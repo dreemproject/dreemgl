@@ -623,11 +623,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n469" name="n469">469</a>
 <strong><a href="#n470" name="n470">470</a></strong>
 <a href="#n471" name="n471">471</a>
+<a href="#n472" name="n472">472</a>
+<a href="#n473" name="n473">473</a>
+<a href="#n474" name="n474">474</a>
+<a href="#n475" name="n475">475</a>
+<a href="#n476" name="n476">476</a>
+<a href="#n477" name="n477">477</a>
+<a href="#n478" name="n478">478</a>
+<a href="#n479" name="n479">479</a>
+<strong><a href="#n480" name="n480">480</a></strong>
+<a href="#n481" name="n481">481</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/shader</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports){
@@ -679,6 +690,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 gl.attachShader(shader, vtx_shader)
                 gl.attachShader(shader, pix_color_shader)
                 gl.linkProgram(shader)
+                <span class="keyword">if</span> (!gl.getProgramParameter(shader, gl.LINK_STATUS)){
+                        <span class="keyword">var</span> err = gl.getProgramInfoLog(shader)
+
+                        console.error(err.toString(), <span class="local-variable">this</span>.annotateLines(pix_color))
+                        <span class="keyword">return</span>
+                        <span class="comment">//throw new Error(err)</span>
+                }
+
                 <span class="local-variable">this</span>.getLocations(gl, shader, vtx_state, pix_state)
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.compile_use) <span class="local-variable">this</span>.compileUse(shader)
@@ -890,6 +909,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
                 gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
+                <span class="keyword">if</span>(TEXTURE_ID &gt; <span class="integer">0</span>)<span class="reserved">debugger</span>
                 TEXTURE_END
 
                 <span class="comment">// attributes</span>
@@ -901,7 +921,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(lastbuf !== buf){
                         lastbuf = buf
                         <span class="keyword">if</span>(buf.length &gt; len) len = buf.length
-                        <span class="comment">//if(len === 0) return 0</span>
+                        <span class="keyword">if</span>(len === <span class="integer">0</span>) <span class="keyword">return</span> <span class="integer">0</span>
                         <span class="keyword">if</span>(!buf.glvb) buf.glvb = gl.createBuffer()
                         gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
                         <span class="keyword">if</span>(!buf.clean){
@@ -984,12 +1004,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                         out += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">loc = shader.unilocs.</span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
                         <span class="keyword">var</span> gen = gltypes.uniform_gen[loc.type]
-                        <span class="comment">//if(gen.args == 1){</span>
 
                         <span class="keyword">var</span> call = gen.call
-                        <span class="comment">//if(call !== 'uniformMatrix4fv' &amp;&amp; call !== 'uniformMatrix3fv' &amp;&amp; call !== 'uniformMatrix2fv'){</span>
-                        <span class="comment">//        out += '\t\tif(loc.value !== uni) loc.value = uni, '</span>
-                        <span class="comment">//}</span>
 
                         out += <span class="string"><span class="delimiter">'</span><span class="content">gl.</span><span class="delimiter">'</span></span> + gen.call + <span class="string"><span class="delimiter">'</span><span class="content">(loc.loc</span><span class="delimiter">'</span></span>
 
@@ -1081,8 +1097,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         exports.TRIANGLE_STRIP = <span class="local-variable">this</span>.TRIANGLE_STRIP = <span class="hex">0x5</span>
         exports.TRIANGLE_FAN = <span class="local-variable">this</span>.TRIANGLE_FAN = <span class="hex">0x6</span>
 
-        <span class="local-variable">this</span>.drawtype = <span class="local-variable">this</span>.TRIANGLES
-        
+        <span class="local-variable">this</span>.drawtype_enum = <span class="local-variable">this</span>.TRIANGLES
+        Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">drawtype</span><span class="delimiter">'</span></span>, {<span class="function">set</span>:<span class="keyword">function</span>(v){
+                <span class="keyword">if</span>(<span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.drawtype_enum = <span class="local-variable">this</span>[v]
+                <span class="keyword">else</span> <span class="local-variable">this</span>.drawtype_enum = v
+        }})
+
         <span class="comment">// lets draw ourselves</span>
         <span class="local-variable">this</span>.<span class="function">drawArrays</span> = <span class="keyword">function</span>(devicewebgl, sub, start, end){
                 <span class="comment">//if(this.mydbg) debugger</span>
@@ -1090,7 +1110,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.shader) <span class="keyword">return</span>
                 <span class="keyword">var</span> gl = devicewebgl.gl
                 <span class="keyword">var</span> len = <span class="local-variable">this</span>.useShader(gl, sub? <span class="local-variable">this</span>.shader[sub]: <span class="local-variable">this</span>.shader)
-                <span class="keyword">if</span>(len) gl.drawArrays(<span class="local-variable">this</span>.drawtype, start || <span class="integer">0</span>, end === <span class="predefined-constant">undefined</span>?len: end)
+                <span class="keyword">if</span>(len) gl.drawArrays(<span class="local-variable">this</span>.drawtype_enum, start || <span class="integer">0</span>, end === <span class="predefined-constant">undefined</span>?len: end)
                 <span class="keyword">return</span> len
         }
 

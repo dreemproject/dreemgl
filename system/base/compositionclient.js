@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('./compositionbase', function(require, baseclass){
 	// internal, Composition base class
@@ -20,7 +21,7 @@ define.class('./compositionbase', function(require, baseclass){
 		baseclass.atConstructor.call(this)
 
 		this.screenname = typeof location !== 'undefined' && location.search && location.search.slice(1)
-
+		this.cached_attributes = {}
 		// web environment
 		if(previous){
 			this.session = previous.session
@@ -29,6 +30,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.rpc.disconnectAll()
 			this.rpc.host = this
 			this.rendered = true
+			this.cached_attributes = previous.cached_attributes
 		}
 		else{
 			this.createBus()
@@ -38,6 +40,12 @@ define.class('./compositionbase', function(require, baseclass){
 		this.bindBusEvents()
 
 		this.renderComposition()
+
+		for(var key in this.cached_attributes){
+			var attrmsg = this.cached_attributes[key]
+			// process it
+			this.bus.atMessage(attrmsg)
+		}
 
 		this.screen = this.names[this.screenname]
 		if(!this.screen){
@@ -146,13 +154,14 @@ define.class('./compositionbase', function(require, baseclass){
 					this.bus.send({type:'webrtcOffer', offer:offer, index: this.index})
 				}.bind(this)
 				*/
-				if(!this.rendered) this.doRender()
-
 				for(var key in msg.attributes){
 					var attrmsg = msg.attributes[key]
 					// process it
 					this.bus.atMessage(attrmsg, socket)
 				}
+
+				if(!this.rendered) this.doRender()
+
 			}
 
 			else if(msg.type == 'connectScreen'){
@@ -161,6 +170,9 @@ define.class('./compositionbase', function(require, baseclass){
 				//else obj.createIndex(msg.index, msg.rpcid, rpcpromise)
 			}
 			else if(msg.type == 'attribute'){
+
+				this.cached_attributes[msg.rpcid+'_'+msg.attribute] = msg
+
 				var split = msg.rpcid.split('.')
 				var obj
 				// see if its a set attribute on ourself
@@ -175,7 +187,6 @@ define.class('./compositionbase', function(require, baseclass){
 					}
 				}
 				var value =  define.structFromJSON(msg.value)
-
 				var attrset = obj.atAttributeSet
 				obj.atAttributeSet = undefined
 				obj[msg.attribute] = value
@@ -225,28 +236,4 @@ define.class('./compositionbase', function(require, baseclass){
 		})
 		console.log.apply(console, args)
 	}
-
-	var onejsparser = new OneJSParser();
-	this.ASTNode = function() {
-		if (!this._ast) {
-			var source = this.constructor.module.factory.body.toString();
-			this._ast = onejsparser.parse(source);
-		}
-		return this._ast;
-	};
-
-	this.commitAST = function () {
-		var source =  new ASTScanner(this.ASTNode()).toSource();
-
-		//console.log("[COMMIT]", source);
-
-		var msg = {
-			rpcid: 'this',
-			method: 'commit',
-			type: 'method',
-			args:[source]
-		};
-		this.rpc.__host.callRpcMethod(msg);
-	};
-
 })

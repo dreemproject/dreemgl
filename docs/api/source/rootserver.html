@@ -453,11 +453,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n299" name="n299">299</a>
 <strong><a href="#n300" name="n300">300</a></strong>
 <a href="#n301" name="n301">301</a>
+<a href="#n302" name="n302">302</a>
+<a href="#n303" name="n303">303</a>
+<a href="#n304" name="n304">304</a>
+<a href="#n305" name="n305">305</a>
+<a href="#n306" name="n306">306</a>
+<a href="#n307" name="n307">307</a>
+<a href="#n308" name="n308">308</a>
+<a href="#n309" name="n309">309</a>
+<strong><a href="#n310" name="n310">310</a></strong>
+<a href="#n311" name="n311">311</a>
+<a href="#n312" name="n312">312</a>
+<a href="#n313" name="n313">313</a>
+<a href="#n314" name="n314">314</a>
+<a href="#n315" name="n315">315</a>
+<a href="#n316" name="n316">316</a>
+<a href="#n317" name="n317">317</a>
+<a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
+<a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
+<a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
+<strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
 <span class="comment">// Teem server</span>
@@ -491,7 +526,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.server = http.createServer(<span class="local-variable">this</span>.request.bind(<span class="local-variable">this</span>))
                 <span class="local-variable">this</span>.server.listen(port, iface)
                 <span class="local-variable">this</span>.server.on(<span class="string"><span class="delimiter">'</span><span class="content">upgrade</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.upgrade.bind(<span class="local-variable">this</span>))
-
+                <span class="local-variable">this</span>.addresses = []
                 <span class="keyword">if</span>(iface == <span class="string"><span class="delimiter">'</span><span class="content">0.0.0.0</span><span class="delimiter">'</span></span>){
                         <span class="keyword">var</span> ifaces = os.networkInterfaces()
                         <span class="keyword">var</span> txt = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -501,6 +536,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">IPv4</span><span class="delimiter">'</span></span> !== iface.family) <span class="keyword">return</span>
                                         <span class="keyword">var</span> addr = <span class="string"><span class="delimiter">'</span><span class="content">http://</span><span class="delimiter">'</span></span> + iface.address + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>
                                         <span class="keyword">if</span>(!<span class="local-variable">this</span>.address) <span class="local-variable">this</span>.address = addr
+                                        <span class="local-variable">this</span>.addresses.push(<span class="string"><span class="delimiter">'</span><span class="content">http://</span><span class="delimiter">'</span></span> + iface.address + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port)
+                                        <span class="keyword">if</span>(iface.address == <span class="string"><span class="delimiter">'</span><span class="content">127.0.0.1</span><span class="delimiter">'</span></span>){
+                                                <span class="local-variable">this</span>.addresses.push(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:</span><span class="delimiter">'</span></span>+port)
+                                        }
                                         txt += <span class="string"><span class="delimiter">'</span><span class="content"> ~~on ~c~</span><span class="delimiter">'</span></span>+addr
                                 }.bind(<span class="local-variable">this</span>))
                         }.bind(<span class="local-variable">this</span>))
@@ -508,7 +547,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.address = <span class="string"><span class="delimiter">'</span><span class="content">http://</span><span class="delimiter">'</span></span> + iface + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.addresses.push(<span class="string"><span class="delimiter">'</span><span class="content">http://</span><span class="delimiter">'</span></span> + iface + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port)
+                        <span class="keyword">if</span>(iface == <span class="string"><span class="delimiter">'</span><span class="content">127.0.0.1</span><span class="delimiter">'</span></span>){
+                                <span class="local-variable">this</span>.addresses.push(<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:</span><span class="delimiter">'</span></span>+port)
+                        }
+
                         console.color(<span class="string"><span class="delimiter">'</span><span class="content">Server running on ~c~</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.address + <span class="string"><span class="delimiter">&quot;</span><span class="content">~~</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                }
+                <span class="keyword">if</span>(iface === <span class="string"><span class="delimiter">'</span><span class="content">127.0.0.1</span><span class="delimiter">'</span></span>){
+                        Object.defineProperty(define, <span class="string"><span class="delimiter">&quot;</span><span class="content">$localbound</span><span class="delimiter">&quot;</span></span>, {
+                            <span class="key">value</span>: <span class="predefined-constant">true</span>,
+                            <span class="key">writable</span>: <span class="predefined-constant">false</span>
+                        });
+                }
+                <span class="keyword">else</span>{
+                        Object.defineProperty(define, <span class="string"><span class="delimiter">&quot;</span><span class="content">$localbound</span><span class="delimiter">&quot;</span></span>, {
+                            <span class="key">value</span>: <span class="predefined-constant">false</span>,
+                            <span class="key">writable</span>: <span class="predefined-constant">false</span>
+                        });
                 }
                 <span class="comment">// use the browser spawner</span>
                 <span class="keyword">var</span> browser = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-browser</span><span class="delimiter">'</span></span>]
@@ -563,12 +619,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">upgrade</span> = <span class="keyword">function</span>(req, sock, head){
+
+                <span class="keyword">if</span>(!define.<span class="predefined">$unsafeorigin</span> &amp;&amp; <span class="local-variable">this</span>.addresses.indexOf(req.headers.origin) === -<span class="integer">1</span>){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">WRONG ORIGIN SOCKET CONNECTION RECEIVED</span><span class="delimiter">&quot;</span></span>+ req.headers.origin+ <span class="string"><span class="delimiter">'</span><span class="content"> -&gt; </span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.address)
+                        <span class="keyword">return</span> <span class="predefined-constant">false</span>
+                }
                 <span class="comment">// lets connect the sockets to the app</span>
                 <span class="keyword">var</span> sock = <span class="keyword">new</span> NodeWebSocket(req, sock, head)
                 sock.url = req.url
                 <span class="keyword">var</span> mypath = req.url.slice(<span class="integer">1</span>)
-                <span class="keyword">if</span>(mypath) <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + decodeURIComponent(mypath)).busserver.addWebSocket(sock)
-                <span class="keyword">else</span> <span class="local-variable">this</span>.busserver.addWebSocket(sock)
+                <span class="keyword">if</span>(mypath) <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + decodeURIComponent(mypath)).busserver.addWebSocket(sock, req)
+                <span class="keyword">else</span> <span class="local-variable">this</span>.busserver.addWebSocket(sock, req)
         }
 
         <span class="comment">// maps an input path into our files</span>
@@ -630,6 +691,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span>(requrl ==<span class="string"><span class="delimiter">'</span><span class="content">/favicon.ico</span><span class="delimiter">'</span></span>){
                         res.writeHead(<span class="integer">200</span>)
+                        res.end()
+                        <span class="keyword">return</span>
+                }
+
+                <span class="comment">// block use of relative paths in the entire url.</span>
+                <span class="keyword">if</span>(decodeURIComponent(requrl).indexOf(<span class="string"><span class="delimiter">'</span><span class="content">..</span><span class="delimiter">'</span></span>) !== -<span class="integer">1</span>){
+                        res.writeHead(<span class="integer">404</span>)
                         res.end()
                         <span class="keyword">return</span>
                 }

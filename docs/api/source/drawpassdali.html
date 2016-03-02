@@ -584,11 +584,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n430" name="n430">430</a></strong>
 <a href="#n431" name="n431">431</a>
 <a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, baseclass){
         <span class="comment">// internal, drawing</span>
@@ -634,7 +643,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">allocDrawTarget</span> = <span class="keyword">function</span>(width, height, view, drawtarget, passid){
-<span class="comment">//console.log('allocDrawTarget', width, height, drawtarget, passid);</span>
+                <span class="comment">//console.log('allocDrawTarget', width, height, drawtarget, passid);</span>
                 width = floor(width)
                 height = floor(height)
                 <span class="keyword">var</span> Texture = <span class="local-variable">this</span>.device.Texture
@@ -696,7 +705,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> sizel = <span class="integer">0</span>
                                 <span class="keyword">var</span> sizer = <span class="integer">1</span>
                                 mat4.ortho(scroll[<span class="integer">0</span>] + pointerx - sizel, scroll[<span class="integer">0</span>] + pointerx + sizer, scroll[<span class="integer">1</span>] + pointery - sizer,  scroll[<span class="integer">1</span>] + pointery + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.viewmatrix)
-                                mat4.ortho( pointerx - sizel, pointerx + sizer, pointery - sizer, pointery + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.noscrollmatrix)
+                                mat4.ortho(pointerx - sizel, pointerx + sizer, pointery - sizer, pointery + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.noscrollmatrix)
                         }
                         <span class="keyword">else</span>{
                                 <span class="keyword">var</span> zoom = view._zoom
@@ -750,9 +759,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
 
-        <span class="local-variable">this</span>.<span class="function">nextItem</span> = <span class="keyword">function</span>(draw){
+        <span class="local-variable">this</span>.<span class="function">nextItem</span> = <span class="keyword">function</span>(draw, nottype){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
-                <span class="keyword">var</span> next = (draw === view || (!draw._viewport &amp;&amp; draw._visible))  &amp;&amp; draw.children[<span class="integer">0</span>], next_index = <span class="integer">0</span>
+                <span class="keyword">var</span> next = (draw === view || (!draw._viewport &amp;&amp; draw._visible &amp;&amp; draw._drawtarget !== nottype))  &amp;&amp; draw.children[<span class="integer">0</span>], next_index = <span class="integer">0</span>
                 <span class="keyword">while</span>(!next){ <span class="comment">// skip to parent next</span>
                         <span class="keyword">if</span>(draw === view) <span class="keyword">break</span>
                         next_index = draw.draw_index + <span class="integer">1</span>
@@ -803,7 +812,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         draw.draw_dirty &amp;= <span class="integer">1</span>
 
                         pick_id+= draw.pickrange;
-                        <span class="keyword">if</span>(!draw._visible || draw._first_draw_pick &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
+                        <span class="keyword">if</span>(!draw._visible || draw._drawtarget===<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span> || draw._first_draw_pick &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
                         }
                         <span class="keyword">else</span>{
                                 draw._first_draw_pick = <span class="integer">1</span>
@@ -822,7 +831,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> blendshader = draw.shaders.viewportblend
                                         <span class="keyword">if</span> (view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                                                 <span class="comment">// dont do this!</span>
-                                                blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
+                                                <span class="keyword">if</span> (shader.depth_test_eq.func === <span class="integer">0</span>) shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
                                         }
                                         <span class="keyword">else</span>{
                                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -839,7 +848,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; shaders.length; j++){
                                                 <span class="keyword">var</span> shader = shaders[j]
 
+                                                <span class="keyword">if</span>(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
+                                                        <span class="keyword">if</span> (shader.depth_test_eq.func == <span class="integer">0</span>) shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
+                                                }
+
                                                 shader.pickguid = pickguid
+
                                                 <span class="keyword">if</span>(!shader.visible) <span class="keyword">continue</span>
                                                 <span class="keyword">if</span>(draw.pickalpha !== <span class="predefined-constant">undefined</span>)shader.pickalpha = draw.pickalpha
                                                 <span class="keyword">if</span>(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
@@ -849,7 +863,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         }
                                 }
                         }
-                        draw = <span class="local-variable">this</span>.nextItem(draw)
+                        draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>)
                 }
         }
 
@@ -874,7 +888,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">drawBlend</span> = <span class="keyword">function</span>(draw){
                 <span class="keyword">if</span>(!draw.drawpass.color_buffer){
-                        console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Null color_buffer detected</span><span class="delimiter">&quot;</span></span>)
+                        console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?</span><span class="delimiter">&quot;</span></span>, draw)
                 }
                 <span class="keyword">else</span> {
                         <span class="comment">// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data</span>
@@ -893,33 +907,38 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">drawNormal</span> = <span class="keyword">function</span>(draw, matrices){
+        <span class="local-variable">this</span>.<span class="function">drawNormal</span> = <span class="keyword">function</span>(draw, view, matrices){
                 draw.updateShaders()
-                <span class="keyword">var</span> count = <span class="integer">0</span>
+                <span class="keyword">var</span> vtx_count = <span class="integer">0</span>
                 <span class="comment">// alright lets iterate the shaders and call em</span>
                 <span class="keyword">var</span> shaders = draw.shader_draw_list
                 <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; shaders.length; j++){
                         <span class="comment">// lets draw em</span>
                         <span class="keyword">var</span> shader = shaders[j]
+                        <span class="keyword">if</span>(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
+                                <span class="keyword">if</span>(shader.depth_test_eq.func === <span class="integer">0</span>)
+                                        shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt; dst_depth</span><span class="delimiter">'</span></span>
+                        }
+
                         <span class="keyword">if</span>(shader.pickonly || !shader.visible) <span class="keyword">continue</span> <span class="comment">// was pick only</span>
+                        shader.view = draw
+                        <span class="keyword">if</span>(shader.atDraw) shader.atDraw(draw)
                         <span class="comment">// we have to set our guid.</span>
                         <span class="keyword">if</span>(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
                         <span class="keyword">else</span> draw.viewmatrix = matrices.viewmatrix
 
-                        count++
-                        shader.drawArrays(<span class="local-variable">this</span>.device)
+                        vtx_count += shader.drawArrays(<span class="local-variable">this</span>.device)
                 }
-                <span class="keyword">return</span> count
+                <span class="keyword">return</span> vtx_count
         }
 
         <span class="local-variable">this</span>.<span class="function">drawColor</span> = <span class="keyword">function</span>(isroot, time, clipview){
-
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                 <span class="keyword">var</span> device = <span class="local-variable">this</span>.device
                 <span class="keyword">var</span> layout = view._layout
                 <span class="keyword">var</span> gl = device.gl
-                <span class="keyword">var</span> count = <span class="integer">0</span>
-
+                <span class="keyword">var</span> dom_count = <span class="integer">0</span>
+                <span class="keyword">var</span> vtx_count = <span class="integer">0</span>
                 <span class="keyword">if</span>(!layout || layout.width === <span class="integer">0</span> || isNaN(layout.width) || layout.height === <span class="integer">0</span> || isNaN(layout.height)) <span class="keyword">return</span>
 
                 <span class="comment">// lets see if we need to allocate our framebuffer..</span>
@@ -934,15 +953,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span>(layout.width === <span class="integer">0</span> || layout.height === <span class="integer">0</span>) <span class="keyword">return</span> <span class="predefined-constant">false</span>
 
-                device.clear(view._clearcolor)
-
                 <span class="keyword">var</span> hastime = <span class="predefined-constant">false</span>
                 <span class="keyword">var</span> zoom = view._zoom
 
                 <span class="keyword">var</span> matrices = <span class="local-variable">this</span>.colormatrices
                 <span class="local-variable">this</span>.calculateDrawMatrices(isroot, matrices);
                 view.colormatrices = matrices
-
 
                 gl.disable(gl.SCISSOR_TEST)
 
@@ -961,7 +977,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         */</span>
                 }
-
+                <span class="comment">//console.log(matrices.viewmatrix)</span>
                 device.clear(view._clearcolor)
 
                 <span class="keyword">var</span> draw = view
@@ -971,23 +987,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//}</span>
                         <span class="comment">//for(var dl = this.draw_list, i = 0; i &lt; dl.length; i++){</span>
                         <span class="comment">//        var draw = dl[i]</span>
-                        <span class="keyword">if</span>(!draw._visible || draw._first_draw_color &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
+                        <span class="keyword">if</span>(!draw._visible || draw._drawtarget===<span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span> || draw._first_draw_color &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
                         }
                         <span class="keyword">else</span>{
                                 draw._first_draw_color = <span class="integer">1</span>
 
                                 <span class="comment">//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)</span>
                                 draw._time = time
+
                                 <span class="keyword">if</span>(draw._listen_time || draw.ontime) hastime = <span class="predefined-constant">true</span>
 
                                 draw.viewmatrix = matrices.viewmatrix
 
-                                <span class="keyword">if</span>(draw.atDraw) draw.atDraw(<span class="local-variable">this</span>)
+                                <span class="keyword">if</span>(draw.atDraw &amp;&amp; draw.atDraw(<span class="local-variable">this</span>)) hastime = <span class="predefined-constant">true</span>
                                 <span class="keyword">if</span>(draw._viewport &amp;&amp; draw.drawpass !== <span class="local-variable">this</span>){
                                         <span class="local-variable">this</span>.drawBlend(draw)
                                 }
                                 <span class="keyword">else</span>{
-                                        count += <span class="local-variable">this</span>.drawNormal(draw, matrices)
+                                        vtx_count += <span class="local-variable">this</span>.drawNormal(draw, view, matrices)
                                 }
 
 
@@ -996,9 +1013,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="local-variable">this</span>.debugrect.drawArrays(<span class="local-variable">this</span>.device)
                                 }
                         }
-                        draw = <span class="local-variable">this</span>.nextItem(draw)
+                        draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>)
                 }
-                <span class="comment">//console.log(count)</span>
                 <span class="keyword">return</span> hastime
         }
 

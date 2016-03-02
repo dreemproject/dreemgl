@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 /**
@@ -34,6 +35,7 @@ define.class(function(exports){
 
 	// Set emitcode to true to emit dali code to the console. These lines
 	// are preceeded with DALICODE to make it easier to extract into a file.
+	// The -dumpprog command-line option codes this value
 	DaliApi.emitcode = false;
 
 	// Create all actors on a layer to ignore depth test.
@@ -88,22 +90,33 @@ define.class(function(exports){
 	 * @method initialize
 	 * Static method to initialize and create the dali stage. This method is
 	 * called when dali starts running.
-	 * @param {number} width Width of stage
-	 * @param {number} height Height of stage
-	 * @param {string} name Name of stage
-	 * @param {string} dalilib Path to dali lib (optional). If the path is
-	 *                 missing, a fixed path is used.
+	 * @param {Object} settings Initial settings:
+	 *                   width    Width of stage
+	 *                   height   Height of stage
+	 *                   name     Name of stage
+	 *                   dalilib  Path to dali lib (optional). If the path is
+	 *                            missing, a fixed path is used.
+	 *                   dumpprog Path of file to dump dali program to, or use
+	 *                            stdout is no file is specified
 	 */
-	DaliApi.initialize = function(width, height, name, dalilib) {
+	DaliApi.initialize = function(settings) {
 		DaliLayer = require('./dali_layer')
+
+		DaliApi.width = settings.width
+		DaliApi.height = settings.height
+		DaliApi.screenname = settings.name
+		DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
+		DaliApi.dumpprog = settings.dumpprog;
+
+		DaliApi.emitcode = DaliApi.dumpprog;
 
 		var window= {
 			x:0,
 			y:0,
-			width:width,
-			height: height,
+			width:DaliApi.width,
+			height: DaliApi.height,
 			transparent: false,
-			name: name
+			name: DaliApi.screenname
 		};
 
 		var viewMode={
@@ -116,27 +129,23 @@ define.class(function(exports){
 			'view-mode': viewMode,
 		}
 
-		// include the Dali/nodejs interface.
-		if (!dalilib)
-			dalilib = '/home/dali/teem/src/dreemgl/Release/dali';
-
-
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var window= {x:0, y:0, width:' + width + ', height:' + height + ', transparent: false, name: \'' + name + '\'};');
+			console.log('DALICODE: var window= {x:0, y:0, width:' + DaliApi.width + ', height:' + DaliApi.height + ', transparent: false, name: \'' + DaliApi.screenname + '\'};');
 
 			console.log('DALICODE: var viewMode={\'stereoscopic-mode\':\'mono\', \'stereo-base\': 65};');
 
 			console.log('DALICODE: var options= {\'window\': window, \'view-mode\': viewMode}');
-			console.log('DALICODE: var dali = require(\'' + dalilib + '\')(options);');
+			console.log('DALICODE: var dali = require(\'' + DaliApi.dalilib + '\')(options);');
 		}
 
 		try {
             // Load the library and make available as DaliApi.dali
-			DaliApi.dali = define.require(dalilib)(options);
+			// console.log('LOADING', dalilib);
+			DaliApi.dali = define.require(DaliApi.dalilib)(options);
 
-			// Create a top-level 2D layer to the stage. 
+			// Create a top-level 2D layer to the stage.
 			var dali = DaliApi.dali;
-			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, width, height);
+			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
 			dali.stage.add(DaliApi.rootlayer.dalilayer);
 
 			if (DaliApi.emitcode) {
@@ -145,7 +154,7 @@ define.class(function(exports){
 
 		}
 		catch (e) {
-			console.error('Failed to load dalilib', dalilib);
+			console.error('Failed to load dalilib', DaliApi.dalilib);
 			console.log(e.stack);
 		}
     }
@@ -257,7 +266,7 @@ define.class(function(exports){
 		DaliApi.BufferId += 1;
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var buffer' + DaliApi.BufferId + ' = new dali.PropertyBuffer(' + JSON.stringify(format) + ', ' + nrecs + ')');			
+			console.log('DALICODE: var buffer' + DaliApi.BufferId + ' = new dali.PropertyBuffer(' + JSON.stringify(format) + ', ' + nrecs + ')');
 		}
 
 		// Write data to the buffer
@@ -298,7 +307,7 @@ define.class(function(exports){
 
 	/**
 	 * @method getArrayValue
-	 * Given the name of a uniform object, retrieve the array of values from 
+	 * Given the name of a uniform object, retrieve the array of values from
 	 * the dreemgl compiled structure. In webgl this extraction happens inline.
 	 * NaN and null values are converted to 0 (dali will error on these)
 	 * @param {Object} obj Compiled object
@@ -319,7 +328,7 @@ define.class(function(exports){
 
 				array.push(val);
 			}
-				
+
 			return array;
 		}
 
@@ -334,7 +343,7 @@ define.class(function(exports){
 
 	/**
 	 * @method getDaliPropertySize
-	 * Static. Return the number of elements required for a dali property, 
+	 * Static. Return the number of elements required for a dali property,
 	 * given the dali constant.
 	 * From Nick (via slack).
 	 * @param {Number} format property constant
@@ -354,11 +363,11 @@ define.class(function(exports){
 			return 9;
 		case dali.PROPERTY_MATRIX4:
 			return 16;
-		default: 
+		default:
 			return 1;
-		}	
+		}
 	}
-	
+
 	/**
 	 * @method getDaliPropertyType
 	 * Static. Return the dali property name for a type, given its size
@@ -404,7 +413,7 @@ define.class(function(exports){
 	 */
 	DaliApi.getHash = function(data) {
 		var str = JSON.stringify(data);
- 
+
 		// Algorithm from: https://github.com/darkskyapp/string-hash/blob/master/index.js
 		var hash = 5381, i = str.length;
 

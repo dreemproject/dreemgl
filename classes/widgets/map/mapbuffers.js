@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $server$, service){
 
@@ -12,13 +13,38 @@ define.class(function(require, $server$, service){
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};
 
-	var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
-	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
+	var roadwidths = {
+			water:20, 
+			ferry:6,
+			Ferry:6,
+			rail: 6,
+			railway: 6,	
+			racetrack:6,			
+			minor_road: 4,
+			major_road: 6, 
+			path: 4, highway:15,
+			Road:200
+	}
+	
+	var roadcolors = {
+		water:"#30a0ff", 
+		path:"#d0d0d0", 
+		ferry:"lightblue", 
+		rail: vec4("purple"),
+		minor_road: vec4("#505050"), 
+		major_road: vec4("#404040"), 
+		highway:vec4("#303030")
+	}
+	
+	var roadmarkcolors = {
+		water:"#30a0ff", 
+		major_road:"white",
+		 minor_road:"#a0a0a0"
+	}
 
 	//this.ignoreuse = {}
+	//this.displaykinds = {}
 	this.displaykinds ={
-		forsest: true,
 		water: true, 
 		meadow:true, 
 		playa:true, 
@@ -29,7 +55,22 @@ define.class(function(require, $server$, service){
 		beach: true,
 		grass: true,
 		lake:true,
-		canal: true
+		building:true,
+		canal: true,
+		land:true,
+		park:true,
+		parking:true,
+		pitch:true,
+		footway:true,
+		playground:true,
+		wood:true,
+		residential:true,
+		farm:true,
+		rail:true,
+		wetland:true,
+		aerodrome:true,
+		farmyard:true, scrub:true,
+		forest:true,nature_reserve:false,riverbank:true, railway:true, runway:true, farmland:true
 	}
 	
 	this.noignoreuse = {
@@ -54,304 +95,22 @@ define.class(function(require, $server$, service){
 		national_park:true,
 		place_of_worship:true, playground:true, quarry:true, railway:true, recreation_ground:false, residential:false, retail:true,
 		riverbank:true,reservoir:true,
-		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true};
-
-	var watercolor = vec4("ocean");
+		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true
+	};
 	
-	var mapstyle = this.mapstyle = {
-		ferry:{
-			roadcolor: vec4(0.6784313917160034,0.8470588326454163,0.9019607901573181,1),
-		},
-		riverbank:{color1:watercolor},
-		marina:{color1:watercolor},
-		reservoir:{color1:watercolor},
-		stream:{color1:watercolor},
-		canal:{color1:watercolor},
-		lake:{color1:watercolor},
-		playa:{color1:vec4("#f0f0c0")},
-		river:{color1:watercolor},
-		basin:{color1:watercolor},
-		swimming_pool:{color1:watercolor},
-		sea:{
-			color1:watercolor
-		},
-		ocean:{
-			color1:watercolor
-		},
-		
-		earth:{
-			offset:10,
-			color1: vec4("#4a644a"),
-			color2: vec4("#38523d"),
-		},
-		national_park:{
-			color1:vec4("lime"),
-			color2:0.22
-		},
-		park:{
-			offset:-7,
-			color1: vec4(0.250980406999588,0.8156862854957581,0.1882352977991104,1),
-			color2: vec4(0.003921568859368563,0.19607843458652496,0.125490203499794,1),
-		},
-		aerodrome:{
-		},
-		residential:{
-			offset:-13,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
-		},
-		industrial:{
-			color1:vec4("#202020"),
-			color2:vec4("#d0d0d0")
-		},
-		recreation_ground:{
-			offset:-18.8,
-			color1:vec4("#8080f0"),
-			color2:vec4("#6060f0")
-		},
-		scrub:{
-		},
-		wetland:{
-			offset:-18.5,
-			color1: vec4("darkgreen"),
-			color2: vec4("darkblue")
-
-		},
-		beach:{
-			offset:-19,
-			color1: vec4("#f0f0a0"),
-			color2: vec4("yellow")
-
-		},
-		nature_reserve:{
-			offset:-18,
-			color1: vec4("green"),
-			color2: vec4("green")
-		},
-		commercial:{
-		},
-		golf_course:{
-		},
-		farm:{
-			color1: vec4(1,1,0.10000000149011612,1),
-			color2: vec4(1,1,0.10000000149011612,1),
-		},
-		grass:{
-			offset:-18,
-			color1:vec4("lightgreen"),
-		},
-		sports_centre:{
-			offset:-23,
-			color1: vec4(1,0,0,1),
-			color2: vec4(1,1,1,1),
-		},
-		farmland:{
-			color1:vec4("#808010"),
-			color2:vec4("#606020")
-		},
-		hospital:{
-		},
-		retail:{
-			offset:27,
-			color1: vec4(0,0,1,0.5),
-			color2: vec4(0,0,1,0.5),
-		},
-		allotments:{
-		},
-		runway:{
-			offset:-20,
-
-				color1:vec4("gray"),
-			color2:vec4("#d0d0d0")
-		},
-		forest:{
-			offset:-30,
-			color1: vec4(0.003921568859368563,0.19607843458652496,0.125490203499794,1),
-			color2: vec4(0,0,0,1),
-		},
-		meadow:{
-		},
-		parking:{
-			offset:-8,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
-		},
-		plant:{
-			color1:vec4("#208020"),
-			color2:vec4("#208020")
-		},
-		pitch:{
-			offset:-17,
-			color1: vec4(0.7490196228027344,1,0,1),
-			color2: vec4(0,0.501960813999176,0,1),
-		},
-		cemetery:{
-			color1: vec4("gray"),
-			color2: vec4("darkgray")
-		},
-		zoo:{
-		},
-		attraction:{
-		},
-		university:{
-			offset:-21,
-			color1: vec4(1,0,0,1),
-			color2: vec4(0,0,0,1),
-		},
-		apron:{
-		},
-		military:{
-		},
-		wastewater_plant:{
-		},
-		playground:{
-			offset:-19,
-			color1: vec4("lightblue"),
-			color2: vec4(1,0,0,1),
-		},
-		stadium:{
-		},
-		railway:{
-		},
-		garden:{
-			offset:-14,
-			color1: vec4(0,0.501960813999176,0,1),
-			color2: vec4(0.250980406999588,0.8156862854957581,0.501960813999176,1),
-		},
-		farmyard:{
-			color1:vec4("#808010"),
-			color2:vec4("#606020")
-		},
-		generator:{
-		},
-		college:{
-		},
-		pedestrian:{
-			offset:-9,
-			color1: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
-			color2: vec4(1,1,0,1),
-		},
-		school:{
-		},
-		substation:{
-		},
-		petting_zoo:{
-		},
-		wood:{
-			color1:vec4("#208020"),
-			color2:vec4("#106010")
-		},
-		common:{
-			offset:24,
-			color1: vec4(1,1,1,1),
-			color2: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-		},
-		village_green:{
-			offset:-15,
-			color1: vec4(0,0.501960813999176,0,1),
-			color2: vec4(0,0.501960813999176,0,1),
-		},
-		prison:{
-		},
-		major_road:{
-			offset:-55,
-			color1: vec4(1,0,0,1),
-			color2: vec4(1,0,0,1),
-			roadcolor: vec4(0.250980406999588,0.250980406999588,0.250980406999588,1),
-		},
-		highway:{
-			offset:-55,
-			color1: vec4(0,0,0,1),
-			color2: vec4(0,0,0,1),
-			roadcolor: vec4(0.1882352977991104,0.1882352977991104,0.1882352977991104,1),
-		},
-		minor_road:{
-			offset:-55,
-			color1: vec4(1,0.6470588445663452,0,1),
-			color2: vec4(1,0.6470588445663452,0,1),
-			roadcolor: vec4(0.3137255012989044,0.3137255012989044,0.3137255012989044,1),
-		},
-		undefined:{
-		},
-		works:{
-		},
-		protected_area:{
-			color1: vec4("red"),
-			color2: vec4("green")
-		},
-		theme_park:{
-		},
-		path:{
-			roadcolor: vec4(0.8156862854957581,0.8156862854957581,0.8156862854957581,1),
-		},
-		quarry:{
-			color1: vec4("gray"),
-			color2: vec4("black")
-		},
-		bridge:{
-			offset:-22,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(1,1,1,1),
-		},
-		breakwater:{
-			offset:-20,
-			color1: watercolor,
-			color2: 0,
-		},
-		water:{
-			offset:0,
-			color1: watercolor,
-			color2: 0,
-		},
-		building:{
-			color1:vec4("white"),
-			color2:vec4("white")
-		},
-		apartments:{
-		},
-		garages:{
-		},
-		storage_tank:{
-		},
-		pier:{
-			offset:-5,
-			color1: vec4(0.250980406999588,0.250980406999588,0.250980406999588,1),
-			color2: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-		},
-		place_of_worship:{
-		},
-		water_works:{
-		},
-		cinema:{
-		},
-		taxiway:{
-		},
-		fuel:{
-		},
-		footway:{
-			offset:-12,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(1,1,0,1),
-		},
-		groyne:{
-		},
-		roller_coaster:{
-		},
-		default:
-		{
-			color1:vec4('red'),
-			color2:vec4('blue')
-		}
-	}
-
+	var styleset = require("./mapstyle.js")();
+	
+	var mapstyle = this.mapstyle = 	styleset.mapstyle;
+	
 	if (true){
 
-	for (var a in this.mapstyle){
-		var st = this.mapstyle[a];
-	//	if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
-	//	if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
-	
-	}}
+		for (var a in this.mapstyle){
+			var st = this.mapstyle[a];
+		//	if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
+		//	if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
+		
+		}
+	}
 
 	this.dumpkindset = function(){
 		var mapstylestring = "var mapstyle = {\n";
@@ -381,9 +140,9 @@ define.class(function(require, $server$, service){
 
 	var RoadVertexStruct = this.RoadVertexStruct = define.struct({
 		pos:vec4,
-		geom:vec4//sidevec:vec2
+		geom:vec4,//sidevec:vec2
 		//geom:vec3,
-		//color: float,
+		color: vec4
 		//side: float,
 		//dist: float,
 		//linewidth:float,
@@ -456,7 +215,11 @@ define.class(function(require, $server$, service){
 
 	this.buildBuildingVertexBuffer = function(buildings){
 		var mesh = BuildingVertexStruct.array(buildings.length * 30);
-
+		var buildingcolor = mapstyle.building.color1;
+		var c0 = buildingcolor[0];
+		var c1 = buildingcolor[1];
+		var c2 = buildingcolor[2];
+		
 		for(var i = 0;i<buildings.length;i++){
 			var building = buildings[i];
 
@@ -485,18 +248,18 @@ define.class(function(require, $server$, service){
 					}
 
 					c = 0.8 + 0.2 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid,theH);
-					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,bid,theH);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid,theH);
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid,theH);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid,theH);
-					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,bid,theH);
+					mesh.push(A1[0],A1[1],0, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A2[0],A2[1],0, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A1[0],A1[1],0, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
 					A1 = A2;
 				}
 				c = 1.0
 				for(var a = 0;a<tris.length;a++){
 					var atri = tris[a];
-					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c,c,c, 1, i,bid,theH);
+					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
 				}
 			}
 		}
@@ -535,14 +298,20 @@ define.class(function(require, $server$, service){
 			var off = 0;
 			var land = areas[i];
 
-			var color1 = vec4(1,1,0,1);;
+			var color1 = vec4(1,0,1,1);;
 			//var color2 = ;
 			var t = mapstyle[land.kind];
-			if (!t) {t = mapstyle["default"];console.log(land.kind);};
+			if (!t) {
+				t = mapstyle["default"];
+			//	console.log("defaulting for:", land.kind);
+			};
 			
-			if (t.color1) color1 = t.color1;else UnhandledKindSet[land.kind] = "land - no color1";
+			if (t.color1) color1 = t.color1;else {
+				UnhandledKindSet[land.kind] = "land - no color1";
+				console.log("no color for: ", land.kind);
+			}
 			//if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = "land - no color2 ";
-			if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = "land - no offset"
+			//if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = "land - no offset"
 
 			if (land.arcs){
 				for(var j = 0;j<land.arcs.length;j++){
@@ -587,7 +356,8 @@ define.class(function(require, $server$, service){
 		return mesh;
 	}
 
-	this.buildRoadPolygonVertexBuffer = function(roads){
+	this.buildRoadPolygonVertexBuffer = function(roads, zoomlevel){
+		if (!zoomlevel) zoomlevel = 10;
 		var mesh = RoadVertexStruct.array();
 		var z = 10;
 		for (var i = 0;i<roads.length;i++){
@@ -598,17 +368,33 @@ define.class(function(require, $server$, service){
 
 			var st = mapstyle[R.kind];
 			if (!st) st = mapstyle["default"];
-			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
-
-			if (st.roadcolor) color = st.roadcolor;else UnhandledKindSet[R.kind] = "road" ;
-			// make color an id
-
-			var colorid = color[0]
+			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else
+			{
+				//console.log("no width:", R.kind);
+				UnhandledKindSet[R.kind] = "road" ;
+			}
+			
+			linewidth *= Math.pow(2.0, zoomlevel - 13);
+			if (st.roadcolor){
+				color = st.roadcolor
+			}else {
+				UnhandledKindSet[R.kind] = "road" ;
+				//console.log("roadkind with no color", R.kind);
+			}
+			
+		
+			var colorid = i;
 			//var markcolor = color;
 			//if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
 			// linewidth *= Math.pow(2, this.view.zoomlevel-14);
 
+			var showcaps = false;
+			var showfill = true;
+			var showcorner = true;
+			
 			for(var rr = 0;rr<R.arcs.length;rr++){
+		
+				
 				var currentarc = R.arcs[rr]
 				if (currentarc.length == 1){
 					continue
@@ -625,37 +411,102 @@ define.class(function(require, $server$, service){
 				var ody = A1[1]-A0[1];
 
 				var predelta = vec2.normalize(vec2(odx, ody));
-				var presdelta = vec2.rotate(predelta, 3.1415/2.0);
+				var pre_side_delta = vec2.rotate(predelta, 3.1415/2.0);
 
 				var dist = 0;
 				var dist2 = 0;
 				var lastsdelta = vec2(0,0);
-			//	color = vec4("blue");
-				// it used to be
-				//posx, posy, posz,
-				//colorr, colorg, colorb, colora,
-				//side, dist, linewidth, sidevec2, markcolor
-				// now it is
-				// posx, posy, sidex, sidey, side, dist, linewidth, colorid
-				/*
-				mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
-				mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+				
+				if (showcaps){
+					mesh.push(
+						nx,
+						ny,
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						1, 
+						dist, 
+						linewidth, 
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2],
+						color[3]
+					)
+					mesh.push(
+						nx,
+						ny,
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						-1, 
+						dist, 
+						linewidth, 
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5, 
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						0.5, 
+						-linewidth,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
 
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
-				mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
-				*/
-				mesh.push(nx,ny,predelta[0], predelta[1], 1, dist, linewidth, colorid)//z, color, 1, dist,linewidth,presdelta, markcolor);
-				mesh.push(nx,ny,presdelta[0], presdelta[1], -1, dist, linewidth, colorid)//z, color, -1, dist,linewidth,presdelta, markcolor);
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5, 
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						0.5, 
+						-linewidth,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5,
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						-0.5, 
+						-linewidth,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+					mesh.push(
+						nx,
+						ny, 
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						-1, 
+						dist,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+				}
 
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], -0.5, -10 ,linewidth,colorid);
-				mesh.push(nx                            ,ny                            , presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
-
-				//	color = vec4(0,0,0.03,0.1)
 				var lastdelta = vec2(0);
+				
 				for(var a = 1;a<currentarc.length;a++){
 					var A =currentarc[a];
 
@@ -665,26 +516,28 @@ define.class(function(require, $server$, service){
 					var delta = vec2.normalize(predelt);
 					var sdelta = vec2.rotate(delta, PI/2);
 
+					
 					var dist2 = dist +  vec2.len(predelt);
-					if (a>1){
-						mesh.push(nx,ny,lastdelta[0], lastdelta[1], 1, dist,linewidth,colorid);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], 1, dist,linewidth,colorid);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid);
+					if (a>1 && showcorner){
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,   sdelta[0],    sdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,   sdelta[0],    sdelta[1],-1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
-						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid);
-						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth,colorid);
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
 					}
 					//color = vec4(0,1,0,0.2)
-					mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid);
-					mesh.push( nx, ny,sdelta[0], sdelta[1], -1, dist ,linewidth, colorid);
-					mesh.push(tnx,tny,sdelta[0], sdelta[1], 1, dist2,linewidth, colorid);
+					if (showfill){
+						mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push( nx, ny,sdelta[0], sdelta[1], -1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1], 1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
 
-					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid);
-					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid);
-					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid);
-
+					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					}
 					lastsdelta = vec2(sdelta[0], sdelta[1]);
 					dist = dist2;
 					nx = tnx;
@@ -692,13 +545,15 @@ define.class(function(require, $server$, service){
 					lastdelta = delta;
 				}
 				//color = vec4("red");
-				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid);
-				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid);
+				if (showcaps){
+					mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid, color[0], color[1], color[2], color[3]);
 
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid);
-				mesh.push(nx,ny, presdelta[0], presdelta[1],  -1, dist,linewidth,colorid);
+					mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx,ny, pre_side_delta[0], pre_side_delta[1],  -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+				}
 			}
 		}
 		return mesh;
@@ -770,7 +625,19 @@ define.class(function(require, $server$, service){
 			TargetSet.push(B);
 		}
 	}
-
+	
+	this.getRoadSortKey = function(kind){
+		if (!kind) return 0;
+		var s = mapstyle[kind];
+		if (!s) return 0;
+		if (s.sortkey) return s.sortkey;
+		return 0;
+	}
+	
+	this.sortroads = function(a, b) {
+		return a.sortkey - b.sortkey;
+	}
+	
 	this.build = function(target, sourcedata){
 		var dt = Date.now()
 		var Bset = [];
@@ -807,6 +674,9 @@ define.class(function(require, $server$, service){
 				var x = Bb.coordinates[0];;
 				var y = Bb.coordinates[1];;
 				Labels.push({x:x, y:y, kind:Bb.properties.kind, name: Bb.properties.name, scalerank: Bb.properties.scalerank})
+				if (!Bb.properties.scalerank){
+					//console.log(Bb.properties);
+				}
 				// console.log(Bb.properties.kind, Bb.properties);
 			}
 			else{
@@ -831,11 +701,14 @@ define.class(function(require, $server$, service){
 			if (this.displaykinds[Bb.properties.kind]){
 				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
 			}
+			else{
+				//console.log("ignoring", Bb.properties.kind);
+			}
 		}
 
 		for (var i = 0;i<objects.roads.geometries.length;i++){
 			var Bb = objects.roads.geometries[i];
-			var B = { arcs:[], kind: Bb.properties.kind};
+			var B = { arcs:[], kind: Bb.properties.kind, sortkey: this.getRoadSortKey(Bb.properties.kind)};
 			var Barcs = Bb.arcs;
 			for(var k = 0;k<Barcs.length;k++){
 				B.arcs.push(Sarcs[Barcs[k]]);
@@ -843,7 +716,9 @@ define.class(function(require, $server$, service){
 			Rset.push(B);
 			KindSet[B.kind] = true;
 		}
-
+		
+		Rset.sort(this.sortroads);
+		
 		/*  Skip transits for now..
 		for (var i = 0;i<objects.transit.geometries.length;i++){
 			var Bb = objects.transit.geometries[i];
@@ -865,7 +740,7 @@ define.class(function(require, $server$, service){
 		//target.landuses = Lset;
 
 		var empty = []
-		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(Rset);
+		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(Rset, target.z);
 		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
 		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(Bset);
 

@@ -1,8 +1,9 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
+"use strict"
 define.class('$system/base/node', function(require){
 // Base UI view object
 
@@ -44,11 +45,17 @@ define.class('$system/base/node', function(require){
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:"style", type:vec4, value: vec4('NaN'), meta:"color"}),
+		bgcolor: Config({group:"style", type:vec4, value: vec4(NaN), meta:"color"}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
 		opacity: Config({group:"style", value: 1.0, type:float}),
+		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
+		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
+		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
+		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
@@ -60,7 +67,7 @@ define.class('$system/base/node', function(require){
 		zoom: Config({type:float, value:1}),
 		// overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
 		// works the same way as the CSS property
-		overflow: Config({type: Enum('','hidden','scroll','auto'), value:''}),
+		overflow: Config({type: Enum('','hidden','scroll','auto','hscroll','vscroll'), value:''}),
 
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
 		size: Config({type:vec3, value:vec3(NaN), meta:"xyz"}),
@@ -214,13 +221,11 @@ define.class('$system/base/node', function(require){
 
 		// fires when pointer is pressed down.
 		pointerstart:Config({type:Event}),
-		pointermultistart:Config({type:Event}),
 		// fires when pointer is pressed and moved (dragged).
 		pointermove:Config({type:Event}),
 		pointermultimove:Config({type:Event}),
 		// fires when pointer is released.
 		pointerend:Config({type:Event}),
-		pointermultiend:Config({type:Event}),
 		// fires when pointer is pressed and released quickly.
 		pointertap:Config({type:Event}),
 		// fires when pointer moved without being pressed.
@@ -305,7 +310,7 @@ define.class('$system/base/node', function(require){
 	this.remapmatrix = mat4();
 
 	// forward references for shaders
-	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
+	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
 	this.screen = {device:{size:vec2(), frame:{size:vec2()}}}
 
 	this.noise = require('$system/shaderlib/noiselib')
@@ -359,20 +364,33 @@ define.class('$system/base/node', function(require){
 
 		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
 			// this switches the bg shader to the rounded one
-			this.bgshader_name = 'roundedrectshader'
-			this.bordershader_name = 'roundedbordershader'
-			this.roundedrect = bg_on
+			if(this._bgimage){
+				this.roundedimage = true
+				this.roundedrect = false
+			}
+			else{
+				this.roundedrect = bg_on
+				this.roundedimage = false
+			}
 			this.roundedborder = border_on
+			this.hardimage = false
 			this.hardrect = false
 			this.hardborder = false
 		}
 		else {
-			this.bgshader_name = 'hardrectshader'
-			this.bordershader_name = 'hardbordershader'
-			this.hardrect = bg_on
+			if(this._bgimage){
+				this.hardimage = true
+				this.hardrect = false
+			}
+			else{
+				this.hardrect = bg_on
+				this.hardimage = false
+			}
+
 			this.hardborder = border_on
 			this.roundedrect = false
 			this.roundedborder = false
+			this.roundedimage = false
 		}
 	}
 
@@ -438,11 +456,6 @@ define.class('$system/base/node', function(require){
 			this.viewportmatrix = mat4()
 		}
 
-		if(this._bgimage || this._wiredfn_bgimage){
-			// set the bg shader
-			this.hardrect = false
-			this.hardimage = true
-		}
 		// create shaders
 		this.shaders = {}
 		for(var key in this.shader_enable){
@@ -459,7 +472,8 @@ define.class('$system/base/node', function(require){
 //				if(prevshader && prevshader.constructor !== shader) console.log(shader)
 				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
 					shobj = prevshader
-					shobj.constructor = shader
+					Object.defineProperty(shobj, 'constructor',{value:shader, configurable:true})
+					//shobj.constructor = shader
 					shobj.view = this
 					shobj.outer = this
 					// ok now check if we need to dirty it
@@ -516,14 +530,22 @@ define.class('$system/base/node', function(require){
 		if(this.initialized){
 			if(typeof this._bgimage === 'string'){
 				// Path to image was specified
-				require.async(this._bgimage, 'jpeg').then(function(result){
-					this.setBgImage(result)
-				}.bind(this))
+				if(require.loaded(this._bgimage)){
+					var img = require(this._bgimage)
+					this.setBgImage(img)
+				}
+				else{
+					// check if loaded already
+					require.async(this._bgimage, 'jpeg').then(function(result){
+						this.setBgImage(result)
+					}.bind(this))
+				}
 			}
 			else{
 				this.setBgImage(this._bgimage)
 			}
 		}
+		else this.setBorderShaders()
 	}
 
 	this.defaultKeyboardHandler = function(v, prefix){
@@ -549,11 +571,16 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
+
 	this.setBgImage = function(image){
-		var img = this.shaders.hardimage.texture = Shader.Texture.fromImage(image);
-		if(isNaN(this._size[0])){
+		var shader = this.shaders.hardimage || this.shaders.roundedimage
+		if(!shader) return
+		var img = shader.texture = Shader.Texture.fromImage(image);
+		if(this.bgimagemode === "resize"){
 			this._size = img.size
 			this.relayout()
+		} else if (img) {
+			this.onbgimagemode()
 		}
 		else this.redraw()
 	}
@@ -585,11 +612,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// internal, called at every frame draw
-	this.atDraw = function(){
-		// if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
-	}
-
 	// internal, sorts the shaders
 	this.sortShaders = function(){
 		var shaders = this.shaders
@@ -602,7 +624,6 @@ define.class('$system/base/node', function(require){
 		}.bind(this))
 		//console.log(this.shader_draw_list)
 	}
-
 
 	// internal, custom hook in the inner class assignment to handle nested shaders specifically
 	this.atInnerClassAssign = function(key, value){
@@ -800,6 +821,7 @@ define.class('$system/base/node', function(require){
 		var shaders = this.shader_update_list
 		for(var i = 0; i < shaders.length; i ++){
 			var shader = shaders[i]
+			if(shader.view !== this)debugger
 			if(shader.update && shader.update_dirty){
 				shader.update_dirty = false
 				shader.update()
@@ -847,15 +869,15 @@ define.class('$system/base/node', function(require){
 			dragview.closeOverlay()
 			if(lastdrag){
 				lastdrag.emitUpward('dragout',{})
-				dragview.atDrop(lastdrag, event)
-				this.onpointerend = undefined
 			}
+			dragview.atDrop(lastdrag, event)
+			this.onpointerend = undefined
 		}
 	}
 
 	// internal, decide to inject scrollbars into our childarray
 	this.atRender = function(){
-		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow === 'auto')){
+		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow==='hscroll' || this._overflow === 'vscroll' || this._overflow === 'auto')){
 			if(this.vscrollbar) this.vscrollbar.value = 0
 			if(this.hscrollbar) this.hscrollbar.value = 0
 
@@ -869,7 +891,7 @@ define.class('$system/base/node', function(require){
 				}
 			}
 
-			this.children.push(
+			if(this._overflow === 'scroll' || this._overflow === 'vscroll') this.children.push(
 				this.vscrollbar = this.scrollbar({
 					position:'absolute',
 					vertical:true,
@@ -886,7 +908,10 @@ define.class('$system/base/node', function(require){
 						this_layout.height = parent_layout.height
 						this_layout.left = parent_layout.width - this_layout.width
 					}
-				}),
+				})
+			)
+
+			if(this._overflow === 'scroll' || this._overflow === 'hscroll') this.children.push(
 				this.hscrollbar = this.scrollbar({
 					position: 'absolute',
 					vertical: false,
@@ -910,10 +935,10 @@ define.class('$system/base/node', function(require){
 			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
 
 			this.pointerwheel = function(event){
-				if(this.vscrollbar._visible){
+				if(this.vscrollbar && this.vscrollbar._visible){
 					this.vscrollbar.value = clamp(this.vscrollbar._value + event.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
-				if(this.hscrollbar._visible){
+				if(this.hscrollbar && this.hscrollbar._visible){
 					this.hscrollbar.value = clamp(this.hscrollbar._value + event.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
@@ -1008,23 +1033,26 @@ define.class('$system/base/node', function(require){
 		if(bailbound) return
 
 		var matrix_changed = parent_changed
-		if (parentviewport === '3d'){// && !this._mode ){
+		if (parentviewport === '3d'){
 			matrix_changed = true
 			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
 		}
 		else {
-
 			// compute TSRT matrix
 			if(layout){
 				//console.log(this.matrix_dirty)
 				var ml = this.matrix_layout
 				if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
-					ml.width !== layout.width || ml.height !== layout.height){
+					ml.width !== layout.width || ml.height !== layout.height
+				    || ml.scale !== this._scale || ml.rotate !== this._rotate
+				){
 					this.matrix_layout = {
 						left:layout.left,
 						top:layout.top,
 						width:layout.width,
-						height:layout.height
+						height:layout.height,
+						scale: this._scale,
+						rotate:this._rotate
 					}
 
 					matrix_changed = true
@@ -1050,6 +1078,7 @@ define.class('$system/base/node', function(require){
 			}
 		}
 
+		var parentmode = parentviewport
 		if(this._viewport){
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(this.modelmatrix, parentmatrix, this.viewportmatrix)
@@ -1057,16 +1086,18 @@ define.class('$system/base/node', function(require){
 			else{
 				this.viewportmatrix = this.modelmatrix
 			}
-			this.totalmatrix = mat4.identity();
-			parentmode = this._viewport;
-			parentmatrix = mat4.identity();
+			mat4.identity(this.totalmatrix)
+			parentmode = this._viewport
+			parentmatrix = mat4.global_identity
 		}
 		else{
 			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4( this.modelmatrix, parentmatrix, this.totalmatrix)
 		}
 
 		var children = this.children
-		if(children) for(var i = 0; i < children.length; i++){
+		var len = children.length
+
+		if(children) for(var i = 0; i < len; i++){
 			var child = children[i]
 
 			var clayout = child.layout
@@ -1106,6 +1137,10 @@ define.class('$system/base/node', function(require){
 		}
 		ref.oldlayout = layout
 		ref.matrix_dirty = true
+
+		if(ref._bgimage){
+			ref.onbgimagemode()
+		}
 	}
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
@@ -1172,6 +1207,8 @@ define.class('$system/base/node', function(require){
 	this.position =
 	this.relayout
 
+	this.rotate = this.rematrix
+
 	// internal, called by the render engine
 	this.doLayout = function(){
 
@@ -1218,15 +1255,22 @@ define.class('$system/base/node', function(require){
 			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0];
 			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1];
 
-
+			// we have some kind of overflow, cause we are a viewport
+			// so if height is not given we have to take up the external height
+			//console.log(presizey, this.layout.height)
 			//console.log("This is where we get the percentage size", this._percentsize, presizex,presizey);
 
 			this._size = vec2(presizex, presizey);
 			this._pos = vec2(preposx, preposy);
 			//console.log(this._percentpos, this._pos ,pos);
-
+			var preheight = this._layout.height
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
+
+			if(isNaN(presizey)){
+				this._layout.height = preheight
+			}
+
 			this._size = size
 			this._pos = pos;
 
@@ -1234,6 +1278,12 @@ define.class('$system/base/node', function(require){
 
 
 		}
+	}
+
+	this.animate = function(key, track){
+		return new define.Promise(function(resolve, reject){
+			this.startAnimation(key, undefined, track, resolve)
+		}.bind(this))
 	}
 
 	this.startAnimation = function(key, value, track, resolve){
@@ -1290,7 +1340,9 @@ define.class('$system/base/node', function(require){
 		this.position = function(){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			var res = vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			res.w -= 0.004
+			return res;
 		}
 		this.color = function(){
 			var col = view.bgcolorfn(mesh.xy)
@@ -1349,11 +1401,58 @@ define.class('$system/base/node', function(require){
 		this.updateorder = 0
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
+		//this.atDraw = function(draw){
+		//	console.log('in shader at:',draw === this.view, this.view.viewmatrix)
+		//}
 		this.color = function(){
-			var col = this.texture.sample(mesh.xy)
-			return vec4(col.rgb, col.a * view.opacity)
+			//return mix('red','green',mesh.y)
+			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
+				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
+				return view.bgcolor;
+			}
+			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
+
+
+	this.onbgimagemode = function(ev, v, o) {
+
+		if (this.shaders) {
+			var shader = this.shaders.hardimage || this.shaders.roundedimage;
+
+			if (shader && shader.texture) {
+				var size = shader.texture.size;
+
+				var imgw = size[0];
+				var imgh = size[1];
+				var aspect = this._width / this._height;
+				var uselayout = false;
+				if (isNaN(aspect)) {
+					uselayout = true;
+					aspect = this._layout.width / this._layout.height;
+				}
+				var ratio = imgw / imgh / aspect;
+				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
+					this.bgimageaspect = vec2(1.0,1.0);
+				} else if (this.bgimagemode === "aspect-fit") {
+					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
+						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+					} else {
+						this.bgimageaspect = vec2(1.0, ratio);
+					}
+				} else if (this.bgimagemode === "aspect-fill") {
+					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
+						this.bgimageaspect = vec2(1.0, ratio);
+					} else {
+						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+					}
+				}
+			}
+		}
+	};
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
@@ -1434,6 +1533,24 @@ define.class('$system/base/node', function(require){
 
 			sized = vec2(pos.x, pos.y)
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
+		}
+	})
+
+	// hard edged bgimage shader
+	define.class(this, 'roundedimage', this.roundedrect, function(){
+		this.dont_scroll_as_viewport = true
+		this.updateorder = 0
+		this.draworder = 0
+		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
+		this.color = function(){
+			if (view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x < 0.0
+				|| view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x > 1.0
+				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y < 0.0
+				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y > 1.0) {
+				return view.bgcolor;
+			}
+			var col = this.texture.sample(vec2(view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect[1]));
+			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
 

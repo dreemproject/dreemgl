@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$system/parse/onejsserialize', function(require, exports, baseclass){
@@ -220,7 +221,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 			//var name = gen.expand(node, null, {})
 			console.error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source)
 			// make it throw in the function so we can find it
-			state.functionref()
+			//state.functionref()
 			//state.fn()
 			//throw new Error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source)
 		}
@@ -624,8 +625,10 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 
 	this.Logic = function(node, parent, state){
 		// return type boolean
+		
 		var ret = baseclass.Logic.call(this, node, parent, state)
 		node.infer = boolean
+
 		return ret
 	}
 

@@ -1,8 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox){
 
@@ -22,18 +22,22 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 		// read-only, the value (HSV)
 		baseval: Config({type:float, value:0.5, readonly:true, rerender:false}),
 		sliderheight: Config({type: float, value:15}),
+
+		colorwheel:Config({type:Boolean, value:true}),
+		colorsliders:Config({type:Boolean, value:true}),
+		colorbox:Config({type:Boolean, value:true})
 	}
 
-	this.basehue = 0.5;
-	this.bgcolor = vec4(0.0,0.0,0.0,0.4)
-	this.flexdirection = "column";
+	this.basehue = 0.5
+	this.bgcolor = vec4(0.0, 0.0, 0.0, 0.4)
+	this.flexdirection = "column"
 	this.padding = vec4(10)
-	this.minwidth = 200;
-	this.maxwidth = 300;
+	this.minwidth = 200
+	this.maxwidth = 300
 	this.borderradius = 3
 	this.borderwidth = 1
 	this.bordercolor = this.internalbordercolor
-	this.contrastcolor = vec4("black");
+	this.contrastcolor = vec4("black")
 
 	this.internalbordercolor= function(){
 		this.bordercolor = this.internalbordercolor
@@ -103,7 +107,7 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 
 	this.createColorFromHSV = function(){
 		this._value = vec4.fromHSV(this.basehue, this.basesat, this.baseval);
-		if (this.valuechange) this.valuechange(this._value);
+		if (this.valuechange) this.valuechange(this._value, this._value, this);
 	}
 
 	this.createHSVFromColor = function(){
@@ -296,7 +300,6 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 		this.drawcount = 0;
 	})
 
-
 	define.class(this, 'colorcirclecontrol', function($ui$view){
 		this.name = 'colorcirclecontrol'
 		this.width = 200;
@@ -322,7 +325,7 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 			this.outer.setHueBase(-angle/ 6.283+ 0.25);
 		}
 
-		this.pointermove = function(event){
+		this.pointerend = this.pointermove = function(event){
 			var a = this.globalToLocal(event.position)
 			this.updatehue(a);
 			this.redraw();
@@ -456,7 +459,7 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 			this.outer.setLumBase(val);
 		}
 
-		this.pointermove = function(event){
+		this.pointerend = this.pointermove = function(event){
 			var p = this.globalToLocal(event.position)
 			this.updatecolorfrompointer(p);
 		}
@@ -583,39 +586,41 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 	}
 
 	this.render = function(){
-		return [
-			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"}
-				,view({margin:10, bgcolor:NaN, position:"relative", alignself:"center"}
-					,view({bgcolor:NaN, width:200, height:200, padding:3})
-					,this.colorcirclecontrol({position:"absolute",width:200, height:200})
-					,this.squareview({basehue:this.basehue, position:"absolute"})
-				)
-				,view({bgcolor:NaN, flexdirection:"column",  width:280}
-					,this.customslider({name:"rslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})
-					,this.customslider({name:"gslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5), offset:function(v){this.outer.setGreen(v.value/255)}})
-					,this.customslider({name:"bslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})
-					,view({bgcolor:NaN}
-						,view({flex:1, bgcolor:NaN},numberbox({title:"R", flex:1, minvalue:0, maxvalue:255, name:"textr",value:"100", fontsize:this.fontsize}))
-						,view({flex:1, bgcolor:NaN},numberbox({title:"G", flex:1, minvalue:0, maxvalue:255, name:"textg",value:"100", fontsize:this.fontsize}))
-						,view({flex:1, bgcolor:NaN},numberbox({title:"B", flex:1, minvalue:0, maxvalue:255, name:"textb",value:"100", fontsize:this.fontsize}))
 
-					)
-					,this.customslider({name:"hsvider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.0,this.basesat,this.baseval), hsvto:vec3(1,this.basesat,this.baseval), offset:function(v){this.outer.setHueBase(v.value/255)}})
-					,this.customslider({name:"sslider",height: this.sliderheight, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,0,this.baseval), hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}})
-					,this.customslider({name:"lslider",height: this.sliderheight, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,this.basesat,0), hsvto:vec3(0,this.basesat,1), offset:function(v){this.outer.setLumBase(v.value/255)}})
-					,view({bgcolor:NaN}
-						,view({flex:1, bgcolor:NaN},numberbox({title:"H", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texth",value:"100"}))
-						,view({flex:1, bgcolor:NaN},numberbox({title:"S", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texts",value:"300"}))
-						,view({flex:1, bgcolor:NaN},numberbox({title:"V", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"textv",value:"100"}))
-					)
-				)
-			)
+		var colorwheel = this.colorwheel ?
+			view({margin:10, bgcolor:NaN, position:"relative", alignself:"center"},
+				view({bgcolor:NaN, width:200, height:200, padding:3}),
+				this.colorcirclecontrol({position:"absolute",width:200, height:200}),
+				this.squareview({basehue:this.basehue, position:"absolute"})) : [];
 
-			,view({ bgcolor:NaN,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"}
-				,view({ bgcolor:NaN,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}
-					,view({flex:1, bgcolor:NaN,alignitems:"flex-end",justifycontent:"flex-end"}
-						,label({bgcolor:NaN,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"#", fgcolor:this.contrastcolor, fontsize: this.fontsize})
-						,textbox({
+		var colorsliders = this.colorsliders ? view({bgcolor:NaN, flexdirection:"column",  width:280},
+			this.customslider({name:"rslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5),
+				offset:function(v){this.outer.setRed(v.value/255)}}),
+			this.customslider({name:"gslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5),
+				offset:function(v){this.outer.setGreen(v.value/255)}}),
+			this.customslider({name:"bslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5),
+				offset:function(v){this.outer.setBlue(v.value/255)}}),view({bgcolor:NaN},
+				view({flex:1, bgcolor:NaN},numberbox({title:"R", flex:1, minvalue:0, maxvalue:255, name:"textr",value:"100", fontsize:this.fontsize})),
+				view({flex:1, bgcolor:NaN},numberbox({title:"G", flex:1, minvalue:0, maxvalue:255, name:"textg",value:"100", fontsize:this.fontsize})),
+				view({flex:1, bgcolor:NaN},numberbox({title:"B", flex:1, minvalue:0, maxvalue:255, name:"textb",value:"100", fontsize:this.fontsize}))
+			),
+			this.customslider({name:"hsvider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.0,this.basesat,this.baseval),
+				hsvto:vec3(1,this.basesat,this.baseval), offset:function(v){this.outer.setHueBase(v.value/255)}}),
+			this.customslider({name:"sslider",height: this.sliderheight, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,0,this.baseval),
+				hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}}),
+			this.customslider({name:"lslider",height: this.sliderheight, flex:1, hsvhueadd: 1,
+				hsvfrom:vec3(0,this.basesat,0), hsvto:vec3(0,this.basesat,1), offset:function(v){this.outer.setLumBase(v.value/255)}}),
+			view({bgcolor:NaN},
+				view({flex:1, bgcolor:NaN},numberbox({title:"H", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texth",value:"100"})),
+				view({flex:1, bgcolor:NaN},numberbox({title:"S", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texts",value:"300"})),
+				view({flex:1, bgcolor:NaN},numberbox({title:"V", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"textv",value:"100"})))) : [];
+
+		var colorbox = this.colorbox ?
+			view({ bgcolor:NaN,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"},
+				view({ bgcolor:NaN,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1},
+					view({flex:1, bgcolor:NaN,alignitems:"flex-end",justifycontent:"flex-end"},
+						label({bgcolor:NaN,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"#", fgcolor:this.contrastcolor, fontsize: this.fontsize}),
+						textbox({
 							name:"hexcolor",
 							bgcolor:NaN,
 							margin:vec4(0,5,0,0),
@@ -623,18 +628,22 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 							fgcolor:this.contrastcolor,
 							padding:vec4(20,2,2,2),
 							fontsize: this.fontsize
-						})
-					)
-					,view({flex:1, bgcolor:NaN,alignitems:"flex-end",justifycontent:"flex-end"}
-						,label({bgcolor:NaN,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"alpha",  fgcolor:this.contrastcolor, fontsize: this.fontsize})
-						,textbox({name:"texta", bgcolor:NaN,  margin:vec4(0,5,0,0), value:"128",  fgcolor:this.contrastcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
-					)
+						})),
+					view({flex:1, bgcolor:NaN,alignitems:"flex-end",justifycontent:"flex-end"},
+						label({bgcolor:NaN,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"alpha", fgcolor:this.contrastcolor, fontsize: this.fontsize}),
+						textbox({name:"texta", bgcolor:NaN, margin:vec4(0,5,0,0), value:"128", fgcolor:this.contrastcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
 				)
 			)
-		]
+		): [];
 
+		return [
+			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"},
+				colorwheel,
+				colorsliders),
+			colorbox
+		]
 	}
-	
+
 	var colorpicker = this.constructor
 	// Basic usage of the button.
 	this.constructor.examples = {
@@ -644,6 +653,6 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 			]
 		}
 	}
-	
-	
+
+
 })

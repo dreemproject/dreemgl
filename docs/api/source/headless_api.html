@@ -532,11 +532,81 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n378" name="n378">378</a>
 <a href="#n379" name="n379">379</a>
 <strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
+<a href="#n382" name="n382">382</a>
+<a href="#n383" name="n383">383</a>
+<a href="#n384" name="n384">384</a>
+<a href="#n385" name="n385">385</a>
+<a href="#n386" name="n386">386</a>
+<a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
+<a href="#n391" name="n391">391</a>
+<a href="#n392" name="n392">392</a>
+<a href="#n393" name="n393">393</a>
+<a href="#n394" name="n394">394</a>
+<a href="#n395" name="n395">395</a>
+<a href="#n396" name="n396">396</a>
+<a href="#n397" name="n397">397</a>
+<a href="#n398" name="n398">398</a>
+<a href="#n399" name="n399">399</a>
+<strong><a href="#n400" name="n400">400</a></strong>
+<a href="#n401" name="n401">401</a>
+<a href="#n402" name="n402">402</a>
+<a href="#n403" name="n403">403</a>
+<a href="#n404" name="n404">404</a>
+<a href="#n405" name="n405">405</a>
+<a href="#n406" name="n406">406</a>
+<a href="#n407" name="n407">407</a>
+<a href="#n408" name="n408">408</a>
+<a href="#n409" name="n409">409</a>
+<strong><a href="#n410" name="n410">410</a></strong>
+<a href="#n411" name="n411">411</a>
+<a href="#n412" name="n412">412</a>
+<a href="#n413" name="n413">413</a>
+<a href="#n414" name="n414">414</a>
+<a href="#n415" name="n415">415</a>
+<a href="#n416" name="n416">416</a>
+<a href="#n417" name="n417">417</a>
+<a href="#n418" name="n418">418</a>
+<a href="#n419" name="n419">419</a>
+<strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
+<a href="#n444" name="n444">444</a>
+<a href="#n445" name="n445">445</a>
+<a href="#n446" name="n446">446</a>
+<a href="#n447" name="n447">447</a>
+<a href="#n448" name="n448">448</a>
+<a href="#n449" name="n449">449</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -640,6 +710,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 HeadlessApi.duration = settings.duration;
                 HeadlessApi.name = settings.name;
                 HeadlessApi.verbose = settings.verbose;
+                HeadlessApi.dumpstate = settings.dumpstate;
           
                 <span class="keyword">try</span> {
                         <span class="comment">// Create a top-level layer to the stage. </span>
@@ -662,9 +733,76 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span> (HeadlessApi.verbose)
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">Terminate</span><span class="delimiter">'</span></span>);
                 
-                <span class="comment">// TODO Dump the object state if enabled</span>
+                <span class="comment">// Dump the object state, if enabled, to a file</span>
+                <span class="keyword">if</span> (HeadlessApi.dumpstate &amp;&amp; HeadlessApi.dumpstate.length &gt; <span class="integer">0</span>) {
+                        <span class="keyword">var</span> state = HeadlessApi.currentstate(<span class="predefined-constant">true</span>);
+                        <span class="keyword">var</span> state_json = JSON.stringify(state, <span class="predefined-constant">null</span>, <span class="integer">2</span>);
+
+                        <span class="comment">// Write to the specified file, or stdout</span>
+                        <span class="keyword">var</span> file = HeadlessApi.dumpstate.toString();
+                        <span class="keyword">if</span> (file === <span class="string"><span class="delimiter">'</span><span class="content">stdout</span><span class="delimiter">'</span></span>) {
+                                process.stdout.write(state_json);
+                        }
+                        <span class="keyword">else</span> {
+                                <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
+                                fs.writeFileSync(file, state_json);
+                        }
+                }
 
                 process.exit(<span class="integer">0</span>);
+        }
+
+
+        <span class="comment">/**
+         * @method currentstate
+         * Static method to return the json state of the composition.
+         * Objects are displayed in the order they are referenced.
+         */</span>
+        HeadlessApi.<span class="function">currentstate</span> = <span class="keyword">function</span>(verbose) {
+                HeadlessApi.shownobjects = {};
+
+                <span class="keyword">var</span> states = HeadlessApi.rootlayer.currentstate(verbose);
+
+                <span class="keyword">return</span> states;
+        }
+
+
+        <span class="comment">/**
+         * @method shownObject
+         * Static method to indicate a named object that has been displayed
+         * @param {objname} String Object name
+         */</span>
+        HeadlessApi.shownobjects = {};
+        HeadlessApi.<span class="function">shownObject</span> = <span class="keyword">function</span>(objname) {
+                HeadlessApi.shownobjects[objname] = <span class="integer">1</span>;
+        }
+
+
+        <span class="comment">/**
+         * @method isShown
+         * Static method to test if the named object has been shown.
+         * @param {objname} String Object name
+         */</span>
+        HeadlessApi.<span class="function">isShown</span> = <span class="keyword">function</span>(objname) {
+                <span class="keyword">return</span> (objname <span class="keyword">in</span> HeadlessApi.shownobjects);
+        }
+
+
+
+        HeadlessApi.<span class="function">inspect</span> = <span class="keyword">function</span>() {
+                <span class="comment">// TODO Dump the object state if enabled</span>
+                <span class="keyword">var</span> output = HeadlessApi.rootlayer.inspect();
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">rootlayer</span><span class="delimiter">'</span></span>, output);
+        }
+
+        <span class="comment">/**
+         * @method inspect
+         * Static method to return the json state of the composition.
+         */</span>
+        HeadlessApi.<span class="function">inspect</span> = <span class="keyword">function</span>() {
+                <span class="comment">// TODO Dump the object state if enabled</span>
+                <span class="keyword">var</span> output = HeadlessApi.rootlayer.inspect();
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">rootlayer</span><span class="delimiter">'</span></span>, output);
         }
 
 

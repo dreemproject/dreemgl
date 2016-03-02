@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$system/base/shader', function(require, exports){
@@ -312,6 +313,7 @@ console.log('*******************************************************************
 			}
 		}
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
+		if(TEXTURE_ID > 0)debugger
 		TEXTURE_END
 
 		// attributes
@@ -340,7 +342,7 @@ console.log('*******************************************************************
 		ATTRLOC_ATTRIBPTR
 		ATTRLOC_END
 
-		var dalimaterial = root.dalimaterial;
+		var blender = root.dalimaterial.hasBlender() ? root.dalimaterial : root.dalirenderer;
 
 		// set up blend mode
 		if(root.alpha_blend_eq.op){
@@ -361,9 +363,9 @@ console.log('*******************************************************************
 
 			// DALI
 			//console.log('*** full blend');
-			dalimaterial.setBlendMode(dali.BLENDING_ON);
-			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
-			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
+			blender.setBlendMode(dali.BLENDING_ON);
+			blender.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+			blender.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
 
 		}
 		else if(root.color_blend_eq.op){
@@ -378,11 +380,11 @@ console.log('*******************************************************************
 			gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
 
 
-			dalimaterial.setBlendMode(dali.BLENDING_ON);
-			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+			blender.setBlendMode(dali.BLENDING_ON);
+			blender.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
 
 			//TODO Check this. What are the last two args?
-			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
+			blender.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
 			//dalimaterial.setBlendFunc(dali.BLEND_FACTOR_SRC_COLOR, dali.BLEND_FACTOR_DST_COLOR, root.color_blend_eq.src, root.color_blend_eq.dst);
 			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_ONE, dali.BLEND_FACTOR_ZERO);
 			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_SRC_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
@@ -395,7 +397,7 @@ console.log('*******************************************************************
 			//console.log('==== blend disabled');
 			gl.disable(gl.BLEND)
 			//DALI
-			dalimaterial.setBlendMode(dali.BLENDING_OFF);
+			blender.setBlendMode(dali.BLENDING_OFF);
 		}
 		
 		// set up depth test

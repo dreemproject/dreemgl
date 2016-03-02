@@ -245,32 +245,114 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n91" name="n91">91</a>
 <a href="#n92" name="n92">92</a>
 <a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view) {
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
 
         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
-        <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.bold = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">format</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.format</span><span class="delimiter">'</span></span>)}),
-                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
-                <span class="key">maxzoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.maxzoom</span><span class="delimiter">'</span></span>)}),
-                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
-                <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
+                <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
+                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>)
         }
 
         <span class="keyword">var</span> MONTHS = [<span class="string"><span class="delimiter">'</span><span class="content">January</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">February</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">March</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">April</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">May</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">June</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">July</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">August</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">September</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">October</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">November</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">December</span><span class="delimiter">'</span></span>]
         <span class="keyword">var</span> DAYS = [<span class="string"><span class="delimiter">'</span><span class="content">1st</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">2nd</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">3rd</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">4th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">5th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">6th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">7th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">8th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">9th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">10th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">11th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">12th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">13th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">14th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">15th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">16th</span><span class="delimiter">'</span></span>,
                 <span class="string"><span class="delimiter">'</span><span class="content">17th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">18th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">19th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">20th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">21st</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">22nd</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">23rd</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">24th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">25th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">26th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">27th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">28th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">29th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">30th</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">31st</span><span class="delimiter">'</span></span>]
+        <span class="keyword">var</span> MONTH_COLLAPSE = <span class="float">200.0</span>
 
         <span class="local-variable">this</span>.<span class="function">typeface</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
-
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                         <span class="keyword">var</span> zoom = view.zoom
+                        <span class="keyword">var</span> scroll = view.scroll
                         <span class="keyword">var</span> w = view.parent.layout.width
                         <span class="keyword">var</span> h = view.parent.layout.height
 
@@ -278,66 +360,140 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> dw = w / zoom
                         <span class="keyword">var</span> hw = w / <span class="integer">24</span> / zoom
 
+                        <span class="keyword">var</span> ts = view.parent.TIME_SCALE
+
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.newText()
                         <span class="keyword">if</span> (view.font) mesh.font = view.font
                         <span class="keyword">if</span> (view.align) mesh.align = view.align
                         <span class="keyword">if</span> (view.fontsize) mesh.fontsize = view.fontsize
                         mesh.clear()
 
-                        <span class="keyword">var</span> x, start
-                        <span class="comment">// draw month labels</span>
-                        <span class="comment">// TODO(aki): calculate and display months correctly</span>
-                        start = floor(zoom / <span class="integer">365</span> * view.scroll[<span class="integer">0</span>] * <span class="integer">12</span>)
-                        <span class="keyword">if</span> (mw &gt; <span class="integer">110</span>) {
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i = start; i &lt; start + <span class="integer">12</span>; i++) {
-                                        x = i * mw + <span class="integer">5</span> - view.scroll[<span class="integer">0</span>] * w
-                                        <span class="keyword">if</span> (x &gt; w) <span class="keyword">break</span>
-                                        mesh.add_x = x
-                                        mesh.add_y = <span class="integer">24</span> - <span class="integer">5</span>
-                                        mesh.add(MONTHS[i % <span class="integer">12</span>],<span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
+                        <span class="keyword">var</span> i, x, y, start, offset, date, text
+
+                        start = <span class="keyword">new</span> Date(view.parent.getStart())
+                        first = <span class="keyword">new</span> Date(view.parent.getRangeStart())
+
+                        <span class="keyword">var</span> firstYear = first.getFullYear()
+                        <span class="keyword">var</span> firstMonth = first.getMonth()
+                        <span class="keyword">var</span> firstDate = first.getDate()
+                        <span class="keyword">var</span> firstHour = first.getHours()
+
+                        <span class="keyword">function</span> <span class="function">drawLabel</span>(text, date, xoffset, yoffset) {
+                                x = (date.getTime() - first) / ts / zoom * w + xoffset + <span class="integer">5</span>
+                                y = yoffset - <span class="integer">5</span>
+                                mesh.add_x = x
+                                mesh.add_y = y
+                                mesh.add(text, <span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">0</span>)
+                        }
+
+                        <span class="keyword">function</span> <span class="function">drawYears</span>(yoffset) {
+                                date = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>)
+                                date.setYear(firstYear)
+                                xoffset = (date.getTime() - first) / ts / zoom * w
+                                x = <span class="integer">0</span>, i = -<span class="integer">1</span>
+                                <span class="keyword">while</span> (x &lt; w) {
+                                        date = <span class="keyword">new</span> Date(first)
+                                        date.setYear(firstYear + i)
+                                        drawLabel(date.getFullYear().toString(), date, xoffset, yoffset)
+                                        i++
                                 }
                         }
 
-                        <span class="comment">// draw day labels</span>
-                        start = floor(zoom / <span class="integer">365</span> * view.scroll[<span class="integer">0</span>] * <span class="integer">12</span> * <span class="integer">30</span>)
-                        <span class="keyword">if</span> (dw &gt; <span class="integer">60</span>) {
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i = start; i &lt; start + <span class="integer">30</span>; i++) {
-                                        x = i * dw + <span class="integer">5</span> - view.scroll[<span class="integer">0</span>] * w
-                                        <span class="keyword">if</span> (x &gt; w) <span class="keyword">break</span>
-                                        mesh.add_x = x
-                                        mesh.add_y = <span class="integer">48</span> - <span class="integer">5</span>
-                                        mesh.add(DAYS[i % <span class="integer">31</span>], <span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
+                        <span class="keyword">function</span> <span class="function">drawMonths</span>(yoffset) {
+                                date = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>)
+                                date.setYear(firstYear)
+                                date.setMonth(firstMonth)
+                                xoffset = (date.getTime() - first) / ts / zoom * w
+                                x = <span class="integer">0</span>, i = -<span class="integer">1</span>
+                                <span class="keyword">while</span> (x &lt; w) {
+                                        date = <span class="keyword">new</span> Date(first)
+                                        date.setMonth(firstMonth + i)
+                                        text = MONTHS[date.getMonth() % <span class="integer">12</span>]
+                                        <span class="keyword">if</span> (mw &gt; <span class="integer">220</span>) {
+                                                text = text + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + date.getFullYear()
+                                        }
+                                        drawLabel(text, date, xoffset, yoffset)
+                                        i++
+                                }
+                        }
+
+                        <span class="keyword">function</span> <span class="function">drawDays</span>(yoffset) {
+                                date = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>)
+                                date.setYear(firstYear)
+                                date.setMonth(firstMonth)
+                                date.setDate(firstDate)
+                                xoffset = (date.getTime() - first) / ts / zoom * w
+                                x = <span class="integer">0</span>, i = -<span class="integer">1</span>
+                                <span class="keyword">while</span> (x &lt; w) {
+                                        date = <span class="keyword">new</span> Date(first)
+                                        date.setDate(firstDate + i)
+                                        text = DAYS[(date.getDate() - <span class="integer">1</span>) % <span class="integer">31</span>]
+                                        <span class="keyword">if</span> (dw &gt; <span class="integer">220</span>) {
+                                                text = MONTHS[(date.getMonth()) % <span class="integer">12</span>] + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + text + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + date.getFullYear()
+                                        } <span class="keyword">else</span> <span class="keyword">if</span> (dw &gt; <span class="integer">120</span>) {
+                                                text = MONTHS[(date.getMonth()) % <span class="integer">12</span>] + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + text
+                                        }
+                                        drawLabel(text, date, xoffset, yoffset)
+                                        i++
+                                }
+                        }
+
+                        <span class="keyword">function</span> <span class="function">drawHours</span>(yoffset) {
+                                date = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>)
+                                date.setYear(firstYear)
+                                date.setMonth(firstMonth)
+                                date.setDate(firstDate)
+                                date.setHours(firstHour)
+                                xoffset = (date.getTime() - first) / ts / zoom * w
+                                <span class="keyword">var</span> c = <span class="integer">24</span> / view.parent.hoursegs
+                                x = <span class="integer">0</span>, i = -<span class="integer">1</span>
+                                <span class="keyword">while</span> (x &lt; w) {
+                                        <span class="keyword">var</span> h = (firstHour + i) % <span class="integer">24</span>
+                                        date = <span class="keyword">new</span> Date(first)
+                                        date.setHours(firstHour + i)
+                                        <span class="keyword">if</span> (view.parent.format == <span class="integer">12</span>) {
+                                                text = (h % <span class="integer">12</span> || <span class="integer">12</span>) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + (h &lt; <span class="integer">12</span> ? <span class="string"><span class="delimiter">'</span><span class="content">am</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">pm</span><span class="delimiter">'</span></span>)
+                                        } <span class="keyword">else</span> {
+                                                text = h % <span class="integer">24</span> + <span class="string"><span class="delimiter">'</span><span class="content"> h</span><span class="delimiter">'</span></span>
+                                        }
+                                        <span class="keyword">if</span> (h % c == <span class="integer">0</span>) {
+                                                drawLabel(text, date, xoffset, yoffset)
+                                        }
+                                        i++
                                 }
                         }
 
                         mesh.fontsize = view.fontsize * <span class="float">0.75</span>
 
-                        <span class="comment">// draw hour labels</span>
-                        start = floor(zoom / <span class="integer">365</span> * view.scroll[<span class="integer">0</span>] * <span class="integer">365</span> * view.hoursegs)
-                        <span class="keyword">if</span> (hw &gt; (<span class="integer">32</span> / view.hoursegs) &amp;&amp; view.hoursegs !== <span class="integer">1</span>) {
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i = start; i &lt; start + <span class="integer">48</span>; i++) {
-                                        <span class="keyword">var</span> h = <span class="integer">24</span> / view.hoursegs * i
-                                        x = h * hw + <span class="integer">5</span> - view.scroll[<span class="integer">0</span>] * w
-                                        <span class="keyword">if</span> (x &gt; w) <span class="keyword">break</span>
-                                        mesh.add_x = x
-                                        mesh.add_y = <span class="integer">72</span> - <span class="integer">5</span>
-                                        <span class="keyword">if</span> (view.format == <span class="integer">12</span>) {
-                                                h = (h % <span class="integer">12</span> || <span class="integer">12</span>) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + (i &lt; <span class="integer">12</span> ? <span class="string"><span class="delimiter">'</span><span class="content">am</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">pm</span><span class="delimiter">'</span></span>)
-                                        } <span class="keyword">else</span> {
-                                                h = h % <span class="integer">24</span> + <span class="string"><span class="delimiter">'</span><span class="content"> h</span><span class="delimiter">'</span></span>
-                                        }
-                                        mesh.add(h, <span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
-                                }
-                        } <span class="keyword">else</span> {
-                                mesh.add_x = <span class="integer">0</span>
-                                mesh.add_y = <span class="integer">72</span> - <span class="integer">5</span>
-                                mesh.add(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, <span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
+                        <span class="keyword">switch</span> (view.parent.segments[<span class="integer">0</span>]) {
+                                <span class="keyword">case</span> <span class="integer">1</span>:
+                                        drawYears(<span class="integer">26</span>)
+                                        <span class="keyword">break</span>
+                                <span class="keyword">case</span> <span class="integer">2</span>:
+                                        drawMonths(<span class="integer">26</span>)
+                                        <span class="keyword">break</span>
+                                <span class="keyword">case</span> <span class="integer">4</span>:
+                                        drawDays(<span class="integer">26</span>)
+                                        <span class="keyword">break</span>
+                        }
+
+                        mesh.fontsize = view.fontsize * <span class="float">0.5</span>
+
+                        <span class="keyword">switch</span> (view.parent.segments[<span class="integer">1</span>]) {
+                                <span class="keyword">case</span> <span class="integer">2</span>:
+                                        drawMonths(<span class="integer">42</span>)
+                                        <span class="keyword">break</span>
+                                <span class="keyword">case</span> <span class="integer">4</span>:
+                                        drawDays(<span class="integer">42</span>)
+                                        <span class="keyword">break</span>
+                                <span class="keyword">case</span> <span class="integer">5</span>:
+                                        drawHours(<span class="integer">42</span>)
+                                        <span class="keyword">break</span>
                         }
 
                         <span class="local-variable">this</span>.mesh = mesh
                 }
         }
-
 })
 </pre></td>
 </tr></table>

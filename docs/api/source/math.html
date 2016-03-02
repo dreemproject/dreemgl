@@ -2595,11 +2595,44 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2441" name="n2441">2441</a>
 <a href="#n2442" name="n2442">2442</a>
 <a href="#n2443" name="n2443">2443</a>
+<a href="#n2444" name="n2444">2444</a>
+<a href="#n2445" name="n2445">2445</a>
+<a href="#n2446" name="n2446">2446</a>
+<a href="#n2447" name="n2447">2447</a>
+<a href="#n2448" name="n2448">2448</a>
+<a href="#n2449" name="n2449">2449</a>
+<strong><a href="#n2450" name="n2450">2450</a></strong>
+<a href="#n2451" name="n2451">2451</a>
+<a href="#n2452" name="n2452">2452</a>
+<a href="#n2453" name="n2453">2453</a>
+<a href="#n2454" name="n2454">2454</a>
+<a href="#n2455" name="n2455">2455</a>
+<a href="#n2456" name="n2456">2456</a>
+<a href="#n2457" name="n2457">2457</a>
+<a href="#n2458" name="n2458">2458</a>
+<a href="#n2459" name="n2459">2459</a>
+<strong><a href="#n2460" name="n2460">2460</a></strong>
+<a href="#n2461" name="n2461">2461</a>
+<a href="#n2462" name="n2462">2462</a>
+<a href="#n2463" name="n2463">2463</a>
+<a href="#n2464" name="n2464">2464</a>
+<a href="#n2465" name="n2465">2465</a>
+<a href="#n2466" name="n2466">2466</a>
+<a href="#n2467" name="n2467">2467</a>
+<a href="#n2468" name="n2468">2468</a>
+<a href="#n2469" name="n2469">2469</a>
+<strong><a href="#n2470" name="n2470">2470</a></strong>
+<a href="#n2471" name="n2471">2471</a>
+<a href="#n2472" name="n2472">2472</a>
+<a href="#n2473" name="n2473">2473</a>
+<a href="#n2474" name="n2474">2474</a>
+<a href="#n2475" name="n2475">2475</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define(<span class="keyword">function</span>(){
 
@@ -2793,7 +2826,7 @@ define(<span class="keyword">function</span>(){
 
         vec2.<span class="function">parse</span> = <span class="keyword">function</span>(str, o){
                 <span class="keyword">var</span> a = o || vec4()
-                <span class="keyword">var</span> fcol = parseFloat(str) 
+                <span class="keyword">var</span> fcol = parseFloat(str)
                 <span class="keyword">if</span> (fcol == str)  {
                         <span class="keyword">return</span> vec2(fcol)
                 }
@@ -2804,7 +2837,7 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">1</span>] = vec2m[<span class="integer">2</span>]
                         <span class="keyword">return</span> a
                 }
-        
+
                 <span class="keyword">var</span> vec2m = str.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*$</span><span class="delimiter">/</span><span class="modifier">i</span></span>)
                 <span class="keyword">if</span>( vec2m ) {
                         a[<span class="integer">0</span>] = vec2m[<span class="integer">1</span>]
@@ -2816,7 +2849,7 @@ define(<span class="keyword">function</span>(){
 
         vec3.<span class="function">parse</span> = <span class="keyword">function</span>(str, o){
                 <span class="keyword">var</span> a = o || vec4()
-                <span class="keyword">var</span> fcol = parseFloat(str)  
+                <span class="keyword">var</span> fcol = parseFloat(str)
                 <span class="keyword">if</span> (fcol == str)  {
                         a[<span class="integer">0</span>] = fcol
                         a[<span class="integer">1</span>] = fcol
@@ -2831,7 +2864,7 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">2</span>] = vec3m[<span class="integer">3</span>]
                         <span class="keyword">return</span> a;
                 }
-        
+
                 <span class="keyword">var</span> vec3m = str.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*$</span><span class="delimiter">/</span><span class="modifier">i</span></span>)
                 <span class="keyword">if</span>( vec3m ) {
                         a[<span class="integer">0</span>] = vec3m[<span class="integer">1</span>]
@@ -2843,9 +2876,9 @@ define(<span class="keyword">function</span>(){
         }
 
         <span class="comment">// color parser</span>
-        vec4.<span class="function">parse</span> = <span class="keyword">function</span>(col, o) {
+        vec4.<span class="function">parse</span> = <span class="keyword">function</span>(col, o, noerror) {
 
-                <span class="keyword">if</span>(col &amp;&amp; col.struct) <span class="keyword">return</span> col <span class="comment">// pass through        </span>
+                <span class="keyword">if</span>(col &amp;&amp; col.struct) <span class="keyword">return</span> col <span class="comment">// pass through</span>
 
                 col = col.trim().toLowerCase();
 
@@ -2855,13 +2888,13 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">0</span>] = ((c &gt;&gt; <span class="integer">16</span>)&amp;<span class="hex">0xff</span>) /<span class="integer">255</span>
                         a[<span class="integer">1</span>] = ((c &gt;&gt; <span class="integer">8</span>)&amp;<span class="hex">0xff</span>) /<span class="integer">255</span>
                         a[<span class="integer">2</span>] = (c&amp;<span class="hex">0xff</span>) /<span class="integer">255</span>
-                        
+
                         a[<span class="integer">3</span>] = ((c &gt;&gt; <span class="integer">24</span>)&amp;<span class="hex">0xff</span>) /<span class="integer">255</span> <span class="comment">// alpha</span>
-                        
+
                         <span class="keyword">return</span> a
                 }
 
-                <span class="keyword">var</span> fcol = parseFloat(col)  
+                <span class="keyword">var</span> fcol = parseFloat(col)
                 <span class="keyword">if</span> (fcol == col)  {
                         a[<span class="integer">0</span>] = fcol
                         a[<span class="integer">1</span>] = fcol
@@ -2869,7 +2902,7 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">3</span>] = fcol
                         <span class="keyword">return</span> a
                 }
-                                                
+
                 <span class="keyword">var</span> hex3 = col.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^#([0-9a-f]{3})$</span><span class="delimiter">/</span><span class="modifier">i</span></span>);
                 <span class="keyword">if</span> (hex3) {
                         hex3 = hex3[<span class="integer">1</span>];
@@ -2879,7 +2912,7 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">3</span>] = <span class="float">1.0</span>;
                         <span class="keyword">return</span> a;
                 }
-                
+
                 <span class="keyword">var</span> hex6 = col.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^#([0-9a-f]{6})$</span><span class="delimiter">/</span><span class="modifier">i</span></span>);
                 <span class="keyword">if</span> (hex6) {
                         hex6 = hex6[<span class="integer">1</span>];
@@ -2898,7 +2931,7 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">2</span>] = rgba[<span class="integer">3</span>]/<span class="float">255.0</span>;
                         a[<span class="integer">3</span>] = rgba[<span class="integer">4</span>]===<span class="predefined-constant">undefined</span>?<span class="integer">1</span>:rgba[<span class="integer">4</span>]/<span class="float">255.0</span>;
         <span class="comment">//                        console.log(&quot;rgba&quot; ,a);</span>
-                
+
                         <span class="keyword">return</span> a;
                 }
                 <span class="keyword">var</span> rgb = col.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^rgb</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*</span><span class="content">\)</span><span class="content">$</span><span class="delimiter">/</span><span class="modifier">i</span></span>);
@@ -2919,7 +2952,7 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">3</span>] = vec4m[<span class="integer">4</span>];
                         <span class="keyword">return</span> a;
                 }
-        
+
                 <span class="keyword">var</span> vec4m = col.match(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(</span><span class="char">\d</span><span class="content">+)</span><span class="char">\s</span><span class="content">*$</span><span class="delimiter">/</span><span class="modifier">i</span></span>);
                 <span class="keyword">if</span>( vec4m ) {
                         a[<span class="integer">0</span>] = vec4m[<span class="integer">1</span>];
@@ -2937,54 +2970,68 @@ define(<span class="keyword">function</span>(){
                         a[<span class="integer">3</span>] = vec4m[<span class="integer">4</span>];
                         <span class="keyword">return</span> a;
                 }
-
                 <span class="comment">// lets parse the color</span>
-                <span class="keyword">var</span> len = col.length
-                <span class="keyword">var</span> i = <span class="integer">0</span>
-                <span class="keyword">if</span> (col.charAt(<span class="integer">0</span>) == <span class="string"><span class="delimiter">'</span><span class="content">#</span><span class="delimiter">'</span></span>) i++;
-                c = <span class="integer">0</span>
-                <span class="keyword">while</span>(i&lt;len) {
-                        <span class="keyword">var</span> ch = col.charCodeAt(i++)
-                        <span class="keyword">if</span>(ch &gt;= <span class="integer">48</span> &amp;&amp; ch &lt;= <span class="integer">57</span>) { <span class="comment">// hex color</span>
-                                c = c &lt;&lt; <span class="integer">4</span>
-                                c += ch - <span class="integer">48</span>
+                <span class="keyword">if</span>(!noerror) console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot parse color </span><span class="delimiter">&quot;</span></span>+col)
+                a[<span class="integer">0</span>] = -<span class="integer">1</span>
+                a[<span class="integer">1</span>] = <span class="integer">1</span>
+                a[<span class="integer">2</span>] = <span class="float">0.85</span>
+                a[<span class="integer">3</span>] = <span class="integer">1</span>
+                <span class="keyword">return</span> a
+                <span class="comment">/*
+                var len = col.length
+                var i = 0
+                if (col.charAt(0) == '#') i++;
+                c = 0
+                while(i&lt;len) {
+                        var ch = col.charCodeAt(i++)
+                        if(ch &gt;= 48 &amp;&amp; ch &lt;= 57) { // hex color
+                                c = c &lt;&lt; 4
+                                c += ch - 48
                         }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(ch &gt;= <span class="integer">97</span> &amp;&amp; ch &lt;= <span class="integer">102</span>) {
-                                c = c &lt;&lt; <span class="integer">4</span>
-                                c += ch - <span class="integer">87</span>
+                        else if(ch &gt;= 97 &amp;&amp; ch &lt;= 102) {
+                                c = c &lt;&lt; 4
+                                c += ch - 87
                         }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(ch &gt;= <span class="integer">65</span> &amp;&amp; ch &lt;= <span class="integer">70</span>) {
-                                c = c &lt;&lt; <span class="integer">4</span>
-                                c += ch - <span class="integer">55</span>
+                        else if(ch &gt;= 65 &amp;&amp; ch &lt;= 70) {
+                                c = c &lt;&lt; 4
+                                c += ch - 55
                         }
-                        <span class="keyword">else</span> { <span class="comment">// try to find the nearest color</span>
+                        else { // try to find the nearest color
                                 col = col.toLowerCase()
                                 c = color_wikipedia[col]
-                                <span class="keyword">if</span>(c === <span class="predefined-constant">undefined</span>) <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> color_wikipedia){
-                                        <span class="keyword">if</span>(k.indexOf(col) != -<span class="integer">1</span>){
+                                if(c === undefined) for(var k in color_wikipedia){
+                                        if(k.indexOf(col) != -1){
                                                 c = color_wikipedia[k]
-                                                <span class="comment">// cache it</span>
+                                                // cache it
                                                 color_wikipedia[col] = c
-                                                <span class="keyword">break</span>
+                                                break
                                         }
                                 }
-                                len = <span class="integer">0</span>
+                                len = 0
                         }
                 }
-                <span class="keyword">if</span>(len == <span class="integer">3</span>){                        
-                        a[<span class="integer">0</span>] = ((c&amp;<span class="hex">0xf00</span>)&gt;&gt;<span class="integer">8</span>|(c&amp;<span class="hex">0xf00</span>)&gt;&gt;<span class="integer">4</span>) /<span class="integer">255</span>
-                        a[<span class="integer">1</span>] = ((c&amp;<span class="hex">0xf0</span>)|(c&amp;<span class="hex">0xf0</span>)&gt;&gt;<span class="integer">4</span>) /<span class="integer">255</span>
-                        a[<span class="integer">2</span>] = ((c&amp;<span class="hex">0xf</span>)|(c&amp;<span class="hex">0xf</span>)&lt;&lt;<span class="integer">4</span>) /<span class="integer">255</span> 
-                        <span class="keyword">return</span> a
+
+                if(len == 3){
+                        a[0] = ((c&amp;0xf00)&gt;&gt;8|(c&amp;0xf00)&gt;&gt;4) /255
+                        a[1] = ((c&amp;0xf0)|(c&amp;0xf0)&gt;&gt;4) /255
+                        a[2] = ((c&amp;0xf)|(c&amp;0xf)&lt;&lt;4) /255
+                        console.log(&quot;here&quot;, col, a)
+                        return a
                 }
-                
-                a[<span class="integer">0</span>] = ((c &gt;&gt; <span class="integer">16</span>)&amp;<span class="hex">0xff</span>) /<span class="integer">255</span>
-                a[<span class="integer">1</span>] = ((c &gt;&gt; <span class="integer">8</span>)&amp;<span class="hex">0xff</span>) /<span class="integer">255</span>
-                a[<span class="integer">2</span>] = (c&amp;<span class="hex">0xff</span>) /<span class="integer">255</span>                
-                a[<span class="integer">3</span>] = <span class="float">1.0</span>;
-                <span class="comment">//a[3] = ((c &gt;&gt; 24)&amp;0xff) /255 // alpha</span>
-                
-                <span class="keyword">return</span> a
+
+                a[0] = ((c &gt;&gt; 16)&amp;0xff) /255
+                a[1] = ((c &gt;&gt; 8)&amp;0xff) /255
+                a[2] = (c&amp;0xff) /255
+                a[3] = 1.0;
+                console.log(&quot;ho&quot;, col, a)
+                //return [1,1,1,1]
+                //console.log(c)
+                return undefined
+
+
+                //a[3] = ((c &gt;&gt; 24)&amp;0xff) /255 // alpha
+
+                return a*/</span>
         }
 
         <span class="keyword">function</span> <span class="function">matApi</span>(exports){
@@ -3026,7 +3073,9 @@ define(<span class="keyword">function</span>(){
                 exports.ceil = vecFn(Math.ceil)
                 exports.min = vecFn(Math.min)
                 exports.max = vecFn(Math.max)
-                exports.mod = vecFn(Math.mod)
+                exports.mod = vecFn2(<span class="keyword">function</span>(a,b){
+                        <span class="keyword">return</span> a%b
+                })
 
                 exports.<span class="function">identity</span> = <span class="keyword">function</span>(o){
                         <span class="keyword">if</span>(!o) o = exports()
@@ -5036,8 +5085,23 @@ define(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> (Xo * (Xi - Xn) + Xn * (Xo - Xi) * Kt) / ((Xo - Xi) * Kt + (Xi - Xn))
                 }
         }
+        
+        mat4.global_identity = mat4.identity()
 
         <span class="reserved">float</span>.ease = ease
+
+        <span class="reserved">int</span>.<span class="function">isPowerOfTwo</span> = <span class="keyword">function</span>(x) {
+            <span class="keyword">return</span> (x &amp; (x - <span class="integer">1</span>)) == <span class="integer">0</span>
+        }
+
+        <span class="reserved">int</span>.<span class="function">nextHighestPowerOfTwo</span> = <span class="keyword">function</span>(x) {
+            --x
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; <span class="integer">32</span>; i &lt;&lt;= <span class="integer">1</span>) {
+                x = x | x &gt;&gt; i
+            }
+            <span class="keyword">return</span> x + <span class="integer">1</span>
+        }
+
 })
 </pre></td>
 </tr></table>

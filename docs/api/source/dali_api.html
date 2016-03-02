@@ -568,11 +568,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n414" name="n414">414</a>
 <a href="#n415" name="n415">415</a>
 <a href="#n416" name="n416">416</a>
+<a href="#n417" name="n417">417</a>
+<a href="#n418" name="n418">418</a>
+<a href="#n419" name="n419">419</a>
+<strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -605,6 +615,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">// Set emitcode to true to emit dali code to the console. These lines</span>
         <span class="comment">// are preceeded with DALICODE to make it easier to extract into a file.</span>
+        <span class="comment">// The -dumpprog command-line option codes this value</span>
         DaliApi.emitcode = <span class="predefined-constant">false</span>;
 
         <span class="comment">// Create all actors on a layer to ignore depth test.</span>
@@ -659,22 +670,33 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * @method initialize
          * Static method to initialize and create the dali stage. This method is
          * called when dali starts running.
-         * @param {number} width Width of stage
-         * @param {number} height Height of stage
-         * @param {string} name Name of stage
-         * @param {string} dalilib Path to dali lib (optional). If the path is
-         *                 missing, a fixed path is used.
+         * @param {Object} settings Initial settings:
+         *                   width    Width of stage
+         *                   height   Height of stage
+         *                   name     Name of stage
+         *                   dalilib  Path to dali lib (optional). If the path is
+         *                            missing, a fixed path is used.
+         *                   dumpprog Path of file to dump dali program to, or use
+         *                            stdout is no file is specified
          */</span>
-        DaliApi.<span class="function">initialize</span> = <span class="keyword">function</span>(width, height, name, dalilib) {
+        DaliApi.<span class="function">initialize</span> = <span class="keyword">function</span>(settings) {
                 DaliLayer = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_layer</span><span class="delimiter">'</span></span>)
+
+                DaliApi.width = settings.width
+                DaliApi.height = settings.height
+                DaliApi.screenname = settings.name
+                DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
+                DaliApi.dumpprog = settings.dumpprog;
+
+                DaliApi.emitcode = DaliApi.dumpprog;
 
                 <span class="keyword">var</span> window= {
                         <span class="key">x</span>:<span class="integer">0</span>,
                         <span class="key">y</span>:<span class="integer">0</span>,
-                        <span class="key">width</span>:width,
-                        <span class="key">height</span>: height,
+                        <span class="key">width</span>:DaliApi.width,
+                        <span class="key">height</span>: DaliApi.height,
                         <span class="key">transparent</span>: <span class="predefined-constant">false</span>,
-                        <span class="key">name</span>: name
+                        <span class="key">name</span>: DaliApi.screenname
                 };
 
                 <span class="keyword">var</span> viewMode={
@@ -687,27 +709,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key"><span class="delimiter">'</span><span class="content">view-mode</span><span class="delimiter">'</span></span>: viewMode,
                 }
 
-                <span class="comment">// include the Dali/nodejs interface.</span>
-                <span class="keyword">if</span> (!dalilib)
-                        dalilib = <span class="string"><span class="delimiter">'</span><span class="content">/home/dali/teem/src/dreemgl/Release/dali</span><span class="delimiter">'</span></span>;
-
-
                 <span class="keyword">if</span> (DaliApi.emitcode) {
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var window= {x:0, y:0, width:</span><span class="delimiter">'</span></span> + width + <span class="string"><span class="delimiter">'</span><span class="content">, height:</span><span class="delimiter">'</span></span> + height + <span class="string"><span class="delimiter">'</span><span class="content">, transparent: false, name: </span><span class="char">\'</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">};</span><span class="delimiter">'</span></span>);
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var window= {x:0, y:0, width:</span><span class="delimiter">'</span></span> + DaliApi.width + <span class="string"><span class="delimiter">'</span><span class="content">, height:</span><span class="delimiter">'</span></span> + DaliApi.height + <span class="string"><span class="delimiter">'</span><span class="content">, transparent: false, name: </span><span class="char">\'</span><span class="delimiter">'</span></span> + DaliApi.screenname + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">};</span><span class="delimiter">'</span></span>);
 
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var viewMode={</span><span class="char">\'</span><span class="content">stereoscopic-mode</span><span class="char">\'</span><span class="content">:</span><span class="char">\'</span><span class="content">mono</span><span class="char">\'</span><span class="content">, </span><span class="char">\'</span><span class="content">stereo-base</span><span class="char">\'</span><span class="content">: 65};</span><span class="delimiter">'</span></span>);
 
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var options= {</span><span class="char">\'</span><span class="content">window</span><span class="char">\'</span><span class="content">: window, </span><span class="char">\'</span><span class="content">view-mode</span><span class="char">\'</span><span class="content">: viewMode}</span><span class="delimiter">'</span></span>);
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var dali = require(</span><span class="char">\'</span><span class="delimiter">'</span></span> + dalilib + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">)(options);</span><span class="delimiter">'</span></span>);
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var dali = require(</span><span class="char">\'</span><span class="delimiter">'</span></span> + DaliApi.dalilib + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">)(options);</span><span class="delimiter">'</span></span>);
                 }
 
                 <span class="keyword">try</span> {
             <span class="comment">// Load the library and make available as DaliApi.dali</span>
-                        DaliApi.dali = define.require(dalilib)(options);
+                        <span class="comment">// console.log('LOADING', dalilib);</span>
+                        DaliApi.dali = define.require(DaliApi.dalilib)(options);
 
-                        <span class="comment">// Create a top-level 2D layer to the stage. </span>
+                        <span class="comment">// Create a top-level 2D layer to the stage.</span>
                         <span class="keyword">var</span> dali = DaliApi.dali;
-                        DaliApi.rootlayer = DaliApi.currentlayer = <span class="keyword">new</span> DaliLayer(<span class="predefined-constant">null</span>, width, height);
+                        DaliApi.rootlayer = DaliApi.currentlayer = <span class="keyword">new</span> DaliLayer(<span class="predefined-constant">null</span>, DaliApi.width, DaliApi.height);
                         dali.stage.add(DaliApi.rootlayer.dalilayer);
 
                         <span class="keyword">if</span> (DaliApi.emitcode) {
@@ -716,7 +734,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 }
                 <span class="keyword">catch</span> (e) {
-                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">Failed to load dalilib</span><span class="delimiter">'</span></span>, dalilib);
+                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">Failed to load dalilib</span><span class="delimiter">'</span></span>, DaliApi.dalilib);
                         console.log(e.stack);
                 }
     }
@@ -828,7 +846,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 DaliApi.BufferId += <span class="integer">1</span>;
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var buffer</span><span class="delimiter">'</span></span> + DaliApi.BufferId + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.PropertyBuffer(</span><span class="delimiter">'</span></span> + JSON.stringify(format) + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + nrecs + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>);                        
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var buffer</span><span class="delimiter">'</span></span> + DaliApi.BufferId + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.PropertyBuffer(</span><span class="delimiter">'</span></span> + JSON.stringify(format) + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + nrecs + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>);
                 }
 
                 <span class="comment">// Write data to the buffer</span>
@@ -869,7 +887,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method getArrayValue
-         * Given the name of a uniform object, retrieve the array of values from 
+         * Given the name of a uniform object, retrieve the array of values from
          * the dreemgl compiled structure. In webgl this extraction happens inline.
          * NaN and null values are converted to 0 (dali will error on these)
          * @param {Object} obj Compiled object
@@ -890,7 +908,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                 array.push(val);
                         }
-                                
+
                         <span class="keyword">return</span> array;
                 }
 
@@ -905,7 +923,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method getDaliPropertySize
-         * Static. Return the number of elements required for a dali property, 
+         * Static. Return the number of elements required for a dali property,
          * given the dali constant.
          * From Nick (via slack).
          * @param {Number} format property constant
@@ -925,11 +943,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">return</span> <span class="integer">9</span>;
                 <span class="keyword">case</span> dali.PROPERTY_MATRIX4:
                         <span class="keyword">return</span> <span class="integer">16</span>;
-                <span class="keyword">default</span>: 
+                <span class="keyword">default</span>:
                         <span class="keyword">return</span> <span class="integer">1</span>;
-                }        
+                }
         }
-        
+
         <span class="comment">/**
          * @method getDaliPropertyType
          * Static. Return the dali property name for a type, given its size
@@ -975,7 +993,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          */</span>
         DaliApi.<span class="function">getHash</span> = <span class="keyword">function</span>(data) {
                 <span class="keyword">var</span> str = JSON.stringify(data);
- 
+
                 <span class="comment">// Algorithm from: https://github.com/darkskyapp/string-hash/blob/master/index.js</span>
                 <span class="keyword">var</span> hash = <span class="integer">5381</span>, i = str.length;
 

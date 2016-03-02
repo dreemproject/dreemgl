@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, exports){
 
@@ -29,6 +30,7 @@ define.class(function(require, exports){
 		this.layout_list = previous && previous.layout_list || []
 		this.pick_resolve = []
 		this.anim_redraws = []
+		this.animate_hooks = []
 		this.doPick = this.doPick.bind(this)
 
 		this.animFrame = function(time){
@@ -286,6 +288,17 @@ define.class(function(require, exports){
 
 		this.screen._maxsize =
 		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
+
+		// do all the animate hooks
+		var animate_hooks = this.animate_hooks
+		for(var i = 0; i < animate_hooks.length; i++){
+			var item = animate_hooks[i]
+			//console.log(item)
+			if(item.atAnimate(stime)){
+				anim_redraw.push(item)
+			}
+		}
+
 		// do the dirty layouts
 		for(var i = 0; i < this.layout_list.length; i++){
 			// lets do a layout?
@@ -337,10 +350,16 @@ define.class(function(require, exports){
 		}
 
 		if(anim_redraw.length){
+			//console.log("REDRAWIN", this.draw_hooks)
+			var redraw = false
 			for(var i = 0; i < anim_redraw.length; i++){
-				anim_redraw[i].redraw()
+				var aredraw = anim_redraw[i]
+				if(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
+					redraw = true
+					aredraw.redraw()
+				}
 			}
-			return true
+			return redraw
 		}
 		return hastime
 	}

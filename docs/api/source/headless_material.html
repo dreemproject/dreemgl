@@ -279,11 +279,48 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n125" name="n125">125</a>
 <a href="#n126" name="n126">126</a>
 <a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-         Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-         either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -400,7 +437,42 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">headlessmaterial</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id;
         }
 
+        <span class="local-variable">this</span>.<span class="function">currentstate</span> = <span class="keyword">function</span>(verbose) {
+                <span class="keyword">var</span> states = [];
+                
+                <span class="keyword">if</span> (!HeadlessApi.isShown(<span class="local-variable">this</span>.name())) {
+                        states = <span class="local-variable">this</span>.headlessshader.currentstate(verbose);
+
+                        <span class="keyword">var</span> state = [
+                                {<span class="key">name</span>: <span class="local-variable">this</span>.name()}
+                                ,{<span class="key">shader</span>: <span class="local-variable">this</span>.headlessshader.name()}
+                        ]
+
+                        <span class="comment">// Add textures</span>
+                        <span class="keyword">var</span> textures = [];
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> <span class="local-variable">this</span>.textures) {
+                                <span class="keyword">var</span> tex = <span class="local-variable">this</span>.textures[i];
+                                <span class="keyword">var</span> texture = [
+                                        {<span class="key">name</span>: tex.name}
+                                        ,{<span class="key">texture</span>: tex.texture}
+                                        ,{<span class="key">sampler</span>: tex.sampler}
+                                ];
+                                textures.push(texture);
+                        }
+                        <span class="keyword">if</span> (textures.length)
+                                state.push({<span class="key">textures</span>: textures});
+                        
+                        states.push(state);
+                        HeadlessApi.shownObject(<span class="local-variable">this</span>.name());
+                }
+
+                <span class="keyword">return</span> states;
+        }
+
+
         <span class="local-variable">this</span>.<span class="function">inspect</span> = <span class="keyword">function</span>(depth) {
+                <span class="comment">//HACK</span>
+                <span class="local-variable">this</span>.currentstate();
                 <span class="keyword">var</span> obj = {<span class="key">headlessMaterial</span>:<span class="local-variable">this</span>.id, <span class="key">obj</span>:[<span class="local-variable">this</span>.headlessshader.inspect(depth)]};
                 <span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>)
                 <span class="keyword">return</span> util.inspect(obj, {<span class="key">depth</span>: <span class="predefined-constant">null</span>});

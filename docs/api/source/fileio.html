@@ -224,16 +224,29 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n70" name="n70">70</a></strong>
 <a href="#n71" name="n71">71</a>
 <a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, service){
         <span class="comment">// The fileio class provides an easy RPC mechanism to load/create/save/enumerate files and directories. The fileio instance should live on the server part of the composition.</span>
         <span class="comment">// do not ever put this in a web-facing composition as it has no security features</span>
-
+        <span class="keyword">var</span> <span class="predefined">$localbound</span> = define.<span class="predefined">$localbound</span>
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">fileio</span><span class="delimiter">&quot;</span></span>
 
         <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>)
@@ -243,8 +256,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// wait for a file to change - then resolve the promise. Returns a promise.</span>
         <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
         <span class="local-variable">this</span>.<span class="function">filechange</span> = <span class="keyword">function</span>(name){
+                name = define.safePath(name)
+                <span class="keyword">if</span>(!name) <span class="keyword">return</span> <span class="predefined-constant">null</span>
                 <span class="keyword">var</span> filepath = path.join(define.expandVariables(define.<span class="predefined">$root</span>), name)
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){
                         <span class="comment">// lets wait for a  filechange, then resolve it</span>
                         <span class="keyword">var</span> stat = JSON.stringify(fs.statSync(filepath))
                         <span class="keyword">var</span> myitv = setInterval(<span class="keyword">function</span> <span class="function">mytimeout</span>(){
@@ -260,6 +275,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Return the full contents of a file as a string. Returns the result of node.js fs.readFileSync or null in case of exception</span>
         <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
         <span class="local-variable">this</span>.<span class="function">readfile</span> = <span class="keyword">function</span>(name){
+                <span class="comment">// only support reading tagged names</span>
+                name = define.safePath(name)
+                <span class="keyword">if</span>(!name) <span class="keyword">return</span> <span class="predefined-constant">null</span>
                 <span class="keyword">try</span>{
                         <span class="keyword">return</span> fs.readFileSync(define.expandVariables(name)).toString()
                 }
@@ -272,10 +290,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
         <span class="comment">// &lt;data&gt; The data to write</span>
         <span class="local-variable">this</span>.<span class="function">writefile</span> = <span class="keyword">function</span>(name, data){
-
+                <span class="keyword">if</span>(!define.<span class="predefined">$writefile</span>){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">return</span> <span class="predefined-constant">null</span>
+                }
+                name = define.safePath(name)
+                <span class="keyword">if</span>(!name) <span class="keyword">return</span> <span class="predefined-constant">null</span>
                 <span class="keyword">try</span>{
-                        console.log(name);
-                        <span class="keyword">var</span> fullname = define.expandVariables( name);
+                        <span class="keyword">var</span> fullname = define.expandVariables(name);
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">writing file:</span><span class="delimiter">&quot;</span></span>,fullname);
                         <span class="keyword">return</span> fs.writeFileSync(fullname, data)
                 }
@@ -286,6 +308,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// reads a directory and returns its contents</span>
         <span class="comment">// &lt;name&gt; the name of the directory to read</span>
         <span class="local-variable">this</span>.<span class="function">readdir</span> = <span class="keyword">function</span>(name){
+                name = define.safePath(name)
+                <span class="keyword">if</span>(!name) <span class="keyword">return</span> <span class="predefined-constant">null</span>
                 <span class="comment">// lets read the directory and return it</span>
                 <span class="keyword">try</span>{
                         <span class="keyword">var</span> dir = fs.readdirSync(path.join(define.expandVariables(define.<span class="predefined">$root</span>), name))

@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, $$, ballbutton){
 
@@ -270,7 +271,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var out = F.findChild(this._fromoutput);
 			var yoff = 0;
 			if (out) {
-				color2 = out.bgcolor;
+				color2 = out.color;
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
@@ -285,7 +286,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var inp = T.findChild(this._toinput);
 			var yoff = 0;
 			if (inp) {
-				color1 = inp.bgcolor;
+				color1 = inp.color;
 
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;

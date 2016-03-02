@@ -1,20 +1,46 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$ui/textbox', function(require){
 
-	var JSFormatter = require('$system/parse/jsformatter')	
+	var JSFormatter = require('$system/parse/jsformatter')
 	var Parser = require('$system/parse/onejsparser')
 
 	this.attributes = {
 		// The code to display
 		source: Config({type:String, value:""}),
 		sourceset: null,
+		ast:null,
 		// wrap the text
-		wrap: Config({type:Boolean, value:false})
+		wrap: Config({type:Boolean, value:false}),
+		init_anim: Config({value:0.0, duration:1, motion:'outexpo'}),
+		line_anim: Config({value:1.0, duration:0.25, motion:'outexpo'}),
+	}
+	this.linespacing = 1.3	
+	this.tab_size = 1
+	this.line_start = 0
+	this.line_end = 0
+	this.boldness = 0.6
+
+	this.format_options = {
+		force_newlines_array:false,
+		force_newlines_object:false
+	}
+
+	// lets go and move this fucker
+	this.textpositionfn = function(pos, tag) {
+		var p = pos
+		var indent = floor((tag.y * -1.)/65536.) * tab_size
+		var line = floor(tag.w/65536.)
+		if(line >= line_start && line <= line_end){
+			p.x  +=  2*indent*((line-line_start))*line_anim
+		}
+		p.x += - min(indent, init_anim*100.)
+		return p
 	}
 
 	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
@@ -22,31 +48,48 @@ define.class('$ui/textbox', function(require){
 	this.readonly = true
 
 	this.fontsize = 12
-	this.subpixel = true
+	this.subpixel = false
 
-	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
+	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 
 	for(var key in JSFormatter.types){
 		this[key] = String(JSFormatter.types[key])
 	}
 
-	this.textstyle = function(style, pos, tag){
+	this.init = function(){
+		//this.init_anim = .0
+	}
 
-		var group = tag.y
+	this.textstyle = function(style, tag){
+
 		var type = int(tag.z / 65536.)
 		var sub = int(mod(tag.z / 256., 256.))
 		var part = int(mod(tag.z, 256.))
 		var unicode = int(tag.x)
-		
-		if(unicode == 10 || unicode == 32 || unicode == 9) discard
-		if(sub == _Paren || sub == _Brace || sub == _Bracket){
+
+		//if(unicode == 10 || unicode == 32 || unicode == 9) discard
+
+		if(tag.z <= 0.){
+			var col = -tag.z
+
+			style.fgcolor = vec4(
+				floor(col/65536.)/255.,
+				floor(mod(col/256.,256.))/255.,
+				floor(mod(col,256.))/255.,
+				1.
+			)
+		}
+		else if(sub == _Paren || sub == _Brace || sub == _Bracket){
 			if(sub == _Paren){
-				style.fgcolor = "white"
+				style.fgcolor = "#cfffff"
 			}
 			else if(sub == _Bracket){
-				style.fgcolor = "#ccc"
+				style.fgcolor = "#ffcfff"
 			}
 			else{
+				style.fgcolor = "#ffffcf"
+			}
+			if(type == _Function){
 				style.fgcolor = "white"
 			}
 		}
@@ -61,7 +104,15 @@ define.class('$ui/textbox', function(require){
 		}
 		else if(type == _Value){
 			if(sub == _String){
-				style.fgcolor = "#0f0"
+				style.fgcolor = "#00cf7f"//#ff7fe1"//"#0f0"
+			}
+			else if(sub == _Boolean){
+				if(part>0){
+					style.fgcolor = "#0f0"
+				}
+				else{
+					style.fgcolor = '#f00'
+				}
 			}
 			else{
 				style.fgcolor = "aero"
@@ -72,9 +123,20 @@ define.class('$ui/textbox', function(require){
 		}
 		else if(type == _This){
 			style.fgcolor = "#ff7fe1"
+		}else if(type == _Function){
+			style.fgcolor = "#ffdd00"
+		}else if(type == _Property ){
+			if(sub == _Object){
+				style.fgcolor = '#afafaf'
+			}
+			else{
+				style.fgcolor = 'white'//'#9fa3ff'*1.2
+			}
 		}else{
 			style.fgcolor = "#ff9d00"
 		}
+
+		return style
 		//if(type>7)mesh.outline = true
 	}
 
@@ -143,30 +205,61 @@ define.class('$ui/textbox', function(require){
 
 		this.update = function(){
 			var view = this.view
-			var maxwidth = view.layout.width
 			var textbuf = this.mesh = this.newText()
 
 			textbuf.font = view.font
 			var cycle = Date.now()
-			var ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
-
+			var ast = view.ast ? view.ast : (view.sourceset ? view.sourceset.ast: Parser.parse(view.source))
+			
+			textbuf.linespacing = view.linespacing
 			textbuf.fontsize = view.fontsize
 			textbuf.add_y = textbuf.line_height
 			textbuf.align = 'left'
 			textbuf.start_y = textbuf.line_height
-			textbuf.boldness = 0.6
+
+			view.tab_size = textbuf.font.glyphs[9].advance * textbuf.fontsize
 
 			textbuf.clear()
-
+			var node_id = 0
 			if(view.wrap){
-				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
-					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
-					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
+				var maxwidth = view.layout.width
+				JSFormatter.walk(ast, textbuf, view.format_options,function(text, padding, l1, l2, l3, node){
+					if(text === '\n'){
+						this.last_is_newline = true
+						return
+					}
+					if(text === '\t' && this.last_is_newline){
+						text = '\n'
+					}
+					this.last_is_newline = false
+					var start = text.charCodeAt(0)
+					var combo
+					if(l1 <= 0) combo = l1
+					else combo = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					if(start !== 32 && start !== 10 && start !== 9) node_id ++
+					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * (this.actual_indent+1)
+					textbuf.addWithinWidth(text, maxwidth, indent, ((padding||0)+ this.actual_indent*65536)*-1, combo, node_id+65536*this.actual_line)
 				})
 			}
 			else{
-				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
-					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
+				// if we process a newline, we should wait for the next tab
+				JSFormatter.walk(ast, textbuf, view.format_options,function(text, padding, l1, l2, l3, node){
+					if(text === '\n'){
+						this.last_is_newline = true
+						return
+					}
+					if(text === '\t' && this.last_is_newline){
+						text = '\n'
+					}
+					this.last_is_newline = false
+					// ok if we are adding a \t, lets add it to the previous newline as a mode 4.
+					var start = text.charCodeAt(0)
+					//console.log(this.actual_line)
+					if(start !== 32 && start !== 10 && start !== 9) node_id ++
+					var combo
+					if(l1 <= 0) combo = l1
+					else combo = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					textbuf.add(text, ((padding||0) + this.actual_indent*65536)*-1, combo, node_id+65536*this.actual_line)
 				})
 			}
 		}

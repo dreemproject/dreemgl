@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function($ui$, view, label, button, icon){
 // The treeview control - classic treeview with expandable nodes.
@@ -37,7 +38,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.borderradius = 0
 		this.borderwidth = 0
 		this.fgcolor = "#d0d0d0"
-		this.bgcolor = "3b3b3b";
+		this.bgcolor = "transparent";
 		this.margin = 0
 		//this.alignself = "flex-start"
 	})
@@ -62,25 +63,41 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.hovercolor2 = "#505050"
 		this.cornerradius = 0
 		this.fgcolor = "#f0f0f0"
+		this.bgcolor = "#3b3b3b"
 		this.margin = 2
-		this.bgcolor = "transparent"
+		//this.bgcolor = "transparent"
 		//this.alignself = "flex-start"
 
 		this.render = function(){
-			return [
-				this.haschildren?this.outer.foldbutton({
-					icon:this.folded? "chevron-right":"chevron-down",
-					padding: 2,
+
+			var vws = [];
+
+			if (this.haschildren) {
+				vws.push(this.outer.foldbutton({
+					icon: this.folded ? "chevron-right" : "chevron-down",
+					paddingleft:1,
+					paddingright:2,
+					paddingtop:2,
+					margintop:3,
+					fontsize:10,
 					click: this.toggleclick
-				}):[],
-				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
-				this.outer.foldbutton({
-					label: this.text,
+				}))
+			}
+
+			if (this.text) {
+				vws.push(this.outer.foldbutton({
+					text: this.text,
 					click:function(){
 						this.emit('select',{node:this})
 					}.bind(this)
-				})
-			];
+				}))
+			}
+
+			if (this.constructor_children.length) {
+				vws = vws.concat(this.constructor_children)
+			}
+
+			return vws;
 		}
 	});
 
@@ -149,17 +166,20 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			//debugger;
 			if (!this.item) return [label({text:""})];
 			//this.collapsed;
-			var res = [
-				this.outer.newitemheading({
-						haschildren: this.item.children && this.item.children.length,
-						folded: this.item.collapsed,
-						toggleclick: this.toggle.bind(this),
-						select: this.processSelect.bind(this),
-						text:this.item.name,
-						id:this.item.id
-					})
-			];
+			var res = [];
 
+			var itemview = [];
+			if (this.item.itemview) {
+				itemview.push(this.item.itemview)
+			}
+			res.push(this.outer.newitemheading({
+					haschildren: this.item.children && this.item.children.length,
+					folded: this.item.collapsed,
+					toggleclick: this.toggle.bind(this),
+					select: this.processSelect.bind(this),
+					text:this.item.name,
+					id:this.item.id
+			}, itemview));
 
 			if (this.item.collapsed == false){
 				if (this.item.children){

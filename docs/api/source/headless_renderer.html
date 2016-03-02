@@ -206,11 +206,34 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n52" name="n52">52</a>
 <a href="#n53" name="n53">53</a>
 <a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-         Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-         either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -254,7 +277,28 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">headlessrenderer</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id;
         }
 
+        <span class="local-variable">this</span>.<span class="function">currentstate</span> = <span class="keyword">function</span>(verbose) {
+                <span class="keyword">var</span> states = [];
+                <span class="keyword">if</span> (!HeadlessApi.isShown(<span class="local-variable">this</span>.name())) {
+                        states = <span class="local-variable">this</span>.headlessgeometry.currentstate(verbose);
+                        states.push(<span class="local-variable">this</span>.headlessmaterial.currentstate(verbose));
+
+                        <span class="keyword">var</span> state = [
+                                {<span class="key">name</span>: <span class="local-variable">this</span>.name()}
+                                ,{<span class="key">geometry</span>: <span class="local-variable">this</span>.headlessgeometry.name()}
+                                ,{<span class="key">material</span>: <span class="local-variable">this</span>.headlessmaterial.name()}
+                        ]
+                        states.push(state);
+                        HeadlessApi.shownObject(<span class="local-variable">this</span>.name());
+                }
+
+                <span class="keyword">return</span> states;
+        }
+
+
         <span class="local-variable">this</span>.<span class="function">inspect</span> = <span class="keyword">function</span>(depth) {
+                <span class="comment">//HACK</span>
+                <span class="local-variable">this</span>.currentstate();
                 <span class="keyword">var</span> obj = {<span class="key">headlessRenderer</span>:<span class="local-variable">this</span>.id, <span class="key">obj</span>:[<span class="local-variable">this</span>.headlessgeometry.inspect(depth), <span class="local-variable">this</span>.headlessmaterial.inspect(depth)]};
                 <span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>)
                 <span class="keyword">return</span> util.inspect(obj, {<span class="key">depth</span>: <span class="predefined-constant">null</span>});

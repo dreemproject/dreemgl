@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 // Rpc single proxy
 
 define.class('$system/base/node', function(require, exports){
@@ -76,8 +77,9 @@ define.class('$system/base/node', function(require, exports){
 			var keys = Object.keys(proto)
 			for(var i = 0; i < keys.length; i++){
 				var key = keys[i]
-
 				if(key in proxy || key.charAt(0) === '_') continue
+				//console.log("RPC"+key, proto.__lookupSetter__(key))
+
 				if(proto.isAttribute(key)){ // we iz attribute
 					// we have to ignore property binds
 					var props = proto.getAttributeConfig(key)

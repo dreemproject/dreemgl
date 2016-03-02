@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
 
@@ -41,10 +42,18 @@ define.class(function(require){
 		}
 	})
 
+	this.moveToOffset = function(offset){
+		this.start = this.end = offset
+		this.max = this.editor.textbuf.cursorRect(this.end).x
+	}
+
 	this.moveLeft = function(only_end){
 		this.end = this.end - 1
 		if(this.end < 0) this.end = 0
-		if(!only_end) this.start = this.end
+		if(!only_end){
+			if(this.editor.atMoveLeft) this.end = this.editor.atMoveLeft(this.end)
+			this.start = this.end
+		}
 		//
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
@@ -52,7 +61,10 @@ define.class(function(require){
 	this.moveRight = function(only_end){
 		this.end = this.end + 1
 		if(this.end > this.editor.textbuf.char_count) this.end = this.editor.textbuf.char_count
-		if(!only_end) this.start = this.end
+		if(!only_end){
+			if(this.editor.atMoveRight) this.end = this.editor.atMoveRight(this.end)
+			this.start = this.end
+		}
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
 
@@ -61,16 +73,24 @@ define.class(function(require){
 		var rect = this.editor.textbuf.cursorRect(this.end)
 		//console.log(max, rect.y + .5*rect.h - lines * cursorset.text_layer.line_height)
 		//cursorset.text_layer.debugChunks()
-		this.end = this.editor.textbuf.offsetFromPos(this.max, rect.y + .5*rect.h - lines * this.editor.textbuf.line_height)
+		if(this.editor.textbuf.charCodeAt(this.end-1) === 10 && this.editor.textbuf.charCodeAt(this.end-2) === 10) this.end--
+		else this.end = this.editor.textbuf.offsetFromPos(this.max, rect.y + .5*rect.h - lines * this.editor.textbuf.line_height)
+
 		if(this.end < 0) this.end = 0
 		if(!only_end) this.start = this.end
 	}
 
 	this.moveDown = function(only_end, lines){
 		if(!lines) lines = 1
+	
 		var rect = this.editor.textbuf.cursorRect(this.end)
+
+		//if(this.editor.textbuf.charCodeAt(this.end+1) === 10 && this.editor.textbuf.charCodeAt(this.end+2) === 10) this.end++
+		//else 
 		this.end = this.editor.textbuf.offsetFromPos(this.max, rect.y + .5*rect.h + lines * this.editor.textbuf.line_height)
+
 		if(this.end < 0) this.end = this.editor.textbuf.char_count
+
 		if(!only_end) this.start = this.end
 	}
 
@@ -171,7 +191,7 @@ define.class(function(require){
 
 	this.selectLine = function(){
 		this.start = this.editor.scanLeftLine(this.lo)
-		this.end = this.editor.scanRightLine(this.hi) + 1
+		this.end = this.editor.scanRightLine(this.hi)
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
 

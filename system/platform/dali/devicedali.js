@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class(function(require, exports){
@@ -80,15 +81,15 @@ define.class(function(require, exports){
 		this.layout_list = previous && previous.layout_list || []
 		this.pick_resolve = []
 		this.anim_redraws = []
+		this.animate_hooks = []
 		this.doPick = this.doPick.bind(this)
 
 		//TODO Use setTimeout for animation until dali animation ready (DALI)
 		this.time = 0;
 		this.animFrame = function(time){
 			//console.log('animFrame', time);
-			var interval = 16; // 500;
+			var interval = 16;
 			var t = this.doColor(time);
-			//console.log('animFrame', t, time);
 			if(t){
 				this.anim_req = true
                 this.time += interval;
@@ -116,12 +117,26 @@ define.class(function(require, exports){
 			this.drawtarget_pools = {}
 
 			this.createContext()
+			this.createWakeupWatcher()
 		}
 
 		this.initResize()
 
 		//TODO Force an update
 		//this.doColor(0);
+	}
+
+	this.createWakeupWatcher = function(){
+		var last = Date.now()
+		setInterval(function(){
+			var now = Date.now()
+			if(now - last > 1000 && this.screen){
+				//this.doresize()
+ 				this.redraw()
+				this.screen.emit('wakeup')
+			}
+			last = now
+		}.bind(this), 200)
 	}
 
 	this.createContext = function(){
@@ -171,7 +186,7 @@ define.class(function(require, exports){
 
 		//TODO
 		this.time = 0
-        setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
+		setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
 	}
 
 	this.bindFramebuffer = function(frame){
@@ -281,6 +296,17 @@ define.class(function(require, exports){
 
 		this.screen._maxsize =
 		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
+
+		// do all the animate hooks
+		var animate_hooks = this.animate_hooks
+		for(var i = 0; i < animate_hooks.length; i++){
+			var item = animate_hooks[i]
+			//console.log(item)
+			if(item.atAnimate(stime)){
+				anim_redraw.push(item)
+			}
+		}
+
 		// do the dirty layouts
 		for(var i = 0; i < this.layout_list.length; i++){
 			// lets do a layout?
@@ -300,16 +326,18 @@ define.class(function(require, exports){
 			}
 		}
 
+		var hastime = false
 		var clipview = undefined
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 
 			var view = this.drawpass_list[i]
-			var skip = false
+			//var skip = false
 			var last = i === len - 1
-			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
-				skip = last = true
-			}
+			//if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
+			//	skip = last = true
+			//}
+
 			if(view.draw_dirty & 1 || last){
 
 				if(!last){
@@ -317,27 +345,32 @@ define.class(function(require, exports){
 					else clipview = null
 				}
 
-				var hastime = view.drawpass.drawColor(last, stime)
+				hastime = view.drawpass.drawColor(last, stime, clipview)
+
 				view.draw_dirty &= 2
 				if(hastime){
 					anim_redraw.push(view)
 				}
 			}
 
-			if(skip){
-				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-
-
-				this.screen.draw_dirty &= 2
-				break
-			}
+			//if(skip){
+			//	this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
+			//	this.screen.draw_dirty &= 2
+			//	break
+			//}
 		}
 
 		if(anim_redraw.length){
+			//console.log("REDRAWIN", anim_redraw)
+			var redraw = false
 			for(var i = 0; i < anim_redraw.length; i++){
-				anim_redraw[i].redraw()
+				var aredraw = anim_redraw[i]
+				if(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
+					redraw = true
+					aredraw.redraw()
+				}
 			}
-			return true
+			return redraw
 		}
 		return hastime
 	}

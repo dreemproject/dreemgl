@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, menubutton) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
@@ -28,9 +29,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		globalpointerover: Config({type:Event}),
 		globalpointerout: Config({type:Event}),
 		globalpointerwheel: Config({type:Event}),
-		globalpointermultistart: Config({type:Event}),
-		globalpointermultimove: Config({type:Event}),
-		globalpointermultiend: Config({type:Event})
+		globalpointermultimove: Config({type:Event})
 	}
 
 	this.bgcolor = NaN
@@ -76,7 +75,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				}
 				res.push(
 					menubutton({
-						padding:vec4(5 ,0,5,4),
+						padding:vec4(5),
 						margin:0,
 						borderradius: 6,
 						bold:false,
@@ -120,53 +119,54 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		})
 	}
 
+	this.walkTree = function(view){
+		var found
+		function dump(walk, parent){
+			var layout = walk.layout || {}
+			var named = (new Function("return function " + (walk.name || walk.constructor.name) + '(){}'))()
+			Object.defineProperty(named.prototype, 'zflash', {
+				get:function(){
+					// humm. ok so we wanna flash it
+					// how do we do that.
+					window.view = this.view
+					return "window.view set"
+				}
+			})
+			var obj = new named()
+			obj.geom = 'x:'+layout.left+', y:'+layout.top+', w:'+layout.width+', h:'+layout.height
+			if(walk._viewport) obj.viewport = walk._viewport
+			// write out shader modes
+			var so = ''
+			for(var key in walk.shaders){
+				if(so) so += ", "
+				so += key//+':'+walk.shader_order[key]
+			}
+			obj.shaders = so
+			obj.view = walk
+
+			if(walk._text) obj.text = walk.text
+
+			if(walk === view) found = obj
+			if(walk.children){
+				//obj.children = []
+				for(var i = 0; i < walk.children.length;i++){
+					obj[i] = dump(walk.children[i], obj)
+				}
+			}
+			obj._parent = parent
+			return obj
+		}
+		dump(this, null)
+		return found
+	}
+
 	// pick a view at the pointer coordinate and console.log its structure
 	this.debugPick = function(x, y){
 		this.device.pickScreen(x, y).then(function(msg){
 			var view = msg.view
 			if(this.last_debug_view === view) return
 			this.last_debug_view = view
-			var found
-			function dump(walk, parent){
-				var layout = walk.layout || {}
-				var named = (new Function("return function " + (walk.name || walk.constructor.name) + '(){}'))()
-				Object.defineProperty(named.prototype, 'zflash', {
-					get:function(){
-						// humm. ok so we wanna flash it
-						// how do we do that.
-						window.view = this.view
-						return "window.view set"
-					}
-				})
-				var obj = new named()
-				obj.geom = 'x:'+layout.left+', y:'+layout.top+', w:'+layout.width+', h:'+layout.height
-				if(walk._viewport) obj.viewport = walk._viewport
-				// write out shader modes
-				var so = ''
-				for(var key in walk.shader_order){
-					if(walk.shader_order[key]){
-						if(so) so += ", "
-						so += key+':'+walk.shader_order[key]
-					}
-				}
-				obj.shaders = so
-				obj.view = walk
-
-				if(walk._text) obj.text = walk.text
-
-				if(walk === view) found = obj
-				if(walk.children){
-					//obj.children = []
-					for(var i = 0; i < walk.children.length;i++){
-						obj[i] = dump(walk.children[i], obj)
-					}
-				}
-				obj._parent = parent
-				return obj
-			}
-			var ret = dump(this, null)
-			if(!found) console.log("Could not find", view)
-			else console.log(found)
+			console.log(this.walkTree(view))
 		}.bind(this))
 	}
 
@@ -210,31 +210,20 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				this.emit('globalpointerstart', e)
 				e.view.emitUpward('pointerstart', e.pointer)
 				e.view.computeCursor()
-				if (!e.pointer.touch) {
-					this.keyboard.pointerMove(e.pointer.position)
-					this.keyboard.checkSpecialKeys(e.pointer)
-				}
 				if(this.inModalChain(e.view)){
 					this.setFocus(e.view)
 				} else if (this.modal){
 					this.modal.emitUpward('focuslost', {global: e.pointer.position})
 				}
-			} else if (e.pointers) {
-				this.emit('globalpointermultistart', e)
-				e.view.emitUpward('pointermultistart', e.pointers)
 			}
 		}.bind(this)
 
 		// Event handler for `pointer.move` event.
 		// Emits `pointermove` event from `pointer.view`.
 		this.pointer.move = function(e){
-
 			if (e.pointer) {
 				this.emit('globalpointermove', e)
 				e.view.emitUpward('pointermove', e.pointer)
-				if (!e.pointer.touch && e.pointer.button == 2){
-					this.device.keyboard.pointerMove(e.pointer.position)
-				}
 			} else if (e.pointers) {
 				this.emit('globalpointermultimove', e)
 				e.view.emitUpward('pointermultimove', e.pointers)
@@ -248,13 +237,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				this.emit('globalpointerend', e)
 				e.view.emitUpward('pointerend', e.pointer)
 				e.view.computeCursor()
-				if (!e.pointer.touch) {
-					this.keyboard.pointerMove(e.pointer.position)
-					this.keyboard.checkSpecialKeys(e.pointer)
-				}
-			} else if (e.pointers) {
-				this.emit('globalpointermultiend', e)
-				e.view.emitUpward('pointermultiend', e.pointers)
 			}
 		}.bind(this)
 
@@ -461,14 +443,14 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	// animation
 
 	// internal, start an animation, delegated from view
-	this.startAnimationRoot = function(obj, key, value, track, promise){
+	this.startAnimationRoot = function(obj, key, value, track, resolve){
 		// ok so. if we get a config passed in, we pass that in
 		var config = obj.getAttributeConfig(key)
 
 		var first = obj['_' + key]
 
 		var anim = new Animate(config, obj, key, track, first, value)
-		anim.promise = promise
+		anim.resolve = resolve
 		var animkey = obj.getViewGuid() + '_' + key
 		this.anims[animkey] = anim
 		obj.redraw()
@@ -504,7 +486,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				anim.obj['_' + anim.key] = value.last_value
 				anim.obj.emit(anim.key, {animate:true, end:true, key: anim.key, owner:anim.obj, value:value.last_value})
 				anim.obj.redraw()
-				if(anim.promise) anim.promise.resolve()
+				if(anim.resolve) anim.resolve()
 			}
 			else{
 				// what if we have a value with storage?
@@ -518,18 +500,5 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			}
 		}
 	}
-
-	this.ASTNode = function() {
-		if (!this._cachednode) {
-			var past = this.composition.ASTNode();
-
-			if (typeof(this.__constructorIndex) !== "undefined") {
-				this._cachednode = past.args[this.__constructorIndex];
-			} else {
-				this._cachednode = new ASTScanner(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
-			}
-		}
-		return this._cachednode;
-	};
 
 })

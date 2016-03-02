@@ -23,3 +23,6 @@ Ported/refactored/rewritten, original by Behdad Esfahbod Copyright 2012 Google, 
 
 Earcut triangulator: /system/lib/earcut-port.js 
 Ported to DreemGL class module, original Copyright (c) 2015, Mapbox - https://github.com/mapbox/earcut
+
+Map widget utilizes mapzen vector tile API (http://mapzen.com)
+Vector data Copyright OpenStreetMap contributors, Who’s On First (http://openstreetmapdata.com)

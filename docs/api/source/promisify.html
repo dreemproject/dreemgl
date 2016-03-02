@@ -183,11 +183,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
 <a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// promisify</span>
 
 define(<span class="keyword">function</span>(){
@@ -195,7 +197,7 @@ define(<span class="keyword">function</span>(){
         <span class="keyword">function</span> <span class="function">promisify</span>(call){
                 <span class="keyword">return</span> <span class="keyword">function</span>(){
                         <span class="keyword">var</span> arg = Array.prototype.slice.call(<span class="local-variable">arguments</span>)
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                 arg.push(<span class="keyword">function</span>(err, result){
                                         <span class="keyword">if</span>(err) reject(err)
                                         <span class="keyword">else</span> resolve(result)
@@ -206,7 +208,7 @@ define(<span class="keyword">function</span>(){
         }
 
         promisify.<span class="function">timeout</span> = <span class="keyword">function</span>(time){
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){
                         setTimeout(<span class="keyword">function</span>(){
                                 resolve(time)
                         }, time)

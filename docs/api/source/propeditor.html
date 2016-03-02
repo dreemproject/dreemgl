@@ -423,14 +423,63 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n269" name="n269">269</a>
 <strong><a href="#n270" name="n270">270</a></strong>
 <a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
+<a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
+<strong><a href="#n280" name="n280">280</a></strong>
+<a href="#n281" name="n281">281</a>
+<a href="#n282" name="n282">282</a>
+<a href="#n283" name="n283">283</a>
+<a href="#n284" name="n284">284</a>
+<a href="#n285" name="n285">285</a>
+<a href="#n286" name="n286">286</a>
+<a href="#n287" name="n287">287</a>
+<a href="#n288" name="n288">288</a>
+<a href="#n289" name="n289">289</a>
+<strong><a href="#n290" name="n290">290</a></strong>
+<a href="#n291" name="n291">291</a>
+<a href="#n292" name="n292">292</a>
+<a href="#n293" name="n293">293</a>
+<a href="#n294" name="n294">294</a>
+<a href="#n295" name="n295">295</a>
+<a href="#n296" name="n296">296</a>
+<a href="#n297" name="n297">297</a>
+<a href="#n298" name="n298">298</a>
+<a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
+<a href="#n302" name="n302">302</a>
+<a href="#n303" name="n303">303</a>
+<a href="#n304" name="n304">304</a>
+<a href="#n305" name="n305">305</a>
+<a href="#n306" name="n306">306</a>
+<a href="#n307" name="n307">307</a>
+<a href="#n308" name="n308">308</a>
+<a href="#n309" name="n309">309</a>
+<strong><a href="#n310" name="n310">310</a></strong>
+<a href="#n311" name="n311">311</a>
+<a href="#n312" name="n312">312</a>
+<a href="#n313" name="n313">313</a>
+<a href="#n314" name="n314">314</a>
+<a href="#n315" name="n315">315</a>
+<a href="#n316" name="n316">316</a>
+<a href="#n317" name="n317">317</a>
+<a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, checkbox,foldcontainer, label, icon, scrollbar, textbox, numberbox, <span class="predefined">$widgets$</span>, colorpicker, radiogroup){
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, checkbox,foldcontainer, label, icon, button, scrollbar, textbox, numberbox, <span class="predefined">$widgets$</span>, colorpicker, radiogroup){
 <span class="comment">// internal</span>
 
         <span class="local-variable">this</span>.attributes = {
@@ -454,8 +503,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.hardrect = {
                 <span class="function">color</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">var</span> col1 = vec3(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>);
-                        <span class="keyword">var</span> col2=vec3(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>);
+                        <span class="keyword">var</span> col1 = vec3(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>);
+                        <span class="keyword">var</span> col2=vec3(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">return</span> vec4(mix(col1, col2, <span class="float">1.0</span>-pow(abs(uv.y),<span class="float">4.0</span>) ),<span class="float">1.0</span>)
                 }
         };
@@ -473,7 +522,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">margin</span>:vec4(<span class="integer">2</span>,<span class="integer">0</span>,<span class="integer">2</span>,<span class="integer">5</span>)
                 },
                 <span class="predefined">$_color</span>:{
-                         <span class="key">width</span>:<span class="integer">302</span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">colorpicker</span><span class="delimiter">&quot;</span></span>,  <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#383838</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle</span><span class="delimiter">&quot;</span></span>, <span class="key">collapsed</span>:<span class="predefined-constant">true</span>
+                         <span class="key">width</span>:<span class="integer">302</span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">colorpicker</span><span class="delimiter">&quot;</span></span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#383838</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">paint-brush</span><span class="delimiter">&quot;</span></span>, <span class="key">collapsed</span>:<span class="predefined-constant">true</span>
                 },
                 <span class="predefined">$_colorview</span>:{
                         <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">width</span>:<span class="integer">300</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
@@ -514,7 +563,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                 editor = foldcontainer({
                                         <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>,
-                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">circle</span><span class="delimiter">'</span></span>,
+                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">paint-brush</span><span class="delimiter">'</span></span>,
                                         <span class="key">basecolor</span>:vec4(<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="local-variable">this</span>.value[<span class="integer">2</span>],<span class="float">1.0</span>)
                                 }, view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color_view</span><span class="delimiter">'</span></span>},
                                         colorpicker({
@@ -661,11 +710,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="key">flex</span>:<span class="integer">0</span>,
                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">textcolor</span>:<span class="local-variable">this</span>.fgcolor,
-                                <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
+                                <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">pressedcolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">pressedcolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                 <span class="key">value</span>:<span class="local-variable">this</span>.value,
                                 <span class="key">padding</span>:<span class="integer">4</span>,
                                 <span class="key">borderradius</span>:<span class="integer">0</span>,
-                                <span class="key">borderwidth</span>:<span class="integer">2</span>,
+                                <span class="key">borderwidth</span>:<span class="integer">1</span>,
                                 <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#262626</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">margin</span>:<span class="integer">2</span>,
                                 <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>, <span class="predefined-constant">true</span>)}.bind(<span class="local-variable">this</span>)
@@ -675,7 +731,47 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         editor = checkbox({<span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">circle</span><span class="delimiter">'</span></span>, <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">margin</span>:<span class="integer">4</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">[FONT PICKER]</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">textcolor</span>:<span class="local-variable">this</span>.fgcolor, <span class="key">borderwidth</span>:<span class="integer">0</span>});
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta == <span class="string"><span class="delimiter">&quot;</span><span class="content">texture</span><span class="delimiter">&quot;</span></span>) {
-                        editor = checkbox({<span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">circle</span><span class="delimiter">'</span></span>, <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">margin</span>:<span class="integer">4</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">[IMAGE PICKER]</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">textcolor</span>:<span class="local-variable">this</span>.fgcolor, <span class="key">borderwidth</span>:<span class="integer">0</span>});
+                        editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
+                                button({
+                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">folder-open</span><span class="delimiter">'</span></span>,
+                                        <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
+                                        <span class="key">margin</span>:<span class="integer">4</span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">pickalpha</span>:-<span class="integer">1</span>,
+                                        <span class="key">textactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">textcolor</span>:<span class="local-variable">this</span>.fgcolor,
+                                        <span class="key">borderwidth</span>:<span class="integer">0</span>,
+                                        <span class="function">click</span>: <span class="keyword">function</span>() {
+                                                <span class="keyword">var</span> input = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">input</span><span class="delimiter">'</span></span>);
+                                                input.type = <span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>;
+                                                input.<span class="function">onchange</span> = <span class="keyword">function</span>(changeEvent) {
+                                                        <span class="keyword">var</span> files = changeEvent.target.files;
+                                                        <span class="local-variable">this</span>.callback(files, <span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">file</span><span class="delimiter">&quot;</span></span>);
+                                                }.bind(<span class="local-variable">this</span>);
+                                                input.click();
+                                        }.bind(<span class="local-variable">this</span>)
+                                }),
+                                textbox({
+                                        <span class="key">flex</span>:<span class="integer">1</span>,
+                                        <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
+                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">value</span>:<span class="local-variable">this</span>.value ? <span class="local-variable">this</span>.value : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
+                                        <span class="key">padding</span>:<span class="integer">4</span>,
+                                        <span class="key">borderradius</span>:<span class="integer">0</span>,
+                                        <span class="key">borderwidth</span>:<span class="integer">1</span>,
+                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">margin</span>:<span class="integer">2</span>,
+                                        <span class="key">multiline</span>:<span class="predefined-constant">false</span>,
+                                        <span class="function">onfocus</span>: <span class="keyword">function</span>(ev,v,o) { <span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">texture</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); } }.bind(<span class="local-variable">this</span>),
+                                        <span class="function">onvalue</span>: <span class="keyword">function</span>(ev,v,o){ <span class="local-variable">this</span>.callback(v, <span class="local-variable">this</span>); }.bind(<span class="local-variable">this</span>)
+                                })
+                        );
+
 
                 } <span class="keyword">else</span> {
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.showunknown || !<span class="local-variable">this</span>.property) {

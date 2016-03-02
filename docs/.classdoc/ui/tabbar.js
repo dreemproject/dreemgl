@@ -17,10 +17,6 @@
  * Color of default tabs, can be overridden in style
  */
 /**
- * @attribute {Object} [selection="undefined"]
+ * @attribute {float32} [activetab="undefined"]
  * Current tab selection
- */
-/**
- * @attribute {Object} [states="[object Object]"]
- * Default tab states if none provided in the tab defintions.
  */

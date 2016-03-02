@@ -491,11 +491,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n337" name="n337">337</a>
 <a href="#n338" name="n338">338</a>
 <a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, <span class="predefined">$$</span>, ballbutton){
 
@@ -764,7 +766,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> out = F.findChild(<span class="local-variable">this</span>._fromoutput);
                         <span class="keyword">var</span> yoff = <span class="integer">0</span>;
                         <span class="keyword">if</span> (out) {
-                                color2 = out.bgcolor;
+                                color2 = out.color;
                                 yoff += out.layout.top;
                                 yoff += out.parent.layout.top;
                                 yoff += out.parent.parent.layout.top + <span class="integer">10</span>;
@@ -779,7 +781,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> inp = T.findChild(<span class="local-variable">this</span>._toinput);
                         <span class="keyword">var</span> yoff = <span class="integer">0</span>;
                         <span class="keyword">if</span> (inp) {
-                                color1 = inp.bgcolor;
+                                color1 = inp.color;
 
                                 yoff += inp.layout.top;
                                 yoff += inp.parent.layout.top;

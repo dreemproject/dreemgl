@@ -1,14 +1,15 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(exports){
 
 	// internal, Reactive renderer
 
 	var initializing = false
-
+	var log_render_cause = false
 	var process_list = []
 	var process_timer = undefined
 
@@ -16,16 +17,28 @@ define.class(function(exports){
 		process_timer = undefined
 		var pl = process_list
 		process_list = []
-		for(var i = 0; i < pl.length; i++){
-			exports.process(pl[i], undefined, undefined, true)
+		for(var i = 0; i < pl.length; i+=2){
+			//console.log("Processing",pl[i])
+			var node = pl[i+1], iter = node
+
+			if(log_render_cause){
+				console.log("Re-render caused by "+pl[i]+" on ", node)
+			}
+
+			while(iter){
+				if(iter.destroyed) break
+				iter = iter.parent
+			}
+			if(!iter) exports.process(node, undefined, undefined, true)
 		}
 	}
 
 	function __atAttributeGet(key){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
-			if(process_list.indexOf(this) === -1)
-				process_list.push(this)
+			if(process_list.indexOf(this) === -1){
+				process_list.push(key, this)
+			}
 			if(!process_timer){
 				process_timer = setTimeout(processTimeout, 0)
 			}
@@ -45,12 +58,20 @@ define.class(function(exports){
 		var is_root = false
 
 		if(!state){
-			state = {wires:[], render_block:[]}
+			state = {render_block:[]}
 			is_root = true
 		}
 
 		// call connect wires before
-		if(!rerender) new_version.connectWires(state.wires)
+		if(!rerender){
+			var wires = []
+			new_version.connectWires(wires)
+			initializing = true
+			for(var i = 0; i < wires.length; i++){
+				wires[i]()
+			}
+			initializing = false
+		}
 
 		var old_children = old_version? old_version.children: undefined
 
@@ -65,6 +86,8 @@ define.class(function(exports){
 					new_version.emit(key, {type:'persist', owner:new_version, key:key, value:value})
 				}
 			}
+			if(new_version.atAnimate) new_version.screen.device.animate_hooks.push(new_version)
+			if(old_version) old_version.old_flag = true
 			if(new_version.atViewInit) new_version.atViewInit(old_version)
 			new_version.emit('init', old_version)// old_version && old_version.constructor == new_version.constructor? old_version: undefined)
 		}
@@ -131,10 +154,12 @@ define.class(function(exports){
 			var old_child = undefined
 			if(old_children){
 				old_child = old_children[i]
+				if(new_children.indexOf(old_child) !== -1) old_child = undefined
 			}
 			var childreuse = false
-			if(new_child.parent) childreuse = true
-
+			if(new_child.parent){
+				childreuse = true
+			}
 			//var name = new_child.name
 			//if(name !== undefined && !(name in new_version)) new_version[name] = new_child
 
@@ -153,17 +178,19 @@ define.class(function(exports){
 			child.emit('destroy')
 		}
 
-		if(old_version){
+		if(old_version && !rerender){
 			old_version.destroyed = true
+			// remove draw hook
+			if(old_version.atAnimate){
+				var id = old_version.screen.device.animate_hooks.indexOf(old_version)
+				if(id !== -1) old_version.screen.device.animate_hooks.splice(id, 1)
+			}
+
 			old_version.emit('destroy')
 		}
 
 		if(is_root){
-			initializing = true
-			for(var i = 0; i < state.wires.length; i++){
-				state.wires[i]()
-			}
-			initializing = false
+			
 
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){

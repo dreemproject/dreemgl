@@ -912,14 +912,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n758" name="n758">758</a>
 <a href="#n759" name="n759">759</a>
 <strong><a href="#n760" name="n760">760</a></strong>
+<a href="#n761" name="n761">761</a>
+<a href="#n762" name="n762">762</a>
+<a href="#n763" name="n763">763</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsgen</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports, baseclass){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsserialize</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports, baseclass){
 
         <span class="keyword">var</span> gltypes = require(<span class="string"><span class="delimiter">'</span><span class="content">./gltypes</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> OneJSParser =  require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
@@ -1135,7 +1139,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//var name = gen.expand(node, null, {})</span>
                         console.error(<span class="string"><span class="delimiter">'</span><span class="content">Identifier cannot be resolved </span><span class="delimiter">'</span></span>+name+<span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> +state.callname+<span class="string"><span class="delimiter">'</span><span class="content">()</span><span class="content">\n</span><span class="delimiter">'</span></span>+state.source)
                         <span class="comment">// make it throw in the function so we can find it</span>
-                        state.functionref()
+                        <span class="comment">//state.functionref()</span>
                         <span class="comment">//state.fn()</span>
                         <span class="comment">//throw new Error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source)</span>
                 }
@@ -1539,8 +1543,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">Logic</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="comment">// return type boolean</span>
+                
                 <span class="keyword">var</span> ret = baseclass.Logic.call(<span class="local-variable">this</span>, node, parent, state)
                 node.infer = <span class="reserved">boolean</span>
+
                 <span class="keyword">return</span> ret
         }
 

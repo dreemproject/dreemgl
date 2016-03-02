@@ -656,65 +656,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n502" name="n502">502</a>
 <a href="#n503" name="n503">503</a>
 <a href="#n504" name="n504">504</a>
-<a href="#n505" name="n505">505</a>
-<a href="#n506" name="n506">506</a>
-<a href="#n507" name="n507">507</a>
-<a href="#n508" name="n508">508</a>
-<a href="#n509" name="n509">509</a>
-<strong><a href="#n510" name="n510">510</a></strong>
-<a href="#n511" name="n511">511</a>
-<a href="#n512" name="n512">512</a>
-<a href="#n513" name="n513">513</a>
-<a href="#n514" name="n514">514</a>
-<a href="#n515" name="n515">515</a>
-<a href="#n516" name="n516">516</a>
-<a href="#n517" name="n517">517</a>
-<a href="#n518" name="n518">518</a>
-<a href="#n519" name="n519">519</a>
-<strong><a href="#n520" name="n520">520</a></strong>
-<a href="#n521" name="n521">521</a>
-<a href="#n522" name="n522">522</a>
-<a href="#n523" name="n523">523</a>
-<a href="#n524" name="n524">524</a>
-<a href="#n525" name="n525">525</a>
-<a href="#n526" name="n526">526</a>
-<a href="#n527" name="n527">527</a>
-<a href="#n528" name="n528">528</a>
-<a href="#n529" name="n529">529</a>
-<strong><a href="#n530" name="n530">530</a></strong>
-<a href="#n531" name="n531">531</a>
-<a href="#n532" name="n532">532</a>
-<a href="#n533" name="n533">533</a>
-<a href="#n534" name="n534">534</a>
-<a href="#n535" name="n535">535</a>
-<a href="#n536" name="n536">536</a>
-<a href="#n537" name="n537">537</a>
-<a href="#n538" name="n538">538</a>
-<a href="#n539" name="n539">539</a>
-<strong><a href="#n540" name="n540">540</a></strong>
-<a href="#n541" name="n541">541</a>
-<a href="#n542" name="n542">542</a>
-<a href="#n543" name="n543">543</a>
-<a href="#n544" name="n544">544</a>
-<a href="#n545" name="n545">545</a>
-<a href="#n546" name="n546">546</a>
-<a href="#n547" name="n547">547</a>
-<a href="#n548" name="n548">548</a>
-<a href="#n549" name="n549">549</a>
-<strong><a href="#n550" name="n550">550</a></strong>
-<a href="#n551" name="n551">551</a>
-<a href="#n552" name="n552">552</a>
-<a href="#n553" name="n553">553</a>
-<a href="#n554" name="n554">554</a>
-<a href="#n555" name="n555">555</a>
-<a href="#n556" name="n556">556</a>
-<a href="#n557" name="n557">557</a>
-<a href="#n558" name="n558">558</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, menubutton) {
 <span class="comment">// Screens are the root of a view hierarchy, typically mapping to a physical device.</span>
@@ -741,9 +688,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">globalpointerover</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalpointerout</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalpointerwheel</span>: Config({<span class="key">type</span>:Event}),
-                <span class="key">globalpointermultistart</span>: Config({<span class="key">type</span>:Event}),
-                <span class="key">globalpointermultimove</span>: Config({<span class="key">type</span>:Event}),
-                <span class="key">globalpointermultiend</span>: Config({<span class="key">type</span>:Event})
+                <span class="key">globalpointermultimove</span>: Config({<span class="key">type</span>:Event})
         }
 
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
@@ -770,29 +715,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.bindInputs()
         }
 
-        <span class="local-variable">this</span>.<span class="function">defaultKeyboardHandler</span> = <span class="keyword">function</span>(target, v, prefix){
-                <span class="keyword">if</span> (!prefix) prefix = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
-
-                <span class="keyword">var</span> keyboard = <span class="local-variable">this</span>.screen.keyboard
-                keyboard.textarea.focus()
-
-                <span class="keyword">var</span> name = prefix + <span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span> + v.name[<span class="integer">0</span>].toUpperCase() + v.name.slice(<span class="integer">1</span>)
-                <span class="local-variable">this</span>.undo_group++
-
-                <span class="keyword">if</span>(keyboard.leftmeta || keyboard.rightmeta) name += <span class="string"><span class="delimiter">'</span><span class="content">Cmd</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.ctrl) name += <span class="string"><span class="delimiter">'</span><span class="content">Ctrl</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.alt) name += <span class="string"><span class="delimiter">'</span><span class="content">Alt</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.shift) name += <span class="string"><span class="delimiter">'</span><span class="content">Shift</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">if</span>(target[name]) {
-                        target[name](v)
-                }
-                <span class="keyword">else</span>{
-                        <span class="comment">//console.log(name)</span>
-                        <span class="keyword">if</span> (target.keydownHandler) target.keydownHandler(name)
-                }
-        }
-
         <span class="comment">// TODO(aki): move menu into a configurable component.</span>
         <span class="comment">// internal, display a classic &quot;rightclick&quot; or &quot;dropdown&quot; menu at position x,y - if no x,y is provided, last pointer coordinates will be substituted instead.</span>
         <span class="local-variable">this</span>.<span class="function">contextMenu</span> = <span class="keyword">function</span>(commands, x,y){
@@ -812,7 +734,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                                 res.push(
                                         menubutton({
-                                                <span class="key">padding</span>:vec4(<span class="integer">5</span> ,<span class="integer">0</span>,<span class="integer">5</span>,<span class="integer">4</span>),
+                                                <span class="key">padding</span>:vec4(<span class="integer">5</span>),
                                                 <span class="key">margin</span>:<span class="integer">0</span>,
                                                 <span class="key">borderradius</span>: <span class="integer">6</span>,
                                                 <span class="key">bold</span>:<span class="predefined-constant">false</span>,
@@ -856,53 +778,54 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
+        <span class="local-variable">this</span>.<span class="function">walkTree</span> = <span class="keyword">function</span>(view){
+                <span class="keyword">var</span> found
+                <span class="keyword">function</span> <span class="function">dump</span>(walk, parent){
+                        <span class="keyword">var</span> layout = walk.layout || {}
+                        <span class="keyword">var</span> named = (<span class="keyword">new</span> Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">return function </span><span class="delimiter">&quot;</span></span> + (walk.name || walk.constructor.name) + <span class="string"><span class="delimiter">'</span><span class="content">(){}</span><span class="delimiter">'</span></span>))()
+                        Object.defineProperty(named.prototype, <span class="string"><span class="delimiter">'</span><span class="content">zflash</span><span class="delimiter">'</span></span>, {
+                                <span class="function">get</span>:<span class="keyword">function</span>(){
+                                        <span class="comment">// humm. ok so we wanna flash it</span>
+                                        <span class="comment">// how do we do that.</span>
+                                        window.view = <span class="local-variable">this</span>.view
+                                        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">window.view set</span><span class="delimiter">&quot;</span></span>
+                                }
+                        })
+                        <span class="keyword">var</span> obj = <span class="keyword">new</span> named()
+                        obj.geom = <span class="string"><span class="delimiter">'</span><span class="content">x:</span><span class="delimiter">'</span></span>+layout.left+<span class="string"><span class="delimiter">'</span><span class="content">, y:</span><span class="delimiter">'</span></span>+layout.top+<span class="string"><span class="delimiter">'</span><span class="content">, w:</span><span class="delimiter">'</span></span>+layout.width+<span class="string"><span class="delimiter">'</span><span class="content">, h:</span><span class="delimiter">'</span></span>+layout.height
+                        <span class="keyword">if</span>(walk._viewport) obj.viewport = walk._viewport
+                        <span class="comment">// write out shader modes</span>
+                        <span class="keyword">var</span> so = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> walk.shaders){
+                                <span class="keyword">if</span>(so) so += <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span>
+                                so += key<span class="comment">//+':'+walk.shader_order[key]</span>
+                        }
+                        obj.shaders = so
+                        obj.view = walk
+
+                        <span class="keyword">if</span>(walk._text) obj.text = walk.text
+
+                        <span class="keyword">if</span>(walk === view) found = obj
+                        <span class="keyword">if</span>(walk.children){
+                                <span class="comment">//obj.children = []</span>
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; walk.children.length;i++){
+                                        obj[i] = dump(walk.children[i], obj)
+                                }
+                        }
+                        obj._parent = parent
+                        <span class="keyword">return</span> obj
+                }
+                dump(<span class="local-variable">this</span>, <span class="predefined-constant">null</span>)
+                <span class="keyword">return</span> found
+        }
+
         <span class="comment">// pick a view at the pointer coordinate and console.log its structure</span>
         <span class="local-variable">this</span>.<span class="function">debugPick</span> = <span class="keyword">function</span>(x, y){
                 <span class="local-variable">this</span>.device.pickScreen(x, y).then(<span class="keyword">function</span>(msg){
                         <span class="keyword">var</span> view = msg.view
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.last_debug_view === view) <span class="keyword">return</span>
                         <span class="local-variable">this</span>.last_debug_view = view
-                        <span class="keyword">var</span> found
-                        <span class="keyword">function</span> <span class="function">dump</span>(walk, parent){
-                                <span class="keyword">var</span> layout = walk.layout || {}
-                                <span class="keyword">var</span> named = (<span class="keyword">new</span> Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">return function </span><span class="delimiter">&quot;</span></span> + (walk.name || walk.constructor.name) + <span class="string"><span class="delimiter">'</span><span class="content">(){}</span><span class="delimiter">'</span></span>))()
-                                Object.defineProperty(named.prototype, <span class="string"><span class="delimiter">'</span><span class="content">zflash</span><span class="delimiter">'</span></span>, {
-                                        <span class="function">get</span>:<span class="keyword">function</span>(){
-                                                <span class="comment">// humm. ok so we wanna flash it</span>
-                                                <span class="comment">// how do we do that.</span>
-                                                window.view = <span class="local-variable">this</span>.view
-                                                <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">window.view set</span><span class="delimiter">&quot;</span></span>
-                                        }
-                                })
-                                <span class="keyword">var</span> obj = <span class="keyword">new</span> named()
-                                obj.geom = <span class="string"><span class="delimiter">'</span><span class="content">x:</span><span class="delimiter">'</span></span>+layout.left+<span class="string"><span class="delimiter">'</span><span class="content">, y:</span><span class="delimiter">'</span></span>+layout.top+<span class="string"><span class="delimiter">'</span><span class="content">, w:</span><span class="delimiter">'</span></span>+layout.width+<span class="string"><span class="delimiter">'</span><span class="content">, h:</span><span class="delimiter">'</span></span>+layout.height
-                                <span class="keyword">if</span>(walk._viewport) obj.viewport = walk._viewport
-                                <span class="comment">// write out shader modes</span>
-                                <span class="keyword">var</span> so = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> walk.shader_order){
-                                        <span class="keyword">if</span>(walk.shader_order[key]){
-                                                <span class="keyword">if</span>(so) so += <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span>
-                                                so += key+<span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>+walk.shader_order[key]
-                                        }
-                                }
-                                obj.shaders = so
-                                obj.view = walk
-
-                                <span class="keyword">if</span>(walk._text) obj.text = walk.text
-
-                                <span class="keyword">if</span>(walk === view) found = obj
-                                <span class="keyword">if</span>(walk.children){
-                                        <span class="comment">//obj.children = []</span>
-                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; walk.children.length;i++){
-                                                obj[i] = dump(walk.children[i], obj)
-                                        }
-                                }
-                                obj._parent = parent
-                                <span class="keyword">return</span> obj
-                        }
-                        <span class="keyword">var</span> ret = dump(<span class="local-variable">this</span>, <span class="predefined-constant">null</span>)
-                        <span class="keyword">if</span>(!found) console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not find</span><span class="delimiter">&quot;</span></span>, view)
-                        <span class="keyword">else</span> console.log(found)
+                        console.log(<span class="local-variable">this</span>.walkTree(view))
                 }.bind(<span class="local-variable">this</span>))
         }
 
@@ -946,31 +869,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalpointerstart</span><span class="delimiter">'</span></span>, e)
                                 e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerstart</span><span class="delimiter">'</span></span>, e.pointer)
                                 e.view.computeCursor()
-                                <span class="keyword">if</span> (!e.pointer.touch) {
-                                        <span class="local-variable">this</span>.keyboard.pointerMove(e.pointer.position)
-                                        <span class="local-variable">this</span>.keyboard.checkSpecialKeys(e.pointer)
-                                }
                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(e.view)){
                                         <span class="local-variable">this</span>.setFocus(e.view)
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.modal){
                                         <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">focuslost</span><span class="delimiter">'</span></span>, {<span class="key">global</span>: e.pointer.position})
                                 }
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (e.pointers) {
-                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalpointermultistart</span><span class="delimiter">'</span></span>, e)
-                                e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermultistart</span><span class="delimiter">'</span></span>, e.pointers)
                         }
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.move` event.</span>
                 <span class="comment">// Emits `pointermove` event from `pointer.view`.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">move</span> = <span class="keyword">function</span>(e){
-
                         <span class="keyword">if</span> (e.pointer) {
                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalpointermove</span><span class="delimiter">'</span></span>, e)
                                 e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermove</span><span class="delimiter">'</span></span>, e.pointer)
-                                <span class="keyword">if</span> (!e.pointer.touch &amp;&amp; e.pointer.button == <span class="integer">2</span>){
-                                        <span class="local-variable">this</span>.device.keyboard.pointerMove(e.pointer.position)
-                                }
                         } <span class="keyword">else</span> <span class="keyword">if</span> (e.pointers) {
                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalpointermultimove</span><span class="delimiter">'</span></span>, e)
                                 e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermultimove</span><span class="delimiter">'</span></span>, e.pointers)
@@ -984,13 +896,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalpointerend</span><span class="delimiter">'</span></span>, e)
                                 e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerend</span><span class="delimiter">'</span></span>, e.pointer)
                                 e.view.computeCursor()
-                                <span class="keyword">if</span> (!e.pointer.touch) {
-                                        <span class="local-variable">this</span>.keyboard.pointerMove(e.pointer.position)
-                                        <span class="local-variable">this</span>.keyboard.checkSpecialKeys(e.pointer)
-                                }
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (e.pointers) {
-                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalpointermultiend</span><span class="delimiter">'</span></span>, e)
-                                e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermultiend</span><span class="delimiter">'</span></span>, e.pointers)
                         }
                 }.bind(<span class="local-variable">this</span>)
 
@@ -1197,14 +1102,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// animation</span>
 
         <span class="comment">// internal, start an animation, delegated from view</span>
-        <span class="local-variable">this</span>.<span class="function">startAnimationRoot</span> = <span class="keyword">function</span>(obj, key, value, track, promise){
+        <span class="local-variable">this</span>.<span class="function">startAnimationRoot</span> = <span class="keyword">function</span>(obj, key, value, track, resolve){
                 <span class="comment">// ok so. if we get a config passed in, we pass that in</span>
                 <span class="keyword">var</span> config = obj.getAttributeConfig(key)
 
                 <span class="keyword">var</span> first = obj[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key]
 
                 <span class="keyword">var</span> anim = <span class="keyword">new</span> Animate(config, obj, key, track, first, value)
-                anim.promise = promise
+                anim.resolve = resolve
                 <span class="keyword">var</span> animkey = obj.getViewGuid() + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key
                 <span class="local-variable">this</span>.anims[animkey] = anim
                 obj.redraw()
@@ -1240,7 +1145,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 anim.obj[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + anim.key] = value.last_value
                                 anim.obj.emit(anim.key, {<span class="key">animate</span>:<span class="predefined-constant">true</span>, <span class="key">end</span>:<span class="predefined-constant">true</span>, <span class="key">key</span>: anim.key, <span class="key">owner</span>:anim.obj, <span class="key">value</span>:value.last_value})
                                 anim.obj.redraw()
-                                <span class="keyword">if</span>(anim.promise) anim.promise.resolve()
+                                <span class="keyword">if</span>(anim.resolve) anim.resolve()
                         }
                         <span class="keyword">else</span>{
                                 <span class="comment">// what if we have a value with storage?</span>
@@ -1254,19 +1159,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         }
-
-        <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>._cachednode) {
-                        <span class="keyword">var</span> past = <span class="local-variable">this</span>.composition.ASTNode();
-
-                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.__constructorIndex) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>) {
-                                <span class="local-variable">this</span>._cachednode = past.args[<span class="local-variable">this</span>.__constructorIndex];
-                        } <span class="keyword">else</span> {
-                                <span class="local-variable">this</span>._cachednode = <span class="keyword">new</span> ASTScanner(past, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>, <span class="key">fn</span>:{ <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:<span class="local-variable">this</span>.constructor.name }}).at;
-                        }
-                }
-                <span class="keyword">return</span> <span class="local-variable">this</span>._cachednode;
-        };
 
 })
 </pre></td>

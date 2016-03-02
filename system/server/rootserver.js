@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
 // Teem server
@@ -35,7 +36,7 @@ define.class(function(require){
 		this.server = http.createServer(this.request.bind(this))
 		this.server.listen(port, iface)
 		this.server.on('upgrade', this.upgrade.bind(this))
-
+		this.addresses = []
 		if(iface == '0.0.0.0'){
 			var ifaces = os.networkInterfaces()
 			var txt = ''
@@ -45,6 +46,10 @@ define.class(function(require){
 					if ('IPv4' !== iface.family) return
 					var addr = 'http://' + iface.address + ':' + port + '/'
 					if(!this.address) this.address = addr
+					this.addresses.push('http://' + iface.address + ':' + port)
+					if(iface.address == '127.0.0.1'){
+						this.addresses.push('http://localhost:'+port)
+					}
 					txt += ' ~~on ~c~'+addr
 				}.bind(this))
 			}.bind(this))
@@ -52,7 +57,24 @@ define.class(function(require){
 		}
 		else {
 			this.address = 'http://' + iface + ':' + port + '/'
+			this.addresses.push('http://' + iface + ':' + port)
+			if(iface == '127.0.0.1'){
+				this.addresses.push('http://localhost:'+port)
+			}
+
 			console.color('Server running on ~c~' + this.address + "~~\n")
+		}
+		if(iface === '127.0.0.1'){
+			Object.defineProperty(define, "$localbound", {
+			    value: true,
+			    writable: false
+			});
+		}
+		else{
+			Object.defineProperty(define, "$localbound", {
+			    value: false,
+			    writable: false
+			});
 		}
 		// use the browser spawner
 		var browser = this.args['-browser']
@@ -107,12 +129,17 @@ define.class(function(require){
 	}
 
 	this.upgrade = function(req, sock, head){
+
+		if(!define.$unsafeorigin && this.addresses.indexOf(req.headers.origin) === -1){
+			console.log("WRONG ORIGIN SOCKET CONNECTION RECEIVED"+ req.headers.origin+ ' -> '+this.address)
+			return false
+		}
 		// lets connect the sockets to the app
 		var sock = new NodeWebSocket(req, sock, head)
 		sock.url = req.url
 		var mypath = req.url.slice(1)
-		if(mypath) this.getComposition('$' + decodeURIComponent(mypath)).busserver.addWebSocket(sock)
-		else this.busserver.addWebSocket(sock)
+		if(mypath) this.getComposition('$' + decodeURIComponent(mypath)).busserver.addWebSocket(sock, req)
+		else this.busserver.addWebSocket(sock, req)
 	}
 
 	// maps an input path into our files
@@ -174,6 +201,13 @@ define.class(function(require){
 
 		if(requrl =='/favicon.ico'){
 			res.writeHead(200)
+			res.end()
+			return
+		}
+
+		// block use of relative paths in the entire url.
+		if(decodeURIComponent(requrl).indexOf('..') !== -1){
+			res.writeHead(404)
 			res.end()
 			return
 		}

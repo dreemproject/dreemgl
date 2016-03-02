@@ -396,11 +396,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n242" name="n242">242</a>
 <a href="#n243" name="n243">243</a>
 <a href="#n244" name="n244">244</a>
+<a href="#n245" name="n245">245</a>
+<a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
+<a href="#n248" name="n248">248</a>
+<a href="#n249" name="n249">249</a>
+<strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/compositionbase</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports, baseclass){
 
@@ -413,14 +422,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>);
         <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
-
-        <span class="local-variable">this</span>.<span class="function">commit</span> = <span class="keyword">function</span> (data) {
-                <span class="keyword">var</span> filename = <span class="local-variable">this</span>.constructor.module.filename;
-                <span class="keyword">var</span> source = <span class="string"><span class="delimiter">'</span><span class="content">define.class(&quot;$server/composition&quot;,</span><span class="delimiter">'</span></span> + data + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>;
-                console.log(<span class="string"><span class="delimiter">'</span><span class="content">[COMMIT]</span><span class="delimiter">'</span></span>, filename);<span class="comment">//, source);</span>
-
-                <span class="keyword">return</span> fs.writeFile(filename, source);
-        };
 
         <span class="comment">// ok now what. well we need to build our RPC interface</span>
         <span class="local-variable">this</span>.<span class="function">postAPI</span> = <span class="keyword">function</span>(msg, response){
@@ -455,7 +456,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">handleRpcMethod</span> = <span class="keyword">function</span>(msg){
                 <span class="comment">// lets make a promise</span>
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                         <span class="keyword">var</span> parts = msg.rpcid.split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
                         <span class="comment">//! TODO fix this up to be multi role capable</span>
                         <span class="keyword">var</span> part = parts[<span class="integer">0</span>];
@@ -540,7 +541,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">setRpcAttribute</span> = <span class="keyword">function</span>(msg, socket){
                 <span class="keyword">var</span> parts = msg.rpcid.split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
                 <span class="comment">// keep it around for new joins</span>
-                <span class="local-variable">this</span>.server_attributes[msg.rpcid] = msg
+                <span class="local-variable">this</span>.server_attributes[msg.rpcid + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + msg.attribute] = msg
 
                 <span class="keyword">if</span> (socket) {
                         <span class="comment">//make sure we set it on the rpc object</span>
@@ -590,6 +591,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         socket.send({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">sessionCheck</span><span class="delimiter">'</span></span>, <span class="key">session</span>:<span class="local-variable">this</span>.session})
                 }.bind(<span class="local-variable">this</span>)
 
+                bus.<span class="function">atClose</span> = <span class="keyword">function</span>(socket){
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.connected_screens){
+                                <span class="keyword">var</span> screens = <span class="local-variable">this</span>.connected_screens[key];
+                                <span class="keyword">var</span> id = screens.indexOf(socket);
+                                <span class="keyword">if</span> (id != -<span class="integer">1</span>){
+                                        screens.splice(id, <span class="integer">1</span>);
+                                        <span class="keyword">if</span> (screens.length == <span class="integer">0</span>){
+                                                <span class="keyword">delete</span> <span class="local-variable">this</span>.connected_screens[key];
+                                        }
+                                        <span class="keyword">return</span>;
+                                }
+                        }
+                }.bind(<span class="local-variable">this</span>)
+
                 bus.<span class="function">atMessage</span> = <span class="keyword">function</span>(msg, socket){
                         <span class="comment">// we will get messages from the clients</span>
                         <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">connectScreen</span><span class="delimiter">'</span></span>){
@@ -630,6 +645,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// create child name shortcut</span>
                         <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
                         child.rpc = <span class="local-variable">this</span>.rpc
+                        child.composition = <span class="local-variable">this</span>;
                         <span class="keyword">if</span>(child <span class="keyword">instanceof</span> screen) <span class="keyword">continue</span>
                         <span class="keyword">if</span>(!child.environment || child.environment === define.<span class="predefined">$environment</span>){
                                 <span class="keyword">var</span> init = []

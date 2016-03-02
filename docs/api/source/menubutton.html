@@ -186,32 +186,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, textbox, label, view){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/button</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, textbox, label, view){
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">commands</span>:[],
         }
-
-
+        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.buttoncolor1 = <span class="local-variable">this</span>.bgcolor;
+                <span class="local-variable">this</span>.buttoncolor2 = <span class="local-variable">this</span>.bgcolor;
+                
+        }
+        <span class="local-variable">this</span>.borderwidth =<span class="integer">0</span> ;
+        <span class="local-variable">this</span>.borderradius = <span class="integer">0</span>;
+        <span class="local-variable">this</span>.padding = <span class="integer">4</span>;
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> res = [];
                 <span class="local-variable">this</span>.buttonres = <span class="predefined-constant">undefined</span>;
                 <span class="local-variable">this</span>.iconres = <span class="predefined-constant">undefined</span>
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.icon &amp;&amp; <span class="local-variable">this</span>.icon.length &gt; <span class="integer">0</span>){
-                        <span class="local-variable">this</span>.iconres = icon({<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor, <span class="key">icon</span>: <span class="local-variable">this</span>.icon});
+                        <span class="local-variable">this</span>.iconres = icon({<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">icon</span>: <span class="local-variable">this</span>.icon});
                         res.push(<span class="local-variable">this</span>.iconres);
                 }
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.text &amp;&amp; <span class="local-variable">this</span>.text.length &gt; <span class="integer">0</span>){
-                        <span class="local-variable">this</span>.buttonres = label({<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,  <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>: <span class="local-variable">this</span>.text})
+                        <span class="local-variable">this</span>.buttonres = label({<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,  <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>: <span class="local-variable">this</span>.text})
                         res.push(<span class="local-variable">this</span>.buttonres);
                 }
 

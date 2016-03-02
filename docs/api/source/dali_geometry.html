@@ -569,11 +569,39 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n415" name="n415">415</a>
 <a href="#n416" name="n416">416</a>
 <a href="#n417" name="n417">417</a>
+<a href="#n418" name="n418">418</a>
+<a href="#n419" name="n419">419</a>
+<strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
+<a href="#n444" name="n444">444</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -595,6 +623,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
+        <span class="keyword">var</span> gltypes = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/gltypes</span><span class="delimiter">'</span></span>)
+
         <span class="comment">// Assign a unique id to each daligeometry object</span>
         <span class="keyword">var</span> DaliGeometry = exports
         DaliGeometry.GlobalId = <span class="integer">0</span>
@@ -603,8 +633,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * @method constructor
          * Create a dali.Geometry object, using triangles
          * You can access the dali.Geometry object as this.daligeometry
-         * @param {number} drawtype Line drawing type. dali uses the same values
-         *                 as webgl. The default is dali.GEOMETRY_TRIANGLES.
+         * @param {number} drawtype Line drawing type (webgl value).
+     *                 DALi does NOT use the same values (but they are close)
+         *                 The default is dali.GEOMETRY_TRIANGLES.
          */</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(drawtype) {
                 <span class="local-variable">this</span>.object_type = <span class="string"><span class="delimiter">'</span><span class="content">DaliGeometry</span><span class="delimiter">'</span></span>
@@ -618,12 +649,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.id = ++DaliGeometry.GlobalId;
                 <span class="local-variable">this</span>.daligeometry = <span class="keyword">new</span> dali.Geometry();
 
-                drawtype = drawtype || dali.GEOMETRY_TRIANGLES;
-                <span class="local-variable">this</span>.daligeometry.setGeometryType(drawtype);
+                <span class="comment">// Map the webgl values to DALi. Triangle fan and strip are different</span>
+                <span class="keyword">var</span> drawmap = {};
+                drawmap[gltypes.gl.POINTS]         = dali.GEOMETRY_POINTS;
+                drawmap[gltypes.gl.LINES]          = dali.GEOMETRY_LINES;
+                drawmap[gltypes.gl.LINE_LOOP]      = dali.GEOMETRY_LINE_LOOP;
+                drawmap[gltypes.gl.LINE_STRIP]     = dali.GEOMETRY_LINE_STRIP;
+                drawmap[gltypes.gl.TRIANGLES]      = dali.GEOMETRY_TRIANGLES;
+                drawmap[gltypes.gl.TRIANGLE_STRIP] = dali.GEOMETRY_TRIANGLE_STRIP;
+                drawmap[gltypes.gl.TRIANGLE_FAN]   = dali.GEOMETRY_TRIANGLE_FAN;
+
+                drawtype = drawtype || gltypes.gl.TRIANGLES;
+                <span class="keyword">var</span> dali_drawtype = drawmap[drawtype];
+
+                <span class="local-variable">this</span>.daligeometry.setGeometryType(dali_drawtype);
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.Geometry();</span><span class="delimiter">'</span></span>);
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setGeometryType(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.drawtypeDali(drawtype) + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setGeometryType(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.drawtypeDali(dali_drawtype) + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
                 }
         }
 
@@ -825,10 +868,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">//TODO Support multiple names in the keys, like webgl</span>
                 <span class="keyword">var</span> format = {};
-
                 <span class="keyword">var</span> name;
         <span class="keyword">var</span> nslots = <span class="integer">0</span>;
+
+                <span class="comment">// DO NOT iterate on key name. You need to iterate in offset order to</span>
+                <span class="comment">// preserve the order.</span>
+                <span class="comment">// Sort based on the offset, and then loop in this order. </span>
+                <span class="keyword">var</span> tosort = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> attrlocs) {
+                        tosort.push([attrlocs[key].offset, key]);
+                }
+                tosort.sort(<span class="keyword">function</span>(a,b) { <span class="keyword">return</span> a[<span class="integer">0</span>]-b[<span class="integer">0</span>]});  <span class="comment">// Numeric sort!</span>
+                <span class="comment">//console.log('SORTED', tosort);</span>
+                
+                <span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> tosort) {
+                        key = tosort[i][<span class="integer">1</span>];
+
                         <span class="keyword">var</span> attrloc = attrlocs[key]
                         name = attrloc.name
 
@@ -865,7 +920,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">if</span> (!name || (Object.keys(format).length == <span class="integer">0</span>)) <span class="keyword">return</span>;
-
                 <span class="comment">//console.log('***************addAttributeGeometry******************');</span>
                 <span class="comment">//console.log(attrlocs);</span>
                 <span class="comment">//console.log('*****************************************************');</span>

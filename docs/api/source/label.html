@@ -321,11 +321,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n167" name="n167">167</a>
 <a href="#n168" name="n168">168</a>
 <a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view){
 <span class="comment">// A simple UI label for displaying text</span>
@@ -337,10 +352,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>)
         <span class="local-variable">this</span>.polygonoffset = <span class="float">0.0</span>;
 
-        <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos) {<span class="keyword">return</span> pos;};
-
-        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(fgcolor, pos, tag){
-                <span class="keyword">return</span> fgcolor;
+        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, tag){
+                <span class="keyword">return</span> style
         }
 
         <span class="local-variable">this</span>.attributes = {
@@ -356,14 +369,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// the boldness of the font (try values 0 - 1)</span>
                 <span class="key">boldness</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">0</span>.}),
 
+                <span class="comment">// line spacing</span>
+                <span class="key">linespacing</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="float">1.0</span>}),
+
                 <span class="comment">// reference to the font typeface, require it with require('font:')</span>
                 <span class="key">font</span>: Config({<span class="key">type</span>:Object, <span class="key">value</span>: <span class="predefined-constant">undefined</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">font</span><span class="delimiter">&quot;</span></span>}),
 
                 <span class="comment">// Should the text wrap around when its width has been reached?</span>
                 <span class="key">multiline</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span> }),
                 <span class="key">outline</span>: <span class="predefined-constant">false</span>,
-                <span class="key">outline_thickness</span>: <span class="float">0.6</span>,
-                <span class="key">outline_color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">outlinethickness</span>: <span class="float">0.6</span>,
+                <span class="key">outlinecolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>),
                 <span class="comment">// turn on subpixel aa, this requieres a bgcolor to be present</span>
                 <span class="key">subpixel</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
 
@@ -378,10 +394,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">bold</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.bold) {
-                        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_bold_ascii.glf</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_bold_256.glf</span><span class="delimiter">'</span></span>)
                 }
                 <span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_ascii.glf</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_256.glf</span><span class="delimiter">'</span></span>)
                 }
         }
 
@@ -401,11 +417,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.newText()
                         <span class="keyword">if</span>(view.font) mesh.font = view.font
 
+                        mesh.linespacing = view.linespacing
                         mesh.fontsize = view.fontsize
-                        mesh.boldness = view.boldness
-                        mesh.outline = view.outline;
-                        mesh.outline_thickness = view.outline_thickness;
-
+                        <span class="comment">//mesh.boldness = view.boldness</span>
+                        <span class="comment">//mesh.outline = view.outline;</span>
+                        <span class="comment">//mesh.outline_thickness = view.outline_thickness;</span>
                         mesh.add_y = mesh.line_height
 
                         mesh.align = view.align
@@ -459,11 +475,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">font</span> = <span class="keyword">function</span>(event){
+                <span class="comment">// DALi needs a baked font</span>
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.font.baked  &amp;&amp; define.<span class="predefined">$platform</span> === <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii_baked.glf</span><span class="delimiter">'</span></span>)
+
                 <span class="local-variable">this</span>.selectShader()
         }
 
         <span class="local-variable">this</span>.<span class="function">subpixel</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.selectShader()
+        }
+
+        <span class="local-variable">this</span>.<span class="function">text</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.relayout()
+        }
+
+        <span class="local-variable">this</span>.<span class="function">layout</span>= <span class="keyword">function</span>(){
         }
 
         <span class="local-variable">this</span>.<span class="function">measure</span> = <span class="keyword">function</span>(width){
@@ -476,12 +503,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">width</span>: <span class="local-variable">this</span>.measured_width = shader.mesh.bound_w,
                         <span class="key">height</span>: <span class="local-variable">this</span>.measured_height = shader.mesh.bound_h
                 };
+
         }
 
         <span class="keyword">if</span> (define.<span class="predefined">$platform</span> === <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>)
                 <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii_baked.glf</span><span class="delimiter">'</span></span>)
         <span class="keyword">else</span>
-                <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_ascii.glf</span><span class="delimiter">'</span></span>)
+                <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_256.glf</span><span class="delimiter">'</span></span>)
 
         <span class="keyword">var</span> label = <span class="local-variable">this</span>.constructor
         <span class="comment">// A label.</span>

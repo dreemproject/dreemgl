@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
 	// Node class provides attributes for events and values, propertybinding and constructor semantics
@@ -30,7 +31,10 @@ define.class(function(require){
 
 	this.setInterval = function(fn, mstime){
 		if(!this.interval_ids) this.interval_ids = []
-		var id = window.setInterval(function(){
+		
+		var platform = typeof window !== 'undefined'?window:global;
+		
+		var id = platform.setInterval(function(){
 			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
 			fn.call(this)
 		}.bind(this), mstime)
@@ -42,13 +46,17 @@ define.class(function(require){
 		var idx = this.interval_ids.indexOf(id)
 		if(idx !== -1){
 			this.interval_ids.splice(idx, 1)
-		 	window.clearInterval(id)
+			var platform = typeof window !== 'undefined'?window:global;
+		
+		 	platform.clearInterval(id)
 		}
 	}
 
 	this.setTimeout = function(fn, mstime){
 		if(!this.timeout_ids) this.timeout_ids = []
-		var id = window.setTimeout(function(){
+		var platform = typeof window !== 'undefined'?window:global;
+		
+		var id = platform.setTimeout(function(){
 			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
 			fn.call(this)
 		}.bind(this), mstime)
@@ -57,10 +65,12 @@ define.class(function(require){
 	}
 
 	this.clearTimeout = function(id){
-		var idx = this.timeout_ids.indexof(id)
+		var idx = this.timeout_ids.indexOf(id)
 		if(idx !== -1){
 			this.timeout_ids.splice(idx, 1)
-		 	window.clearInterval(id)
+			var platform = typeof window !== 'undefined'?window:global;
+		
+		 	platform.clearInterval(id)
 		}
 	}
 
@@ -227,15 +237,34 @@ define.class(function(require){
 		}
 	}
 
+	this.emit_block_set = null
+
 	this.emit = function(key, ievent){
+
+		// lets do a fastpass
 		var event = ievent || {}
+		var fast_key = '_fast_' + key
+
+		// FAST OUT
+		var callfn = this[fast_key] 
+		if(this['on'+key] == callfn){
+			if(callfn === null) return
+			if(callfn){
+				// lets see if we have an 'on' key defined
+				callfn.call(this, event, event.value, this)
+				return
+			}
+		}
 
 		var lock_key = '_lock_' + key
-
-		if(this[lock_key]) return
-
+		if(this[lock_key] || this.emit_block_set && this.emit_block_set.indexOf(key) !== -1) return
 		this[lock_key] = true
+
+		var counter = 0
 		try{
+
+			var on_key = 'on' + key
+			var listen_key = '_listen_' + key
 			if(!this.__lookupSetter__(key)){
 				var fn = this[key]
 				if(typeof fn === 'function'){
@@ -244,18 +273,17 @@ define.class(function(require){
 				return
 			}
 
-			var on_key = 'on' + key
-			var listen_key = '_listen_' + key
-
 			var proto = this
 
 			// called after the onclicks, in reverse order (parent on up)
 			var finals
 			while(on_key in proto || listen_key in proto){
 				if(proto.hasOwnProperty(on_key)){
-					proto[on_key].call(this, event, event.value, this)
+					callfn = proto[on_key]
+					callfn.call(this, event, event.value, this)
 					if(event.stop) return
 					if(event.final) finals = finals || [], finals.push(event.final)
+					counter++
 				}
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
@@ -263,6 +291,7 @@ define.class(function(require){
 						listeners[j].call(this, event, event.value, this)
 						if(event.stop) return
 						if(event.final) finals = finals || [], finals.push(event.final)
+						counter = -1
 					}
 				}
 				proto = Object.getPrototypeOf(proto)
@@ -274,6 +303,12 @@ define.class(function(require){
 		}
 		finally{
 			this[lock_key] = false
+			if(counter === 1){
+				this[fast_key] = callfn
+			}
+			else if(counter === 0){
+				this[fast_key] = null
+			}
 		}
 	}
 
@@ -283,6 +318,8 @@ define.class(function(require){
 			this.defineAttribute(key, this[key], true)
 		}
 		var listen_key = '_listen_' + key
+		var fast_key = '_fast_' + key
+		this[fast_key] = undefined // invalidate fast cache
 		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
 		else array = this[listen_key]
@@ -498,7 +535,7 @@ define.class(function(require){
 		},
 		set:function(arg){
 			for(var key in arg){
-				this.addEventListener(key, arg[key])
+				this.adListener(key, arg[key])
 			}
 		}
 	})
@@ -576,7 +613,13 @@ define.class(function(require){
 		var is_config =  config instanceof Config
 		var is_attribute = !always_define && key in this
 		// use normal value assign
-		if(!always_define && (is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function')){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+
+		var islistener = false
+		if(key[0] === 'o' && key[1] === 'n'){
+			if(this.__lookupSetter__(key.slice(2))) islistener = true
+		}
+
+		if(!always_define && (is_attribute && !is_config || islistener || typeof config === 'function' && !config.is_wired)){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -588,7 +631,6 @@ define.class(function(require){
 		else{ // its a value
 			config = {value: config}
 		}
-
 		// figure out the type
 		if(!is_attribute && !config.type){
 			var value = config.value
@@ -604,8 +646,14 @@ define.class(function(require){
 			else if(typeof value === 'boolean'){
 				config.type = boolean
 			}
-			else if(typeof value === 'function' && !value.is_wired){
-				config.type = Function
+			else if(typeof value === 'function'){
+				if(!value.is_wired){
+					config.type = Function
+				}
+				else{ // an undefined wire is automatically a number
+					config.value = 0
+					config.type = Number
+				}
 			}
 			else if(typeof value === 'string'){
 				config.type = String
@@ -619,7 +667,6 @@ define.class(function(require){
 		if(!this.hasOwnProperty('_attributes')){
 			this._attributes = this._attributes?Object.create(this._attributes):{}
 		}
-
 		if(is_attribute){ // extend the config
 			//if('type' in config) throw new Error('Cannot redefine type of attribute '+key)
 			var newconfig = Object.create(this._attributes[key])
@@ -642,6 +689,7 @@ define.class(function(require){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var animinit_key = '_animinit_' + key
+
 		//var config_key = '_config_' + key
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
@@ -679,7 +727,7 @@ define.class(function(require){
 		// block attribute emission on objects with an environment thats (stub it)
 		if(config.alias){
 			var alias_key = '_' + config.alias
-
+			var aliasstore_key = '_alias_'+config.alias
 			setter = function(value){
 				var mark
 
@@ -690,6 +738,7 @@ define.class(function(require){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
 						//this.addListener(on_key, value)
+						this['_fast_' + key] = undefined
 						this[on_key] = value
 						return
 					}
@@ -733,18 +782,24 @@ define.class(function(require){
 				this.emit(config.alias, {setter:true, via:key, key:config.alias, owner:this, value:this[alias_key], mark:mark})
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
+				// emit self
 				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
 			}
 
-			this.addListener(config.alias, function(event){
+			// add a listener to the alias
+			var aliasarray = this[aliasstore_key]
+			if(!aliasarray) this[aliasstore_key] = aliasarray = []
+
+			aliasarray.push(function(value){
 				var old = this[value_key]
-				var val = this[value_key] = event.value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old, mark:event.mark})
+				var val = this[value_key] = value[config.index]
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old})
 			})
 			// initialize value
 			this[value_key] = this[alias_key][config.index]
 		}
 		else {
+			var aliasstore_key = '_alias_'+key
 			setter = function(value){
 				var mark
 
@@ -755,6 +810,7 @@ define.class(function(require){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
 						//this.addListener(on_key, value)
+						this['_fast_' + key] = undefined
 						this[on_key] = value
 						return
 					}
@@ -787,6 +843,13 @@ define.class(function(require){
 				}
 				var old = this[value_key]
 				this[value_key] = value
+
+				var aliases = this[aliasstore_key]
+				if(aliases){
+					for(var i = 0; i<aliases.length;i++){
+						aliases[i].call(this, value)
+					}
+				}
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
 				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
@@ -954,19 +1017,6 @@ define.class(function(require){
 		init:Config({type:Event}),
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
 		destroy:Config({type:Event})
-	};
-
-	this.ASTNode = function() {
-		if (!this._cachednode) {
-			var past = this.parent.ASTNode();
-
-			if (typeof(this.__constructorIndex) !== "undefined") {
-				this._cachednode = past.args[this.__constructorIndex];
-			} else {
-				this._cachednode = new ASTScanner(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
-			}
-		}
-		return this._cachednode;
 	};
 
 })

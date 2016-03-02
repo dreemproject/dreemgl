@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/compositionbase', function(require, exports, baseclass){
 
@@ -14,14 +15,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 
 	var path = require('path');
 	var fs = require('fs');
-
-	this.commit = function (data) {
-		var filename = this.constructor.module.filename;
-		var source = 'define.class("$server/composition",' + data + ')';
-		console.log('[COMMIT]', filename);//, source);
-
-		return fs.writeFile(filename, source);
-	};
 
 	// ok now what. well we need to build our RPC interface
 	this.postAPI = function(msg, response){
@@ -141,7 +134,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	this.setRpcAttribute = function(msg, socket){
 		var parts = msg.rpcid.split('.')
 		// keep it around for new joins
-		this.server_attributes[msg.rpcid] = msg
+		this.server_attributes[msg.rpcid + '_' + msg.attribute] = msg
 
 		if (socket) {
 			//make sure we set it on the rpc object
@@ -191,6 +184,20 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			socket.send({type:'sessionCheck', session:this.session})
 		}.bind(this)
 
+		bus.atClose = function(socket){
+			for(var key in this.connected_screens){
+				var screens = this.connected_screens[key];
+				var id = screens.indexOf(socket);
+				if (id != -1){
+					screens.splice(id, 1);
+					if (screens.length == 0){
+						delete this.connected_screens[key];
+					}
+					return;
+				}
+			}
+		}.bind(this)
+
 		bus.atMessage = function(msg, socket){
 			// we will get messages from the clients
 			if(msg.type == 'connectScreen'){
@@ -231,6 +238,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			// create child name shortcut
 			var child = this.children[i]
 			child.rpc = this.rpc
+			child.composition = this;
 			if(child instanceof screen) continue
 			if(!child.environment || child.environment === define.$environment){
 				var init = []

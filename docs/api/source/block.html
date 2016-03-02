@@ -509,11 +509,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n355" name="n355">355</a>
 <a href="#n356" name="n356">356</a>
 <a href="#n357" name="n357">357</a>
+<a href="#n358" name="n358">358</a>
+<a href="#n359" name="n359">359</a>
+<strong><a href="#n360" name="n360">360</a></strong>
+<a href="#n361" name="n361">361</a>
+<a href="#n362" name="n362">362</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton, renameblockdialog){
 
@@ -567,7 +573,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.colormap = {
                 <span class="key">Number</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF7260</span><span class="delimiter">&quot;</span></span>),
                 <span class="reserved">int</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">int32</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
                 <span class="key">IntLike</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">float32</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
                 <span class="reserved">float</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
                 <span class="key">FloatLike</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
                 <span class="key">Array</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#0198E1</span><span class="delimiter">&quot;</span></span>),
@@ -660,7 +668,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
-                <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
+                <span class="local-variable">this</span>.defaultKeyboardHandler(v);
         }
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
@@ -741,10 +749,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">inputbutton</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
-                <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">inputbutton</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>,  <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
+                <span class="comment">//this.drawtarget = 'pick'</span>
 
                 <span class="local-variable">this</span>.attributes = {
+                        <span class="key">color</span>:Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                         <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tadaa</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
@@ -765,16 +774,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Input </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type):<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">return</span> [
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}),
+                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.color, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}),
                                 label({<span class="key">marginleft</span>:<span class="integer">5</span>, <span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.title), <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
         })
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">outputbutton</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
-                <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">outputbutton</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>,  <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
+                <span class="comment">//this.drawtarget = 'pick'</span>
 
                 <span class="local-variable">this</span>.attributes = {
+                        <span class="key">color</span>:Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                         <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
@@ -797,7 +807,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="keyword">return</span> [
                                 label({<span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.name), <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>: <span class="integer">5</span>}),
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>: <span class="local-variable">this</span>.bgcolor, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
+                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>: <span class="local-variable">this</span>.color, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
         })
@@ -806,7 +816,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> res = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.inputs.length;i++){
                         <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i];
-                        res.push(<span class="local-variable">this</span>.inputbutton({<span class="key">name</span>:inp.name, <span class="key">type</span>:inp.type.name, <span class="key">title</span>:inp.title, <span class="key">bgcolor</span>:inp.color}))
+                        res.push(<span class="local-variable">this</span>.inputbutton({<span class="key">name</span>:inp.name, <span class="key">type</span>:inp.type.name, <span class="key">title</span>:inp.title, <span class="key">color</span>:inp.color}))
                 }
                 <span class="keyword">return</span> res;
         }
@@ -815,7 +825,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> res = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.outputs.length;i++){
                         <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i];
-                        res.push(<span class="local-variable">this</span>.outputbutton({<span class="key">name</span>:outp.name, <span class="key">type</span>:outp.type.name, <span class="key">title</span>:outp.title, <span class="key">bgcolor</span>:outp.color}))
+                        res.push(<span class="local-variable">this</span>.outputbutton({<span class="key">name</span>:outp.name, <span class="key">type</span>:outp.type.name, <span class="key">title</span>:outp.title, <span class="key">color</span>:outp.color}))
                 }
                 <span class="keyword">return</span> res;
         }

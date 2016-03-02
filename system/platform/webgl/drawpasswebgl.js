@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, baseclass){
 	// internal, drawing
@@ -11,6 +12,7 @@ define.class(function(require, baseclass){
 		this.device = gldevice
 		this.view = view
 		view.drawpass = this
+
 		// lets do the flatten
 		this.pickmatrices = {
 			viewmatrix: mat4.identity(),
@@ -218,6 +220,7 @@ define.class(function(require, baseclass){
 				pickguid[2] = (id>>8)/255
 
 				draw.pickguid = pickguid[0]*255<<16 | pickguid[1]*255 << 8 | pickguid[2]*255
+
 				draw.viewmatrix = matrices.viewmatrix
 
 				if(!draw._visible) continue
@@ -227,7 +230,7 @@ define.class(function(require, baseclass){
 					var blendshader = draw.shaders.viewportblend
 					if (view._viewport === '3d'){
 						// dont do this!
-						if (shader.depth_test_eq.func === 0) shader.depth_test = 'src_depth <= dst_depth'												
+						if (shader.depth_test_eq.func === 0) shader.depth_test = 'src_depth <= dst_depth'
 					}
 					else{
 						blendshader.depth_test = ''
@@ -249,6 +252,7 @@ define.class(function(require, baseclass){
 						}
 
 						shader.pickguid = pickguid
+
 						if(!shader.visible) continue
 						if(draw.pickalpha !== undefined)shader.pickalpha = draw.pickalpha
 						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
@@ -281,7 +285,7 @@ define.class(function(require, baseclass){
 
 	this.drawBlend = function(draw){
 		if(!draw.drawpass.color_buffer){
-			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?")
+			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?", draw)
 		}
 		else {
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
@@ -314,10 +318,12 @@ define.class(function(require, baseclass){
 			}
 
 			if(shader.pickonly || !shader.visible) continue // was pick only
+			shader.view = draw
+			if(shader.atDraw) shader.atDraw(draw)
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
-			
+
 			vtx_count += shader.drawArrays(this.device)
 		}
 		return vtx_count
@@ -350,9 +356,9 @@ define.class(function(require, baseclass){
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
 		view.colormatrices = matrices
-		
+
 		gl.disable(gl.SCISSOR_TEST)
-		
+
 		if(isroot){
 			/*
 			if(clipview){
@@ -368,7 +374,7 @@ define.class(function(require, baseclass){
 			}
 			*/
 		}
-
+		//console.log(matrices.viewmatrix)
 		device.clear(view._clearcolor)
 
 		var draw = view
@@ -385,11 +391,12 @@ define.class(function(require, baseclass){
 
 				//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
 				draw._time = time
+
 				if(draw._listen_time || draw.ontime) hastime = true
 
 				draw.viewmatrix = matrices.viewmatrix
 
-				if(draw.atDraw) draw.atDraw(this)
+				if(draw.atDraw && draw.atDraw(this)) hastime = true
 				if(draw._viewport && draw.drawpass !== this){
 					this.drawBlend(draw)
 				}
@@ -405,7 +412,6 @@ define.class(function(require, baseclass){
 			}
 			draw = this.nextItem(draw, 'pick')
 		}
-		//console.log(vtx_count)
 		return hastime
 	}
 

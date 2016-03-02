@@ -7,14 +7,14 @@ creating a report in [JIRA for DreemGL](https://dreem2.atlassian.net).
 
 * [DreemGL in 10
   Minutes](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/dreem_in_10/README.md)
-  Start with this introdution to the DreemGL toolkit.
+  Start with this introduction to the DreemGL toolkit.
 
 * [Flexbox Layout in
   DreemGL](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/flexbox/README.md)
   Introduction to the Flebox-based layout system in DreemGL.
 
-* [DreemGL Developer's
-Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/README.md)
+* [Developer's
+Guide to DreemGL](https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/README.md)
   A technical guide meant for developer's building applications and
   extending DreemGL
 
@@ -23,17 +23,17 @@ Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/
   API reference documentation for all classes, methods,
   attributes.
 
-* [Extending DreemGL with New Components](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/components/README.md)
+* [DreemGL Visual Layout Toolkit](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/toolkit/README.md)
+A guide for designer's using the layout toolkit to prototype screen designs and interactions. 
+
+* [DreemGL IoT Guide](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/components/README.md)
 A guide for extending DreemGL with new services, devices and other components. A live slide-show that demonstrates many of the same concepts in this guide can be found in the [/examples/extdemo](https://github.com/dreemproject/dreemgl/tree/master/examples/extdemo) directory.
 
 * [DreemGL
   Appendix](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/appendix/README.md)
   A reference appendix containing information for constants.
 
+* [DreemGL DALi Runtime Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/dali/README.md)
+A guide describing the prerequisties and how to run DreemGL applications in DALi.
 
-## DALI Documentation
-* [Getting Started](https://github.com/dreemproject/dreemgl/blob/master/docs/dali/dali_getting_started.md)
-A guide describing the prerequisties and how to run DreemGL applications in DALI.
 
-* [Debugging Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/dali/dali_debugging.md)
-A guide to debugging DALI applications.

@@ -344,18 +344,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n190" name="n190">190</a></strong>
 <a href="#n191" name="n191">191</a>
 <a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(exports){
 
         <span class="comment">// internal, Reactive renderer</span>
 
         <span class="keyword">var</span> initializing = <span class="predefined-constant">false</span>
-
+        <span class="keyword">var</span> log_render_cause = <span class="predefined-constant">false</span>
         <span class="keyword">var</span> process_list = []
         <span class="keyword">var</span> process_timer = <span class="predefined-constant">undefined</span>
 
@@ -363,16 +391,28 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 process_timer = <span class="predefined-constant">undefined</span>
                 <span class="keyword">var</span> pl = process_list
                 process_list = []
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pl.length; i++){
-                        exports.process(pl[i], <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pl.length; i+=<span class="integer">2</span>){
+                        <span class="comment">//console.log(&quot;Processing&quot;,pl[i])</span>
+                        <span class="keyword">var</span> node = pl[i+<span class="integer">1</span>], iter = node
+
+                        <span class="keyword">if</span>(log_render_cause){
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Re-render caused by </span><span class="delimiter">&quot;</span></span>+pl[i]+<span class="string"><span class="delimiter">&quot;</span><span class="content"> on </span><span class="delimiter">&quot;</span></span>, node)
+                        }
+
+                        <span class="keyword">while</span>(iter){
+                                <span class="keyword">if</span>(iter.destroyed) <span class="keyword">break</span>
+                                iter = iter.parent
+                        }
+                        <span class="keyword">if</span>(!iter) exports.process(node, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
                 }
         }
 
         <span class="keyword">function</span> <span class="function">__atAttributeGet</span>(key){
                 <span class="keyword">if</span>(!initializing){
                         <span class="comment">//exports.process(this, undefined, undefined, true)</span>
-                        <span class="keyword">if</span>(process_list.indexOf(<span class="local-variable">this</span>) === -<span class="integer">1</span>)
-                                process_list.push(<span class="local-variable">this</span>)
+                        <span class="keyword">if</span>(process_list.indexOf(<span class="local-variable">this</span>) === -<span class="integer">1</span>){
+                                process_list.push(key, <span class="local-variable">this</span>)
+                        }
                         <span class="keyword">if</span>(!process_timer){
                                 process_timer = setTimeout(processTimeout, <span class="integer">0</span>)
                         }
@@ -392,12 +432,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> is_root = <span class="predefined-constant">false</span>
 
                 <span class="keyword">if</span>(!state){
-                        state = {<span class="key">wires</span>:[], <span class="key">render_block</span>:[]}
+                        state = {<span class="key">render_block</span>:[]}
                         is_root = <span class="predefined-constant">true</span>
                 }
 
                 <span class="comment">// call connect wires before</span>
-                <span class="keyword">if</span>(!rerender) new_version.connectWires(state.wires)
+                <span class="keyword">if</span>(!rerender){
+                        <span class="keyword">var</span> wires = []
+                        new_version.connectWires(wires)
+                        initializing = <span class="predefined-constant">true</span>
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; wires.length; i++){
+                                wires[i]()
+                        }
+                        initializing = <span class="predefined-constant">false</span>
+                }
 
                 <span class="keyword">var</span> old_children = old_version? old_version.children: <span class="predefined-constant">undefined</span>
 
@@ -412,6 +460,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         new_version.emit(key, {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">persist</span><span class="delimiter">'</span></span>, <span class="key">owner</span>:new_version, <span class="key">key</span>:key, <span class="key">value</span>:value})
                                 }
                         }
+                        <span class="keyword">if</span>(new_version.atAnimate) new_version.screen.device.animate_hooks.push(new_version)
+                        <span class="keyword">if</span>(old_version) old_version.old_flag = <span class="predefined-constant">true</span>
                         <span class="keyword">if</span>(new_version.atViewInit) new_version.atViewInit(old_version)
                         new_version.emit(<span class="string"><span class="delimiter">'</span><span class="content">init</span><span class="delimiter">'</span></span>, old_version)<span class="comment">// old_version &amp;&amp; old_version.constructor == new_version.constructor? old_version: undefined)</span>
                 }
@@ -478,10 +528,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> old_child = <span class="predefined-constant">undefined</span>
                         <span class="keyword">if</span>(old_children){
                                 old_child = old_children[i]
+                                <span class="keyword">if</span>(new_children.indexOf(old_child) !== -<span class="integer">1</span>) old_child = <span class="predefined-constant">undefined</span>
                         }
                         <span class="keyword">var</span> childreuse = <span class="predefined-constant">false</span>
-                        <span class="keyword">if</span>(new_child.parent) childreuse = <span class="predefined-constant">true</span>
-
+                        <span class="keyword">if</span>(new_child.parent){
+                                childreuse = <span class="predefined-constant">true</span>
+                        }
                         <span class="comment">//var name = new_child.name</span>
                         <span class="comment">//if(name !== undefined &amp;&amp; !(name in new_version)) new_version[name] = new_child</span>
 
@@ -500,17 +552,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         child.emit(<span class="string"><span class="delimiter">'</span><span class="content">destroy</span><span class="delimiter">'</span></span>)
                 }
 
-                <span class="keyword">if</span>(old_version){
+                <span class="keyword">if</span>(old_version &amp;&amp; !rerender){
                         old_version.destroyed = <span class="predefined-constant">true</span>
+                        <span class="comment">// remove draw hook</span>
+                        <span class="keyword">if</span>(old_version.atAnimate){
+                                <span class="keyword">var</span> id = old_version.screen.device.animate_hooks.indexOf(old_version)
+                                <span class="keyword">if</span>(id !== -<span class="integer">1</span>) old_version.screen.device.animate_hooks.splice(id, <span class="integer">1</span>)
+                        }
+
                         old_version.emit(<span class="string"><span class="delimiter">'</span><span class="content">destroy</span><span class="delimiter">'</span></span>)
                 }
 
                 <span class="keyword">if</span>(is_root){
-                        initializing = <span class="predefined-constant">true</span>
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; state.wires.length; i++){
-                                state.wires[i]()
-                        }
-                        initializing = <span class="predefined-constant">false</span>
+                        
 
                         <span class="comment">// signal to our device we have a newly rendered node</span>
                         <span class="keyword">if</span>(new_version.screen){

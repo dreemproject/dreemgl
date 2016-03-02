@@ -3375,11 +3375,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n3221" name="n3221">3221</a>
 <a href="#n3222" name="n3222">3222</a>
 <a href="#n3223" name="n3223">3223</a>
+<a href="#n3224" name="n3224">3224</a>
+<a href="#n3225" name="n3225">3225</a>
+<a href="#n3226" name="n3226">3226</a>
+<a href="#n3227" name="n3227">3227</a>
+<a href="#n3228" name="n3228">3228</a>
+<a href="#n3229" name="n3229">3229</a>
+<strong><a href="#n3230" name="n3230">3230</a></strong>
+<a href="#n3231" name="n3231">3231</a>
+<a href="#n3232" name="n3232">3232</a>
+<a href="#n3233" name="n3233">3233</a>
+<a href="#n3234" name="n3234">3234</a>
+<a href="#n3235" name="n3235">3235</a>
+<a href="#n3236" name="n3236">3236</a>
+<a href="#n3237" name="n3237">3237</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">// Parts Copyright (C) Marijn Haverbeke (Apache 2.0 license)</span>
 
@@ -3620,8 +3635,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 message += <span class="string"><span class="delimiter">&quot;</span><span class="content"> in </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.sourceFile + <span class="string"><span class="delimiter">&quot;</span><span class="content"> line </span><span class="delimiter">&quot;</span></span> + loc.line + <span class="string"><span class="delimiter">&quot;</span><span class="content"> column </span><span class="delimiter">&quot;</span></span> + loc.column 
                 <span class="keyword">var</span> err = <span class="keyword">new</span> SyntaxError(message)
                 err.pos = pos; err.loc = loc; err.raisedAt = <span class="local-variable">this</span>.tokPos
-
-                console.log(message, <span class="local-variable">this</span>.input.split(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)[loc.line-<span class="integer">1</span>])
+                <span class="comment">//console.log(message, this.input.split(&quot;\n&quot;)[loc.line-1])</span>
 
                 <span class="keyword">throw</span> err
         }
@@ -5162,17 +5176,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.strict &amp;&amp; <span class="local-variable">this</span>.isStrictBadIdWord(def.id.name))
                                         <span class="local-variable">this</span>.raise(def.id.start, <span class="string"><span class="delimiter">&quot;</span><span class="content">Binding </span><span class="delimiter">&quot;</span></span> + def.id.name + <span class="string"><span class="delimiter">&quot;</span><span class="content"> in this.strict mode</span><span class="delimiter">&quot;</span></span>)
                                 <span class="comment">// dont allow newline before a function-init</span>
-                                <span class="keyword">if</span>( cantype &amp;&amp; <span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._name &amp;&amp; !<span class="local-variable">this</span>.lastSkippedNewlines){
-                                        <span class="keyword">var</span> id = <span class="local-variable">this</span>.parseIdent()
+                                <span class="comment">/*
+                                if( cantype &amp;&amp; this.tokType == this._name &amp;&amp; !this.lastSkippedNewlines){
+                                        var id = this.parseIdent()
                                         id.typing = def.id
                                         def.id = id
-                                        <span class="comment">// support second type</span>
-                                        <span class="keyword">if</span>( cantype &amp;&amp; <span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._name &amp;&amp; !<span class="local-variable">this</span>.lastSkippedNewlines){
-                                                <span class="keyword">var</span> id = <span class="local-variable">this</span>.parseIdent()
+                                        // support second type
+                                        if( cantype &amp;&amp; this.tokType == this._name &amp;&amp; !this.lastSkippedNewlines){
+                                                var id = this.parseIdent()
                                                 id.typing = def.id
                                                 def.id = id
                                         }
-                                }
+                                }*/</span>
 
                                 <span class="keyword">if</span>( !<span class="local-variable">this</span>.lastSkippedNewlines &amp;&amp; <span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._parenL){
                                         def.init = <span class="local-variable">this</span>.parseCall(def.id)
@@ -5260,57 +5275,57 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.parseFunction(node, <span class="predefined-constant">true</span>)
                         node.type = <span class="string"><span class="delimiter">'</span><span class="content">Macro</span><span class="delimiter">'</span></span>
                         <span class="keyword">return</span> node
-
-                <span class="keyword">case</span> <span class="local-variable">this</span>._struct:
-                        <span class="local-variable">this</span>.next()
-                        <span class="keyword">if</span>( <span class="local-variable">this</span>.tokType !== <span class="local-variable">this</span>._name ) <span class="local-variable">this</span>.unexpected()
-                        node.id = <span class="local-variable">this</span>.parseIdent()
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._extends)){
-                                node.base = <span class="local-variable">this</span>.parseIdent()
+<span class="comment">/*
+                case this._struct:
+                        this.next()
+                        if( this.tokType !== this._name ) this.unexpected()
+                        node.id = this.parseIdent()
+                        if(this.eat(this._extends)){
+                                node.base = this.parseIdent()
                         }
-                        node.struct = <span class="local-variable">this</span>.parseBlock()
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Struct</span><span class="delimiter">&quot;</span></span>)
+                        node.struct = this.parseBlock()
+                        return this.finishNode(node, &quot;Struct&quot;)
                 
-                <span class="keyword">case</span> <span class="local-variable">this</span>._enum:
-                        <span class="local-variable">this</span>.next()
-                        node.id = <span class="local-variable">this</span>.parseIdent()
-                        <span class="local-variable">this</span>.expect(<span class="local-variable">this</span>._braceL)
+                case this._enum:
+                        this.next()
+                        node.id = this.parseIdent()
+                        this.expect(this._braceL)
                         node.enums = []
-                        <span class="keyword">for</span>(;;){
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._braceR) <span class="keyword">break</span>
-                                <span class="keyword">var</span> enm = <span class="local-variable">this</span>.startNode()
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._string){
-                                        <span class="keyword">var</span> str = <span class="local-variable">this</span>.startNode()
-                                        str.kind = <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>
-                                        str.value = <span class="local-variable">this</span>.tokVal
-                                        str.multi = <span class="local-variable">this</span>.isMultiLine
-                                        str.raw = <span class="local-variable">this</span>.input.slice(<span class="local-variable">this</span>.tokStart, <span class="local-variable">this</span>.tokEnd)
-                                        <span class="local-variable">this</span>.finishNode(str, <span class="string"><span class="delimiter">'</span><span class="content">Value</span><span class="delimiter">'</span></span>)
-                                        <span class="local-variable">this</span>.next()
+                        for(;;){
+                                if(this.tokType == this._braceR) break
+                                var enm = this.startNode()
+                                if(this.tokType == this._string){
+                                        var str = this.startNode()
+                                        str.kind = &quot;string&quot;
+                                        str.value = this.tokVal
+                                        str.multi = this.isMultiLine
+                                        str.raw = this.input.slice(this.tokStart, this.tokEnd)
+                                        this.finishNode(str, 'Value')
+                                        this.next()
                                         enm.id = str
                                 } 
-                                <span class="keyword">else</span>{
-                                        enm.id = <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>)
+                                else{
+                                        enm.id = this.parseIdent(true)
                                 }
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._eq)){
-                                        enm.init = <span class="local-variable">this</span>.parseNoCommaExpression()
+                                if(this.eat(this._eq)){
+                                        enm.init = this.parseNoCommaExpression()
                                 }
-                                node.enums.push(<span class="local-variable">this</span>.finishNode(enm, <span class="string"><span class="delimiter">&quot;</span><span class="content">Def</span><span class="delimiter">&quot;</span></span>))
-                                <span class="keyword">if</span>(!<span class="local-variable">this</span>.canInjectComma(<span class="local-variable">this</span>.tokType) &amp;&amp; !<span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._comma)){
-                                        <span class="keyword">break</span>
+                                node.enums.push(this.finishNode(enm, &quot;Def&quot;))
+                                if(!this.canInjectComma(this.tokType) &amp;&amp; !this.eat(this._comma)){
+                                        break
                                 }
                         }
-                        <span class="local-variable">this</span>.expect(<span class="local-variable">this</span>._braceR)
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Enum</span><span class="delimiter">&quot;</span></span>)
+                        this.expect(this._braceR)
+                        return this.finishNode(node, &quot;Enum&quot;)
 
-                        <span class="comment">// Disambiguating between a `for` and a `for`/`in` loop is</span>
-                        <span class="comment">// non-trivial. Basically, we have to parse the init `var`</span>
-                        <span class="comment">// statement or expression, disallowing the `in` operator (see</span>
-                        <span class="comment">// the second parameter to `this.parseExpression`), and then check</span>
-                        <span class="comment">// whether the next token is `in`. When there is no init part</span>
-                        <span class="comment">// (this.semicolon immediately after the opening parenthesis), it is</span>
-                        <span class="comment">// a regular `for` loop.</span>
-
+                        // Disambiguating between a `for` and a `for`/`in` loop is
+                        // non-trivial. Basically, we have to parse the init `var`
+                        // statement or expression, disallowing the `in` operator (see
+                        // the second parameter to `this.parseExpression`), and then check
+                        // whether the next token is `in`. When there is no init part
+                        // (this.semicolon immediately after the opening parenthesis), it is
+                        // a regular `for` loop.
+        */</span>
                 <span class="keyword">case</span> <span class="local-variable">this</span>._for:
                         <span class="local-variable">this</span>.next()
                         <span class="local-variable">this</span>.labels.push(<span class="local-variable">this</span>.loopLabel)
@@ -5766,55 +5781,56 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">parseExpression</span> = <span class="keyword">function</span>(noIn, termColon, inStatement) {
 
                 <span class="keyword">var</span> expr = <span class="local-variable">this</span>.parseMaybeQuote(noIn)
-
-                <span class="keyword">if</span>(inStatement &amp;&amp; (
-                        expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; expr.object.kind || 
-                        expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> &amp;&amp; expr.left.type == <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; expr.left.object.kind)){
-                        <span class="local-variable">this</span>.raise(expr.start, <span class="string"><span class="delimiter">&quot;</span><span class="content">Please use 'type[] x', not 'type x[]' for array types</span><span class="delimiter">&quot;</span></span>)
+                <span class="comment">/*
+                if(inStatement &amp;&amp; (
+                        expr.type == 'Index' &amp;&amp; expr.object.kind || 
+                        expr.type == 'Assign' &amp;&amp; expr.left.type == 'Index' &amp;&amp; expr.left.object.kind)){
+                        this.raise(expr.start, &quot;Please use 'type[] x', not 'type x[]' for array types&quot;)
                 }
-                <span class="comment">// parse float x, y to be a TypeVar not (float x), y</span>
-                <span class="keyword">if</span>(inStatement &amp;&amp; (
-                        expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; expr.object.typing ||
-                        expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; expr.typing || 
-                        expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> &amp;&amp; expr.left.typing || 
-                        expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span> &amp;&amp; expr.fn.typing)){
-                        <span class="comment">// lets convert to something that looks like a var decl</span>
-                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(expr)
-                        <span class="keyword">var</span> defs = node.defs = []
-                        <span class="keyword">if</span>(expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span>){
-                                <span class="comment">// make an init def</span>
+                // parse float x, y to be a TypeVar not (float x), y
+                
+                if(inStatement &amp;&amp; (
+                        expr.type == 'Index' &amp;&amp; expr.object.typing ||
+                        expr.type == 'Id' &amp;&amp; expr.typing || 
+                        expr.type == 'Assign' &amp;&amp; expr.left.typing || 
+                        expr.type == 'Call' &amp;&amp; expr.fn.typing)){
+                        // lets convert to something that looks like a var decl
+                        var node = this.startNodeFrom(expr)
+                        var defs = node.defs = []
+                        if(expr.type == 'Assign'){
+                                // make an init def
                                 node.typing = expr.left.typing
-                                expr.left.typing = <span class="predefined-constant">undefined</span>
-                                <span class="keyword">var</span> def = <span class="local-variable">this</span>.startNodeFrom(expr)
+                                expr.left.typing = undefined
+                                var def = this.startNodeFrom(expr)
                                 def.id = expr.left
                                 def.init = expr.right
-                                defs[<span class="integer">0</span>] = <span class="local-variable">this</span>.finishNode(def, <span class="string"><span class="delimiter">&quot;</span><span class="content">Def</span><span class="delimiter">&quot;</span></span>)
+                                defs[0] = this.finishNode(def, &quot;Def&quot;)
                         }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(expr.type == <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>){
-                                <span class="comment">// make a call init def</span>
+                        else if(expr.type == 'Call'){
+                                // make a call init def
                                 node.typing = expr.fn.typing
-                                expr.fn.typing = <span class="predefined-constant">undefined</span>
-                                <span class="keyword">var</span> def = <span class="local-variable">this</span>.startNodeFrom(expr)
+                                expr.fn.typing = undefined
+                                var def = this.startNodeFrom(expr)
                                 def.id = expr.fn
-                                expr.name = <span class="predefined-constant">undefined</span>
+                                expr.name = undefined
                                 def.init = expr
                                 def.init.fn = node.typing
-                                defs[<span class="integer">0</span>] = <span class="local-variable">this</span>.finishNode(def, <span class="string"><span class="delimiter">&quot;</span><span class="content">Def</span><span class="delimiter">&quot;</span></span>)
+                                defs[0] = this.finishNode(def, &quot;Def&quot;)
                         }
-                        <span class="keyword">else</span> {
-                                <span class="comment">// normal def</span>
+                        else {
+                                // normal def
                                 node.typing = expr.typing
-                                expr.typing = <span class="predefined-constant">undefined</span>
-                                def = <span class="local-variable">this</span>.startNodeFrom(expr)
+                                expr.typing = undefined
+                                def = this.startNodeFrom(expr)
                                 def.id = expr
-                                defs[<span class="integer">0</span>] = <span class="local-variable">this</span>.finishNode(def, <span class="string"><span class="delimiter">&quot;</span><span class="content">Def</span><span class="delimiter">&quot;</span></span>)
+                                defs[0] = this.finishNode(def, &quot;Def&quot;)
                         }
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType === <span class="local-variable">this</span>._comma){
-                                <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._comma)
-                                <span class="local-variable">this</span>.parseDefs(noIn, defs)
+                        if(this.tokType === this._comma){
+                                this.eat(this._comma)
+                                this.parseDefs(noIn, defs)
                         }
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">'</span><span class="content">TypeVar</span><span class="delimiter">'</span></span>)
-                }
+                        return this.finishNode(node, 'TypeVar')
+                }*/</span>
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType === <span class="local-variable">this</span>._comma){
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(expr)
@@ -5998,7 +6014,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         <span class="keyword">if</span>(probe) node.store = <span class="integer">8</span>
                         node.object = base
-                        node.key = <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>)
+                        node.key = <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Property</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Key</span><span class="delimiter">&quot;</span></span>), noCalls)
                 
                 <span class="keyword">case</span> <span class="local-variable">this</span>._bracketR:
@@ -6010,17 +6026,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">case</span> <span class="local-variable">this</span>._parenL:
                         <span class="keyword">if</span>(noCalls) <span class="keyword">return</span> base
                         <span class="keyword">return</span> <span class="local-variable">this</span>.parseCall( base )
-
-                <span class="keyword">case</span> <span class="local-variable">this</span>._existkey:
-                        <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._existkey)
-                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(base)
+<span class="comment">/*
+                case this._existkey:
+                        this.eat(this._existkey)
+                        var node = this.startNodeFrom(base)
                         node.object = base
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.isExistStore){
-                                base.store = <span class="integer">1</span>
+                        if(this.isExistStore){
+                                base.store = 1
                         }
-                        node.key = <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>)
-                        node.exist = <span class="integer">1</span>
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Key</span><span class="delimiter">&quot;</span></span>), noCalls)
+                        node.key = this.parseIdent(true)
+                        node.exist = 1
+                        return this.parseSubscripts(this.finishNode(node, &quot;Key&quot;), noCalls)
+                        */</span>
                 <span class="keyword">case</span> <span class="local-variable">this</span>._this:
                 <span class="keyword">case</span> <span class="local-variable">this</span>._string:
                 <span class="keyword">case</span> <span class="local-variable">this</span>._name:
@@ -6035,56 +6052,57 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._name) || <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._string) || <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._this) 
 
                         <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>))
-
-                <span class="keyword">case</span> <span class="local-variable">this</span>._dotdot:
-                        <span class="keyword">if</span>( <span class="local-variable">this</span>.lastSkippedNewlines ) <span class="keyword">return</span> base
-                        <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._dotdot)
-                        base.store = base.store || <span class="integer">0</span>
-                        base.store |= <span class="integer">1</span>
-                        <span class="keyword">if</span>( <span class="local-variable">this</span>.lastSkippedNewlines ) <span class="keyword">return</span> base
-                        <span class="keyword">if</span>( <span class="local-variable">this</span>.tokType === <span class="local-variable">this</span>._name || <span class="local-variable">this</span>.tokType.keyword){
-                                <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(base)
+<span class="comment">/*
+                case this._dotdot:
+                        if( this.lastSkippedNewlines ) return base
+                        this.eat(this._dotdot)
+                        base.store = base.store || 0
+                        base.store |= 1
+                        if( this.lastSkippedNewlines ) return base
+                        if( this.tokType === this._name || this.tokType.keyword){
+                                var node = this.startNodeFrom(base)
                                 node.object = base
-                                node.key = <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>)
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Key</span><span class="delimiter">&quot;</span></span>), noCalls)
+                                node.key = this.parseIdent(true)
+                                return this.parseSubscripts(this.finishNode(node, &quot;Key&quot;), noCalls)
                         }
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(base, noCalls)
+                        return this.parseSubscripts(base, noCalls)
 
-                <span class="keyword">case</span> <span class="local-variable">this</span>._notxor:
-                        <span class="keyword">if</span>( <span class="local-variable">this</span>.lastSkippedNewlines ) <span class="keyword">return</span> base
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.tokVal == <span class="string"><span class="delimiter">'</span><span class="content">!</span><span class="delimiter">'</span></span>) base.store |= <span class="integer">2</span>
-                        <span class="keyword">else</span> base.store |= <span class="integer">4</span>
-                        <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._notxor)
-                        base.store = base.store || <span class="integer">0</span>
-                        <span class="keyword">return</span> base
+                case this._notxor:
+                        if( this.lastSkippedNewlines ) return base
+                        if(this.tokVal == '!') base.store |= 2
+                        else base.store |= 4
+                        this.eat(this._notxor)
+                        base.store = base.store || 0
+                        return base
 
 
-                <span class="keyword">case</span> <span class="local-variable">this</span>._doublecolon:
-                        <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._doublecolon)
-                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(base)
+                case this._doublecolon:
+                        this.eat(this._doublecolon)
+                        var node = this.startNodeFrom(base)
                         node.object = base
-                        node.key = <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>)
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">ThisCall</span><span class="delimiter">&quot;</span></span>), noCalls)
-                
-                <span class="keyword">case</span> <span class="local-variable">this</span>._braceL:
-                        <span class="comment">// we also dont do this._braceL on new line</span>
-                        <span class="keyword">if</span>( noCalls || <span class="local-variable">this</span>.lastSkippedNewlines ) <span class="keyword">return</span> base
+                        node.key = this.parseIdent(true)
+                        return this.parseSubscripts(this.finishNode(node, &quot;ThisCall&quot;), noCalls)
+                        */</span>
+                <span class="comment">/*
+                case this._braceL:
+                        // we also dont do this._braceL on new line
+                        if( noCalls || this.lastSkippedNewlines ) return base
                         
-                        <span class="comment">// we have to figure out if we are a Function or not.</span>
-                        <span class="comment">// if base has parens, we are a short arrow funciton</span>
-                        <span class="keyword">if</span>(base.parens || base.type == <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>){
-                                <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(base)
-                                <span class="comment">//node.arrow = '-&gt;'</span>
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.parseArrowFunction(node, base)
+                        // we have to figure out if we are a Function or not.
+                        // if base has parens, we are a short arrow funciton
+                        if(base.parens || base.type == 'Call'){
+                                var node = this.startNodeFrom(base)
+                                //node.arrow = '-&gt;'
+                                return this.parseArrowFunction(node, base)
                         } 
-                        <span class="keyword">else</span> {
-                                <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(base)
+                        else {
+                                var node = this.startNodeFrom(base)
                                 node.fn = base
-                                <span class="comment">//node.arrow = '-&gt;'</span>
-                                node.body = <span class="local-variable">this</span>.parseBlock(<span class="predefined-constant">true</span>)
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Nest</span><span class="delimiter">&quot;</span></span>), noCalls)
-                        }
-                <span class="keyword">case</span> <span class="local-variable">this</span>._thinArrow:
+                                //node.arrow = '-&gt;'
+                                node.body = this.parseBlock(true)
+                                return this.parseSubscripts(this.finishNode(node, &quot;Nest&quot;), noCalls)
+                        }*/</span>
+                <span class="comment">//case this._thinArrow:</span>
                 <span class="keyword">case</span> <span class="local-variable">this</span>._fatArrow:
                         <span class="comment">// you cant separate an arrow from its args with a this.newline</span>
                         <span class="keyword">if</span>( <span class="local-variable">this</span>.lastSkippedNewlines ) <span class="keyword">return</span> base
@@ -6092,48 +6110,49 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         node.arrow = <span class="local-variable">this</span>.tokType.type
                         <span class="local-variable">this</span>.next()
                         <span class="keyword">return</span> <span class="local-variable">this</span>.parseArrowFunction(node, base)
-                <span class="keyword">case</span> <span class="local-variable">this</span>._on:
-                <span class="keyword">case</span> <span class="local-variable">this</span>._do:
-                        <span class="comment">// do on next line followed by { } is interpreted as the JS do/while</span>
-                        <span class="keyword">if</span>( <span class="local-variable">this</span>.lastSkippedNewlines &amp;&amp; <span class="local-variable">this</span>.input.charCodeAt(<span class="local-variable">this</span>.tokPos) == <span class="integer">123</span>)<span class="keyword">return</span> base
+                <span class="comment">/*
+                case this._on:
+                case this._do:
+                        // do on next line followed by { } is interpreted as the JS do/while
+                        if( this.lastSkippedNewlines &amp;&amp; this.input.charCodeAt(this.tokPos) == 123)return base
 
-                        <span class="keyword">var</span> type = <span class="local-variable">this</span>.tokType
-                        <span class="keyword">var</span> node = base
-                        <span class="keyword">if</span>(base.type !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>){
-                                node = <span class="local-variable">this</span>.startNodeFrom(base)
+                        var type = this.tokType
+                        var node = base
+                        if(base.type !== 'Call'){
+                                node = this.startNodeFrom(base)
                                 node.fn = base
                                 node.args = []
                         }
 
-                        <span class="comment">// lets modify base into a call.</span>
-                        node.extarg = <span class="local-variable">this</span>.tokVal
-                        <span class="local-variable">this</span>.next()
-                        <span class="keyword">var</span> arg = <span class="local-variable">this</span>.parseNoCommaExpression()
+                        // lets modify base into a call.
+                        node.extarg = this.tokVal
+                        this.next()
+                        var arg = this.parseNoCommaExpression()
         
-                        <span class="keyword">if</span>(type == <span class="local-variable">this</span>._do){
+                        if(type == this._do){
                                 node.args.push(arg)
                         }
-                        <span class="keyword">else</span>
+                        else
                                 node.args.unshift(arg)
 
-                        <span class="comment">// we can parse other _do's or catch's</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._catch)){
-                                node.args.push(<span class="local-variable">this</span>.parseNoCommaExpression())
+                        // we can parse other _do's or catch's
+                        if(this.eat(this._catch)){
+                                node.args.push(this.parseNoCommaExpression())
                         }
 
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._name &amp;&amp; <span class="local-variable">this</span>.tokVal == <span class="string"><span class="delimiter">'</span><span class="content">then</span><span class="delimiter">'</span></span>){
-                                node = <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>)
-                                <span class="keyword">var</span> ident = <span class="local-variable">this</span>.parseIdent()
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._parenL){
-                                        <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._parenL)
-                                        <span class="local-variable">this</span>.expect(<span class="local-variable">this</span>._parenR)
+                        if(this.tokType == this._name &amp;&amp; this.tokVal == 'then'){
+                                node = this.finishNode(node, 'Call')
+                                var ident = this.parseIdent()
+                                if(this.tokType == this._parenL){
+                                        this.eat(this._parenL)
+                                        this.expect(this._parenR)
                                 }
-                                node.then = <span class="local-variable">this</span>.parseSubscripts(ident, noCalls)
-                                <span class="keyword">return</span> node
-                                <span class="comment">//eat(this._ident)</span>
+                                node.then = this.parseSubscripts(ident, noCalls)
+                                return node
+                                //eat(this._ident)
                         }
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode( node, <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>)
-                <span class="comment">/*
+                        return this.finishNode( node, 'Call')
+                
                 case this._on:
                 case this._do:
                         // do on next line followed by { } is interpreted as the JS do/while
@@ -6167,7 +6186,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         return this.finishNode( node, 'Do')
                         */</span>
-                } 
+                }
                 <span class="keyword">return</span> base
         }
 
@@ -6204,11 +6223,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">return</span> <span class="local-variable">this</span>.parseNew()
                 <span class="keyword">case</span> <span class="local-variable">this</span>._name:
                         <span class="keyword">var</span> typing = <span class="local-variable">this</span>.parseIdent()
-                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.lastSkippedNewlines &amp;&amp; <span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._name){
-                                <span class="keyword">var</span> node = <span class="local-variable">this</span>.parseIdent()
-                                node.typing = typing
-                                <span class="keyword">return</span> node
-                        }
+                        <span class="comment">//if(!this.lastSkippedNewlines &amp;&amp; this.tokType == this._name){</span>
+                        <span class="comment">//        var node = this.parseIdent()</span>
+                        <span class="comment">//        node.typing = typing</span>
+                        <span class="comment">//        return node</span>
+                        <span class="comment">//}</span>
                         <span class="keyword">return</span> typing
                 <span class="keyword">case</span> <span class="local-variable">this</span>._num: 
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNode()
@@ -6255,10 +6274,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.next()
                         <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>)
 
-                <span class="keyword">case</span> <span class="local-variable">this</span>._null: <span class="keyword">case</span> <span class="local-variable">this</span>._true: <span class="keyword">case</span> <span class="local-variable">this</span>._false:
+                <span class="keyword">case</span> <span class="local-variable">this</span>._null: 
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNode()
                         node.value = <span class="local-variable">this</span>.tokType.atomValue
                         node.raw = <span class="local-variable">this</span>.tokType.keyword
+                        node.kind = <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>
+                        <span class="local-variable">this</span>.next()
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>)
+
+                <span class="keyword">case</span> <span class="local-variable">this</span>._true: <span class="keyword">case</span> <span class="local-variable">this</span>._false:
+                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNode()
+                        node.value = <span class="local-variable">this</span>.tokType.atomValue
+                        node.raw = <span class="local-variable">this</span>.tokType.keyword
+                        node.kind = <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span>
                         <span class="local-variable">this</span>.next()
                         <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>)
 
@@ -6440,7 +6468,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">parsePropertyName</span> = <span class="keyword">function</span>() {
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.tokType === <span class="local-variable">this</span>._num || <span class="local-variable">this</span>.tokType === <span class="local-variable">this</span>._string) <span class="keyword">return</span> <span class="local-variable">this</span>.parseExprAtom()
-                <span class="keyword">return</span> <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>)
+                <span class="keyword">return</span> <span class="local-variable">this</span>.parseIdent(<span class="predefined-constant">true</span>, <span class="string"><span class="delimiter">'</span><span class="content">Property</span><span class="delimiter">'</span></span>)
         }
 
         <span class="comment">// Parse a function declaration or literal (depending on the</span>
@@ -6509,7 +6537,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.expect(<span class="local-variable">this</span>._parenL)
                 node.params = <span class="local-variable">this</span>.parseDefs( <span class="predefined-constant">false</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span> )
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.tokType == <span class="local-variable">this</span>._dot) node.rest = <span class="local-variable">this</span>.parseDots(<span class="predefined-constant">true</span>)
+                <span class="comment">//if(this.tokType == this._dot) node.rest = this.parseDots(true)</span>
 
                 <span class="local-variable">this</span>.expect(<span class="local-variable">this</span>._parenR)
 
@@ -6569,7 +6597,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// when parsing properties), it will also convert keywords into</span>
         <span class="comment">// identifiers.</span>
 
-        <span class="local-variable">this</span>.<span class="function">parseIdent</span> = <span class="keyword">function</span>(liberal) {
+        <span class="local-variable">this</span>.<span class="function">parseIdent</span> = <span class="keyword">function</span>(liberal, specialid) {
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNode()
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.tokIsType) node.isType = <span class="local-variable">this</span>.tokVal
                 <span class="keyword">if</span> (liberal &amp;&amp; <span class="local-variable">this</span>.forbidReserved == <span class="string"><span class="delimiter">&quot;</span><span class="content">everywhere</span><span class="delimiter">&quot;</span></span>) liberal = <span class="predefined-constant">false</span>
@@ -6596,7 +6624,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         node.flag = <span class="local-variable">this</span>.containsFlag
                 }
                 <span class="local-variable">this</span>.next()
-                <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>)
+                <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, specialid || <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>)
         }
 })</pre></td>
 </tr></table>

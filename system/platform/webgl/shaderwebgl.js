@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$system/base/shader', function(require, exports){
@@ -53,6 +54,14 @@ define.class('$system/base/shader', function(require, exports){
 		gl.attachShader(shader, vtx_shader)
 		gl.attachShader(shader, pix_color_shader)
 		gl.linkProgram(shader)
+		if (!gl.getProgramParameter(shader, gl.LINK_STATUS)){
+			var err = gl.getProgramInfoLog(shader)
+
+			console.error(err.toString(), this.annotateLines(pix_color))
+			return
+			//throw new Error(err)
+		}
+
 		this.getLocations(gl, shader, vtx_state, pix_state)
 
 		if(this.compile_use) this.compileUse(shader)
@@ -264,6 +273,7 @@ define.class('$system/base/shader', function(require, exports){
 			}
 		}
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
+		if(TEXTURE_ID > 0)debugger
 		TEXTURE_END
 
 		// attributes
@@ -275,7 +285,7 @@ define.class('$system/base/shader', function(require, exports){
 		if(lastbuf !== buf){
 			lastbuf = buf
 			if(buf.length > len) len = buf.length
-			//if(len === 0) return 0
+			if(len === 0) return 0
 			if(!buf.glvb) buf.glvb = gl.createBuffer()
 			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
 			if(!buf.clean){
@@ -358,12 +368,8 @@ define.class('$system/base/shader', function(require, exports){
 			}
 			out += '\t\tloc = shader.unilocs.' + key + '\n'
 			var gen = gltypes.uniform_gen[loc.type]
-			//if(gen.args == 1){
 
 			var call = gen.call
-			//if(call !== 'uniformMatrix4fv' && call !== 'uniformMatrix3fv' && call !== 'uniformMatrix2fv'){
-			//	out += '\t\tif(loc.value !== uni) loc.value = uni, '
-			//}
 
 			out += 'gl.' + gen.call + '(loc.loc'
 
@@ -455,8 +461,12 @@ define.class('$system/base/shader', function(require, exports){
 	exports.TRIANGLE_STRIP = this.TRIANGLE_STRIP = 0x5
 	exports.TRIANGLE_FAN = this.TRIANGLE_FAN = 0x6
 
-	this.drawtype = this.TRIANGLES
-	
+	this.drawtype_enum = this.TRIANGLES
+	Object.defineProperty(this, 'drawtype', {set:function(v){
+		if(typeof v === 'string') this.drawtype_enum = this[v]
+		else this.drawtype_enum = v
+	}})
+
 	// lets draw ourselves
 	this.drawArrays = function(devicewebgl, sub, start, end){
 		//if(this.mydbg) debugger
@@ -464,7 +474,7 @@ define.class('$system/base/shader', function(require, exports){
 		if(!this.shader) return
 		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
-		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)
+		if(len) gl.drawArrays(this.drawtype_enum, start || 0, end === undefined?len: end)
 		return len
 	}
 

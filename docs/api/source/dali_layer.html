@@ -260,11 +260,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n106" name="n106">106</a>
 <a href="#n107" name="n107">107</a>
 <a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -309,7 +316,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.onstage = <span class="predefined-constant">false</span>;
 
-                <span class="local-variable">this</span>.dalilayer.behavior = <span class="string"><span class="delimiter">&quot;</span><span class="content">Dali::Layer::LAYER_2D</span><span class="delimiter">&quot;</span></span>;
+                <span class="comment">// Support older and newer DALi versions</span>
+                <span class="keyword">var</span> older = <span class="keyword">typeof</span>(dali.ALPHA_FUNCTION_DEFAULT) === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>;
+                <span class="keyword">var</span> behavior = (older) ? <span class="string"><span class="delimiter">&quot;</span><span class="content">Dali::Layer::LAYER_2D</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">LAYER_2D</span><span class="delimiter">&quot;</span></span>;
+                <span class="comment">// console.log('behavior', behavior);</span>
+                <span class="local-variable">this</span>.dalilayer.behavior = behavior;
+
                 <span class="keyword">if</span> (width &amp;&amp; height)
                         <span class="local-variable">this</span>.dalilayer.size = [width, height, <span class="integer">0</span>];
 
@@ -318,7 +330,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.Layer();</span><span class="delimiter">'</span></span>);
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.behavior = &quot;Dali::Layer::LAYER_2D&quot;</span><span class="delimiter">'</span></span>);
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.behavior = &quot;</span><span class="delimiter">'</span></span> + behavior + <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>);
                         <span class="keyword">if</span> (width &amp;&amp; height)
                                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.size = [</span><span class="delimiter">'</span></span> + width + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + height + <span class="string"><span class="delimiter">'</span><span class="content">, 0];</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.parentOrigin = dali.TOP_LEFT;</span><span class="delimiter">'</span></span>);

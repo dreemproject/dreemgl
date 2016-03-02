@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 // parse a color string into a [r,g,b] 0-1 float array
 
@@ -163,22 +164,85 @@ define.class(function(require){
 
 		if(req.method == 'POST'){
 			// lets do an RPC call
-			var buf = ''
-			req.on('data', function(data){buf += data.toString()})
-			req.on('end', function(){
-				try{
-					var json = JSON.parse(buf)
-					this.composition.postAPI(json, {send:function(msg){
-						res.writeHead(200, {"Content-Type":"text/json"})
-						res.write(JSON.stringify(msg))
-						res.end()
-					}})
+
+			if(!define.$unsafeorigin && this.rootserver.addresses.indexOf(req.headers.origin) === -1){
+				console.log("WRONG ORIGIN POST API RECEIVED" + req.headers.origin)
+				res.end()
+				return false
+			}
+
+			var boundary;
+			if (req.headers && req.headers['content-type']) {
+				var type = req.headers['content-type'];
+				if (type) {
+					var m = /^multipart\/form-data; boundary=(.*)$/.exec(type)
+
+					if (m) {
+						boundary = m[1];
+					}
 				}
-				catch(e){
-					res.writeHead(500, {"Content-Type": "text/html"})
-					res.write('FAIL')
-					res.end()
+			}
+
+			var buffer;
+			req.on('data', function(data){
+				if (boundary) {
+					if (!buffer) {
+						buffer = new Buffer(data)
+					} else {
+						buffer = Buffer.concat([buffer, data])
+					}
+				}
+			})
+			req.on('end', function(){
+
+				if (boundary) {
+
+					var cursor = buffer.indexOf(boundary) + boundary.length;
+
+					cursor = buffer.indexOf("filename=", cursor) + "filename=".length;
+					var q = buffer[cursor];
+					var filename = buffer.slice(cursor + 1, buffer.indexOf(q, cursor + 1)).toString();
+					cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
+
+					var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary));
+
+					var compfile = this.composition.constructor.module.filename;
+					var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+
+					filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
+
+					if (!define.$writefile){
+						console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
+						res.writeHead(501);
+					} else {
+						try{
+							var fullname = define.expandVariables(filename);
+							fs.writeFile(fullname, filedata);
+							console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
+							res.writeHead(200);
+						}
+						catch(e){
+							res.writeHead(503);
+						}
+					}
+
+					res.end();
 					return
+				} else {
+					try{
+						var json = JSON.parse(buffer.toString())
+						this.composition.postAPI(json, {send:function(msg){
+							res.writeHead(200, {"Content-Type":"text/json"})
+							res.write(JSON.stringify(msg))
+							res.end()
+						}})
+					}
+					catch(e){
+						res.writeHead(500, {"Content-Type": "text/html"})
+						res.write('FAIL')
+						res.end()
+						return
+					}
 				}
 			}.bind(this))
 			return

@@ -518,11 +518,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n364" name="n364">364</a>
 <a href="#n365" name="n365">365</a>
 <a href="#n366" name="n366">366</a>
+<a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, label, checkbox){
 <span class="comment">// A palatte is a container view with drag-dropable components</span>
@@ -666,9 +670,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">fgcolor</span>:<span class="local-variable">this</span>.bordercolor,
                                         <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                         <span class="key">padding</span>:<span class="integer">0</span>,
-                                        <span class="key">paddingright</span>:<span class="integer">5</span>,
+                                        <span class="key">paddingright</span>:<span class="integer">7</span>,
                                         <span class="key">margin</span>:<span class="integer">0</span>,
                                         <span class="key">icon</span>:icn,
+                                        <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                         <span class="function">onvalue</span>:<span class="keyword">function</span>(ev) {
                                                 <span class="keyword">if</span> (ev.value) {
                                                         self.panel.mode = <span class="string"><span class="delimiter">&quot;</span><span class="content">detail</span><span class="delimiter">&quot;</span></span>;
@@ -677,6 +682,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         self.panel.mode = <span class="string"><span class="delimiter">&quot;</span><span class="content">compact</span><span class="delimiter">&quot;</span></span>;
                                                         <span class="local-variable">this</span>.icon = <span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>;
                                                 }
+
                                         }
                                 }))
                         }
@@ -685,21 +691,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelview</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
-                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panellabel</span><span class="delimiter">&quot;</span></span>, label, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
-                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#e4e4e4</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelicon</span><span class="delimiter">&quot;</span></span>, icon, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.align = <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
@@ -708,9 +714,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelitem</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
 
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
+                <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
 
@@ -755,7 +761,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         droptest = <span class="local-variable">this</span>.outer.dropTest(ev, v, pitem, event, <span class="local-variable">this</span>);
                                                 }
 
-                                                <span class="keyword">if</span>(!v || !droptest) {
+                                                <span class="keyword">if</span>(!droptest) {
                                                         <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">'</span><span class="content">no-drop</span><span class="delimiter">'</span></span>;
                                                         <span class="keyword">return</span> <span class="predefined-constant">false</span>
                                                 }

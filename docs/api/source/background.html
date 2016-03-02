@@ -220,71 +220,135 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n66" name="n66">66</a>
 <a href="#n67" name="n67">67</a>
 <a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view, scrollbar) {
-<span class="comment">// internal</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-        <span class="comment">// this.flex = 1</span>
-        <span class="comment">// this.flexdirection = 'column'</span>
-        <span class="comment">// this.position = 'absolute'</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
-                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
+                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>}),
+                <span class="key">scroll</span>: Config({<span class="key">type</span>: vec2, <span class="key">value</span>: vec2()}),
                 <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
-                <span class="comment">//TODO(aki): why this breaks sahder</span>
-                <span class="comment">// value: Config({type: Number, value: wire('this.parent.scroll')})</span>
-                <span class="comment">// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})</span>
+                <span class="key">segments</span>: Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()})
         }
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.layout.top = <span class="integer">0</span>
+                <span class="local-variable">this</span>.layout.width = <span class="local-variable">this</span>.parent.layout.width
                 <span class="local-variable">this</span>.layout.height = <span class="local-variable">this</span>.parent.layout.height
         }
 
+        <span class="comment">// Data-binding is buggy. set values at draw.</span>
+        <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
+                <span class="local-variable">this</span>.zoom = <span class="local-variable">this</span>.parent._zoom
+                <span class="local-variable">this</span>.scroll = <span class="local-variable">this</span>.parent._scroll
+                <span class="local-variable">this</span>.segments = <span class="local-variable">this</span>.parent._segments
+                <span class="local-variable">this</span>.hoursegs = <span class="local-variable">this</span>.parent._hoursegs
+        }
+
         <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.<span class="function">makepattern</span> = <span class="keyword">function</span> (field, repeat, zoom) {
-                        <span class="keyword">var</span> f = field * repeat
-                        <span class="keyword">if</span> (mod(f, <span class="float">1.0</span>) &lt; <span class="float">1.0</span> / view.layout.width * zoom * repeat) {
-                                <span class="keyword">return</span> <span class="float">0.75</span>
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (math.odd(f - mod(f, <span class="float">1.0</span>))) {
-                                <span class="keyword">return</span> <span class="float">1.0</span>
-                        } <span class="keyword">else</span> {
-                                <span class="keyword">return</span> <span class="float">0.9</span>
+                <span class="keyword">var</span> array = <span class="keyword">new</span> Float32Array(<span class="integer">4</span> * <span class="integer">2048</span>)
+                <span class="local-variable">this</span>.caltexture = <span class="local-variable">this</span>.Texture.fromArray(array, <span class="integer">2048</span>, <span class="integer">1</span>)
+
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span> () {
+                        <span class="keyword">var</span> array = <span class="keyword">new</span> Float32Array(<span class="integer">4</span> * <span class="integer">2048</span>)
+                        <span class="keyword">var</span> start = <span class="local-variable">this</span>.view.parent.getStart()
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length / <span class="integer">4</span>; i++) {
+                                <span class="keyword">var</span> day = <span class="keyword">new</span> Date(start + i * <span class="integer">86400000</span>)
+                                array[i * <span class="integer">4</span> + <span class="integer">0</span>] = day.getDate()
+                                array[i * <span class="integer">4</span> + <span class="integer">1</span>] = day.getDay()
+                                array[i * <span class="integer">4</span> + <span class="integer">2</span>] = day.getMonth()
+                                array[i * <span class="integer">4</span> + <span class="integer">3</span>] = day.getFullYear()
                         }
+
+                        <span class="local-variable">this</span>.caltexture = <span class="local-variable">this</span>.Texture.fromArray(array, <span class="integer">2048</span>, <span class="integer">1</span>)
+                        <span class="local-variable">this</span>.caltexture.updateid = random()
                 }
+
+                <span class="local-variable">this</span>.<span class="function">makepattern</span> = <span class="keyword">function</span> (field1, field2) {
+                        <span class="keyword">if</span> (field1 != field2) <span class="keyword">return</span> <span class="float">1.0</span>
+                        <span class="keyword">return</span> <span class="float">0.0</span>
+                }
+
+                <span class="local-variable">this</span>.<span class="function">pickpattern</span> = <span class="keyword">function</span> (val, year, month, weekp, day, hour, minute) {
+                        <span class="keyword">if</span> (val == <span class="float">1.0</span>) <span class="keyword">return</span> year
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">2.0</span>) <span class="keyword">return</span> month
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">3.0</span>) <span class="keyword">return</span> weekp
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">4.0</span>) <span class="keyword">return</span> day
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">5.0</span>) <span class="keyword">return</span> hour
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">6.0</span>) <span class="keyword">return</span> minute
+                        <span class="keyword">return</span> <span class="float">0.0</span>;
+                }
+
+
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">var</span> col = vec4()
-                        <span class="keyword">var</span> fill = vec4(<span class="float">0.098</span>, <span class="float">0.098</span>, <span class="float">0.098</span>, <span class="integer">1</span>)
+                        <span class="keyword">var</span> fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffff</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">var</span> bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">var</span> a = <span class="float">24.0</span> / view.layout.height
                         <span class="keyword">var</span> b = <span class="float">48.0</span> / view.layout.height
-                        <span class="keyword">var</span> c = <span class="float">72.0</span> / view.layout.height
-                        <span class="comment">// horizontal dividers</span>
-                        <span class="keyword">if</span> (abs(uv.y - a) &lt; <span class="float">0.5</span> / view.layout.height ||
-                        abs(uv.y - b) &lt; <span class="float">0.5</span> / view.layout.height ||
-                        abs(uv.y - c) &lt; <span class="float">0.5</span> / view.layout.height) {
-                                <span class="keyword">return</span> vec4(<span class="float">0.75</span>, <span class="float">0.75</span>, <span class="float">0.75</span>, <span class="float">1.0</span>)
-                        }
-                        <span class="keyword">var</span> zoom = view.zoom
-                        <span class="keyword">var</span> dayfield = (uv.x + view.scroll.x) * view.zoom
-                        <span class="keyword">var</span> hour = makepattern(dayfield, view.hoursegs, zoom)
-                        <span class="keyword">var</span> day = makepattern(dayfield, <span class="integer">1</span>, zoom)
-                        <span class="keyword">var</span> week = makepattern(dayfield, <span class="float">1.0</span> / <span class="integer">7</span>, zoom) <span class="comment">// TODO: breaks without point!</span>
-                        <span class="keyword">var</span> month = makepattern(dayfield, <span class="float">1.0</span> / <span class="integer">31</span>, zoom)
-                        <span class="keyword">var</span> pattern = week;
-                        <span class="keyword">if</span> (uv.y &lt; a) {
-                                pattern = month
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (uv.y &lt; b) {
-                                pattern = week * day
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (uv.y &lt; c) {
-                                pattern = hour
-                        } <span class="keyword">else</span> {
-                                pattern = hour
-                                fill = vec4(<span class="float">0.8</span>, <span class="float">0.8</span>, <span class="float">0.8</span>, <span class="integer">1</span>)
-                        }
-                        <span class="comment">// TODO(aki): crossfade patterns</span>
-                        <span class="keyword">return</span> mix(fill, <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>, pattern)
+
+                        <span class="keyword">var</span> dayfield1 = (uv.x + view.scroll.x) * view.zoom
+                        <span class="keyword">var</span> dayfield2 = (uv.x + <span class="float">1.0</span> / view.layout.width + view.scroll.x) * view.zoom
+                        <span class="keyword">var</span> caldata1 = <span class="local-variable">this</span>.caltexture.point(vec2(dayfield1 / <span class="integer">2048</span>, <span class="float">0.0</span>)) * <span class="float">255.0</span>
+                        <span class="keyword">var</span> caldata2 = <span class="local-variable">this</span>.caltexture.point(vec2(dayfield2 / <span class="integer">2048</span>, <span class="float">0.0</span>)) * <span class="float">255.0</span>
+
+                        <span class="keyword">var</span> year = makepattern(caldata1.a, caldata2.a)
+                        <span class="keyword">var</span> month = makepattern(caldata1.b, caldata2.b)
+                        <span class="keyword">var</span> week = makepattern(floor(dayfield1 / <span class="float">7.0</span>), floor(dayfield2 / <span class="float">7.0</span>))
+                        <span class="keyword">var</span> day = makepattern(floor(dayfield1), floor(dayfield2))
+                        <span class="keyword">var</span> hour = makepattern(floor(dayfield1 * view.hoursegs), floor(dayfield2 * view.hoursegs))
+                        <span class="keyword">var</span> minute = makepattern(floor(dayfield1 * <span class="float">96.0</span>), floor(dayfield2 * <span class="float">96.0</span>))
+
+                        <span class="keyword">var</span> color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">var</span> pattern = <span class="float">0.0</span>
+
+                        pattern += pickpattern(view.segments.x, year, month, week, day, hour, minute)
+                        <span class="keyword">if</span> (uv.y &gt; a)
+                                pattern = max(pattern, <span class="float">0.5</span> * pickpattern(view.segments.y, year, month, week, day, hour, minute))
+                                color = mix(bgcolor, fgcolor, pattern)
+                        <span class="keyword">if</span> (uv.y &gt; b)
+                                pattern = max(pattern, <span class="float">0.25</span> * pickpattern(view.segments.z, year, month, week, day, hour, minute))
+                                color = mix(bgcolor, fgcolor, pattern)
+
+                        <span class="keyword">return</span> color
                 }
         }
 

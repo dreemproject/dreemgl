@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 // Pointer emits events that unify mouse and touch interactions.
 
@@ -99,6 +100,7 @@ define.class('$system/base/node', function(){
 	// Internal: Returns pointer object.
 	// It calculats deltas, min and max is reference pointer is provided.
 	var Pointer = function(pointer, id, view) {
+		// TODO(aki): add start value
 		this.id = id
 		this.view = view
 		this.value = pointer.value
@@ -182,9 +184,9 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < this._start.length; i++) {
 			var start = this._start[i]
 
-			if(start.atHandOver){
+			if (start.atHandOver){
 				var id = start.atHandOver(pointerlist)
-				if(id >= 0){
+				if (id >= 0){
 					// we got a handoff of a particular pointer
 					pointerlist[id].handovered = start.view
 				}
@@ -208,7 +210,7 @@ define.class('$system/base/node', function(){
 
 		for (var i = 0; i < pointerlist.length; i++) {
 			// if a pointer is handoffed use that view instead
-			if(pointerlist[i].handovered) pick(pointerlist[i].handovered)
+			if (pointerlist[i].handovered) pick(pointerlist[i].handovered)
 			else this.device.pickScreen(pointerlist[i].position, pick, true)
 		}
 		this.emitPointerList(this._start, 'start')
@@ -216,6 +218,7 @@ define.class('$system/base/node', function(){
 
 	// Internal: emits `move` event.
 	this.setmove = function(pointerlist) {
+		this._wheel.length = 0
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
 			var start = this._start.getById(previous.id)
@@ -226,17 +229,28 @@ define.class('$system/base/node', function(){
 			pointer.addMovement(previous || first)
 
 			// emit event hooks
-			if(start){
-				if(start.pickview){
+			if (start){
+				if (start.pickview){
 					this.device.pickScreen(pointerlist[i].position, function(view){
 						pointer.pick = view
 					}.bind(this), true)
 				}
-				if(start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
+				if (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
 			this._move.setPointer(pointer)
+			if (pointer.touch) {
+				if (abs(pointer.movement[0]) > abs(pointer.movement[1])) {
+					pointer.wheel = vec2(-pointer.movement[0], 0)
+				} else {
+					pointer.wheel = vec2(0, -pointer.movement[1])
+				}
+				this._wheel.setPointer(pointer)
+			}
 		}
 		this.emitPointerList(this._move, 'move')
+		if (this._wheel.length) {
+			this.emitPointerList(this._wheel, 'wheel')
+		}
 	}
 
 	// Internal: emits `end` event.
@@ -248,8 +262,8 @@ define.class('$system/base/node', function(){
 
 			// emit event hooks
 			var start = this._start.getById(this._move.getClosest(pointerlist[i]).id)
-			if(start){
-				if(start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
+			if (start){
+				if (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
 			}
 
 			this.device.pickScreen(pointerlist[i].position, function(view){

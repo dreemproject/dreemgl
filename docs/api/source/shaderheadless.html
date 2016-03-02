@@ -664,14 +664,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n510" name="n510">510</a></strong>
 <a href="#n511" name="n511">511</a>
 <a href="#n512" name="n512">512</a>
-<a href="#n513" name="n513">513</a>
-<a href="#n514" name="n514">514</a>
-<a href="#n515" name="n515">515</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-         Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-         either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/shader</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports){
@@ -890,10 +888,8 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
                         <span class="keyword">if</span> (texture.image) {
                                 <span class="keyword">var</span> ti = TEXTURE_INFO
 
-                                <span class="comment">//TODO Get current values for sampler</span>
-                                <span class="keyword">var</span> sampler = <span class="keyword">new</span> headless.Sampler();
-                                sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);
-                                sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);
+                                <span class="comment">// Simulate the DALi Sampler</span>
+                                <span class="keyword">var</span> sampler = {};
 
                                 <span class="comment">//FIX</span>
                                 <span class="keyword">if</span> (headlessmaterial) {
@@ -916,10 +912,8 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
                                         <span class="keyword">if</span> (texture.image) {
                                                 <span class="keyword">var</span> ti = TEXTURE_INFO
 
-                                                <span class="comment">//TODO Get current values for sampler</span>
-                                                <span class="keyword">var</span> sampler = <span class="keyword">new</span> headless.Sampler();
-                                                sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);
-                                                sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);
+                                                <span class="comment">// Simulate the DALi Sampler</span>
+                                                <span class="keyword">var</span> sampler = {};
 
                                                 <span class="keyword">var</span> index = headlessmaterial.addTexture(texture.image, ti.loc, sampler);
                                                 gltex.texture_index = index;

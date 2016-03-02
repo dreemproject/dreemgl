@@ -1,5 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 */
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/keyboard', function (require, exports){
 
@@ -46,7 +49,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		var special_key_hack = false
 
 		this.checkSpecialKeys = function(e){
-			if(e.shiftKey !== this._shift?true:false) this.shift = e.shiftKey?1:0
+			if(e.shift !== this._shift?true:false) this.shift = e.shiftKey?1:0
 			if(e.altKey !== this._alt?true:false) this.alt = e.altKey?1:0
 			if(e.ctrlKey !== this._ctrl?true:false) this.ctrl = e.ctrlKey?1:0
 			if(e.metaKey !== this._meta?true:false) this.meta = e.metaKey?1:0
@@ -82,14 +85,17 @@ define.class('$system/base/keyboard', function (require, exports){
 			this.emit('down', msg)
 
 			if( (this._ctrl  || this._meta) && this._y ||
+				//(this._ctrl  || this._meta) && this._c ||
+				//(this._ctrl  || this._meta) && this._v ||
 				this._tab ||
 				this._leftarrow ||
 				this._rightarrow ||
 				this._uparrow ||
-				this._downarrow){
+				this._downarrow ||
+				this._backspace || 
+				this._delete){
 				if(e.preventDefault) e.preventDefault()
 			}
-
 			is_keyboard_cut = false
 			is_keyboard_all = false
 		}.bind(this)
@@ -138,10 +144,10 @@ define.class('$system/base/keyboard', function (require, exports){
 		}.bind(this)
 		// lets output a css
 
-		this.pointerMove = function(pos){
+		this.textAreaRespondToMouse = function(pos){
 			this.textarea.focus()
-			this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
-			this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
+			//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
+			//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
 		}
 
 		this.textarea = document.createElement('textarea')
@@ -189,7 +195,7 @@ define.class('$system/base/keyboard', function (require, exports){
     		outline:0px !important;\n\
     		-webkit-appearance:none;\n\
     	}"
-    	document.body.appendChild(style);
+    	document.body.appendChild(style)
 
 		document.body.appendChild(this.textarea)
 
@@ -235,7 +241,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				this._clipboard = value
 				this.textarea.value = value + ' '
 				this.textarea.selectionStart = 0
-		        this.textarea.selectionEnd = value.length - 1
+		        this.textarea.selectionEnd = value.length
 				this.textarea.focus()
 			}
 		})

@@ -391,24 +391,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n237" name="n237">237</a>
 <a href="#n238" name="n238">238</a>
 <a href="#n239" name="n239">239</a>
-<strong><a href="#n240" name="n240">240</a></strong>
-<a href="#n241" name="n241">241</a>
-<a href="#n242" name="n242">242</a>
-<a href="#n243" name="n243">243</a>
-<a href="#n244" name="n244">244</a>
-<a href="#n245" name="n245">245</a>
-<a href="#n246" name="n246">246</a>
-<a href="#n247" name="n247">247</a>
-<a href="#n248" name="n248">248</a>
-<a href="#n249" name="n249">249</a>
-<strong><a href="#n250" name="n250">250</a></strong>
-<a href="#n251" name="n251">251</a>
-<a href="#n252" name="n252">252</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">./compositionbase</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, baseclass){
         <span class="comment">// internal, Composition base class</span>
@@ -427,7 +415,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 baseclass.atConstructor.call(<span class="local-variable">this</span>)
 
                 <span class="local-variable">this</span>.screenname = <span class="keyword">typeof</span> location !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; location.search &amp;&amp; location.search.slice(<span class="integer">1</span>)
-
+                <span class="local-variable">this</span>.cached_attributes = {}
                 <span class="comment">// web environment</span>
                 <span class="keyword">if</span>(previous){
                         <span class="local-variable">this</span>.session = previous.session
@@ -436,6 +424,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.rpc.disconnectAll()
                         <span class="local-variable">this</span>.rpc.host = <span class="local-variable">this</span>
                         <span class="local-variable">this</span>.rendered = <span class="predefined-constant">true</span>
+                        <span class="local-variable">this</span>.cached_attributes = previous.cached_attributes
                 }
                 <span class="keyword">else</span>{
                         <span class="local-variable">this</span>.createBus()
@@ -445,6 +434,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.bindBusEvents()
 
                 <span class="local-variable">this</span>.renderComposition()
+
+                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.cached_attributes){
+                        <span class="keyword">var</span> attrmsg = <span class="local-variable">this</span>.cached_attributes[key]
+                        <span class="comment">// process it</span>
+                        <span class="local-variable">this</span>.bus.atMessage(attrmsg)
+                }
 
                 <span class="local-variable">this</span>.screen = <span class="local-variable">this</span>.names[<span class="local-variable">this</span>.screenname]
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.screen){
@@ -553,13 +548,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         this.bus.send({type:'webrtcOffer', offer:offer, index: this.index})
                                 }.bind(this)
                                 */</span>
-                                <span class="keyword">if</span>(!<span class="local-variable">this</span>.rendered) <span class="local-variable">this</span>.doRender()
-
                                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> msg.attributes){
                                         <span class="keyword">var</span> attrmsg = msg.attributes[key]
                                         <span class="comment">// process it</span>
                                         <span class="local-variable">this</span>.bus.atMessage(attrmsg, socket)
                                 }
+
+                                <span class="keyword">if</span>(!<span class="local-variable">this</span>.rendered) <span class="local-variable">this</span>.doRender()
+
                         }
 
                         <span class="keyword">else</span> <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">connectScreen</span><span class="delimiter">'</span></span>){
@@ -568,6 +564,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="comment">//else obj.createIndex(msg.index, msg.rpcid, rpcpromise)</span>
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">attribute</span><span class="delimiter">'</span></span>){
+
+                                <span class="local-variable">this</span>.cached_attributes[msg.rpcid+<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>+msg.attribute] = msg
+
                                 <span class="keyword">var</span> split = msg.rpcid.split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
                                 <span class="keyword">var</span> obj
                                 <span class="comment">// see if its a set attribute on ourself</span>
@@ -582,7 +581,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         }
                                 }
                                 <span class="keyword">var</span> value =  define.structFromJSON(msg.value)
-
                                 <span class="keyword">var</span> attrset = obj.atAttributeSet
                                 obj.atAttributeSet = <span class="predefined-constant">undefined</span>
                                 obj[msg.attribute] = value
@@ -632,30 +630,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
                 console.log.apply(console, args)
         }
-
-        <span class="keyword">var</span> onejsparser = <span class="keyword">new</span> OneJSParser();
-        <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>._ast) {
-                        <span class="keyword">var</span> source = <span class="local-variable">this</span>.constructor.module.factory.body.toString();
-                        <span class="local-variable">this</span>._ast = onejsparser.parse(source);
-                }
-                <span class="keyword">return</span> <span class="local-variable">this</span>._ast;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">commitAST</span> = <span class="keyword">function</span> () {
-                <span class="keyword">var</span> source =  <span class="keyword">new</span> ASTScanner(<span class="local-variable">this</span>.ASTNode()).toSource();
-
-                <span class="comment">//console.log(&quot;[COMMIT]&quot;, source);</span>
-
-                <span class="keyword">var</span> msg = {
-                        <span class="key">rpcid</span>: <span class="string"><span class="delimiter">'</span><span class="content">this</span><span class="delimiter">'</span></span>,
-                        <span class="key">method</span>: <span class="string"><span class="delimiter">'</span><span class="content">commit</span><span class="delimiter">'</span></span>,
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>,
-                        <span class="key">args</span>:[source]
-                };
-                <span class="local-variable">this</span>.rpc.host.callRpcMethod(msg);
-        };
-
 })
 </pre></td>
 </tr></table>

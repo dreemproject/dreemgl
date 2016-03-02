@@ -419,11 +419,32 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n265" name="n265">265</a>
 <a href="#n266" name="n266">266</a>
 <a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
+<a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
+<strong><a href="#n280" name="n280">280</a></strong>
+<a href="#n281" name="n281">281</a>
+<a href="#n282" name="n282">282</a>
+<a href="#n283" name="n283">283</a>
+<a href="#n284" name="n284">284</a>
+<a href="#n285" name="n285">285</a>
+<a href="#n286" name="n286">286</a>
+<a href="#n287" name="n287">287</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label, button, icon){
 <span class="comment">// The treeview control - classic treeview with expandable nodes.</span>
@@ -459,7 +480,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.borderradius = <span class="integer">0</span>
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">3b3b3b</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>
                 <span class="comment">//this.alignself = &quot;flex-start&quot;</span>
         })
@@ -484,25 +505,41 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.hovercolor2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.cornerradius = <span class="integer">0</span>
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.margin = <span class="integer">2</span>
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>
+                <span class="comment">//this.bgcolor = &quot;transparent&quot;</span>
                 <span class="comment">//this.alignself = &quot;flex-start&quot;</span>
 
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [
-                                <span class="local-variable">this</span>.haschildren?<span class="local-variable">this</span>.outer.foldbutton({
-                                        <span class="key">icon</span>:<span class="local-variable">this</span>.folded? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">padding</span>: <span class="integer">2</span>,
+
+                        <span class="keyword">var</span> vws = [];
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.haschildren) {
+                                vws.push(<span class="local-variable">this</span>.outer.foldbutton({
+                                        <span class="key">icon</span>: <span class="local-variable">this</span>.folded ? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">paddingleft</span>:<span class="integer">1</span>,
+                                        <span class="key">paddingright</span>:<span class="integer">2</span>,
+                                        <span class="key">paddingtop</span>:<span class="integer">2</span>,
+                                        <span class="key">margintop</span>:<span class="integer">3</span>,
+                                        <span class="key">fontsize</span>:<span class="integer">10</span>,
                                         <span class="key">click</span>: <span class="local-variable">this</span>.toggleclick
-                                }):[],
-                                <span class="comment">//flatbutton({icon:this.folded?&quot;arrow-right&quot;:&quot;arrow-down&quot;,padding: 2, click: this.toggleclick}),</span>
-                                <span class="local-variable">this</span>.outer.foldbutton({
-                                        <span class="key">label</span>: <span class="local-variable">this</span>.text,
+                                }))
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.text) {
+                                vws.push(<span class="local-variable">this</span>.outer.foldbutton({
+                                        <span class="key">text</span>: <span class="local-variable">this</span>.text,
                                         <span class="function">click</span>:<span class="keyword">function</span>(){
                                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">select</span><span class="delimiter">'</span></span>,{<span class="key">node</span>:<span class="local-variable">this</span>})
                                         }.bind(<span class="local-variable">this</span>)
-                                })
-                        ];
+                                }))
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children.length) {
+                                vws = vws.concat(<span class="local-variable">this</span>.constructor_children)
+                        }
+
+                        <span class="keyword">return</span> vws;
                 }
         });
 
@@ -571,17 +608,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//debugger;</span>
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.item) <span class="keyword">return</span> [label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>})];
                         <span class="comment">//this.collapsed;</span>
-                        <span class="keyword">var</span> res = [
-                                <span class="local-variable">this</span>.outer.newitemheading({
-                                                <span class="key">haschildren</span>: <span class="local-variable">this</span>.item.children &amp;&amp; <span class="local-variable">this</span>.item.children.length,
-                                                <span class="key">folded</span>: <span class="local-variable">this</span>.item.collapsed,
-                                                <span class="key">toggleclick</span>: <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>),
-                                                <span class="key">select</span>: <span class="local-variable">this</span>.processSelect.bind(<span class="local-variable">this</span>),
-                                                <span class="key">text</span>:<span class="local-variable">this</span>.item.name,
-                                                <span class="key">id</span>:<span class="local-variable">this</span>.item.id
-                                        })
-                        ];
+                        <span class="keyword">var</span> res = [];
 
+                        <span class="keyword">var</span> itemview = [];
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.item.itemview) {
+                                itemview.push(<span class="local-variable">this</span>.item.itemview)
+                        }
+                        res.push(<span class="local-variable">this</span>.outer.newitemheading({
+                                        <span class="key">haschildren</span>: <span class="local-variable">this</span>.item.children &amp;&amp; <span class="local-variable">this</span>.item.children.length,
+                                        <span class="key">folded</span>: <span class="local-variable">this</span>.item.collapsed,
+                                        <span class="key">toggleclick</span>: <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>),
+                                        <span class="key">select</span>: <span class="local-variable">this</span>.processSelect.bind(<span class="local-variable">this</span>),
+                                        <span class="key">text</span>:<span class="local-variable">this</span>.item.name,
+                                        <span class="key">id</span>:<span class="local-variable">this</span>.item.id
+                        }, itemview));
 
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.item.collapsed == <span class="predefined-constant">false</span>){
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.item.children){

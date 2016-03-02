@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
@@ -155,19 +156,24 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.stateclick()
 	}
 	this.pointerend = function(event){
-		this.statenormal()
 		if (event.isover){
+			this.statehover();
 			this.emit('click',event)
 		}
+		else{
+			this.statenormal()
+		}
 	}
-
+	
 	this.render = function(){
+		if (this.constructor_children.length > 0) return this.constructor_children;
 		var res = []
 		this.buttonres = undefined
 		this.iconres = undefined
 
 		if (this.icon && this.icon.length > 0){
 			this.iconres = icon({
+				drawtarget:"color",
 				fgcolor:this.textcolor,
 				fontsize: this.fontsize,
 				icon: this.icon
@@ -177,6 +183,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		if (this.text && this.text.length > 0){
 			this.buttonres = label({
+				drawtarget:"color",
 				marginleft:this.iconres?4:0,
 				//bgcolor:this.bgcolor,
 				fontsize: this.fontsize,

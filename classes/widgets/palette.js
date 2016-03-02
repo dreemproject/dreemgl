@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 // A palatte is a container view with drag-dropable components
@@ -145,7 +146,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					fgcolor:this.bordercolor,
 					borderwidth:0,
 					padding:0,
-					paddingright:5,
+					paddingright:7,
 					margin:0,
 					icon:icn,
 					pickalpha:-1,
@@ -157,6 +158,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 							self.panel.mode = "compact";
 							this.icon = "list";
 						}
+
 					}
 				}))
 			}
@@ -165,21 +167,21 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "panelview", view, function() {
-		this.bgcolor = "white";
-		this.hardrect = {pickonly:true};
+		this.bgcolor = "transparent";
+		this.pickalpha = -1;
 	});
 
 	define.class(this, "panellabel", label, function() {
-		this.bgcolor = "white";
-		this.hardrect = {pickonly:true};
+		this.bgcolor = "transparent";
+		this.pickalpha = -1;
 		this.fgcolor = "#e4e4e4";
 		this.padding = 0;
 		this.margin = 0;
 	});
 
 	define.class(this, "panelicon", icon, function() {
-		this.bgcolor = 'white';
-		this.hardrect = {pickonly:true};
+		this.bgcolor = 'transparent';
+		this.pickalpha = -1;
 		this.fgcolor = '#e4e4e4';
 		this.align = 'center';
 		this.padding = 0;
@@ -188,9 +190,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 	define.class(this, "panelitem", view, function() {
 
-		this.bgcolor = 'white';
+		this.bgcolor = 'transparent';
 		this.flexdirection = 'column';
-		this.hardrect = {pickonly:true};
+		this.pickalpha = -1;
 		this.padding = 0;
 		this.margin = 0;
 
@@ -235,7 +237,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 							droptest = this.outer.dropTest(ev, v, pitem, event, this);
 						}
 
-						if(!v || !droptest) {
+						if(!droptest) {
 							this.screen.pointer.cursor = 'no-drop';
 							return false
 						}

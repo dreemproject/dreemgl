@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
 define.class('$system/platform/$platform/shader$platform', function(require, exports, baseclass){
 	//internal
@@ -13,21 +14,29 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.position = "glyphy_mesh()"
 	this.color = "glyphy_pixel()"
 
-	this.fgcolor = vec4("blue")
+	//this.fgcolor = vec4("blue")
+	//this.boldness = 0
+	//this.outline = false
+	this.pixel_contrast = 1.4
+	this.pixel_gamma_adjust = vec3(1.2)
+	this.subpixel_off = 1.0115
+	this.subpixel_distance = 3.
 
 	// forward ref of things we need on view
 	this.view = {
+		_fgcolor:vec4(),
+		_bgcolor:vec4(),
 		_totalmatrix:mat4(),
-		textstyle: function(fgcolor, pos, tag){return fgcolor;},
-		textpositionfn:function(pos){return pos;},
 		_viewmatrix:mat4(),
 		_polygonoffset:0.0,
-		_fgcolor:vec4(),
-		_outline_color:vec4(),
-		_outline_thickness:0.0,
+		_outlinecolor:vec4(),
+		_outlinethickness:0.0,
+		_boldness: 0.0,
 		_outline: false,
-		_bgcolor:vec4(),
 		_opacity:1.0,
+		textstyle: function(style, tag){ return style },
+		//textstyle: function(fgcolor, pos, tag){return fgcolor;},
+		//textpositionfn:function(pos, tag){return pos;},
 		screen:{
 				device:{
 					frame:{
@@ -39,7 +48,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	// lets define a custom struct and subclass the array
 	this.textgeom = define.struct({
-		pos:vec4,
+		pos:vec4, // x y z w unicode in w
 		tex:vec2,
 		tag:vec4,
 	}).extend(function(exports, self){
@@ -54,35 +63,26 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.add_y = 0
 
 		this.fontsize = 10
-		this.line_spacing = 1.3
+		this.linespacing = 1.0
 		this.italic_ness = 0
 		// defines the line
-		this.cursor_spacing = 1.3
+		this.cursorspacing = 1.3
 		this.cursor_sink = 0.32
 
 		this.scaling = 0
 		this.distance = 0
 
-		this.boldness = 0
-		this.gamma_adjust = vec3(1.2)
-
-		this.outline = false
 		this.debug = false
-		this.contrast = 1.4
-		this.outline_thickness = 4//:device.ratio
 
-		this.subpixel_off = 1.0115
-		this.subpixel_distance = 3.
-
-		this.bgcolor = vec3('black')
-		this.fgcolor = vec4('white')
+		//this.bgcolor = vec3('black')
+		//this.fgcolor = vec4('white')
 
 		this.__defineGetter__('line_height', function(){
-			return this.fontsize * this.line_spacing
+			return this.fontsize * this.linespacing
 		})
 
 		this.__defineGetter__('min_y', function(){
-			return this.fontsize * this.line_spacing
+			return this.fontsize * this.linespacing
 		})
 
 		this.__defineGetter__('block_y', function(){
@@ -154,7 +154,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ((j<line.length-1)?' ':'') , m1, m2, m3);
 					if (i < lines.length -1)
 					{
-						this.add_y += this.fontsize * this.line_spacing
+						this.add_y += this.fontsize * this.cursorspacing
 						this.add_x = indent;
 					}
 				}
@@ -163,14 +163,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					this.add_x = maxwidth - widths[i];
 					var line = lines[i];
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ' ', m1, m2, m3);
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			} else if (this.align === "center") {
 				for (var i = 0;i<lines.length;i++) {
 					this.add_x = maxwidth/2 - widths[i]/2;
 					var line = lines[i];
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ' ', m1, m2, m3);
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			} else if (this.align === "justify") {
 				for (var i = 0;i<lines.length;i++) {
@@ -184,12 +184,12 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						this.add(line[j]+' ', m1, m2, m3);
 						this.add_x += spacer;
 					}
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			}
 
 		}
-		
+
 
 		self.pushQuad = function(){
 			this.clean = false
@@ -210,25 +210,54 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			}
 		}
 
+		// what do we need to know?
+
+
 		this.addGlyph = function(info, unicode, m1, m2, m3) {
+
 			var fontsize = this.fontsize
 			var x1 = this.add_x + fontsize * info.min_x
 			var x2 = this.add_x + fontsize * info.max_x
 			var y1 = this.add_y - fontsize * info.min_y
 			var y2 = this.add_y - fontsize * info.max_y
+			var advance = info.advance
 			var italic = this.italic_ness * info.height * fontsize
 			var cz = this.add_z ? this.add_z:0;
-
+			var dx = 0
 			this.clean = false
 			var slots = this.slots
 			//if(arguments.length !== slots * 4) throw new Error('Please use individual components to set a quad for '+slots)
-			
+
 			var o = this.length * slots
 			this.length += 6
 			if(this.length >= this.allocated){
 				this.ensureSize(this.length)
 			}
 
+			// m1 is the formatting layout
+			if(m1 < 0){
+				var format = m1 * -1
+				//var m1info = unicode === 10?this.font.glyphs[9]:info
+				//var indent = parseInt(m1/65536)
+				var mode = Math.floor(format/256)%256
+				var padding = format%256
+				// mode is 1, space left
+				// mode is 2, space right
+				// mode is 3, space left/right
+				// mode is 4, scale indent
+				if(mode){
+					var padskip = padding * info.advance * fontsize
+					if(mode&1) x1 += padskip, x2 += padskip, dx += padskip
+					if(mode&2) dx += padskip
+					if(mode == 4){
+						x2 += padskip, dx = (padding - 1)* info.advance * fontsize
+					}
+				}
+			}
+			else if(unicode === 10){
+				x2 = 0
+				advance = 0
+			}
 			var a = this.array
 
 			if(this.font.baked){
@@ -260,7 +289,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				a[o + 41] = y2
 				a[o + 44] = info.tmax_x
 				a[o + 45] = info.tmax_y
-				
+
 				/*
 				this.pushQuad(
 					x1, y1, cz, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
@@ -272,7 +301,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			else {
 				var gx = ((info.atlas_x<<6) | info.nominal_w)<<1
 				var gy = ((info.atlas_y<<6) | info.nominal_h)<<1
-				
+
 				// INLINED for optimization. text is used a lot
 				a[o + 2] = a[o + 12] = a[o + 32] = a[o + 22] = a[o + 52] = a[o + 42] = cz
 				a[o + 3] = a[o + 13] = a[o + 33] = a[o + 23] = a[o + 53] = a[o + 43] = fontsize
@@ -309,8 +338,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					x2 + italic, y2, cz, fontsize, gx|1, gy|1, unicode, m1, m2, m3
 				)*/
 			}
-			this.add_x += info.advance * fontsize
-
+			this.add_x += advance * fontsize + dx
 			if(this.add_x > this.text_w) this.text_w = this.add_x
 		}
 
@@ -327,7 +355,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var info = this.font.glyphs[unicode]
 				if(!info) info = this.font.glyphs[32]
 				var add_x = x1 - fontsize * info.min_x + (unicode === 10 ? 0 : info.advance * fontsize)
-				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.line_spacing
+				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.linespacing
 				if(add_x > text_w) text_w = add_x
 				if(add_y > text_h) text_h = add_y
 			}
@@ -335,7 +363,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var info = this.font.glyphs[32]
 				if (info) {
 					text_w += info.advance * this.fontsize
-					if(!text_h) text_h = this.fontsize * this.line_spacing
+					if(!text_h) text_h = this.fontsize * this.linespacing
 				}
 			}
 			this.text_w = text_w
@@ -345,12 +373,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// lets add some strings
 		this.add = function(string, im1, im2, im3){
 			var length = string.length
+			this.ensureSize(this.length + length)
+
 			var m1 = im1, m2 = im2, m3 = im3
 			// alright lets convert some text babeh!
 			var array
 			if(string.struct) array = string.array
 			var glyphs = this.font.glyphs
-			for(var i = 0; i < length; i++){
+			for(var i = string.start || 0; i < length; i++){
 				var unicode
 				if(array){
 					unicode = array[i * 4]
@@ -363,13 +393,19 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				}
 
 				var info = glyphs[unicode]
-				if(!info) info = glyphs[32]
+				if(!info) info = glyphs[32], unicode = 32
+
 				// lets add some vertices
-				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
+
+				this.addGlyph(info, unicode, m1, m2, m3)
+				//if(!(m1<0) &&  unicode == 10){ // newline
+				//	this.add_x = this.start_x
+				//	this.add_y += this.fontsize * this.linespacing
+				//}
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
 		}
@@ -391,12 +427,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
 		}
-
 
 		this.__defineGetter__('char_count', function(){
 			return this.lengthQuad()
@@ -432,13 +467,17 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return this.array[off * 6 * 10 + 0 + 10]
 		}
 
+		this.tagAt = function(off, tagid){
+			return this.array[off * 6 * 10 + 6 + (tagid||0)]
+		}
+
 		this.offsetFromTag = function(tagid, tag, start){
 			var off = start || 0, len = this.length
 			while(Math.abs(this.array[off * 6 * 10 + 7 + tagid] - tag) > 0.001){
 
 				if(off >= len) return -1
 				off ++
-		
+
 			}
 			return off
 		}
@@ -484,11 +523,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						return -1 // to the left
 					}
 					if(o == len - 1 && x > tr_x){
-						if(char_code ==10) return o
+						//if(char_code ==10) return o
 						return -4 // to the right of self
 					}
 					if(x > hx){
-						if(char_code == 10) return o
+						//if(char_code == 10) return o
 						return o + 1
 					}
 				}
@@ -501,13 +540,45 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		this.cursorRect = function(off){
-			var coords = this.charCoords(off)
+			var coords= this.charCoords(off)
+			// do a little bit of alignment fixery
+			var m1 = this.tagAt(off,1)
+			if(m1<0){
+
+				// lets check the alignment mode
+				var format = m1 * -1
+				//var indent = parseInt(m1/65536)
+				var mode = Math.floor(format/256)%256
+
+				if(this.charCodeAt(off) === 10){
+					coords = this.charCoords(off-1)
+					if(this.charCodeAt(off-1) !== 10){
+						coords.x = coords.x + coords.w
+					}
+					else{
+						// add padd
+						coords.x = coords.x + coords.w
+						var padding = format%256
+						var info = this.font.glyphs[10]
+						var fontsize = this.array[off * 6 * 10 + 3]
+						coords.x += (padding-1) * info.advance * fontsize
+					}
+				}
+				else if(mode&1){
+					var coords1 = this.charCoords(off - 1)
+					coords.x = coords1.x + coords1.w
+				}
+			}
 			coords.y -= coords.h - this.fontsize * this.cursor_sink
 			return coords
 		}
 
 		this.charCodeAt = function(off){
 			return this.array[off * 6 * 10 + 6]
+		}
+
+		this.charAt = function(off){
+			return String.fromCharCode(this.charCodeAt(off))
 		}
 
 		this.serializeText = function(start, end){
@@ -533,15 +604,62 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return out
 		}
 
+		this.setLength = function(len){
+
+			// if we are inserting at a newline, we need to grab the previous
+			var off = len
+			if(this.charCodeAt(len) === 10) off -=1
+			var m1 = this.array[off * 6 * 10 + 7]
+			// if its a padded character we need to compute the new add_x differently
+			if(m1<0 && (-m1)&65535){
+
+				var format = m1 * -1
+				//var indent = parseInt(m1/65536)
+				var mode = Math.floor(format/256)%256
+				var rect = this.charCoords(off)
+
+				this.length = len * 6
+				this.add_x = rect.x //+ rect.w
+				this.add_y = rect.y
+				// rip off padding
+
+				if(mode&1){
+					var padding = format%256
+					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
+					var fontsize = this.array[off * 6 * 10 + 3]
+					this.add_x -= padding * info.advance * fontsize//- rect.w
+				}
+				else if(mode&2){
+					console.log(2)
+					var padding = format%256
+					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
+					var fontsize = this.array[off * 6 * 10 + 3]
+					this.add_x += padding * info.advance * fontsize//- rect.w
+				}
+				else if(mode === 4){
+					console.log(4)
+					var padding = format%256
+					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
+					var fontsize = this.array[off * 6 * 10 + 3]
+					this.add_x += padding * info.advance * fontsize - rect.w
+				}
+				return
+			}
+
+			var rect = this.charCoords(off)
+			this.length = len * 6
+			this.add_x = rect.x
+			this.add_y = rect.y
+			if(off !== len)this.add_x += rect.w
+		}
+
 		this.insertText = function(off, text){
 			// ok lets pull in the 'rest' as string
 			//var str = this.serializeText(off, this.lengthQuad())
 			var tags = this.serializeTags(off, this.lengthQuad())
 			// lets set the length and start adding
 			var rect = this.charCoords(off)
-			this.add_x = rect.x
-			this.add_y = rect.y
-			this.length = off * 6
+			this.setLength(off)
 			this.add(text)
 			this.add(tags)
 			this.computeBounds(true)
@@ -550,10 +668,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		this.removeText = function(off, end){
 			var tags = this.serializeTags(end, this.lengthQuad())
-			var rect = this.charCoords(off)
-			this.add_x = rect.x
-			this.add_y = rect.y
-			this.length = off * 6
+			this.setLength(off)
 			this.add(tags)
 			// recompute the bounds
 			this.computeBounds(true)
@@ -579,24 +694,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		return glyphy_compute_position()
 	}
 
-	this.glyphy_compute_position = function(){
-		// we want to compute a measure of scale relative to the actual pixels
-		var matrix = view.totalmatrix  * view.viewmatrix
-
-
-		var finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z));
-		var finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z));
-
-		// compute the main position and one rectgle atan fontsize for the pixelscale
-		var pos1 = vec4(finalpos1 , 1) * matrix
-		var pos2 = vec4(finalpos2,  1) * matrix
-
-		// compute the pixelscaling used in the pixelshader AA
-		var pixsize = view.screen.device.frame.size
-		pixelscale = 1 / length(vec2(abs(pos2.x - pos1.x), abs(pos2.y - pos1.y)) * pixsize)
-		pos1.w += view.polygonoffset;
-		return pos1
-	}
 
 	this.glyphy_mesh_atlas = function(){
 		glyph = glyph_vertex_transcode(mesh.tex)
@@ -608,25 +705,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.GLYPHY_EPSILON = '1e-5'
 	this.GLYPHY_MAX_NUM_ENDPOINTS = '32'
 
-	this.paint = function(p, m, pixelscale){
-		if(mesh.tag.x == 32.) discard
-		return vec4(-1.)
-	}
-
-	this.style = function(pos, tag){
-	}
+	//this.paint = function(p, m, pixelscale){
+	//	if(abs(mesh.tag.x-32.)<0.01 || abs(mesh.tag.x-10.)<0.01) discard
+	//	return vec4(-1.)
+	//}
 
 	this.moddist = function(pos, dist){
 		return dist
 	}
-
-	this.font_style_t = define.struct({
-		fgcolor: vec4,
-		bgcolor: vec4,
-		outlinecolor: vec4,
-		outline_thickness: float,
-		outline: bool
-	}, "font_style_t")
 
 	this.glyphy_arc_t = define.struct({
 		p0:vec2,
@@ -925,194 +1011,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var p = glyph.xy
 		return glyphy_sdf_encode(glyphy_sdf(p, nominal_size, atlas_pos))
 	}
-	/*
-	this.glyphy_sdf_draw_subpixel_3tap = function(){
-
-		var pos = mesh.tex
-
-		var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
-		var dpdy = dFdy(pos)
-		var m = length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2
-		// screenspace length
-		mesh.scaling = 500.*m
-		var fin_alpha = 1.
-		var sub_delta = dpdx / mesh.subpixel_distance
-		var exit = paint(p, dpdx, dpdy, m)
-		if(exit.a>=0.){
-			return exit
-		}
-		var distance = vec3(
-			glyphy_sdf_decode(sdf_texture.sample(pos - sub_delta)),
-			glyphy_sdf_decode(sdf_texture.sample(pos)),
-			glyphy_sdf_decode(sdf_texture.sample(pos + sub_delta))
-		)*0.003
-
-		style(pos) // per pixel styling callback
-
-		distance -= mesh.boldness / 300.
-		distance = distance / m * mesh.contrast
-
-		if(mesh.outline){
-			distance = abs(distance) - mesh.outline_thickness
-		}
-		var col = mesh.bgcolor
-		if(distance.g > 1. )
-			discard
-
-		var alpha = glyphy_antialias(-distance)
-		if(m>mesh.subpixel_off){ // turn off subpixel at a certain size
-			return vec4(u_color, alpha.g)
-		}
-		alpha = pow(alpha, mesh.gamma_adjust)
-
-		var max_alpha = max(max(alpha.r,alpha.g),alpha.b) * fin_alpha
-		if(max_alpha >0.2) max_alpha = 1.
-		return vec4(mix(mesh.bgcolor, mesh.fgcolor, alpha), max_alpha)
-	}
-
-	// draw subpixel antialiased using SDF texture
-	this.glyphy_sdf_draw_subpixel_5tap = function(){
-
-		var pos = mesh.tex
-
-		var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
-		var dpdy = dFdy(pos)
-		var m = min(length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2, 0.03)
-		// screenspace length
-		mesh.scaling = 500.*m
-		var fin_alpha = 1.
-		var sub_delta = dpdx / mesh.subpixel_distance
-
-		var exit = paint(pos, dpdx, dpdy, m)
-		if(exit.a>=0.){
-			return exit
-		}
-
-		var v1 = glyphy_sdf_decode(mesh.font.texture.sample(pos - sub_delta*2.))
-		var v2 = glyphy_sdf_decode(mesh.font.texture.sample(pos - sub_delta))
-		var v3 = glyphy_sdf_decode(mesh.font.texture.sample(pos))
-		var v4 = glyphy_sdf_decode(mesh.font.texture.sample(pos + sub_delta))
-		var v5 = glyphy_sdf_decode(mesh.font.texture.sample(pos + sub_delta*2.))
-
-		var distance = vec3(
-			v1+v2+v3,
-			v2+v3+v4,
-			v3+v4+v5
-		) * 0.001
-
-	//todo: fix up if this ever gets uncommented
-		view.textstyle(pos) // per pixel styling callback
-
-		distance -= mesh.boldness / 300.
-		distance = distance / m * mesh.contrast
-
-		if(mesh.outline){
-			distance = abs(distance) - mesh.outline_thickness
-		}
-
-		var col = mesh.bgcolor
-		if(distance.g > 1. )
-			discard
-
-		var alpha = glyphy_antialias(-distance)
-		if(m > mesh.subpixel_off){ // turn off subpixel at a certain size
-			return vec4(mesh.fgcolor, alpha.g)
-		}
-		alpha = pow(alpha, mesh.gamma_adjust)
-		var max_alpha = max(max(alpha.r,alpha.g),alpha.b) * fin_alpha
-		if(max_alpha >0.2) max_alpha = 1.
-		return vec4(mix(mesh.bgcolor, mesh.fgcolor, alpha), max_alpha)
-	}
-	*/
-
-	// draw using SDF texture
-	this.glyphy_sdf_draw = function(){
-		var pos = mesh.tex
-
-		var m = pixelscale*0.4//0.005
-		// screenspace length
-		mesh.scaling = 500. * m
-
-		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
-
-		var exit = paint(pos,m, pixelscale)
-		if(exit.a >= 0.){
-			return exit
-		}
-
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
-
-		view.textstyle(style, pos, mesh.tag)
-
-		dist -= mesh.boldness / 300.
-		dist = dist / m * mesh.contrast
-
-		dist = moddist(pos, dist)
-
-		if(style.outline){
-			dist = abs(dist) - style.outline_thickness
-		}
-
-		if(dist > 1.){
-			discard
-		}
-
-		//return 'red'
-		return vec4(style.fgcolor.xyz, glyphy_antialias(-dist))
-		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
-	}
-
-	this.glyphy_sdf_draw_subpixel_aa = function(){
-		var pos = mesh.tex
-
-		var m = pixelscale*.5//0.005
-		// screenspace length
-		mesh.scaling = 500. * m
-
-		var sub_delta = vec2((pixelscale / mesh.subpixel_distance)*0.1,0)
-
-		var v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*2.))
-		var v2 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta))
-		var v3 = glyphy_sdf_decode(glyphy_sdf_lookup(pos))
-		var v4 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta))
-		var v5 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta*2.))
-
-		var dist = vec3(
-			v1+v2+v3,
-			v2+v3+v4,
-			v3+v4+v5
-		) * 0.001
-
-		//return 'red'
-
-		var exit = paint(pos,m, pixelscale)
-		if(exit.a >= 0.){
-			return exit
-		}
-
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
-
-		 view.textstyle(style, pos, mesh.tag)
-
-		dist -= mesh.boldness / 300.
-		dist = dist / m * mesh.contrast
-
-		if(mesh.outline){
-			dist = abs(dist) - mesh.outline_thickness
-		}
-
-		if(dist.g > 1.){
-			discard
-		}
-
-		var alpha = glyphy_antialias(-dist)
-
-		alpha = pow(alpha, mesh.gamma_adjust)
-		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)
-		//if(max_alpha >0.5) max_alpha = 1.
-		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
-		return vec4(mix(view.bgcolor.rgb, style.fgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
-	}
 
 	this.glyphy_sdf_lookup = function(pos){
 		return texture2D(mesh.font.texture, pos, {
@@ -1138,57 +1036,157 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	// draw using atlas
 	this.time = 0
+
+	this.atExtend = function(){
+		this.mesh.font = this.font
+		baseclass.atExtend.call(this)
+	}
+
+	this.font_style_t = define.struct({
+		pos:vec3,
+		fgcolor: vec4,
+		outlinecolor: vec4,
+		boldness: float,
+		outlinethickness: float,
+		outline: bool,
+		visible: bool
+	}, "font_style_t")
+
+	// default text style
+	this.style = function(style, tag){
+		return style
+	}
+
+	this.glyphy_compute_position = function(){
+		// we want to compute a measure of scale relative to the actual pixels
+		var matrix = view.totalmatrix  * view.viewmatrix
+
+		var s = font_style_t(
+			vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z),
+			view.fgcolor,
+			view.outlinecolor,
+			view.boldness,
+			view.outlinethickness,
+			view.outline,
+			(abs(mesh.tag.x - 10.)<0.001 || abs(mesh.tag.x - 32.)<0.001)?false:true
+		)
+
+		s = view.textstyle(s, mesh.tag)
+		// plug it into varyings
+		stylefgcolor = s.fgcolor
+		styleoutlinecolor = s.outlinecolor
+		stylepack = vec3(s.boldness, s.outlinethickness, s.outline ? 1.0 : 0.0)
+
+		// hide it
+		if(!s.visible) return vec4(0.)
+
+		var pos1 = vec4(s.pos, 1.) * matrix
+		pos1.w += view.polygonoffset;
+		return pos1
+	}
+
+	// draw using SDF texture
+	this.glyphy_sdf_draw = function(){
+		var pos = mesh.tex
+
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
+
+		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
+
+		dist -= stylepack.x / 300.
+		dist = dist / m * pixel_contrast
+
+		dist = moddist(pos, dist)
+
+		if(stylepack.z>0.){
+			dist = abs(dist) - (stylepack.y)
+		}
+
+		// TODO(aki): verify that this is correct
+		if(dist > 1. + stylepack.y){
+			discard
+		}
+
+		//return 'red'
+		return vec4(stylefgcolor.xyz, glyphy_antialias(-dist))
+		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
+	}
+
+	this.glyphy_sdf_draw_subpixel_aa = function(){
+		var pos = mesh.tex
+
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2
+		//var m = pixelscale*.5//0.005
+		// screenspace length
+		mesh.scaling = 500. * m
+
+		var sub_delta = vec2((m / subpixel_distance)*0.1,0)
+
+		var v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*2.))
+		var v2 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta))
+		var v3 = glyphy_sdf_decode(glyphy_sdf_lookup(pos))
+		var v4 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta))
+		var v5 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta*2.))
+
+		var dist = vec3(
+			v1+v2+v3,
+			v2+v3+v4,
+			v3+v4+v5
+		) * 0.001
+
+		dist -= stylepack.x / 300.
+		dist = dist / m * pixel_contrast
+
+		if(stylepack.z>0.){
+			dist = abs(dist) - (stylepack.y)
+		}
+
+		// TODO(aki): verify that this is correct
+		if(dist.y > 1. + stylepack.y){
+			discard
+		}
+
+		var alpha = glyphy_antialias(-dist)
+
+		alpha = pow(alpha, pixel_gamma_adjust)
+		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)
+		//if(max_alpha >0.5) max_alpha = 1.
+		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
+		return vec4(mix(view.bgcolor.rgb, stylefgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
+	}
+
 	this.glyphy_atlas_draw = function(){
 		//'trace'
 		var nominal_size = (ivec2(mod(glyph.zw, 256.)) + 2) / 4
 		var atlas_pos = ivec2(glyph.zw) / 256
-
 		var pos = glyph.xy
 		/* isotropic antialiasing */
-		var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
-		var dpdy = dFdy(pos)
-		var m = length(vec2(length(dpdx), length(dpdy)))*SQRT_1_2//*0.1
-		//var m = pixelscale*100.
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
 
 		var dist = glyphy_sdf(glyph.xy, nominal_size, atlas_pos) //+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6
 
-		//	dbg = mesh.distance
-		mesh.scaling = m
-
-		var exit = paint(pos, m, pixelscale)
-		if(exit.a >= 0.){
-			return exit
-		}
-//		style(glyph)
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
-		view.textstyle(style, pos, mesh.tag)
-
-
-		dist -= mesh.boldness
+		dist -= stylepack.x
 		//debug(mesh.distance)
-		dist = dist / m * mesh.contrast
+		dist = dist / m * pixel_contrast
+
 		var dist2 = dist;
-		if(mesh.outline){
-			dist2 = abs(dist) - (style.outline_thickness)
+		if(stylepack.z>0.){
+			dist2 = abs(dist) - (stylepack.y)
 		}
 
-		if(dist > 1.){
+		// TODO(aki): verify that this is correct
+		if(dist > 1. + stylepack.y){
 			discard
 		}
 
 		var alpha = glyphy_antialias(-dist)
 		var alpha2 = glyphy_antialias(-dist2)
 
-		if(mesh.gamma_adjust.r != 1.){
+		//if(mesh.gamma_adjust.r != 1.){
 		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
-		}
+		//}
 
-		return vec4(mix(style.fgcolor.rgb, style.outlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * style.fgcolor.a * view.opacity)
-	}
-
-	this.atExtend = function(){
-		this.mesh.font = this.font
-		baseclass.atExtend.call(this)
+		return vec4(mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
 	}
 
 	this.glyphy_mesh = this.glyphy_mesh_sdf

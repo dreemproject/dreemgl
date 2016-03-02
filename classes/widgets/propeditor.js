@@ -1,10 +1,11 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, scrollbar, textbox, numberbox, $widgets$, colorpicker, radiogroup){
+define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, button, scrollbar, textbox, numberbox, $widgets$, colorpicker, radiogroup){
 // internal
 
 	this.attributes = {
@@ -28,8 +29,8 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 
 	this.hardrect = {
 		color:function(){
-			var col1 = vec3("#3b3b3b");
-			var col2=vec3("#3b3b3b");
+			var col1 = vec3("#4e4e4e");
+			var col2=vec3("#4e4e4e");
 			return vec4(mix(col1, col2, 1.0-pow(abs(uv.y),4.0) ),1.0)
 		}
 	};
@@ -47,7 +48,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			margin:vec4(2,0,2,5)
 		},
 		$_color:{
-			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"circle", collapsed:true
+			 width:302, title:"colorpicker", bordercolor:"#383838", icon:"paint-brush", collapsed:true
 		},
 		$_colorview:{
 			bgcolor:NaN,width:300, flexdirection:"column"
@@ -88,7 +89,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 
 				editor = foldcontainer({
 					class:'color',
-					icon:'circle',
+					icon:'paint-brush',
 					basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)
 				}, view({class:'color_view'},
 					colorpicker({
@@ -235,11 +236,18 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				flex:0,
 				fgcolor:"white",
 				textcolor:this.fgcolor,
-				bgcolor:NaN,
+				buttoncolor1:"transparent",
+				buttoncolor2:"transparent",
+				hovercolor1:"transparent",
+				hovercolor2:"transparent",
+				pressedcolor1:"transparent",
+				pressedcolor2:"transparent",
+				bgcolor:"transparent",
+				pickalpha:-1,
 				value:this.value,
 				padding:4,
 				borderradius:0,
-				borderwidth:2,
+				borderwidth:1,
 				bordercolor:"#262626",
 				margin:2,
 				onvalue:function(ev,val) {this.callback(val, this, true)}.bind(this)
@@ -249,7 +257,47 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			editor = checkbox({icon:'circle', fontsize: this.fontsize, margin:4, text:"[FONT PICKER]", bgcolor:NaN, textcolor:this.fgcolor, borderwidth:0});
 
 		} else if (typename == "Object" && meta == "texture") {
-			editor = checkbox({icon:'circle', fontsize: this.fontsize, margin:4, text:"[IMAGE PICKER]", bgcolor:NaN, textcolor:this.fgcolor, borderwidth:0});
+			editor = view({bgcolor:NaN},
+				button({
+					icon:'folder-open',
+					fontsize:this.fontsize,
+					margin:4,
+					bgcolor:"transparent",
+					buttoncolor1:"transparent",
+					buttoncolor2:"transparent",
+					hovercolor1:"transparent",
+					hovercolor2:"transparent",
+					pickalpha:-1,
+					textactivecolor:"white",
+					textcolor:this.fgcolor,
+					borderwidth:0,
+					click: function() {
+						var input = document.createElement('input');
+						input.type = "file";
+						input.onchange = function(changeEvent) {
+							var files = changeEvent.target.files;
+							this.callback(files, this, "file");
+						}.bind(this);
+						input.click();
+					}.bind(this)
+				}),
+				textbox({
+					flex:1,
+					fontsize:this.fontsize,
+					fgcolor:"#d0d0d0",
+					bgcolor:"#505050",
+					value:this.value ? this.value : '',
+					padding:4,
+					borderradius:0,
+					borderwidth:1,
+					bordercolor:"gray",
+					margin:2,
+					multiline:false,
+					onfocus: function(ev,v,o) { if (!v) { this.callback("texture", null, true); } }.bind(this),
+					onvalue: function(ev,v,o){ this.callback(v, this); }.bind(this)
+				})
+			);
+
 
 		} else {
 			if (!this.showunknown || !this.property) {

@@ -205,11 +205,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n51" name="n51">51</a>
 <a href="#n52" name="n52">52</a>
 <a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// BusServer class, a package of websockets you can broadcast on (server side)</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
@@ -219,16 +228,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="comment">// adds a WebSocket to the BusServer</span>
-        <span class="local-variable">this</span>.<span class="function">addWebSocket</span> = <span class="keyword">function</span>(sock){
+        <span class="local-variable">this</span>.<span class="function">addWebSocket</span> = <span class="keyword">function</span>(sock, req){
                 <span class="local-variable">this</span>.sockets.push(sock)
-
-                sock.<span class="function">atEnd</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> origin = req.headers.origin
+                sock.<span class="function">atClose</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.sockets.splice(<span class="local-variable">this</span>.sockets.indexOf(sock), <span class="integer">1</span>)
-                        sock.onEnd = <span class="predefined-constant">undefined</span>
+                        sock.atClose = <span class="predefined-constant">undefined</span>                        
+                        <span class="local-variable">this</span>.atClose(sock);
                 }.bind(<span class="local-variable">this</span>)
 
                 sock.<span class="function">atMessage</span> = <span class="keyword">function</span>(message){
-                        <span class="local-variable">this</span>.atMessage(JSON.parse(message), sock)
+                        <span class="keyword">var</span> jsonmsg = JSON.parse(message)
+                        jsonmsg.origin = origin
+                        <span class="local-variable">this</span>.atMessage(jsonmsg, sock)
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="local-variable">this</span>.atConnect(sock)
@@ -237,6 +249,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// called when a new message arrives</span>
         <span class="local-variable">this</span>.<span class="function">atMessage</span> = <span class="keyword">function</span>(message, socket){
         } 
+        
+        <span class="comment">// called when a client disconnects</span>
+        <span class="local-variable">this</span>.<span class="function">atClose</span> = <span class="keyword">function</span>(socket){
+        }
 
         <span class="comment">// Called when a new socket appears on the bus</span>
         <span class="local-variable">this</span>.<span class="function">atConnect</span> = <span class="keyword">function</span>(message, socket){

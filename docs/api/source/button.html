@@ -355,11 +355,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n201" name="n201">201</a>
 <a href="#n202" name="n202">202</a>
 <a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, icon){
@@ -513,19 +521,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.stateclick()
         }
         <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event){
-                <span class="local-variable">this</span>.statenormal()
                 <span class="keyword">if</span> (event.isover){
+                        <span class="local-variable">this</span>.statehover();
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">click</span><span class="delimiter">'</span></span>,event)
                 }
+                <span class="keyword">else</span>{
+                        <span class="local-variable">this</span>.statenormal()
+                }
         }
-
+        
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children.length &gt; <span class="integer">0</span>) <span class="keyword">return</span> <span class="local-variable">this</span>.constructor_children;
                 <span class="keyword">var</span> res = []
                 <span class="local-variable">this</span>.buttonres = <span class="predefined-constant">undefined</span>
                 <span class="local-variable">this</span>.iconres = <span class="predefined-constant">undefined</span>
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.icon &amp;&amp; <span class="local-variable">this</span>.icon.length &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.iconres = icon({
+                                <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,
                                 <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
                                 <span class="key">icon</span>: <span class="local-variable">this</span>.icon
@@ -535,6 +548,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.text &amp;&amp; <span class="local-variable">this</span>.text.length &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.buttonres = label({
+                                <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">marginleft</span>:<span class="local-variable">this</span>.iconres?<span class="integer">4</span>:<span class="integer">0</span>,
                                 <span class="comment">//bgcolor:this.bgcolor,</span>
                                 <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,

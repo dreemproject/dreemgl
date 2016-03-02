@@ -916,11 +916,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n762" name="n762">762</a>
 <a href="#n763" name="n763">763</a>
 <a href="#n764" name="n764">764</a>
+<a href="#n765" name="n765">765</a>
+<a href="#n766" name="n766">766</a>
+<a href="#n767" name="n767">767</a>
+<a href="#n768" name="n768">768</a>
+<a href="#n769" name="n769">769</a>
+<strong><a href="#n770" name="n770">770</a></strong>
+<a href="#n771" name="n771">771</a>
+<a href="#n772" name="n772">772</a>
+<a href="#n773" name="n773">773</a>
+<a href="#n774" name="n774">774</a>
+<a href="#n775" name="n775">775</a>
+<a href="#n776" name="n776">776</a>
+<a href="#n777" name="n777">777</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
@@ -965,6 +979,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">_atConstructor</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.view = <span class="local-variable">this</span>.outer
         }
+
         <span class="local-variable">this</span>.set_precision = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.extensions = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -990,8 +1005,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.precision = <span class="string"><span class="delimiter">'</span><span class="content">highp</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.<span class="function">compileHeader</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
                 <span class="comment">// ehm how do we find extensions to enable?</span>
-                <span class="keyword">var</span> ret = <span class="local-variable">this</span>.set_precision?<span class="string"><span class="delimiter">'</span><span class="content">precision </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.precision + <span class="string"><span class="delimiter">'</span><span class="content"> float;</span><span class="content">\n</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                <span class="comment">// Extensions come first.</span>
+                ret += <span class="string"><span class="delimiter">'</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="content">\n</span><span class="delimiter">'</span></span>
+
+                ret += <span class="local-variable">this</span>.set_precision?<span class="string"><span class="delimiter">'</span><span class="content">precision </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.precision + <span class="string"><span class="delimiter">'</span><span class="content"> float;</span><span class="content">\n</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                 <span class="comment">//        'precision ' + this.precision + ' int;'</span>
 
                 <span class="comment">//var ret = ''</span>
@@ -1000,10 +1019,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">//                if(gltypes.extensions[ext] === 1)</span>
         <span class="comment">//                        ret += '\n#extension GL_' + ext + ' : enable'</span>
         <span class="comment">//        }</span>
-                <span class="comment">// Don't add extentions to DALi</span>
-                <span class="keyword">if</span> (define.<span class="predefined">$platform</span> !== <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>) {
-                        ret += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="delimiter">'</span></span>
-                }
         
                 <span class="keyword">return</span> ret + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
         }
@@ -1619,7 +1634,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">var</span> shader = <span class="local-variable">this</span>
                 <span class="keyword">if</span>(define.<span class="predefined">$platform</span> === <span class="string"><span class="delimiter">'</span><span class="content">nodejs</span><span class="delimiter">'</span></span>) <span class="keyword">return</span>
-                <span class="comment">// forward the view reference</span>
+                <span class="comment">// forwar        d the view reference</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.constructor.outer){
                         <span class="local-variable">this</span>.view = <span class="local-variable">this</span>.constructor.outer
                         <span class="local-variable">this</span>.compile()
@@ -1628,13 +1643,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> parts = key.split(<span class="string"><span class="delimiter">'</span><span class="content">_DOT_</span><span class="delimiter">'</span></span>)
                                 <span class="keyword">if</span>(parts.length === <span class="integer">2</span> &amp;&amp; parts[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">view</span><span class="delimiter">'</span></span>){
                                         <span class="keyword">if</span>(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + parts[<span class="integer">1</span>] <span class="keyword">in</span> <span class="local-variable">this</span>.view){
+
                                                 <span class="local-variable">this</span>.view.addListener(parts[<span class="integer">1</span>], <span class="keyword">function</span>(){
                                                         <span class="local-variable">this</span>.redraw()
                                                 })
                                         }
                                 }
                         }
-                        
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.vtx_state.uniforms){
+                                <span class="keyword">var</span> parts = key.split(<span class="string"><span class="delimiter">'</span><span class="content">_DOT_</span><span class="delimiter">'</span></span>)
+                                <span class="keyword">if</span>(parts.length === <span class="integer">2</span> &amp;&amp; parts[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">view</span><span class="delimiter">'</span></span>){
+                                        <span class="keyword">if</span>(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + parts[<span class="integer">1</span>] <span class="keyword">in</span> <span class="local-variable">this</span>.view){
+
+                                                <span class="local-variable">this</span>.view.addListener(parts[<span class="integer">1</span>], <span class="keyword">function</span>(){
+                                                        <span class="local-variable">this</span>.redraw()
+                                                })
+                                        }
+                                }
+                        }
                         <span class="keyword">var</span> name = shader.constructor.name
                         <span class="keyword">function</span> <span class="function">recompile_shader</span>(){
                                 <span class="keyword">var</span> oldcls = <span class="local-variable">this</span>[name]

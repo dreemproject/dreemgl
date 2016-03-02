@@ -283,11 +283,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
 <a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/label</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require){
 <span class="comment">// Text input field</span>
@@ -298,7 +302,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// the color of the cursor</span>
                 <span class="key">cursorcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="predefined-constant">NaN</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// color of the marker</span>
-                <span class="key">markerfocus</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">ocean</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">markerfocus</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">oceanboatblue</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">markerunfocus</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">value</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">readonly</span>:<span class="predefined-constant">false</span>,
@@ -326,7 +330,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         })
         <span class="local-variable">this</span>.cursors = <span class="predefined-constant">true</span>
         <span class="local-variable">this</span>.tabstop = <span class="integer">0</span>
-
+        <span class="local-variable">this</span>.linespacing = <span class="float">1.3</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">markers</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">$system/typeface/markershader.js</span><span class="delimiter">'</span></span>), <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateorder = <span class="integer">6</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">4</span>
@@ -359,11 +363,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">focus</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.shaders || !<span class="local-variable">this</span>.shaders.cursors) <span class="keyword">return</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._focus){
-                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>
+                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly? <span class="predefined-constant">false</span>: <span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerfocus
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.shaders) {
-                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly? <span class="predefined-constant">true</span>: <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerunfocus
                 }
                 <span class="local-variable">this</span>.redraw()
@@ -375,7 +379,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         })
 
-        <span class="local-variable">this</span>.<span class="function">textChanged</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">textChanged</span> = <span class="keyword">function</span>(noredraw){
+
                 <span class="keyword">var</span> string = <span class="local-variable">this</span>.textbuf.serializeText(<span class="integer">0</span>, <span class="local-variable">this</span>.textbuf.lengthQuad())
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.multiline &amp;&amp; (string.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) &gt;= <span class="integer">0</span> || string.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">\r</span><span class="delimiter">'</span></span>) &gt;= <span class="integer">0</span>)) {
                         string = string.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="char">\r</span><span class="char">\n</span><span class="content">|</span><span class="char">\n</span><span class="content">|</span><span class="char">\r</span><span class="content">)</span><span class="delimiter">/</span><span class="modifier">gm</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
@@ -384,7 +389,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.focus = <span class="predefined-constant">false</span>;
                 }
                 <span class="local-variable">this</span>.value = Mark(string)
-                <span class="local-variable">this</span>.relayout()
+                <span class="comment">// this causes a redraw</span>
+                <span class="keyword">if</span>(!noredraw) <span class="local-variable">this</span>.relayout()
         }
 
         <span class="local-variable">this</span>.<span class="function">value</span> = <span class="keyword">function</span>(event){
@@ -394,7 +400,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.redraw()
         }
 
-        <span class="local-variable">this</span>.<span class="function">cursorsChanged</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">cursorsChanged</span> = <span class="keyword">function</span>(noreupdate){
                 <span class="local-variable">this</span>.shaders.cursors.reupdate()
                 <span class="local-variable">this</span>.shaders.markers.reupdate()
         }

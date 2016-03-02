@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-	 You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-	 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-	 either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 // Dreem/Dali server
 require = require('./system/base/define') // support define.js modules
@@ -76,6 +77,8 @@ function main(){
 		console.color('~bc~-restart~~ Auto restarts after crash (Handy for client dev, not server dev)\n')
 		console.color('~bc~-edit~~ Automatically open an exception in your code editor at the right line\n')
 		console.color('~bc~-path~~ [name]:~br~[directory]~~ add a path to the server under name $name\n')
+		console.color('~bc~-dali~~ run a composition in DALi\n')
+		console.color('~bc~-dalilib~~ can be used to point to the DALi node-addon installation folder on Ubuntu (only to be used in combination with the ~bc~-dali~~ flag)\n')
 		return process.exit(0)
 	}
 
@@ -90,12 +93,38 @@ function main(){
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
-		'compositions':'$root/compositions',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
 		'docs':'$root/docs',
 		'test':'$root/test'
 	}
+
+	if(args['-writefile']){
+		Object.defineProperty(define, "$writefile", {
+		    value: true,
+		    writable: false
+		});
+	}
+	else{
+		Object.defineProperty(define, "$writefile", {
+		    value: false,
+		    writable: false
+		});
+	}
+
+	if(args['-unsafe']){
+		Object.defineProperty(define, "$unsafeorigin", {
+			value: true,
+			writable: false
+		});
+	}
+	else{
+		Object.defineProperty(define, "$unsafeorigin", {
+			value: false,
+			writable: false
+		});
+	}
+
 	if(args['-nomoni']){
 		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
 		for(var i = 0; i < paths.length; i++){
@@ -195,7 +224,6 @@ function main(){
 	}
 	else{
 		var RunMonitor = require('$system/server/runmonitor')
-		console.log(typeof RunMonitor)
 		new RunMonitor(args)
 	}
 }

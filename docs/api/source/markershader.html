@@ -264,11 +264,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n110" name="n110">110</a></strong>
 <a href="#n111" name="n111">111</a>
 <a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/shader$platform</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
         <span class="local-variable">this</span>.view = {<span class="key">totalmatrix</span>:mat4(), <span class="key">viewmatrix</span>:mat4(), <span class="key">markercolor</span>:vec4()}
@@ -293,7 +302,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> nx1 = other.z
                 <span class="keyword">var</span> nx2 = other.w
                 <span class="comment">// main shape</span>
-                
+
                 <span class="keyword">var</span> field = shape.roundbox(rel, <span class="integer">0</span>,<span class="integer">0</span>, rect.z, rect.w, border_radius)
                 <span class="keyword">if</span>(px1 != px2){
                         <span class="keyword">var</span> field2 = shape.roundbox(rel, px1 - rect.x, -rect.w, px2 - px1, rect.w, border_radius)
@@ -303,7 +312,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> field2 = shape.roundbox(rel, nx1 - rect.x, rect.w, nx2 - nx1, rect.w, border_radius)
                         field = shape.smoothpoly(field, field2, gloop)
                 }
-                
+
                 <span class="comment">//dump = field</span>
                 <span class="comment">//field = marker_style(field, pos)</span>
                 <span class="keyword">var</span> alpha = smoothstep(edge, -edge, field)
@@ -332,19 +341,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets access the textbuf geometry</span>
                         <span class="keyword">var</span> length = textbuf.lengthQuad()
                         <span class="keyword">if</span>(end &gt; length) end = length
-
+                        <span class="keyword">var</span> min = <span class="predefined-constant">Infinity</span>
+                        <span class="comment">//if(textbuf.charCodeAt(start) === 10) start--</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> o = start, last = o; o &lt; end; o++){
                                 ch = textbuf.charCodeAt(o)
+                                <span class="comment">//next = textbuf.charCodeAt(o+1)</span>
                                 <span class="keyword">if</span>(o == end - <span class="integer">1</span> || ch == <span class="integer">10</span>){
                                         <span class="keyword">var</span> r = textbuf.cursorRect(last)
-                                        <span class="keyword">var</span> x = (o + <span class="integer">1</span>) == length || ch == <span class="integer">10</span>? textbuf.char_tr_x(o): textbuf.char_tl_x(o+<span class="integer">1</span>)
-                                        r.start = last
+                                        <span class="keyword">var</span> r2 = textbuf.cursorRect(o)
+                                        <span class="keyword">var</span> x = ch === <span class="integer">10</span>? r2.x: r2.x + r2.w;<span class="comment">//ch === 10? textbuf.char_tl_x(o-1): textbuf.char_tr_x(o)</span>
+                                        r.start = last + <span class="integer">1</span>
                                         r.end = o
+                                        <span class="keyword">if</span>(r.x &lt; min) min = r.x
+                                        r.x = min
                                         r.w = x - r.x
+                                        <span class="keyword">if</span>(r.w &lt; <span class="integer">4</span>) r.w = <span class="integer">4</span>
                                         r.x2 = r.x + r.w
                                         r.y2 = r.y + r.h
                                         r.y += deltay
                                         r.y2 += deltay
+
                                         <span class="comment">// check if the previous item is on the same r.y</span>
                                         <span class="comment">// ifso fuse it with this marker</span>
                                         <span class="keyword">var</span> prev = array[array.length -<span class="integer">1</span>]
@@ -373,10 +389,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         )
                 }
         })
-        
+
         <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array()
-        <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">ocea</span><span class="delimiter">&quot;</span></span>);
-})</pre></td>
+        <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">oceanboatblue</span><span class="delimiter">&quot;</span></span>);
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$ui/view', function(icon, label){
@@ -66,10 +67,6 @@ define.class('$ui/view', function(icon, label){
 		}
 	}
 
-	this.onclick = function(){
-		this.value  = this.value?false:true;
-	}
-
 	this.hardrect = {
 		color: function(){
 			return mix(view.col1, view.col2, (uv.y)/0.8)
@@ -94,7 +91,7 @@ define.class('$ui/view', function(icon, label){
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
 
-		this.value  = this.value?false:true;
+		this.value  = !(this.value);
 	}
 
 	this.init = function(){
@@ -117,20 +114,21 @@ define.class('$ui/view', function(icon, label){
 		var cb = [];
 
 		cb.push(icon({
-			fgcolor:(this.value ? this.fgcolor : this.inactivecolor),
+			fgcolor:(!!(this.value) ? this.fgcolor : this.inactivecolor),
 			icon: this.icon,
-			bgcolor:"white",
-			hardrect:{pickonly:true}
+			fontsize:this.fontsize,
+			bgcolor:"transparent",
+			drawtarget:"color"
 		}));
 
 		if (this.text) {
 			cb.push(label({
-				bgcolor:"white",
-				hardrect:{pickonly:true},
+				bgcolor:NaN,
+				drawtarget:"color",
 				padding:vec4(10,0,0,0),
 				text:this.text,
 				fontsize:this.fontsize,
-				fgcolor:(this.value ? this.textactivecolor : this.textcolor)
+				fgcolor:(!!(this.value) ? this.textactivecolor : this.textcolor)
 			}))
 		}
 

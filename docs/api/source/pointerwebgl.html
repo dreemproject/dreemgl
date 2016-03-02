@@ -289,24 +289,60 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n135" name="n135">135</a>
 <a href="#n136" name="n136">136</a>
 <a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">// Pointerwebgl adds mouse and touch listeners and connectes them pointer.js API.</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/pointer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, exports){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/pointer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, exports) {
 
         <span class="local-variable">this</span>._cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>._tooltip = <span class="string"><span class="delimiter">'</span><span class="content">Application</span><span class="delimiter">'</span></span>
 
         Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursor</span><span class="delimiter">'</span></span>, {
-                <span class="function">get</span>:<span class="keyword">function</span>(){
+                <span class="function">get</span>:<span class="keyword">function</span>() {
                         <span class="keyword">return</span> <span class="local-variable">this</span>._cursor
                 },
-                <span class="function">set</span>:<span class="keyword">function</span>(value){
+                <span class="function">set</span>:<span class="keyword">function</span>(value) {
                         <span class="local-variable">this</span>._cursor = value
                         <span class="keyword">if</span> (value === <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>) value = <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
                         <span class="local-variable">this</span>.device.keyboard.textarea.style.cursor =
@@ -314,12 +350,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         })
 
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(device){
-
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(device) {
                 <span class="local-variable">this</span>.device = device
-
                 <span class="comment">// Internal: creates pointer array with a single pointer from mouse event data.</span>
-                <span class="keyword">var</span> <span class="function">mouseToPointers</span> = <span class="keyword">function</span> (event) {
+                <span class="keyword">var</span> <span class="function">mouseToPointers</span> = <span class="keyword">function</span> (event, wheelx, wheely) {
                         <span class="keyword">return</span> [{
                                 <span class="key">value</span>: vec2(event.pageX, event.pageY),
                                 <span class="key">position</span>: vec2(event.pageX, event.pageY),
@@ -328,7 +362,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">alt</span>: event.altKey,
                                 <span class="key">ctrl</span>: event.ctrlKey,
                                 <span class="key">meta</span>: event.metaKey,
-                                <span class="key">wheel</span>: vec2(event.deltaX, event.deltaY),
+                                <span class="key">wheel</span>: vec2(wheelx, wheely),
                                 <span class="key">touch</span>: <span class="predefined-constant">false</span>
                         }]
                 }.bind(<span class="local-variable">this</span>)
@@ -352,7 +386,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Internal: handler for `mousedown` event starts `mousemove` listening.</span>
-                <span class="local-variable">this</span>.<span class="function">mousedown</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">mousedown</span> = <span class="keyword">function</span>(e) {
+
+                        <span class="local-variable">this</span>.device.keyboard.checkSpecialKeys(e)
+
                         e.preventDefault()
                         <span class="local-variable">this</span>.setstart(mouseToPointers(e))
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
@@ -364,19 +401,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                 }
+
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousedown</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.mousedown.bind(<span class="local-variable">this</span>))
 
                 <span class="comment">// Internal: handler for `mousemove` event.</span>
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(e) {
+                        <span class="local-variable">this</span>.device.keyboard.checkSpecialKeys(e)
                         e.preventDefault()
                         <span class="local-variable">this</span>.setmove(mouseToPointers(e))
                 }
                 <span class="local-variable">this</span>._mousemove = <span class="local-variable">this</span>.mousemove.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Internal: handler for `mousedown` event stops `mousemove` listening.</span>
-                <span class="local-variable">this</span>.<span class="function">mouseup</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">mouseup</span> = <span class="keyword">function</span>(e) {
+
+                        <span class="comment">//console.log(e.button)</span>
+                        <span class="keyword">if</span>(e.button === <span class="integer">2</span>) <span class="local-variable">this</span>.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
+                        <span class="comment">//this.device.keyboard.checkSpecialKeys(e)</span>
+
                         e.preventDefault()
+
                         <span class="local-variable">this</span>.setend(mouseToPointers(e))
+
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
@@ -389,7 +435,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._mouseup = <span class="local-variable">this</span>.mouseup.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Internal: handler for `mousemove` for the purpose of hover tracking.</span>
-                <span class="local-variable">this</span>.<span class="function">mousehover</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">mousehover</span> = <span class="keyword">function</span>(e) {
                         e.preventDefault()
                         <span class="local-variable">this</span>.sethover(mouseToPointers(e))
                 }
@@ -397,33 +443,57 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousehover)
 
                 <span class="comment">// Internal: handler for `touchstart` event.</span>
-                <span class="local-variable">this</span>.<span class="function">touchstart</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">touchstart</span> = <span class="keyword">function</span>(e) {
                         e.preventDefault()
                         <span class="local-variable">this</span>.setstart(touchToPointers(e))
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchstart</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchstart.bind(<span class="local-variable">this</span>))
 
                 <span class="comment">// Internal: handler for `touchmove` event.</span>
-                <span class="local-variable">this</span>.<span class="function">touchmove</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">touchmove</span> = <span class="keyword">function</span>(e) {
                         e.preventDefault()
                         <span class="local-variable">this</span>.setmove(touchToPointers(e))
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchmove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchmove.bind(<span class="local-variable">this</span>))
 
                 <span class="comment">// Internal: handler for `touchend` event.</span>
-                <span class="local-variable">this</span>.<span class="function">touchend</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.<span class="function">touchend</span> = <span class="keyword">function</span>(e) {
                         <span class="local-variable">this</span>.setend(touchToPointers(e))
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchend.bind(<span class="local-variable">this</span>))
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchcancel</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchend.bind(<span class="local-variable">this</span>))
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchleave</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchend.bind(<span class="local-variable">this</span>))
 
-                <span class="comment">// Internal: handler for `wheel` event. Sets the wheel or zoom attribute/event.</span>
-                <span class="local-variable">this</span>.<span class="function">wheelmove</span> = <span class="keyword">function</span>(e){
+                <span class="comment">// scrollwheel fun</span>
+                <span class="comment">// the different platforms</span>
+                <span class="keyword">var</span> is_osx = navigator.userAgent.indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">Macintosh</span><span class="delimiter">&quot;</span></span>) &gt; -<span class="integer">1</span>
+                <span class="keyword">var</span> is_windows = navigator.appVersion.indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">Win</span><span class="delimiter">&quot;</span></span>) &gt; -<span class="integer">1</span>
+                <span class="keyword">var</span> is_gecko = <span class="string"><span class="delimiter">'</span><span class="content">MozAppearance</span><span class="delimiter">'</span></span> <span class="keyword">in</span> document.documentElement.style
+                <span class="keyword">var</span> is_chrome = navigator.userAgent.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">Chrome</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
+
+                document.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">wheel</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(e) {
                         e.preventDefault()
-                        <span class="local-variable">this</span>.setwheel(mouseToPointers(e))
-                }
-                document.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">wheel</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.wheelmove.bind(<span class="local-variable">this</span>))
+
+                        <span class="keyword">var</span> d = vec2(e.deltaX, e.deltaY)
+
+                        <span class="comment">// line scroll</span>
+                        <span class="keyword">if</span> (e.deltaMode === <span class="integer">1</span>) {
+                                vec2.mul_float32(d, <span class="integer">6</span>, d)
+                        }
+
+                        <span class="comment">// page scroll</span>
+                        <span class="keyword">else</span> <span class="keyword">if</span> (e.deltaMode === <span class="integer">2</span>) {
+                                vec2.mul_float32(d, <span class="integer">400</span>, d)
+                        }
+
+                        <span class="keyword">if</span> (is_osx) {}
+
+                        <span class="keyword">else</span> <span class="keyword">if</span> (is_windows) {
+                                vec2.mul_float32(d, <span class="float">0.125</span>, d)
+                        }
+
+                        <span class="local-variable">this</span>.setwheel(mouseToPointers(e, d[<span class="integer">0</span>], d[<span class="integer">1</span>]))
+                }.bind(<span class="local-variable">this</span>))
         }
 
 })

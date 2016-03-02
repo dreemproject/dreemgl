@@ -1,65 +1,99 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function (events, $ui$, view, scrollbar) {
+define.class('$ui/view', function () {
 
 	this.fgcolor = 'black'
 
 	this.attributes = {
-		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
-		scroll: wire('this.parent.scroll'),
-		hoursegs: Config({type: Number, value: 24})
+		zoom: Config({type: Number, value: 1}),
+		scroll: Config({type: vec2, value: vec2()}),
+		hoursegs: Config({type: Number, value: 24}),
+		segments: Config({type: vec3, value: vec3()})
 	}
 
 	this.layout = function(){
 		this.layout.top = 0
+		this.layout.width = this.parent.layout.width
 		this.layout.height = this.parent.layout.height
 	}
 
+	// Data-binding is buggy. set values at draw.
+	this.atDraw = function () {
+		this.zoom = this.parent._zoom
+		this.scroll = this.parent._scroll
+		this.segments = this.parent._segments
+		this.hoursegs = this.parent._hoursegs
+	}
+
 	this.hardrect = function(){
-		this.makepattern = function (field, repeat, zoom) {
-			var f = field * repeat
-			if (mod(f, 1.0) < 1.0 / view.layout.width * zoom * repeat) {
-				return 0.75
-			} else if (math.odd(f - mod(f, 1.0))) {
-				return 1.0
-			} else {
-				return 0.9
+		var array = new Float32Array(4 * 2048)
+		this.caltexture = this.Texture.fromArray(array, 2048, 1)
+
+		this.update = function () {
+			var array = new Float32Array(4 * 2048)
+			var start = this.view.parent.getStart()
+			for(var i = 0; i < array.length / 4; i++) {
+				var day = new Date(start + i * 86400000)
+				array[i * 4 + 0] = day.getDate()
+				array[i * 4 + 1] = day.getDay()
+				array[i * 4 + 2] = day.getMonth()
+				array[i * 4 + 3] = day.getFullYear()
 			}
+
+			this.caltexture = this.Texture.fromArray(array, 2048, 1)
+			this.caltexture.updateid = random()
 		}
+
+		this.makepattern = function (field1, field2) {
+			if (field1 != field2) return 1.0
+			return 0.0
+		}
+
+		this.pickpattern = function (val, year, month, weekp, day, hour, minute) {
+			if (val == 1.0) return year
+			else if (val == 2.0) return month
+			else if (val == 3.0) return weekp
+			else if (val == 4.0) return day
+			else if (val == 5.0) return hour
+			else if (val == 6.0) return minute
+			return 0.0;
+		}
+
+
 		this.color = function(){
-			var col = vec4()
-			var fill = vec4(0.098, 0.098, 0.098, 1)
+			var fgcolor = vec4("#ffffff")
+			var bgcolor = vec4("#4e4e4e")
 			var a = 24.0 / view.layout.height
 			var b = 48.0 / view.layout.height
-			var c = 72.0 / view.layout.height
-			// horizontal dividers
-			if (abs(uv.y - a) < 0.5 / view.layout.height ||
-			abs(uv.y - b) < 0.5 / view.layout.height ||
-			abs(uv.y - c) < 0.5 / view.layout.height) {
-				return vec4(0.75, 0.75, 0.75, 1.0)
-			}
-			var zoom = view.zoom
-			var dayfield = (uv.x + view.scroll.x) * view.zoom
-			var hour = makepattern(dayfield, view.hoursegs, zoom)
-			var day = makepattern(dayfield, 1, zoom)
-			var week = makepattern(dayfield, 1.0 / 7, zoom) // TODO: breaks without point!
-			var month = makepattern(dayfield, 1.0 / 31, zoom)
-			var pattern = week;
-			if (uv.y < a) {
-				pattern = month
-			} else if (uv.y < b) {
-				pattern = week * day
-			} else if (uv.y < c) {
-				pattern = hour
-			} else {
-				pattern = hour
-				fill = vec4(0.8, 0.8, 0.8, 1)
-			}
-			// TODO(aki): crossfade patterns
-			return mix(fill, 'white', pattern)
+
+			var dayfield1 = (uv.x + view.scroll.x) * view.zoom
+			var dayfield2 = (uv.x + 1.0 / view.layout.width + view.scroll.x) * view.zoom
+			var caldata1 = this.caltexture.point(vec2(dayfield1 / 2048, 0.0)) * 255.0
+			var caldata2 = this.caltexture.point(vec2(dayfield2 / 2048, 0.0)) * 255.0
+
+			var year = makepattern(caldata1.a, caldata2.a)
+			var month = makepattern(caldata1.b, caldata2.b)
+			var week = makepattern(floor(dayfield1 / 7.0), floor(dayfield2 / 7.0))
+			var day = makepattern(floor(dayfield1), floor(dayfield2))
+			var hour = makepattern(floor(dayfield1 * view.hoursegs), floor(dayfield2 * view.hoursegs))
+			var minute = makepattern(floor(dayfield1 * 96.0), floor(dayfield2 * 96.0))
+
+			var color = vec4("#4e4e4e")
+			var pattern = 0.0
+
+			pattern += pickpattern(view.segments.x, year, month, week, day, hour, minute)
+			if (uv.y > a)
+				pattern = max(pattern, 0.5 * pickpattern(view.segments.y, year, month, week, day, hour, minute))
+				color = mix(bgcolor, fgcolor, pattern)
+			if (uv.y > b)
+				pattern = max(pattern, 0.25 * pickpattern(view.segments.z, year, month, week, day, hour, minute))
+				color = mix(bgcolor, fgcolor, pattern)
+
+			return color
 		}
 	}
 

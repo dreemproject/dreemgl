@@ -1,36 +1,54 @@
 [
   {
-    "title": "Dreem Guides",
+    "title": "DreemGL Guides",
     "items": [
       {
         "name": "dreem_in_10_part1",
         "url": "guides/dreem_in_10",
-        "title": "Dreem in 10 - Part 1",
-        "description": "This guide gets developers with JavaScript experience up and running writing their first Dreem applications."
+        "title": "DreemGL in 10 Minutes",
+        "description": "Start with this introduction to the DreemGL toolkit."
       },
       {
-        "name": "flexbox",
-        "url": "guides/flexbox",
-        "title": "Flexbox Layout in Dreem",
-        "description": "Introduction to the Flexbox based layout system in Dreem."
+        "name": "flexbox_part1",
+        "url": "guides/flexbox-part1",
+        "title": "Flexbox Layout in DreemGL Part 1",
+        "description": "Introduction to the Flebox-based layout system in DreemGL."
+      },
+      {
+        "name": "flexbox_part2",
+        "url": "guides/flexbox-part2",
+        "title": "Flexbox Layout in DreemGL Part 2",
+        "description": "Introduction to the Flebox-based layout system in DreemGL."
+      },
+      {
+        "name": "devguide",
+        "url": "guides/developer_guide",
+        "title": "Developer's Guide to DreemGL",
+        "description": "A technical guide meant for developer's building applications and extending DreemGL"
       },
       {
         "name": "components",
         "url": "guides/components",
-        "title": "Extending DreemGL",
-        "description": "Adding DreemGL Components"
+        "title": "DreemGL IoT Guide",
+        "description": "A guide for extending DreemGL with new services, devices and other components."
       },
       {
         "name": "toolkit",
         "url": "guides/toolkit",
-        "title": "DreemGL Visual Toolkit",
-        "description": "Using the DreemGL Visual Toolkit"
+        "title": "DreemGL Visual Layout Toolkit",
+        "description": "A guide for designer's using the layout toolkit to prototype screen designs and interactions."
+      },
+      {
+        "name": "dali_runtime",
+        "url": "guides/dali",
+        "title": "DreemGL DALi Runtime Guide",
+        "description": "A guide describing the prerequisties and how to run DreemGL applications in DALi."
       },
       {
         "name": "appendix",
         "url": "guides/appendix",
         "title": "DreemGL Appendix",
-        "description": "The DreemGL Appendix"
+        "description": "A reference appendix containing a list of predefined values or constants used in DreemGL."
       }
     ]
   }

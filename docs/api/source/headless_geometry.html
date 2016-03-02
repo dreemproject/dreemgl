@@ -514,11 +514,52 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n360" name="n360">360</a></strong>
 <a href="#n361" name="n361">361</a>
 <a href="#n362" name="n362">362</a>
+<a href="#n363" name="n363">363</a>
+<a href="#n364" name="n364">364</a>
+<a href="#n365" name="n365">365</a>
+<a href="#n366" name="n366">366</a>
+<a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
+<strong><a href="#n370" name="n370">370</a></strong>
+<a href="#n371" name="n371">371</a>
+<a href="#n372" name="n372">372</a>
+<a href="#n373" name="n373">373</a>
+<a href="#n374" name="n374">374</a>
+<a href="#n375" name="n375">375</a>
+<a href="#n376" name="n376">376</a>
+<a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
+<a href="#n382" name="n382">382</a>
+<a href="#n383" name="n383">383</a>
+<a href="#n384" name="n384">384</a>
+<a href="#n385" name="n385">385</a>
+<a href="#n386" name="n386">386</a>
+<a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
+<a href="#n391" name="n391">391</a>
+<a href="#n392" name="n392">392</a>
+<a href="#n393" name="n393">393</a>
+<a href="#n394" name="n394">394</a>
+<a href="#n395" name="n395">395</a>
+<a href="#n396" name="n396">396</a>
+<a href="#n397" name="n397">397</a>
+<a href="#n398" name="n398">398</a>
+<a href="#n399" name="n399">399</a>
+<strong><a href="#n400" name="n400">400</a></strong>
+<a href="#n401" name="n401">401</a>
+<a href="#n402" name="n402">402</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-         Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-         either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -844,8 +885,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">// Update an existing buffer using setData</span>
                         HeadlessApi.writeHeadlessBuffer(buffer, bufferindex, data)
                 }
-
-
         }
 
 
@@ -870,7 +909,48 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">headlessgeometry</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id;
         }
 
+        <span class="local-variable">this</span>.<span class="function">currentstate</span> = <span class="keyword">function</span>(verbose) {
+
+                <span class="keyword">var</span> states = [];
+
+                <span class="keyword">if</span> (!HeadlessApi.isShown(<span class="local-variable">this</span>.name())) {
+                        <span class="comment">// Sort the vertex_buffers </span>
+                        <span class="keyword">var</span> vertex_data = []
+                        <span class="keyword">var</span> keys = Object.keys(<span class="local-variable">this</span>.vertex_buffers).sort();
+
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> keys) {
+                                <span class="comment">// Decompose the stored vertex_buffer data</span>
+                                <span class="keyword">var</span> obj = <span class="local-variable">this</span>.vertex_buffers[keys[i]];
+                                <span class="keyword">var</span> buffer = obj[<span class="integer">3</span>]
+                                <span class="keyword">var</span> type = buffer.format;
+                                
+                                <span class="keyword">var</span> data = buffer.data;
+                                <span class="keyword">var</span> values = []
+                                <span class="keyword">for</span> (<span class="keyword">var</span> j <span class="keyword">in</span> data) {
+                                        <span class="comment">// No more than 4 decimal places</span>
+                                        values.push(parseFloat(data[j].toFixed(<span class="integer">4</span>)));
+                                }
+
+                                <span class="keyword">var</span> vertex = [type, values];
+                                vertex_data.push(vertex);
+                        }
+
+                        <span class="keyword">var</span> state = [
+                                {<span class="key">name</span>: <span class="local-variable">this</span>.name()}
+                                ,{<span class="key">type</span>: <span class="local-variable">this</span>.geometryType}
+                                ,{<span class="key">vertex_buffers</span>: vertex_data}
+                        ]
+
+                        states = [state];
+                        HeadlessApi.shownObject(<span class="local-variable">this</span>.name());
+                }
+
+                <span class="keyword">return</span> states;
+        }
+
         <span class="local-variable">this</span>.<span class="function">inspect</span> = <span class="keyword">function</span>(depth) {
+                <span class="comment">//HACK</span>
+                <span class="local-variable">this</span>.currentstate();
                 <span class="keyword">var</span> obj = {<span class="key">headlessGeometry</span>: <span class="local-variable">this</span>.id};
                 <span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>)
                 <span class="keyword">return</span> util.inspect(obj, {<span class="key">depth</span>: <span class="predefined-constant">null</span>});

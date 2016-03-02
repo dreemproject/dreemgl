@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 // Micro AMD module loader for browser and node.js and basic system homogenisation library
 
@@ -10,7 +11,7 @@
 // not a web-facing backend.
 // dreemGL is not optimized to be a neat NPM module, fit into browserify or express or otherwise
 // be a grab-and-use JS thing that respects the constraints that this would require.
-// Also any nodejs code is NOT deploy-safe because of the automatic RPC system and should 
+// Also any nodejs code is NOT deploy-safe because of the automatic RPC system and should
 // NOT be put webfacing as is.
 // And since it keeps websocket connections to all clients for live reloading
 // and RPC, it will rapidly stop working if faced with any large number of connections.
@@ -22,10 +23,10 @@
 // dreemGL is a prototyping toolkit, and aimed at quickly being able to do certain things
 // having globals helps there and most have been carefully chosen to be global.
 // Also all the math things are global, in math.js to be more GLSL-like in JS.
-// The prototypes of Float32Array are modified to add the GLSL swizzle (.xyxy) apis.	
+// The prototypes of Float32Array are modified to add the GLSL swizzle (.xyxy) apis.
 // The nodeJS Module loader is hooked to allow for loading the custom AMD extension
-// you see in dreemGL, which fuses classes with modules. And this may have some 
-// compatibility repercussions for some modules that assume 'define' works a certain way 
+// you see in dreemGL, which fuses classes with modules. And this may have some
+// compatibility repercussions for some modules that assume 'define' works a certain way
 // If you need to require nodejs modules using the require provided by define,
 // use require('module') dont use './' or '/' these are interpreted as define.js modules
 // The browser require will ignore require('module') so if you stick to a clean
@@ -33,7 +34,7 @@
 // All these choices are to support the design goals of dreemGL some of which are:
 // - be a low cognitive overhead prototyping toolkit
 // - symmetrical loading of the entire 'app' in both nodejs and browser for automatic
-//   rpc interface handling 
+//   rpc interface handling
 // - low jank, all rendering in JS (the timeline is super important here)
 // - do not transcompile anything and run in browser and node with same files
 // - optimized live editability and reloading of all class hierarchy parts (thats the reason
@@ -41,7 +42,7 @@
 
 (function define_module(){
 
-	var config_define 
+	var config_define
 	if(typeof window !== 'undefined') config_define =  window.define
 	else if(typeof self !== 'undefined') config_define = self.define
 	else if(typeof global !== 'undefined') global.define
@@ -56,10 +57,16 @@
 		// continue calling
 		if(define.define) define.define(factory)
 	}
-	
+
 	if(typeof window !== 'undefined') window.define = define, define.$environment = 'browser'
 	else if(typeof self !== 'undefined') self.define = define, define.$environment = 'worker'
-	else if (typeof global !== 'undefined') global.define = define, define.$environment = 'nodejs'
+	else if (typeof global !== 'undefined'){
+		Object.defineProperty(global, "define", {
+		    value: define,
+		    writable: false
+		})
+		define.$environment = 'nodejs'
+	}
 	else define.$environment = 'v8'
 
 	// default config variables
@@ -148,6 +155,24 @@
 		return define.cleanPath(base.join('/') + '/' + relative)
 	}
 
+	// constrain the path to any $symbol/ directory
+	define.safePath = function(name){
+		name = name.replace(/\\/g,'/')
+		var id = name.indexOf('..')
+		if(id !== -1){
+			var base = name.slice(0,id)
+			var rel= name.slice(id)
+			var path = define.joinPath(base, rel)
+			if(path.indexOf('..') !== -1) return undefined
+			if(path.indexOf('./') !== -1) return undefined
+			if(path.charAt(0)!=='$') return undefined
+			return path
+		}
+		if(name.charAt(0) !== '$') return undefined
+		if(name.indexOf('./') !== -1) return undefined
+		return name
+	}
+
 	define.expandVariables = function(str){
 		return define.cleanPath(str.replace(/(\$[a-zA-Z0-9]+[a-zA-Z0-9]*)/g, function(all, lut){
 			if(!(lut in define)) throw new Error("Cannot find " + lut + " used in require")
@@ -157,10 +182,10 @@
 
 	define.lookupFileType = function(type){
 		type = type.toLowerCase()
-		
+
 		if(type === 'json')	return 'json'
 		if(type === 'txt' || type === 'obj' || type === 'text' || type === 'md') return 'text'
-		
+
 		return 'arraybuffer'
 	}
 
@@ -185,7 +210,8 @@
 			var path = define.expandVariables(define['$'+key])
 			if(fn.indexOf(path) === 0){
 				// Return the class path as a symbol base
-				return define.filePath('$'+key+fn.slice(path.length)) + '/'
+				var ext = fn.slice(path.length)
+				return define.filePath('$'+key+(ext.charAt(0)!=='/'?'/':'')+ext) + '/'
 			}
 		}
 	}
@@ -260,10 +286,17 @@
 			return module.exports
 		}
 
+		require.loaded = function(path, ext){
+			var dep_path = define.joinPath(base_path, define.expandVariables(path))
+			if(define.factory[dep_path]){
+				return true
+			}
+		}
+
 		require.async = function(path, ext){
 			var dep_path = define.joinPath(base_path, define.expandVariables(path))
 			return new define.Promise(function(resolve, reject){
-				if(define.factory[path]){
+				if(define.factory[dep_path]){
 					// if its already asynchronously loading..
 					var module = require(path, ext)
 					return resolve(module)
@@ -282,7 +315,7 @@
 				define.reload_id++
 
 				// lets wipe the old module
-				var old_module = define.module[path] 
+				var old_module = define.module[path]
 				var old_factory = define.factory[path]
 
 				define.module[path] = define.factory[path] = undefined
@@ -303,7 +336,7 @@
 								// try to wipe all modules that depend our this one
 								wipe_module(key)
 							}
-						}							
+						}
 					}
 					wipe_module(path)
 
@@ -325,9 +358,9 @@
 
 	define.findRequiresInFactory = function(factory, req){
 		var search = factory.toString()
-		
+
 		if(factory.body) search += '\n' + factory.body.toString()
-		if(factory.depstring) search += '\n' + factory.depstring.toString()		
+		if(factory.depstring) search += '\n' + factory.depstring.toString()
 
 		req = req || []
 		// bail out if we redefine require
@@ -336,7 +369,7 @@
 		}
 
 		search.replace(/\/\*[\s\S]*?\*\//g,'').replace(/([^:]|^)\/\/[^\n]*/g,'$1').replace(/require\s*\(\s*["']([^"']+)["']\s*\)/g, function(m,path){
-			
+
 			req.push(path)
 		})
 
@@ -354,17 +387,17 @@
 
 	define.buildClassArgs = function(fn){
 		// Ideally these regexps are better, not vastly slower but maybe proper specwise matching for stuff, its a bit rough now
-		// This is otherwise known as a 'really bad idea'. However this makes the modules work easily, with a relatively small collision risk.		
+		// This is otherwise known as a 'really bad idea'. However this makes the modules work easily, with a relatively small collision risk.
 		var str = fn.toString()
 
 		str = str.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
-		
+
 		var result;
 		var output = []
 		var result = str.match(/function\s*[$_\w]*\s*\(([$_\w,\s]*)\)/)
 
 		var map = result[1].split(/\s*,\s*/)
-		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].toLowerCase().trim())
+		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].trim())
 
 		// now fetch all the fast classdeps
 		var matchrx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:(?:['"][[^"']+['"]|[$_\w]+)\s*,\s*)?function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
@@ -372,7 +405,7 @@
 		while((result = matchrx.exec(str)) !== null) {
 			output.push('$$')
 			var map = result[1].split(/\s*,\s*/)
-			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i].toLowerCase())
+			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i])
 		}
 
 		return output
@@ -414,10 +447,6 @@
 			}
 			if(arg === '$$'){
 				path = './'
-			}
-			else if(arg === '$$$'){
-				// we have to rip something off path
-				path = define.filePath(path)
 			}
 			else if(arg.charAt(0) === '$'){
 				if(arg.charAt(arg.length - 1) === '$'){ // $blabla$
@@ -507,7 +536,7 @@
 
 			return obj
 		}
-		
+
 		if(define.debug){
 			var fnname
 			if(in_name){
@@ -533,7 +562,7 @@
 		}
 		else{
 			var Constructor = MyConstructor
-		}		
+		}
 
 		var final_at_extend = Array.isArray(body)? body: []
 
@@ -571,7 +600,7 @@
 			if(module){
 				if(body && body.mixin) module.exports = Constructor.prototype
 				else module.exports = Constructor
-				
+
 				Object.defineProperty(Constructor, 'module', {value:module})
 
 				define.applyBody(body, Constructor, baseclass, require)
@@ -646,7 +675,7 @@
 			Object.defineProperty(outer_this, classname, {
 				get:function(){
 					var cls = this['_' + classname]
-					if(cls) cls.outer = this 
+					if(cls) cls.outer = this
 					return cls
 				},
 				set:function(value){
@@ -663,7 +692,7 @@
 						this['_' + classname] = value
 						return
 					}
-					// otherwise use it as an extend 
+					// otherwise use it as an extend
 					var cls = this['_' + classname]
 					// ok so the problem here is, that if we are inherited
 					this['_' + classname] = cls.extend(value, this)
@@ -728,14 +757,14 @@
 			var outer_module = outer_require.module
 			var module = {exports:{}, filename:outer_module.filename, factory:moduleFactory, outer:outer_module}
 			moduleFactory(outer_require, module.exports, module)
-			
+
 			if(outer_this){
 				outer_this['_' + classname] = module.exports
 				if(outer_this.atInnerClassAssign) outer_this.atInnerClassAssign(classname, module.exports)
 				if(!outer_this.hasOwnProperty('_inner_classes')) outer_this._inner_classes = Object.create(outer_this._inner_classes || {})
 				outer_this._inner_classes[classname] = module.exports
 			}
-	
+
 			return module.exports
 		}
 		//if(typeof arguments[arguments.length - 1] == 'string'){ // packaged
@@ -978,10 +1007,8 @@
 
 
 
-
-	if(define.packaged){
+	function define_packaged(){
 		define.require = define.localRequire('')
-
 	}
 
 
@@ -999,8 +1026,8 @@
 
 
 
-	else if(typeof window !== 'undefined')(function(){ // browser implementation
-		
+	function define_browser(){ // browser implementation
+
 		// if define was already defined use it as a config store
 		// storage structures
 		define.cputhreads = navigator.hardwareConcurrency || 2
@@ -1028,7 +1055,7 @@
 				}
 
 				if(define.reload_id) abs_url += '?' + define.getReloadID()
-					
+
 				if(module_deps && module_deps.indexOf(fac_url) === -1) module_deps.push(fac_url)
 
 				if(define.factory[fac_url]) return new define.Promise(function(resolve){resolve()})
@@ -1043,7 +1070,7 @@
 				if(ext === 'js'){
 					prom = loadScript(fac_url, abs_url, from_file)
 				}
-				else if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){		
+				else if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 					prom = loadImage(fac_url, abs_url, from_file)
 				}
 				else  prom = loadXHR(fac_url, abs_url, from_file, ext)
@@ -1087,7 +1114,7 @@
 							}
 							var blob = define.processFileType(type, req.response)
 							define.factory[facurl] = blob
-							
+
 							// do a post process on the file type
 							resolve(blob)
 						}
@@ -1099,10 +1126,10 @@
 			// insert by script tag
 			function loadScript(facurl, url, from_file){
 				return new define.Promise(function(resolve, reject){
-		
+
 					var script = document.createElement('script')
 					var base_path = define.filePath(url)
-						
+
 					define.script_tags[location.origin + url] = script
 
 					script.type = 'text/javascript'
@@ -1148,7 +1175,7 @@
 						})
 					}
 
-					script.onerror = function(exception, path, line){ 
+					script.onerror = function(exception, path, line){
 						var error = "Error loading " + url + " from " + from_file
 						console.error(error)
 						this.rejected = true
@@ -1193,7 +1220,7 @@
 			// lets append the div
 			var div = define.exception_div = document.createElement('div')
 			div.style.cssText ='position:absolute;left:10;top:10;padding:30px;background-color:white;border-radius:10px;border:2px dotted #ffc0c0;color:#202020;margin:20px;margin-left:20px;font-size:14pt;font-family:arial, helvetica;'
-			
+
 			div.innerHTML = "<b>DreemGL has encountered a problem!</b><br/>"+exc.error+"<br/><div>"+exc.exception+"<br/><br/><div style='color:black'><a href='view-source:"+exc.path+"#"+exc.line+"'>in "+exc.path+" on line "+exc.line+"</a></div>"
 			document.body.appendChild(div)
 		}
@@ -1257,7 +1284,7 @@
 				}
 				else if (msg.type === 'close') {
 					window.close() // close the window
-				} 
+				}
 				else if (msg.type === 'delay') { // a delay refresh message
 					console.log('Got delay refresh from server!');
 					setTimeout(function() {
@@ -1268,7 +1295,7 @@
 			}
 		}
 		define.autoreloadConnect()
-	})()
+	}
 
 
 
@@ -1287,7 +1314,7 @@
 
 
 
-	else if(typeof process !== 'undefined')(function(){ // nodeJS implementation
+	function define_nodejs(){ // nodeJS implementation
 		module.exports = global.define = define
 
 		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
@@ -1339,7 +1366,7 @@
 						port: myurl.port,
 						path: myurl.path,
 						headers:headers
-					}, 
+					},
 					function(res){
 						//console.log(res)
 						if(res.statusCode === 200){
@@ -1371,7 +1398,7 @@
 		var Module = require("module")
 		var modules = []
 		var _compile = Module.prototype._compile
-		Module.prototype._compile = function(content, filename){  
+		Module.prototype._compile = function(content, filename){
 			modules.push(this)
 			try {
 				var ret = _compile.call(this, content, filename)
@@ -1429,7 +1456,7 @@
 							}
 							// alright now, lets load up the root
 							loadModuleAsync(define.expandVariables(data.boot), modurl).then(function(result){
-								// ok so, 
+								// ok so,
 								resolve(result)
 							})
 							return
@@ -1469,7 +1496,7 @@
 
 								var ext = define.fileExt(dep_path)
 								if(!ext) dep_path += '.js'
-		
+
 								return loadModuleAsync(dep_path, modurl)
 
 							})).then(function(){
@@ -1478,12 +1505,12 @@
 							}).catch(function(error){
 								console.log("CAUGHT ERROR ", error)
 							})
-	
+
 							return
 							// lets initialize the module
 						}
 						return resolve(result.path)
-	
+
 					}).catch(function(err){
 						console.log("Error in "+modurl+" from "+includefrom,err,err.stack)
 					})
@@ -1522,7 +1549,7 @@
 				// we cant require non js files
 				var ext = define.fileExt(full_name)
 				if(ext !== '' && ext !== 'js'){
-					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){		
+					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
 						if(define.$platform === 'dali'){
 							var tex = define.expandVariables('$system/platform/$platform/texture$platform')
@@ -1563,7 +1590,7 @@
 			noderequirewrapper.clearCache = function(name){
 				Module._cache = {}
 			}
-			
+
 			noderequirewrapper.module = module
 
 			noderequirewrapper.async = function(modname){
@@ -1623,11 +1650,10 @@
 		global.define.module = {}
 		global.define.factory = {}
 		// fetch a new require for the main module and return that
-		
 		define.define(function(require){
 			module.exports = require
 		})
-	})()
+	}
 
 
 
@@ -1642,15 +1668,12 @@
 
 
 
-	else{
+	function define_worker(){
 		self.define = define
 
 		define.define = function(body){
-			console.log('here')
 		}
 	}
-
-
 
 
 
@@ -1746,10 +1769,10 @@
 			function MyStruct(){
 				var out = new myarray(mysize), len = arguments.length
 				out.toJSON = function(){
-					
+
 					var res = [];
-					res.push.apply(res, this);										
-					return {____struct: this.struct.id, data: res}; 
+					res.push.apply(res, this);
+					return {____struct: this.struct.id, data: res};
 				}
 				out.struct = MyStruct
 				if(len === 0) return out
@@ -1790,7 +1813,7 @@
 					MyStruct.fromString.apply(out, arguments)
 					return out
 				}
-				
+
 				var outoff = 0
 				for(var i = 0; i < len; i++){
 					var item = arguments[i]
@@ -1862,7 +1885,7 @@
 					if(ch !== 115 && ch !== 116){i = 0;break}
 				}
 			}
-			else if(mysize === 3){ 
+			else if(mysize === 3){
 				while(i < l){ // xyz
 					ch = key.charCodeAt(i++)
 					if(ch !== 120 && ch !== 121 && ch !== 122) {i = 0;break}
@@ -1888,14 +1911,14 @@
 				while(i < l){ // stpq
 					ch = key.charCodeAt(i++)
 					if(ch !== 115 && ch !== 116 && ch !== 112 && ch !== 113){i = 0;break}
-				}				
+				}
 			}
 			if(i == l){
 				var swiz = define.typemap.swizzle[myprim.def.type]
 				if(!swiz) return
 				return swiz[l]
 			}
-		}			
+		}
 
 		if(id !== undefined) Struct.id = id
 
@@ -1996,7 +2019,7 @@
 			else{
 				for(var key in node){
 					node[key] = define.structFromJSON(node[key]);
-				}				
+				}
 			}
 		}
 		return node;
@@ -2054,7 +2077,7 @@
 				else this.allocated = this.allocated * 2 // exponential strategy
 
 				var oldarray = this.array
-				var newarray = new this.arrayconstructor(this.allocated * this.slots)				
+				var newarray = new this.arrayconstructor(this.allocated * this.slots)
 				for(var i = 0; i < oldsize; i++) newarray[i] = oldarray[i]
 				this.array = newarray
 			}
@@ -2071,7 +2094,7 @@
 		}
 
 		self.push = function(){
-			this.length ++ 
+			this.length ++
 			if(this.length >= this.allocated) this.ensureSize(this.length)
 			this.clean = false
 			var base = (this.length -1) * this.slots
@@ -2120,11 +2143,11 @@
 		}
 
 		// Simple quad geometry api
-		// 0___14 
+		// 0___14
 		// |   /|
 		// |  / |
 		// | /  |
-		// |/   | 
+		// |/   |
 		// 23---5
 
 		// lets return a single slot
@@ -2248,9 +2271,9 @@
 					tmin_y: vfloat32[off++],
 					tmax_x: vfloat32[off++],
 					tmax_y: vfloat32[off++]
-				}				
+				}
 				glyphs[unicode] = glyph
-				glyph.width = glyph.max_x - glyph.min_x 
+				glyph.width = glyph.max_x - glyph.min_x
 				glyph.height = glyph.max_y - glyph.min_y
 			}
 			font.tex_array = blob.slice(off * 4)
@@ -2282,13 +2305,13 @@
 					atlas_y: vuint8[off*4+3]
 				}
 				off++
-				glyph.width = glyph.max_x - glyph.min_x 
+				glyph.width = glyph.max_x - glyph.min_x
 				glyph.height = glyph.max_y - glyph.min_y
 			}
 			font.tex_array = blob.slice(off * 4)
 		}
 		else throw new Error('Error in font file')
-		
+
 		if(!(32 in font.glyphs)) font.count++
 		font.glyphs[32] = { // space
 			min_x: 0,
@@ -2306,20 +2329,20 @@
 			height: 0,
 		}
 		if(!(10 in font.glyphs)) font.count++
-		font.glyphs[10] = { // newline
+		font.glyphs[10] = { // tab
 			min_x: 0,
-			min_y: 0,
-			max_x: 0.5,
-			max_y: 0,
+			min_y: -0.3,
+			max_x: 2,
+			max_y: 1.,
 			tmin_x:0,
 			tmin_y:0,
-			tmax_x:24,
+			tmax_x:24*4,
 			tmax_y:24,
-			nominal_w:24,
+			nominal_w:24 * 4,
 			nominal_h:24,
-			advance:0.5,
-			width: 0,
-			height: 0
+			advance:2,
+			width: 2,
+			height: 1
 		}
 		if(!(9 in font.glyphs)) font.count++
 		font.glyphs[9] = { // tab
@@ -2372,7 +2395,7 @@
 
 		// primitive types
 		exports.string = String
-		exports.boolean = 
+		exports.boolean =
 		exports.bool = define.struct({prim:true, type:'bool', bytes:4, array:Int32Array},'bool')
 		exports.float =
 		exports.float32 = define.struct({prim:true, type:'float32',bytes:4, array:Float32Array},'float32')
@@ -2436,7 +2459,7 @@
 		// vec2 type
 		exports.vec2 = define.struct({
 			r:'x',g:'y',
-			s:'x',t:'y',		
+			s:'x',t:'y',
 			x:exports.float32,
 			y:exports.float32
 		}, 'vec2')
@@ -2461,7 +2484,7 @@
 
 		// mat3
 		exports.mat3 = define.struct({
-			a:exports.float32, b:exports.float32, c:exports.float32, 
+			a:exports.float32, b:exports.float32, c:exports.float32,
 			d:exports.float32, e:exports.float32, f:exports.float32,
 			g:exports.float32, h:exports.float32, i:exports.float32
 		}, 'mat3')
@@ -2481,7 +2504,7 @@
 			z:exports.float32,
 			w:exports.float32
 		}, 'quat')
-		
+
 
 		exports.Enum = function Enum(){
 			var matchset = Array.prototype.slice.call(arguments)
@@ -2493,7 +2516,7 @@
 			}
 
 			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
-				
+
 			function Enum(value){
 				var index = -1
 				if(typeof value !== 'string'){
@@ -2575,7 +2598,9 @@
 		exports.ceil = typeFn(Math.ceil)
 		exports.min = typeFn2(Math.min)
 		exports.max = typeFn2(Math.max)
-		exports.mod = typeFn2(Math.mod)
+		exports.mod = typeFn2(function(a,b){
+			return a%b
+		})
 		exports.random = Math.random
 
 		exports.sign = typeFn(function(v){
@@ -2710,29 +2735,29 @@
 	}
 
 	function defineComponent(proto, name, index){
-		Object.defineProperty(proto, name, {get:function(){ return this[index] },set:function(v){ 
-			this[index] = v 
+		Object.defineProperty(proto, name, {get:function(){ return this[index] },set:function(v){
+			this[index] = v
 			if(this.atChange) this.atChange(index)
 		}})
 	}
 
 	function defineSwiz2(proto, name, i0, i1, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1]) },set:function(v){ 
-			this[i0] = v[0], this[i1] = v[1] 
+		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1]) },set:function(v){
+			this[i0] = v[0], this[i1] = v[1]
 			if(this.atChange) this.atChange(-1)
 		}})
 	}
 
 	function defineSwiz3(proto, name, i0, i1, i2, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2]) },set:function(v){ 
-			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2] 
+		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2]) },set:function(v){
+			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2]
 			if(this.atChange) this.atChange(-1)
 		}})
 	}
 
 	function defineSwiz4(proto, name, i0, i1, i2, i3, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2], this[i3]) },set:function(v){ 
-			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2], this[i3] = v[3] 
+		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2], this[i3]) },set:function(v){
+			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2], this[i3] = v[3]
 			if(this.atChange) this.atChange(-1)
 		}})
 	}
@@ -2757,7 +2782,10 @@
 	//defineArrayProp(Float32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.vec2, exports.vec3, exports.vec4])
 	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
-
+	if(define.packaged) define_packaged()
+	else if(define.$environment === 'nodejs') define_nodejs()
+	else if(define.$environment === 'browser') define_browser()
+	else if(define.$environment === 'worker') define_worker()
 })()
 
 // use the switchable promise

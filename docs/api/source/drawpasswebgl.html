@@ -578,11 +578,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n424" name="n424">424</a>
 <a href="#n425" name="n425">425</a>
 <a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, baseclass){
         <span class="comment">// internal, drawing</span>
@@ -592,6 +599,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.device = gldevice
                 <span class="local-variable">this</span>.view = view
                 view.drawpass = <span class="local-variable">this</span>
+
                 <span class="comment">// lets do the flatten</span>
                 <span class="local-variable">this</span>.pickmatrices = {
                         <span class="key">viewmatrix</span>: mat4.identity(),
@@ -799,6 +807,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 pickguid[<span class="integer">2</span>] = (id&gt;&gt;<span class="integer">8</span>)/<span class="integer">255</span>
 
                                 draw.pickguid = pickguid[<span class="integer">0</span>]*<span class="integer">255</span>&lt;&lt;<span class="integer">16</span> | pickguid[<span class="integer">1</span>]*<span class="integer">255</span> &lt;&lt; <span class="integer">8</span> | pickguid[<span class="integer">2</span>]*<span class="integer">255</span>
+
                                 draw.viewmatrix = matrices.viewmatrix
 
                                 <span class="keyword">if</span>(!draw._visible) <span class="keyword">continue</span>
@@ -808,7 +817,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> blendshader = draw.shaders.viewportblend
                                         <span class="keyword">if</span> (view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                                                 <span class="comment">// dont do this!</span>
-                                                <span class="keyword">if</span> (shader.depth_test_eq.func === <span class="integer">0</span>) shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>                                                                                                
+                                                <span class="keyword">if</span> (shader.depth_test_eq.func === <span class="integer">0</span>) shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
                                         }
                                         <span class="keyword">else</span>{
                                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -830,6 +839,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 }
 
                                                 shader.pickguid = pickguid
+
                                                 <span class="keyword">if</span>(!shader.visible) <span class="keyword">continue</span>
                                                 <span class="keyword">if</span>(draw.pickalpha !== <span class="predefined-constant">undefined</span>)shader.pickalpha = draw.pickalpha
                                                 <span class="keyword">if</span>(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
@@ -862,7 +872,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">drawBlend</span> = <span class="keyword">function</span>(draw){
                 <span class="keyword">if</span>(!draw.drawpass.color_buffer){
-                        console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?</span><span class="delimiter">&quot;</span></span>)
+                        console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?</span><span class="delimiter">&quot;</span></span>, draw)
                 }
                 <span class="keyword">else</span> {
                         <span class="comment">// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data</span>
@@ -895,10 +905,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
 
                         <span class="keyword">if</span>(shader.pickonly || !shader.visible) <span class="keyword">continue</span> <span class="comment">// was pick only</span>
+                        shader.view = draw
+                        <span class="keyword">if</span>(shader.atDraw) shader.atDraw(draw)
                         <span class="comment">// we have to set our guid.</span>
                         <span class="keyword">if</span>(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
                         <span class="keyword">else</span> draw.viewmatrix = matrices.viewmatrix
-                        
+
                         vtx_count += shader.drawArrays(<span class="local-variable">this</span>.device)
                 }
                 <span class="keyword">return</span> vtx_count
@@ -931,9 +943,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> matrices = <span class="local-variable">this</span>.colormatrices
                 <span class="local-variable">this</span>.calculateDrawMatrices(isroot, matrices);
                 view.colormatrices = matrices
-                
+
                 gl.disable(gl.SCISSOR_TEST)
-                
+
                 <span class="keyword">if</span>(isroot){
                         <span class="comment">/*
                         if(clipview){
@@ -949,7 +961,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         */</span>
                 }
-
+                <span class="comment">//console.log(matrices.viewmatrix)</span>
                 device.clear(view._clearcolor)
 
                 <span class="keyword">var</span> draw = view
@@ -966,11 +978,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                 <span class="comment">//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)</span>
                                 draw._time = time
+
                                 <span class="keyword">if</span>(draw._listen_time || draw.ontime) hastime = <span class="predefined-constant">true</span>
 
                                 draw.viewmatrix = matrices.viewmatrix
 
-                                <span class="keyword">if</span>(draw.atDraw) draw.atDraw(<span class="local-variable">this</span>)
+                                <span class="keyword">if</span>(draw.atDraw &amp;&amp; draw.atDraw(<span class="local-variable">this</span>)) hastime = <span class="predefined-constant">true</span>
                                 <span class="keyword">if</span>(draw._viewport &amp;&amp; draw.drawpass !== <span class="local-variable">this</span>){
                                         <span class="local-variable">this</span>.drawBlend(draw)
                                 }
@@ -986,7 +999,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>)
                 }
-                <span class="comment">//console.log(vtx_count)</span>
                 <span class="keyword">return</span> hastime
         }
 

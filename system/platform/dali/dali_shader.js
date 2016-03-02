@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 /**
@@ -37,9 +38,8 @@ define.class(function(require, exports){
 	this.atConstructor = function(vertexShader, fragmentShader) {
 		this.object_type = 'DaliShader'
 
-		// Simplify the shader by removing comments and empty lines
-        var vs = this.trimShader(vertexShader);
-        var fs = this.trimShader(fragmentShader);
+		var vs = vertexShader;
+		var fs = fragmentShader;
 
 		var shaderOptions = {
             vertexShader : vs,
@@ -53,6 +53,14 @@ define.class(function(require, exports){
 		this.fragmentShader = fragmentShader;
 
 		if (DaliApi.emitcode) {
+			// Simplify the shader by removing comments and empty lines
+			vs = this.trimShader(vs);
+			fs = this.trimShader(fs);
+
+			// #extension lines must have a \n at the end to compile
+			vs = vs.replace(/(\#extension.*)\n/g, '$1\\n\\\n');
+			fs = fs.replace(/(\#extension.*)\n/g, '$1\\n\\\n');
+
 			// Each line needs a separate DALICODE statement
 			vs = vs.replace(/\n/g, "\nDALICODE: ");
 			fs = fs.replace(/\n/g, "\nDALICODE: ");
@@ -86,6 +94,9 @@ define.class(function(require, exports){
 
 		// Create a multi-line string
 		str = str.replace(/\\n/g, "\\\n");
+
+		// Add an additional newline for #extension (or else it won't compile)
+		str = str.replace(/(\#extension.*)\\\n/g, '$1\n\\\n');
 
         return str;
 }

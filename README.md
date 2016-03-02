@@ -12,12 +12,12 @@ To start DreemGL type:
 
 To view the Intro presentation, click here:
 
-[http://127.0.0.1:2000/introduction](http://127.0.0.1:2000/introductio)
+[http://127.0.0.1:2000/docs/slides/introduction](http://127.0.0.1:2000/docs/slides/introduction)
 
 To try livecoding a shader open this:
 
-[http://127.0.0.1:2000/examples/rendertest](http://127.0.0.1:2000/examples/rendertest) and open
-[examples/rendertest.js](examples/rendertest.js) in your editor and start typing away and saving, reload should
+[http://127.0.0.1:2000/test/rendertest](http://127.0.0.1:2000/test/rendertest) and open
+[./test/rendertest.js](/test/rendertest.js) in your editor and start typing away and saving, reload should
 be live.
 
 As the server starts, it also shows other local IP's its listening on (for trying it on your phone)
@@ -56,7 +56,7 @@ define.class('$ui/view', function(require, exports, $ui$, label){
 ```
 
 Please note the 'require' syntax to specify the baseclass, and the $ui$ to switch directory in the dependency-class list.
-Other syntax: $$ - current directory, $$$ - parent directory, relative$dir$
+Other syntax: $$ - current directory, relative$dir$
 
 The prototype of the class is the 'this' of the function.
 Note the 2 specially named arguments 'require' and 'exports' where they appear

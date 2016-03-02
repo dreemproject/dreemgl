@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$system/base/texture', function(exports){
@@ -194,7 +195,21 @@ define.class('$system/base/texture', function(exports){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.array))
 		}
 		else if(this.image){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
+			var image = this.image
+			// lets do a power of two
+			if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
+				if (!int.isPowerOfTwo(image.width) || !int.isPowerOfTwo(image.height)) {
+				    // Scale up the texture to the next highest power of two dimensions.
+				    var canvas = document.createElement("canvas")
+				    canvas.width = int.nextHighestPowerOfTwo(image.width)
+				    canvas.height = int.nextHighestPowerOfTwo(image.height)
+				    var ctx = canvas.getContext("2d")
+				    ctx.drawImage(image, 0, 0, image.width, image.height)
+				    image = canvas
+				}
+			}
+	
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 			this.image[samplerid] = gltex
 		}
 		else{
@@ -209,6 +224,9 @@ define.class('$system/base/texture', function(exports){
 		gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl[samplerdef.WRAP_S])
 		gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl[samplerdef.WRAP_T])
 
+		if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
+			gl.generateMipmap(gl.TEXTURE_2D)
+		}
 		this[samplerid] = gltex
 		return gltex
 	}
@@ -218,6 +236,7 @@ define.class('$system/base/texture', function(exports){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
 		}
 		else if(this.image){
+			console.log("UPDATING!")
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
 		}
 		gltex.updateid = this.updateid
@@ -234,6 +253,14 @@ define.class('$system/base/texture', function(exports){
 		})
 	}
 
+	this.samplemip = function(v){
+		return texture2D(this, v, {
+			MIN_FILTER: 'LINEAR_MIPMAP_NEAREST',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {

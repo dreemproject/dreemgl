@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/label", function(require){
 // Text input field
@@ -12,7 +13,7 @@ define.class("$ui/label", function(require){
 		// the color of the cursor
 		cursorcolor: Config({type:vec4, value: vec4(NaN), meta:"color"}),
 		// color of the marker
-		markerfocus: Config({type:vec4, value: vec4("ocean"), meta:"color"}),
+		markerfocus: Config({type:vec4, value: vec4("oceanboatblue"), meta:"color"}),
 		markerunfocus: Config({type:vec4, value: vec4("gray"), meta:"color"}),
 		value: Config({type:String, value:""}),
 		readonly:false,
@@ -40,7 +41,7 @@ define.class("$ui/label", function(require){
 	})
 	this.cursors = true
 	this.tabstop = 0
-
+	this.linespacing = 1.3
 	define.class(this, 'markers', require('$system/typeface/markershader.js'), function(){
 		this.updateorder = 6
 		this.draworder = 4
@@ -89,7 +90,8 @@ define.class("$ui/label", function(require){
 		}
 	})
 
-	this.textChanged = function(){
+	this.textChanged = function(noredraw){
+
 		var string = this.textbuf.serializeText(0, this.textbuf.lengthQuad())
 		if (!this.multiline && (string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0)) {
 			string = string.replace(/(\r\n|\n|\r)/gm,"");
@@ -98,7 +100,8 @@ define.class("$ui/label", function(require){
 			this.focus = false;
 		}
 		this.value = Mark(string)
-		this.relayout()
+		// this causes a redraw
+		if(!noredraw) this.relayout()
 	}
 
 	this.value = function(event){
@@ -108,7 +111,7 @@ define.class("$ui/label", function(require){
 		this.redraw()
 	}
 
-	this.cursorsChanged = function(){
+	this.cursorsChanged = function(noreupdate){
 		this.shaders.cursors.reupdate()
 		this.shaders.markers.reupdate()
 	}

@@ -437,11 +437,39 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n283" name="n283">283</a>
 <a href="#n284" name="n284">284</a>
 <a href="#n285" name="n285">285</a>
+<a href="#n286" name="n286">286</a>
+<a href="#n287" name="n287">287</a>
+<a href="#n288" name="n288">288</a>
+<a href="#n289" name="n289">289</a>
+<strong><a href="#n290" name="n290">290</a></strong>
+<a href="#n291" name="n291">291</a>
+<a href="#n292" name="n292">292</a>
+<a href="#n293" name="n293">293</a>
+<a href="#n294" name="n294">294</a>
+<a href="#n295" name="n295">295</a>
+<a href="#n296" name="n296">296</a>
+<a href="#n297" name="n297">297</a>
+<a href="#n298" name="n298">298</a>
+<a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
+<a href="#n302" name="n302">302</a>
+<a href="#n303" name="n303">303</a>
+<a href="#n304" name="n304">304</a>
+<a href="#n305" name="n305">305</a>
+<a href="#n306" name="n306">306</a>
+<a href="#n307" name="n307">307</a>
+<a href="#n308" name="n308">308</a>
+<a href="#n309" name="n309">309</a>
+<strong><a href="#n310" name="n310">310</a></strong>
+<a href="#n311" name="n311">311</a>
+<a href="#n312" name="n312">312</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(exports){
@@ -634,7 +662,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, gl.RGBA, gl.UNSIGNED_BYTE, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.array))
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.image){
-                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, <span class="local-variable">this</span>.image)
+                        <span class="keyword">var</span> image = <span class="local-variable">this</span>.image
+                        <span class="comment">// lets do a power of two</span>
+                        <span class="keyword">if</span>(samplerdef.MIN_FILTER === <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>){
+                                <span class="keyword">if</span> (!<span class="reserved">int</span>.isPowerOfTwo(image.width) || !<span class="reserved">int</span>.isPowerOfTwo(image.height)) {
+                                    <span class="comment">// Scale up the texture to the next highest power of two dimensions.</span>
+                                    <span class="keyword">var</span> canvas = document.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">canvas</span><span class="delimiter">&quot;</span></span>)
+                                    canvas.width = <span class="reserved">int</span>.nextHighestPowerOfTwo(image.width)
+                                    canvas.height = <span class="reserved">int</span>.nextHighestPowerOfTwo(image.height)
+                                    <span class="keyword">var</span> ctx = canvas.getContext(<span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>)
+                                    ctx.drawImage(image, <span class="integer">0</span>, <span class="integer">0</span>, image.width, image.height)
+                                    image = canvas
+                                }
+                        }
+        
+                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
                         <span class="local-variable">this</span>.image[samplerid] = gltex
                 }
                 <span class="keyword">else</span>{
@@ -649,6 +691,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl[samplerdef.WRAP_S])
                 gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl[samplerdef.WRAP_T])
 
+                <span class="keyword">if</span>(samplerdef.MIN_FILTER === <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>){
+                        gl.generateMipmap(gl.TEXTURE_2D)
+                }
                 <span class="local-variable">this</span>[samplerid] = gltex
                 <span class="keyword">return</span> gltex
         }
@@ -658,6 +703,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, gl.RGBA, gl.UNSIGNED_BYTE, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.data)) 
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.image){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATING!</span><span class="delimiter">&quot;</span></span>)
                         gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, <span class="local-variable">this</span>.image)
                 }
                 gltex.updateid = <span class="local-variable">this</span>.updateid
@@ -674,6 +720,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
+        <span class="local-variable">this</span>.<span class="function">samplemip</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, v, {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
         <span class="local-variable">this</span>.<span class="function">flipped2</span> = <span class="keyword">function</span>(x,y){ <span class="keyword">return</span> flipped(vec2(x,y)) }
         <span class="local-variable">this</span>.<span class="function">flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {

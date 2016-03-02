@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 // Parts Copyright (C) Marijn Haverbeke (Apache 2.0 license)
 
@@ -242,8 +243,7 @@ define.class(function(require, exports){
 		message += " in " + this.sourceFile + " line " + loc.line + " column " + loc.column 
 		var err = new SyntaxError(message)
 		err.pos = pos; err.loc = loc; err.raisedAt = this.tokPos
-
-		console.log(message, this.input.split("\n")[loc.line-1])
+		//console.log(message, this.input.split("\n")[loc.line-1])
 
 		throw err
 	}
@@ -1784,6 +1784,7 @@ define.class(function(require, exports){
 				if (this.strict && this.isStrictBadIdWord(def.id.name))
 					this.raise(def.id.start, "Binding " + def.id.name + " in this.strict mode")
 				// dont allow newline before a function-init
+				/*
 				if( cantype && this.tokType == this._name && !this.lastSkippedNewlines){
 					var id = this.parseIdent()
 					id.typing = def.id
@@ -1794,7 +1795,7 @@ define.class(function(require, exports){
 						id.typing = def.id
 						def.id = id
 					}
-				}
+				}*/
 
 				if( !this.lastSkippedNewlines && this.tokType == this._parenL){
 					def.init = this.parseCall(def.id)
@@ -1882,7 +1883,7 @@ define.class(function(require, exports){
 			var node = this.parseFunction(node, true)
 			node.type = 'Macro'
 			return node
-
+/*
 		case this._struct:
 			this.next()
 			if( this.tokType !== this._name ) this.unexpected()
@@ -1932,7 +1933,7 @@ define.class(function(require, exports){
 			// whether the next token is `in`. When there is no init part
 			// (this.semicolon immediately after the opening parenthesis), it is
 			// a regular `for` loop.
-
+	*/
 		case this._for:
 			this.next()
 			this.labels.push(this.loopLabel)
@@ -2388,13 +2389,14 @@ define.class(function(require, exports){
 	this.parseExpression = function(noIn, termColon, inStatement) {
 
 		var expr = this.parseMaybeQuote(noIn)
-
+		/*
 		if(inStatement && (
 			expr.type == 'Index' && expr.object.kind || 
 			expr.type == 'Assign' && expr.left.type == 'Index' && expr.left.object.kind)){
 			this.raise(expr.start, "Please use 'type[] x', not 'type x[]' for array types")
 		}
 		// parse float x, y to be a TypeVar not (float x), y
+		
 		if(inStatement && (
 			expr.type == 'Index' && expr.object.typing ||
 			expr.type == 'Id' && expr.typing || 
@@ -2436,7 +2438,7 @@ define.class(function(require, exports){
 				this.parseDefs(noIn, defs)
 			}
 			return this.finishNode(node, 'TypeVar')
-		}
+		}*/
 
 		if(this.tokType === this._comma){
 			var node = this.startNodeFrom(expr)
@@ -2620,7 +2622,7 @@ define.class(function(require, exports){
 
 			if(probe) node.store = 8
 			node.object = base
-			node.key = this.parseIdent(true)
+			node.key = this.parseIdent(true, "Property")
 			return this.parseSubscripts(this.finishNode(node, "Key"), noCalls)
 		
 		case this._bracketR:
@@ -2632,7 +2634,7 @@ define.class(function(require, exports){
 		case this._parenL:
 			if(noCalls) return base
 			return this.parseCall( base )
-
+/*
 		case this._existkey:
 			this.eat(this._existkey)
 			var node = this.startNodeFrom(base)
@@ -2643,6 +2645,7 @@ define.class(function(require, exports){
 			node.key = this.parseIdent(true)
 			node.exist = 1
 			return this.parseSubscripts(this.finishNode(node, "Key"), noCalls)
+			*/
 		case this._this:
 		case this._string:
 		case this._name:
@@ -2657,7 +2660,7 @@ define.class(function(require, exports){
 			this.eat(this._name) || this.eat(this._string) || this.eat(this._this) 
 
 			return this.parseSubscripts(this.finishNode(node, "Id"))
-
+/*
 		case this._dotdot:
 			if( this.lastSkippedNewlines ) return base
 			this.eat(this._dotdot)
@@ -2687,7 +2690,8 @@ define.class(function(require, exports){
 			node.object = base
 			node.key = this.parseIdent(true)
 			return this.parseSubscripts(this.finishNode(node, "ThisCall"), noCalls)
-		
+			*/
+		/*
 		case this._braceL:
 			// we also dont do this._braceL on new line
 			if( noCalls || this.lastSkippedNewlines ) return base
@@ -2705,8 +2709,8 @@ define.class(function(require, exports){
 				//node.arrow = '->'
 				node.body = this.parseBlock(true)
 				return this.parseSubscripts(this.finishNode(node, "Nest"), noCalls)
-			}
-		case this._thinArrow:
+			}*/
+		//case this._thinArrow:
 		case this._fatArrow:
 			// you cant separate an arrow from its args with a this.newline
 			if( this.lastSkippedNewlines ) return base
@@ -2714,6 +2718,7 @@ define.class(function(require, exports){
 			node.arrow = this.tokType.type
 			this.next()
 			return this.parseArrowFunction(node, base)
+		/*
 		case this._on:
 		case this._do:
 			// do on next line followed by { } is interpreted as the JS do/while
@@ -2755,7 +2760,7 @@ define.class(function(require, exports){
 				//eat(this._ident)
 			}
 			return this.finishNode( node, 'Call')
-		/*
+		
 		case this._on:
 		case this._do:
 			// do on next line followed by { } is interpreted as the JS do/while
@@ -2789,7 +2794,7 @@ define.class(function(require, exports){
 			}
 			return this.finishNode( node, 'Do')
 			*/
-		} 
+		}
 		return base
 	}
 
@@ -2826,11 +2831,11 @@ define.class(function(require, exports){
 			return this.parseNew()
 		case this._name:
 			var typing = this.parseIdent()
-			if(!this.lastSkippedNewlines && this.tokType == this._name){
-				var node = this.parseIdent()
-				node.typing = typing
-				return node
-			}
+			//if(!this.lastSkippedNewlines && this.tokType == this._name){
+			//	var node = this.parseIdent()
+			//	node.typing = typing
+			//	return node
+			//}
 			return typing
 		case this._num: 
 			var node = this.startNode()
@@ -2877,10 +2882,19 @@ define.class(function(require, exports){
 			this.next()
 			return this.finishNode(node, "Value")
 
-		case this._null: case this._true: case this._false:
+		case this._null: 
 			var node = this.startNode()
 			node.value = this.tokType.atomValue
 			node.raw = this.tokType.keyword
+			node.kind = "object"
+			this.next()
+			return this.finishNode(node, "Value")
+
+		case this._true: case this._false:
+			var node = this.startNode()
+			node.value = this.tokType.atomValue
+			node.raw = this.tokType.keyword
+			node.kind = "boolean"
 			this.next()
 			return this.finishNode(node, "Value")
 
@@ -3062,7 +3076,7 @@ define.class(function(require, exports){
 
 	this.parsePropertyName = function() {
 		if (this.tokType === this._num || this.tokType === this._string) return this.parseExprAtom()
-		return this.parseIdent(true)
+		return this.parseIdent(true, 'Property')
 	}
 
 	// Parse a function declaration or literal (depending on the
@@ -3131,7 +3145,7 @@ define.class(function(require, exports){
 		this.expect(this._parenL)
 		node.params = this.parseDefs( false, undefined, true )
 
-		if(this.tokType == this._dot) node.rest = this.parseDots(true)
+		//if(this.tokType == this._dot) node.rest = this.parseDots(true)
 
 		this.expect(this._parenR)
 
@@ -3191,7 +3205,7 @@ define.class(function(require, exports){
 	// when parsing properties), it will also convert keywords into
 	// identifiers.
 
-	this.parseIdent = function(liberal) {
+	this.parseIdent = function(liberal, specialid) {
 		var node = this.startNode()
 		if(this.tokIsType) node.isType = this.tokVal
 		if (liberal && this.forbidReserved == "everywhere") liberal = false
@@ -3218,6 +3232,6 @@ define.class(function(require, exports){
 			node.flag = this.containsFlag
 		}
 		this.next()
-		return this.finishNode(node, "Id")
+		return this.finishNode(node, specialid || "Id")
 	}
 })

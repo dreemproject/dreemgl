@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 
 /**
@@ -45,6 +46,9 @@ define.class(function(require, exports){
 
 		var dali = DaliApi.dali;
 
+		// Cache the property values (blend-related)
+		this.property_cache = {};
+
 		this.id = ++DaliRenderer.GlobalId;
 		this.daligeometry = geometry;
 		this.dalimaterial = material;
@@ -59,6 +63,82 @@ define.class(function(require, exports){
 		}
 
 	}
+
+
+	// Blend Modes moved from material to renderer in some versions of dali
+
+	/**
+	 * @method hasBlender
+	 * Return true if the material has blending api
+	 */
+	this.hasBlender = function(mode) {
+		return (typeof this.dalirenderer.setBlendEquation === 'function');
+	}
+
+	/**
+	 * @method setBlendMode
+	 * Forward request to dali.Material object. dali enumerations match webgl.
+	 * @param {number} mode Set the blending mode
+	 */
+	this.setBlendMode = function(mode) {
+		var val = this.property_cache['blendmode'];
+		if (val && val == mode)
+			return;
+
+		this.dalirenderer.blendingMode = mode;
+		this.property_cache['blendmode'] = mode;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.blendingMode = ' + mode + ';');
+		}
+	}
+
+
+	/**
+	 * @method setBlendEquation
+	 * Forward request to dali.Material object
+	 * @param {number} equationRgb Equation for combining rgb components
+	 * @param {number} equationAlpha Equation for combining alpha component
+	 */
+	this.setBlendEquation = function(equationRgb, equationAlpha) {
+		var hash = DaliApi.getHash([equationRgb, equationAlpha]);
+
+		var val = this.property_cache['blendequation'];
+		if (val && val == hash)
+			return;
+
+		this.dalirenderer.setBlendEquation(equationRgb, equationAlpha);
+		this.property_cache['blendequation'] = hash;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.setBlendEquation(' + equationRgb + ', ' + equationAlpha + ');');
+		}
+	}
+
+
+	/**
+	 * @method setBlendFunc
+	 * Forward request to dali.Material object
+	 * @param {number} srcFactorRgb Source blending rgb
+	 * @param {number} dstFactorRgb Destination blending rgb
+	 * @param {number} srcFactorAlpha Source blending alpha
+	 * @param {number} dstFactorAlpha Destination blending alpha
+	 */
+	this.setBlendFunc = function(srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha) {
+		var hash = DaliApi.getHash([srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha]);
+
+		var val = this.property_cache['blendfunc'];
+		if (val && val == hash)
+			return;
+
+		this.dalirenderer.setBlendFunc(srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha);
+		this.property_cache['blendfunc'] = hash;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.setBlendFunc(' + srcFactorRgb + ', ' + dstFactorRgb + ', ' + srcFactorAlpha + ', ' + dstFactorAlpha + ');');
+		}
+	}
+
 
 	this.name = function() {
 		return 'dalirenderer' + this.id;

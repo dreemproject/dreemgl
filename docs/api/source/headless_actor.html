@@ -299,11 +299,59 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n145" name="n145">145</a>
 <a href="#n146" name="n146">146</a>
 <a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-         Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-         either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 <span class="comment">/**
@@ -440,7 +488,53 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">headlessactor</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id;
         }
 
+        <span class="local-variable">this</span>.<span class="function">currentstate</span> = <span class="keyword">function</span>(verbose) {
+                <span class="keyword">var</span> states = <span class="local-variable">this</span>.headlessrenderer.currentstate(verbose);
+
+                <span class="keyword">if</span> (!HeadlessApi.isShown(<span class="local-variable">this</span>.name())) {
+                        <span class="keyword">var</span> props = [];
+                        <span class="keyword">var</span> keys = Object.keys(<span class="local-variable">this</span>.props).sort();
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> keys) {
+                                <span class="keyword">var</span> key = keys[i];
+                                <span class="keyword">var</span> prop = {};
+
+                                <span class="comment">// Format the values. This might be an array</span>
+                                <span class="keyword">var</span> vals = <span class="local-variable">this</span>.props[key];
+                                <span class="keyword">var</span> v;
+                                <span class="keyword">if</span> (Array.isArray(vals)) {
+                                        v = [];
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> vals) {
+                                                v.push(parseFloat(vals[i].toFixed(<span class="integer">4</span>)));
+                                        }
+                                }
+                                <span class="keyword">else</span> {
+                                        v = parseFloat(vals.toFixed(<span class="integer">4</span>));
+                                }
+                                
+
+                                prop[key] = v;
+                                props.push(prop);
+                        }
+
+                        <span class="keyword">var</span> state = [
+                                {<span class="key">name</span>: <span class="local-variable">this</span>.name()}
+                                ,{<span class="key">renderer</span>: <span class="local-variable">this</span>.headlessrenderer.name()}
+                                ,{<span class="key">onstage</span>: <span class="local-variable">this</span>.onstage}
+                        ];
+                        <span class="keyword">if</span> (props.length &gt; <span class="integer">0</span>)
+                                state.push ({<span class="key">props</span>: props});
+
+                        states.push(state);
+                        HeadlessApi.shownObject(<span class="local-variable">this</span>.name());
+                }
+                
+                <span class="keyword">return</span> states;
+        }
+
         <span class="local-variable">this</span>.<span class="function">inspect</span> = <span class="keyword">function</span>(depth) {
+                <span class="comment">//HACK</span>
+                <span class="local-variable">this</span>.currentstate();
+                
                 <span class="keyword">var</span> obj = {<span class="key">headlessActor</span>:<span class="local-variable">this</span>.id, <span class="key">obj</span>:[<span class="local-variable">this</span>.headlessrenderer.inspect(depth)]};
                 <span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>)
                 <span class="keyword">return</span> util.inspect(obj, {<span class="key">depth</span>: <span class="predefined-constant">null</span>});

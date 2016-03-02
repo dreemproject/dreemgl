@@ -5,7 +5,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.
 -->
 
-# DreemGL in 10 Minutes - Part 1
+# DreemGL in 10 Minutes
 
 DreemGL is a GL (webGL) based UI toolkit and IOT system written in JavaScript. In DreemGL Shaders replace CSS and are written in type inferenced JS, 
 large data can be rendered using vertexbuffers, the DOM is created React-style, and multiple devices/screens share one 'composition' space with automated RPC system.
@@ -70,10 +70,10 @@ node server.js -port 3555
 ```
 
 To test if everything is working fine, open the following URL for the *shadertest.js* composition in a supported browser:
-<a href="http://localhost:2000/examples/shadertest" target="_blank">http://localhost:2000/examples/shadertest</a>
+<a href="http://localhost:2000/test/shadertest" target="_blank">http://localhost:2000/tests/shadertest</a>
 
 You should be seeing an animated shape rendering a shaders, similar to the image below:
-<img src="./img/shadertest.png" width="500"/>
+<img src="https://raw.githubusercontent.com/dreemproject/dreemgl/master/docs/images/shadertest.png" width="500"/>
 
 There are a number of command line flags for the server, the most important ones being the `-port` and the `-path` flags: ds
 
@@ -115,22 +115,22 @@ Before we dive into the source code of our *Hello World* composition, you need t
 
 ### Compositions and URIs
 You create a composition in its own file. When running a composition, the server maps the composition's JavaScript file to a URI. Remember the *shadertest.js* composition? The URI for the composition is
-<a href="http://localhost:2000/examples/shadertest" target="_blank">http://localhost:2000/examples/shadertest</a>
+<a href="http://localhost:2000/test/shadertest" target="_blank">http://localhost:2000/tests/shadertest</a>
 
-You will find the corresponding file at `DREEM/examples/shadertest.js`, where `DREEM` is the root folder of your DreemGL installation. While you can add your own compositions to the DREEM/examples, the better approach is to put your all your own compositions into a separate folder (e.g. a folder on the same level as the DreemGL toolkit folder). You can make your own composition folder available to DreemGL by using the `-path` option when launching the server, e.g.
+You will find the corresponding file at `DREEM/test/shadertest.js`, where `DREEM` is the root folder of your DreemGL installation. While you can add your own compositions to the DREEM/examples, the better approach is to put your all your own compositions into a separate folder (e.g. a folder on the same level as the DreemGL toolkit folder). You can make your own composition folder available to DreemGL by using the `-path` option when launching the server, e.g.
 
 ```bash
 node server.js -path project1:../myproject
 ```
 Here *project1* is the virtual server path assigned to the *myproject* folder. If you create a composition named *helloworld.js* in this folder, you can run the composition by loading:
-<a href="http://localhost:2000/examples/shadertest" target="_blank">http://localhost:2000/project1/helloworld</a>
+<a href="http://localhost:2000/project1/helloworld" target="_blank">http://localhost:2000/project1/helloworld</a>
 
 As you can see, the file ending `.js` is omitted when running a composition.
 
 ### 'Hello World' composition
 Here is our first composition. It doesn't do much, just renders a single screen with a green background color. But we use it explain the general syntax of classes and compositions.
 
-**helloworld.js [(open composition in new tab)](http://localhost:2000/guide/examples/helloworld)**
+**helloworld.js [(open composition in new tab)](http://localhost:2000/docs/examples/dreem10_part1/helloworld)**
 
 ```javascript
 define.class("$server/composition",
@@ -211,7 +211,7 @@ return [ screen({name: 'default', clearcolor: "grey"}) ];
 Compositions can have multiple screens, and each screen needs to have name attribute with a unique name.
 We will have a more detailed look at the `render()` function in a bit, but you should first learn how to define classes in Dreem.
 
-**helloworld_multiscreen.js [(open composition in new tab)](http://localhost:2000/guide/examples/helloworld_multiscreen)**
+**helloworld_multiscreen.js [(open composition in new tab)](http://localhost:2000/docs/examples/dreem10_part1/helloworld_multiscreen)**
 
 ```javascript
 define.class("$server/composition",
@@ -230,7 +230,7 @@ define.class("$server/composition",
 ```
 
 With more than one screen in a composition, DreemGL will render the first screen child by default. To access another screen, you have to append the screen name directly to the query string (directly behind the question mark). The screen with name `mobile` can therefore be accessed using the URI:
-<a href="http://localhost:2000/guide/examples/helloworld_multiscreen?mobile" target="_blank">http://localhost:2000/guide/examples/helloworld_multiscreen?mobile</a>
+<a href="http://localhost:2000/docs/examples/dreem10_part1/helloworld_multiscreen?mobile" target="_blank">http://localhost:2000/docs/examples/dreem10_part1/helloworld_multiscreen?mobile</a>
 
 ### Classes
 
@@ -268,7 +268,6 @@ There are a number of predefined directory switches:
 | `$widgets$` | [$root/system](../classes/widgets)| UI widgets used by applications, e.g. colorpicker, searchbox, radiogroup. |
 | `$3d$` | [$root/classes/3d](../classes/3d)| System classes for 3d support in DreemGL |
 | `$$` | current directory | Used to import classes relative to current directory. |
-| `$$$` | parent directory | Used to import classes from parent directory or subfolder of parent directory. |
 | `relative$dir$` | relative directory| Directory relative to current or parent directory. |
 
 

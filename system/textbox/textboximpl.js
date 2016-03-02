@@ -1,21 +1,14 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.mixin(function(require){
 
 	var CursorSet = require('./cursorset')
 	var Cursor = require('./singlecursor')
 	var parse = new (require('$system/parse/onejsparser'))()
-
-	// change sources
-	/*var enumchange = this.enumchange = {
-		keypress:1,
-		delete:2,
-		clipboard:3,
-		undoredo:4
-	}*/
 
 	this.change = 0
 
@@ -26,7 +19,7 @@ define.mixin(function(require){
 		}
 		var coord = this.textbuf.charCoords(max(cursor0.start - 1,0))
 		var v2 = vec2.mul_mat4(vec2(coord.x - 0.5*coord.w, coord.y - 0.5 *coord.h), this.totalmatrix)
-		this.screen.keyboard.pointerMove(vec2(floor(v2[0]), floor(v2[1])))
+		this.screen.keyboard.textAreaRespondToMouse([floor(v2[0]), floor(v2[1])])
 	}
 
 	this.addUndoInsert = function(start, end, stack){
@@ -97,6 +90,7 @@ define.mixin(function(require){
 		}
 		stack1.splice(i+1)
 		this.cursorset.fromArray(last_cursor)
+		this.textChanged()
 	}
 
 	// alright we serialize all ze cursors and concat and send over.
@@ -177,6 +171,7 @@ define.mixin(function(require){
 		this.undo_group++
 		this.cursorset.insert(event.value)
 		this.doCursor()
+		this.change_keypress = event.value
 		this.change = 'keypress'//enumchange.keypress
 	}
 

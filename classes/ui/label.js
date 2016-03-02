@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $ui$, view){
 // A simple UI label for displaying text
@@ -13,10 +14,8 @@ define.class(function(require, $ui$, view){
 	this.bgcolor = vec4("transparent")
 	this.polygonoffset = 0.0;
 
-	this.textpositionfn = function(pos) {return pos;};
-
-	this.textstyle = function(fgcolor, pos, tag){
-		return fgcolor;
+	this.textstyle = function(style, tag){
+		return style
 	}
 
 	this.attributes = {
@@ -32,14 +31,17 @@ define.class(function(require, $ui$, view){
 		// the boldness of the font (try values 0 - 1)
 		boldness: Config({type:float, value: 0.}),
 
+		// line spacing
+		linespacing: Config({type:float, value: 1.0}),
+
 		// reference to the font typeface, require it with require('font:')
 		font: Config({type:Object, value: undefined, meta:"font"}),
 
 		// Should the text wrap around when its width has been reached?
 		multiline: Config({type:Boolean, value: false }),
 		outline: false,
-		outline_thickness: 0.6,
-		outline_color: vec4("black"),
+		outlinethickness: 0.6,
+		outlinecolor: vec4("black"),
 		// turn on subpixel aa, this requieres a bgcolor to be present
 		subpixel: Config({type:Boolean, value: false}),
 
@@ -54,10 +56,10 @@ define.class(function(require, $ui$, view){
 
 	this.bold = function(){
 		if (this.bold) {
-			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
+			this.font = require('$resources/fonts/opensans_bold_256.glf')
 		}
 		else{
-			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+			this.font = require('$resources/fonts/opensans_regular_256.glf')
 		}
 	}
 
@@ -77,11 +79,11 @@ define.class(function(require, $ui$, view){
 			var mesh = this.newText()
 			if(view.font) mesh.font = view.font
 
+			mesh.linespacing = view.linespacing
 			mesh.fontsize = view.fontsize
-			mesh.boldness = view.boldness
-			mesh.outline = view.outline;
-			mesh.outline_thickness = view.outline_thickness;
-
+			//mesh.boldness = view.boldness
+			//mesh.outline = view.outline;
+			//mesh.outline_thickness = view.outline_thickness;
 			mesh.add_y = mesh.line_height
 
 			mesh.align = view.align
@@ -135,11 +137,22 @@ define.class(function(require, $ui$, view){
 	}
 
 	this.font = function(event){
+		// DALi needs a baked font
+		if (!this.font.baked  && define.$platform === 'dali')
+			this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
+
 		this.selectShader()
 	}
 
 	this.subpixel = function(event){
 		this.selectShader()
+	}
+
+	this.text = function(){
+		this.relayout()
+	}
+
+	this.layout= function(){
 	}
 
 	this.measure = function(width){
@@ -152,12 +165,13 @@ define.class(function(require, $ui$, view){
 			width: this.measured_width = shader.mesh.bound_w,
 			height: this.measured_height = shader.mesh.bound_h
 		};
+
 	}
 
 	if (define.$platform === 'dali')
 		this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 	else
-		this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+		this.font = require('$resources/fonts/opensans_regular_256.glf')
 
 	var label = this.constructor
 	// A label.

@@ -1,7 +1,8 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/
 // self generating onejs walker utility class, run with nodejs to regenerate
 
 if(typeof process !== 'undefined' && require.main === module){
@@ -18,7 +19,7 @@ if(typeof process !== 'undefined' && require.main === module){
 				if(arguments.length > 1) return this._Object.apply(this, arguments)
 				var ret = {type:'Object',keys:[]}
 				for(var key in obj){
-					ret.keys.push({key:key, value:obj})
+					ret.keys.push({key:this.Id(key), value:this.Value(obj[key])})
 				}
 				return ret
 			}
@@ -34,7 +35,7 @@ if(typeof process !== 'undefined' && require.main === module){
 	}.toString().match(/function\s*\(\)\{\n([\S\s]*)\}/)[1].replace(/(^|\n)\t\t/g,'\n')
 
 	var rename = {for:'_for', else:'_else', try:'_try',catch:'_catch', finally:'_finally', in:'_in', do:'_do', const:'_const'}
-	var out = '\n'	
+	var out = '\n'
 	for(var key in defs){
 		out += '	this._'+key+' = this.' + key + ' = function('
 		var def = defs[key]
@@ -44,7 +45,7 @@ if(typeof process !== 'undefined' && require.main === module){
 			var ren = rename[sub] || sub
 			if(args) args += ', '
 			args += ren
-			body += ',\n			' + sub + ':' + ren 
+			body += ',\n			' + sub + ':' + ren
 
 			//var type = def[sub]
 		}
@@ -71,12 +72,19 @@ define.class(function(exports){
 		}
 	}
 
-	this._Id = this.Id = function(name, flag, typing){
+	this._Id = this.Id = function(name, flag){
 		return {
 			type:"Id",
 			name:name,
-			flag:flag,
-			typing:typing
+			flag:flag
+		}
+	}
+
+	this._Property = this.Property = function(name, flag){
+		return {
+			type:"Property",
+			name:name,
+			flag:flag
 		}
 	}
 
@@ -535,7 +543,7 @@ define.class(function(exports){
 		if(arguments.length > 1) return this._Object.apply(this, arguments)
 		var ret = {type:'Object',keys:[]}
 		for(var key in obj){
-			ret.keys.push({key:key, value:obj})
+			ret.keys.push({key:this.Id(key), value:this.Value(obj[key])})
 		}
 		return ret
 	}

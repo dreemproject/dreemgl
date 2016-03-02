@@ -302,11 +302,34 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n148" name="n148">148</a>
 <a href="#n149" name="n149">149</a>
 <strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">// Copied from compositionserver.js for dali. This assumes that the</span>
 <span class="comment">// node server is running on the same machine where dali is running.</span>
@@ -340,7 +363,28 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.width = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-width</span><span class="delimiter">'</span></span>]) || <span class="integer">1920</span>;
                 <span class="local-variable">this</span>.height = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-height</span><span class="delimiter">'</span></span>]) || <span class="integer">1080</span>;
                 <span class="local-variable">this</span>.name = args[<span class="string"><span class="delimiter">'</span><span class="content">-name</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">dreemgl</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.dalilib = args[<span class="string"><span class="delimiter">'</span><span class="content">-dalilib</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">/home/dali/teem/src/dreemgl/Release/dali</span><span class="delimiter">'</span></span>;
+
+                <span class="comment">// Detect location for Dali Node.js add-on. On Tizen</span>
+                <span class="comment">// it can be required like any npm module, on Ubuntu</span>
+                <span class="comment">// it's in the /dali-toolkit/node-addon/build/Release/dali</span>
+                <span class="comment">// relative to Dali's root folder.</span>
+                <span class="local-variable">this</span>.onTizen = <span class="predefined-constant">false</span>;
+                <span class="local-variable">this</span>.dalilib = <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>;
+                <span class="keyword">try</span> {
+                        <span class="local-variable">this</span>.onTizen = fs.statSync(<span class="string"><span class="delimiter">'</span><span class="content">/etc/tizen-release</span><span class="delimiter">'</span></span>).isFile();
+                } <span class="keyword">catch</span> (e) {
+                }
+
+                <span class="comment">// Dali/nodejs interface (nodejs package at top-level of dreemgl repository)</span>
+                <span class="keyword">if</span> (! <span class="local-variable">this</span>.onTizen ) {
+                        <span class="keyword">var</span> daliRoot = process.env[<span class="string"><span class="delimiter">'</span><span class="content">DESKTOP_PREFIX</span><span class="delimiter">'</span></span>].replace(<span class="string"><span class="delimiter">'</span><span class="content">/dali-env/opt</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
+                        <span class="local-variable">this</span>.dalilib = daliRoot + <span class="string"><span class="delimiter">'</span><span class="content">/dali-toolkit/node-addon/build/Release/dali</span><span class="delimiter">'</span></span>
+                }
+
+                <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">-dumpprog</span><span class="delimiter">'</span></span> <span class="keyword">in</span> args) {
+                        <span class="keyword">var</span> dp = args[<span class="string"><span class="delimiter">'</span><span class="content">-dumpprog</span><span class="delimiter">'</span></span>];
+                        <span class="local-variable">this</span>.dumpprog = (dp.length &gt; <span class="integer">0</span>) ? args[<span class="string"><span class="delimiter">'</span><span class="content">-dumpprog</span><span class="delimiter">'</span></span>] : <span class="string"><span class="delimiter">'</span><span class="content">stdout</span><span class="delimiter">'</span></span>;
+                }
 
                 <span class="local-variable">this</span>.args = args
                 <span class="local-variable">this</span>.compname = compname
@@ -355,7 +399,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">200</span>)
                 <span class="local-variable">this</span>.fast_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">10</span>)
 
-                <span class="local-variable">this</span>.fast_watcher.atChange = 
+                <span class="local-variable">this</span>.fast_watcher.atChange =
                 <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
                         <span class="comment">// lets reload this app</span>
                         <span class="local-variable">this</span>.reload()
@@ -404,7 +448,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 require.clearCache()
 
                 <span class="local-variable">this</span>.DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>);
-                <span class="local-variable">this</span>.DaliApi.initialize(<span class="local-variable">this</span>.width, <span class="local-variable">this</span>.height, <span class="local-variable">this</span>.name, <span class="local-variable">this</span>.dalilib);
+                <span class="local-variable">this</span>.DaliApi.initialize({<span class="key">width</span>: <span class="local-variable">this</span>.width, <span class="key">height</span>: <span class="local-variable">this</span>.height, <span class="key">name</span>: <span class="local-variable">this</span>.name, <span class="key">dalilib</span>: <span class="local-variable">this</span>.dalilib, <span class="key">dumpprog</span>: <span class="local-variable">this</span>.dumpprog});
 
 
                 <span class="keyword">var</span> Composition = require(define.expandVariables(<span class="local-variable">this</span>.filename))
@@ -414,7 +458,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">reload</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.destroy()
 
-                <span class="comment">// lets fill </span>
+                <span class="comment">// lets fill</span>
                 require.clearCache()
 
                 <span class="comment">// lets see if our composition is a dir or a jsfile</span>
@@ -438,7 +482,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                   <span class="local-variable">this</span>.screenname = <span class="local-variable">this</span>.compname;
-                
+
                 <span class="comment">// Reaching here indicates the path does not exist</span>
                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">bootdali.reload: Unable to load</span><span class="delimiter">'</span></span>, jsname);
 }
