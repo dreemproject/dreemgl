@@ -1,6 +1,6 @@
 # DreemGL Visual Layout Toolkit
 
-The layout `toolkit` widget is designed for quickly prototyping and designing new compositions.  
+The layout `toolkit` widget is meant for quickly prototyping and designing new compositions.  
 
 ## Setting Up
 
