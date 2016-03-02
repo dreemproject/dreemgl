@@ -1,7 +1,6 @@
-# Extending DreemGL with New Components
+# DreemGL Components Guide
 
-Extending DreemGL to communicate with and access IoT devices, web services and other external resources means creating 
-a DreemGL component.
+This document describes how to extend DreemGL to communicate with and access IoT devices, web services and other external resources.
 
 ## Simple Web Service as a DreemGL Component
 
