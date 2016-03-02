@@ -307,3 +307,6 @@ The screen will redraw and this the API will return:
 
     {"type":"return","method":"onkeyword"}
 
+#Examples of Connected Devices
+
+See the Hue ambient lights: http://localhost:2000/examples/components/hue/README.md
