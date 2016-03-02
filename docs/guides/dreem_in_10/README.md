@@ -5,7 +5,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.
 -->
 
-# DreemGL in 10 Minutes - Part 1
+# DreemGL in 10 Minutes
 
 DreemGL is a GL (webGL) based UI toolkit and IOT system written in JavaScript. In DreemGL Shaders replace CSS and are written in type inferenced JS, 
 large data can be rendered using vertexbuffers, the DOM is created React-style, and multiple devices/screens share one 'composition' space with automated RPC system.

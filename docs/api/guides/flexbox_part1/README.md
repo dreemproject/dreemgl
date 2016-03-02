@@ -1,4 +1,4 @@
-# CSS3 Flexible Box or flexbox - Part 1
+# Flexbox Layout in DreemGL Part 1
 
 The [CSS3 Flexible Box](https://www.w3.org/TR/css3-flexbox/), or *flexbox*, is a layout mode providing for the arrangement of elements (children of a container element) such that the elements behave predictably when the UI layout must accommodate different screen sizes and different display devices. CSS3 Flexible Box is a W3C standard (working draft). For many applications, the flexible box model provides an improvement over the block model in that it does not use floats, nor do the flex container's margins collapse with the margins of its contents.
 

@@ -1,7 +1,6 @@
-# Extending DreemGL with New Components
+# DreemGL IoT Guide
 
-Extending DreemGL to communicate with and access IoT devices, web services and other external resources means creating 
-a DreemGL component.
+This document describes how to extend DreemGL to communicate with and access IoT devices, web services and other external resources.
 
 ## Simple Web Service as a DreemGL Component
 
@@ -308,3 +307,6 @@ The screen will redraw and this the API will return:
 
     {"type":"return","method":"onkeyword"}
 
+#Examples of Connected Devices
+
+See the Hue ambient lights example here: [http://localhost:2000/examples/components/hue/README.md](http://localhost:2000/examples/components/hue/README.md)

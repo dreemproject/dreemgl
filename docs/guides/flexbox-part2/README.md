@@ -1,6 +1,4 @@
-# CSS3 Flexible Box or flexbox
-
-This is part #2 of the flexbox guide. For part #1, click here.
+# Flexbox Layout in DreemGL Part 2
 
 ## Container attributes (continued)
 

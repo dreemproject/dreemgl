@@ -1176,11 +1176,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1022" name="n1022">1022</a>
 <a href="#n1023" name="n1023">1023</a>
 <a href="#n1024" name="n1024">1024</a>
+<a href="#n1025" name="n1025">1025</a>
+<a href="#n1026" name="n1026">1026</a>
+<a href="#n1027" name="n1027">1027</a>
+<a href="#n1028" name="n1028">1028</a>
+<a href="#n1029" name="n1029">1029</a>
+<strong><a href="#n1030" name="n1030">1030</a></strong>
+<a href="#n1031" name="n1031">1031</a>
+<a href="#n1032" name="n1032">1032</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, labelset, <span class="predefined">$$</span>, geo, urlfetch)
 {
@@ -2191,6 +2200,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ])
                 );
                 <span class="comment">//res.push(this.constructor_children);</span>
+                res.push(label({
+                        <span class="key">bottom</span>:<span class="integer">10</span>,
+                        <span class="key">fontsize</span>:<span class="integer">8</span>,
+                        <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
+                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>,
+                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Vector data copyright OpenStreetMap contributors, Whos On First. Webservice by mapzen.</span><span class="delimiter">&quot;</span></span>
+                }))
                 <span class="local-variable">this</span>.framessincerender = <span class="integer">0</span>;
                 <span class="keyword">return</span> res;
         }

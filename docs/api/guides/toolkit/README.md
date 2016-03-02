@@ -1,12 +1,11 @@
-# DreemGL Visual Toolkit
+# DreemGL Visual Layout Toolkit
 
-The `toolkit` widget can be a helpful tool when designing a new compositions.  
+The layout `toolkit` widget is meant for quickly prototyping and designing new compositions.  
 
 ## Setting Up
 
-Currently `toolkit` is somewhat limited to compositions with simple render functions (particularly functions without loops
-or flow control logic).  The simplest way to ensure this is to begin with a blank `toolkit` application and only add
-more complext logic by hand after visual layout and design is futher along when the toolkit is no longer necessary.
+The layout `toolkit` is for prototyping user interfaces and as such is limited to compositions with simple render functions (particularly functions without loops
+or flow control logic).  The simplest way to begin is with a blank `toolkit` application to complete the visual layout and design. Then, more complex logic can be added when the application is developed. The purpose of this guide is to describe the process of prototping visual layout.
 
 For example:
 
@@ -50,7 +49,6 @@ There are a number of special properties that can be added to views to influence
 | toolremove | true | When false, cannot be removed/deleted |
 | tooltextedit | true | When true can edit text in place |
 | toolrotate | true | When true toolkit can rotate view |
-|----------|---------|----------|
 
 ## Component Palette
 

@@ -154,9 +154,91 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <table class="CodeRay"><tr>
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
 <a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> convert = require(<span class="string"><span class="delimiter">'</span><span class="content">./convert</span><span class="delimiter">'</span></span>);
-module.exports = convert(<span class="string"><span class="delimiter">'</span><span class="content">map</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">../map</span><span class="delimiter">'</span></span>));
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>() {
+<span class="comment">// internal, View that visualizes the output from Google Map's static map api</span>
+
+    <span class="local-variable">this</span>.attributes = {
+
+      <span class="comment">// Google Maps API key</span>
+      <span class="key">apikey</span>:   <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
+
+      <span class="comment">// Location for center of map, can be anything Google Maps understands</span>
+      <span class="key">location</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Seocho-gu, Seoul, South Korea</span><span class="delimiter">&quot;</span></span>,
+
+      <span class="comment">// Image format (jpg, png, etc.)</span>
+      <span class="key">format</span>:   <span class="string"><span class="delimiter">&quot;</span><span class="content">jpg</span><span class="delimiter">&quot;</span></span>,
+
+      <span class="comment">// Map type (of roadmap,satellite,terrain,hybrid)</span>
+      <span class="key">maptype</span>:  <span class="string"><span class="delimiter">&quot;</span><span class="content">roadmap</span><span class="delimiter">&quot;</span></span>,
+
+      <span class="comment">// Map device scale //1, 2 (or 4)</span>
+      <span class="key">mapscale</span>:<span class="integer">2</span>,
+
+      <span class="comment">// Map zoom level 0 ~ 21+ (0 is whole earth, 21 is street level)</span>
+      <span class="key">mapzoom</span>:<span class="integer">14</span>,
+
+          <span class="comment">// Google Static Map's endpoint</span>
+      <span class="key">endpoint</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://maps.googleapis.com/maps/api/staticmap</span><span class="delimiter">&quot;</span></span>,
+
+      <span class="key">bgimage</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.mapurl()</span><span class="delimiter">&quot;</span></span>)
+    };
+
+        <span class="local-variable">this</span>.<span class="function">mapurl</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.endpoint + <span class="string"><span class="delimiter">'</span><span class="content">?key=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.apikey + <span class="string"><span class="delimiter">'</span><span class="content">&amp;center=</span><span class="delimiter">'</span></span> + encodeURIComponent(<span class="local-variable">this</span>.location) + <span class="string"><span class="delimiter">'</span><span class="content">&amp;maptype=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.maptype + <span class="string"><span class="delimiter">'</span><span class="content">&amp;scale=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.mapscale + <span class="string"><span class="delimiter">'</span><span class="content">&amp;zoom=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.mapzoom + <span class="string"><span class="delimiter">'</span><span class="content">&amp;size=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.width + <span class="string"><span class="delimiter">'</span><span class="content">x</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.height + <span class="string"><span class="delimiter">'</span><span class="content">&amp;format=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.format
+        }
+
+
+});
+
+
 </pre></td>
 </tr></table>
 

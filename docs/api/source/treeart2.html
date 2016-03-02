@@ -292,8 +292,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n138" name="n138">138</a>
 <a href="#n139" name="n139">139</a>
 <strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view) {
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view) {
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [screen({
                                 <span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
@@ -306,12 +318,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="local-variable">this</span>.mousepos = event.value
                                 },
                                 <span class="key">hardrect</span>:{
-                                        <span class="function">color</span>:<span class="keyword">function</span>(){                                                
+                                        <span class="function">color</span>:<span class="keyword">function</span>(){
                                                 <span class="keyword">if</span>(mesh.depth&gt;<span class="integer">13</span>.){
-                                                        <span class="keyword">var</span> len = min(pow(<span class="float">1.5</span>-length(mesh.pos),<span class="integer">8</span>.),<span class="integer">1</span>.)                                                                
+                                                        <span class="keyword">var</span> len = min(pow(<span class="float">1.5</span>-length(mesh.pos),<span class="integer">8</span>.),<span class="integer">1</span>.)
                                                         <span class="keyword">if</span>(mesh.isberry&gt;<span class="integer">0</span>.){
                                                                 <span class="comment">// render a berry</span>
-                                                                <span class="comment">//var len = min(pow(1.5-length(mesh.pos),8.)*0.15,1.)                </span>
+                                                                <span class="comment">//var len = min(pow(1.5-length(mesh.pos),8.)*0.15,1.)</span>
                                                                 <span class="keyword">return</span> mycolor*len
                                                         }
                                                         <span class="keyword">else</span>{
@@ -353,7 +365,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="integer">14</span>; i++){
                                                         <span class="keyword">if</span>(i &gt;= depth) <span class="keyword">break</span>
                                                         <span class="comment">// this is like path&amp;1 binary arithmetic done using floats</span>
-                                                        <span class="keyword">var</span> right = mod(path, <span class="integer">2</span>.)        
+                                                        <span class="keyword">var</span> right = mod(path, <span class="integer">2</span>.)
                                                         <span class="comment">// its the right branch</span>
                                                         <span class="keyword">var</span> angle = <span class="integer">25</span>.*math.DEG+<span class="float">0.01</span>*turbulence*sin(view.time)
                                                     <span class="keyword">if</span>(right&gt;<span class="integer">0</span>.){
@@ -409,7 +421,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                                                 <span class="comment">// first triangle</span>
                                                 <span class="keyword">function</span> <span class="function">recur</span>(path, depth){
-                                                        
+
                                                         <span class="keyword">var</span> isberry = <span class="integer">0</span>
                                                         <span class="comment">// probabilistically spread the berries through the tree</span>
                                                         <span class="keyword">if</span>(depth &gt; <span class="integer">13</span> &amp;&amp; Math.random()&lt;<span class="float">0.1</span>) isberry = <span class="integer">1</span>

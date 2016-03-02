@@ -11,7 +11,7 @@
 To launch a DreemGL application in DALi runtime, you need to launch the DreemGL server.js file with some additional command line options, e.g.:
 
 ```Bash
-node server.js -width 600 -height 600 -dali examples/nulltest
+node server.js -width 600 -height 600 -dali test/nulltest
 ```
 
 There is a default folder hard coded into the Dreem
@@ -21,17 +21,10 @@ There is a default folder hard coded into the Dreem
 | width   | Optional | Width of dali stage. default = 1920 pixels |
 | height  | Optional | Height of dali stage. defualt = 1080 pixels |
 | name    | Optional | Window name to display |
+| dumpprog| Optional | Write DALi statements to the console. This can be used to debug a stand-alone DALi application. Each line starts with ```DALICODE: ```. |
 | dali    | Required | Location of the dreemgl application to run. This can be the name of a directory containing the application, or the name of a single javascript file (without the ```.js``` suffix)
 
 ## Debugging DALi Runtime
-
-### Generating dali output from dreemgl/dali apps
-
-Dali output can be enabled by editing the file, /system/platform/dali/dali_api.js
-
-```DaliApi.emitcode = true;```
-
-When true, dali statements are written to the console when the application runs. Each line of output starts with 'DALICODE: '. 
 
 
 ### odroid/tizen performance logging
@@ -149,6 +142,4 @@ Results of running valgrind on the boxes example
 ==96952== For counts of detected and suppressed errors, rerun with: -v
 ==96952== ERROR SUMMARY: 231 errors from 1 contexts (suppressed: 0 from 0)
 ```
-
-
 

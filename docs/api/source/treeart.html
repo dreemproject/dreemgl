@@ -224,8 +224,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n70" name="n70">70</a></strong>
 <a href="#n71" name="n71">71</a>
 <a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view) {
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view) {
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [screen(
                         view({
@@ -244,7 +256,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="key">depth</span>:<span class="reserved">float</span>
                                         }).array(),
                                         <span class="function">position</span>:<span class="keyword">function</span>(){
-                                                
+
                                                 <span class="comment">// lets walk</span>
                                                 <span class="keyword">var</span> path = mesh.path
                                                 <span class="keyword">var</span> pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>)
@@ -253,7 +265,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="keyword">var</span> depth = <span class="reserved">int</span>(mesh.depth)
                                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="integer">14</span>; i++){
                                                         <span class="keyword">if</span>(i &gt;= depth) <span class="keyword">break</span>
-                                                        <span class="keyword">var</span> right = mod(path, <span class="integer">2</span>.)        
+                                                        <span class="keyword">var</span> right = mod(path, <span class="integer">2</span>.)
                                                     <span class="keyword">if</span>(right&gt;<span class="integer">0</span>.){
                                                             dir = math.rotate2d(dir, <span class="integer">30</span>.*math.DEG*sin(view.time))
                                                     }
@@ -283,12 +295,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                                 <span class="integer">1</span>,<span class="integer">1</span>, path, depth
                                                         )
                                                         <span class="keyword">if</span>(depth&gt;<span class="integer">13</span>)<span class="keyword">return</span>
-                                                        
+
                                                         recur(path, depth+<span class="integer">1</span>)
                                                         recur(path + Math.pow(<span class="integer">2</span>, depth), depth+<span class="integer">1</span>)
                                                 }
                                                 recur(<span class="integer">0</span>,<span class="integer">0</span>)
-                                                
+
                                                 <span class="integer">10101101</span>
 
                                         }
