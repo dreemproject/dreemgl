@@ -1012,6 +1012,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			])
 		);
 		//res.push(this.constructor_children);
+		res.push(label({
+			bottom:10,
+			fontsize:8,
+			position:'absolute',
+			fgcolor:'black',
+			text:"Vector data copyright OpenStreetMap contributors, Whos On First. Webservice by mapzen."
+		}))
 		this.framessincerender = 0;
 		return res;
 	}
