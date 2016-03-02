@@ -1,4 +1,4 @@
-# DreemGL Components Guide
+# DreemGL IoT Guide
 
 This document describes how to extend DreemGL to communicate with and access IoT devices, web services and other external resources.
 
