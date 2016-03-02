@@ -1,3 +1,9 @@
+/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class("$server/composition",function(require, $ui$, screen, view) {
 	this.render = function() {
 		return [screen(
@@ -17,7 +23,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						depth:float
 					}).array(),
 					position:function(){
-						
+
 						// lets walk
 						var path = mesh.path
 						var pos = vec2(0,0)
@@ -26,7 +32,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						var depth = int(mesh.depth)
 						for(var i = 0; i < 14; i++){
 							if(i >= depth) break
-							var right = mod(path, 2.)	
+							var right = mod(path, 2.)
 						    if(right>0.){
 						    	dir = math.rotate2d(dir, 30.*math.DEG*sin(view.time))
 						    }
@@ -56,12 +62,12 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 								1,1, path, depth
 							)
 							if(depth>13)return
-							
+
 							recur(path, depth+1)
 							recur(path + Math.pow(2, depth), depth+1)
 						}
 						recur(0,0)
-						
+
 						10101101
 
 					}
