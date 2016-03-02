@@ -1,10 +1,10 @@
 # DreemGL Visual Layout Toolkit
 
-The `layout toolkit` widget is designed for laying out new compositions.  
+The layout `toolkit` widget is designed for quickly prototyping and designing new compositions.  
 
 ## Setting Up
 
-The `layout toolkit` is for prototyping user interfaces and as such is limited to compositions with simple render functions (particularly functions without loops
+The layout `toolkit` is for prototyping user interfaces and as such is limited to compositions with simple render functions (particularly functions without loops
 or flow control logic).  The simplest way to begin is with a blank `toolkit` application to complete the visual layout and design. Then, more complex logic can be added when the application is developed. The purpose of this guide is to describe the process of prototping visual layout.
 
 For example:
