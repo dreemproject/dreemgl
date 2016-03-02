@@ -26,7 +26,7 @@ define.class(function($ui$, screen, view, button, textbox, $$, movie) {
         return [
 
         view(
-            { flexdirection:'column', flex:1, overflow:'scroll' },
+            { flexdirection:'column', flex:1, overflow:'scroll', bgcolor:"white" },
             view({flexdirection:'row'},
 				textbox({ name:'search', value:'Cats', fgcolor:'black', borderwidth:1, bordercolor:'#666'}),
 				button({text:'Search', click:function() {
