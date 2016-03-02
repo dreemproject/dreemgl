@@ -27,7 +27,7 @@ Guide to DreemGL](https://github.com/dreemproject/dreemgl/blob/master/docs/devel
 A guide for designer's using the layout toolkit to prototype screen designs and interactions. 
 
 * [DreemGL IoT Guide](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/components/README.md)
-A guide for extending DreemGL with new services, devices and other components. A live slide-show that demonstrates many of the same concepts in this guide can be found in the [/examples/extdemo](https://github.com/dreemproject/dreemgl/tree/master/examples/extdemo) directory.
+A guide for extending DreemGL with new services, devices and other components. A live slide-show that demonstrates many of the same concepts in this guide can be found in the [/slides/extendingdreem](https://github.com/dreemproject/dreemgl/tree/master/docs/slides/extendingdreem) directory.
 
 * [DreemGL
   Appendix](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/appendix/README.md)
