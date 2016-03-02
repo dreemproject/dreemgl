@@ -1,10 +1,6 @@
 # DreemGL Visual Toolkit
 
-<<<<<<< HEAD
-The DreemGL Visual Toolkit is a component which allows you to edit a DreemGL composition from inside the browser. The toolkit can be used to build a visual editor for DreemGL.
-=======
 The `toolkit` widget can be a helpful tool when designing a new compositions.  
->>>>>>> Add some more detail to toolkit readme, regenerate docs
 
 ## Setting Up
 
