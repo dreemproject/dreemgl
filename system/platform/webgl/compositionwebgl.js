@@ -15,7 +15,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 		window.composition = this
 		if(previous){
 			this.reload = (previous.reload || 0) + 1
-			this.device = previous.device// new Device(previous.device) //previous.device
+			this.device = new Device(previous.device) //previous.device// new Device(previous.device) //previous.device
 			this.device.reload = this.reload
 			console.log("Reload " + this.reload)
 		}
@@ -23,8 +23,8 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 			// lets spawn up a webGL device
 			this.device = new Device()
 		}
-
 		baseclass.atConstructor.call(this, previous, parent)
+		this.device.screen = this.screen
 		this.screen._size = this.device.size
 	}
 

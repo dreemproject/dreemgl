@@ -22,7 +22,7 @@ define.class('$system/base/shader', function(require, exports){
 		var pix_debug = pix_state.code_debug
 
 		var gl = gldevice.gl
-		var cache_id = vtx_code + pix_color + this.has_pick
+		var cache_id = vtx_code + pix_color
 
 		var shader = gldevice.shadercache[cache_id]
 
@@ -64,56 +64,11 @@ define.class('$system/base/shader', function(require, exports){
 
 		this.getLocations(gl, shader, vtx_state, pix_state)
 
-		if(this.compile_use) this.compileUse(shader)
-
-		if(pix_debug){
-			// compile the pick shader
-			var pix_debug_shader = gl.createShader(gl.FRAGMENT_SHADER)
-			gl.shaderSource(pix_debug_shader, pix_debug)
-			gl.compileShader(pix_debug_shader)
-			if (!gl.getShaderParameter(pix_debug_shader, gl.COMPILE_STATUS)){
-				var err = gl.getShaderInfoLog(pix_debug_shader)
-				console.log(err.toString(), this.annotateLines(pix_debug))
-				throw new Error(err)
-			}
-
-			shader.debug = gl.createProgram()
-			gl.attachShader(shader.debug, vtx_shader)
-			gl.attachShader(shader.debug, pix_debug_shader)
-			gl.linkProgram(shader.debug)
-			// add our pick uniform
-			this.getLocations(gl, shader.debug, vtx_state, pix_state)
-			if(this.compile_use) this.compileUse(shader.debug)
-		}
-
-		if(this.has_pick){
-			// compile the pick shader
-			var pix_pick_shader = gl.createShader(gl.FRAGMENT_SHADER)
-			gl.shaderSource(pix_pick_shader, pix_pick)
-			gl.compileShader(pix_pick_shader)
-			if (!gl.getShaderParameter(pix_pick_shader, gl.COMPILE_STATUS)){
-				var err = gl.getShaderInfoLog(pix_pick_shader)
-
-				console.log(err.toString(), this.annotateLines(pix_pick))
-				throw new Error(err)
-			}
-
-			shader.pick = gl.createProgram()
-			gl.attachShader(shader.pick, vtx_shader)
-			gl.attachShader(shader.pick, pix_pick_shader)
-			gl.linkProgram(shader.pick)
-			// add our pick uniform
-			pix_state.uniforms['pickguid'] = vec3
-			pix_state.uniforms['pickalpha'] = float
-
-			this.getLocations(gl, shader.pick, vtx_state, pix_state)
-
-			if(this.compile_use) this.compileUse(shader.pick)
-		}
+		this.compileUse(shader)
 
 		return shader		
 	}
-
+	/*
 	this.useShader = function(gl, shader){
 		if(!shader) return
 		if(shader.use) return shader.use(gl, shader, this)
@@ -242,11 +197,13 @@ define.class('$system/base/shader', function(require, exports){
 		}
 		
 		return len
-	}
+	}*/
 
-	this.compile_use = true
+	//this.compile_use = true
 
-	this.useShaderTemplate = function(gl, shader, root){
+	this.useShaderTemplate = function(gldevice, shader, root, overlay){
+		var gl = gldevice.gl
+		var ANGLE_instanced_arrays = gldevice.ANGLE_instanced_arrays
 		// use the shader
 		gl.useProgram(shader)
 
@@ -284,19 +241,26 @@ define.class('$system/base/shader', function(require, exports){
 		if (!buf) return 0;
 		if(lastbuf !== buf){
 			lastbuf = buf
-			if(buf.length > len) len = buf.length
-			if(len === 0) return 0
+			if(buf.length === 0) return 0
 			if(!buf.glvb) buf.glvb = gl.createBuffer()
 			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
 			if(!buf.clean){
 				var dt = Date.now()
-				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STREAM_DRAW)
+				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
 				buf.clean = true
 			}
 		}
 		var loc = ATTRLOC_LOC
 		gl.enableVertexAttribArray(loc)
 		ATTRLOC_ATTRIBPTR
+		if(buf.instancedivisor){
+			ANGLE_instanced_arrays.vertexAttribDivisorANGLE(loc, buf.instancedivisor)
+			root.instance_len = buf.length
+		}
+		else{
+			ANGLE_instanced_arrays.vertexAttribDivisorANGLE(loc, 0)
+			len = buf.length
+		}
 		ATTRLOC_END
 
 		// set up blend mode
@@ -359,13 +323,18 @@ define.class('$system/base/shader', function(require, exports){
 					if(part === 'layout' || isattr && i === split.length - 1) name += '_'
 					name += part
 				}
-				out += '\t\tuni = root.' + name + '\n'
+				out += '\t\tuni = "'+key+'" in overlay?overlay.'+key+':root.' + name + '\n'
 			}
 			else{
-				out += '\t\tuni = root.' 
+				out += '\t\tuni = "'+key+'" in overlay?overlay.'+key+':root.' 
 				if(isattr) out += '_' 
 				out += key + '\n'
 			}
+			// put in a bailout when we doing have the pixel entry
+			if(key === '_pixelentry'){
+				out += 'if(uni<0 || uni >'+this._pixelentries.length+') return 0\n'
+			}
+
 			out += '\t\tloc = shader.unilocs.' + key + '\n'
 			var gen = gltypes.uniform_gen[loc.type]
 
@@ -421,6 +390,9 @@ define.class('$system/base/shader', function(require, exports){
 			var lastbuf
 			for(var key in attrlocs){
 				var attrloc = attrlocs[key]
+				if(!attrloc){
+					continue
+				}
 				var ATTRLOC_BUF
 				if(attrloc.name){
 					ATTRLOC_BUF = 'root.' + attrloc.name 
@@ -437,7 +409,7 @@ define.class('$system/base/shader', function(require, exports){
 				}
 				else{
 					ATTRLOC_ATTRIBPTR = 
-						'if(buf.slots>4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
+						'gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
 				}
 				out += body		
 					.replace(/ATTRLOC_BUF/, ATTRLOC_BUF)
@@ -450,6 +422,7 @@ define.class('$system/base/shader', function(require, exports){
 		tpl = tpl.replace(/gl.[A-Z][A-Z0-9_]+/g, function(m){
 			return gltypes.gl[m.slice(3)]
 		})
+
 		shader.use = new Function('return ' + tpl)()
 	}
 
@@ -468,13 +441,31 @@ define.class('$system/base/shader', function(require, exports){
 	}})
 
 	// lets draw ourselves
-	this.drawArrays = function(devicewebgl, sub, start, end){
+	this.draw = function(gldevice, overlay){
 		//if(this.mydbg) debugger
-		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
-		if(!this.shader) return
-		var gl = devicewebgl.gl
-		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
-		if(len) gl.drawArrays(this.drawtype_enum, start || 0, end === undefined?len: end)
+		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(gldevice)
+		var shader = this.shader
+		if(!shader) return
+
+		var len = shader.use(gldevice, shader, this, overlay)
+		if(len){
+			if(this.index){
+				if(this.instance_len){
+					gldevice.ANGLE_instanced_arrays.drawElementsInstancedANGLE(this.drawtype_enum, this.start || 0, this.end === undefined?len: this.end)
+				}
+				else{
+					gl.drawElements(this.drawtype_enum, this.start || 0, this.end === undefined?len: this.end)
+				}
+			}
+			else{				
+				if(this.instance_len){
+					gldevice.ANGLE_instanced_arrays.drawArraysInstancedANGLE(this.drawtype_enum, this.start || 0, this.end === undefined?len: this.end, this.instance_len)
+				}
+				else{
+					gl.drawArrays(this.drawtype_enum, start || 0, end === undefined?len: end)
+				}
+			}
+		}
 		return len
 	}
 

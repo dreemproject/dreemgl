@@ -237,34 +237,43 @@ define.class(function(require){
 		}
 	}
 
-	this.emit_block_set = null
+	this.emitFlags = function(flag, keys){
+		for(var i = 0; i < keys.length; i++ ){
+			this['_flag_'+keys[i]] |= flag
+		}
+	}
+
+	this.emit_block_set = undefined
 
 	this.emit = function(key, ievent){
 
+		var flag_key = '_flag_' + key
+		var on_key = 'on' + key
+		var listen_key = '_listen_' + key
+
 		// lets do a fastpass
 		var event = ievent || {}
-		var fast_key = '_fast_' + key
 
-		// FAST OUT
-		var callfn = this[fast_key] 
-		if(this['on'+key] == callfn){
-			if(callfn === null) return
-			if(callfn){
-				// lets see if we have an 'on' key defined
-				callfn.call(this, event, event.value, this)
-				return
+		// flag based listener callbacks
+		var flags = this[flag_key]
+		var flag_pos = 1
+		while(flags){
+			if(flags&flag_pos){
+				var flagfn = this['atFlag'+(flags&flag_pos)]
+				if(flagfn) flagfn.call(this, key, event)
+				flags -= flag_pos
 			}
+			flag_pos = flag_pos << 1
 		}
+
+		if(!this[on_key] && !this[listen_key]) return
 
 		var lock_key = '_lock_' + key
 		if(this[lock_key] || this.emit_block_set && this.emit_block_set.indexOf(key) !== -1) return
 		this[lock_key] = true
 
-		var counter = 0
 		try{
 
-			var on_key = 'on' + key
-			var listen_key = '_listen_' + key
 			if(!this.__lookupSetter__(key)){
 				var fn = this[key]
 				if(typeof fn === 'function'){
@@ -279,11 +288,9 @@ define.class(function(require){
 			var finals
 			while(on_key in proto || listen_key in proto){
 				if(proto.hasOwnProperty(on_key)){
-					callfn = proto[on_key]
-					callfn.call(this, event, event.value, this)
+					proto[on_key].call(this, event, event.value, this)
 					if(event.stop) return
 					if(event.final) finals = finals || [], finals.push(event.final)
-					counter++
 				}
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
@@ -291,7 +298,6 @@ define.class(function(require){
 						listeners[j].call(this, event, event.value, this)
 						if(event.stop) return
 						if(event.final) finals = finals || [], finals.push(event.final)
-						counter = -1
 					}
 				}
 				proto = Object.getPrototypeOf(proto)
@@ -303,12 +309,6 @@ define.class(function(require){
 		}
 		finally{
 			this[lock_key] = false
-			if(counter === 1){
-				this[fast_key] = callfn
-			}
-			else if(counter === 0){
-				this[fast_key] = null
-			}
 		}
 	}
 
@@ -318,8 +318,6 @@ define.class(function(require){
 			this.defineAttribute(key, this[key], true)
 		}
 		var listen_key = '_listen_' + key
-		var fast_key = '_fast_' + key
-		this[fast_key] = undefined // invalidate fast cache
 		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
 		else array = this[listen_key]
@@ -539,42 +537,9 @@ define.class(function(require){
 			}
 		}
 	})
-	/*
-	// define setters {attrname:function(){}}
-	Object.defineProperty(this, 'setters', {
-		get:function(){
-			throw new Error("setter can only be assigned to")
-		},
-		set:function(arg){
-			for(var key in arg){
-				this['_set_'+key] = arg[key]
-			}
-		}
-	})
-
-
-	// define getters {attrname:function(){}}
-	Object.defineProperty(this, 'getters', {
-		get:function(){
-			throw new Error("getter can only be assigned to")
-		},
-		set:function(arg){
-			for(var key in arg){
-				this['_get_'+key] = arg[key]
-			}
-		}
-	})
-
-	// start animation by assigning keyframes to an attribute {attrname:{1:'red', 2:'green', 3:'blue'}}
-	Object.defineProperty(this, 'animate', {
-		get:function(){ return this.animateAttribute },
-		set:function(arg){
-			this.animateAttribute(arg)
-		}
-	})*/
 
 	// internal, animate an attribute with an animation object see animate
-	this.animateAttribute = function(arg){
+	this.animateAttributes = function(arg){
 		// count
 		var arr = []
 		for(var key in arg){
@@ -693,6 +658,9 @@ define.class(function(require){
 		//var config_key = '_config_' + key
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
+		var flag_key = '_flag_' + key
+		
+		this[flag_key] = 0
 
 		if(!config.group) config.group  = this.constructor.name
 		if(config.animinit) this[animinit_key] = 0
@@ -738,7 +706,6 @@ define.class(function(require){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
 						//this.addListener(on_key, value)
-						this['_fast_' + key] = undefined
 						this[on_key] = value
 						return
 					}
@@ -783,7 +750,7 @@ define.class(function(require){
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
 				// emit self
-				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
+				this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
 			}
 
 			// add a listener to the alias
@@ -793,7 +760,7 @@ define.class(function(require){
 			aliasarray.push(function(value){
 				var old = this[value_key]
 				var val = this[value_key] = value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old})
+				this.emit(key, {setter:true, key:key, owner:this, value:val, old:old})
 			})
 			// initialize value
 			this[value_key] = this[alias_key][config.index]
@@ -810,7 +777,6 @@ define.class(function(require){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
 						//this.addListener(on_key, value)
-						this['_fast_' + key] = undefined
 						this[on_key] = value
 						return
 					}
@@ -852,7 +818,7 @@ define.class(function(require){
 				}
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
+				this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
 			}
 		}
 
@@ -861,11 +827,9 @@ define.class(function(require){
 			configurable:true,
 			enumerable:true,
 			get: function(){
-				if(this.atAttributeGet !== undefined) this.atAttributeGet(key)
-				var getter = this[get_key]
-				if(getter !== undefined) return getter()
-				// lets check if we need to map our stored type
-				// if we are in motion, we should return the end value
+				if(this.atAttributeGetFlag){
+					this[flag_key] |= this.atAttributeGetFlag
+				}
 				return this[value_key]
 			},
 			set: setter

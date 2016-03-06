@@ -22,19 +22,27 @@ define.class(function(require, exports){
 
 	this.document = typeof window !== 'undefined'?window : null
 
+	this.atResize = function(){
+	}
+
+	this.atDraw = function(time, frameid){
+	}
+
 	this.atConstructor = function(previous){
 
-		this.extensions = previous && previous.extensions || {}
 		this.shadercache = previous &&  previous.shadercache || {}
-		this.drawpass_list = previous && previous.drawpass_list || []
-		this.layout_list = previous && previous.layout_list || []
-		this.pick_resolve = []
+
 		this.anim_redraws = []
 		this.animate_hooks = []
-		this.doPick = this.doPick.bind(this)
+		
+		this.frameid = 0
 
 		this.animFrame = function(time){
-			if(this.doColor(time)){
+
+			if(!this.first_time) this.first_time = time
+			if(++this.frameid >= 9007199254740991) this.frameid = 0
+
+			if(this.atDraw( (time - this.first_time) / 1000, this.frameid)){
 				this.anim_req = true
 				this.document.requestAnimationFrame(this.animFrame)
 			}
@@ -64,6 +72,8 @@ define.class(function(require, exports){
 			this.createContext()
 			this.createWakeupWatcher()
 		}
+		this.loadExtension('OES_standard_derivatives')
+		this.loadExtension('ANGLE_instanced_arrays')
 
 		this.initResize()
 	}
@@ -107,8 +117,8 @@ define.class(function(require, exports){
 			console.log("Could not get webGL context!")
 		}
 
-		// require derivatives
-		this.getExtension('OES_standard_derivatives')
+		// require derivatives and instanced arrays
+
 	}
 
 	this.initResize = function(){
@@ -148,19 +158,8 @@ define.class(function(require, exports){
 		resize()
 	}
 
-	this.clear = function(r, g, b, a){
-		if(arguments.length === 1){
-			a = r.length === 4? r[3]: 1, b = r[2], g = r[1], r = r[0]
-		}
-		if(arguments.length === 3) a = 1
-		this.gl.clearColor(r, g, b, a)
-		this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT|this.gl.STENCIL_BUFFER_BIT)
-	}
-
-	this.getExtension = function(name){
-		var ext = this.extensions[name]
-		if(ext) return ext
-		return this.extensions[name] = this.gl.getExtension(name)
+	this.loadExtension = function(name){
+		this[name] = this.gl.getExtension(name)
 	}
 
 	this.redraw = function(){
@@ -169,12 +168,15 @@ define.class(function(require, exports){
 		this.document.requestAnimationFrame(this.animFrame)
 	}
 
+	this.clear = function(r,g,b,a){
+		var gl = this.gl
+		gl.clearColor(r,g,b,a)
+		gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT|gl.STENCIL_BUFFER_BIT)
+	}
+
 	this.bindFramebuffer = function(frame){
 		if(!frame) frame = this.main_frame
-
 		this.frame = frame
-		//this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
-
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
 	}
@@ -184,308 +186,5 @@ define.class(function(require, exports){
 		this.gl.readPixels(x , y , w , h, this.gl.RGBA, this.gl.UNSIGNED_BYTE, buf)
 		return buf
 	}
-
-	this.doPick = function(resolve){
-		this.pick_timer = 0
-		var x = this.pick_x, y = this.pick_y
-
-		if(!this.first_draw_done){
-			this.doColor(this.last_time)
-		}
-
-		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
-			var last = i === len - 1
-			//var skip = false
-			var view = this.drawpass_list[i]
-
-			// little hack to dont use rtt if you only use a single view
-			//if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
-			//	skip = last = true
-			//}
-			// lets set up glscissor on last
-			// and then read the goddamn pixel
-			if(last || view.draw_dirty & 2){
-				view.draw_dirty &= 1
-				view.drawpass.drawPick(last, i + 1, x, y, this.debug_pick)
-			}
-			//if(skip){
-			//	this.screen.draw_dirty &= 1
-			//	break
-			//}
-		}
-		// now lets read the pixel under the pointer
-		var pick_resolve = this.pick_resolve
-		this.pick_resolve = []
-
-		if(this.debug_pick){
-
-			var data = this.readPixels(x * this.ratio, this.main_frame.size[1] - y * this.ratio, 1, 1)
-		}
-		else{
-			var data = this.readPixels(0, 0, 1, 1)
-		}
-
-		// decode the pass and drawid
-		var passid = data[0]//(data[0]*43)%256
-		var drawid = (((data[2]<<8) | data[1]))//*60777)%65536
-		// lets find the view.
-
-		var passview = this.drawpass_list[passid - 1]
-		var drawpass = passview && passview.drawpass
-		var view = drawpass && drawpass.getDrawID(drawid)
-
-		while(view && view.nopick){
-			view = view.parent
-		}
-
-		if (resolve) {
-			resolve(view)
-		} else {
-			for (var i = 0; i < pick_resolve.length; i++){
-				pick_resolve[i](view)
-			}
-		}
-	}
-
-	this.pickScreen = function(pos, resolve, immediate){
-		this.pick_x = pos[0]
-		this.pick_y = pos[1]
-
-		var callback = function () {
-			this.doPick(resolve)
-			delete this.pick_timer
-		}.bind(this)
-
-		// TODO(aki): remove sync picking
-		if (immediate) {
-			callback(resolve)
-			return
-		}
-
-		// Throttle picking at 15 fps
-		if (!this.pick_timer) {
-			this.pick_timer = setTimeout(callback, 1000/15)
-			this.pick_timer.time = this.last_time
-		}
-	}
-
-	this.doColor = function(time){
-
-		if(!this.first_time) this.first_time = time
-		this.last_time = time
-
-		if(!this.screen) return
-
-		this.first_draw_done = true
-
-		var stime = (time - this.first_time) / 1000
-		//console.log(this.last_time - stime)
-
-		// lets layout shit that needs layouting.
-		var anim_redraw = this.anim_redraws
-		anim_redraw.length = 0
-		this.screen.doAnimation(stime, anim_redraw)
-
-		this.screen._maxsize =
-		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
-
-		// do all the animate hooks
-		var animate_hooks = this.animate_hooks
-		for(var i = 0; i < animate_hooks.length; i++){
-			var item = animate_hooks[i]
-			//console.log(item)
-			if(item.atAnimate(stime)){
-				anim_redraw.push(item)
-			}
-		}
-
-		// do the dirty layouts
-		for(var i = 0; i < this.layout_list.length; i++){
-			// lets do a layout?
-			var view = this.layout_list[i]
-			if(view.layout_dirty){
-				view.doLayout()
-				view.layout_dirty = false
-			}
-		}
-
-		// do the dirty matrix regen
-		for(var i = 0; i < this.layout_list.length; i++){
-			// lets do a layout?
-			var view = this.layout_list[i]
-			if(view.matrix_dirty){
-				view.updateMatrices(view.parent? view.parent.totalmatrix: undefined, view._viewport)
-			}
-		}
-
-		var clipview = undefined
-		// lets draw draw all dirty passes.
-		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
-
-			var view = this.drawpass_list[i]
-			//var skip = false
-			var last = i === len - 1
-			//if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
-			//	skip = last = true
-			//}
-
-			if(view.draw_dirty & 1 || last){
-
-				if(!last){
-					if(clipview === undefined) clipview = view
-					else clipview = null
-				}
-				var hastime = view.drawpass.drawColor(last, stime, clipview)
-				view.draw_dirty &= 2
-				if(hastime){
-					anim_redraw.push(view)
-				}
-			}
-
-			//if(skip){
-			//	this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-			//	this.screen.draw_dirty &= 2
-			//	break
-			//}
-		}
-
-		if(anim_redraw.length){
-			//console.log("REDRAWIN", this.draw_hooks)
-			var redraw = false
-			for(var i = 0; i < anim_redraw.length; i++){
-				var aredraw = anim_redraw[i]
-				if(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
-					redraw = true
-					aredraw.redraw()
-				}
-			}
-			return redraw
-		}
-		return hastime
-	}
-
-	this.atNewlyRendered = function(view){
-
-		// if view is not a layer we have to find the layer, and regenerate that whole layer.
-		if(!view.parent) this.screen = view // its the screen
-		// alright lets do this.
-		var node = view
-		while(!node._viewport){
-			node = node.parent
-		}
-
-		if(!node.parent){ // fast path to chuck the whole setc
-
-
-			for (var j = 0; j< this.pointer.hover.length;j++) {
-				var p = this.pointer.hover[j];
-				//console.log("Removing dangling hover pointer", p)
-				this.pointer.hover.removePointer(p);
-			}
-
-
-			// lets put all the drawpasses in a pool for reuse
-			for(var i = 0; i < this.drawpass_list.length; i++){
-				var draw = this.drawpass_list[i]
-				draw.drawpass.poolDrawTargets()
-				draw.layout_dirty = true
-				draw.draw_dirty = 3
-			}
-			this.drawpass_list = []
-			this.layout_list = []
-			this.drawpass_idx = 0
-			this.layout_idx_first = 0
-			this.layout_idx = 0
-			this.addDrawPassRecursive(node)
-			this.first_draw_done = false
-			this.redraw()
-		}
-		else{ // else we remove drawpasses first then re-add them
-			this.removeDrawPasses(node)
-			this.layout_idx_first = this.layout_idx
-			this.addDrawPassRecursive(node)
-		}
-		node.relayout()
-	}
-
-	// remove drawpasses related to a view
-	this.removeDrawPasses = function(view){
-		// we have to remove all the nodes which have view as their parent layer
-		var drawpass_list = this.drawpass_list
-		this.drawpass_idx = Infinity
-		for(var i = 0; i < drawpass_list.length; i++){
-			var node = drawpass_list[i]
-			while(node.parent && node !== view){
-				node = node.parent
-			}
-			if(node === view){
-				if(i < this.drawpass_idx) this.drawpass_idx = i
-				node.drawpass.poolDrawTargets()
-				drawpass_list.splice(i, 1)
-				break
-			}
-		}
-		if(this.drawpass_idx === Infinity) this.drawpass_idx = 0
-		// now remove all layouts too
-		this.layout_idx = Infinity
-		var layout_list = this.layout_list
-		for(var i = 0; i < layout_list.length; i++){
-			var pass = layout_list[i]
-			var node = pass
-			while(node.parent && node !== view){
-				node = node.parent
-			}
-			if(node === view){
-				if(i < this.layout_idx) this.layout_idx = i
-				layout_list.splice(i, 1)
-			}
-		}
-		if(this.layout_idx === Infinity) this.layout_idx = 0
-	}
-
-	// add drawpasses and layouts recursively from a view
-	this.addDrawPassRecursive = function(view){
-		// lets first walk our children( depth first)
-		var children = view.children
-		if(children) for(var i = 0; i < children.length; i++){
-			this.addDrawPassRecursive(children[i])
-		}
-
-		// lets create a drawpass
-		if(view._viewport){
-			var pass = new this.DrawPass(this, view)
-			this.drawpass_list.splice(this.drawpass_idx,0,view)
-			this.drawpass_idx++
-			// lets also add a layout pass
-			if(isNaN(view._flex)){ // if not flex, make sure layout runs before the rest
-				// we are self contained
-				this.layout_list.splice(this.layout_idx_first,0,view)
-			}
-			else{ // we are flex, make sure we layout after
-				this.layout_list.splice(this.layout_idx,0,view)
-			}
-			//this.layout_idx++
-		}
-
-	}
-
-	this.relayout = function(){
-		var layout_list = this.layout_list
-		for(var i = 0; i < layout_list.length; i++){
-			view = layout_list[i]
-			if(!isNaN(view._flex) || view == this.screen){
-				view.relayout()
-			}
-		}
-	}
-
-	this.atResize = function(){
-		// lets relayout the whole fucker
-		this.relayout()
-		this.redraw()
-		// do stuff
-	}
-
-
 
 })

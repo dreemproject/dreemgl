@@ -260,7 +260,6 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 
 		node.infer = struct.keyType(key)
 		if(!node.infer){
-			console.log(infer.array.font)
 			throw new Error('Cannot find property ' + obj + '.' + key + ' on ' + struct.id + ' in ' + state.callname + '(...)\n' + state.source)
 		}
 

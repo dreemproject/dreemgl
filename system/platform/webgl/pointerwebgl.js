@@ -23,7 +23,7 @@ define.class('$system/base/pointer', function (require, exports) {
 		}
 	})
 
-	this.atConstructor = function(device) {
+	this.atConstructor = function(device) {		
 		this.device = device
 		// Internal: creates pointer array with a single pointer from mouse event data.
 		var mouseToPointers = function (event, wheelx, wheely) {

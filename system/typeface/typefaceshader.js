@@ -11,8 +11,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 
 	// initial pixel and vertex shaders
-	this.position = "glyphy_mesh()"
-	this.color = "glyphy_pixel()"
+	this.position = function(){
+		return glyphy_mesh()
+	}
+	
+	this.color = function(){
+		return glyphy_pixel()
+	}
 
 	//this.fgcolor = vec4("blue")
 	//this.boldness = 0

@@ -33,15 +33,16 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	}
 
 	this.bgcolor = NaN
-
 	this.rpcproxy = false
+
 	this.viewport = '2d'
 	this.dirty = true
 	this.flex = NaN
 	this.flexdirection = "column"
 	this.cursor = 'arrow'
-
 	this.tooltip = 'Application'
+	this.pickbits = 9
+	this.guid = ''
 
 	this.atConstructor = function(){
 	}
@@ -49,76 +50,257 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	this.oninit = function () {
 		// ok. lets bind inputs
 		this.modal_stack = []
+		this.draw_passes = []
+		this.pick_passes = []
+		this.anim_redraw = []
+		// use 2 different matrix stores
+
+		this.commandRunner =this.CommandRunner.create(this.device)
+
+		this.pick_map = {}
+		this.pick_viewmatrix = mat4()
+		this.pick_noscrollmatrix = mat4()
+
+		this.pick_rendertargets = {}
+		this.color_rendertargets = {}
+
 		this.focus_view = undefined
 		this.keyboard = this.device.keyboard
 		this.pointer = this.device.pointer
 		this.midi = this.device.midi
 		this.bindInputs()
+
+		this.device.atDraw = this.doDraw.bind(this)
+		this.device.atResize = this.doResize.bind(this)
 	}
 
-	// TODO(aki): move menu into a configurable component.
-	// internal, display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last pointer coordinates will be substituted instead.
-	this.contextMenu = function(commands, x,y){
-		this.openModal(function(){
-			var res = []
-			for(var a in commands){
-				var c = commands[a]
-				//console.log("menucommand: ", c)
-				var act = c.clickaction
-				if (!act && c.commands){
-					act = function(){
-						console.log("opening submenu?")
-						console.log(this.constructor.name, this.layout)
-						this.screen.contextMenu(this.commands, this.layout.absx + this.layout.width, this.layout.absy)
-						return true
-					}
-				}
-				res.push(
-					menubutton({
-						padding:vec4(5),
-						margin:0,
-						borderradius: 6,
-						bold:false,
-						text:c.name,
+	this.nextViewWalk = function(iter, end){
+		var doenter =  true//!draw._viewport && draw._visible && draw._drawtarget !== nottype)
+		var next = iter.children[0]
+		var next_index = 0
+		while(!next){ // skip to parent next
+			if(iter === end) break
+			next_index = iter.draw_index + 1
+			iter = iter.parent
+			next = iter.children[next_index]
+		}
+		if(next === end) return undefined
+		if(next) next.draw_index = next_index
+		return next
+	}
 
-						bgcolor:"#a3a3a3",
-						borderwidth:0,
-						hovercolor1:"#737373",
-						hovercolor2:"#737373",
-						buttoncolor2:"#a3a3a3",
-						textcolor:"#3b3b3b",
-						textactivecolor:"white",
-						clickaction: act,
-						commands: c.commands,
-						click:function(){
-							var close = false
-							if(this.clickaction) close = this.clickaction()
-							if (!close) this.screen.closeModal(true)
-						}
-					})
-				)
+	this.atNewlyRendered = function(item){
+		var node = this
+		var id = 1
+		var mul = 1<<(24-this.pickbits)
+		while(node){
+			node.pickview = id * mul
+			this.pick_map[node.pickview] = node
+			node = this.nextViewWalk(node, this)
+		}
+	}
+
+	this.doResize = function(){
+		this._maxsize =
+		this._size = vec2(this.device.main_frame.size[0] / this.device.ratio, this.device.main_frame.size[1] / this.device.ratio)
+		this.relayout()
+	}
+
+	this.redraw = function(){
+		if(this.draw_dirty) return
+		this.draw_dirty = true
+
+		if(this.device) {
+			this.device.redraw()
+		}
+	}
+
+	// command execution
+	this.CommandRunner = {
+		create:function(device){
+			var obj =  Object.create(this)
+			this.device = device
+			this.cmdstack = []
+			return obj
+		},
+		execute: function(cmds, overlay, replace_matrices){
+			this.replace_matrices = replace_matrices
+			this.cmds = cmds
+			this.cmdid = 0
+			this.overlay = overlay
+			while(this.cmdid < this.cmds.length){
+				// dispatch
+				var command = this.cmds[this.cmdid]
+				this[command]()
+				// unroll the stack
+				while(this.cmdstack.length > 0 && this.cmdid === this.cmds.length){
+					// pop the stack
+					this.cmdid = this.cmdstack.pop()
+					this.cmds = this.cmdstack.pop()
+				}
+			}
+		},
+		drawShader: function(){
+			var shader = this.cmds[this.cmdid+1]
+			// lets draw it	
+			shader.state = this
+			shader.draw(this.device, this.overlay)
+			//console.log(shader._context.clean)
+			this.cmdid += 2
+		},
+		setViewMatrix: function(){
+			var name = this.cmds[this.cmdid+2]
+			this.viewmatrix = this.replace_matrices && this.replace_matrices[name] || this.cmds[this.cmdid+1]
+			this.cmdid += 3
+		},
+		clear: function(){
+			var color = this.cmds[this.cmdid+1]
+			this.device.clear(color[0], color[1], color[2], color[3])
+			this.cmdid += 2
+		},
+		context: function(){
+			var cmds = this.cmds[this.cmdid+1]
+			var view = this.cmds[this.cmdid+2]
+			this.cmdstack.push(this.cmds, this.cmdid + 3)
+			this.cmdid = 0
+			this.cmds = cmds
+		}
+	}
+
+	this.debug_pick = false
+
+	// lets pick the screen
+	this.doPick = function(pointer){
+
+		if(!this.main_pass) return {}
+
+		var overlay = {			
+			_pixelentry:1
+		}
+
+		var pick_passes = this.pick_passes
+		if(!pick_passes.length){
+			pick_passes.push(0,this.main_pass)
+		}
+
+		var pick_matrices
+
+		if(!this.debug_pick){
+	
+			var scroll = this.scroll
+			var sizel = 0, sizer = 1
+
+			mat4.ortho(scroll[0] + pointer[0] - sizel, scroll[0] + pointer[0] + sizer, scroll[1] + pointer[1] - sizer,  scroll[1] + pointer[1] + sizel, -100, 100, this.pick_viewmatrix)
+			mat4.ortho(pointer[0] - sizel, pointer[0] + sizer, pointer[1] - sizer, pointer[1] + sizel, -100, 100, this.pick_noscrollmatrix)
+
+			var pickmatrices = {
+				noscroll:this.pick_noscrollmatrix,
+				view:this.pick_viewmatrix
+			}
+		}
+
+		for(var passid = 0; passid < pick_passes.length;passid +=2){
+			// execute the commandbuffer
+			var pass = pick_passes[passid + 1]
+			var ismain = this.main_pass === pass
+
+			// lets create a render target!
+			var guid = pass.target.targetguid
+			var tgt = this.pick_rendertargets[guid]
+			if(!tgt){
+				if(ismain) tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, 1, 1, this.device)
+				else tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+				this.pick_rendertargets[guid] = tgt
 			}
 
-			return view({bgcolor:"#a3a3a3",flexdirection:"column",
-				dropshadowopacity: 0.4,
-				padding:4,
-				dropshadowhardness:0,
-				dropshadowradius: 20,
-				dropshadowoffset:vec2(9,9),
-				borderradius:7,
-				onfocuslost:function(){
-					this.screen.closeModal(false)
-				},
-				init:function(){
-				},
-				pos:[x,y],
-				size:[300,NaN],position:'absolute'
-			}, res)
-		}).then(function(result){
+			this.device.bindFramebuffer(tgt)
 
-		})
+			this.commandRunner.execute(pass.cmds, overlay, ismain && pickmatrices)
+		}
+		// gc the framebuffer set somehow?
+		this.pick_passes.length = 0
+
+		// then readpixels
+		var data 
+		if(this.debug_pick){
+			data = this.device.readPixels(pointer[0]*this.device.ratio, this.device.main_frame.size[1] - pointer[1] * this.device.ratio, 1, 1)
+		}
+		else{
+			data = this.device.readPixels(0,0,1,1)
+		}
+
+		// decode the pass and drawid
+		var mask = ((1<<(24-this.pickbits))-1)
+		var totalid = data[0]<<16|data[1]<<8|data[2]
+		var viewid = totalid&( ((1<<24)-1) - mask)
+		var drawid = totalid&mask
+
+		var match = {
+			view:this.pick_map[viewid],
+			pickdraw:drawid
+		}
+
+		return match
 	}
 
+	this.doDraw = function(stime, frameid){
+
+		var anim_redraw = this.anim_redraw
+		anim_redraw.length = 0
+
+		this.doAnimation(stime, anim_redraw)
+
+		// lets lay it out
+		this.doLayout()
+
+		// clean out the drawpasses
+		this.draw_passes.length = 0
+
+		// lets draw the screen
+		this.context.frameid = frameid
+		
+		this.drawView()
+
+		var overlay = {
+			_pixelentry:0,
+			vertex_displace:vec4(0,0,0,0)
+		}
+		
+		this.device.bindFramebuffer(null)
+
+		// lets run over the drawpasses
+		var draw_passes = this.draw_passes
+		for(var passid = 0; passid < draw_passes.length;passid +=5){
+			// execute the commandbuffer
+			var pass = draw_passes[passid + 1]
+
+			var ismain = this.main_pass === pass
+			// Create the render targets
+			var guid = pass.target.targetguid
+			var tgt = this.color_rendertargets[guid]
+			if(!tgt && !ismain){
+				this.color_rendertargets[guid] = tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+			}
+			this.device.bindFramebuffer(tgt)
+			this.commandRunner.execute(pass.cmds, overlay)
+		}
+		// gc the framebuffer set somehow?
+		this.draw_passes.length = 0
+
+		if(anim_redraw.length){
+			//console.log("REDRAWIN", this.draw_hooks)
+			var redraw = false
+			for(var i = 0; i < anim_redraw.length; i++){
+				var aredraw = anim_redraw[i]
+				if(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
+					redraw = true
+					aredraw.redraw()
+				}
+			}
+			return redraw
+		}
+	}
+	
 	this.walkTree = function(view){
 		var found
 		function dump(walk, parent){
@@ -161,6 +343,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	}
 
 	// pick a view at the pointer coordinate and console.log its structure
+	/*
 	this.debugPick = function(x, y){
 		this.device.pickScreen(x, y).then(function(msg){
 			var view = msg.view
@@ -168,7 +351,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			this.last_debug_view = view
 			console.log(this.walkTree(view))
 		}.bind(this))
-	}
+	}*/
 
 	// internal, bind all keyboard/pointer inputs for delegating it into the view tree
 	this.bindInputs = function(){
@@ -202,13 +385,22 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			this.focus_view.emitUpward('keypaste', v)
 		}.bind(this)
 
+		this.emitPointer = function(name, e){
+			var p = e.pointer
+			var draw = e.view.draw_objects[p.pickdraw]
+			if(draw && (draw['_listen_'+name] || draw['on'+name])){
+				draw.emit(name, e.pointer)
+			}
+			else e.view.emitUpward(name, e.pointer)
+		}
+
 
 		// Event handler for `pointer.start` event.
 		// Emits `pointerstart` event from `pointer.view` and computes the cursor.
 		this.pointer.start = function(e){
 			if (e.pointer) {
 				this.emit('globalpointerstart', e)
-				e.view.emitUpward('pointerstart', e.pointer)
+				this.emitPointer('pointerstart',e)
 				e.view.computeCursor()
 				if(this.inModalChain(e.view)){
 					this.setFocus(e.view)
@@ -223,10 +415,9 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		this.pointer.move = function(e){
 			if (e.pointer) {
 				this.emit('globalpointermove', e)
-				e.view.emitUpward('pointermove', e.pointer)
+				this.emitPointer('pointermove',e)
 			} else if (e.pointers) {
 				this.emit('globalpointermultimove', e)
-				e.view.emitUpward('pointermultimove', e.pointers)
 			}
 		}.bind(this)
 
@@ -235,7 +426,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		this.pointer.end = function(e){
 			if (e.pointer) {
 				this.emit('globalpointerend', e)
-				e.view.emitUpward('pointerend', e.pointer)
+				this.emitPointer('pointerend',e)
 				e.view.computeCursor()
 			}
 		}.bind(this)
@@ -244,8 +435,8 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		// Emits `pointertap` event from `pointer.view`.
 		this.pointer.tap = function(e){
 			if (e.pointer) {
-				this.emit('globalpointertap', e);
-				e.view.emitUpward('pointertap', e.pointer)
+				this.emit('globalpointertap', e)
+				this.emitPointer('pointertap',e)
 			}
 		}.bind(this)
 
@@ -254,8 +445,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		this.pointer.hover = function(e){
 			if (e.pointer) {
 				this.emit('globalpointerhover', e);
-
-				e.view.emitUpward('pointerhover', e.pointer)
+				this.emitPointer('pointerhover',e)
 				e.view.computeCursor()
 			}
 		}.bind(this)
@@ -264,8 +454,8 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		// Emits `pointerover` event from `pointer.view`.
 		this.pointer.over = function(e){
 			if (e.pointer) {
-				this.emit('globalpointerover', e);
-				e.view.emitUpward('pointerover', e.pointer)
+				this.emit('globalpointerover', e)
+				this.emitPointer('pointerover',e)
 			}
 		}.bind(this)
 
@@ -273,8 +463,8 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		// Emits `pointerout` event from `pointer.view`.
 		this.pointer.out = function(e){
 			if (e.pointer) {
-				this.emit('globalpointerout', e);
-				e.view.emitUpward('pointerout', e.pointer)
+				this.emit('globalpointerout', e)
+				this.emitPointer('pointerout',e)
 			}
 		}.bind(this)
 
@@ -282,8 +472,8 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		// Emits `pointerwheel` event from `pointer.view`.
 		this.pointer.wheel = function(e){
 			if (e.pointer) {
-				this.emit('globalpointerwheel', e);
-				e.view.emitUpward('pointerwheel', e.pointer)
+				this.emit('globalpointerwheel', e)
+				this.emitPointer('pointerwheel',e)
 			}
 		}.bind(this)
 	}
@@ -443,17 +633,13 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	// animation
 
 	// internal, start an animation, delegated from view
-	this.startAnimationRoot = function(obj, key, value, track, resolve){
+	this.startAnimationRoot = function(animkey, config, first, obj, key, value, track, resolve){
 		// ok so. if we get a config passed in, we pass that in
-		var config = obj.getAttributeConfig(key)
-
-		var first = obj['_' + key]
-
 		var anim = new Animate(config, obj, key, track, first, value)
 		anim.resolve = resolve
-		var animkey = obj.getViewGuid() + '_' + key
 		this.anims[animkey] = anim
 		obj.redraw()
+
 		return true
 	}
 
@@ -483,19 +669,29 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			if(value instanceof anim.End){
 				delete this.anims[key]
 				//console.log(value.last_value)
-				anim.obj['_' + anim.key] = value.last_value
-				anim.obj.emit(anim.key, {animate:true, end:true, key: anim.key, owner:anim.obj, value:value.last_value})
-				anim.obj.redraw()
+				if(('_' + anim.key) in anim.obj){
+					anim.obj['_' + anim.key] = value.last_value
+					anim.obj.emit(anim.key, {animate:true, end:true, key: anim.key, owner:anim.obj, value:value.last_value})
+					anim.obj.redraw()
+				}
+				else{
+					anim.obj[anim.key] = value.last_value
+				}
 				if(anim.resolve) anim.resolve()
 			}
 			else{
 				// what if we have a value with storage?
-				anim.obj['_' + anim.key] = value
-				if(anim.config.storage){
-					anim.obj['_' + anim.config.storage][anim.config.index] = value
-					anim.obj.emit(anim.config.storage, {type:'animation', key: anim.key, owner:anim.obj, value:value})
+				if(('_' + anim.key) in anim.obj){
+					anim.obj['_' + anim.key] = value
+					if(anim.config.storage){
+						anim.obj['_' + anim.config.storage][anim.config.index] = value
+						anim.obj.emit(anim.config.storage, {type:'animation', key: anim.key, owner:anim.obj, value:value})
+					}
+					anim.obj.emit(anim.key, {animate:true, key: anim.key, owner:anim.obj, value:value})
 				}
-				anim.obj.emit(anim.key, {animate:true, key: anim.key, owner:anim.obj, value:value})
+				else{
+					anim.obj[anim.key] = value
+				}
 				redrawlist.push(anim.obj)
 			}
 		}

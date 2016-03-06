@@ -380,10 +380,25 @@
 			req.push(result[1])
 		}
 
+		var simplerx = new RegExp(/define\.class\s*\(\s*this\s*,\s*['"][$_\w]+['"]\s*,\s*['"]([^"']+)['"]\s*\)/g)
+
+		while((result = simplerx.exec(search)) !== null) {
+			req.push(result[1])
+		}
 
 		return req
 	}
 
+	define.getFunctionArgs = function(fn){
+		var str = fn.toString()
+		str = str.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
+		var result;
+		var output = []
+		var result = str.match(/function\s*[$_\w]*\s*\(([$_\w,\s]*)\)/)
+		var map = result[1].split(/\s*,\s*/)
+		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].trim())
+		return output
+	}
 
 	define.buildClassArgs = function(fn){
 		// Ideally these regexps are better, not vastly slower but maybe proper specwise matching for stuff, its a bit rough now
@@ -705,6 +720,8 @@
 			}
 			else{
 				body = arguments[2]
+				if(typeof body === 'string') base_class = body, body = function(){}
+
 			}
 			if(typeof body === 'function'){
 				body.classname = classname
@@ -2778,9 +2795,9 @@
 		}
 	}
 
-	defineArrayProp(Float32Array.prototype, {x:0, y:1, z:2, w:3}, [vec2, vec3, vec4])
+	//defineArrayProp(Float32Array.prototype, {x:0, y:1, z:2, w:3}, [vec2, vec3, vec4])
 	//defineArrayProp(Float32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.vec2, exports.vec3, exports.vec4])
-	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
+	//defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
 	if(define.packaged) define_packaged()
 	else if(define.$environment === 'nodejs') define_nodejs()

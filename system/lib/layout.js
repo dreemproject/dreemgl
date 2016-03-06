@@ -10,12 +10,12 @@
 
 define(function () {
 
-	function fillNodes(node, nochildren, invisible) {
+	function fillNodes(node, nochildren) {
 		var newnode = {
 			children:[],
 			ref:node,
-			visible:(!invisible && node.visible),
-			dirty: node.layout_dirty,
+			visible: node._visible,
+			//dirty: node.layout_dirty,
 			layout:{
 				width:undefined,
 				height:undefined,
@@ -44,30 +44,32 @@ define(function () {
 		// alright so. what we need to do is bubble down layout_dirty
 		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
 			var child = node.children[i]
-			if(!('_viewport' in child))continue
-			if(child._viewport){ // its using a different layout pass
-				// if we are flex, we have to compute the layout of this child
-				if(!isNaN(child._flex)){
-					var newchild = fillNodes(child, true, !newnode.visible)
-					if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
-					newnode.children.push(newchild)
-				}
-				else{
+			if(!('_viewport' in child) || !node._visible) continue
+
+			var newchild = fillNodes(child, false)
+			//if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+			newnode.children.push(newchild)
+
+			//if(child._viewport){ // its using a different layout pass
+			//	if we are flex, we have to compute the layout of this child
+			//  if(!isNaN(child._flex)){
+			//		var newchild = fillNodes(child, true, !newnode.visible)
+			//		if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+			//		newnode.children.push(newchild)
+			//	}
+			//	else{
 					// otherwise this child has an already computed layout
-					// so how do we know if this is dirty?
-					newnode.children.push({
-						flex:undefined,
-						ref:child,
-						layout:child.layout,
-						children:[]
-					})
-				}
-			}
-			else{
-				var newchild = fillNodes(child, false, !newnode.visible)
-				if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
-				newnode.children.push(newchild)
-			}
+			//		// so how do we know if this is dirty?
+			//		newnode.children.push({
+			//			flex:undefined,
+			//			ref:child,
+			//			layout:child.layout,
+			//			children:[]
+			//		})
+			//	}
+			//}
+			//else{
+			//}
 		}
 
 		return newnode

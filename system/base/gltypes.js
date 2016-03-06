@@ -48,7 +48,7 @@ define(function(require, exports){
 		gl_MaxTextureImageUnits:int32,
 		gl_MaxFragmentUniformVectors:int32,
 		gl_MaxDrawBuffers:int32,
-		PickGuid:float,
+		PickDraw:float,
 		discard:int32
 	},
 	exports.typemap = {

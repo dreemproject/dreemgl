@@ -54,6 +54,7 @@ define.class('$system/base/texture', function(exports){
 	Texture.DEPTH = 1 << 4
 	Texture.STENCIL = 1 << 5
 	Texture.LUMINANCE = 1<< 6
+	Texture.PICK = 1<<7
 
 	Texture.FLOAT = 1<<10
 	Texture.HALF_FLOAT = 1<<11

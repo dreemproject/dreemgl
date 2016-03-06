@@ -9,8 +9,9 @@ define.class('$system/base/node', function(require){
 
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
-	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
+	this.Shader = require('$system/platform/$platform/shader$platform')
 	var view = this.constructor
+
 
 	this.attributes = {
 		// wether to draw it
@@ -88,20 +89,20 @@ define.class('$system/base/node', function(require){
 
 		percentsize: Config({type:vec3, value:vec3(NaN)}),
 
-		// alias for the x component of percentsize
+		// alias for the x component of percentsize NOT IMPLEMENTED
 		percentwidth: Config({alias:'percentsize', index:0}),
-		// alias for the y component of percentsize
+		// alias for the y component of percentsize NOT IMPLEMENTED
 		percentheight: Config({alias:'percentsize', index:1}),
-		// alias for the z component of percentsize
+		// alias for the z component of percentsize NOT IMPLEMENTED
 		percentdepth: Config({alias:'percentsize', index:2}),
 
 		percentpos: Config({type:vec3, value:vec3(NaN)}),
 
-		// internal, percentage widths/heights
+		// internal, percentage widths/heights NOT IMPLEMENTED
 		percentx: Config({alias:'percentpos', index:0}),
-		// internal, percentage widths/heights
+		// internal, percentage widths/heights NOT IMPLEMENTED
 		percenty: Config({alias:'percentpos', index:1}),
-		// internal, percentage widths/heights
+		// internal, percentage widths/heights NOT IMPLEMENTED
 		percentz: Config({alias:'percentpos', index:2}),
 
 		// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
@@ -154,8 +155,18 @@ define.class('$system/base/node', function(require){
 		anchor: Config({type: vec3, value: vec3(0.)}),
 		// the mode with which the anchor is computed. Factor uses the size of an item to find the point, defaulting to center
 		anchormode: Config({type:Enum('','factor','absolute'), value:'factor'}),
-		// rotate the item around x, y or z in radians. If you want degrees type it like this: 90*DEG
-		rotate: Config({type: vec3, value: vec3(0), meta:"xyz"}),
+
+		// orientation
+		orientation: Config({type:vec3, value:vec3(0)}),
+
+		// orientation of the item
+		rotate: Config({alias:'orientation', index:2}),
+
+		// rotate the item around x in radians. If you want degrees type it like this: 90*DEG
+		rotatex: Config({alias:'orientation', index:0}),
+
+		// rotate the item around y in radians. If you want degrees type it like this: 90*DEG
+		rotatey: Config({alias:'orientation', index:1}),
 
 		// the color of the border of an item.
 		bordercolor: Config({group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"}),
@@ -288,14 +299,62 @@ define.class('$system/base/node', function(require){
 	this.name = ""
 	this.class = ""
 
-	this.onvisible = this.oncamera = this.onlookat = this.onup = function(){
+	// trigger redraw
+	this.emitFlags(1, [
+		'visible','camera','lookat','up','layout'
+	])
+
+	// trigger a relayout
+	this.emitFlags(2, [
+		'pos','corner','size','minsize','maxsize','margin',
+		'padding','flex','flexwrap','flexdirection','justifycontent',
+		'alignitems','alignself','position',
+	])
+
+	// trigger matrix_dirty
+	this.emitFlags(4, [
+		'orientation', 'pos', 'layout'
+	])
+
+	// trigger a redraw.
+	this.redraw = function(){
+		if(this.draw_dirty) return
+
+		var parent = this
+		while(!parent.draw_dirty){
+			parent.draw_dirty = true
+		}
+
+		if(this.screen) {
+			this.screen.redraw()
+		}
+	}
+
+	// trigger a relayout
+	this.relayout = function(){
+		if(this.layout_dirty) return
+
+		var parent = this
+		while(!parent.layout_dirty){
+			parent.layout_dirty = true
+		}
+
 		this.redraw()
 	}
 
-	// the number of pick ID's to reserve for this view.
-	this.pickrange = 1
 
+	// trigger a matrix update
+	this.rematrix = function(){
+		if(this.matrix_dirty) return
+		this.matrix_dirty = true
+		this.redraw()
+	}
+
+	this.pickview = 0
+
+	// the number of pick ID's to reserve for this view.
 	this.boundscheck = true
+
 	// the local matrix
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
@@ -313,96 +372,501 @@ define.class('$system/base/node', function(require){
 	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
 	this.screen = {device:{size:vec2(), frame:{size:vec2()}}}
 
-	this.noise = require('$system/shaderlib/noiselib')
-	this.pal = require('$system/shaderlib/palettelib')
-	this.shape = require('$system/shaderlib/shapelib')
-	this.math = require('$system/shaderlib/mathlib')
-	this.demo = require('$system/shaderlib/demolib')
-	this.material = require('$system/shaderlib/materiallib')
-	this.colorlib = require('$system/shaderlib/colorlib')
-
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
 
-	this.ondropshadowradius = function(){
-		if (this.dropshadowopacity > 0){
-			this.shadowrect = true
-		}
-		else {
-			this.shadowrect = false
-		}
-	}
+	// internal, initialization of a view
+	this.atViewInit = function(prev){
 
-	// internal, listen to switch the shaders when borderradius changes
-	this.onborderradius = function(){
-		this.setBorderShaders()
-	}
+		this.anims = {}
+		this.matrix_store = {}
+		this.draw_contexts = {}
+		this.draw_objects = {}
+		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 
-	this.onborderwidth = function(){
-		this.setBorderShaders()
-	}
+		this.initialized = true
 
-	this.onbgcolor = function(){
-		this.setBorderShaders()
-	}
-
-	this.setBorderShaders = function(){
-		var radius = this._borderradius
-		//var value = event.value
-		var border_on = true
-		var width = this._borderwidth
-		if(width[0] === 0 && width[1] === 0 && width[2] === 0 && width[3] === 0){
-			border_on = false
+		// matrices
+		if(prev){
+			this.modelmatrix = prev.modelmatrix
+			this.totalmatrix = prev.totalmatrix
+			this.viewportmatrix = prev.viewportmatrix
+			this.layout = prev.layout
 		}
 		else{
-			border_on = true
+			this.modelmatrix = mat4()
+			if(this._viewport) this.totalmatrix = mat4.identity()
+			else this.totalmatrix = mat4()
+			this.viewportmatrix = mat4()
 		}
 
-		var bg_on = isNaN(this._bgcolor[0])? false: true
+		// create a context
+		if(!this.Context.drawRect) debugger
 
-		if(this._viewport === '3d') border_on = false, bg_on = false
+		this.context = Object.create(this.Context)
+		this.context.initContext(this)
 
-		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
-			// this switches the bg shader to the rounded one
-			if(this._bgimage){
-				this.roundedimage = true
-				this.roundedrect = false
-			}
-			else{
-				this.roundedrect = bg_on
-				this.roundedimage = false
-			}
-			this.roundedborder = border_on
-			this.hardimage = false
-			this.hardrect = false
-			this.hardborder = false
+		this.atFlag1 = this.redraw
+		this.atFlag2 = this.relayout
+		this.atFlag4 = this.rematrix
+	}
+
+	this.drawBackground = function(){
+		var c = this.context
+		if(this._viewport === '2d'){
+			c.setViewMatrix('noscroll')
 		}
-		else {
-			if(this._bgimage){
-				this.hardimage = true
-				this.hardrect = false
+		if (this.dropshadowopacity > 0){
+			c.drawDropshadow()
+		}
+		if(this.bgimage){
+			if(this.borderradius[0]>0){
+				c.drawImage()
 			}
 			else{
-				this.hardrect = bg_on
-				this.hardimage = false
+				c.drawRoundedimage()
 			}
-
-			this.hardborder = border_on
-			this.roundedrect = false
-			this.roundedborder = false
-			this.roundedimage = false
+		}
+		else if(!isNaN(this.bgcolor[0])){
+			if(this.borderradius[0]>0){
+				c.drawRoundedrect()
+			}
+			else{
+				c.drawRect()
+			}
+		}
+		if(this._viewport === '2d'){
+			c.setViewMatrix('view')
 		}
 	}
 
-	// internal, listen to the viewport to turn off our background and border shaders when 3D
-	this.onviewport = function(event){
-		this.setBorderShaders()
+	// the user draw function
+	this.draw = function(){
+		this.drawBackground()
+		this.drawChildren()
 	}
 
-	// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
-	this.onoverflow = function(){
-		if(this._overflow){
-			if(!this._viewport) this._viewport = '2d'
+	this.drawChildren = function(){
+		var c = this.context
+
+		// TODO add boundingbox clipping
+		for(var i = 0;i < this.children.length;i++){
+			var child = this.children[i]
+			// include it in our drawlist
+			c.addContext(child.context, i)
+			child.drawView()
+		}
+	}
+
+	this.drawView = function(){
+		var c = this.context
+		c.width = this._layout.width
+		c.height = this._layout.height
+
+		if(!this._viewport && !this.draw_dirty) return
+
+		// clear commandset
+		c.clearCmds()
+		this.pickdraw = 0
+		// update matrices
+		this.updateMatrix()
+
+		// alright its a viewport, render to a texture
+		if(this._viewport){
+			// do the 2d
+			var tgt
+			if(this._viewport === '2d'){
+				this.viewport_target =
+				tgt = c.getTarget("viewport", c.RGBA|c.PICK)
+				c.pushTarget(tgt)
+				c.setOrthoViewMatrix(!this.parent)
+			}
+			else{
+				this.viewport_target =
+				tgt = c.getTarget("viewport", c.RGBA|c.DEPTH|c.PICK)
+				c.pushTarget(tgt)
+				c.setPerspectiveViewMatrix(tgt)
+			}
+			if(this.draw_dirty){
+				c.clear()
+				this.atAttributeGetFlag = 2
+				this.draw()
+				this.atAttributeGetFlag = 0
+				this.draw_dirty = false
+			}
+			c.popTarget()
+			//c.blendDraw(tgt)
+		}
+		else if(this.draw_dirty){
+			this.atAttributeGetFlag = 2
+			this.draw()
+			this.atAttributeGetFlag = 0
+			this.draw_dirty = false
+		}
+	}
+
+	// the drawing context
+	this.Context = {
+		initContext: function(view){
+			this.view = view
+			this.scope = view
+			this.matrix = mat4.identity()
+			this.cmds = []
+		},
+		clearCmds: function(){
+			this.cmds.length = 0
+		},
+		addContext: function(ctx, index){
+			ctx.frameid = this.frameid
+			this.cmds.push('context', ctx.cmds, ctx.view)
+		},
+		clear: function(){
+			this.cmds.push('clear', this.clearcolor !== undefined?this.clearcolor:this.view.clearcolor)
+		},
+		pushCache: function(uid, isdirty){
+			if(!this.cachestack) this.cachestack = []
+			if(isdirty || !this.view.draw_cache || !this.view.draw_cache[uid]){
+				this.cachestack.push(this.cmds.length, uid)
+				return true
+			}
+			// restore cache
+			var cache = this.view.draw_cache[uid]
+			this.cmds.push.apply(this.cmds, cache.cmds)
+			this.view.pickdraw = cache.pickdraw
+			return false
+		},
+		popCache: function(){
+			if(!this.cachestack || !this.cachestack.length) throw new Error('no matching pushcache')
+			var uid = this.cachestack.pop()
+			var pos = this.cachestack.pop()
+			if(!this.view.draw_cache) this.view.draw_cache = {}
+			this.view.draw_cache[uid] = {
+				cmds:this.cmds.slice(pos, this.cmds.length), 
+				pickdraw:this.view.pickdraw
+			}
+		},
+		// create or reuse a matrix by name
+		getMatrix: function(name, itarget){
+			var target = itarget !== undefined? itarget: this.target.targetguid
+			var store = this.view.matrix_store[target]
+			if(!store) this.view.matrix_store[target] = store = {}
+			var mat = store[name]
+			if(!mat) store[name] = mat = mat4()
+			return mat
+		},
+		// load a matrix (return undefined when not there)
+		loadMatrix: function(name, itarget){
+			var target = itarget !== undefined? itarget: this.target.targetguid
+			var store = this.view.matrix_store[target]
+			if(!store) return
+			return store[name]
+		},
+		// sets the view matrix
+		setViewMatrix: function(iviewmatrix){
+			var isstring = typeof iviewmatrix === 'string'
+			var viewmatrix = isstring? this.loadMatrix(iviewmatrix) : iviewmatrix
+			if(!iviewmatrix) return
+			this.cmds.push(
+				'setViewMatrix',
+				viewmatrix,
+				isstring?iviewmatrix:undefined
+			)
+		},
+		// sets the view matrix to default ortho projection which is in device pixels top left 0,0
+		setOrthoViewMatrix: function(yflip, xflip, iwidth, iheight, ixscroll, iyscroll, izoom, left, top){
+			// lets set up a 2D matrix
+			var width = iwidth !== undefined?iwidth:this.target.width
+			var height = iheight !== undefined?iheight:this.target.height
+			var zoom = izoom !== undefined?izoom: this.scope._zoom
+			var xscroll = ixscroll !== undefined? ixscroll: this.scope._scroll[0]
+			var yscroll = iyscroll !== undefined? iyscroll: this.scope._scroll[1]
+
+			var viewmatrix = this.getMatrix('view')
+			var L = xscroll
+			var R = width * zoom + xscroll
+			var T = yscroll
+			var B = height * zoom + yscroll
+			mat4.ortho(xflip?R:L, xflip?L:R, yflip?T:B, yflip?B:T, -100, 100, viewmatrix)
+
+			var noscrollmatrix = this.getMatrix('noscroll')
+			var L = left || 0 
+			var R = width
+			var T = top || 0
+			var B = height
+			mat4.ortho(xflip?R:L, xflip?L:R, yflip?T:B, yflip?B:T, -100, 100, noscrollmatrix)
+
+			this.setViewMatrix(viewmatrix)
+		},
+		// set the view matrix to a perspective projection
+		setPerspectiveViewMatrix: function(ifov, inear, ifar, icamera, ilookat, iup, iwidth, iheight){
+			
+			var fov = ifov !== undefined? ifov: this.scope._fov
+			var camera = icamera !== undefined? icamera: this.scope._camera 
+			var lookat = ilookat !== undefined? ilookat: this.scope._lookat
+			var up = iup !== undefined? iup: this.scope._up
+			var width = iwidth !== undefined?iwidth:this.target.width
+			var height = iheight !== undefined?iheight:this.target.height
+			var near = ifov !== undefined? ifov: this.scope._fov
+			
+			var perspectivematrix = this.getMatrix('perspective')
+			var lookatmatrix = this.getMatrix('lookat')
+			var viewmatrix = this.getMatrix('view')
+
+			mat4.perspective(fov * PI * 2/360.0 , width/height, near, far, perspectivematrix)
+			mat4.lookAt(camera, lookat, up, lookatmatrix)
+			mat4.mat4_mul_mat4(matrix, perspectivematrix, viewmatrix)
+
+			this.setViewMatrix(viewmatrix)
+		},
+		getDoubleTarget: function(name, iflags, iwidth, iheight){
+			if(!iframes) iframes = 2
+			// lets return a double buffered target which flips on every request
+		},
+		// get or reuse a render target by name
+		getTarget: function(name, iflags, iwidth, iheight){
+			var width = iwidth !== undefined?iwidth:this.scope._layout.width
+			var height = iheight !== undefined?iheight:this.scope._layout.height
+			var flags = iflags !== undefined?iflags:this.RGBA
+			var targetguid = this.view.guid + '_' + flags + '_'+ (name || this.cmds.length)
+			this.cmds.push(
+				'createTarget', 
+				targetguid, 
+				flags, 
+				width,
+				height
+			)
+			return {targetguid:targetguid, width:width, height:height, flags:flags}
+		},
+		pushTarget: function(target, outputname){
+
+			if(!this.cmdstack) this.cmdstack = []
+			this.cmdstack.push(this.cmds, this.target)
+			this.cmds = []
+			this.target = target
+
+			var pass = {
+				target:target, 
+				outputname:outputname, 
+				cmds:this.cmds, 
+				view:this.view
+			}
+			var draw_passes = this.view.screen.draw_passes
+			var id = draw_passes.indexOf(target.targetguid)
+			if(id !== -1) draw_passes.splice(id, 2)
+			draw_passes.push(target.targetguid, pass)
+
+			if(!this.view.parent)  this.view.screen.main_pass = pass
+
+			// also add it to pick passes
+			if(target.flags & this.PICK){
+				var pick_passes = this.view.screen.pick_passes
+				var id = pick_passes.indexOf(target.targetguid)
+				if(id === -1){
+					pick_passes.push(target.targetguid, pass)
+				}
+			}
+		},
+		popTarget: function(){
+			if(!this.cmdstack.length) throw new Error('popTarget empty')
+			this.target = this.cmdstack.pop()
+			this.cmds = this.cmdstack.pop()
+		}
+	}
+	// copy over texture flags
+	for(var key in this.Shader.Texture){
+		var prop = this.Shader.Texture[key]
+		if(typeof prop === 'number') this.Context[key] = prop
+	}
+
+	this.doCompileContextVerbs = function(name, cls, verbs, defaults, struct){
+		if(!this.hasOwnProperty('Context')) this.Context = Object.create(this.Context)
+
+		var verbs = cls._contextverbs
+		var defaults = cls._defaults
+		var struct = cls._context && cls._context.struct
+		var context = this.Context
+		var slots = struct && struct.slots
+		var def = struct && struct.def
+		var cap = name.charAt(0).toUpperCase() + name.slice(1)		
+
+		if(struct){
+			function defProp(obj, key, offset, type){
+				var index = 'index'+cap
+				var buffer = 'buffer'+cap
+				var name = key + cap
+				if(!(name in cls)){
+					Object.defineProperty(obj, name,{
+						get:function(){
+							var o = this[index] * slots
+							var buf = this.context[buffer]
+							if(type.slots>1){
+								var ret = type()
+								for(var i = 0; i < type.slots; i++){
+									ret[i] = buf.array[o + offset + i]
+								}
+								return ret
+							}
+							else{
+								return buf.array[o + offset]
+							}
+						},
+						set:function(value){
+							// animation!
+							if(value instanceof Animate){
+								// lets hook an animation on view
+								var first = this[name]
+								this.context.view.screen.startAnimationRoot(
+									this.context.view.pickview + '_' + this.pickdraw+'_'+key,
+									{type:type},
+									first, 
+									this, 
+									name, 
+									undefined,
+									value.track
+								)
+								return
+							}
+							var o = this[index] * slots
+							var buf = this.context[buffer]
+							if(type.slots>1){
+								for(var i = 0; i < type.slots; i++){
+									buf.array[o + offset + i] = value[i]
+								}
+							}
+							else{
+								buf.array[o + offset] = value
+							}
+							buf.clean = false
+							this.context.view.redraw()
+						}
+					})
+					//console.log('defining'+name, cls)
+				}
+			}
+			// lets define our getters
+			for(var key in def){
+				var info = struct.keyInfo(key)
+				console.log()
+				defProp(this, key, info.offset/4, info.type)
+			}
+		}
+
+		context['array' + cap] = struct
+		context['class' + cap] = cls
+
+		for(var verb in verbs){
+			var fn = verbs[verb]
+			var args = define.getFunctionArgs(fn)
+			var fnstr = fn.toString()	
+			if(!struct){
+				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
+					var write = 
+					ind+'var draw_contexts = this.view.draw_contexts\n'+
+					ind+'var context = draw_contexts["'+cap+'"]\n'+
+					ind+'if(!context){\n'+
+					ind+'\tdraw_contexts["'+cap+'"] = context = Object.create(this.class'+cap+'.Context)\n'+
+					ind+'\tcontext.initContext(this.view)\n'+
+					ind+'\tthis.addContext(context)\n'+
+					ind+'}\n'+
+
+					ind+'var pickdraw = context.pickdraw = ++this.view.pickdraw\n'+
+					ind+'var draw_objects = this.view.draw_objects\n'+
+					ind+'var obj = draw_objects[pickdraw] || (draw_objects[pickdraw] = Object.create(this.class'+cap+'))\n'+
+					ind+'obj.pickdraw = pickdraw\n'+
+					ind+'context.scope = obj\n'+
+					ind+'obj.context = context\n'
+
+					for(var i = 0; i < args.length; i++){
+						write += 'obj.'+args[i]+' = '+args[i] + '\n'
+					}
+					write += 'obj.draw()\n'
+					return write
+				})
+			}
+			else{
+
+				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
+					var write = ind+'var _buf = this.buffer'+cap+'\n'+
+						ind+'if(!_buf){\n'+
+						ind+'\tthis.buffer'+cap+' = _buf = this.alloc'+cap+'?this.array'+cap+'.array(this.alloc'+cap+'):this.array'+cap+'.array()\n' + 
+						ind+'\t_buf.frameid = this.frameid\n'+
+						ind+'\tthis.flush'+cap+'()\n'+
+						ind+'\tthis.buffer'+cap+' = _buf\n'+
+						ind+'}\n'+
+						ind+'if(!_buf.appendonly && _buf.frameid !== this.frameid){\n'+
+						ind+'\t_buf.length = 0, _buf.frameid = this.frameid\n'+
+						ind+'\tthis.flush'+cap+'()\n'+
+						ind+'\tthis.buffer'+cap+' = _buf\n'+
+						ind+'}\n'+
+						ind+'_buf.clean = false\n'+
+						ind+'var _len = _buf.length, _alloc = _buf.allocated\n'+
+						ind+'this.scope.index'+cap+' = _len\n'+
+						ind+'_buf.instancedivisor = this.instancedivisor'+cap+'|| 1\n'+
+						ind+'if(_buf.length >= _buf.allocated){\n'+
+							ind+'\tvar _ns = _buf.allocated * 2 || 1\n'+
+							ind+'\tfor(var _n = new _buf.arrayconstructor(_ns * '+slots+'), _o = _buf.array, _i = 0, _s = _buf.allocated * '+slots+'; _i < _s; _i++) _n[_i] = _o[_i]\n'+
+							ind+'\t_buf.array = _n, _buf.allocated = _ns\n'+
+						ind+'}\n'+
+						ind+'var _array = _buf.array, _off = _len*'+slots+', _obj\n'
+
+					// iterate over the keys
+					var off = 0
+					for(var key in def) if(typeof def[key] === 'function'){
+						// lets output to the array
+						// and copy it from the context
+						var dft = '(this.scope._'+key+' || 0)'
+						if(key in defaults) dft = defaults[key]
+
+						var itemslots = def[key].slots
+						if(itemslots>1){
+							if(args.indexOf(key) !== -1){
+								write += ind+'_obj = '+key+'!==undefined?'+key+':this.'+key+'?this.'+key+':'+dft+'\n'
+							}
+							else{
+								write += ind+'_obj = this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
+							}
+							write += ind+'if(_obj !== undefined){\n'
+							for(var i = 0; i < itemslots; i++, off++){
+								write += ind+'\t_array[_off + ' + off + '] = _obj['+i+']\n'
+							}
+							write += ind+'}\n'
+						}
+						else{
+							if(args.indexOf(key) !== -1){
+								write += ind+'_array[_off + ' + off + '] = '+key+'!==undefined?'+key+':this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
+							}
+							else{
+								write += ind+'_array[_off + ' + off + '] = this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
+							}
+							off++
+						}
+					}
+					write += ind+'_buf.length++\n'
+					return write
+				})
+			}
+			//console.log(fnstr)
+			fnstr = fnstr.replace(/CONTEXT/g, cap)
+			context[verb+cap] = Function('return '+fnstr)()
+		}
+	}
+
+	// lets manage the drawcontext
+	this.atInnerClassAssign = function(key, value){
+		// its a class assignment
+		var cls
+		if(typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
+			this['_' + key] = value
+			cls = value.prototype
+		}
+		else{
+			// its inheritance
+			cls = this['_' + key]
+			cls = this['_' + key] = cls.extend(value, this)
+			cls = cls.prototype
+		}
+		if(cls._contextverbs){
+			this.doCompileContextVerbs(key, cls)
 		}
 	}
 
@@ -425,106 +889,12 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
-	this.draw_dirty = 3
-	// layout dirty causes a relayout to occur (only on viewports)
+	// draw dirty true
+	this.draw_dirty = true
+	// layout dirty causes a relayout to occur
 	this.layout_dirty = true
-	// update dirty causes a shader update to occur
-	this.update_dirty = true
 	// update matrix stack
 	this.matrix_dirty = true
-
-	// internal, initialization of a view
-	this.atViewInit = function(prev){
-
-		this.anims = {}
-		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
-		this.shader_list = []
-
-		this.initialized = true
-
-		if(prev){
-			this.modelmatrix = prev.modelmatrix
-			this.totalmatrix = prev.totalmatrix
-			this.viewportmatrix = prev.viewportmatrix
-			this.layout = prev.layout
-		}
-		else{
-			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = mat4.identity()
-			else this.totalmatrix = mat4()
-			this.viewportmatrix = mat4()
-		}
-
-		// create shaders
-		this.shaders = {}
-		for(var key in this.shader_enable){
-			var enable = this.shader_enable[key]
-			if(!enable) continue
-			var shader = this[key]
-			if(shader){
-				//var shname = key + 'shader'
-				//console.log(shname)
-
-				var prevshader = prev && prev.shaders && prev.shaders[key]
-				var shobj
-				// ok so instead of comparing constructor, lets compare the computational result
-//				if(prevshader && prevshader.constructor !== shader) console.log(shader)
-				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
-					shobj = prevshader
-					Object.defineProperty(shobj, 'constructor',{value:shader, configurable:true})
-					//shobj.constructor = shader
-					shobj.view = this
-					shobj.outer = this
-					// ok now check if we need to dirty it
-
-					if(shobj._view_listeners) for(var shkey in shobj._view_listeners){
-
-						this.addListener(shkey, shobj.reupdate.bind(shobj))
-						var value = this[shkey]
-
-						if(!(value && value.struct && value.struct.equals(value, prev[shkey]) || value === prev[shkey])){
-							shobj.reupdate(shkey)
-						}
-					}
-				}
-				else{
-					shobj = new shader(this)
-				}
-				//this[shname] = shobj
-				shobj.shadername = key
-				this.shaders[key] = shobj
-				this.shader_list.push(shobj)
-			}
-		}
-
-		if(this._bgimage){
-			this.onbgimage()
-		}
-
-		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
-		//	console.log(this.shader_order)
-		//}
-
-		if(this._viewport){
-			for(var key in this.shaders){
-				var shader = this.shaders[key]
-				if(shader.dont_scroll_as_viewport){
-					this.shaders[key].noscroll = true
-				}
-			}
-			this.shaders.viewportblend = new this.viewportblend(this)
-		}
-
-		this.sortShaders()
-	}
-
-	Object.defineProperty(this, 'bg', {
-		get:function(){},
-		set:function(){
-			console.error('bg property depricated, please use bgcolor:NaN to turn off background shader, and subclass via bgcolorfn or hardrect/roundedrect specifically')
-		}
-	})
 
 	this.onbgimage = function(){
 		if(this.initialized){
@@ -545,7 +915,7 @@ define.class('$system/base/node', function(require){
 				this.setBgImage(this._bgimage)
 			}
 		}
-		else this.setBorderShaders()
+		this.redraw
 	}
 
 	this.defaultKeyboardHandler = function(v, prefix){
@@ -571,8 +941,9 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-
 	this.setBgImage = function(image){
+		// TODO figure it out
+		/*
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
 		var img = shader.texture = Shader.Texture.fromImage(image);
@@ -582,7 +953,7 @@ define.class('$system/base/node', function(require){
 		} else if (img) {
 			this.onbgimagemode()
 		}
-		else this.redraw()
+		else this.redraw()*/
 	}
 
 	// internal, emit an event upward (to all parents) untill a listener is hit
@@ -612,86 +983,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// internal, sorts the shaders
-	this.sortShaders = function(){
-		var shaders = this.shaders
-		this.shader_draw_list = this.shader_list.slice(0).sort(function(a, b){
-			return shaders[a.shadername].draworder > shaders[b.shadername].draworder
-		}.bind(this))
-
-		this.shader_update_list = this.shader_list.slice(0).sort(function(a, b){
-			return shaders[a.shadername].updateorder > shaders[b.shadername].updateorder
-		}.bind(this))
-		//console.log(this.shader_draw_list)
-	}
-
-	// internal, custom hook in the inner class assignment to handle nested shaders specifically
-	this.atInnerClassAssign = function(key, value){
-
-		if(!this.hasOwnProperty('shader_enable')) this.shader_enable = Object.create(this.shader_enable || {})
-
-		// set the shader order
-		if(!value || typeof value === 'number' || typeof value === 'boolean'){
-			this.shader_enable[key] = value? true: false
-			return
-		}
-
-		// its a class assignment
-		if(typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
-			this['_' + key] = value
-			return
-		}
-
-		// its inheritance
-		var cls = this['_' + key]
-		this['_' + key] = cls.extend(value, this)
-	}
-
-	// internal, redraw our view and bubble up the viewport dirtiness to the root
-	this.redraw = function(){
-		if(!this.parent_viewport){
-			return
-		}
-		if(this.parent_viewport.draw_dirty === 3){
-			return
-		}
-		var parent = this
-		while(parent){
-			var viewport = parent.parent_viewport
-			if(!viewport) break
-			if(viewport.draw_dirty === 3){
-				return
-			}
-			viewport.draw_dirty = 3
-			parent = viewport.parent
-		}
-		this.draw_dirty = 3
-		if(this.screen.device && this.screen.device.redraw) {
-			this.screen.device.redraw()
-		}
-	}
-
-	// internal, updates all the shaders
-	this.reupdate = function(){
-		var shaders = this.shader_list
-		if(shaders) for(var i = 0; i < shaders.length; i++){
-			shaders[i].reupdate()
-		}
-	}
-
-	this.getViewGuid = function(){
-		if(this.viewguid) return this.viewguid
-		if(this.pickguid){
-			this.viewguid = '' +this.pickguid
-		}
-		var node = this, id = ''
-		while(node){
-			if(node.parent) id += node.parent.children.indexOf(node)
-			node = node.parent
-		}
-		this.viewguid = id
-		return id
-	}
 
 	function UnProject(glx, gly, glz, modelview, projection){
 		var inv = vec4()
@@ -796,42 +1087,6 @@ define.class('$system/base/node', function(require){
 		rayend = vec3.mul_mat4(rayend, this.remapmatrix)
 
 		return vec2(raystart.x, raystart.y)
-	}
-
-	// internal, this gets called by the render engine
-	this.updateShaders = function(){
-		if(!this.update_dirty) return
-		this.update_dirty = false
-		// we can wire up the shader
-		if(!this._shaderswired){
-			this.atAttributeGet = function(attrname){
-				//if(this.constructor.name === 'label')
-				//console.log(this.constructor.name, attrname, this['_'+attrname])
-				// monitor attribute wires for geometry
-				// lets add a listener
-				if(!shader._view_listeners) shader._view_listeners = {}
-				shader._view_listeners[attrname] = 1
-
-				this.addListener(attrname,shader.reupdate.bind(shader, attrname))
-
-			}.bind(this)
-		}
-
-
-		var shaders = this.shader_update_list
-		for(var i = 0; i < shaders.length; i ++){
-			var shader = shaders[i]
-			if(shader.view !== this)debugger
-			if(shader.update && shader.update_dirty){
-				shader.update_dirty = false
-				shader.update()
-			}
-		}
-
-		if(!this._shaderswired) {
-			this._shaderswired = true
-			this.atAttributeGet = undefined
-		}
 	}
 
 	// starts a drag view via render function
@@ -1003,283 +1258,122 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// internal, called by doLayout, to update the matrices to layout and parent matrix
-	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
-
-		// allow pre-matrix gen hooking
-		if(this.atMatrix) this.atMatrix()
-
-		var boundsobj = boundsinput
-		if(!boundsinput){
-			boundsobj = this._layout
-			boundsobj.absx = 0
-			boundsobj.absy = 0
-			boundsobj.boundw = 0
-			boundsobj.boundh = 0
-		}
-
-		var layout = this._layout
-
-		if(this.measured_width !== undefined || this.measured_height !== undefined){
-			var width = layout.absx + max(layout.width ,this.measured_width)
-			var height = layout.absy + max(layout.height, this.measured_height)
-		}
-		else{
-			var width = layout.absx + layout.width
-			var height = layout.absy + layout.height
-		}
-		if(width > boundsobj.boundw) boundsobj.boundw = width
-		if(height > boundsobj.boundh) boundsobj.boundh = height
-		if(bailbound) return
-
-		var matrix_changed = parent_changed
-		if (parentviewport === '3d'){
-			matrix_changed = true
-			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
-		}
-		else {
-			// compute TSRT matrix
-			if(layout){
-				//console.log(this.matrix_dirty)
-				var ml = this.matrix_layout
-				if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
-					ml.width !== layout.width || ml.height !== layout.height
-				    || ml.scale !== this._scale || ml.rotate !== this._rotate
-				){
-					this.matrix_layout = {
-						left:layout.left,
-						top:layout.top,
-						width:layout.width,
-						height:layout.height,
-						scale: this._scale,
-						rotate:this._rotate
-					}
-
-					matrix_changed = true
-					var s = this._scale
-					var r = this._rotate
-					var t0 = layout.left, t1 = layout.top, t2 = 0
-					//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
-					//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
-					//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
-					var hw = layout.width / 2
-					var hh = layout.height / 2
-					mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
-				}
+	// called in draw
+	this.updateMatrix = function(){
+		var frameid = this.context.frameid
+		// lets check what kind of matrix to make.
+		if(this.matrix_dirty){
+			if(this.context.target_mode === '3d'){
+				mat4.TSRT2(this.anchor, this.scale, this.orientation, this.pos, this.modelmatrix);
 			}
-			else {
-				matrix_changed = true
+			else { // its 2d
+				var layout = this._layout
+				// compute TSRT matrix
 				var s = this._scale
-				var r = this._rotate
-				var t = this._translate
-				var hw = this._size[0] / 2
-				var hh = this._size[1] / 2
-				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t[0] + hw * s[0], t[1] + hh * s[1], t[2], this.modelmatrix);
+				var r = this._orientation
+				var t0 = layout.left, t1 = layout.top, t2 = 0
+				var hw = layout.width / 2
+				var hh = layout.height / 2
+				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
 			}
+			this.last_matrix_update = frameid
+			this.matrix_dirty = false
 		}
 
-		var parentmode = parentviewport
-		if(this._viewport){
-			if(parentmatrix) {
-				mat4.mat4_mul_mat4(this.modelmatrix, parentmatrix, this.viewportmatrix)
+		if(this.last_matrix_update === frameid || this.parent && this.parent.last_matrix_update !== this.last_parent_matrix_update){
+			if(this.parent) this.last_parent_matrix_update = this.parent.last_matrix_update
+			if(this._viewport){
+				if(this.parent){
+					mat4.mat4_mul_mat4(this.modelmatrix, this.parent.totalmatrix, this.viewportmatrix)
+				}
+				else{
+					this.viewportmatrix = this.modelmatrix
+				}
+				mat4.identity(this.totalmatrix)
 			}
 			else{
-				this.viewportmatrix = this.modelmatrix
+				mat4.mat4_mul_mat4(this.modelmatrix, this.parent.totalmatrix, this.totalmatrix)
 			}
-			mat4.identity(this.totalmatrix)
-			parentmode = this._viewport
-			parentmatrix = mat4.global_identity
 		}
-		else{
-			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4( this.modelmatrix, parentmatrix, this.totalmatrix)
-		}
-
-		var children = this.children
-		var len = children.length
-
-		if(children) for(var i = 0; i < len; i++){
-			var child = children[i]
-
-			var clayout = child.layout
-			if(!clayout) continue
-			clayout.absx = layout.absx + clayout.left
-			clayout.absy = layout.absy + clayout.top
-
-			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj, child._viewport)
-		}
-
-		if(!boundsinput){
-			this.updateScrollbars()
-		}
-
-		this.matrix_dirty = false
 	}
 
-	// emit post layout
-	function emitPostLayout(node, nochild){
+	this.moveToFront = function(){
+		if(!this.parent) return
+		var idx = this.parent.children.indexOf(this)
+		this.parent.children.splice(idx, 1)
+		this.parent.children.push(this)
+		this.parent.redraw()
+	}
+
+	this.moveToBack = function(){
+		if(!this.parent) return
+		var idx = this.parent.children.indexOf(this)
+		this.parent.children.splice(idx, 1)
+		this.parent.children.unshift(this)
+		this.parent.redraw()
+	}
+
+	this.childrenInRect = function(rect, exclude) {
+		var hits = []
+		for (var i = 0;i<this.children.length;i++) {
+			var child = this.children[i]
+			if (exclude && exclude.indexOf(child) > -1) {
+				continue
+			}
+			if (child.boundsInsideRect(rect)) {
+				hits.push(child)
+			} 
+			else {
+				var sub = child.childrenInRect(rect, exclude)
+				if (sub.length) {
+					hits = hits.concat(sub)
+				}
+			}
+		}
+
+		return hits;
+	};
+
+	this.boundsInsideRect = function(r) {
+		return r.x <= this._layout.left
+			&& r.y <= this._layout.top
+			&& r.w >= this._layout.width
+			&& r.z >= this._layout.height
+	}
+
+	function emitPostLayout(node){
 		var ref = node.ref
 		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout
 
-		if(!nochild){
-			var children = node.children
-			for(var i = 0; i < children.length; i++){
-				var child = children[i]
-				emitPostLayout(child, child.ref._viewport)
-			}
-			ref.layout_dirty = false
+		var children = node.children
+		for(var i = 0; i < children.length; i++){
+			var child = children[i]
+			emitPostLayout(child)
 		}
+		ref.layout_dirty = false
 
 		var oldlayout = ref.oldlayout || {}
-		if((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
-			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
+		if(layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+			 layout.width !== oldlayout.width || layout.height !== oldlayout.height){
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
-		ref.matrix_dirty = true
 
 		if(ref._bgimage){
 			ref.onbgimagemode()
 		}
 	}
 
-	// cause this node, all childnodes and relevant parent nodes to relayout
-
-	this.relayoutRecur = function(source){
-		this.layout_dirty = true
-		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
-		for(var i = 0;i < this.child_viewport_list.length;i++){
-			var child = this.child_viewport_list[i]
-			//if(child._overflow) continue
-			if(child !== source){
-				child.relayoutRecur()
-			}
-		}
-		if(this.parent_viewport !== this){
-			if(this.parent_viewport._overflow) return
-			this.parent_viewport.relayoutRecur(this)
-		}
-	}
-
-	// ok so. what we need to do is
-	// scan up towards overflow something
-	// scan down and skip overflow something.
-
-	this.relayout = function(shallow){
-		if(this.layout_dirty) return
-		this.layout_dirty = true
-		this.redraw()
-		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
-	}
-
-	this.rematrix = function(){
-		this.matrix_dirty = true
-		if(this.parent_viewport){
-			this.parent_viewport.matrix_dirty = true
-			this.redraw()
-		}
-	}
-
-	// internal, moving a position in absolute should only trigger a matrix reload
-	this.pos = function(){
-		if(this._position === 'absolute'){
-			this._layout.left = this._pos[0]
-			this._layout.top = this._pos[1]
-			this.rematrix()
-		}
-		else{
-			this.relayout()
-		}
-	}
-
-	this.corner =
-	this.size =
-	this.minsize =
-	this.maxsize =
-	this.margin =
-	this.padding =
-	this.flex =
-	this.flexwrap =
-	this.flexdirection =
-	this.justifycontent =
-	this.alignitems =
-	this.alignself =
-	this.position =
-	this.relayout
-
-	this.rotate = this.rematrix
-
-	// internal, called by the render engine
 	this.doLayout = function(){
 
-		if(this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
+		if(!this.layout_dirty) return
+		var copynodes = FlexLayout.fillNodes(this)
+		FlexLayout.computeLayout(copynodes)
 
-			var layout = this._layout
-			var flex = this._flex
-			var size = this._size
-
-			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
-			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
-
-			//console.log(this._percentsize, presizex,presizey);
-			//this._size = vec2(layout.width, layout.height)
-
-			var flexwrap = this._flexwrap
-			this._flex = 1
-			this._size = vec2(presizex, presizey)
-			this._flexwrap = false
-
-			if(this.measure) this.measure() // otherwise it doesnt get called
-
-			var copynodes = FlexLayout.fillNodes(this)
-			FlexLayout.computeLayout(copynodes)
-
-			//this.sublayout = this.layout
-			this._flex = flex
-			this._size = size
-			this._flexwrap = flexwrap
-			this._layout = layout
-			emitPostLayout(copynodes)
-		}
-		else{
-			var layout = this._layout
-
-			//this._size = vec2(presizex, presizey)
-			var size = this._size
-			var pos = this._pos;
-
-			var presizex = isNaN(this._percentsize[0])?size[0]:this.parent._layout.width * 0.01 * this._percentsize[0];
-			var presizey = isNaN(this._percentsize[1])?size[1]: this.parent._layout.height * 0.01 * this._percentsize[1];
-			var presizez = isNaN(this._percentsize[2])?size[2]: this.parent.depth * 0.01 * this._percentsize[2];
-
-			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0];
-			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1];
-
-			// we have some kind of overflow, cause we are a viewport
-			// so if height is not given we have to take up the external height
-			//console.log(presizey, this.layout.height)
-			//console.log("This is where we get the percentage size", this._percentsize, presizex,presizey);
-
-			this._size = vec2(presizex, presizey);
-			this._pos = vec2(preposx, preposy);
-			//console.log(this._percentpos, this._pos ,pos);
-			var preheight = this._layout.height
-			var copynodes = FlexLayout.fillNodes(this)
-			FlexLayout.computeLayout(copynodes)
-
-			if(isNaN(presizey)){
-				this._layout.height = preheight
-			}
-
-			this._size = size
-			this._pos = pos;
-
-			emitPostLayout(copynodes)
-
-
-		}
+		emitPostLayout(copynodes)
 	}
-
+	
 	this.animate = function(key, track){
 		return new define.Promise(function(resolve, reject){
 			this.startAnimation(key, undefined, track, resolve)
@@ -1287,10 +1381,18 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.startAnimation = function(key, value, track, resolve){
-		if(this.initialized) return this.screen.startAnimationRoot(this, key, value, track, resolve)
-		else{
-			return false
-		}
+		if(!this.initialized) return false
+		
+		return this.screen.startAnimationRoot(
+			this.pickview + '_' + key, 
+			this.getAttributeConfig(key), 
+			this['_'+key], 
+			this, 
+			key, 
+			value, 
+			track, 
+			resolve
+		)
 	}
 
 	this.stopAnimation = function(key){
@@ -1305,13 +1407,7 @@ define.class('$system/base/node', function(require){
 		if(this.initialized) this.screen.pauseAnimationRoot(this, key)
 	}
 
-	// Determines the background color that should be drawn at a given position.
-	// Returns a vec4 color value, defaults to bgcolor.
-	this.bgcolorfn = function(pos /*vec2*/){
-		return bgcolor
-	}
-
-	this.appendChild = function(render){
+	this.renderChild = function(render){
 		// wrap our render function in a temporary view
 		var vroot = view()
 		// set up a temporary view
@@ -1331,510 +1427,8 @@ define.class('$system/base/node', function(require){
 		this.relayout()
 	}
 
-	define.class(this, 'hardrect', this.Shader, function(){
-		this.updateorder = 0
-		this.draworder = 0
-		this.dont_scroll_as_viewport = true
-		this.mesh = vec2.array()
-		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-		this.position = function(){
-			uv = mesh.xy
-			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			var res = vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
-			res.w -= 0.004
-			return res;
-		}
-		this.color = function(){
-			var col = view.bgcolorfn(mesh.xy)
-			return vec4(col.rgb, col.a * view.opacity)
-		}
-	})
-	this.hardrect = true
-
-	this.bordercolorfn = function(pos){
-		return bordercolor
-	}
-
-	define.class(this, 'hardborder', this.Shader, function(){
-		this.updateorder = 0
-		this.draworder = 1
-		this.mesh = vec2.array();
-		this.dont_scroll_as_viewport = true
-
-		this.update = function(){
-			var view = this.view
-			var width = view.layout?view.layout.width:view.width
-			var height = view.layout?view.layout.height:view.height
-			var bw1 = view.borderwidth[0]/width;
-			var bw2 = view.borderwidth[1]/width;
-			var bw3 = view.borderwidth[2]/height;
-			var bw4 = view.borderwidth[3]/height;
-
-			var mesh = this.mesh = vec2.array();
-//			console.log(bw, height);
-
-			mesh.pushQuad(0,0, bw1,0,0,1,bw1,1);
-			mesh.pushQuad(1-bw2,0, 1,0,1-bw2,1,1,1);
-			mesh.pushQuad(0,0, 1,0,0,bw3,1,bw3);
-			mesh.pushQuad(0,1-bw4, 1,1-bw4,0,1,1,1);
-		}
-
-		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-
-		this.position = function(){
-			uv = mesh.xy
-			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
-		}
-		this.color = function(){
-			var col = view.bordercolorfn(uv.xy)
-			return vec4(col.rgb, col.a * view.opacity);
-		}
-	})
-
-	// hard edged bgimage shader
-	define.class(this, 'hardimage', this.hardrect, function(){
-		this.dont_scroll_as_viewport = true
-		this.updateorder = 0
-		this.draworder = 0
-		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
-		//this.atDraw = function(draw){
-		//	console.log('in shader at:',draw === this.view, this.view.viewmatrix)
-		//}
-		this.color = function(){
-			//return mix('red','green',mesh.y)
-			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
-				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
-				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
-				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
-				return view.bgcolor;
-			}
-			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
-			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
-		}
-	})
-
-
-	this.onbgimagemode = function(ev, v, o) {
-
-		if (this.shaders) {
-			var shader = this.shaders.hardimage || this.shaders.roundedimage;
-
-			if (shader && shader.texture) {
-				var size = shader.texture.size;
-
-				var imgw = size[0];
-				var imgh = size[1];
-				var aspect = this._width / this._height;
-				var uselayout = false;
-				if (isNaN(aspect)) {
-					uselayout = true;
-					aspect = this._layout.width / this._layout.height;
-				}
-				var ratio = imgw / imgh / aspect;
-				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
-					this.bgimageaspect = vec2(1.0,1.0);
-				} else if (this.bgimagemode === "aspect-fit") {
-					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0);
-					} else {
-						this.bgimageaspect = vec2(1.0, ratio);
-					}
-				} else if (this.bgimagemode === "aspect-fill") {
-					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0, ratio);
-					} else {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0);
-					}
-				}
-			}
-		}
-	};
-
-	// rounded rect shader class
-	define.class(this, 'roundedrect', this.Shader, function(){
-		this.dont_scroll_as_viewport = true
-		this.updateorder = 0
-		this.draworder = 0
-		this.vertexstruct = define.struct({
-			pos: vec2,
-			angle: float,
-			radmult: vec4,
-			uv:vec2
-		})
-
-		this.mesh = this.vertexstruct.array()
-
-		this.depth_test = ""
-
-		// matrix and viewmatrix should be referenced on view
-		this.opacity = 0.0
-		this.drawtype = this.TRIANGLE_FAN
-		this.color_blend = 'src_alpha * src_color + (1 - src_alpha) * dst_color'
-
-		this.update = function(){
-			var view = this.view
-			var width = view.layout?view.layout.width:view.width
-			var height = view.layout?view.layout.height:view.height
-			var radius = view.borderradius
-
-			var mesh = this.mesh = this.vertexstruct.array()
-
-			if (vec4.equals(radius, vec4(0,0,0,0))) {
-				mesh.push([width/2,height/2], 0, [1,0,0,0], 0.5,0.5)
-				mesh.push([0,0], 0, [1,0,0,0], 0,0)
-				mesh.push([width,0], 0, [1,0,0,0], 1,0)
-				mesh.push([width,height], 0, [1,0,0,0], 1,1)
-				mesh.push([0,height], 0, [1,0,0,0], 0,1)
-				mesh.push([0,0], 0, [1,0,0,0], 0,0)
-			}
-			else{
-
-				var divbase = 0.45;
-				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
-				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
-				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
-				var pidiv4 = Math.floor(Math.max(2, divbase* PI * radius[3]))
-
-				var pimul1 = (PI*0.5)/(pidiv1-1)
-				var pimul2 = (PI*0.5)/(pidiv2-1)
-				var pimul3 = (PI*0.5)/(pidiv3-1)
-				var pimul4 = (PI*0.5)/(pidiv4-1)
-
-				this.mesh.push([width/2,height/2], 0, [0,0,0,0], 0.5,0.5)
-
-				for(var p = 0;p<pidiv1;p++) this.mesh.push(vec2(radius[0] ,radius[0]), p*pimul1, vec4(1,0,0,0), 1,0)
-				for(var p = 0;p<pidiv2;p++) this.mesh.push(vec2(width - radius[1]-1, radius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0)
-				for(var p = 0;p<pidiv3;p++) this.mesh.push(vec2(width - radius[2]-1, height - radius[2]-1), p*pimul3+ PI, vec4(0,0,1,0), 1,1)
-				for(var p = 0;p<pidiv4;p++) this.mesh.push(vec2(radius[3], height - radius[3]-1), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1)
-
-				this.mesh.push(vec2( radius[0] ,radius[0]), 0, vec4(1,0,0,0), 1,0)
-			}
-		}
-
-		this.color = function(){
-			var col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
-			return vec4(col.rgb, col.a * view.opacity)
-		}
-
-		this.position = function(){
-			pos = mesh.pos.xy
-			var ca = cos(mesh.angle + PI)
-			var sa = sin(mesh.angle + PI)
-
-			var rad  = (mesh.radmult.x * view.borderradius.x + mesh.radmult.y * view.borderradius.y + mesh.radmult.z * view.borderradius.z + mesh.radmult.w * view.borderradius.w)
-			pos.x += ca * rad
-			pos.y += sa * rad
-
-			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
-
-			sized = vec2(pos.x, pos.y)
-			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
-		}
-	})
-
-	// hard edged bgimage shader
-	define.class(this, 'roundedimage', this.roundedrect, function(){
-		this.dont_scroll_as_viewport = true
-		this.updateorder = 0
-		this.draworder = 0
-		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
-		this.color = function(){
-			if (view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x < 0.0
-				|| view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x > 1.0
-				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y < 0.0
-				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y > 1.0) {
-				return view.bgcolor;
-			}
-			var col = this.texture.sample(vec2(view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect[1]));
-			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
-		}
-	})
-
-	// rounded rect shader class
-	define.class(this, 'shadowrect', this.Shader, function(){
-		this.updateorder = 0
-
-		this.vertexstruct = define.struct({
-			pos: vec2,
-			angle: float,
-			radmult: vec4,
-			uv:vec2,
-			shadowradius: vec4
-		})
-
-		this.mesh = this.vertexstruct.array()
-
-		this.depth_test = ""
-		this.draworder = -1;
-
-		// matrix and viewmatrix should be referenced on view
-		this.opacity = 0.0
-		this.drawtype = this.TRIANGLE_STRIP
-		this.color_blend = 'src_alpha * src_color + (1 - src_alpha) * dst_color'
-		this.update = function(){
-			var view = this.view
-
-			var width = (view.layout?view.layout.width:view.width)
-			//console.log(view.dropshadowradius, width);
-			var height = (view.layout?view.layout.height:view.height)
-
-			var radius = vec4(Math.max(1, view.borderradius[0] + view.dropshadowradius),Math.max(1, view.borderradius[1]+ view.dropshadowradius),Math.max(1, view.borderradius[2]+ view.dropshadowradius),Math.max(1, view.borderradius[3]+ view.dropshadowradius));
-			//console.log(radius)
-			var mesh = this.mesh = this.vertexstruct.array()
-
-			if (vec4.equals(radius, vec4(0,0,0,0))) {
-				mesh.push([width/2,height/2], 0, [1,0,0,0], 0.5,0.5)
-				mesh.push([0,0], 0, [1,0,0,0], 0,0)
-				mesh.push([width,0], 0, [1,0,0,0], 1,0)
-				mesh.push([width,height], 0, [1,0,0,0], 1,1)
-				mesh.push([0,height], 0, [1,0,0,0], 0,1)
-				mesh.push([0,0], 0, [1,0,0,0], 0,0)
-			}
-			else{
-
-				var divbase = 0.45;
-				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
-				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
-				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
-				var pidiv4 = Math.floor(Math.max(2, divbase* PI * radius[3]))
-
-				var pimul1 = (PI*0.5)/(pidiv1-1)
-				var pimul2 = (PI*0.5)/(pidiv2-1)
-				var pimul3 = (PI*0.5)/(pidiv3-1)
-				var pimul4 = (PI*0.5)/(pidiv4-1)
-
-
-				for(var p = 0;p<pidiv1;p++){
-					this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), p*pimul1, vec4(0,0,0,0), 0,0,radius)
-					this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), p*pimul1, vec4(1,0,0,0), 1,0,radius)
-				}
-				for(var p = 0;p<pidiv2;p++)
-				{
-					this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,0,0,0), 0,0,radius)
-					this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0,radius)
-				}
-				for(var p = 0;p<pidiv3;p++) {
-					this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,0,0), 0,0,radius)
-					this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,1,0), 1,0,radius)
-				}
-				for(var p = 0;p<pidiv4;p++){
-					this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,0,radius)
-					this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 1,0,radius)
-				}
-				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(0,0,0,0), 0,0,radius)
-				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(1,0,0,0), 1,0,radius)
-				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(0,0,0,0), 1,0,radius)
-				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(0,0,0,0), 0,0,radius)
-				this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,0,radius)
-				this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,0,0,0), 0,0,radius)
-				this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,0,0), 0,0,radius)
-			//this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), 0*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,1,radius)
-
-//				this.mesh.push(vec2( radius[0]- view.dropshadowradius ,radius[0]- view.dropshadowradius), 0, vec4(1,0,0,0), 0,0, radius)
-			}
-		}
-
-		this.color = function(){
-			var col = view.dropshadowcolor;
-			col.a *= view.dropshadowopacity;
-			col.a *= 1.0- pow(mesh.uv.x,1. + view.dropshadowhardness*10.);
-
-			return vec4(col.rgb, col.a * view.opacity)
-		}
-
-		this.position = function(){
-			pos = mesh.pos.xy
-			var ca = cos(mesh.angle + PI)
-			var sa = sin(mesh.angle + PI)
-
-			var rad  = (mesh.radmult.x * mesh.shadowradius.x + mesh.radmult.y * mesh.shadowradius.y + mesh.radmult.z * mesh.shadowradius.z + mesh.radmult.w * mesh.shadowradius.w)
-			pos.x += ca * rad
-			pos.y += sa * rad
-
-			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
-
-			sized = vec2(pos.x, pos.y)
-			sized += view.dropshadowoffset;
-			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
-		}
-	})
-
-	this.dropshadowopacity = function(){
-		if (this.dropshadowopacity> 0){
-			this.shadowrect = true;
-		}
-		else{
-			this.shadowrect =false;
-		}
-	}
-
-
-	this.moveToFront = function(){
-		if(!this.parent) return
-		var idx = this.parent.children.indexOf(this)
-		this.parent.children.splice(idx, 1)
-		this.parent.children.push(this)
-		this.parent.redraw()
-	}
-
-	this.moveToBack = function(){
-		if(!this.parent) return
-		var idx = this.parent.children.indexOf(this)
-		this.parent.children.splice(idx, 1)
-		this.parent.children.unshift(this)
-		this.parent.redraw()
-	}
-
-	this.childrenInRect = function(rect, exclude) {
-		var hits = [];
-		for (var i = 0;i<this.children.length;i++) {
-			var child = this.children[i];
-			if (exclude && exclude.indexOf(child) > -1) {
-				continue;
-			}
-			if (child.boundsInsideRect(rect)) {
-				hits.push(child);
-			} else {
-				var sub = child.childrenInRect(rect, exclude);
-				if (sub.length) {
-					hits = hits.concat(sub)
-				}
-			}
-		}
-
-		return hits;
-	};
-
-	this.boundsInsideRect = function(r) {
-		return r.x <= this._layout.left
-			&& r.y <= this._layout.top
-			&& r.w >= this._layout.width
-			&& r.z >= this._layout.height;
-	};
-
-	define.class(this, 'viewportblend', this.Shader, function(){
-		this.draworder = 10
-		this.updateorder = 10
-		this.omit_from_shader_list = true
-		this.texture = Shader.prototype.Texture.fromType('rgba_depth_stencil')
-		this.mesh = vec2.array()
-		this.mesh.pushQuad(0,0, 0,1, 1,0, 1,1)
-		this.width = 0
-		this.height = 0
-
-		this.position = function(){
-			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix
-		}
-
-		this.color = function(){
-			var col = texture.sample(mesh.xy)
-			return vec4(col.rgb, col.a * view.opacity)
-		}
-	})
-
-	// rounded corner border shader
-	define.class(this, 'roundedborder', this.Shader, function(){
-		this.dont_scroll_as_viewport = true
-		this.draworder = 1
-		this.updateorder = 1
-		this.vertexstruct = define.struct({
-			pos: vec2,
-			angle: float,
-			radmult: vec4,
-			uv:vec2
-		})
-		this.mesh = this.vertexstruct.array()
-		this.drawtype = this.TRIANGLE_STRIP
-
-		this.update = function(){
-
-			var view = this.view
-			var width = view.layout? view.layout.width: view.width
-			var height = view.layout? view.layout.height: view.height
-
-			var mesh = this.mesh = this.vertexstruct.array()
-
-			var borderradius = view.borderradius
-			var borderwidth = view.borderwidth
-
-			var scale0 = ((borderradius[0]-borderwidth[0]))/Math.max(0.01, borderradius[0])
-			var scale1 = ((borderradius[1]-borderwidth[0]))/Math.max(0.01, borderradius[1])
-			var scale2 = ((borderradius[2]-borderwidth[0]))/Math.max(0.01, borderradius[2])
-			var scale3 = ((borderradius[3]-borderwidth[0]))/Math.max(0.01, borderradius[3])
-
-			var divbase = 0.45
-			var pidiv1 = Math.floor(Math.max(2, divbase* PI * borderradius[0]))
-			var pidiv2 = Math.floor(Math.max(2, divbase* PI * borderradius[1]))
-			var pidiv3 = Math.floor(Math.max(2, divbase* PI * borderradius[2]))
-			var pidiv4 = Math.floor(Math.max(2, divbase* PI * borderradius[3]))
-
-			var pimul1 = (PI*0.5)/(pidiv1-1)
-			var pimul2 = (PI*0.5)/(pidiv2-1)
-			var pimul3 = (PI*0.5)/(pidiv3-1)
-			var pimul4 = (PI*0.5)/(pidiv4-1)
-
-			for(var p = 0; p < pidiv1; p ++){
-				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(1,0,0,0), 1,0);
-				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(scale0,0,0,0), 1,0);
-			}
-
-			for(var p = 0;p<pidiv2;p++){
-				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0);
-				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,scale1,0,0), 1,0);
-			}
-			for(var p = 0;p<pidiv3;p++){
-				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,1,0), 1,1);
-				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,scale2,0), 1,1);
-			}
-			for(var p = 0;p<pidiv4;p++){
-				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1);
-				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,scale3), 0,1);
-			}
-			this.mesh.push(vec2( borderradius[0] ,borderradius[0]), 0, vec4(1,0,0,0), 1,0);
-			this.mesh.push(vec2( borderradius[0] ,borderradius[0]), 0, vec4(scale0,0,0,0), 1,0);
-
-		}
-
-		this.color = function(){
-			var col = view.bordercolorfn(pos.xy)
-			return vec4(col.rgb, view.opacity * col.a)
-		}
-
-		this.position = function(){
-
-			pos = mesh.pos.xy
-
-			var ca = cos(mesh.angle + PI)
-			var sa = sin(mesh.angle+PI)
-
-
-
-			var rad  = dot(mesh.radmult, view.borderradius)
-			pos.x += ca * rad
-			pos.y += sa * rad
-
-			uv = vec2(pos.x/view.width,  pos.y/view.height)
-
-			sized = vec2(pos.x, pos.y)
-			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
-		}
-
-	//	this.atExtend = function(){
-	//		console.log("EXTENDING", this.constructor.outer.bordercolorfn)
-			//Object.getPrototypeOf(this).atExtend.call(this)
-	//	}
-	})
-
-	// lets pull in the scrollbar on the view
-	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){
-		this.hardrect = {
-			noscroll:true
-		}
-	})
+	// the draw api
+	define.class(this, 'rect', '$shaders/rectshader')
 
 	// Basic usage of the splitcontainer
 	this.constructor.examples = {

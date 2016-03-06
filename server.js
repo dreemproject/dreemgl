@@ -90,6 +90,8 @@ function main(){
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
 		'ui':'$root/classes/ui',
+		'draw':'$root/classes/draw',
+		'shaders':'$root/classes/shaders',
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',

@@ -29,7 +29,6 @@ define(function(require, exports){
 		var it = (1-t);
 		var it2 = it*it;
 		var it3 = it2*it;
-	//	return p0 + t*vec2(1,0);
 		var pos = p0 * it3  + p1*3*t*it2 + p2 * 3*it*t2 +  p3* t3;
 		var deriv = -3.0 * p0 * it2 + 3 * p1 * (it2-2*t*it) + 3 * p2 *( -t2 + it * t * 2) + 3 * p3 * t2;
 		deriv = normalize(deriv);

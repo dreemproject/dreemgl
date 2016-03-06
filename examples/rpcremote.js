@@ -45,7 +45,8 @@ define.class('$server/composition', function(
 			pos: wire('this.screen.movepos'),
 			bgcolor: 'red',
 			init: function(){
-				console.log("screen2", this.rpc.server.test)
+				console.log(this.rpc)
+				console.log("screen2", this.rpc.myservice.test)
 			}
 		})
 	)

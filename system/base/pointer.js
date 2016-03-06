@@ -65,11 +65,11 @@ define.class('$system/base/node', function(){
 	PointerList.prototype.setPointer = function (pointer) {
 		for (var i = this.length; i--;) {
 			if (this[i].id === pointer.id) {
-				this.splice(i, 1, new Pointer(pointer, pointer.id, pointer.view))
+				this.splice(i, 1, new Pointer(pointer, pointer.id, pointer.view, pointer.pickdraw))
 				return
 			}
 		}
-		this.push(new Pointer(pointer, pointer.id, pointer.view))
+		this.push(new Pointer(pointer, pointer.id, pointer.view, pointer.pickdraw))
 		this.sort(function(a, b) {
 			if (a.id < b.id) return -1
 			if (a.id > b.id) return 1
@@ -99,10 +99,11 @@ define.class('$system/base/node', function(){
 
 	// Internal: Returns pointer object.
 	// It calculats deltas, min and max is reference pointer is provided.
-	var Pointer = function(pointer, id, view) {
+	var Pointer = function(pointer, id, view, pickdraw) {
 		// TODO(aki): add start value
 		this.id = id
 		this.view = view
+		this.pickdraw = pickdraw
 		this.value = pointer.value
 		this.position = pointer.position
 		this.button = pointer.button
@@ -189,15 +190,16 @@ define.class('$system/base/node', function(){
 				if (id >= 0){
 					// we got a handoff of a particular pointer
 					pointerlist[id].handovered = start.view
+					pointerlist[id].handovered_pickdraw = start.pickdraw
 				}
 			}
 		}
 
 		this._start.length = 0
 
-		var pick = function(view){
+		var pick = function(view, pickdraw){
 			var id = this._first.getAvailableId()
-			var pointer = new Pointer(pointerlist[i], id, view)
+			var pointer = new Pointer(pointerlist[i], id, view, pickdraw)
 			// Add pointer to clicker stash for counting
 			this._clickerstash.unshift(pointer)
 			this._clickerstash.length = min(this._clickerstash.length, 5)
@@ -210,8 +212,13 @@ define.class('$system/base/node', function(){
 
 		for (var i = 0; i < pointerlist.length; i++) {
 			// if a pointer is handoffed use that view instead
-			if (pointerlist[i].handovered) pick(pointerlist[i].handovered)
-			else this.device.pickScreen(pointerlist[i].position, pick, true)
+			if (pointerlist[i].handovered){
+				pick(pointerlist[i].handovered, pointerlist[i].handovered_pickdraw)
+			}
+			else {
+				var  match = this.device.screen.doPick(pointerlist[i].position)
+				pick(match.view, match.pickdraw)
+			}
 		}
 		this.emitPointerList(this._start, 'start')
 	}
@@ -231,9 +238,9 @@ define.class('$system/base/node', function(){
 			// emit event hooks
 			if (start){
 				if (start.pickview){
-					this.device.pickScreen(pointerlist[i].position, function(view){
-						pointer.pick = view
-					}.bind(this), true)
+					var match = this.device.screen.doPick(pointerlist[i].position)
+					pointer.pick = match.view
+					pointer.pickdraw = match.pickdraw
 				}
 				if (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
@@ -266,22 +273,21 @@ define.class('$system/base/node', function(){
 				if (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
 			}
 
-			this.device.pickScreen(pointerlist[i].position, function(view){
-				var previous = this._move.getClosest(pointerlist[i])
-				var first = this._first.getById(previous.id)
+			var match = this.device.screen.doPick(pointerlist[i].position)
 
-				var pointer = new Pointer(pointerlist[i], previous.id, first.view)
-				pointer.addDelta(first)
-				pointer.setClicker(this._clickerstash)
-				pointer.isover = pointer.view === view
-				this._first.removePointer(first)
-				this._end.setPointer(pointer)
-				this._move.removePointer(pointer)
-				if (pointer.dt < TAPSPEED && vec2.len(pointer.delta) < TAPDIST){
-					this._tap.setPointer(pointer)
-				}
-			}.bind(this), true)
+			var previous = this._move.getClosest(pointerlist[i])
+			var first = this._first.getById(previous.id)
 
+			var pointer = new Pointer(pointerlist[i], previous.id, first.view, match.pickdraw)
+			pointer.addDelta(first)
+			pointer.setClicker(this._clickerstash)
+			pointer.isover = pointer.view === match.view
+			this._first.removePointer(first)
+			this._end.setPointer(pointer)
+			this._move.removePointer(pointer)
+			if (pointer.dt < TAPSPEED && vec2.len(pointer.delta) < TAPDIST){
+				this._tap.setPointer(pointer)
+			}
 		}
 
 		this.emitPointerList(this._end, 'end')
@@ -292,24 +298,27 @@ define.class('$system/base/node', function(){
 	this.sethover = function(pointerlist) {
 		this._over.length = 0
 		this._out.length = 0
-		this.device.pickScreen(pointerlist[0].position, function(view){
-			var previous = this._hover.getById(0)
-			if (previous) previous = new Pointer(previous, 0, previous.view)
-			var pointer = new Pointer(pointerlist[0], 0, view)
-			this._hover.setPointer(pointer)
-			// TODO(aki): entering child view triggers out event. Consider adding pointer-events: 'none'
-			if (!previous || previous.view !== pointer.view) {
-				if (pointer.view) {
-					this._over.setPointer(pointer)
-				}
-				if (previous) {
-					this._out.setPointer(previous)
-				}
+
+		var match = this.device.screen.doPick(pointerlist[0].position)
+
+		var view = match.view
+
+		var previous = this._hover.getById(0)
+		if (previous) previous = new Pointer(previous, 0, previous.view, previous.pickdraw)
+		var pointer = new Pointer(pointerlist[0], 0, view, match.pickdraw)
+		this._hover.setPointer(pointer)
+		// TODO(aki): entering child view triggers out event. Consider adding pointer-events: 'none'
+		if (!previous || previous.view !== pointer.view) {
+			if (pointer.view) {
+				this._over.setPointer(pointer)
 			}
-			this.emitPointerList(this._hover, 'hover')
-			this.emitPointerList(this._over, 'over')
-			this.emitPointerList(this._out, 'out')
-		}.bind(this))
+			if (previous) {
+				this._out.setPointer(previous)
+			}
+		}
+		this.emitPointerList(this._hover, 'hover')
+		this.emitPointerList(this._over, 'over')
+		this.emitPointerList(this._out, 'out')
 	}
 
 

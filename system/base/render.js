@@ -162,7 +162,7 @@ define.class(function(exports){
 			}
 			//var name = new_child.name
 			//if(name !== undefined && !(name in new_version)) new_version[name] = new_child
-
+			new_child.guid = new_version.guid+'_'+i
 			new_child.parent = new_version
 			new_child.screen = new_version.screen
 			new_child.rpc = new_version.rpc
@@ -194,7 +194,7 @@ define.class(function(exports){
 
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){
-				new_version.screen.device.atNewlyRendered(new_version)
+				new_version.screen.atNewlyRendered(new_version)
 			}
 		}
 
