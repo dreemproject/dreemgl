@@ -13,8 +13,10 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 			// this allows reuse of commandbuffers
 			if(c.pushCache('button', false)){
 				//c.drawRect(random()*300, random()*300, 10, 10)
-				for(var i = 0; i < 30000;i++){
-					c.drawButton("hi!", random()*800, random()*800, 5, 5)
+				for(var i = 0; i < 150;i++){
+				for(var j = 0; j < 150;j++){
+					c.drawButton("hi!", i*6,j*6, 5, 5)
+				}
 				}
 				c.popCache()
 			}
