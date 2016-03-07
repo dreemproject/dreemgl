@@ -41,7 +41,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	this.flexdirection = "column"
 	this.cursor = 'arrow'
 	this.tooltip = 'Application'
-	this.pickbits = 9
+	this.pickbits = 8
 	this.guid = ''
 
 	this.atConstructor = function(){
@@ -96,6 +96,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		while(node){
 			node.pickview = id * mul
 			this.pick_map[node.pickview] = node
+			id++
 			node = this.nextViewWalk(node, this)
 		}
 	}
@@ -172,19 +173,13 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	// lets pick the screen
 	this.doPick = function(pointer){
 
-		if(!this.main_pass) return {}
+		if(!this.pick_passes || !this.pick_passes.length) return {}
 
 		var overlay = {			
 			_pixelentry:1
 		}
 
-		var pick_passes = this.pick_passes
-		if(!pick_passes.length){
-			pick_passes.push(0,this.main_pass)
-		}
-
 		var pick_matrices
-
 		if(!this.debug_pick){
 	
 			var scroll = this.scroll
@@ -199,17 +194,29 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			}
 		}
 
+		var last_pick_main
+		var pick_passes = this.pick_passes
 		for(var passid = 0; passid < pick_passes.length;passid +=2){
 			// execute the commandbuffer
 			var pass = pick_passes[passid + 1]
-			var ismain = this.main_pass === pass
 
+			var ismain = !pass.view.parent && pass.passname === 'viewport'
+		
+			if(ismain) last_pick_main = pass
+		
 			// lets create a render target!
 			var guid = pass.target.targetguid
 			var tgt = this.pick_rendertargets[guid]
+
 			if(!tgt){
-				if(ismain) tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, 1, 1, this.device)
-				else tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+				if(ismain){
+					if(!this.debug_pick){
+						tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, 1, 1, this.device)
+					}
+				}
+				else{
+					tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+				}
 				this.pick_rendertargets[guid] = tgt
 			}
 
@@ -219,6 +226,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		}
 		// gc the framebuffer set somehow?
 		this.pick_passes.length = 0
+		this.pick_passes.push(0,last_pick_main)
 
 		// then readpixels
 		var data 
@@ -231,10 +239,11 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 
 		// decode the pass and drawid
 		var mask = ((1<<(24-this.pickbits))-1)
-		var totalid = data[0]<<16|data[1]<<8|data[2]
+		var totalid = (data[0]<<16)|(data[1]<<8)|data[2]
 		var viewid = totalid&( ((1<<24)-1) - mask)
 		var drawid = totalid&mask
 
+		//console.log(viewid>>16, drawid)
 		var match = {
 			view:this.pick_map[viewid],
 			pickdraw:drawid
@@ -273,8 +282,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		for(var passid = 0; passid < draw_passes.length;passid +=5){
 			// execute the commandbuffer
 			var pass = draw_passes[passid + 1]
-
-			var ismain = this.main_pass === pass
+			var ismain = !pass.view.parent && pass.passname === 'viewport'
 			// Create the render targets
 			var guid = pass.target.targetguid
 			var tgt = this.color_rendertargets[guid]

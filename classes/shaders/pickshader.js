@@ -24,7 +24,7 @@ define.class('$system/platform/$platform/shader$platform', function(){
 	this.pick = function(){
 		var col = this.color()
 		var total = view.pickview + canvas.pickdraw
-		return vec4(floor(total/65536.)/255., floor(total/256.)/255., mod(total,256.)/255., col.a>pickalpha?1.:0.)
+		return vec4(floor(total/65536.)/255., mod(floor(total/256.),256.)/255., mod(total,256.)/255., col.a>pickalpha?1.:0.)
 	}
 
 	this.pixelentries = ['color','pick']

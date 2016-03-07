@@ -46,7 +46,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 	})
 
 	this.render = function(){ return [
-		screen({name:'default', bgcolor:'orange',rect:{color:function(){return mix('blue','red',mesh.y)}},clearcolor:vec4('purple')},
+		screen({name:'default', bgcolor:'orange',rect:{color:function(){return mix('red','red',mesh.y)}},clearcolor:vec4('purple')},
 			myview({width:200, height:200, bgcolor:'red'})
 		)
 	]}

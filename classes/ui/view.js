@@ -478,13 +478,13 @@ define.class('$system/base/node', function(require){
 			if(this._viewport === '2d'){
 				this.viewport_target =
 				tgt = c.getTarget("viewport", c.RGBA|c.PICK)
-				c.pushTarget(tgt)
+				c.pushTarget(tgt, 'viewport')
 				c.setOrthoViewMatrix(!this.parent)
 			}
 			else{
 				this.viewport_target =
 				tgt = c.getTarget("viewport", c.RGBA|c.DEPTH|c.PICK)
-				c.pushTarget(tgt)
+				c.pushTarget(tgt, 'viewport')
 				c.setPerspectiveViewMatrix(tgt)
 			}
 			if(this.draw_dirty){
@@ -637,7 +637,7 @@ define.class('$system/base/node', function(require){
 			)
 			return {targetguid:targetguid, width:width, height:height, flags:flags}
 		},
-		pushTarget: function(target, outputname){
+		pushTarget: function(target, passname, outputname){
 
 			if(!this.cmdstack) this.cmdstack = []
 			this.cmdstack.push(this.cmds, this.target)
@@ -645,6 +645,7 @@ define.class('$system/base/node', function(require){
 			this.target = target
 
 			var pass = {
+				passname:passname,
 				target:target, 
 				outputname:outputname, 
 				cmds:this.cmds, 
@@ -654,8 +655,6 @@ define.class('$system/base/node', function(require){
 			var id = draw_passes.indexOf(target.targetguid)
 			if(id !== -1) draw_passes.splice(id, 2)
 			draw_passes.push(target.targetguid, pass)
-
-			if(!this.view.parent)  this.view.screen.main_pass = pass
 
 			// also add it to pick passes
 			if(target.flags & this.PICK){
