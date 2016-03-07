@@ -1186,11 +1186,16 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
 		//}
 
-		return vec4(mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
+		var rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha);
+
+		return vec4(this.textpixel(rgb, pos, dist), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
 	}
 
 	this.glyphy_mesh = this.glyphy_mesh_sdf
 	this.glyphy_pixel = this.glyphy_sdf_draw
 
+	this.textpixel = function(col, pos, dist) {
+		return col;
+	}
 
 })

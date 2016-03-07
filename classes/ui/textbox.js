@@ -21,6 +21,8 @@ define.class("$ui/label", function(require){
 		multiline:true
 	}
 
+	this.bgcolor = "transparent";
+	this.pickalpha = -1;
 	this.markercolor = this.markerunfocus
 
 	define.class(this, 'cursors', require('$system/typeface/cursorshader.js'), function(){
