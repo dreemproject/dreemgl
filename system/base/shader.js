@@ -840,31 +840,31 @@ define.class(function(require, exports){
 		}
 	})
 
-	Object.defineProperty(this, 'contextverbs',{
+	Object.defineProperty(this, 'canvasverbs',{
 		get:function(){
-			return this._contextverbs
+			return this._canvasverbs
 		},
 		set:function(verbs){
-			if(this._contextverbs) this._contextverbs = Object.create(this._contextverbs)
-			else this._contextverbs = {}
-			for(var key in verbs) this._contextverbs[key] = verbs[key]
+			if(this._canvasverbs) this._canvasverbs = Object.create(this._canvasverbs)
+			else this._canvasverbs = {}
+			for(var key in verbs) this._canvasverbs[key] = verbs[key]
 		}
 	})
 
-	Object.defineProperty(this, 'context',{
+	Object.defineProperty(this, 'canvas',{
 		get:function(){
-			return this._context
+			return this._canvas
 		},
 		set:function(props){
 			// lets load up the previous values and make a new struct
 			var struct = {}
-			if(this._context){
-				var def = this._context.struct.def
+			if(this._canvas){
+				var def = this._canvas.struct.def
 				for(var key in def) if(typeof def[key] === 'function')
 					struct[key] = def[key] 
 			}
 			for(var key in props) struct[key] = props[key]
-			this._context = define.struct(struct).array()
+			this._canvas = define.struct(struct).array()
 		}
 	})
 

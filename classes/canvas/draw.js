@@ -9,16 +9,16 @@ define.class('$system/base/node', function(require){
 
 	var view = require('$ui/view')
 
-	// use the drawing context from view
-	this.Context = view.prototype.Context
-	this.doCompileContextVerbs = view.prototype.doCompileContextVerbs
+	// use the drawing canvas from view
+	this.Canvas = view.prototype.Canvas
+	this.doCompileCanvasVerbs = view.prototype.doCompileCanvasVerbs
 	this.atInnerClassAssign = view.prototype.atInnerClassAssign
 
-	Object.defineProperty(this, 'contextverbs',{
+	Object.defineProperty(this, 'canvasverbs',{
 		set:function(verbs){
-			if(this._contextverbs) this._contextverbs = Object.create(this._contextverbs)
-			else this._contextverbs = {}
-			for(var key in verbs) this._contextverbs[key] = verbs[key]
+			if(this._canvasverbs) this._canvasverbs = Object.create(this._canvasverbs)
+			else this._canvasverbs = {}
+			for(var key in verbs) this._canvasverbs[key] = verbs[key]
 		}
 	})
 
@@ -55,7 +55,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.redraw = function(){
-		this.context.view.redraw()
+		this.canvas.view.redraw()
 	}
 
 })

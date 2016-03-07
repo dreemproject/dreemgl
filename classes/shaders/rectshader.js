@@ -4,13 +4,13 @@ define.class('$shaders/pickshader', function(){
 	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 
 	this.position = function(){
-		var pos = vec3(context.x + mesh.x * context.w, context.y + mesh.y * context.h, context.z)
-		var res = vec4(pos, 1) * context.matrix * view.totalmatrix * state.viewmatrix
+		var pos = vec3(canvas.x + mesh.x * canvas.w, canvas.y + mesh.y * canvas.h, canvas.z)
+		var res = vec4(pos, 1) * canvas.matrix * view.totalmatrix * state.viewmatrix
 		return res + vertex_displace
 	}
 
 	this.color = function(){
-		var col = context.color
+		var col = canvas.color
 		return vec4(col.rgb, col.a)
 	}
 
@@ -22,7 +22,7 @@ define.class('$shaders/pickshader', function(){
 		color:'this.scope._layout?this.scope._bgcolor:this.scope.color'
 	}
 
-	this.context = {
+	this.canvas = {
 		matrix:mat4,
 		color:vec4,
 		x:float,
@@ -32,7 +32,7 @@ define.class('$shaders/pickshader', function(){
 		z:float
 	}
 
-	this.contextverbs = {
+	this.canvasverbs = {
 		draw:function(x, y, w, h){
 			// this processes the args and builds up a buffer
 			this.drawINLINE()

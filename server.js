@@ -90,7 +90,7 @@ function main(){
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
 		'ui':'$root/classes/ui',
-		'draw':'$root/classes/draw',
+		'canvas':'$root/classes/canvas',
 		'shaders':'$root/classes/shaders',
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',

@@ -23,27 +23,27 @@ define.class('$system/platform/$platform/shader$platform', function(){
 	// the pick entry point
 	this.pick = function(){
 		var col = this.color()
-		var total = view.pickview + context.pickdraw
+		var total = view.pickview + canvas.pickdraw
 		return vec4(floor(total/65536.)/255., floor(total/256.)/255., mod(total,256.)/255., col.a>pickalpha?1.:0.)
 	}
 
 	this.pixelentries = ['color','pick']
 
-	this.context = {
+	this.canvas = {
 		pickdraw:float,
 	}
 
-	this.contextverbs = {
+	this.canvasverbs = {
 		flush:function(start, end){
 			// output drawcommand
-			var shader = Object.create(this.classCONTEXT)
+			var shader = Object.create(this.classNAME)
 			shader.view = this.view
-			shader._context = this.bufferCONTEXT
+			shader._canvas = this.bufferNAME
 			this.cmds.push(
 				'drawShader',
 				shader
 			)
-			this.bufferCONTEXT = undefined
+			this.bufferNAME = undefined
 		}
 	}
 })

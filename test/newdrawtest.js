@@ -9,7 +9,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 	var myview = define.class(view, function(){
 
 		this.draw = function(){
-			var c = this.context 
+			var c = this.canvas 
 			// this allows reuse of commandbuffers
 			if(c.pushCache('button', false)){
 				//c.drawRect(random()*300, random()*300, 10, 10)
@@ -23,7 +23,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 		}
 
 		// create a little draw based button with hover anim
-		define.class(this, 'button', '$draw/draw', function(){
+		define.class(this, 'button', '$canvas/draw', function(){
 
 			this.onpointerhover = function(event){
 				this.colorRect = Animate({1:[0,1,1,1]})
@@ -34,10 +34,10 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 			this.color = [0.5,0.5,0.5,1]
 	
 			this.draw = function(){
-				this.context.drawRect()
+				this.canvas.drawRect()
 			}
 
-			this.contextverbs = {
+			this.canvasverbs = {
 				draw: function(label, x, y, w, h){
 					this.drawINLINE()
 				}

@@ -380,7 +380,7 @@ define.class('$system/base/node', function(require){
 
 		this.anims = {}
 		this.matrix_store = {}
-		this.draw_contexts = {}
+		this.draw_canvas = {}
 		this.draw_objects = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 
@@ -401,10 +401,10 @@ define.class('$system/base/node', function(require){
 		}
 
 		// create a context
-		if(!this.Context.drawRect) debugger
+		if(!this.Canvas.drawRect) debugger
 
-		this.context = Object.create(this.Context)
-		this.context.initContext(this)
+		this.canvas = Object.create(this.Canvas)
+		this.canvas.initCanvas(this)
 
 		this.atFlag1 = this.redraw
 		this.atFlag2 = this.relayout
@@ -412,7 +412,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.drawBackground = function(){
-		var c = this.context
+		var c = this.canvas
 		if(this._viewport === '2d'){
 			c.setViewMatrix('noscroll')
 		}
@@ -447,19 +447,19 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.drawChildren = function(){
-		var c = this.context
+		var c = this.canvas
 
 		// TODO add boundingbox clipping
 		for(var i = 0;i < this.children.length;i++){
 			var child = this.children[i]
 			// include it in our drawlist
-			c.addContext(child.context, i)
+			c.addCanvas(child.canvas, i)
 			child.drawView()
 		}
 	}
 
 	this.drawView = function(){
-		var c = this.context
+		var c = this.canvas
 		c.width = this._layout.width
 		c.height = this._layout.height
 
@@ -505,9 +505,9 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// the drawing context
-	this.Context = {
-		initContext: function(view){
+	// the drawing canvas
+	this.Canvas = {
+		initCanvas: function(view){
 			this.view = view
 			this.scope = view
 			this.matrix = mat4.identity()
@@ -516,9 +516,9 @@ define.class('$system/base/node', function(require){
 		clearCmds: function(){
 			this.cmds.length = 0
 		},
-		addContext: function(ctx, index){
+		addCanvas: function(ctx, index){
 			ctx.frameid = this.frameid
-			this.cmds.push('context', ctx.cmds, ctx.view)
+			this.cmds.push('canvas', ctx.cmds, ctx.view)
 		},
 		clear: function(){
 			this.cmds.push('clear', this.clearcolor !== undefined?this.clearcolor:this.view.clearcolor)
@@ -675,16 +675,16 @@ define.class('$system/base/node', function(require){
 	// copy over texture flags
 	for(var key in this.Shader.Texture){
 		var prop = this.Shader.Texture[key]
-		if(typeof prop === 'number') this.Context[key] = prop
+		if(typeof prop === 'number') this.Canvas[key] = prop
 	}
 
-	this.doCompileContextVerbs = function(name, cls, verbs, defaults, struct){
-		if(!this.hasOwnProperty('Context')) this.Context = Object.create(this.Context)
+	this.doCompileCanvasVerbs = function(name, cls, verbs, defaults, struct){
+		if(!this.hasOwnProperty('Canvas')) this.Canvas = Object.create(this.Canvas)
 
-		var verbs = cls._contextverbs
+		var verbs = cls._canvasverbs
 		var defaults = cls._defaults
-		var struct = cls._context && cls._context.struct
-		var context = this.Context
+		var struct = cls._canvas && cls._canvas.struct
+		var canvas = this.Canvas
 		var slots = struct && struct.slots
 		var def = struct && struct.def
 		var cap = name.charAt(0).toUpperCase() + name.slice(1)		
@@ -698,7 +698,7 @@ define.class('$system/base/node', function(require){
 					Object.defineProperty(obj, name,{
 						get:function(){
 							var o = this[index] * slots
-							var buf = this.context[buffer]
+							var buf = this.canvas[buffer]
 							if(type.slots>1){
 								var ret = type()
 								for(var i = 0; i < type.slots; i++){
@@ -715,8 +715,8 @@ define.class('$system/base/node', function(require){
 							if(value instanceof Animate){
 								// lets hook an animation on view
 								var first = this[name]
-								this.context.view.screen.startAnimationRoot(
-									this.context.view.pickview + '_' + this.pickdraw+'_'+key,
+								this.canvas.view.screen.startAnimationRoot(
+									this.canvas.view.pickview + '_' + this.pickdraw+'_'+key,
 									{type:type},
 									first, 
 									this, 
@@ -727,7 +727,7 @@ define.class('$system/base/node', function(require){
 								return
 							}
 							var o = this[index] * slots
-							var buf = this.context[buffer]
+							var buf = this.canvas[buffer]
 							if(type.slots>1){
 								for(var i = 0; i < type.slots; i++){
 									buf.array[o + offset + i] = value[i]
@@ -737,7 +737,7 @@ define.class('$system/base/node', function(require){
 								buf.array[o + offset] = value
 							}
 							buf.clean = false
-							this.context.view.redraw()
+							this.canvas.view.redraw()
 						}
 					})
 					//console.log('defining'+name, cls)
@@ -751,8 +751,8 @@ define.class('$system/base/node', function(require){
 			}
 		}
 
-		context['array' + cap] = struct
-		context['class' + cap] = cls
+		canvas['array' + cap] = struct
+		canvas['class' + cap] = cls
 
 		for(var verb in verbs){
 			var fn = verbs[verb]
@@ -761,20 +761,20 @@ define.class('$system/base/node', function(require){
 			if(!struct){
 				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
 					var write = 
-					ind+'var draw_contexts = this.view.draw_contexts\n'+
-					ind+'var context = draw_contexts["'+cap+'"]\n'+
-					ind+'if(!context){\n'+
-					ind+'\tdraw_contexts["'+cap+'"] = context = Object.create(this.class'+cap+'.Context)\n'+
-					ind+'\tcontext.initContext(this.view)\n'+
-					ind+'\tthis.addContext(context)\n'+
+					ind+'var draw_canvas = this.view.draw_canvas\n'+
+					ind+'var canvas = draw_canvas["'+cap+'"]\n'+
+					ind+'if(!canvas){\n'+
+					ind+'\tdraw_canvas["'+cap+'"] = canvas = Object.create(this.class'+cap+'.Canvas)\n'+
+					ind+'\tcanvas.initCanvas(this.view)\n'+
+					ind+'\tthis.addCanvas(canvas)\n'+
 					ind+'}\n'+
 
-					ind+'var pickdraw = context.pickdraw = ++this.view.pickdraw\n'+
+					ind+'var pickdraw = canvas.pickdraw = ++this.view.pickdraw\n'+
 					ind+'var draw_objects = this.view.draw_objects\n'+
 					ind+'var obj = draw_objects[pickdraw] || (draw_objects[pickdraw] = Object.create(this.class'+cap+'))\n'+
 					ind+'obj.pickdraw = pickdraw\n'+
-					ind+'context.scope = obj\n'+
-					ind+'obj.context = context\n'
+					ind+'canvas.scope = obj\n'+
+					ind+'obj.canvas = canvas\n'
 
 					for(var i = 0; i < args.length; i++){
 						write += 'obj.'+args[i]+' = '+args[i] + '\n'
@@ -813,7 +813,7 @@ define.class('$system/base/node', function(require){
 					var off = 0
 					for(var key in def) if(typeof def[key] === 'function'){
 						// lets output to the array
-						// and copy it from the context
+						// and copy it from the canvas
 						var dft = '(this.scope._'+key+' || 0)'
 						if(key in defaults) dft = defaults[key]
 
@@ -846,12 +846,12 @@ define.class('$system/base/node', function(require){
 				})
 			}
 			//console.log(fnstr)
-			fnstr = fnstr.replace(/CONTEXT/g, cap)
-			context[verb+cap] = Function('return '+fnstr)()
+			fnstr = fnstr.replace(/NAME/g, cap)
+			canvas[verb+cap] = Function('return '+fnstr)()
 		}
 	}
 
-	// lets manage the drawcontext
+	// lets manage the drawcanvas
 	this.atInnerClassAssign = function(key, value){
 		// its a class assignment
 		var cls
@@ -865,8 +865,8 @@ define.class('$system/base/node', function(require){
 			cls = this['_' + key] = cls.extend(value, this)
 			cls = cls.prototype
 		}
-		if(cls._contextverbs){
-			this.doCompileContextVerbs(key, cls)
+		if(cls._canvasverbs){
+			this.doCompileCanvasVerbs(key, cls)
 		}
 	}
 
@@ -1260,10 +1260,10 @@ define.class('$system/base/node', function(require){
 
 	// called in draw
 	this.updateMatrix = function(){
-		var frameid = this.context.frameid
+		var frameid = this.canvas.frameid
 		// lets check what kind of matrix to make.
 		if(this.matrix_dirty){
-			if(this.context.target_mode === '3d'){
+			if(this.canvas.target_mode === '3d'){
 				mat4.TSRT2(this.anchor, this.scale, this.orientation, this.pos, this.modelmatrix);
 			}
 			else { // its 2d

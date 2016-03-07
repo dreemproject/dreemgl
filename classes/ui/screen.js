@@ -145,7 +145,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			// lets draw it	
 			shader.state = this
 			shader.draw(this.device, this.overlay)
-			//console.log(shader._context.clean)
+			//console.log(shader._canvas.clean)
 			this.cmdid += 2
 		},
 		setViewMatrix: function(){
@@ -158,7 +158,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			this.device.clear(color[0], color[1], color[2], color[3])
 			this.cmdid += 2
 		},
-		context: function(){
+		canvas: function(){
 			var cmds = this.cmds[this.cmdid+1]
 			var view = this.cmds[this.cmdid+2]
 			this.cmdstack.push(this.cmds, this.cmdid + 3)
@@ -257,7 +257,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		this.draw_passes.length = 0
 
 		// lets draw the screen
-		this.context.frameid = frameid
+		this.canvas.frameid = frameid
 		
 		this.drawView()
 
