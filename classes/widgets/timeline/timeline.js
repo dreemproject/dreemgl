@@ -48,6 +48,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			date: stardate,
 			enddate: enddate,
 			metadata: {
+				color: eventdata.color,
 				location: {
 					title: eventdata.title,
 					lattitude: eventdata.lattitude,

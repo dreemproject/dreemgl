@@ -69,6 +69,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			id: null,
 			zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 			scroll: wire('this.parent.scroll'),
+			color: vec4(1,1,1,1),
 			duration: 1,
 			offset: 0,
 			start: 0,
@@ -171,7 +172,11 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			},
 			color: function(){
 				var col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
-				return vec4(col.rgb, col.a * view.opacity)
+				if (uv.y > 0.85) {
+					return vec4(view.color.rgb, col.a * view.opacity)
+				} else {
+					return vec4(col.rgb, col.a * view.opacity)
+				}
 			}
 		}
 
@@ -216,10 +221,12 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		var rows = [[],[],[],[],[],[]]
 		this.rows = 1
 		for (var i = 0; i < data.length; i++) {
+			var color = (data[i].metadata && data[i].metadata.color) ? data[i].metadata.color : null
 			var event = this.event({
 				title: data[i].title,
 				id: data[i].id,
 				bgcolor: vec4(0.75, 0.75, 0.75, 1),
+				color: color || vec4(1, 1, 1, 1),
 				start: new Date(data[i].date).getTime(),
 				end: new Date(data[i].enddate).getTime()
 			})
