@@ -68,7 +68,8 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 								paddingleft:10,
 								fgcolor:"black",
 								bgcolor:"white",
-								value:"Input text w/bgcolor"
+								value:"Multuline\nInput\ntext",
+								multiline:true
 							}),
 							textbox({
 								borderwidth:1,
