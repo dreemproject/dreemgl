@@ -22,9 +22,6 @@ define.class('$ui/view', function(icon, label){
 		// Gradient color 2
 		col2: Config({meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0}),
 
-		// Color of the inactive icon
-		inactivecolor: Config({meta:"color", type: vec4, value: vec4("#bbb")}),
-
 		// Color of the label text in neutral state
 		textcolor: Config({meta:"color", type: vec4, value: vec4("#404040")}),
 
@@ -114,7 +111,7 @@ define.class('$ui/view', function(icon, label){
 		var cb = [];
 
 		cb.push(icon({
-			fgcolor:(!!(this.value) ? this.fgcolor : this.inactivecolor),
+			fgcolor:(!!(this.value) ? this.textactivecolor : this.textcolor),
 			icon: this.icon,
 			fontsize:this.fontsize,
 			bgcolor:"transparent",

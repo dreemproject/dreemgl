@@ -22,25 +22,44 @@ define.class("$server/composition",function(require, $ui$, checkbox, screen, lab
 							justifycontent:'space-around'
 						},
 						view({ flexdirection:"column", flex:0 },
-							label({text:"Basic Usage"}),
+							label({text:"Basic Usage", marginbottom:20}),
 							checkbox({
 								click:function(){
 									this.find("status").text = "Value is: " + this.value
 								}
 							}),
-							label({name:"status", text:"Value is: false", fontsize:12})
+							label({name:"status", text:"Value is: false", fontsize:12, margintop:5})
 						),
 						view({ flexdirection:"column", flex:0 },
-							label({text:"Using BG Image"}),
+							label({text:"Icon w/ text", marginbottom:20}),
 							checkbox({
-								bgimage:"$resources/textures/redcloud.png",
+								icon:"star-o",
+								text:"My value is: false",
+								bgcolor:"transparent",
+								borderwidth:0,
+								textcolor:"white",
+								textactivecolor:"pink",
+								fontsize:30,
+								pickalpha:-1,
+								click:function(){
+									this.icon = this.value ? "star" : "star-o";
+									this.text = "My value is: " + this.value
+								}
+							})
+						),
+						view({ flexdirection:"column", flex:0 },
+							label({text:"Background Image", marginbottom:20}),
+							checkbox({
+								icon:undefined,
+								width:40,
+								bgimage:"$resources/textures/purplecloud.png",
 								bgimagemode:"stretch",
 								click:function(){
-									this.bgimage = this.value ? "$resources/textures/bluecloud.png" : "$resources/textures/redcloud.png";
+									this.bgimage = this.value ? "$resources/textures/bluecloud.png" : "$resources/textures/purplecloud.png";
 									this.find("status").text = "Value is: " + this.value
 								}
 							}),
-							label({name:"status", text:"Value is: false", fontsize:12})
+							label({name:"status", text:"Value is: false", fontsize:12, margintop:5})
 						)
 					)
 				)
