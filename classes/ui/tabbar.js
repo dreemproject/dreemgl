@@ -40,19 +40,30 @@ define.class("$ui/view", function($ui$, button){
 			borderradius:0,
 			arrowheight:5.0,
 			showarrow:true,
+			arrowtop:true,
 			bgcolorfn:function(p) {
 				var atx = p.x * layout.width;
 				var aty = p.y * layout.height;
-				if (showarrow && aty < arrowheight && (atx + aty < layout.width * 0.5 || atx - aty > layout.width * 0.5)) {
-					return "transparent"
-				} else {
-					return bgcolor;
+				if (showarrow) {
+					if (arrowtop) {
+						if (aty < arrowheight && (atx + aty < layout.width * 0.5 || atx - aty > layout.width * 0.5)) {
+							return "transparent";
+						}
+					} else {
+						if ((layout.height - aty) < arrowheight && (atx + (layout.height - aty) < layout.width * 0.5 || atx - (layout.height - aty) > layout.width * 0.5)) {
+							return "transparent";
+						}
+
+					}
 				}
+
+				return bgcolor;
 			}
 		},
 	    button_folder: {
-			y:1,
+			x:1,
 			flex: 0,
+			padding:5,
 			bgcolor:this.tabcolor,
 			borderradius:vec4(15,15,0,0),
 			bgcolorfn:function(p) { return bgcolor; }
@@ -66,7 +77,8 @@ define.class("$ui/view", function($ui$, button){
 				var tabdef = this.tabs[i];
 				var active = i === this.activetab;
 
-				var tab = button({
+				var tab = {
+					bgimagemode:"stretch",
 					textcolor: active ? this.activetextcolor : this.textcolor,
 					textactivecolor: active ? this.activetextcolor : this.textcolor,
 					bgcolor: active ? this.activetabcolor : this.tabcolor,
@@ -76,13 +88,14 @@ define.class("$ui/view", function($ui$, button){
 					hovercolor2:"transparent",
 					pressedcolor1:"transparent",
 					pressedcolor2:"transparent",
+					pickalpha:-1,
 					borderwidth:0,
 					class:this.tabclass,
 					tabindex:i,
 					click:function(ev,v,o) {
 						this.activetab = o.tabindex;
 					}.bind(this)
-				});
+				};
 
 				if (typeof(tabdef) === "string") {
 					tab.text = tabdef
@@ -94,7 +107,7 @@ define.class("$ui/view", function($ui$, button){
 					}
 				}
 
-				tabs.push(tab);
+				tabs.push(button(tab));
 			}
 		}
 
