@@ -9,17 +9,41 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 	define.class(this, "morphview", view, function(){
 
 		this.attributes = {
-			weight0: Config({type: Number, value: 0.2}),
-			weight1: Config({type: Number, value: 0.2}),
-			weight2: Config({type: Number, value: 0.2})
+			weight0: Config({type: Number, value: 0}),
+			weight1: Config({type: Number, value: 0}),
+			weight2: Config({type: Number, value: 0})
 		}
 
-		this.weight0 = Animate({
-			10: {
-				value: 1,
-				motion: "inquad"
-			}
+		var anim0 = Animate({
+			repeat: Infinity,
+			0: {value: 1, motion: "linear"},
+			1: {value: 0, motion: "outelastic"},
+			2: {value: 0, motion: "linear"},
+			3: {value: 1, motion: "outelastic"}
 		})
+
+		var anim1 = Animate({
+			repeat: Infinity,
+			0: {value: 0, motion: "linear"},
+			1: {value: 1, motion: "outelastic"},
+			2: {value: 0, motion: "outelastic"},
+			3: {value: 0, motion: "linear"}
+		})
+
+		var anim2 = Animate({
+			repeat: Infinity,
+			0: {value: 0, motion: "linear"},
+			1: {value: 0, motion: "linear"},
+			2: {value: 1, motion: "outelastic"},
+			3: {value: 0, motion: "outelastic"}
+		})
+
+		this.oninit = function() {
+			this.weight0 = anim0
+			this.weight1 = anim1
+			this.weight2 = anim2
+		}
+
 
 		define.class(this, 'morphshape', this.Shader, function(){
 
@@ -84,6 +108,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 			}
 
 			this.position = function(){
+				// combine and weight morph targets
 				var pos = mesh.target0 * view.weight0
 				pos    += mesh.target1 * view.weight1
 				pos    += mesh.target2 * view.weight2
