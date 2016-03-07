@@ -34,23 +34,55 @@ define.class("$server/composition",function(require, $ui$, button, screen, label
 								}})
 						),
 						view({ flex:0, flexdirection:"column" },
-							label({text:"Using Background Images"}),
+							label({
+								marginbottom:20,
+								text:"Text Alignment"
+							}),
+							button({margintop:10, width:200, height:100,
+								text:"Center"}),
+							button({margintop:10, width:200, height:100, padding:10,
+								text:"Top Left", alignitems:"flex-start", justifycontent:"flex-start"}),
+							button({margintop:10, width:200, height:100, padding:10,
+								text:"Bottom Left", alignitems:"flex-end", justifycontent:"flex-start"}),
+							button({margintop:10, width:200, height:100, padding:10,
+								text:"Top Right", alignitems:"flex-start", justifycontent:"flex-end"}),
+							button({margintop:10, width:200, height:100, padding:10,
+								text:"Bottom Right", alignitems:"flex-end", justifycontent:"flex-end"})
+						),
+						view({ flex:0, flexdirection:"column" },
+							label({text:"Background Images", marginbottom:20}),
 							button({
-								text:"Click To Change",
 								padding:40,
-								bgimagemode:"stretch",
-								toggle:false,
+								text:"Click To Change",
+								textcolor:"white",
+								textactivecolor:"#666",
 								bgimage:"$resources/textures/redcloud.png",
-								stateclick:function() {
-									if (this.toggle) {
-										this.textcolor = this.textactivecolor = "white";
-										this.bgimage = "$resources/textures/redcloud.png";
-									} else {
-										this.textcolor = this.textactivecolor = "black";
+								bgimagemode:"stretch",
+
+								selected:false,
+
+								click:function() { this.selected = !this.selected; },
+
+								statenormal:function() {
+									if (this.selected) {
 										this.bgimage = "$resources/textures/bluecloud.png";
+										this.setTextColor(this.textactivecolor)
+									} else {
+										this.bgimage = "$resources/textures/redcloud.png";
+										this.setTextColor(this.textcolor)
 									}
-									this.toggle = !this.toggle;
-								}
+								},
+								statehover:function() {
+									if (!this.selected) {
+										this.bgimage = "$resources/textures/greencloud.png";
+										this.setTextColor(this.textactivecolor)
+									}
+								},
+								stateclick:function() {
+									this.bgimage = "$resources/textures/purplecloud.png";
+									this.setTextColor(this.textcolor)
+								},
+								onselected:function() { this.statenormal() }
 							})
 						)
 					)

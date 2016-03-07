@@ -108,30 +108,32 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		return mix(col1, col2, pos.y)
 	}
 
+	this.setTextColor = function(color) {
+		if (this.iconres) this.iconres.fgcolor = color;
+		if (this.buttonres) this.buttonres.fgcolor = color;
+	}
+
 	// the hover state when someone hovers over the button
 	this.statehover = function(){
-		this.col1 = this.hovercolor1
-		this.col2 = this.hovercolor2
-		this.shadowopacity = 1.0
-		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
-		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
+		this.col1 = this.hovercolor1;
+		this.col2 = this.hovercolor2;
+		this.shadowopacity = 1.0;
+		this.setTextColor(this.textactivecolor)
 	}
 
 	// the normal button state
-	this.statenormal = function(first){
-		this.col1 = Mark(this.buttoncolor1, first)
-		this.col2 = Mark(this.buttoncolor2, first)
+	this.statenormal = function(first) {
+		this.col1 = Mark(this.buttoncolor1, first);
+		this.col2 = Mark(this.buttoncolor2, first);
 		this.shadowopacity = 0.0
-		if(this.iconres)this.iconres.fgcolor = this.textcolor
-		if(this.buttonres) this.buttonres.fgcolor = this.textcolor;
+		this.setTextColor(this.textcolor)
 	}
 
 	// clicked state
 	this.stateclick = function(){
-		this.col1 = this.pressedcolor1
-		this.col2 = this.pressedcolor2
-		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
-		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
+		this.col1 = this.pressedcolor1;
+		this.col2 = this.pressedcolor2;
+		this.setTextColor(this.textactivecolor)
 	}
 
 	this.init = function(){
@@ -142,14 +144,16 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this._isover = true
 		this.statehover()
 	}
+
 	this.pointerout = function(){
 		this._isover = false
 		this.statenormal()
 	}
-	this.pointerstart = function(){
 
+	this.pointerstart = function(){
 		this.stateclick()
 	}
+
 	this.pointerend = function(event){
 		if (event.isover){
 			this.statehover();
