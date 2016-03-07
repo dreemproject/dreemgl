@@ -88,7 +88,7 @@ bgimagemode:"aspect-fill",
 borderradius:vec4(30,100,50,0),
 rotate:vec3(0,0,-0.5300000309944153)
 },
-button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',label:"Press Me!",position:"absolute",x:37.835906982421875,y:58.24383544921875}),
+button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',text:"Press Me!",position:"absolute",x:37.835906982421875,y:58.24383544921875}),
 checkbox({
 tooldragroot:true,
 toolresize:false,

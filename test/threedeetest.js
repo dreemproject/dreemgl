@@ -70,7 +70,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 						}
 					}},
 					button({
-						label:"Near",
+						text:"Near",
 						click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(1,2,3);
@@ -78,7 +78,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 						}
 					}),
 					button({
-						label:"Far",
+						text:"Far",
 						click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(4,0.2,4);
@@ -127,7 +127,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 						}),
 						pointerdebug({width:100, height:100}),
 						button({
-							label:"Far",
+							text:"Far",
 							click:function(){
 								var cam = this.find("theview");
 								cam.camera = vec3(4,0.2,4);
@@ -136,7 +136,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 						}),
 						pointerdebug({width:100, height:100}),
 						button({
-							label:"Left",
+							text:"Left",
 							click:function(){
 								var cam = this.find("theview");
 								cam.camera = vec3(-4,0.2,-0.5);

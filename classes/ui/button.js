@@ -11,7 +11,6 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 	this.attributes = {
 		// The label for the button
 		text: Config({type: String, value: ""}),
-		label: Config({type: String, value: ""}),
 
 		// The icon for the button, see FontAwesome for the available icon-names.
 		icon: Config({type: String, value: "", meta:"icon"}),
@@ -67,8 +66,8 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		margin: 0,
 		bordercolor: vec4("#636363"),
 
-		alignitems: "flex-start",
-		justifycontent: "flex-start"
+		alignitems: "center",
+		justifycontent: "center"
 	}
 
 	this.style = {
@@ -89,10 +88,6 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			justifycontent:"center"
 		}
 	}
-
-	this.onlabel = function(ev,v,o) {
-		this.text = v;
-	};
 
 	//this.buttonres = {};
 	this.font = require('$resources/fonts/opensans_bold_ascii.glf')
@@ -164,7 +159,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			this.statenormal()
 		}
 	}
-	
+
 	this.render = function(){
 		if (this.constructor_children.length > 0) return this.constructor_children;
 		var res = []

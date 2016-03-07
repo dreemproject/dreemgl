@@ -88,7 +88,7 @@ define.class("$ui/view", function(require,
 					tooldragroot:true,
 					fontsize:24,
 					pickalpha:-1,
-					label:'Button'
+					text:'Button'
 				}
 			},
 			{

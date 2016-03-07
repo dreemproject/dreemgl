@@ -71,7 +71,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 						fgcolor:"#909090",
 						bold: false,
 
-					    label:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), pointerstart:function(){
+					    text:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), pointerstart:function(){
 							radio.currentvalue = (this.text=="undefined" ||this.text=="unD") ? undefined:this.text;
 						},fontsize:this.fontsize
 					}))
