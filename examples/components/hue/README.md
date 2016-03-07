@@ -4,7 +4,7 @@
 
 ### Node Modules
 
-Be sure to run `npm install` in the hue component directory, or install `node-hue-api` globally:
+Be sure to run `npm install` in the hue component directory:
 
     cd ./examples/components/hue
     

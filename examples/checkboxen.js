@@ -11,18 +11,37 @@ define.class("$server/composition",function(require, $ui$, checkbox, screen, lab
 				screen(
 					cadgrid({
 							name:"grid",
-							flex:3,
 							bgcolor:"#4e4e4e",
 							gridsize:8,
 							majorevery:5,
 							majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1),
 							minorline:vec4(0.2823529541492462,0.2823529541492462,0.2823529541492462,1),
-							alignitems:'center',
 							alignself:'stretch',
-							flexdirection:'column',
-							justifycontent:'center'
+							flexdirection:'row',
+							alignitems:"center",
+							justifycontent:'space-around'
 						},
-						checkbox()
+						view({ flexdirection:"column", flex:0 },
+							label({text:"Basic Usage"}),
+							checkbox({
+								click:function(){
+									this.find("status").text = "Value is: " + this.value
+								}
+							}),
+							label({name:"status", text:"Value is: false", fontsize:12})
+						),
+						view({ flexdirection:"column", flex:0 },
+							label({text:"Using BG Image"}),
+							checkbox({
+								bgimage:"$resources/textures/redcloud.png",
+								bgimagemode:"stretch",
+								click:function(){
+									this.bgimage = this.value ? "$resources/textures/bluecloud.png" : "$resources/textures/redcloud.png";
+									this.find("status").text = "Value is: " + this.value
+								}
+							}),
+							label({name:"status", text:"Value is: false", fontsize:12})
+						)
 					)
 				)
 			]

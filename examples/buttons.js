@@ -11,30 +11,48 @@ define.class("$server/composition",function(require, $ui$, button, screen, label
 				screen(
 					cadgrid({
 							name:"grid",
-							flex:3,
 							bgcolor:"#4e4e4e",
 							gridsize:8,
 							majorevery:5,
 							majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1),
 							minorline:vec4(0.2823529541492462,0.2823529541492462,0.2823529541492462,1),
-							alignitems:'center',
 							alignself:'stretch',
-							flexdirection:'column',
-							justifycontent:'center'
+							flexdirection:'row',
+							alignitems:"center",
+							justifycontent:'space-around'
 						},
-						label({
-							name:"status",
-							marginbottom:20,
-							width:200,
-							bgcolor:NaN,
-							text:"Press the button below:"
-						}),
-						button({
-							marginbottom:20,
-							label:"Click Button",
-							click:function(ev,v,o){
-							this.screen.find("status").text = "Button clicked!";
-						}})
+						view({ flex:0, flexdirection:"column" },
+							label({
+								name:"status",
+								marginbottom:20,
+								text:"Basic Usage"
+							}),
+							button({
+								text:"Click Button",
+								click:function(ev,v,o){
+									this.screen.find("status").text = "Button clicked!";
+								}})
+						),
+						view({ flex:0, flexdirection:"column" },
+							label({text:"Using Background Images"}),
+							button({
+								text:"Click To Change",
+								padding:40,
+								bgimagemode:"stretch",
+								toggle:false,
+								bgimage:"$resources/textures/redcloud.png",
+								stateclick:function() {
+									if (this.toggle) {
+										this.textcolor = this.textactivecolor = "white";
+										this.bgimage = "$resources/textures/redcloud.png";
+									} else {
+										this.textcolor = this.textactivecolor = "black";
+										this.bgimage = "$resources/textures/bluecloud.png";
+									}
+									this.toggle = !this.toggle;
+								}
+							})
+						)
 					)
 				)
 			]
