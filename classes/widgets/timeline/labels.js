@@ -27,8 +27,8 @@ define.class('$ui/label', function () {
 			var view = this.view
 			var zoom = view.zoom
 			var scroll = view.scroll
-			var w = view.parent.layout.width
-			var h = view.parent.layout.height
+			var w = view.parent._layout.width
+			var h = view.parent._layout.height
 
 			var mw = w / 11.774193548387096 * 365 / zoom
 			var dw = w / zoom
@@ -79,7 +79,7 @@ define.class('$ui/label', function () {
 				date.setMonth(firstMonth)
 				xoffset = (date.getTime() - first) / ts / zoom * w
 				x = 0, i = -1
-				while (x < w) {
+				while (x < w && i < 100) {
 					date = new Date(first)
 					date.setMonth(firstMonth + i)
 					text = MONTHS[date.getMonth() % 12]
@@ -98,7 +98,7 @@ define.class('$ui/label', function () {
 				date.setDate(firstDate)
 				xoffset = (date.getTime() - first) / ts / zoom * w
 				x = 0, i = -1
-				while (x < w) {
+				while (x < w && i < 100) {
 					date = new Date(first)
 					date.setDate(firstDate + i)
 					text = DAYS[(date.getDate() - 1) % 31]
@@ -121,7 +121,7 @@ define.class('$ui/label', function () {
 				xoffset = (date.getTime() - first) / ts / zoom * w
 				var c = 24 / view.parent.hoursegs
 				x = 0, i = -1
-				while (x < w) {
+				while (x < w && i < 100) {
 					var h = (firstHour + i) % 24
 					date = new Date(first)
 					date.setHours(firstHour + i)

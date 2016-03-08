@@ -13,7 +13,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.attributes = {
 		// TODO(aki): Why latlong inverse?
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
-		// 
+		//
 		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
 		latlongchange: Config({type: Event})
@@ -29,7 +29,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.onpointerwheel = function(ev){
-		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1]/120);
+		if (!ev.touch) {
+			this.zoomTo(this.dataset.zoomlevel - ev.wheel[1]/120);
+		}
 	}
 
 	this.onpointerend = function(ev){
@@ -341,7 +343,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			//this.setCenter(33656/2,21534/2, 16)
 		}
 	})
-	
+
 	// Every time we re-draw process the
 	this.atAnimate = function(){
 		this.updateTiles();
@@ -409,22 +411,22 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.tap = function(ev){
-		
-		// 
+
+		//
 		var coord  =  this.globalToLocal(ev.position);
-		var R = this.projectonplane(coord);	
+		var R = this.projectonplane(coord);
 		if (R){
-			// 
+			//
 			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1])
 
 			var zoomoffs = 0;
 			if (ev.clicker == 2) zoomoffs ++;
-	
-			// convert GL unit to map meters	
+
+			// convert GL unit to map meters
 			var r0 = (R[0]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
 			var r2 = (-R[2]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
-			
-			// 
+
+			//
 			//	var M = this.find("MARKER");
 			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1]+ r2);
 			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel + zoomoffs, 1);
@@ -470,7 +472,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	// All tiles use tilebasemixin
 	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
-			// the translate in integer units 
+			// the translate in integer units
 			trans: vec2(0),
 			// the coordinate in integer units
 			coord: vec2(0),
@@ -519,13 +521,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.pointertap = function(ev){
-			
-			this.host.tap(ev);			
+
+			this.host.tap(ev);
 		}
 
 		this.lastpos = vec2(0);
 
-		// return the tile position 
+		// return the tile position
 		this.calctilepos = function(){
 			var x = Math.floor( this._coord[0] + this._trans[0]);
 			var y = Math.floor(this._coord[1] + this._trans[1]);
@@ -648,7 +650,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 	});
-	
+
 	// view implementation of the land
 	define.class(this,"landtile", "$ui/view", function(){
 
@@ -721,7 +723,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 	});
-	
+
 	// view implementation of the label tile
 	define.class(this,"labeltile", "$ui/labelset", function(){
 		this.polygonoffset = 10.0;

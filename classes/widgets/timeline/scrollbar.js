@@ -23,8 +23,8 @@ define.class('$ui/scrollbar', function () {
 	this.layout = function(){
 		this.layout.left = 0
 		this.layout.height = 10
-		this.layout.width =  this.parent.layout.width
-		this.layout.top = this.parent.layout.height - this.layout.height
+		this.layout.width = this.parent._layout.width
+		this.layout.top = this.parent._layout.height - 10
 	}
 
 	this.atAnimate = function () {
@@ -35,12 +35,14 @@ define.class('$ui/scrollbar', function () {
 	this.updateScrollbar = function(){
 		this._total = this.parent.getDuration() / this.zoom / this.parent.TIME_SCALE
 		this._page = 1
-		if (this._total > this._page - 0.1){
+		if (this._total > this._page - 0.2){
 			var offset = clamp(this._value, 0, this._total - this._page)
 			if (offset !== this._value) {
 				this._value = offset
 			}
 			this.visible = true
+		} else {
+			// TODO: hide when full range
 		}
 	}
 

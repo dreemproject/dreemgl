@@ -238,7 +238,8 @@ define.class('$system/base/node', function(){
 				if (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
 			this._move.setPointer(pointer)
-			if (pointer.touch) {
+			// TODO(aki): check list length per view
+			if (pointer.touch && pointerlist.length === 1) {
 				if (abs(pointer.movement[0]) > abs(pointer.movement[1])) {
 					pointer.wheel = vec2(-pointer.movement[0], 0)
 				} else {

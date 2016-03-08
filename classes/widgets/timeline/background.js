@@ -7,6 +7,7 @@
 define.class('$ui/view', function () {
 
 	this.fgcolor = 'black'
+	this.cursor = 'move'
 
 	this.attributes = {
 		zoom: Config({type: Number, value: 1}),

@@ -37,7 +37,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 						name:'timeline',
 						start: START_DATE,
 						end: END_DATE,
-						zoom: 224
+						zoom: 1
 					})
 				])
 			])

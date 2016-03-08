@@ -16,18 +16,13 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.attributes = {
 		format:  Config({type: Enum('12','24'),  value: "12"}),
-
 		start:   Config({type: String,  value: "Jan 1 2016"}),
 		end:     Config({type: String,  value: "Dec 31 2016"}),
-
-		data:    Config({type: Array}),
-
+		data:    Config({type: Array, value: []}),
 		zoom: Config({type: Number, value: 0.5}),
 		scroll: Config({type: Number, value: 0}),
-
 		hoursegs: Config({type: Number, value: 24}),
 		segments: Config({type: vec3, value: vec3()}),
-
 		change: Config({type: Event})
 	}
 
@@ -89,24 +84,23 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 	}
 
-	// this.ondata = function () {
-	// 	var eventstart, eventend
-	// 	var starttime = this.getStart()
-	// 	var endtime = this.getEnd()
-	// 	if (!this.data) return
-	// 	for (var i = 0; i < this.data.length; i++) {
-	// 		eventstart = new Date(this.data[i].date)
-	// 		eventend = new Date(this.data[i].enddate)
-	// 		if (eventend > endtime) endtime = eventend
-	// 		if (eventstart < starttime) starttime = eventstart
-	// 	}
-	// 	this.start = new Date(starttime).toString()
-	// 	this.end = new Date(endtime).toString()
-	// }
+	this.ondata = function () {
+		var eventstart, eventend
+		var starttime = this.getStart()
+		var endtime = this.getEnd()
+		if (!this.data) return
+		for (var i = 0; i < this.data.length; i++) {
+			eventstart = new Date(this.data[i].date)
+			eventend = new Date(this.data[i].enddate)
+			if (eventend > endtime) endtime = eventend
+			if (eventstart < starttime) starttime = eventstart
+		}
+		this.start = new Date(starttime).toString()
+		this.end = new Date(endtime).toString()
+	}
 
 	this.atDraw = function () {
-		this.background = this.find("background")
-		this.labels = this.find("labels")
+		// this.labels = this.find("labels")
 		this.hscrollbar = this.find("scrollbar")
 		if (this.hscrollbar){
 			this.hscrollbar.updateScrollbars()
@@ -166,11 +160,13 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.pointermultimove = function(event) {
+		this.background = this.find("background")
+		this.hscrollbar = this.find("scrollbar")
+
 		if (event.length === 1 && event[0].view === this.background) {
-			if (event[0].touch) {
-				this.scroll = clamp(this._scroll - event[0].movement[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
-			}
-		} else if (event.length === 2 && event[0].view === this.background) {
+			this.scroll = clamp(this._scroll - event[0].movement[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+		}
+		else if (event.length === 2 && event[0].view === this.background) {
 			var lastzoom = this._zoom
 
 			var center = vec2.mix(event[0].position, event[1].position, 0.5)
@@ -194,22 +190,24 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.pointerwheel = function(event) {
 		this.hscrollbar = this.find("scrollbar")
-		if (event.value[0] && abs(event.value[0]) > abs(event.value[1])){
-			this.scroll = clamp(this._scroll + event.value[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
-		}
-		if (event.value[1] && abs(event.value[1]) > abs(event.value[0])){
-			var lastzoom = this._zoom
+		if (!event.touch) {
+			if (event.wheel[0] && abs(event.wheel[0]) > abs(event.wheel[1])){
+				this.scroll = clamp(this._scroll + event.wheel[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+			}
+			if (event.value[1] && abs(event.value[1]) > abs(event.value[0])){
+				var lastzoom = this._zoom
 
-			var delta = event.value[1] / this.layout.width * this.zoom
-			var newzoom = clamp(this.zoom + delta, this.MIN_ZOOM, this.getDuration() / this.TIME_SCALE)
+				var delta = event.value[1] / this.layout.width * this.zoom
+				var newzoom = clamp(this.zoom + delta, this.MIN_ZOOM, this.getDuration() / this.TIME_SCALE)
 
-			this.zoom = newzoom
+				this.zoom = newzoom
 
-			var xpos0 = this._scroll * lastzoom + this.globalToLocal(event.position)[0] / this.layout.width * lastzoom
-			var xpos1 = this._scroll * newzoom + this.globalToLocal(event.position)[0] / this.layout.width * newzoom
-			var shiftx = (xpos0 - xpos1) / newzoom
+				var xpos0 = this._scroll * lastzoom + this.globalToLocal(event.position)[0] / this.layout.width * lastzoom
+				var xpos1 = this._scroll * newzoom + this.globalToLocal(event.position)[0] / this.layout.width * newzoom
+				var shiftx = (xpos0 - xpos1) / newzoom
 
-			this.scroll = clamp(this._scroll + shiftx, 0, this.hscrollbar._total - this.hscrollbar._page)
+				this.scroll = clamp(this._scroll + shiftx, 0, this.hscrollbar._total - this.hscrollbar._page)
+			}
 		}
 	}
 
