@@ -24,11 +24,67 @@ define.class("$server/composition",function(require, $ui$, checkbox, screen, lab
 						view({ flexdirection:"column", flex:0 },
 							label({text:"Basic Usage", marginbottom:20}),
 							checkbox({
+								bgcolor:"transparent",
+								textcolor:"transparent",
+								textactivecolor:"white",
 								click:function(){
 									this.find("status").text = "Value is: " + this.value
 								}
 							}),
 							label({name:"status", text:"Value is: false", fontsize:12, margintop:5})
+						),
+						view({ flexdirection:"column", flex:0 },
+							label({text:"Examples of Checkboxes", marginbottom:20}),
+							checkbox({
+								icon:"square-o",
+								text:"CHECKBOX ONE UNSELECETED (FALSE)",
+								borderwidth:0,
+								bgcolor:"transparent",
+								textcolor:"white",
+								textactivecolor:"white",
+								click:function(){
+									this.icon = this.value ? "check-square-o" : "square-o"
+									this.text = "CHECKBOX ONE " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+								}
+							}),
+							checkbox({
+								icon:"square-o",
+								text:"CHECKBOX TWO UNSELECETED (FALSE)",
+								borderwidth:0,
+								bgcolor:"transparent",
+								textcolor:"white",
+								textactivecolor:"white",
+								click:function(){
+									this.icon = this.value ? "check-square-o" : "square-o"
+									this.text = "CHECKBOX TWO " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+								}
+							}),
+							checkbox({
+								value:true,
+								icon:"check-square-o",
+								text:"CHECKBOX THREE SELECETED (TRUE)",
+								borderwidth:0,
+								bgcolor:"transparent",
+								textcolor:"white",
+								textactivecolor:"white",
+								click:function(){
+									this.icon = this.value ? "check-square-o" : "square-o"
+									this.text = "CHECKBOX THREE " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+								}
+							}),
+							checkbox({
+								value:true,
+								icon:"check-square-o",
+								text:"CHECKBOX FOUR SELECETED (TRUE)",
+								borderwidth:0,
+								bgcolor:"transparent",
+								textcolor:"white",
+								textactivecolor:"white",
+								click:function(){
+									this.icon = this.value ? "check-square-o" : "square-o"
+									this.text = "CHECKBOX FOUR " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+								}
+							})
 						),
 						view({ flexdirection:"column", flex:0 },
 							label({text:"Icon w/ text", marginbottom:20}),

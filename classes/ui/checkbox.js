@@ -54,6 +54,7 @@ define.class('$ui/view', function(icon, label){
 		borderradius: 3,
 		borderwidth: 2,
 		margin: 4,
+		pickalpha:-1,
 		bordercolor: vec4("lightgray"),
 		alignItems: "center"
 	}
