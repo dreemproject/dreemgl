@@ -20,62 +20,72 @@ define.class("$server/composition",function($ui$, screen, icon, label, view, cad
 						flexdirection:'row',
 						alignitems:"center",
 						justifycontent:'space-around'
-					},
-						table({
-							width:400,
-							height:400,
-							columns:5,
-							alignsection:"center",
-							style:{
-								rowcol: {
-									borderwidth:vec4(0,1,0,0),
-									bordercolor:"white"
+						},
+						view({flexdirection:"column"},
+							label({text:"Columns", marginbottom:30}),
+							table({
+									width:400,
+									height:100,
+									columns:5,
+									alignsection:"center",
+									style:{
+										rowcol: {
+											borderwidth:vec4(0,1,0,0),
+											bordercolor:"white"
+										},
+										rowcol_column3: {
+											borderwidth:vec4(1,1,0,0),
+										},
+										rowcol_column2: {
+											bgcolor:vec4(1,1,1,0.2),
+											borderwidth:vec4(0,0,5,5),
+											bordercolor:"yellow",
+											paddingtop:20,
+											width:30
+										}
+									}
 								},
-								rowcol_column2: {
-									borderwidth:vec4(0,1,1,1),
-									bordercolor:"yellow",
-									padding:30,
-									width:30
-								}
-							}
-						},
-							icon({icon:"facebook"}),
-							icon({icon:"digg"}),
-							icon({icon:"cc"}),
-							icon({icon:"envelope"}),
-							icon({icon:"empire"}),
-							icon({icon:"eye"}),
-							icon({icon:"circle"}),
-							icon({icon:"circle-o"}),
-							icon({icon:"star"}),
-							icon({icon:"star-o"})
+								icon({icon:"facebook"}),
+								icon({icon:"digg"}),
+								icon({icon:"cc"}),
+								icon({icon:"envelope"}),
+								icon({icon:"empire"}),
+								icon({icon:"eye"}),
+								icon({icon:"circle"}),
+								icon({icon:"circle-o"}),
+								icon({icon:"star"}),
+								icon({icon:"star-o"})
+							)
 						),
-						table({
-							name:"foo",
-							width:400,
-							height:400,
-							rows:3,
-							alignsection:"center",
-							justifysection:"space-around",
-							style:{
-								rowcol: {
-									borderwidth:vec4(0,0,0,1),
-									bordercolor:"white"
-								}
-							}
-						},
-							icon({icon:"star"}),
-							icon({icon:"facebook"}),
-							icon({icon:"digg"}),
-							icon({icon:"cc"}),
-							icon({icon:"envelope"}),
-							icon({icon:"empire"}),
-							icon({icon:"eye"}),
-							icon({icon:"circle"}),
-							icon({icon:"circle-o"}),
-							icon({icon:"star"}),
-							icon({icon:"star-o"}),
-							icon({icon:"star-o"})
+						view({flexdirection:"column"},
+							label({text:"Rows", marginbottom:30}),
+							table({
+									name:"foo",
+									width:400,
+									height:200,
+									rows:3,
+									alignsection:"center",
+									justifysection:"space-around",
+									style:{
+										rowcol: {
+											borderwidth:vec4(0,0,0,1),
+											bordercolor:"white"
+										}
+									}
+								},
+								icon({icon:"star"}),
+								icon({icon:"facebook"}),
+								icon({icon:"digg"}),
+								icon({icon:"cc"}),
+								icon({icon:"envelope"}),
+								icon({icon:"empire"}),
+								icon({icon:"eye"}),
+								icon({icon:"circle"}),
+								icon({icon:"circle-o"}),
+								icon({icon:"star"}),
+								icon({icon:"star-o"}),
+								icon({icon:"star-o"})
+							)
 						)
 					)
 				)
