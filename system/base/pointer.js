@@ -305,7 +305,6 @@ define.class('$system/base/node', function(){
 					this._over.setPointer(pointer)
 				}
 				if (previous) {
-					if (previous) console.log(previous.view)
 					this._out.setPointer(previous)
 				}
 			}
