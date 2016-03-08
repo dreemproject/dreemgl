@@ -138,7 +138,11 @@ define.class('$ui/view', function(icon, label){
 	this.constructor.examples = {
 		Usage:function(){
 			return [
-				checkbox({value:true}),
+				checkbox({
+					bgcolor:"transparent",
+					textcolor:"transparent",
+					value:true
+				}),
 				checkbox({text:"With an icon!", icon:"flask" }),
 				checkbox({
 					icon:"square-o",
