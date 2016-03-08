@@ -52,7 +52,7 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 						),
 						view({flexdirection:"column"},
 							label({
-								text:"Custom Handle",
+								text:"Custom Handle w/Image",
 								marginbottom:30
 							}),
 							slider({
