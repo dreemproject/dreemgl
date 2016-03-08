@@ -5,8 +5,8 @@
  * Individual rows and columns can be configured via styles and are given names and style classes conforming to
  * either `row#` or `column#` style where `#` is the index of the particular row or column.
  * 
- * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/widgets/table.js"></iframe>
- * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/widgets/table.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/widgets/table.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/widgets/table.js">open example in new tab &raquo;</a>
  * 
  */
 /**

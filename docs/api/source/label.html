@@ -335,6 +335,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n181" name="n181">181</a>
 <a href="#n182" name="n182">182</a>
 <a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -515,7 +518,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// A label.</span>
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>: <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">I am a textlabel!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">30</span> })]
+                        <span class="keyword">return</span> [
+                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">I am a textlabel!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">30</span> }),
+                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Label With BG Image</span><span class="delimiter">&quot;</span></span>, <span class="key">margintop</span>:<span class="integer">10</span>, <span class="key">padding</span>:<span class="integer">10</span>, <span class="key">fontsize</span>:<span class="integer">20</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>, <span class="key">bgimage</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/purplecloud.png</span><span class="delimiter">&quot;</span></span>, <span class="key">bgimagemode</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>})
+                        ]
                 }
         }
 })

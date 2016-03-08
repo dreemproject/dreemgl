@@ -269,7 +269,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon) {
 <span class="comment">// A table is a container view that lays out it's children in either rows or columns.</span>
 <span class="comment">// Individual rows and columns can be configured via styles and are given names and style classes conforming to</span>
 <span class="comment">// either `row#` or `column#` style where `#` is the index of the particular row or column.</span>
@@ -343,11 +343,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> table = <span class="local-variable">this</span>.constructor;
         <span class="comment">// Basic usage of the table.</span>
         <span class="local-variable">this</span>.constructor.examples = {
-                <span class="function">Usage</span>:<span class="keyword">function</span>(){
+                <span class="function">Usage</span>:<span class="keyword">function</span>() {
                         <span class="keyword">return</span> [
                                 table({
-                                            <span class="key">flex</span>:<span class="integer">1</span>,
-                                                <span class="key">columns</span>:<span class="integer">5</span>,
+                                            <span class="key">width</span>:<span class="integer">200</span>,
+                                                <span class="key">columns</span>:<span class="integer">3</span>,
                                                 <span class="key">alignsection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">style</span>:{
                                                         <span class="key">rowcol</span>: {

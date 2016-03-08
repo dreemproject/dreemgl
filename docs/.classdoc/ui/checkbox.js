@@ -3,8 +3,8 @@
  * @extends view
  * Simple toggle button: a rectangle with a textlabel and an icon
  * 
- * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/checkbox.js"></iframe>
- * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/checkbox.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/checkbox.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/checkbox.js">open example in new tab &raquo;</a>
  * 
  */
 /**

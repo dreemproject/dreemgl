@@ -237,6 +237,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n83" name="n83">83</a>
 <a href="#n84" name="n84">84</a>
 <a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -260,62 +270,72 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>,
                                                 <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">space-around</span><span class="delimiter">'</span></span>
-                                        },
-                                                table({
-                                                        <span class="key">width</span>:<span class="integer">400</span>,
-                                                        <span class="key">height</span>:<span class="integer">400</span>,
-                                                        <span class="key">columns</span>:<span class="integer">5</span>,
-                                                        <span class="key">alignsection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">style</span>:{
-                                                                <span class="key">rowcol</span>: {
-                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                                                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                                                },
+                                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
+                                                        label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Columns</span><span class="delimiter">&quot;</span></span>, <span class="key">marginbottom</span>:<span class="integer">30</span>}),
+                                                        table({
+                                                                        <span class="key">width</span>:<span class="integer">400</span>,
+                                                                        <span class="key">height</span>:<span class="integer">100</span>,
+                                                                        <span class="key">columns</span>:<span class="integer">5</span>,
+                                                                        <span class="key">alignsection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">style</span>:{
+                                                                                <span class="key">rowcol</span>: {
+                                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>),
+                                                                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                                                                                },
+                                                                                <span class="key">rowcol_column3</span>: {
+                                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>),
+                                                                                },
+                                                                                <span class="key">rowcol_column2</span>: {
+                                                                                        <span class="key">bgcolor</span>:vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.2</span>),
+                                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">5</span>,<span class="integer">5</span>),
+                                                                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>,
+                                                                                        <span class="key">paddingtop</span>:<span class="integer">20</span>,
+                                                                                        <span class="key">width</span>:<span class="integer">30</span>
+                                                                                }
+                                                                        }
                                                                 },
-                                                                <span class="key">rowcol_column2</span>: {
-                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>),
-                                                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">padding</span>:<span class="integer">30</span>,
-                                                                        <span class="key">width</span>:<span class="integer">30</span>
-                                                                }
-                                                        }
-                                                },
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">facebook</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">digg</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cc</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">envelope</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">empire</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eye</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle-o</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>})
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">facebook</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">digg</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cc</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">envelope</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">empire</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eye</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle-o</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>})
+                                                        )
                                                 ),
-                                                table({
-                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">width</span>:<span class="integer">400</span>,
-                                                        <span class="key">height</span>:<span class="integer">400</span>,
-                                                        <span class="key">rows</span>:<span class="integer">3</span>,
-                                                        <span class="key">alignsection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">justifysection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-around</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">style</span>:{
-                                                                <span class="key">rowcol</span>: {
-                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                                                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                                                                }
-                                                        }
-                                                },
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">facebook</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">digg</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cc</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">envelope</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">empire</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eye</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle-o</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>}),
-                                                        icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>})
+                                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
+                                                        label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Rows</span><span class="delimiter">&quot;</span></span>, <span class="key">marginbottom</span>:<span class="integer">30</span>}),
+                                                        table({
+                                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">foo</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">width</span>:<span class="integer">400</span>,
+                                                                        <span class="key">height</span>:<span class="integer">200</span>,
+                                                                        <span class="key">rows</span>:<span class="integer">3</span>,
+                                                                        <span class="key">alignsection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">justifysection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-around</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">style</span>:{
+                                                                                <span class="key">rowcol</span>: {
+                                                                                        <span class="key">borderwidth</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
+                                                                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                                                                                }
+                                                                        }
+                                                                },
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">facebook</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">digg</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cc</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">envelope</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">empire</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eye</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle-o</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>}),
+                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>})
+                                                        )
                                                 )
                                         )
                                 )

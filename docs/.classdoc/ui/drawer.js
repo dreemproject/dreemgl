@@ -6,8 +6,8 @@
  * Up to three subviews can be added to the drawer's constructor, providing the top drawer view, the right tray view
  * and the left tray view, in that order.
  * 
- * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/drawer.js"></iframe>
- * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/drawer.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/drawer.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/drawer.js">open example in new tab &raquo;</a>
  * 
  */
 /**

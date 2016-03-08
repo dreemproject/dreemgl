@@ -386,7 +386,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="comment">// Calculate splat shape</span>
                                         <span class="keyword">var</span> shape2 = vec2(cos(segment), sin(segment))
                                         shape2 = vec2.mul_float32(shape2, <span class="float">0.75</span>)
-                                        shape2 = vec2.mul_float32(shape2, <span class="integer">1</span> + <span class="float">0.25</span> * cos(segment * <span class="integer">5</span>))
+                                        shape2 = vec2.mul_float32(shape2, <span class="integer">1</span> + <span class="float">0.25</span> * cos(segment * <span class="integer">4</span>))
 
                                         <span class="comment">// Add all shapes to the vertex buffer</span>
                                         mesh.push(
@@ -404,7 +404,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 pos    += mesh.target1 * view.weight1
                                 pos    += mesh.target2 * view.weight2
                                 <span class="comment">// center shape in view</span>
-                                pos = pos * min(view.layout.width, view.layout.height) / <span class="integer">2</span>
+                                pos = pos * min(view.layout.width, view.layout.height) / <span class="integer">3</span>
                                 pos += vec2(view.layout.width / <span class="integer">2</span>, view.layout.height / <span class="integer">2</span>)
                                 <span class="keyword">return</span> vec4(pos, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                         }
