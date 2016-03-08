@@ -7,14 +7,20 @@
 
 define.class('$ui/button', function(exports, $ui$, icon, label) {
 
-	exports.groups = {}
-	exports.select = function(group, value) {
-		var current = this.groups[group];
-		if (current) {
-			current.selected = false;
-			current.textcolor = "white"
+	exports.groups = {};
+	exports.clearSelection = function(group) {
+		if (group) {
+			var current = this.groups[group];
+			if (current) {
+				delete this.groups[group]
+				current.selected = false;
+			}
+		} else {
+			this.groups = {}
 		}
-
+	};
+	exports.select = function(group, value) {
+		this.clearSelection(group);
 		this.groups[group] = value;
 		value.selected = true;
 	};
