@@ -53,7 +53,7 @@ define.class('$system/base/node', function(require){
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
+		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"resize"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
 
@@ -1449,6 +1449,63 @@ define.class('$system/base/node', function(require){
 					} else {
 						this.bgimageaspect = vec2(1.0/ratio, 1.0);
 					}
+				} else if (this.bgimagemode === "center"
+					|| this.bgimagemode === "left"
+					|| this.bgimagemode === "right"
+					|| this.bgimagemode === "top"
+					|| this.bgimagemode === "top-left"
+					|| this.bgimagemode === "top-right"
+					|| this.bgimagemode === "bottom"
+					|| this.bgimagemode === "bottom-left"
+					|| this.bgimagemode === "bottom-right") {
+
+					var rx, ry;
+					if (uselayout) {
+						rx = this._layout.width / imgw;
+						ry = this._layout.height / imgh;
+					} else {
+						rx = this._width / imgw;
+						ry = this._height / imgh;
+					}
+
+					this.bgimageaspect = vec2(rx, ry);
+
+					if (this.bgimagemode === "center") {
+						this.bgimageoffset = vec2(0.5, 0.5);
+
+					} else if (this.bgimagemode === "left") {
+
+						this.bgimageoffset = vec2(0, 0.5);
+
+					} else if (this.bgimagemode === "right") {
+
+						this.bgimageoffset = vec2(1.0 - rx, 0.5);
+
+					} else if (this.bgimagemode === "top") {
+
+						this.bgimageoffset = vec2(0.5, 0);
+
+					} else if (this.bgimagemode === "top-left") {
+
+						this.bgimageoffset = vec2(0, 0);
+
+					} else if (this.bgimagemode === "top-right") {
+
+						this.bgimageoffset = vec2(1.0 - rx, 0);
+
+					} else if (this.bgimagemode === "bottom") {
+
+						this.bgimageoffset = vec2(0.5, 1.0 - ry);
+
+					} else if (this.bgimagemode === "bottom-left") {
+
+						this.bgimageoffset = vec2(0, 1.0 - ry);
+
+					} else if (this.bgimagemode === "bottom-right") {
+
+						this.bgimageoffset = vec2(1.0 - rx, 1.0 - ry);
+					}
+
 				}
 			}
 		}
