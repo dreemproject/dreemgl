@@ -6,6 +6,8 @@
 
 define.class('$ui/scrollbar', function () {
 
+	//TODO(aki): implement with view scrollbar and overflow instead.
+
 	this.position = 'absolute'
 	this.vertical = false
 	this.visible = true
@@ -30,6 +32,10 @@ define.class('$ui/scrollbar', function () {
 	this.atAnimate = function () {
 		this.updateScrollbar()
 	}
+
+
+	// TODO(aki): hack to stopPropagation of multimove
+	this.pointermultimove = function () {}
 
 	// internal: show/hide and resize scrollbar
 	this.updateScrollbar = function(){

@@ -6,10 +6,12 @@
 
 define.class('$ui/label', function (require, $ui$, view, label) {
 
+	var ROW_HEIGHT = 28
+
 	this.text = ''
-	this.bgcolor = vec4(1, 1, 1, 0.01)
-	this.pickalpha = 0
-	this.height = 28
+	this.bgcolor = NaN
+	this.height = ROW_HEIGHT
+	this.cursor = 'move'
 
 	this.attributes = {
 		data: Config({type: Array,  value: wire('this.parent.data')}),
@@ -19,48 +21,51 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	}
 
 	this.onrows = function () {
-		this.height = this.rows * 28
+		this.height = this.rows * ROW_HEIGHT
 	}
 
-	this.pointermove = function(event) {
-		var eventghost = this.find('eventghost')
-		var timeline = this.parent
-		eventghost.title = ''
-		eventghost.start = timeline.getRangeStart() + timeline.getRange() * (event.min[0] / this.layout.width)
-		eventghost.end = timeline.getRangeStart() + timeline.getRange() * (event.max[0] / this.layout.width)
-		this.redraw()
-	}
-
-	this.pointerend = function(event) {
-		var eventghost = this.find('eventghost')
-		var timeline = this.parent
-		if (abs(event.delta.x) > 2) {
-			var eventdata = {
-				title: 'New Event',
-				date: eventghost.start,
-				enddate: eventghost.end,
-				metadata: {
-					location: {
-						name: 'New Location',
-						lattitude: 0,
-						longitute: 0
-					}
-				}
-			}
-			timeline.makeEvent(eventdata)
-		}
-		eventghost.start = 0
-		eventghost.end = 0
-	}
+	// Temporarily disable new event creation on drag
+	// this.pointermove = function(event) {
+	// 	var eventghost = this.find('eventghost')
+	// 	var timeline = this.parent
+	// 	eventghost.title = ''
+	// 	eventghost.start = timeline.getRangeStart() + timeline.getRange() * (event.min[0] / this.layout.width)
+	// 	eventghost.end = timeline.getRangeStart() + timeline.getRange() * (event.max[0] / this.layout.width)
+	// 	timeline.lockscroll = true
+	// 	this.redraw()
+	// }
+	//
+	// this.pointerend = function(event) {
+	// 	var eventghost = this.find('eventghost')
+	// 	var timeline = this.parent
+	// 	if (abs(event.delta.x) > 2) {
+	// 		var eventdata = {
+	// 			title: 'New Event',
+	// 			date: eventghost.start,
+	// 			enddate: eventghost.end,
+	// 			metadata: {
+	// 				location: {
+	// 					name: 'New Location',
+	// 					lattitude: 0,
+	// 					longitute: 0
+	// 				}
+	// 			}
+	// 		}
+	// 		timeline.makeEvent(eventdata)
+	// 	}
+	// 	eventghost.start = 0
+	// 	eventghost.end = 0
+	// 	timeline.lockscroll = false
+	// }
 
 	define.class(this, 'event', view, function(){
 
 		this.bgcolor = '#999999'
 		this.position = 'absolute'
 		this.flexdirection = 'row'
-		this.cursor = 'move'
 		this.justifycontent = "center"
 		this.borderradius = 6
+		this.cursor = 'ew-resize'
 
 		var RESIZE_HANDLE_WIDTH = 10
 
@@ -80,7 +85,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		var editmode = ''
 
 		this.pointerhover = this.pointerstart = function (event) {
-			this.cursor = 'move'
+			this.cursor = 'ew-resize'
 			editmode = 'move'
 
 			var localstart = this.globalToLocal(event.position)
@@ -88,10 +93,10 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			var pxduration = this.duration * event.view.layout.width
 
 			if (localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
-				this.cursor = 'ew-resize'
+				this.cursor = 'w-resize'
 				editmode = 'setstart'
 			} else if (pxduration - localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
-				this.cursor = 'ew-resize'
+				this.cursor = 'e-resize'
 				editmode = 'setend'
 			}
 		}
@@ -115,6 +120,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 				eventghost.start = eventghost.end
 				eventghost.end = start
 			}
+			timeline.lockscroll = true
 			this.redraw()
 		}
 
@@ -128,6 +134,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			})
 			eventghost.start = 0
 			eventghost.end = 0
+			timeline.lockscroll = false
 		}
 
 		this.pointertap = function(event) {

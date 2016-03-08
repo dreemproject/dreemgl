@@ -19,10 +19,12 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		start:   Config({type: String,  value: "Jan 1 2016"}),
 		end:     Config({type: String,  value: "Dec 31 2016"}),
 		data:    Config({type: Array, value: []}),
-		zoom: Config({type: Number, value: 0.5}),
+		zoom: Config({type: Number, value: 1}),
 		scroll: Config({type: Number, value: 0}),
 		hoursegs: Config({type: Number, value: 24}),
 		segments: Config({type: vec3, value: vec3()}),
+		lockscroll: Config({type: Boolean, value: false}),
+		autoexpand: Config({type: Boolean, value: false}),
 		change: Config({type: Event})
 	}
 
@@ -87,6 +89,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.ondata = function () {
 		var eventstart, eventend
 		var starttime = this.getStart()
+		var oldstarttime = this.getStart()
 		var endtime = this.getEnd()
 		if (!this.data) return
 		for (var i = 0; i < this.data.length; i++) {
@@ -97,10 +100,31 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 		this.start = new Date(starttime).toString()
 		this.end = new Date(endtime).toString()
+		this.scroll = this.scroll + (oldstarttime - this.getStart()) / this.zoom / this.TIME_SCALE
+	}
+
+	this.onscroll = function() {
+		if (this.autoexpand) {
+			window.clearTimeout(this.expandTimeout)
+			this.expandTimeout = setTimeout(function() {
+				var starttime = this.getStart()
+				var oldstarttime = this.getStart()
+				var endtime = this.getEnd()
+
+				var scrollstart = new Date(this.getRangeStart() - this.getRange())
+				var scrollend = new Date(this.getRangeEnd() + this.getRange())
+				if (scrollend > endtime) endtime = scrollend
+				if (scrollstart < starttime) starttime = scrollstart
+
+				this.start = new Date(starttime).toString()
+				this.end = new Date(endtime).toString()
+				this.scroll = this.scroll + (oldstarttime - this.getStart()) / this.zoom / this.TIME_SCALE
+			}.bind(this), 1000)
+
+		}
 	}
 
 	this.atDraw = function () {
-		// this.labels = this.find("labels")
 		this.hscrollbar = this.find("scrollbar")
 		if (this.hscrollbar){
 			this.hscrollbar.updateScrollbars()
@@ -160,13 +184,12 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.pointermultimove = function(event) {
-		this.background = this.find("background")
+		if (this.lockscroll) return
 		this.hscrollbar = this.find("scrollbar")
-
-		if (event.length === 1 && event[0].view === this.background) {
+		if (event.length === 1) {
 			this.scroll = clamp(this._scroll - event[0].movement[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
-		else if (event.length === 2 && event[0].view === this.background) {
+		else if (event.length === 2) {
 			var lastzoom = this._zoom
 
 			var center = vec2.mix(event[0].position, event[1].position, 0.5)
@@ -189,6 +212,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.pointerwheel = function(event) {
+		if (this.lockscroll) return
 		this.hscrollbar = this.find("scrollbar")
 		if (!event.touch) {
 			if (event.wheel[0] && abs(event.wheel[0]) > abs(event.wheel[1])){
