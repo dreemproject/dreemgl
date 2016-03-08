@@ -106,7 +106,7 @@ define.class("$server/composition",function(require, $ui$, button, radiobutton, 
 								label({text:"Radio Buttons - Group A", marginbottom:20}),
 								radiobutton({
 									marginbottom:10,
-									group:"b",
+									group:"a",
 									icon:"circle-o",
 									onselected:function(ev,v,o) { o.icon = v ? "circle" : "circle-o" },
 									hovercolor1:"transparent",
@@ -120,7 +120,7 @@ define.class("$server/composition",function(require, $ui$, button, radiobutton, 
 								}),
 								radiobutton({
 									marginbottom:10,
-									group:"b",
+									group:"a",
 									icon:"circle-o",
 									onselected:function(ev,v,o) { o.icon = v ? "circle" : "circle-o" },
 									hovercolor1:"transparent",
@@ -135,7 +135,7 @@ define.class("$server/composition",function(require, $ui$, button, radiobutton, 
 								radiobutton({
 									selected:true,
 									icon:"circle-o",
-									group:"b",
+									group:"a",
 									onselected:function(ev,v,o) { o.icon = v ? "circle" : "circle-o" },
 									hovercolor1:"transparent",
 									hovercolor2:"transparent",
@@ -150,16 +150,19 @@ define.class("$server/composition",function(require, $ui$, button, radiobutton, 
 							view({flexdirection:"column"},
 								label({text:"Radio Buttons - Group B", marginbottom:20}),
 								radiobutton({
+									group:"b",
 									marginbottom:10,
 									textselectedcolor:"red",
 									text:"first"
 								}),
 								radiobutton({
+									group:"b",
 									marginbottom:10,
 									selected:true,
 									text:"second"
 								}),
 								radiobutton({
+									group:"b",
 									text:"third"
 								})
 							)
