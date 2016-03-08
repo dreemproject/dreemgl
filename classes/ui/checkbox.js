@@ -138,9 +138,30 @@ define.class('$ui/view', function(icon, label){
 	this.constructor.examples = {
 		Usage:function(){
 			return [
-				checkbox({value:true})
-				,checkbox({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", textcolor: "white"  })
-				,checkbox({text:"With an icon!", icon:"flask" })
+				checkbox({value:true}),
+				checkbox({text:"With an icon!", icon:"flask" }),
+				checkbox({
+					icon:"square-o",
+					text:"Checkbox Unselected (FALSE)",
+					borderwidth:0,
+					bgcolor:"transparent",
+					textcolor:"white",
+					textactivecolor:"white",
+					click:function(){
+						this.icon = this.value ? "check-square-o" : "square-o"
+						this.text = "Checkbox " + (this.value ? "Selected (TRUE)" : "Unselected (FALSE)")
+					}
+				}),
+				checkbox({
+					icon:undefined,
+					text:"Using bg image",
+					textcolor:"white",
+					bgimage:"$resources/textures/purplecloud.png",
+					bgimagemode:"stretch",
+					click:function(){
+						this.bgimage = this.value ? "$resources/textures/bluecloud.png" : "$resources/textures/purplecloud.png";
+					}
+				})
 			]
 		}
 	}
