@@ -177,7 +177,10 @@ define.class(function(require, $ui$, view){
 	// A label.
 	this.constructor.examples = {
 		Usage: function(){
-			return [label({text:"I am a textlabel!", fgcolor:"purple", fontsize: 30 })]
+			return [
+				label({text:"I am a textlabel!", fgcolor:"purple", fontsize: 30 }),
+				label({text:"Label With BG Image", margintop:10, padding:10, fontsize:20, fgcolor:"yellow", bgimage:"$resources/textures/purplecloud.png", bgimagemode:"stretch"})
+			]
 		}
 	}
 })
