@@ -1499,11 +1499,11 @@ define.class('$system/base/node', function(require){
 
 					} else if (this.bgimagemode === "bottom-left") {
 
-						this.bgimageoffset = vec2(0, 1.0 - ry);
+						this.bgimageoffset = vec2(0, 1.0 - ry); //
 
 					} else if (this.bgimagemode === "bottom-right") {
 
-						this.bgimageoffset = vec2(1.0 - rx, 1.0 - ry);
+						this.bgimageoffset = vec2(1.0 - rx, 1.0 - ry); //
 					}
 
 				}
