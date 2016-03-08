@@ -119,7 +119,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 				this.start = new Date(starttime).toString()
 				this.end = new Date(endtime).toString()
 				this.scroll = this.scroll + (oldstarttime - this.getStart()) / this.zoom / this.TIME_SCALE
-			}.bind(this), 1000)
+			}.bind(this), 100)
 
 		}
 	}
