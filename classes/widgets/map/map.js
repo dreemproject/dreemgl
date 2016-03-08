@@ -725,34 +725,32 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	});
 
 	// view implementation of the label tile
-	define.class(this,"labeltile", "$ui/labelset", function(){
-		this.polygonoffset = 10.0;
+	define.class(this, "labeltile", "$ui/labelset", function(){
+		this.polygonoffset = 100.0;
 		this.outline = false;
 		this.outline_thickness = 0;
 		this.is = tilebasemixin;
 		this.outline_color = "black" ;
 		this.fgcolor = "black"
+
 		this.textpositionfn = function(pos, tag){
 		//	idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 		}
 
 		this.textstyle = function(style, tag){
 			var pos = style.pos
-			var rpos = vec2(1,-1)*pos.xz ;
+			var rpos = vec2(1,-1) * pos.xz;
 			rpos.y += pos.y;
 			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
 			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
 
-			// pos.xy /= pow(2.0,view.layeroffset - view.fraczoom - 2)
-			// rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
 			style.pos = vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 
 			style.fgcolor = "black";
-			//style.outlinecolor = "black" ;
-			//style.outline_thickness = 120.0;
-			//style.outline = false;
+			// style.outlinecolor = "white";
+			// style.outlinethickness = 1.0;
+			// style.outline = true;
 			return style
-			//return vec4(tag.yzw, 1.0);
 		}
 
 		this.resetbuffer = function(){
@@ -780,14 +778,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 			for (var i =0 ; i<LabelSource.length; i++){
 				var l = LabelSource[i];
-				var f = 20;
+				var f = 30;
 				if (l.scalerank !== undefined){
 					f = rankfontsizes[l.scalerank] * Math.pow(2, this.layeroffset-1);
 					//f+= l.scalerank?(100/l.scalerank):0;
 				}
 
 				if (f >-1){
-					var l2 = {text:l.name,fontsize:f,outline:false, color: vec4("black"), outlinecolor: vec4("black"), pos: vec3(l.x, -11,l.y)};
+					var l2 = {text:l.name,fontsize:f,outline:false, color: vec4("white"), outlinecolor: vec4("black"), pos: vec3(l.x, -11,l.y)};
 					thelabels.push(l2);
 				}
 			}
