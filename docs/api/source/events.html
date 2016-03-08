@@ -470,6 +470,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n316" name="n316">316</a>
 <a href="#n317" name="n317">317</a>
 <a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
+<a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -542,6 +549,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">id</span>: <span class="predefined-constant">null</span>,
                         <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
                         <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
+                        <span class="key">color</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>),
                         <span class="key">duration</span>: <span class="integer">1</span>,
                         <span class="key">offset</span>: <span class="integer">0</span>,
                         <span class="key">start</span>: <span class="integer">0</span>,
@@ -644,7 +652,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         },
                         <span class="function">color</span>: <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
-                                <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
+                                <span class="keyword">if</span> (uv.y &gt; <span class="float">0.85</span>) {
+                                        <span class="keyword">return</span> vec4(view.color.rgb, col.a * view.opacity)
+                                } <span class="keyword">else</span> {
+                                        <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
+                                }
                         }
                 }
 
@@ -689,10 +701,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> rows = [[],[],[],[],[],[]]
                 <span class="local-variable">this</span>.rows = <span class="integer">1</span>
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; data.length; i++) {
+                        <span class="keyword">var</span> color = (data[i].metadata &amp;&amp; data[i].metadata.color) ? data[i].metadata.color : <span class="predefined-constant">null</span>
                         <span class="keyword">var</span> event = <span class="local-variable">this</span>.event({
                                 <span class="key">title</span>: data[i].title,
                                 <span class="key">id</span>: data[i].id,
                                 <span class="key">bgcolor</span>: vec4(<span class="float">0.75</span>, <span class="float">0.75</span>, <span class="float">0.75</span>, <span class="integer">1</span>),
+                                <span class="key">color</span>: color || vec4(<span class="integer">1</span>, <span class="integer">1</span>, <span class="integer">1</span>, <span class="integer">1</span>),
                                 <span class="key">start</span>: <span class="keyword">new</span> Date(data[i].date).getTime(),
                                 <span class="key">end</span>: <span class="keyword">new</span> Date(data[i].enddate).getTime()
                         })

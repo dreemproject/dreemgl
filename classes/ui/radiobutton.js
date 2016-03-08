@@ -6,6 +6,7 @@
 
 
 define.class('$ui/button', function(exports, $ui$, icon, label) {
+// Similar to a button, but carries a `group` and a selection state, and only one `radiobutton` per group can be seelcted at any one time.
 
 	exports.groups = {};
 	exports.clearSelection = function(group) {
@@ -26,8 +27,12 @@ define.class('$ui/button', function(exports, $ui$, icon, label) {
 	};
 
 	this.attributes = {
+		// The radiobutton group.  Only one button per group can be selected at any one time.  Radio buttons without a specificed group all share a default group.
 		group:"default",
+
+		// The current seelction state of the button
 		selected:false,
+
 		// Color of the label text in pressed-down state
 		textselectedcolor: Config({meta:"color", type: vec4, value: vec4("yellow")}),
 
@@ -86,5 +91,21 @@ define.class('$ui/button', function(exports, $ui$, icon, label) {
 	this.click = function() {
 		this.constructor.select(this.group, this)
 	}
+
+	var radiobutton = this.constructor;
+	// Basic usage of the radiobutton.
+	this.constructor.examples = {
+		Usage:function(){
+			return [
+				radiobutton({group:"a", text:"Group A - Press me!", selected:true}),
+				radiobutton({group:"a", text:"Group A - Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  }),
+				radiobutton({group:"a", text:"Group A - With an icon!", icon:"flask" }),
+				radiobutton({group:"b", text:"Group B - Press me!", selected:true, margintop:20}),
+				radiobutton({group:"b", text:"Group B - Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  }),
+				radiobutton({group:"b", text:"Group B - With an icon!", icon:"flask" })
+			]
+		}
+	}
+
 
 });

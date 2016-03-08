@@ -497,6 +497,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n343" name="n343">343</a>
 <a href="#n344" name="n344">344</a>
 <a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -738,7 +739,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span> (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
                         }
                         <span class="local-variable">this</span>._move.setPointer(pointer)
-                        <span class="keyword">if</span> (pointer.touch) {
+                        <span class="comment">// TODO(aki): check list length per view</span>
+                        <span class="keyword">if</span> (pointer.touch &amp;&amp; pointerlist.length === <span class="integer">1</span>) {
                                 <span class="keyword">if</span> (abs(pointer.movement[<span class="integer">0</span>]) &gt; abs(pointer.movement[<span class="integer">1</span>])) {
                                         pointer.wheel = vec2(-pointer.movement[<span class="integer">0</span>], <span class="integer">0</span>)
                                 } <span class="keyword">else</span> {

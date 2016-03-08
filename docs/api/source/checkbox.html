@@ -298,9 +298,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n144" name="n144">144</a>
 <a href="#n145" name="n145">145</a>
 <a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
-<a href="#n149" name="n149">149</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -325,9 +322,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">col1</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">duration</span>: <span class="float">1.0</span>}),
                 <span class="comment">// Gradient color 2</span>
                 <span class="key">col2</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">duration</span>: <span class="float">1.0</span>}),
-
-                <span class="comment">// Color of the inactive icon</span>
-                <span class="key">inactivecolor</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#bbb</span><span class="delimiter">&quot;</span></span>)}),
 
                 <span class="comment">// Color of the label text in neutral state</span>
                 <span class="key">textcolor</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>)}),
@@ -418,7 +412,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> cb = [];
 
                 cb.push(icon({
-                        <span class="key">fgcolor</span>:(!!(<span class="local-variable">this</span>.value) ? <span class="local-variable">this</span>.fgcolor : <span class="local-variable">this</span>.inactivecolor),
+                        <span class="key">fgcolor</span>:(!!(<span class="local-variable">this</span>.value) ? <span class="local-variable">this</span>.textactivecolor : <span class="local-variable">this</span>.textcolor),
                         <span class="key">icon</span>: <span class="local-variable">this</span>.icon,
                         <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
