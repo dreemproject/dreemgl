@@ -34,55 +34,54 @@ define.class("$server/composition",function(require, $ui$, checkbox, screen, lab
 							label({name:"status", text:"Value is: false", fontsize:12, margintop:5})
 						),
 						view({ flexdirection:"column", flex:0 },
-							label({text:"Examples of Checkboxes", marginbottom:20}),
 							checkbox({
 								icon:"square-o",
-								text:"CHECKBOX ONE UNSELECETED (FALSE)",
+								text:"Checkbox One Unselected (FALSE)",
 								borderwidth:0,
 								bgcolor:"transparent",
 								textcolor:"white",
 								textactivecolor:"white",
 								click:function(){
 									this.icon = this.value ? "check-square-o" : "square-o"
-									this.text = "CHECKBOX ONE " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+									this.text = "Checkbox One " + (this.value ? "Selected (TRUE)" : "Unselected (FALSE)")
 								}
 							}),
 							checkbox({
 								icon:"square-o",
-								text:"CHECKBOX TWO UNSELECETED (FALSE)",
+								text:"Checkbox Two Unselected (FALSE)",
 								borderwidth:0,
 								bgcolor:"transparent",
 								textcolor:"white",
 								textactivecolor:"white",
 								click:function(){
 									this.icon = this.value ? "check-square-o" : "square-o"
-									this.text = "CHECKBOX TWO " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+									this.text = "Checkbox Two " + (this.value ? "Selected (TRUE)" : "Unselected (FALSE)")
 								}
 							}),
 							checkbox({
 								value:true,
 								icon:"check-square-o",
-								text:"CHECKBOX THREE SELECETED (TRUE)",
+								text:"Checkbox Three Unseected (TRUE)",
 								borderwidth:0,
 								bgcolor:"transparent",
 								textcolor:"white",
 								textactivecolor:"white",
 								click:function(){
 									this.icon = this.value ? "check-square-o" : "square-o"
-									this.text = "CHECKBOX THREE " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+									this.text = "Checkbox Three " + (this.value ? "Selected (TRUE)" : "Unselected (FALSE)")
 								}
 							}),
 							checkbox({
 								value:true,
 								icon:"check-square-o",
-								text:"CHECKBOX FOUR SELECETED (TRUE)",
+								text:"Checkbox Four Unseected (TRUE)",
 								borderwidth:0,
 								bgcolor:"transparent",
 								textcolor:"white",
 								textactivecolor:"white",
 								click:function(){
 									this.icon = this.value ? "check-square-o" : "square-o"
-									this.text = "CHECKBOX FOUR " + (this.value ? "SELECETED (TRUE)" : "UNSELECTED (FALSE)")
+									this.text = "Checkbox Four " + (this.value ? "Selected (TRUE)" : "Unselected (FALSE)")
 								}
 							})
 						),
