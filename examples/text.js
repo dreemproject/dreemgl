@@ -21,39 +21,11 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 							alignitems:"stretch",
 							justifycontent:'space-around'
 						},
-						view({justifycontent:"space-around", padding:30},
-							icon({
-								icon:"gear",
-								fgcolor:"lightblue",
-								fontsize:140
-							}),
-							icon({
-								icon:"gear",
-								boldness:1.0,
-								fgcolor:"lightblue",
-								fontsize:140
-							}),
-							icon({
-								icon:"flask",
-								borderradius:20,
-								bgimagemode:"stretch",
-								bgimage:"$resources/textures/purplecloud.png",
-								fontsize:60
-							}),
-							icon({
-								icon:"star",
-								fontsize:60,
-								typefacenormal:{
-									textpixel:function() {
-										return vec4(1,0,0,0)
-									}
-								}
-							}),
-							icon({
-								icon:"star-o",
-								fgcolor:"yellow",
-								fontsize:40
-							})
+						view({margintop:20, justifycontent:"space-around", padding:30},
+							label({text:"Static text label"}),
+							label({text:"Multiline\nLabel", multiline:true}),
+							label({text:"Styled Label", fontsize:100, fgcolor:"red", bgcolor:"white", borderradius:10}),
+							label({text:"Label With BG Image", padding:10, fgcolor:"black", bgimage:"$resources/textures/bluecloud.png", bgimagemode:"stretch"})
 						),
 						view({margintop:20, justifycontent:"space-around", padding:30},
 							textbox({
@@ -62,13 +34,13 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 								bordercolor:"white",
 								fgcolor:"black",
 								cursorcolor:"red",
-								value:"Input text box"
+								value:"Text field"
 							}),
 							textbox({
 								paddingleft:10,
 								fgcolor:"black",
 								bgcolor:"white",
-								value:"Multuline\nInput\ntext",
+								value:"Multuline\ntext\nfield",
 								multiline:true
 							}),
 							textbox({
@@ -77,14 +49,8 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 								bordercolor:"white",
 								bgimage:"$resources/textures/purplecloud.png",
 								bgimagemode:"stretch",
-								value:"Input text box w/bg image"
+								value:"Text field w/bg image"
 							})
-						),
-						view({margintop:20, justifycontent:"space-around", padding:30},
-							label({text:"Basic Label"}),
-							label({text:"Multiline\nLabel", multiline:true}),
-							label({text:"Styled", fontsize:100, fgcolor:"red", bgcolor:"white", borderradius:10}),
-							label({text:"BG Image", padding:10, fgcolor:"black", bgimage:"$resources/textures/bluecloud.png", bgimagemode:"stretch"})
 						)
 					)
 				)

@@ -129,7 +129,17 @@ define.class("$ui/label", function(require){
 	// Basic usage of the treeview control.
 	this.constructor.examples = {
 		Usage:function(){
-			return [textbox({alignself:'flex-start', value:"Text can be input here", fgcolor:'#333', borderwidth:1, bordercolor:'black', padding:5})]
+			return [
+				textbox({alignself:'flex-start', value:"Text can be input here", fgcolor:'#333', borderwidth:1, bordercolor:'black', padding:5}),
+				textbox({
+					borderwidth:1,
+					paddingleft:10,
+					bordercolor:"white",
+					bgimage:"$resources/textures/purplecloud.png",
+					bgimagemode:"stretch",
+					value:"Text field w/bgimage"
+				})
+			]
 		}
 	}
 
