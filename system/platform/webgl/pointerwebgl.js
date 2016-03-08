@@ -6,7 +6,7 @@
 
 // Pointerwebgl adds mouse and touch listeners and connectes them pointer.js API.
 
-define.class('$system/base/pointer', function (require, exports) {
+define.class('$system/platform/base/pointer', function (require, exports) {
 
 	this._cursor = 'arrow'
 	this._tooltip = 'Application'

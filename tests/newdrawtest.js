@@ -4,26 +4,40 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function(require, $ui$, screen, view){
+define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
 
 		this.draw = function(){
 			var c = this.canvas 
+			c.color = [0,1,1,1]
+			//c.drawRect()
+			
 			// this allows reuse of commandbuffers
-			if(c.pushCache('button', false)){
+			if(c.startCache('button', true)){
+
+				c.startAlign('leftfloor',10)
+				c.margin = [1,0,0,0.5]
+
 				//c.drawRect(random()*300, random()*300, 10, 10)
-				for(var i = 0; i < 150;i++){
-				for(var j = 0; j < 150;j++){
-					c.drawButton("hi!", i*6,j*6, 5, 5)
-				}
-				}
-				c.popCache()
+				c.color = [1,1,1,0.5]
+				//for(var j = 0; j < 5;j++){
+				//for(var j = 0; j < 150;j++){
+
+				//var dt = performance.now()
+				for(var i = 0; i < 10000;i++)
+					c.drawRect(4,10+10*sin(i))
+				//console.log(performance.now()-dt)
+			//}
+					//c.drawRect(i*6,j*6, 5, 5)
+				//	}
+				//}
+				c.stopCache()
 			}
 		}
 
 		// create a little draw based button with hover anim
-		define.class(this, 'button', '$canvas/draw', function(){
+		define.class(this, 'button', '$base/stamp', function(){
 
 			this.onpointerhover = function(event){
 				this.colorRect = Animate({1:[0,1,1,1]})
@@ -39,15 +53,17 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 
 			this.canvasverbs = {
 				draw: function(label, x, y, w, h){
-					this.drawINLINE()
+					if(w === undefined && x !== undefined) w = x, x = undefined
+					if(h ===undefined && y !== undefined) h = y, y = undefined
+					this.drawINLINE()					
 				}
 			}
 		})
 	})
 
 	this.render = function(){ return [
-		screen({name:'default', bgcolor:'orange',rect:{color:function(){return mix('red','red',mesh.y)}},clearcolor:vec4('purple')},
-			myview({width:200, height:200, bgcolor:'red'})
+		screen({name:'default', bgcolor:'orange',rect:{color:function(){return 'blue'}},clearcolor:vec4('purple')},
+			myview({flex:1, bgcolor:'orange'})
 		)
 	]}
 })

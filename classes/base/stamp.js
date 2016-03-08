@@ -4,14 +4,15 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 "use strict"
-define.class('$system/base/node', function(require){
+define.class('$base/node', function(require){
 	this.Shader = require('$system/platform/$platform/shader$platform')
 
-	var view = require('$ui/view')
-
+	var view = require('$base/view')
+	var Canvas = require('$base/canvas')
 	// use the drawing canvas from view
-	this.Canvas = view.prototype.Canvas
-	this.doCompileCanvasVerbs = view.prototype.doCompileCanvasVerbs
+
+	this.Canvas = Canvas.prototype
+	this.compileCanvasVerbs = Canvas.compileCanvasVerbs
 	this.atInnerClassAssign = view.prototype.atInnerClassAssign
 
 	Object.defineProperty(this, 'canvasverbs',{

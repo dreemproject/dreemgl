@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$system/base/texture', function(exports){
+define.class('$system/platform/base/texture', function(exports){
 	exports.fromType = function(){ return new exports() }
 	exports.fromArray = function(){ return new exports() }
 	exports.Image = function(){}

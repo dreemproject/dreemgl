@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$system/base/texture', function(exports){
+define.class('$system/platform/base/texture', function(exports){
 	var Texture = exports
 	Texture.Image = typeof window !== 'undefined'? window.Image: function(){}
 	
@@ -54,7 +54,6 @@ define.class('$system/base/texture', function(exports){
 	Texture.DEPTH = 1 << 4
 	Texture.STENCIL = 1 << 5
 	Texture.LUMINANCE = 1<< 6
-	Texture.PICK = 1<<7
 
 	Texture.FLOAT = 1<<10
 	Texture.HALF_FLOAT = 1<<11

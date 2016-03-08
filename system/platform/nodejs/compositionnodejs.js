@@ -4,14 +4,13 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$system/base/compositionbase', function(require, exports, baseclass){
+define.class('$system/platform/base/compositionbase', function(require, exports, baseclass){
 
-	var Node = require('$system/base/node')
+	var Node = require('$base/node')
 	var RpcProxy = require('$system/rpc/rpcproxy')
 	var RpcHub = require('$system/rpc/rpchub')
 
-	var Render = require('$system/base/render')
-	var screen = require('$ui/screen')
+	var screen = require('$base/screen')
 
 	var path = require('path');
 	var fs = require('fs');

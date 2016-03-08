@@ -138,7 +138,7 @@ define.class(function(require){
 			'	   $platform:"webgl",\n'+
 			'      paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
-			'      main:["$system/base/math", "' + boot + '"],\n'+
+			'      main:["$system/math", "' + boot + '"],\n'+
 			'      atMain:function(require, modules){\n'+
 			'        define.endLoader()\n'+
 			'		 require(modules[0])\n'+
@@ -150,7 +150,7 @@ define.class(function(require){
 			'      }\n'+
 			'    }\n'+
 			'  </script>\n'+
-			'  <script type="text/javascript" src="/system/base/define.js"></script>\n'+
+			'  <script type="text/javascript" src="/system/define.js"></script>\n'+
 			' </head>\n'+
 			' <body class="unselectable">\n'+
 			' </body>\n'+

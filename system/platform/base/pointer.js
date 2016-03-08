@@ -6,7 +6,7 @@
 
 // Pointer emits events that unify mouse and touch interactions.
 
-define.class('$system/base/node', function(){
+define.class('$base/node', function(){
 
 	var TAPSPEED = 150
 	var TAPDIST = 5
@@ -338,11 +338,10 @@ define.class('$system/base/node', function(){
 			dist = vec2.distance(pointerlist[0].position, this._wheel[0].position)
 		}
 		if (dist > 0) {
-			this.device.pickScreen(pointerlist[0].position, function(view){
-				var pointer = new Pointer(pointerlist[0], 0, view)
-				pointer.value = pointer.wheel
-				this._wheel.setPointer(pointer)
-			}.bind(this), true)
+			var match = this.device.screen.doPick(pointerlist[0].position)
+			var pointer = new Pointer(pointerlist[0], 0, match.view, match.pickdraw)
+			pointer.value = pointer.wheel
+			this._wheel.setPointer(pointer)
 		} else {
 			var pointer = new Pointer(pointerlist[0], 0, this._wheel[0].view)
 			pointer.value = pointer.wheel

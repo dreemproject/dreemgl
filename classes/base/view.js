@@ -4,14 +4,16 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 "use strict"
-define.class('$system/base/node', function(require){
-// Base UI view object
+define.class('$base/node', function(require){
+	// Base UI view Object
 
 	var FlexLayout = require('$system/lib/layout')
-	var Render = require('$system/base/render')
+
 	this.Shader = require('$system/platform/$platform/shader$platform')
 	var view = this.constructor
 
+	var Canvas = require('$base/canvas')
+	this.Canvas = Canvas.prototype
 
 	this.attributes = {
 		// wether to draw it
@@ -51,8 +53,10 @@ define.class('$system/base/node', function(require){
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
 		opacity: Config({group:"style", value: 1.0, type:float}),
+
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
+		// colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
+		
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
@@ -214,18 +218,18 @@ define.class('$system/base/node', function(require){
 		viewport: Config({group:"layout", type:Enum('','2d','3d'), value:''}),
 
 		// the field of view of a 3D viewport. Only useful on a viewport:'3D'
-		fov: Config({group:"3d", type:float, value: 45}),
+		camerafov: Config({group:"3d", type:float, value: 45}),
 		// the nearplane of a 3D viewport, controls at which Z value near clipping start. Only useful on a viewport:'3D'
-		nearplane: Config({group:"3d",type:float, value: 0.001}),
+		cameranear: Config({group:"3d",type:float, value: 0.001}),
 		// the farplane of a 3D viewport, controls at which Z value far clipping start. Only useful on a viewport:'3D'
-		farplane: Config({group:"3d",type:float, value: 1000}),
+		camerafar: Config({group:"3d",type:float, value: 1000}),
 
 		// the position of the camera in 3D space. Only useful on a viewport:'3D'
-		camera: Config({group:"3d",type: vec3, value: vec3(-2,2,-2)}),
+		camerapos: Config({group:"3d",type: vec3, value: vec3(-2,2,-2)}),
 		// the point the camera is looking at in 3D space. Only useful on a viewport:'3D'
-		lookat: Config({group:"3d",type: vec3, value: vec3(0)}),
+		cameralookat: Config({group:"3d",type: vec3, value: vec3(0)}),
 		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
-		up: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
+		cameraup: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
 
 		// internal, the current time which can be used in shaders to create continous animations
 		time:Config({meta:"hidden", value:0}),
@@ -265,7 +269,7 @@ define.class('$system/base/node', function(require){
 		keypaste: Config({type:Event}),
 
 		// fires when this view loses focus
-		blur: Config({type:Event}),
+		focuslost: Config({type:Event}),
 
 		// drop shadow size
 		dropshadowradius:Config({type:float, value:20}),
@@ -350,6 +354,13 @@ define.class('$system/base/node', function(require){
 		this.redraw()
 	}
 
+	// draw dirty true
+	this.draw_dirty = true
+	// layout dirty causes a relayout to occur
+	this.layout_dirty = true
+	// update matrix stack
+	this.matrix_dirty = true
+
 	this.pickview = 0
 
 	// the number of pick ID's to reserve for this view.
@@ -359,14 +370,15 @@ define.class('$system/base/node', function(require){
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
 	this.totalmatrix = mat4.identity()
+
 	// the last view matrix used
-	this.viewmatrix = mat4.identity()
+	// this.viewmatrix = mat4.identity()
 	// the viewport matrix used to render the viewportblend
-	this.viewportmatrix = mat4.identity()
+	///this.viewportmatrix = mat4.identity()
 	// the normal matrix contains the transform without translate (for normals)
-	this.normalmatrix = mat4.identity()
+	// this.normalmatrix = mat4.identity()
 	// the remap matrix used to remap pointer vec2 to local space
-	this.remapmatrix = mat4();
+	// this.remapmatrix = mat4();
 
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
@@ -390,14 +402,12 @@ define.class('$system/base/node', function(require){
 		if(prev){
 			this.modelmatrix = prev.modelmatrix
 			this.totalmatrix = prev.totalmatrix
-			this.viewportmatrix = prev.viewportmatrix
 			this.layout = prev.layout
 		}
 		else{
 			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = mat4.identity()
+			if(this._viewport) this.totalmatrix = mat4()// mat4.identity()
 			else this.totalmatrix = mat4()
-			this.viewportmatrix = mat4()
 		}
 
 		// create a context
@@ -505,350 +515,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// the drawing canvas
-	this.Canvas = {
-		initCanvas: function(view){
-			this.view = view
-			this.scope = view
-			this.matrix = mat4.identity()
-			this.cmds = []
-		},
-		clearCmds: function(){
-			this.cmds.length = 0
-		},
-		addCanvas: function(ctx, index){
-			ctx.frameid = this.frameid
-			this.cmds.push('canvas', ctx.cmds, ctx.view)
-		},
-		clear: function(){
-			this.cmds.push('clear', this.clearcolor !== undefined?this.clearcolor:this.view.clearcolor)
-		},
-		pushCache: function(uid, isdirty){
-			if(!this.cachestack) this.cachestack = []
-			if(isdirty || !this.view.draw_cache || !this.view.draw_cache[uid]){
-				this.cachestack.push(this.cmds.length, uid)
-				return true
-			}
-			// restore cache
-			var cache = this.view.draw_cache[uid]
-			this.cmds.push.apply(this.cmds, cache.cmds)
-			this.view.pickdraw = cache.pickdraw
-			return false
-		},
-		popCache: function(){
-			if(!this.cachestack || !this.cachestack.length) throw new Error('no matching pushcache')
-			var uid = this.cachestack.pop()
-			var pos = this.cachestack.pop()
-			if(!this.view.draw_cache) this.view.draw_cache = {}
-			this.view.draw_cache[uid] = {
-				cmds:this.cmds.slice(pos, this.cmds.length), 
-				pickdraw:this.view.pickdraw
-			}
-		},
-		// create or reuse a matrix by name
-		getMatrix: function(name, itarget){
-			var target = itarget !== undefined? itarget: this.target.targetguid
-			var store = this.view.matrix_store[target]
-			if(!store) this.view.matrix_store[target] = store = {}
-			var mat = store[name]
-			if(!mat) store[name] = mat = mat4()
-			return mat
-		},
-		// load a matrix (return undefined when not there)
-		loadMatrix: function(name, itarget){
-			var target = itarget !== undefined? itarget: this.target.targetguid
-			var store = this.view.matrix_store[target]
-			if(!store) return
-			return store[name]
-		},
-		// sets the view matrix
-		setViewMatrix: function(iviewmatrix){
-			var isstring = typeof iviewmatrix === 'string'
-			var viewmatrix = isstring? this.loadMatrix(iviewmatrix) : iviewmatrix
-			if(!iviewmatrix) return
-			this.cmds.push(
-				'setViewMatrix',
-				viewmatrix,
-				isstring?iviewmatrix:undefined
-			)
-		},
-		// sets the view matrix to default ortho projection which is in device pixels top left 0,0
-		setOrthoViewMatrix: function(yflip, xflip, iwidth, iheight, ixscroll, iyscroll, izoom, left, top){
-			// lets set up a 2D matrix
-			var width = iwidth !== undefined?iwidth:this.target.width
-			var height = iheight !== undefined?iheight:this.target.height
-			var zoom = izoom !== undefined?izoom: this.scope._zoom
-			var xscroll = ixscroll !== undefined? ixscroll: this.scope._scroll[0]
-			var yscroll = iyscroll !== undefined? iyscroll: this.scope._scroll[1]
-
-			var viewmatrix = this.getMatrix('view')
-			var L = xscroll
-			var R = width * zoom + xscroll
-			var T = yscroll
-			var B = height * zoom + yscroll
-			mat4.ortho(xflip?R:L, xflip?L:R, yflip?T:B, yflip?B:T, -100, 100, viewmatrix)
-
-			var noscrollmatrix = this.getMatrix('noscroll')
-			var L = left || 0 
-			var R = width
-			var T = top || 0
-			var B = height
-			mat4.ortho(xflip?R:L, xflip?L:R, yflip?T:B, yflip?B:T, -100, 100, noscrollmatrix)
-
-			this.setViewMatrix(viewmatrix)
-		},
-		// set the view matrix to a perspective projection
-		setPerspectiveViewMatrix: function(ifov, inear, ifar, icamera, ilookat, iup, iwidth, iheight){
-			
-			var fov = ifov !== undefined? ifov: this.scope._fov
-			var camera = icamera !== undefined? icamera: this.scope._camera 
-			var lookat = ilookat !== undefined? ilookat: this.scope._lookat
-			var up = iup !== undefined? iup: this.scope._up
-			var width = iwidth !== undefined?iwidth:this.target.width
-			var height = iheight !== undefined?iheight:this.target.height
-			var near = ifov !== undefined? ifov: this.scope._fov
-			
-			var perspectivematrix = this.getMatrix('perspective')
-			var lookatmatrix = this.getMatrix('lookat')
-			var viewmatrix = this.getMatrix('view')
-
-			mat4.perspective(fov * PI * 2/360.0 , width/height, near, far, perspectivematrix)
-			mat4.lookAt(camera, lookat, up, lookatmatrix)
-			mat4.mat4_mul_mat4(matrix, perspectivematrix, viewmatrix)
-
-			this.setViewMatrix(viewmatrix)
-		},
-		getDoubleTarget: function(name, iflags, iwidth, iheight){
-			if(!iframes) iframes = 2
-			// lets return a double buffered target which flips on every request
-		},
-		// get or reuse a render target by name
-		getTarget: function(name, iflags, iwidth, iheight){
-			var width = iwidth !== undefined?iwidth:this.scope._layout.width
-			var height = iheight !== undefined?iheight:this.scope._layout.height
-			var flags = iflags !== undefined?iflags:this.RGBA
-			var targetguid = this.view.guid + '_' + flags + '_'+ (name || this.cmds.length)
-			this.cmds.push(
-				'createTarget', 
-				targetguid, 
-				flags, 
-				width,
-				height
-			)
-			return {targetguid:targetguid, width:width, height:height, flags:flags}
-		},
-		pushTarget: function(target, passname, outputname){
-
-			if(!this.cmdstack) this.cmdstack = []
-			this.cmdstack.push(this.cmds, this.target)
-			this.cmds = []
-			this.target = target
-
-			var pass = {
-				passname:passname,
-				target:target, 
-				outputname:outputname, 
-				cmds:this.cmds, 
-				view:this.view
-			}
-			var draw_passes = this.view.screen.draw_passes
-			var id = draw_passes.indexOf(target.targetguid)
-			if(id !== -1) draw_passes.splice(id, 2)
-			draw_passes.push(target.targetguid, pass)
-
-			// also add it to pick passes
-			if(target.flags & this.PICK){
-				var pick_passes = this.view.screen.pick_passes
-				var id = pick_passes.indexOf(target.targetguid)
-				if(id === -1){
-					pick_passes.push(target.targetguid, pass)
-				}
-			}
-		},
-		popTarget: function(){
-			if(!this.cmdstack.length) throw new Error('popTarget empty')
-			this.target = this.cmdstack.pop()
-			this.cmds = this.cmdstack.pop()
-		}
-	}
-	// copy over texture flags
-	for(var key in this.Shader.Texture){
-		var prop = this.Shader.Texture[key]
-		if(typeof prop === 'number') this.Canvas[key] = prop
-	}
-
-	this.doCompileCanvasVerbs = function(name, cls, verbs, defaults, struct){
-		if(!this.hasOwnProperty('Canvas')) this.Canvas = Object.create(this.Canvas)
-
-		var verbs = cls._canvasverbs
-		var defaults = cls._defaults
-		var struct = cls._canvas && cls._canvas.struct
-		var canvas = this.Canvas
-		var slots = struct && struct.slots
-		var def = struct && struct.def
-		var cap = name.charAt(0).toUpperCase() + name.slice(1)		
-
-		if(struct){
-			function defProp(obj, key, offset, type){
-				var index = 'index'+cap
-				var buffer = 'buffer'+cap
-				var name = key + cap
-				if(!(name in cls)){
-					Object.defineProperty(obj, name,{
-						get:function(){
-							var o = this[index] * slots
-							var buf = this.canvas[buffer]
-							if(type.slots>1){
-								var ret = type()
-								for(var i = 0; i < type.slots; i++){
-									ret[i] = buf.array[o + offset + i]
-								}
-								return ret
-							}
-							else{
-								return buf.array[o + offset]
-							}
-						},
-						set:function(value){
-							// animation!
-							if(value instanceof Animate){
-								// lets hook an animation on view
-								var first = this[name]
-								this.canvas.view.screen.startAnimationRoot(
-									this.canvas.view.pickview + '_' + this.pickdraw+'_'+key,
-									{type:type},
-									first, 
-									this, 
-									name, 
-									undefined,
-									value.track
-								)
-								return
-							}
-							var o = this[index] * slots
-							var buf = this.canvas[buffer]
-							if(type.slots>1){
-								for(var i = 0; i < type.slots; i++){
-									buf.array[o + offset + i] = value[i]
-								}
-							}
-							else{
-								buf.array[o + offset] = value
-							}
-							buf.clean = false
-							this.canvas.view.redraw()
-						}
-					})
-					//console.log('defining'+name, cls)
-				}
-			}
-			// lets define our getters
-			for(var key in def){
-				var info = struct.keyInfo(key)
-				console.log()
-				defProp(this, key, info.offset/4, info.type)
-			}
-		}
-
-		canvas['array' + cap] = struct
-		canvas['class' + cap] = cls
-
-		for(var verb in verbs){
-			var fn = verbs[verb]
-			var args = define.getFunctionArgs(fn)
-			var fnstr = fn.toString()	
-			if(!struct){
-				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
-					var write = 
-					ind+'var draw_canvas = this.view.draw_canvas\n'+
-					ind+'var canvas = draw_canvas["'+cap+'"]\n'+
-					ind+'if(!canvas){\n'+
-					ind+'\tdraw_canvas["'+cap+'"] = canvas = Object.create(this.class'+cap+'.Canvas)\n'+
-					ind+'\tcanvas.initCanvas(this.view)\n'+
-					ind+'\tthis.addCanvas(canvas)\n'+
-					ind+'}\n'+
-
-					ind+'var pickdraw = canvas.pickdraw = ++this.view.pickdraw\n'+
-					ind+'var draw_objects = this.view.draw_objects\n'+
-					ind+'var obj = draw_objects[pickdraw] || (draw_objects[pickdraw] = Object.create(this.class'+cap+'))\n'+
-					ind+'obj.pickdraw = pickdraw\n'+
-					ind+'canvas.scope = obj\n'+
-					ind+'obj.canvas = canvas\n'
-
-					for(var i = 0; i < args.length; i++){
-						write += 'obj.'+args[i]+' = '+args[i] + '\n'
-					}
-					write += 'obj.draw()\n'
-					return write
-				})
-			}
-			else{
-
-				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
-					var write = ind+'var _buf = this.buffer'+cap+'\n'+
-						ind+'if(!_buf){\n'+
-						ind+'\tthis.buffer'+cap+' = _buf = this.alloc'+cap+'?this.array'+cap+'.array(this.alloc'+cap+'):this.array'+cap+'.array()\n' + 
-						ind+'\t_buf.frameid = this.frameid\n'+
-						ind+'\tthis.flush'+cap+'()\n'+
-						ind+'\tthis.buffer'+cap+' = _buf\n'+
-						ind+'}\n'+
-						ind+'if(!_buf.appendonly && _buf.frameid !== this.frameid){\n'+
-						ind+'\t_buf.length = 0, _buf.frameid = this.frameid\n'+
-						ind+'\tthis.flush'+cap+'()\n'+
-						ind+'\tthis.buffer'+cap+' = _buf\n'+
-						ind+'}\n'+
-						ind+'_buf.clean = false\n'+
-						ind+'var _len = _buf.length, _alloc = _buf.allocated\n'+
-						ind+'this.scope.index'+cap+' = _len\n'+
-						ind+'_buf.instancedivisor = this.instancedivisor'+cap+'|| 1\n'+
-						ind+'if(_buf.length >= _buf.allocated){\n'+
-							ind+'\tvar _ns = _buf.allocated * 2 || 1\n'+
-							ind+'\tfor(var _n = new _buf.arrayconstructor(_ns * '+slots+'), _o = _buf.array, _i = 0, _s = _buf.allocated * '+slots+'; _i < _s; _i++) _n[_i] = _o[_i]\n'+
-							ind+'\t_buf.array = _n, _buf.allocated = _ns\n'+
-						ind+'}\n'+
-						ind+'var _array = _buf.array, _off = _len*'+slots+', _obj\n'
-
-					// iterate over the keys
-					var off = 0
-					for(var key in def) if(typeof def[key] === 'function'){
-						// lets output to the array
-						// and copy it from the canvas
-						var dft = '(this.scope._'+key+' || 0)'
-						if(key in defaults) dft = defaults[key]
-
-						var itemslots = def[key].slots
-						if(itemslots>1){
-							if(args.indexOf(key) !== -1){
-								write += ind+'_obj = '+key+'!==undefined?'+key+':this.'+key+'?this.'+key+':'+dft+'\n'
-							}
-							else{
-								write += ind+'_obj = this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							}
-							write += ind+'if(_obj !== undefined){\n'
-							for(var i = 0; i < itemslots; i++, off++){
-								write += ind+'\t_array[_off + ' + off + '] = _obj['+i+']\n'
-							}
-							write += ind+'}\n'
-						}
-						else{
-							if(args.indexOf(key) !== -1){
-								write += ind+'_array[_off + ' + off + '] = '+key+'!==undefined?'+key+':this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							}
-							else{
-								write += ind+'_array[_off + ' + off + '] = this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							}
-							off++
-						}
-					}
-					write += ind+'_buf.length++\n'
-					return write
-				})
-			}
-			//console.log(fnstr)
-			fnstr = fnstr.replace(/NAME/g, cap)
-			canvas[verb+cap] = Function('return '+fnstr)()
-		}
-	}
 
 	// lets manage the drawcanvas
 	this.atInnerClassAssign = function(key, value){
@@ -865,7 +531,8 @@ define.class('$system/base/node', function(require){
 			cls = cls.prototype
 		}
 		if(cls._canvasverbs){
-			this.doCompileCanvasVerbs(key, cls)
+			if(!this.hasOwnProperty('Canvas')) this.Canvas = Object.create(this.Canvas)
+			Canvas.compileCanvasVerbs(this, this.Canvas, key, cls)
 		}
 	}
 
@@ -888,12 +555,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// draw dirty true
-	this.draw_dirty = true
-	// layout dirty causes a relayout to occur
-	this.layout_dirty = true
-	// update matrix stack
-	this.matrix_dirty = true
 
 	this.onbgimage = function(){
 		if(this.initialized){
@@ -916,7 +577,7 @@ define.class('$system/base/node', function(require){
 		}
 		this.redraw
 	}
-
+	/*
 	this.defaultKeyboardHandler = function(v, prefix){
 		if (!prefix) prefix = ""
 
@@ -938,7 +599,7 @@ define.class('$system/base/node', function(require){
 			//console.log(name)
 			if (this.keydownHandler) this.keydownHandler(name)
 		}
-	}
+	}*/
 
 	this.setBgImage = function(image){
 		// TODO figure it out
@@ -981,7 +642,6 @@ define.class('$system/base/node', function(require){
 			node = node.parent
 		}
 	}
-
 
 	function UnProject(glx, gly, glz, modelview, projection){
 		var inv = vec4()
@@ -1282,12 +942,12 @@ define.class('$system/base/node', function(require){
 		if(this.last_matrix_update === frameid || this.parent && this.parent.last_matrix_update !== this.last_parent_matrix_update){
 			if(this.parent) this.last_parent_matrix_update = this.parent.last_matrix_update
 			if(this._viewport){
-				if(this.parent){
-					mat4.mat4_mul_mat4(this.modelmatrix, this.parent.totalmatrix, this.viewportmatrix)
-				}
-				else{
-					this.viewportmatrix = this.modelmatrix
-				}
+				//if(this.parent){
+				//	mat4.mat4_mul_mat4(this.modelmatrix, this.parent.totalmatrix, this.viewportmatrix)
+				//}
+				//else{
+				//	this.viewportmatrix = this.modelmatrix
+				//}
 				mat4.identity(this.totalmatrix)
 			}
 			else{
@@ -1312,6 +972,7 @@ define.class('$system/base/node', function(require){
 		this.parent.redraw()
 	}
 
+	/*
 	this.childrenInRect = function(rect, exclude) {
 		var hits = []
 		for (var i = 0;i<this.children.length;i++) {
@@ -1338,7 +999,7 @@ define.class('$system/base/node', function(require){
 			&& r.y <= this._layout.top
 			&& r.w >= this._layout.width
 			&& r.z >= this._layout.height
-	}
+	}*/
 
 	function emitPostLayout(node){
 		var ref = node.ref
@@ -1416,7 +1077,7 @@ define.class('$system/base/node', function(require){
 		vroot.screen = this.screen
 		vroot.parent_viewport = this._viewport?this:this.parent_viewport
 		// render it
-		Render.process(vroot, undefined, undefined, true)
+		this.screen.composition.processRender(vroot, undefined, undefined, true)
 		// move the children over
 		this.children.push.apply(this.children, vroot.children)
 		for(var i = 0; i < vroot.children.length; i++){

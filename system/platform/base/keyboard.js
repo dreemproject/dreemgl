@@ -4,8 +4,13 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(node){
+
+define.class('$base/node', function(){
 	this.atConstructor = function(){}
-
-
+	this.attributes = {
+		up:Config({type:Event}),
+		down:Config({type:Event}),
+		press:Config({type:Event}),
+		paste:Config({type:Event})
+	}
 })

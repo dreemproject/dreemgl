@@ -5,10 +5,10 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 // Dreem/Dali server
-require = require('./system/base/define') // support define.js modules
+require = require('./system/define') // support define.js modules
 
 // load up math core and make it global
-require('$system/base/math')
+require('$system/math')
 
 if(process.argv.indexOf('-nomoni') != -1){
 	define.atRequire = function(filename){
@@ -20,7 +20,7 @@ var fs = require('fs')
 var path = require('path')
 
 // ok now we can require components
-var ansicolor = require('$system/debug/ansicolor')
+var ansicolor = require('$system/server/ansicolor')
 console.color = ansicolor(function(v){
 	process.stdout.write(v)
 })
@@ -34,7 +34,7 @@ console.setposition = function(x, y){
 }
 
 // make a nice console.dump function
-var dump = require('$system/debug/dump')
+var dump = require('$system/server/dump')
 console.dump = function(){
 	// lets grab where we are called
 	console.log(new Error().stack)
@@ -86,19 +86,15 @@ function main(){
 	define.paths = {
 		'system':'$root/system',
 		'resources':'$root/resources',
+		'base':'$root/classes/base',
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
-		'ui':'$root/classes/ui',
-		'canvas':'$root/classes/canvas',
+		'views':'$root/classes/views',
+		'stamps':'$root/classes/stamps',
 		'shaders':'$root/classes/shaders',
-		'flow':'$root/classes/flow',
-		'testing':'$root/classes/testing',
-		'widgets':'$root/classes/widgets',
 		'examples':'$root/examples',
-		'apps':'$root/apps',
-		'docs':'$root/docs',
-		'test':'$root/test'
+		'tests':'$root/tests'
 	}
 
 	if(args['-writefile']){

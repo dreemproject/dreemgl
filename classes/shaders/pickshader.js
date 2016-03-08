@@ -1,17 +1,23 @@
-define.class('$system/platform/$platform/shader$platform', function(){
+define.class('$system/platform/$platform/shader$platform', function(require){
 	// baseclass shader with a pick entry point for UI picking
 
+	this.noise = require('./shaderlib/noiselib')
+	this.pal = require('./shaderlib/palettelib')
+	this.shape = require('./shaderlib/shapelib')
+	this.math = require('./shaderlib/mathlib')
+	this.demo = require('./shaderlib/demolib')
+	this.material = require('./shaderlib/materiallib')
+	this.colorlib = require('./shaderlib/colorlib')
+
 	this.view = {totalmatrix:mat4(), pickview:0.}
-	this.state = {viewmatrix:mat4(), displace:vec4(0,0,0,0)}
+	this.state = {viewmatrix:mat4()}
 	this.mesh = vec2.array()
 	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-
-	this.vertex_displace = vec4(0)
 
 	this.position = function(){
 		var pos = vec3(mesh.x * 100, mesh.y * 100, 0)
 		var res = vec4(pos, 1) * view.totalmatrix * state.viewmatrix
-		return res + vertex_displace
+		return res
 	}
 
 	this.color = function(){

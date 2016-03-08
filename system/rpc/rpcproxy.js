@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 // Rpc single proxy
 
-define.class('$system/base/node', function(require, exports){
+define.class('$base/node', function(require, exports){
 	var RpcProxy = exports
 	
 	// disconnect all listeners to this rpc object

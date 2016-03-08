@@ -13,7 +13,6 @@ define.class(function(require, exports){
 	// require embedded classes
 	this.Shader = require('./shaderwebgl')
 	this.Texture = require('./texturewebgl')
-	this.DrawPass = require('./drawpasswebgl')
 
 	this.preserveDrawingBuffer = false
 	this.premultipliedAlpha = false

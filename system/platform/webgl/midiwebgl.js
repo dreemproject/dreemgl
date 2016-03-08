@@ -4,7 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$system/base/midi', function (require, exports){
+define.class('$system/platform/base/midi', function (require, exports){
 
 	exports.midiAttributes = {
 		message:Config({type:Event}),
@@ -17,7 +17,7 @@ define.class('$system/base/midi', function (require, exports){
 		pitchbend:Config({type:Event})
 	}
 	
-	this.Input = define.class(function midiInput($system$base$node){
+	this.Input = define.class('$base/node', function midiInput(){
 		
 		this.atMidiData = function(data){
 			var ch = data[0] & 16
@@ -34,7 +34,7 @@ define.class('$system/base/midi', function (require, exports){
 		this.attributes = exports.midiAttributes
 	})
 
-	this.Output = define.class(function midiOutput($system$base$node){
+	this.Output = define.class('$base/node', function midiOutput(){
 		this.atConstructor = function(send){
 			this.send = send
 		}

@@ -14,15 +14,6 @@ define.class(function(require, exports){
 	var astdef = require('$system/parse/onejsdef')
 
 	//this.default_texture = GLTexture.fromArray(new Float32Array(4*4*4), 4,4)
-
-	this.noise = require('$system/shaderlib/noiselib')
-	this.pal = require('$system/shaderlib/palettelib')
-	this.shape = require('$system/shaderlib/shapelib')
-	this.math = require('$system/shaderlib/mathlib')
-	this.demo = require('$system/shaderlib/demolib')
-	this.material = require('$system/shaderlib/materiallib')
-	this.colorlib = require('$system/shaderlib/colorlib')
-
 	this.RAD = '1'
 	this.DEG = '0.017453292519943295'
 	this.PI = '3.141592653589793'

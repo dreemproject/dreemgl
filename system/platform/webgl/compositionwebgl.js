@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 // this class
 
-define.class('$system/base/compositionclient', function(require, baseclass){
+define.class('$system/platform/base/compositionclient', function(require, baseclass){
 
 	var Device = require('$system/platform/$platform/device$platform')
 	var WebRTC = require('$system/rpc/webrtc')

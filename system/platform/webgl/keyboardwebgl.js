@@ -4,7 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$system/base/keyboard', function (require, exports){
+define.class('$system/platform/base/keyboard', function (require, exports){
 
 	this.toKey = { // slap a usable name on keys
 		8:'backspace',9:'tab',13:'enter',16:'shift',17:'ctrl',18:'alt',

@@ -5,9 +5,9 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$system/base/shader', function(require, exports){
+define.class('$system/platform/base/shader', function(require, exports){
 
-	var gltypes = require('$system/base/gltypes')
+	var gltypes = require('$system/platform/base/gltypes')
 
 	exports.Texture =
 	this.Texture =  require('./texturewebgl')

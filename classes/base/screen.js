@@ -4,12 +4,10 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, menubutton) {
+define.class('$base/view', function(require, exports, $base$, view) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
 
-	var Render = require('$system/base/render')
-	var Animate = require('$system/base/animate')
-	var ASTScanner = require('$system/parse/astscanner')
+	var Animate = require('$base/animate')
 
 	this.attributes = {
 		// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
@@ -594,7 +592,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			vroot.rpc = this.rpc
 			vroot.parent_viewport = this
 			// render it
-			Render.process(vroot, undefined, undefined, true)
+			exports.processRender(vroot, undefined, undefined, true)
 
 			var mychild = vroot.children[0]
 			//console.log(mychild)
@@ -620,7 +618,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		vroot.rpc = this.rpc
 		vroot.parent_viewport = this
 		// render it
-		Render.process(vroot, undefined, undefined, true)
+		exports.processRender(vroot, undefined, undefined, true)
 
 		var mychild = vroot.children[0]
 		//console.log(mychild)
@@ -661,12 +659,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		}
 	}
 
-	// internal, called when something renders
-	this.atRender = function(){
-		// lets add a debugview
-		//this.children.push(debugview({}))
-	}
-
 	// internal, called by the renderer to animate all items in our viewtree
 	this.doAnimation = function(time, redrawlist){
 		for(var key in this.anims){
@@ -704,5 +696,4 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			}
 		}
 	}
-
 })

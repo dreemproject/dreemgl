@@ -4,9 +4,10 @@ define.class('$shaders/pickshader', function(){
 	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 
 	this.position = function(){
+		if(canvas.visible < 0.5) return vec4(0.)
 		var pos = vec3(canvas.x + mesh.x * canvas.w, canvas.y + mesh.y * canvas.h, canvas.z)
 		var res = vec4(pos, 1) * canvas.matrix * view.totalmatrix * state.viewmatrix
-		return res + vertex_displace
+		return res
 	}
 
 	this.color = function(){
@@ -23,6 +24,7 @@ define.class('$shaders/pickshader', function(){
 	}
 
 	this.canvas = {
+		visible:float,
 		matrix:mat4,
 		color:vec4,
 		x:float,
@@ -34,6 +36,8 @@ define.class('$shaders/pickshader', function(){
 
 	this.canvasverbs = {
 		draw:function(x, y, w, h){
+			if(w === undefined && x !== undefined) w = x, x = undefined
+			if(h ===undefined && y !== undefined) h = y, y = undefined
 			// this processes the args and builds up a buffer
 			this.drawINLINE()
 		}

@@ -9,8 +9,7 @@ define.class('./compositionbase', function(require, baseclass){
 
 	var RpcProxy = require('$system/rpc/rpcproxy')
 	var RpcHub = require('$system/rpc/rpchub')
-	var screen = require('$ui/screen')
-	var Render = require('./render')
+	var screen = require('$base/screen')
 	var ASTScanner = require('$system/parse/astscanner')
 	var OneJSParser = require('$system/parse/onejsparser')
 
@@ -76,7 +75,7 @@ define.class('./compositionbase', function(require, baseclass){
 		}
 		//this.screen.teem = this
 
-		Render.process(this.screen, previous && previous.screen)
+		this.processRender(this.screen, previous && previous.screen)
 
 		if(typeof document !== 'undefined' && this.screen.title !== undefined) document.title = this.screen.title
 
