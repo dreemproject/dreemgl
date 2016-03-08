@@ -211,7 +211,26 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			return [
 				button({text:"Press me!"}),
 				button({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  }),
-				button({text:"With an icon!", icon:"flask" })
+				button({text:"With an icon!", icon:"flask" }),
+				button({
+					text:"Button With Image",
+					textcolor:"white",
+					textactivecolor:"black",
+					bgimage:"$resources/textures/redcloud.png",
+					bgimagemode:"stretch",
+					selected:false,
+					click:function() { this.selected = !this.selected; },
+					statenormal:function() {
+						if (this.selected) {
+							this.bgimage = "$resources/textures/bluecloud.png";
+							this.setTextColor(this.textactivecolor)
+						} else {
+							this.bgimage = "$resources/textures/redcloud.png";
+							this.setTextColor(this.textcolor)
+						}
+					},
+					onselected:function() { this.statenormal() }
+				})
 			]
 		}
 	}
