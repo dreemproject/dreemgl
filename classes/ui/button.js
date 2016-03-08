@@ -65,6 +65,8 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		borderwidth: 2,
 		margin: 0,
 		bordercolor: vec4("#636363"),
+		pickalpha:-1,
+		iconmargin:4,
 
 		alignitems: "center",
 		justifycontent: "center"
@@ -164,6 +166,25 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		}
 	}
 
+	this.buildIconRes = function() {
+		return icon({
+			drawtarget:"color",
+			fgcolor:this.textcolor,
+			fontsize: this.fontsize,
+			icon: this.icon
+		})
+	};
+
+	this.buildButtonRes = function(iconres) {
+		return label({
+			drawtarget:"color",
+			marginleft: iconres ? this.iconmargin : 0,
+			fontsize: this.fontsize,
+			fgcolor:this.textcolor,
+			text: this.text
+		})
+	};
+
 	this.render = function(){
 		if (this.constructor_children.length > 0) return this.constructor_children;
 		var res = []
@@ -171,24 +192,12 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.iconres = undefined
 
 		if (this.icon && this.icon.length > 0){
-			this.iconres = icon({
-				drawtarget:"color",
-				fgcolor:this.textcolor,
-				fontsize: this.fontsize,
-				icon: this.icon
-			})
+			this.iconres = this.buildIconRes();
 			res.push(this.iconres)
 		}
 
 		if (this.text && this.text.length > 0){
-			this.buttonres = label({
-				drawtarget:"color",
-				marginleft:this.iconres?4:0,
-				//bgcolor:this.bgcolor,
-				fontsize: this.fontsize,
-				fgcolor:this.textcolor,
-				text: this.text
-			})
+			this.buttonres = this.buildButtonRes(this.iconres);
 			res.push(this.buttonres)
 		}
 
