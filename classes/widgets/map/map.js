@@ -4,7 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo, urlfetch)
+define.class("$ui/view", function(require, $ui$, view, label, button, labelset, $$, geo, urlfetch)
 {
 
 	var BufferGen = require("$widgets/map/mapbuffers")();
@@ -990,6 +990,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 		var zoom = 0.25
+		//
+		//console.log(-this.camdist*zoom*0.13,this.camdist*zoom*0.3)
 		res.push(
 			view({
 				bgcolor:"red",
@@ -999,7 +1001,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				nearplane: 100 ,
 				fov: fov,
 				farplane: this.camdist * 2,
-				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3), fov: fov,
+				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3), 
+				fov: fov,
 				up: vec3(0,1,0),
 				lookat: vec3(0,0,0)
 			},[
@@ -1013,6 +1016,25 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			])
 		);
 		//res.push(this.constructor_children);
+		var camdist = this.camdist
+		res.push(button({
+			position:'absolute',
+			top:20,
+			label:'2D/3D',
+			mode:1,
+			click:function(){
+				var map = this.find('mapinside')
+				if(this.mode == 1){
+					this.mode = 2
+					map.camera = Animate({1:vec3(0,-4650,150)})
+				}
+				else {
+					this.mode = 1	
+					map.camera = Animate({1:vec3(0,-camdist*zoom*0.13,camdist*zoom*0.3)})
+				}
+
+			}
+		}))
 		res.push(label({
 			bottom:10,
 			fontsize:8,
