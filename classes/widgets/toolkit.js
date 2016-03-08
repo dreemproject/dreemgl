@@ -10,6 +10,7 @@ define.class("$ui/view", function(require,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
+// <br/><a href="/examples/usingtoolkit">examples &raquo;</a>
 
 	this.name = "toolkit";
 	this.clearcolor = "#565656";

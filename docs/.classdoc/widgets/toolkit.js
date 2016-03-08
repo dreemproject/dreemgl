@@ -2,6 +2,7 @@
  * @class toolkit
  * @extends view
  * The DreemGL Visual Toolkit allows for visual manipulation of a running composition
+ * <br/><a href="/examples/usingtoolkit">examples &raquo;</a>
  */
 /**
  * @attribute {Object} [inspect="undefined"]

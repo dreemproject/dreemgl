@@ -7,7 +7,7 @@
 
 define.class("$ui/view", function($ui$, view, icon) {
 // Slider with customizable handle.  To customize the handle put views as the slider's constructor children.
-// [example](http://localhost:2000/examples/slider)
+// <br/><a href="/examples/sliders">examples &raquo;</a>
 
 	this.attributes = {
 

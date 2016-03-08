@@ -2,6 +2,7 @@
  * @class tabbar
  * @extends view
  * Presents a bar of configurable tabs.  [example](http://localhost:2000/examples/tabbar).
+ * <br/><a href="/examples/tabs">examples &raquo;</a>
  * 
  * <iframe style="border:0;width:900px;height:600px" src="/apps/docs/example#path=$root/ui/tabbar.js"></iframe>
  * <a target="blank" href="/apps/docs/example#path=$root/ui/tabbar.js">open example in new tab &raquo;</a>

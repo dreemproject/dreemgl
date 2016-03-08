@@ -6,6 +6,7 @@
 
 define.class("$ui/label", function(require){
 // Text input field
+// <br/><a href="/examples/text">examples &raquo;</a>
 
 	this.mixin(require('$system/textbox/textboximpl'))
 

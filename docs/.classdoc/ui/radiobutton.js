@@ -2,6 +2,7 @@
  * @class radiobutton
  * @extends button
  * Similar to a button, but carries a `group` and a selection state, and only one `radiobutton` per group can be seelcted at any one time.
+ * <br/><a href="/examples/buttons">examples &raquo;</a>
  * 
  * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/radiobutton.js"></iframe>
  * <a target="blank" href="/apps/docs/example#path=$root/ui/radiobutton.js">open example in new tab &raquo;</a>

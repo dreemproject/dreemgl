@@ -10,6 +10,8 @@ define.class("$ui/view", function(require, $ui$, view){
 // bottom in vertical mode.  Subviews can contain components which will become activated as the lower tray is revealed.
 // Up to three subviews can be added to the drawer's constructor, providing the top drawer view, the right tray view
 // and the left tray view, in that order.
+// <br/><a href="/examples/drawers">examples &raquo;</a>
+
 
 	this.tooldragroot = true;
 	this.overflow = "hidden";

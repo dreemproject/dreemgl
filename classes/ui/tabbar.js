@@ -7,6 +7,7 @@
 
 define.class("$ui/view", function($ui$, button){
 // Presents a bar of configurable tabs.  [example](http://localhost:2000/examples/tabbar).
+// <br/><a href="/examples/tabs">examples &raquo;</a>
 
 	this.attributes = {
 

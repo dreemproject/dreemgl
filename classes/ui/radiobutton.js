@@ -7,6 +7,7 @@
 
 define.class('$ui/button', function(exports, $ui$, icon, label) {
 // Similar to a button, but carries a `group` and a selection state, and only one `radiobutton` per group can be seelcted at any one time.
+// <br/><a href="/examples/buttons">examples &raquo;</a>
 
 	exports.groups = {};
 	exports.clearSelection = function(group) {

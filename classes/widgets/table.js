@@ -8,6 +8,7 @@ define.class('$ui/view', function(require, $ui$, view, icon) {
 // A table is a container view that lays out it's children in either rows or columns.
 // Individual rows and columns can be configured via styles and are given names and style classes conforming to
 // either `row#` or `column#` style where `#` is the index of the particular row or column.
+// <br/><a href="/examples/tables">examples &raquo;</a>
 
 	this.attributes = {
 		// The number of rows in the table (not compatible with `columns`)

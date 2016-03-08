@@ -6,7 +6,8 @@
 
 
 define.class('$ui/view', function(icon, label){
-	// Simple toggle button: a rectangle with a textlabel and an icon
+// Simple checkbox/tobble button: a rectangle with a textlabel and an icon
+// <br/><a href="/examples/checkboxes">examples &raquo;</a>
 
 	this.attributes = {
 		// The label for the button

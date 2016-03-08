@@ -7,6 +7,7 @@
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
 // Simple gradient button: a rectangle with a textlabel and an icon
+// <br/><a href="/examples/buttons">examples &raquo;</a>
 
 	this.attributes = {
 		// The label for the button

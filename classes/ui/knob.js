@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require,$ui$, view){
-	// Simple knob: a dial with a value
+	// internal, Simple knob: a dial with a value
 
 	this.attributes = {
 		value: Config({type: float, value: 0}),

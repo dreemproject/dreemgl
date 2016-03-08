@@ -6,8 +6,8 @@
 
 define.class(function(require, $ui$, view){
 // A simple UI label for displaying text
+// <br/><a href="/examples/text">examples &raquo;</a>
 
-//	require("$fonts/arial_bold.glf")
 
 	var TypeFace = require('$system/typeface/typefaceshader')
 
