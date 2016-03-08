@@ -178,6 +178,7 @@ define.class('$system/base/node', function(){
 	}
 
 	// Internal: emits `start` event.
+	// TODO(aki): down with button 2 seems to trigger end and tap. Investigate.
 	this.setstart = function(pointerlist) {
 
 		// scan for handoff hooks on in flight pointers
@@ -304,9 +305,11 @@ define.class('$system/base/node', function(){
 					this._over.setPointer(pointer)
 				}
 				if (previous) {
+					if (previous) console.log(previous.view)
 					this._out.setPointer(previous)
 				}
 			}
+			// TODO(aki): fix hover, over, out and drag API
 			this.emitPointerList(this._hover, 'hover')
 			this.emitPointerList(this._over, 'over')
 			this.emitPointerList(this._out, 'out')
