@@ -13,6 +13,9 @@ define.class(function($ui$, view, label, bargraphic){
 		// The URL to an audio file to play
 		url: Config({type:string, value:''})
 
+		// When true (default), start the audio track automatically.
+		,autoplay: Config({type:bool, value:true})
+
 		// Audio volume (0-1)
 		,volume: Config({type:float, value:0.5})
 
@@ -21,10 +24,16 @@ define.class(function($ui$, view, label, bargraphic){
 
 		// Amount of smoothing to apply to the fft analysis (0-1)
 		,fftsmoothing: Config({type:float, value:0.8})
+
+		// Event generated when screen updates
+		,update: Config({type:Event}),
 	}
 
 	// True if the audio is playing
 	this.playing = false;
+
+	// True if the audio is paused
+	this.paused = false;
 
 	// Length of audio (seconds)
 	this.duration = -1;
@@ -37,6 +46,7 @@ define.class(function($ui$, view, label, bargraphic){
 	this.fftData = function() {
 		//console.log('***** fftData is updated');
 	}
+
 
 	// Play the audio
 	this.play = function() {
@@ -62,6 +72,20 @@ define.class(function($ui$, view, label, bargraphic){
 			
 
 			//console.log('play', this.audioElement);
+		}
+	}
+
+	// Pause or restart the audio
+	this.pause = function() {
+		if (this.playing) {
+			if (this.paused) {
+				this.paused = false;
+				this.audioElement.play();
+			}
+			else {
+				this.paused = true;
+				this.audioElement.pause();
+			}
 		}
 	}
 
@@ -103,6 +127,8 @@ define.class(function($ui$, view, label, bargraphic){
 			viz.data = data;
 			//console.log('data set', viz);
 		}
+
+		this.emit('update')
 	}
 
 
@@ -117,7 +143,7 @@ define.class(function($ui$, view, label, bargraphic){
       this.audioElement = document.createElement('audio')
       this.audioElement.setAttribute('volume', this.volume);
       this.audioElement.ondurationchange = function(data) {
-        console.log('ondurationchange', this.audioElement.duration)
+        //console.log('ondurationchange', this.audioElement.duration)
 				this.duration = this.audioElement.duration;
       }.bind(this);
       this.audioElement.onprogress = function(evt) {
@@ -131,7 +157,7 @@ define.class(function($ui$, view, label, bargraphic){
 
       this.audioElement.onended = function(evt) {
 				this.stop();
-				console.log('onended', evt);
+				//console.log('onended', evt);
 			}.bind(this);
 			
 			// Create fft
@@ -166,8 +192,9 @@ define.class(function($ui$, view, label, bargraphic){
 	}
 
 	this.oninit = function(){
-		console.log('oninit');
-		this.play();
+		//console.log('oninit');
+		if (this.autoplay)
+			this.play();
 	}
 
 
