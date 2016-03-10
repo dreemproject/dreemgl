@@ -353,8 +353,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                         <span class="keyword">var</span> zoom = view.zoom
                         <span class="keyword">var</span> scroll = view.scroll
-                        <span class="keyword">var</span> w = view.parent.layout.width
-                        <span class="keyword">var</span> h = view.parent.layout.height
+                        <span class="keyword">var</span> w = view.parent._layout.width
+                        <span class="keyword">var</span> h = view.parent._layout.height
 
                         <span class="keyword">var</span> mw = w / <span class="float">11.774193548387096</span> * <span class="integer">365</span> / zoom
                         <span class="keyword">var</span> dw = w / zoom
@@ -405,7 +405,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 date.setMonth(firstMonth)
                                 xoffset = (date.getTime() - first) / ts / zoom * w
                                 x = <span class="integer">0</span>, i = -<span class="integer">1</span>
-                                <span class="keyword">while</span> (x &lt; w) {
+                                <span class="keyword">while</span> (x &lt; w &amp;&amp; i &lt; <span class="integer">100</span>) {
                                         date = <span class="keyword">new</span> Date(first)
                                         date.setMonth(firstMonth + i)
                                         text = MONTHS[date.getMonth() % <span class="integer">12</span>]
@@ -424,7 +424,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 date.setDate(firstDate)
                                 xoffset = (date.getTime() - first) / ts / zoom * w
                                 x = <span class="integer">0</span>, i = -<span class="integer">1</span>
-                                <span class="keyword">while</span> (x &lt; w) {
+                                <span class="keyword">while</span> (x &lt; w &amp;&amp; i &lt; <span class="integer">100</span>) {
                                         date = <span class="keyword">new</span> Date(first)
                                         date.setDate(firstDate + i)
                                         text = DAYS[(date.getDate() - <span class="integer">1</span>) % <span class="integer">31</span>]
@@ -447,7 +447,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 xoffset = (date.getTime() - first) / ts / zoom * w
                                 <span class="keyword">var</span> c = <span class="integer">24</span> / view.parent.hoursegs
                                 x = <span class="integer">0</span>, i = -<span class="integer">1</span>
-                                <span class="keyword">while</span> (x &lt; w) {
+                                <span class="keyword">while</span> (x &lt; w &amp;&amp; i &lt; <span class="integer">100</span>) {
                                         <span class="keyword">var</span> h = (firstHour + i) % <span class="integer">24</span>
                                         date = <span class="keyword">new</span> Date(first)
                                         date.setHours(firstHour + i)

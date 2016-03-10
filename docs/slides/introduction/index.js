@@ -214,7 +214,7 @@ define.class('$server/composition', function(require,
 				}
 				,view({flex:1, bgcolor:'black'}
 					,button({
-						label:'Left',
+						text:'Left',
 						flex:1,
 						size: vec2(200, 200),
 						//is: draggable(),
@@ -223,7 +223,7 @@ define.class('$server/composition', function(require,
 						}
 					})
 					,button({
-						label:'Right',
+						text:'Right',
 						flex:1,
 						size: vec2(200, 200),
 						//is: draggable(),

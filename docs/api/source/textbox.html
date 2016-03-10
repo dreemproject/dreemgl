@@ -286,6 +286,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n132" name="n132">132</a>
 <a href="#n133" name="n133">133</a>
 <a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -295,6 +308,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/label</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require){
 <span class="comment">// Text input field</span>
+<span class="comment">// &lt;br/&gt;&lt;a href=&quot;/examples/text&quot;&gt;examples &amp;raquo;&lt;/a&gt;</span>
 
         <span class="local-variable">this</span>.mixin(require(<span class="string"><span class="delimiter">'</span><span class="content">$system/textbox/textboximpl</span><span class="delimiter">'</span></span>))
 
@@ -310,6 +324,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">multiline</span>:<span class="predefined-constant">true</span>
         }
 
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
+        <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerunfocus
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursors</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">$system/typeface/cursorshader.js</span><span class="delimiter">'</span></span>), <span class="keyword">function</span>(){
@@ -416,7 +432,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Basic usage of the treeview control.</span>
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [textbox({<span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Text can be input here</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#333</span><span class="delimiter">'</span></span>, <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>, <span class="key">padding</span>:<span class="integer">5</span>})]
+                        <span class="keyword">return</span> [
+                                textbox({<span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Text can be input here</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#333</span><span class="delimiter">'</span></span>, <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>, <span class="key">padding</span>:<span class="integer">5</span>}),
+                                textbox({
+                                        <span class="key">borderwidth</span>:<span class="integer">1</span>,
+                                        <span class="key">paddingleft</span>:<span class="integer">10</span>,
+                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgimage</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/purplecloud.png</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgimagemode</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Text field w/bgimage</span><span class="delimiter">&quot;</span></span>
+                                })
+                        ]
                 }
         }
 

@@ -1348,6 +1348,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1194" name="n1194">1194</a>
 <a href="#n1195" name="n1195">1195</a>
 <a href="#n1196" name="n1196">1196</a>
+<a href="#n1197" name="n1197">1197</a>
+<a href="#n1198" name="n1198">1198</a>
+<a href="#n1199" name="n1199">1199</a>
+<strong><a href="#n1200" name="n1200">1200</a></strong>
+<a href="#n1201" name="n1201">1201</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2537,12 +2542,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">//        alpha = pow(alpha, 1. / mesh.gamma_adjust.r)</span>
                 <span class="comment">//}</span>
 
-                <span class="keyword">return</span> vec4(mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
+                <span class="keyword">var</span> rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha);
+
+                <span class="keyword">return</span> vec4(<span class="local-variable">this</span>.textpixel(rgb, pos, dist), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
         }
 
         <span class="local-variable">this</span>.glyphy_mesh = <span class="local-variable">this</span>.glyphy_mesh_sdf
         <span class="local-variable">this</span>.glyphy_pixel = <span class="local-variable">this</span>.glyphy_sdf_draw
 
+        <span class="local-variable">this</span>.<span class="function">textpixel</span> = <span class="keyword">function</span>(col, pos, dist) {
+                <span class="keyword">return</span> col;
+        }
 
 })
 </pre></td>

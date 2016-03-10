@@ -362,6 +362,34 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n208" name="n208">208</a>
 <a href="#n209" name="n209">209</a>
 <strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
+<a href="#n235" name="n235">235</a>
+<a href="#n236" name="n236">236</a>
+<a href="#n237" name="n237">237</a>
+<a href="#n238" name="n238">238</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -372,11 +400,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, icon){
 <span class="comment">// Simple gradient button: a rectangle with a textlabel and an icon</span>
+<span class="comment">// &lt;br/&gt;&lt;a href=&quot;/examples/buttons&quot;&gt;examples &amp;raquo;&lt;/a&gt;</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// The label for the button</span>
                 <span class="key">text</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">label</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
 
                 <span class="comment">// The icon for the button, see FontAwesome for the available icon-names.</span>
                 <span class="key">icon</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">icon</span><span class="delimiter">&quot;</span></span>}),
@@ -431,9 +459,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">borderwidth</span>: <span class="integer">2</span>,
                 <span class="key">margin</span>: <span class="integer">0</span>,
                 <span class="key">bordercolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#636363</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
+                <span class="key">iconmargin</span>:<span class="integer">4</span>,
 
-                <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>,
-                <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>
+                <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>
         }
 
         <span class="local-variable">this</span>.style = {
@@ -455,10 +485,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">onlabel</span> = <span class="keyword">function</span>(ev,v,o) {
-                <span class="local-variable">this</span>.text = v;
-        };
-
         <span class="comment">//this.buttonres = {};</span>
         <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_bold_ascii.glf</span><span class="delimiter">'</span></span>)
 
@@ -478,30 +504,32 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> mix(col1, col2, pos.y)
         }
 
+        <span class="local-variable">this</span>.<span class="function">setTextColor</span> = <span class="keyword">function</span>(color) {
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.iconres) <span class="local-variable">this</span>.iconres.fgcolor = color;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.buttonres) <span class="local-variable">this</span>.buttonres.fgcolor = color;
+        }
+
         <span class="comment">// the hover state when someone hovers over the button</span>
         <span class="local-variable">this</span>.<span class="function">statehover</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.col1 = <span class="local-variable">this</span>.hovercolor1
-                <span class="local-variable">this</span>.col2 = <span class="local-variable">this</span>.hovercolor2
-                <span class="local-variable">this</span>.shadowopacity = <span class="float">1.0</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.iconres)<span class="local-variable">this</span>.iconres.fgcolor = <span class="local-variable">this</span>.textactivecolor
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.buttonres) <span class="local-variable">this</span>.buttonres.fgcolor = <span class="local-variable">this</span>.textactivecolor;
+                <span class="local-variable">this</span>.col1 = <span class="local-variable">this</span>.hovercolor1;
+                <span class="local-variable">this</span>.col2 = <span class="local-variable">this</span>.hovercolor2;
+                <span class="local-variable">this</span>.shadowopacity = <span class="float">1.0</span>;
+                <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textactivecolor)
         }
 
         <span class="comment">// the normal button state</span>
-        <span class="local-variable">this</span>.<span class="function">statenormal</span> = <span class="keyword">function</span>(first){
-                <span class="local-variable">this</span>.col1 = Mark(<span class="local-variable">this</span>.buttoncolor1, first)
-                <span class="local-variable">this</span>.col2 = Mark(<span class="local-variable">this</span>.buttoncolor2, first)
+        <span class="local-variable">this</span>.<span class="function">statenormal</span> = <span class="keyword">function</span>(first) {
+                <span class="local-variable">this</span>.col1 = Mark(<span class="local-variable">this</span>.buttoncolor1, first);
+                <span class="local-variable">this</span>.col2 = Mark(<span class="local-variable">this</span>.buttoncolor2, first);
                 <span class="local-variable">this</span>.shadowopacity = <span class="float">0.0</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.iconres)<span class="local-variable">this</span>.iconres.fgcolor = <span class="local-variable">this</span>.textcolor
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.buttonres) <span class="local-variable">this</span>.buttonres.fgcolor = <span class="local-variable">this</span>.textcolor;
+                <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textcolor)
         }
 
         <span class="comment">// clicked state</span>
         <span class="local-variable">this</span>.<span class="function">stateclick</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.col1 = <span class="local-variable">this</span>.pressedcolor1
-                <span class="local-variable">this</span>.col2 = <span class="local-variable">this</span>.pressedcolor2
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.iconres)<span class="local-variable">this</span>.iconres.fgcolor = <span class="local-variable">this</span>.textactivecolor
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.buttonres) <span class="local-variable">this</span>.buttonres.fgcolor = <span class="local-variable">this</span>.textactivecolor;
+                <span class="local-variable">this</span>.col1 = <span class="local-variable">this</span>.pressedcolor1;
+                <span class="local-variable">this</span>.col2 = <span class="local-variable">this</span>.pressedcolor2;
+                <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textactivecolor)
         }
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
@@ -512,14 +540,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._isover = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.statehover()
         }
+
         <span class="local-variable">this</span>.<span class="function">pointerout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>._isover = <span class="predefined-constant">false</span>
                 <span class="local-variable">this</span>.statenormal()
         }
-        <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(){
 
+        <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.stateclick()
         }
+
         <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">if</span> (event.isover){
                         <span class="local-variable">this</span>.statehover();
@@ -529,7 +559,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.statenormal()
                 }
         }
-        
+
+        <span class="local-variable">this</span>.<span class="function">buildIconRes</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> icon({
+                        <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,
+                        <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
+                        <span class="key">icon</span>: <span class="local-variable">this</span>.icon
+                })
+        };
+
+        <span class="local-variable">this</span>.<span class="function">buildButtonRes</span> = <span class="keyword">function</span>(iconres) {
+                <span class="keyword">return</span> label({
+                        <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">marginleft</span>: iconres ? <span class="local-variable">this</span>.iconmargin : <span class="integer">0</span>,
+                        <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
+                        <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,
+                        <span class="key">text</span>: <span class="local-variable">this</span>.text
+                })
+        };
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children.length &gt; <span class="integer">0</span>) <span class="keyword">return</span> <span class="local-variable">this</span>.constructor_children;
                 <span class="keyword">var</span> res = []
@@ -537,24 +586,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.iconres = <span class="predefined-constant">undefined</span>
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.icon &amp;&amp; <span class="local-variable">this</span>.icon.length &gt; <span class="integer">0</span>){
-                        <span class="local-variable">this</span>.iconres = icon({
-                                <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,
-                                <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
-                                <span class="key">icon</span>: <span class="local-variable">this</span>.icon
-                        })
+                        <span class="local-variable">this</span>.iconres = <span class="local-variable">this</span>.buildIconRes();
                         res.push(<span class="local-variable">this</span>.iconres)
                 }
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.text &amp;&amp; <span class="local-variable">this</span>.text.length &gt; <span class="integer">0</span>){
-                        <span class="local-variable">this</span>.buttonres = label({
-                                <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">marginleft</span>:<span class="local-variable">this</span>.iconres?<span class="integer">4</span>:<span class="integer">0</span>,
-                                <span class="comment">//bgcolor:this.bgcolor,</span>
-                                <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
-                                <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,
-                                <span class="key">text</span>: <span class="local-variable">this</span>.text
-                        })
+                        <span class="local-variable">this</span>.buttonres = <span class="local-variable">this</span>.buildButtonRes(<span class="local-variable">this</span>.iconres);
                         res.push(<span class="local-variable">this</span>.buttonres)
                 }
 
@@ -568,7 +605,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> [
                                 button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Press me!</span><span class="delimiter">&quot;</span></span>}),
                                 button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Colored!</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">labelcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>  }),
-                                button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">With an icon!</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span> })
+                                button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">With an icon!</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span> }),
+                                button({
+                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Button With Image</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">textcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">textactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgimage</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/redcloud.png</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgimagemode</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">selected</span>:<span class="predefined-constant">false</span>,
+                                        <span class="function">click</span>:<span class="keyword">function</span>() { <span class="local-variable">this</span>.selected = !<span class="local-variable">this</span>.selected; },
+                                        <span class="function">statenormal</span>:<span class="keyword">function</span>() {
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.selected) {
+                                                        <span class="local-variable">this</span>.bgimage = <span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/bluecloud.png</span><span class="delimiter">&quot;</span></span>;
+                                                        <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textactivecolor)
+                                                } <span class="keyword">else</span> {
+                                                        <span class="local-variable">this</span>.bgimage = <span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/redcloud.png</span><span class="delimiter">&quot;</span></span>;
+                                                        <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textcolor)
+                                                }
+                                        },
+                                        <span class="function">onselected</span>:<span class="keyword">function</span>() { <span class="local-variable">this</span>.statenormal() }
+                                })
                         ]
                 }
         }

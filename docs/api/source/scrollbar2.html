@@ -199,6 +199,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n45" name="n45">45</a>
 <a href="#n46" name="n46">46</a>
 <a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -225,8 +227,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.layout.left = <span class="integer">0</span>
                 <span class="local-variable">this</span>.layout.height = <span class="integer">10</span>
-                <span class="local-variable">this</span>.layout.width =  <span class="local-variable">this</span>.parent.layout.width
-                <span class="local-variable">this</span>.layout.top = <span class="local-variable">this</span>.parent.layout.height - <span class="local-variable">this</span>.layout.height
+                <span class="local-variable">this</span>.layout.width = <span class="local-variable">this</span>.parent._layout.width
+                <span class="local-variable">this</span>.layout.top = <span class="local-variable">this</span>.parent._layout.height - <span class="integer">10</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">atAnimate</span> = <span class="keyword">function</span> () {
@@ -237,12 +239,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">updateScrollbar</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>._total = <span class="local-variable">this</span>.parent.getDuration() / <span class="local-variable">this</span>.zoom / <span class="local-variable">this</span>.parent.TIME_SCALE
                 <span class="local-variable">this</span>._page = <span class="integer">1</span>
-                <span class="keyword">if</span> (<span class="local-variable">this</span>._total &gt; <span class="local-variable">this</span>._page - <span class="float">0.1</span>){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._total &gt; <span class="local-variable">this</span>._page - <span class="float">0.2</span>){
                         <span class="keyword">var</span> offset = clamp(<span class="local-variable">this</span>._value, <span class="integer">0</span>, <span class="local-variable">this</span>._total - <span class="local-variable">this</span>._page)
                         <span class="keyword">if</span> (offset !== <span class="local-variable">this</span>._value) {
                                 <span class="local-variable">this</span>._value = offset
                         }
                         <span class="local-variable">this</span>.visible = <span class="predefined-constant">true</span>
+                } <span class="keyword">else</span> {
+                        <span class="comment">// TODO: hide when full range</span>
                 }
         }
 

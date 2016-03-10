@@ -95,7 +95,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 					// Calculate splat shape
 					var shape2 = vec2(cos(segment), sin(segment))
 					shape2 = vec2.mul_float32(shape2, 0.75)
-					shape2 = vec2.mul_float32(shape2, 1 + 0.25 * cos(segment * 5))
+					shape2 = vec2.mul_float32(shape2, 1 + 0.25 * cos(segment * 4))
 
 					// Add all shapes to the vertex buffer
 					mesh.push(
@@ -113,7 +113,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				pos    += mesh.target1 * view.weight1
 				pos    += mesh.target2 * view.weight2
 				// center shape in view
-				pos = pos * min(view.layout.width, view.layout.height) / 2
+				pos = pos * min(view.layout.width, view.layout.height) / 3
 				pos += vec2(view.layout.width / 2, view.layout.height / 2)
 				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 			}

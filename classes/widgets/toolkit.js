@@ -10,6 +10,7 @@ define.class("$ui/view", function(require,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
+// <br/><a href="/examples/usingtoolkit">examples &raquo;</a>
 
 	this.name = "toolkit";
 	this.clearcolor = "#565656";
@@ -58,39 +59,39 @@ define.class("$ui/view", function(require,
 					text:'Label'
 				}
 			},
-			{
-				label:"Check Button",
-				icon:"check-square-o",
-				desc:"A check button",
-				classname:"checkbox",
-				classdir:"$ui$",
-				params:{
-					tooldragroot:true,
-					fontsize:24,
-					bgcolor:"transparent",
-					buttoncolor1:"transparent",
-					buttoncolor2:"transparent",
-					hovercolor1:"transparent",
-					hovercolor2:"transparent",
-					pressedcolor1:"transparent",
-					pressedcolor2:"transparent",
-					pickalpha:-1,
-					fgcolor:'white'
-				}
-			},
-			{
-				label:"Button",
-				icon:"stop",
-				desc:"A basic button",
-				classname:"button",
-				classdir:"$ui$",
-				params:{
-					tooldragroot:true,
-					fontsize:24,
-					pickalpha:-1,
-					label:'Button'
-				}
-			},
+			//{
+			//	label:"Check Button",
+			//	icon:"check-square-o",
+			//	desc:"A check button",
+			//	classname:"checkbox",
+			//	classdir:"$ui$",
+			//	params:{
+			//		tooldragroot:true,
+			//		fontsize:24,
+			//		bgcolor:"transparent",
+			//		buttoncolor1:"transparent",
+			//		buttoncolor2:"transparent",
+			//		hovercolor1:"transparent",
+			//		hovercolor2:"transparent",
+			//		pressedcolor1:"transparent",
+			//		pressedcolor2:"transparent",
+			//		pickalpha:-1,
+			//		fgcolor:'white'
+			//	}
+			//},
+			//{
+			//	label:"Button",
+			//	icon:"stop",
+			//	desc:"A basic button",
+			//	classname:"button",
+			//	classdir:"$ui$",
+			//	params:{
+			//		tooldragroot:true,
+			//		fontsize:24,
+			//		pickalpha:-1,
+			//		text:'Button'
+			//	}
+			//},
 			{
 				label:"Icon",
 				icon:"info-circle",
@@ -1308,8 +1309,8 @@ define.class("$ui/view", function(require,
 								checkbox({
 									icon:"lock",
 									pickalpha:-1,
-									fgcolor:vec4(0.1,0.6,0.8,1),
-									inactivecolor:"#666",
+									textactivecolor:vec4(0.1,0.6,0.8,1),
+									textcolor:"#666",
 									bgcolor:"transparent",
 									fontsize:14,
 									borderwidth:0,
@@ -1347,8 +1348,8 @@ define.class("$ui/view", function(require,
 									icon:"eye-slash",
 									pickalpha:-1,
 									fontsize:14,
-									fgcolor:vec4(1,0.5,0.5,1),
-									inactivecolor:"#666",
+									textactivecolor:vec4(1,0.5,0.5,1),
+									textcolor:"#666",
 									bgcolor:"transparent",
 									borderwidth:0,
 									padding:0,
@@ -1360,8 +1361,8 @@ define.class("$ui/view", function(require,
 								checkbox({
 									icon:"warning",
 									pickalpha:-1,
-									fgcolor:"yellow",
-									inactivecolor:"#444",
+									textactivecolor:"yellow",
+									textcolor:"#444",
 									bgcolor:"transparent",
 									fontsize:12,
 									//margintop:7,
@@ -1661,11 +1662,11 @@ define.class("$ui/view", function(require,
 							}
 							if (changeset.params) {
 								var item = changeset.params;
-								console.log("build", item.params)
+//								console.log("build", item.params)
 								var newo = src.createASTNode(item.params)
-								console.log("build2", newo)
+//								console.log("build2", newo)
 								var obj = src.build.Call(src.build.Id(item.classname),[newo]);
-								console.log("build3", obj)
+//								console.log("build3", obj)
 								src.pushArg(obj);
 							}
 							if (changeset.arg) {

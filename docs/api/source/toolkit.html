@@ -2292,6 +2292,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2138" name="n2138">2138</a>
 <a href="#n2139" name="n2139">2139</a>
 <strong><a href="#n2140" name="n2140">2140</a></strong>
+<a href="#n2141" name="n2141">2141</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2305,6 +2306,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                   <span class="predefined">$server$</span>, astio){
 
 <span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running composition</span>
+<span class="comment">// &lt;br/&gt;&lt;a href=&quot;/examples/usingtoolkit&quot;&gt;examples &amp;raquo;&lt;/a&gt;</span>
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">toolkit</span><span class="delimiter">&quot;</span></span>;
         <span class="local-variable">this</span>.clearcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span>;
@@ -2383,7 +2385,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
                                         <span class="key">fontsize</span>:<span class="integer">24</span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                        <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Button</span><span class="delimiter">'</span></span>
+                                        <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Button</span><span class="delimiter">'</span></span>
                                 }
                         },
                         {
@@ -3603,8 +3605,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 checkbox({
                                                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lock</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                                                        <span class="key">fgcolor</span>:vec4(<span class="float">0.1</span>,<span class="float">0.6</span>,<span class="float">0.8</span>,<span class="integer">1</span>),
-                                                                        <span class="key">inactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#666</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">textactivecolor</span>:vec4(<span class="float">0.1</span>,<span class="float">0.6</span>,<span class="float">0.8</span>,<span class="integer">1</span>),
+                                                                        <span class="key">textcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#666</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">fontsize</span>:<span class="integer">14</span>,
                                                                         <span class="key">borderwidth</span>:<span class="integer">0</span>,
@@ -3642,8 +3644,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">eye-slash</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                                         <span class="key">fontsize</span>:<span class="integer">14</span>,
-                                                                        <span class="key">fgcolor</span>:vec4(<span class="integer">1</span>,<span class="float">0.5</span>,<span class="float">0.5</span>,<span class="integer">1</span>),
-                                                                        <span class="key">inactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#666</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">textactivecolor</span>:vec4(<span class="integer">1</span>,<span class="float">0.5</span>,<span class="float">0.5</span>,<span class="integer">1</span>),
+                                                                        <span class="key">textcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#666</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                                                         <span class="key">padding</span>:<span class="integer">0</span>,
@@ -3655,8 +3657,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 checkbox({
                                                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">warning</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">inactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#444</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">textactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">textcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#444</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">fontsize</span>:<span class="integer">12</span>,
                                                                         <span class="comment">//margintop:7,</span>

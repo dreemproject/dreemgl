@@ -2,9 +2,10 @@
  * @class textbox
  * @extends label
  * Text input field
+ * <br/><a href="/examples/text">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/textbox.js"></iframe>
- * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/textbox.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/textbox.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/textbox.js">open example in new tab &raquo;</a>
  * 
  */
 /**

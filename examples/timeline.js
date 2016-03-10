@@ -4,11 +4,15 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function($server$, service, $ui$, screen, view, $widgets$timeline$, timeline) {
+define.class('$server/composition', function($ui$, screen, view, $widgets$timeline$, timeline) {
 
-	var START_DATE = "Feb 1 2016"
-	var END_DATE = "Feb 17 2016"
 	var EVENT_COUNT = 10
+
+	var now = new Date()
+	var startDate = now.toString()
+
+	now.setHours(96)
+	var endDate = now.toString()
 
 	this.render = function() {
 		return [
@@ -22,7 +26,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 						var events = []
 						var date
 						for(var i = 0; i < EVENT_COUNT; i++) {
-							date = new Date(new Date(START_DATE).getTime() + i * (6 + floor(random() * 3) ) * hstep)
+							date = new Date(new Date(startDate).getTime() + i * (6 + floor(random() * 3) ) * hstep)
 							events.push({
 								title: 'E' + i,
 								id: i + 1,
@@ -30,14 +34,21 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 								enddate: new Date(date.getTime() + (64 - floor(random() * 64) ) * hstep / 4)
 							})
 						}
+						events.push({
+							title: 'event',
+							id: 999,
+							date: new Date('Mar 10 2016'),
+							enddate: new Date('Mar 11 2016')
+						})
 						timeline.data = events
 					}
 				},[
 					timeline({
 						name:'timeline',
-						start: START_DATE,
-						end: END_DATE,
-						zoom: 224
+						start: startDate,
+						end: endDate,
+						zoom: 2.8,
+						autoexpand: true
 					})
 				])
 			])

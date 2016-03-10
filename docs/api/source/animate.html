@@ -357,6 +357,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n203" name="n203">203</a>
 <a href="#n204" name="n204">204</a>
 <a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -387,7 +393,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.track = track
                 <span class="comment">//else this.track = config</span>
 
-                <span class="keyword">if</span>(config.motion) <span class="local-variable">this</span>.motion = config.motion
+                <span class="keyword">if</span> (config.motion) <span class="local-variable">this</span>.motion = config.motion
+
+                <span class="keyword">if</span> (track) {
+                        <span class="keyword">if</span> (track.bounce) <span class="local-variable">this</span>.bounce = track.bounce
+                        <span class="keyword">if</span> (track.repeat) <span class="local-variable">this</span>.repeat = track.repeat
+                        <span class="keyword">if</span> (track.speed) <span class="local-variable">this</span>.speed = track.speed
+                }
 
                 <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="local-variable">this</span>.motion === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.motion = <span class="reserved">float</span>.ease[<span class="local-variable">this</span>.motion] || <span class="reserved">float</span>.ease.linear
                 <span class="keyword">if</span>(!config) <span class="reserved">debugger</span>

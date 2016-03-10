@@ -6,6 +6,7 @@
 
 define.class("$ui/label", function(require){
 // Text input field
+// <br/><a href="/examples/text">examples &raquo;</a>
 
 	this.mixin(require('$system/textbox/textboximpl'))
 
@@ -21,6 +22,8 @@ define.class("$ui/label", function(require){
 		multiline:true
 	}
 
+	this.bgcolor = "transparent";
+	this.pickalpha = -1;
 	this.markercolor = this.markerunfocus
 
 	define.class(this, 'cursors', require('$system/typeface/cursorshader.js'), function(){
@@ -127,7 +130,17 @@ define.class("$ui/label", function(require){
 	// Basic usage of the treeview control.
 	this.constructor.examples = {
 		Usage:function(){
-			return [textbox({alignself:'flex-start', value:"Text can be input here", fgcolor:'#333', borderwidth:1, bordercolor:'black', padding:5})]
+			return [
+				textbox({alignself:'flex-start', value:"Text can be input here", fgcolor:'#333', borderwidth:1, bordercolor:'black', padding:5}),
+				textbox({
+					borderwidth:1,
+					paddingleft:10,
+					bordercolor:"white",
+					bgimage:"$resources/textures/purplecloud.png",
+					bgimagemode:"stretch",
+					value:"Text field w/bgimage"
+				})
+			]
 		}
 	}
 

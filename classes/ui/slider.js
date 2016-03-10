@@ -7,7 +7,7 @@
 
 define.class("$ui/view", function($ui$, view, icon) {
 // Slider with customizable handle.  To customize the handle put views as the slider's constructor children.
-// [example](http://localhost:2000/examples/slider)
+// <br/><a href="/examples/sliders">examples &raquo;</a>
 
 	this.attributes = {
 
@@ -113,7 +113,7 @@ define.class("$ui/view", function($ui$, view, icon) {
 
 		CustomHandle: function() {
 			return [
-				slider({x:10, y:30,width:250, bgcolor:"white",smooth:false}, view({bgcolor:'purple', width:40, height:40, fontsize:20}))
+				slider({x:10, y:30,width:250, bgcolor:"white",smooth:false}, view({borderradius:2, width:30, height:20, bgimagemode:"stretch", bgimage:"$resources/textures/purplecloud.png"}))
 			]
 		}
 
