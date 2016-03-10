@@ -13,26 +13,26 @@ define.class('$ui/scrollbar', function () {
 	this.visible = true
 
 	this.attributes = {
-		zoom: Config({value: wire('this.parent.zoom')}),
-		value: Config({value: wire('this.parent.scroll')})
+		zoom: wire('this.parent.zoom'),
+		scroll: wire('this.parent.scroll')
 	}
 
 	this.value = function(event){
 		if (event.mark) return
-		this.parent.scroll = this._value
+		this.parent.scroll = vec2(this._value, 0)
 	}
 
 	this.layout = function(){
-		this.layout.left = 0
-		this.layout.height = 10
-		this.layout.width = this.parent._layout.width
-		this.layout.top = this.parent._layout.height - 10
+		this._layout.left = 0
+		this._layout.height = 10
+		this._layout.width = this.parent._layout.width
+		this._layout.top = this.parent._layout.height - 10
 	}
 
-	this.atAnimate = function () {
+	this.scroll = function () {
+		this.value = this.scroll[0]
 		this.updateScrollbar()
 	}
-
 
 	// TODO(aki): hack to stopPropagation of multimove
 	this.pointermultimove = function () {}

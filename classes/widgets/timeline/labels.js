@@ -26,6 +26,7 @@ define.class('$ui/label', function () {
 		this.update = function(){
 			var view = this.view
 			var zoom = view.zoom
+			// hack to trigger update on scroll change
 			var scroll = view.scroll
 			var w = view.parent._layout.width
 			var h = view.parent._layout.height
