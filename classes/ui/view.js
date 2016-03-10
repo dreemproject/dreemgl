@@ -1340,8 +1340,7 @@ define.class('$system/base/node', function(require){
 		this.position = function(){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			var res = vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
-			res.w -= 0.004
+			var res = vec4(pos, -0.004, 1) * view.totalmatrix * view.viewmatrix
 			return res;
 		}
 		this.color = function(){
@@ -1589,8 +1588,8 @@ define.class('$system/base/node', function(require){
 			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
 			sized = vec2(pos.x, pos.y)
-			var res = vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
-			res.w -= 0.004
+			var res = vec4(sized.x, sized.y, -0.004, 1) * view.totalmatrix * view.viewmatrix
+			//res.w -= 0.004
 			return res
 		}
 	})
