@@ -64,7 +64,7 @@ define.class(function($server$, composition, $ui$, screen, cadgrid, view, icon, 
 						select.visible = false
 					}
 				},
-				label({noselect:true, text:"Drag the selection box around the object below to demonstrate selection", fgcolor:"blue"}),
+				label({noselect:true, text:"Drag the selection box around the objects below to demonstrate selection", fgcolor:"blue"}),
 				icon({icon:"star-o", bgcolor:"transparent"}), icon({icon:"circle-o", bgcolor:"transparent"}), icon({icon:"square-o", bgcolor:"transparent"}),
 				this.selectorrect()
 			)
