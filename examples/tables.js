@@ -22,7 +22,7 @@ define.class("$server/composition",function($ui$, screen, icon, label, view, cad
 						justifycontent:'space-around'
 						},
 						view({flexdirection:"column"},
-							label({text:"Columns", marginbottom:30}),
+							label({text:"Columns w/styled column", marginbottom:30}),
 							table({
 									width:400,
 									height:100,
@@ -39,26 +39,26 @@ define.class("$server/composition",function($ui$, screen, icon, label, view, cad
 										rowcol_column2: {
 											bgcolor:vec4(1,1,1,0.2),
 											borderwidth:vec4(0,0,5,5),
-											bordercolor:"yellow",
+											bordercolor:"white",
 											paddingtop:20,
 											width:30
 										}
 									}
 								},
-								icon({icon:"facebook"}),
-								icon({icon:"digg"}),
-								icon({icon:"cc"}),
-								icon({icon:"envelope"}),
-								icon({icon:"empire"}),
-								icon({icon:"eye"}),
-								icon({icon:"circle"}),
-								icon({icon:"circle-o"}),
-								icon({icon:"star"}),
-								icon({icon:"star-o"})
+								label({text:"col1"}),
+								label({text:"col2"}),
+								label({text:"col3"}),
+								label({text:"col4"}),
+								label({text:"col5"}),
+								label({text:"col1"}),
+								label({text:"col2"}),
+								label({text:"col3"}),
+								label({text:"col4"}),
+								label({text:"col5"})
 							)
 						),
 						view({flexdirection:"column"},
-							label({text:"Rows", marginbottom:30}),
+							label({text:"Rows w/styled row", marginbottom:30}),
 							table({
 									name:"foo",
 									width:400,
@@ -70,21 +70,30 @@ define.class("$server/composition",function($ui$, screen, icon, label, view, cad
 										rowcol: {
 											borderwidth:vec4(0,0,0,1),
 											bordercolor:"white"
+										},
+										rowcol_row2: {
+											borderwidth:vec4(0,0, 1,1),
+										},
+										rowcol_row1: {
+											bgcolor:vec4(1,1,1,0.2),
+											borderwidth:vec4(5,5,0,0),
+											bordercolor:"white",
+											height:30
 										}
 									}
 								},
-								icon({icon:"star"}),
-								icon({icon:"facebook"}),
-								icon({icon:"digg"}),
-								icon({icon:"cc"}),
-								icon({icon:"envelope"}),
-								icon({icon:"empire"}),
-								icon({icon:"eye"}),
-								icon({icon:"circle"}),
-								icon({icon:"circle-o"}),
-								icon({icon:"star"}),
-								icon({icon:"star-o"}),
-								icon({icon:"star-o"})
+								label({text:"row1"}),
+								label({text:"row2"}),
+								label({text:"row3"}),
+								label({text:"row1"}),
+								label({text:"row2"}),
+								label({text:"row3"}),
+								label({text:"row1"}),
+								label({text:"row2"}),
+								label({text:"row3"}),
+								label({text:"row1"}),
+								label({text:"row2"}),
+								label({text:"row3"})
 							)
 						)
 					)

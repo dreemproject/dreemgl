@@ -79,6 +79,10 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 	this.nodePathFor = function(v) {
 		var ast = this.nodeFor(v);
+		if (!ast.fn) {
+			console.log("Yikes!", ast, v)
+			return;
+		}
 
 		var parentpath;
 		var index = -1;

@@ -59,39 +59,39 @@ define.class("$ui/view", function(require,
 					text:'Label'
 				}
 			},
-			{
-				label:"Check Button",
-				icon:"check-square-o",
-				desc:"A check button",
-				classname:"checkbox",
-				classdir:"$ui$",
-				params:{
-					tooldragroot:true,
-					fontsize:24,
-					bgcolor:"transparent",
-					buttoncolor1:"transparent",
-					buttoncolor2:"transparent",
-					hovercolor1:"transparent",
-					hovercolor2:"transparent",
-					pressedcolor1:"transparent",
-					pressedcolor2:"transparent",
-					pickalpha:-1,
-					fgcolor:'white'
-				}
-			},
-			{
-				label:"Button",
-				icon:"stop",
-				desc:"A basic button",
-				classname:"button",
-				classdir:"$ui$",
-				params:{
-					tooldragroot:true,
-					fontsize:24,
-					pickalpha:-1,
-					text:'Button'
-				}
-			},
+			//{
+			//	label:"Check Button",
+			//	icon:"check-square-o",
+			//	desc:"A check button",
+			//	classname:"checkbox",
+			//	classdir:"$ui$",
+			//	params:{
+			//		tooldragroot:true,
+			//		fontsize:24,
+			//		bgcolor:"transparent",
+			//		buttoncolor1:"transparent",
+			//		buttoncolor2:"transparent",
+			//		hovercolor1:"transparent",
+			//		hovercolor2:"transparent",
+			//		pressedcolor1:"transparent",
+			//		pressedcolor2:"transparent",
+			//		pickalpha:-1,
+			//		fgcolor:'white'
+			//	}
+			//},
+			//{
+			//	label:"Button",
+			//	icon:"stop",
+			//	desc:"A basic button",
+			//	classname:"button",
+			//	classdir:"$ui$",
+			//	params:{
+			//		tooldragroot:true,
+			//		fontsize:24,
+			//		pickalpha:-1,
+			//		text:'Button'
+			//	}
+			//},
 			{
 				label:"Icon",
 				icon:"info-circle",
@@ -1662,11 +1662,11 @@ define.class("$ui/view", function(require,
 							}
 							if (changeset.params) {
 								var item = changeset.params;
-								console.log("build", item.params)
+//								console.log("build", item.params)
 								var newo = src.createASTNode(item.params)
-								console.log("build2", newo)
+//								console.log("build2", newo)
 								var obj = src.build.Call(src.build.Id(item.classname),[newo]);
-								console.log("build3", obj)
+//								console.log("build3", obj)
 								src.pushArg(obj);
 							}
 							if (changeset.arg) {
