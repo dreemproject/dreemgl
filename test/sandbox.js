@@ -1,13 +1,5 @@
-/* DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and limitations under the License.*/
-
 define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
-
 		this.render=function(){
-
 			return [
 				screen(
 					{
@@ -35,11 +27,12 @@ define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,b
 								width:313,
 								bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),
 								position:"absolute",
-								x:46,
-								y:96.00015258789062,
-								borderwidth:vec4(0,0,0,0),
+								x:123,
+								y:101.00015258789062,
+								borderwidth:vec4(30,30,30,30),
 								bordercolor:vec4(0.7597017884254456,0.7722791433334351,0.13173383474349976,1),
-								rotate:{____struct:"vec3",data:[0,0,-6.037205366737908e-7]}
+								rotate:{____struct:"vec3",data:[0,0,-6.037205366737908e-7]},
+								borderradius:vec4(0,0,0,0)
 							},
 							view({
 									height:143,
@@ -129,7 +122,7 @@ define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,b
 								width:669,
 								bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
 								position:"absolute",
-								x:393.8311767578125,
+								x:620.8311767578125,
 								y:44.318634033203125,
 								bgimage:"$resources/textures/landscape.jpg",
 								bgimagemode:"aspect-fill"
@@ -164,7 +157,9 @@ define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,b
 							position:"absolute",
 							x:62.07366943359375,
 							y:534.5030517578125,
-							opacity:0.6
+							opacity:0.6,
+							width:847.423828125,
+							height:110.88
 						})
 					),
 					toolkit({

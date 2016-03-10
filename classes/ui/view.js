@@ -1768,10 +1768,13 @@ define.class('$system/base/node', function(require){
 	};
 
 	this.boundsInsideRect = function(r) {
-		return r.x <= this._layout.left
-			&& r.y <= this._layout.top
-			&& r.w >= this._layout.width
-			&& r.z >= this._layout.height;
+
+		var inside = r[0] <= this._layout.absx
+			&& r[1] <= this._layout.absy
+			&& r[0] + r[2] >= this._layout.absx + this._layout.width
+			&& r[1] + r[3] >= this._layout.absy + this._layout.height;
+
+		return inside;
 	};
 
 	define.class(this, 'viewportblend', this.Shader, function(){

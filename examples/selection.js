@@ -5,7 +5,7 @@
  See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class(function($server$, composition, $ui$, screen, cadgrid, view, label){
+define.class(function($server$, composition, $ui$, screen, cadgrid, view, icon, label){
 
 	define.class(this, "selectorrect", view, function(){
 		this.name = 'selectorrect'
@@ -21,6 +21,14 @@ define.class(function($server$, composition, $ui$, screen, cadgrid, view, label)
 		this.visible = false
 	})
 
+	this.style = {
+		icon: {
+			fgcolor:"red",
+			margin:40,
+			fontsize:60
+		}
+	}
+
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
 			cadgrid({
@@ -34,19 +42,30 @@ define.class(function($server$, composition, $ui$, screen, cadgrid, view, label)
 						select.size = vec2(event.max[0] - event.min[0], event.max[1] - event.min[1])
 					},
 					pointerend:function(event){
-						var rect = vec4(event.min[0], event.min[1], event.max[0] - event.min[0], event.max[1] - event.min[1])
+
+						for (var i=0;i< this.children.length;i++) {
+							var child = this.children[i];
+							child.bgcolor = "transparent";
+						}
+
 						var select = this.find('selectorrect');
+						var rect = vec4(event.min[0], event.min[1], event.max[0] - event.min[0], event.max[1] - event.min[1])
+
+
 						var selection = this.screen.childrenInRect(rect, [select]);
 
 						for (var i=0;i< selection.length;i++) {
 							var selected = selection[i];
-							selected.bordercolor = "green";
+							if (selected.noselect !== true) {
+								selected.bgcolor = "green";
+							}
 						}
 
 						select.visible = false
 					}
 				},
-				label({text:"Drag\naround\nme!", borderwidth:3, bordercolor:"transparent", fontsize:80, fgcolor:"red"}),
+				label({noselect:true, text:"Drag the selection box around the object below to demonstrate selection", fgcolor:"blue"}),
+				icon({icon:"star-o", bgcolor:"transparent"}), icon({icon:"circle-o", bgcolor:"transparent"}), icon({icon:"square-o", bgcolor:"transparent"}),
 				this.selectorrect()
 			)
 		)
