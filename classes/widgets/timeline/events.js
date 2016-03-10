@@ -14,9 +14,9 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	this.cursor = 'move'
 
 	this.attributes = {
-		data: Config({type: Array,  value: wire('this.parent.data')}),
 		zoom: wire('this.parent.zoom'),
 		scroll: wire('this.parent.scroll'),
+		data: Config({type: Array,  value: wire('this.parent.data')}),
 		rows: Config({type: Number, value: 1})
 	}
 
@@ -72,8 +72,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		this.attributes = {
 			title: '',
 			id: null,
-			zoom: Config({type: Number, value: wire('this.parent.zoom')}),
-			scroll: wire('this.parent.scroll'),
 			color: vec4(1,1,1,1),
 			duration: 1,
 			offset: 0,
@@ -156,6 +154,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		}
 
 		this.atDraw = function () {
+			this.scroll = this.parent.scroll
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.offset = new Date(this.start).getTime() - this.parent.parent.getStart()
@@ -167,7 +166,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		this.roundedrect = {
 			position: function(){
 				pos = mesh.pos.xy
-				pos.x = pos.x * view.duration + (view.offset - view.scroll[0]) * view.layout.width
+				pos.x = pos.x * view.duration + (view.offset - view.scroll.x) * view.layout.width
 				var ca = cos(mesh.angle + PI)
 				var sa = sin(mesh.angle + PI)
 				var rad  = (mesh.radmult.x * view.borderradius.x + mesh.radmult.y * view.borderradius.y + mesh.radmult.z * view.borderradius.z + mesh.radmult.w * view.borderradius.w)
@@ -189,7 +188,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 		this.hardrect = {
 			position: function(){
-				var pos = vec2(mesh.x * view.duration + view.offset - view.scroll[0], mesh.y)
+				var pos = vec2(mesh.x * view.duration + view.offset - view.scroll.x, mesh.y)
 				return vec4(pos.x * view.layout.width, pos.y * view.layout.height, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
 		}
@@ -314,7 +313,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	//
 	// 	this.position = function(){
 	// 		var pos = mesh.pos
-	// 		pos.x = pos.x - view.zoom * view.scroll[0]
+	// 		pos.x = pos.x - view.zoom * view.scroll.x
 	// 		pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
 	// 		return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 	// 	}

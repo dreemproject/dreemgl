@@ -12,8 +12,8 @@ define.class('$ui/view', function () {
 	this.TIME_SCALE = 86400000 // millis to days
 
 	this.attributes = {
-		zoom: Config({type: Number, value: 1}),
-		scroll: Config({type: vec2, value: vec2()}),
+		zoom: wire('this.parent.zoom'),
+		scroll: wire('this.parent.scroll'),
 		hoursegs: Config({type: Number, value: 24}),
 		segments: Config({type: vec3, value: vec3()}),
 		dayoffset: Config({type: Number, value: 1})
@@ -21,14 +21,12 @@ define.class('$ui/view', function () {
 
 	this.layout = function(){
 		this.layout.top = 0
-		this.layout.width = this.parent.layout.width
-		this.layout.height = this.parent.layout.height
+		this.layout.width = this.parent._layout.width
+		this.layout.height = this.parent._layout.height
 	}
 
 	// Data-binding is buggy. set values at draw.
 	this.atDraw = function () {
-		this.zoom = this.parent._zoom
-		this.scroll = this.parent._scroll
 		this.segments = this.parent._segments
 		this.hoursegs = this.parent._hoursegs
 		// TODO(aki): this is a hack. Handle dates and timezones better

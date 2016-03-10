@@ -61,7 +61,7 @@ define.class("$server/composition",function(require, $ui$, checkbox, screen, lab
 							checkbox({
 								value:true,
 								icon:"check-square-o",
-								text:"Checkbox Three Unseected (TRUE)",
+								text:"Checkbox Three Selected (TRUE)",
 								borderwidth:0,
 								bgcolor:"transparent",
 								textcolor:"white",
@@ -74,7 +74,7 @@ define.class("$server/composition",function(require, $ui$, checkbox, screen, lab
 							checkbox({
 								value:true,
 								icon:"check-square-o",
-								text:"Checkbox Four Unseected (TRUE)",
+								text:"Checkbox Four Selected (TRUE)",
 								borderwidth:0,
 								bgcolor:"transparent",
 								textcolor:"white",

@@ -58,7 +58,7 @@ define.class('$system/base/node', function(require){
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
-		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
+		clearcolor: Config({group:"style",type:vec4, value: NaN, meta:"color"}),
 
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
