@@ -2057,6 +2057,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1903" name="n1903">1903</a>
 <a href="#n1904" name="n1904">1904</a>
 <a href="#n1905" name="n1905">1905</a>
+<a href="#n1906" name="n1906">1906</a>
+<a href="#n1907" name="n1907">1907</a>
+<a href="#n1908" name="n1908">1908</a>
+<a href="#n1909" name="n1909">1909</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2118,7 +2122,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">bgimageoffset</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:vec2(<span class="integer">0</span>,<span class="integer">0</span>)}),
 
                 <span class="comment">// the clear color of the view when it is in '2D' or '3D' viewport mode</span>
-                <span class="key">clearcolor</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>,<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">clearcolor</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>,<span class="key">type</span>:vec4, <span class="key">value</span>: <span class="predefined-constant">NaN</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
 
                 <span class="comment">// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'</span>
                 <span class="comment">// this property is manipulated by the overflow:'SCROLL' scrollbars</span>
@@ -3400,8 +3404,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                         uv = mesh.xy
                         pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-                        <span class="keyword">var</span> res = vec4(pos, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
-                        res.w -= <span class="float">0.004</span>
+                        <span class="keyword">var</span> res = vec4(pos, -<span class="float">0.004</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                         <span class="keyword">return</span> res;
                 }
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
@@ -3649,7 +3652,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
                         sized = vec2(pos.x, pos.y)
-                        <span class="keyword">return</span> vec4(sized.x, sized.y, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                        <span class="keyword">var</span> res = vec4(sized.x, sized.y, -<span class="float">0.004</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                        <span class="comment">//res.w -= 0.004</span>
+                        <span class="keyword">return</span> res
                 }
         })
 
@@ -3827,10 +3832,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         };
 
         <span class="local-variable">this</span>.<span class="function">boundsInsideRect</span> = <span class="keyword">function</span>(r) {
-                <span class="keyword">return</span> r.x &lt;= <span class="local-variable">this</span>._layout.left
-                        &amp;&amp; r.y &lt;= <span class="local-variable">this</span>._layout.top
-                        &amp;&amp; r.w &gt;= <span class="local-variable">this</span>._layout.width
-                        &amp;&amp; r.z &gt;= <span class="local-variable">this</span>._layout.height;
+
+                <span class="keyword">var</span> inside = r[<span class="integer">0</span>] &lt;= <span class="local-variable">this</span>._layout.absx
+                        &amp;&amp; r[<span class="integer">1</span>] &lt;= <span class="local-variable">this</span>._layout.absy
+                        &amp;&amp; r[<span class="integer">0</span>] + r[<span class="integer">2</span>] &gt;= <span class="local-variable">this</span>._layout.absx + <span class="local-variable">this</span>._layout.width
+                        &amp;&amp; r[<span class="integer">1</span>] + r[<span class="integer">3</span>] &gt;= <span class="local-variable">this</span>._layout.absy + <span class="local-variable">this</span>._layout.height;
+
+                <span class="keyword">return</span> inside;
         };
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">viewportblend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){

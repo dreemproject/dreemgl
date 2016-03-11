@@ -253,6 +253,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n99" name="n99">99</a>
 <strong><a href="#n100" name="n100">100</a></strong>
 <a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -265,25 +269,29 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>
 
+        <span class="local-variable">this</span>.TIME_SCALE = <span class="integer">86400000</span> <span class="comment">// millis to days</span>
+
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>}),
-                <span class="key">scroll</span>: Config({<span class="key">type</span>: vec2, <span class="key">value</span>: vec2()}),
+                <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
+                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
                 <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
-                <span class="key">segments</span>: Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()})
+                <span class="key">segments</span>: Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()}),
+                <span class="key">dayoffset</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>})
         }
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.layout.top = <span class="integer">0</span>
-                <span class="local-variable">this</span>.layout.width = <span class="local-variable">this</span>.parent.layout.width
-                <span class="local-variable">this</span>.layout.height = <span class="local-variable">this</span>.parent.layout.height
+                <span class="local-variable">this</span>.layout.width = <span class="local-variable">this</span>.parent._layout.width
+                <span class="local-variable">this</span>.layout.height = <span class="local-variable">this</span>.parent._layout.height
         }
 
         <span class="comment">// Data-binding is buggy. set values at draw.</span>
         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
-                <span class="local-variable">this</span>.zoom = <span class="local-variable">this</span>.parent._zoom
-                <span class="local-variable">this</span>.scroll = <span class="local-variable">this</span>.parent._scroll
                 <span class="local-variable">this</span>.segments = <span class="local-variable">this</span>.parent._segments
                 <span class="local-variable">this</span>.hoursegs = <span class="local-variable">this</span>.parent._hoursegs
+                <span class="comment">// TODO(aki): this is a hack. Handle dates and timezones better</span>
+                <span class="keyword">var</span> startDate = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.parent.getStart())
+                <span class="local-variable">this</span>.dayoffset = <span class="integer">1</span> - ((startDate.getTime() - startDate.getTimezoneOffset() * <span class="integer">60</span> * <span class="integer">1000</span>) / <span class="local-variable">this</span>.TIME_SCALE) % <span class="integer">1</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
@@ -294,7 +302,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> array = <span class="keyword">new</span> Float32Array(<span class="integer">4</span> * <span class="integer">2048</span>)
                         <span class="keyword">var</span> start = <span class="local-variable">this</span>.view.parent.getStart()
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length / <span class="integer">4</span>; i++) {
-                                <span class="keyword">var</span> day = <span class="keyword">new</span> Date(start + i * <span class="integer">86400000</span>)
+                                <span class="keyword">var</span> day = <span class="keyword">new</span> Date(start + i * <span class="local-variable">this</span>.TIME_SCALE)
                                 array[i * <span class="integer">4</span> + <span class="integer">0</span>] = day.getDate()
                                 array[i * <span class="integer">4</span> + <span class="integer">1</span>] = day.getDay()
                                 array[i * <span class="integer">4</span> + <span class="integer">2</span>] = day.getMonth()
@@ -327,8 +335,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> a = <span class="float">24.0</span> / view.layout.height
                         <span class="keyword">var</span> b = <span class="float">48.0</span> / view.layout.height
 
-                        <span class="keyword">var</span> dayfield1 = (uv.x + view.scroll.x) * view.zoom
-                        <span class="keyword">var</span> dayfield2 = (uv.x + <span class="float">1.0</span> / view.layout.width + view.scroll.x) * view.zoom
+                        <span class="keyword">var</span> dayfield1 = (uv.x + (view.scroll.x)) * view.zoom - view.dayoffset
+                        <span class="keyword">var</span> dayfield2 = (uv.x + <span class="float">1.0</span> / view.layout.width + (view.scroll.x)) * view.zoom - view.dayoffset
                         <span class="keyword">var</span> caldata1 = <span class="local-variable">this</span>.caltexture.point(vec2(dayfield1 / <span class="integer">2048</span>, <span class="float">0.0</span>)) * <span class="float">255.0</span>
                         <span class="keyword">var</span> caldata2 = <span class="local-variable">this</span>.caltexture.point(vec2(dayfield2 / <span class="integer">2048</span>, <span class="float">0.0</span>)) * <span class="float">255.0</span>
 

@@ -4,8 +4,8 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$system/base/node", function() {
-// 	Provides information about the distance of a nearby physical object using the proximity sensor of a device.
+define.class("$system/base/node", function(require) {
+// 	internal, Provides information about the distance of a nearby physical object using the proximity sensor of a device.
 
 	this.name = "proximity";
 
@@ -38,8 +38,15 @@ define.class("$system/base/node", function() {
 	var proximity = this.constructor;
 	this.constructor.examples = {
 		Usage: function() {
+			var label = require("$ui/label");
+
 			return [
-				proximity()
+				proximity({
+					ondistance:function(ev,v,o) {
+						o.find("distance").text = "Distance to object is: " + v;
+					}
+				}),
+				label({name:"distance", text:"Searching for nearby object ..."})
 			]
 		}
 	}

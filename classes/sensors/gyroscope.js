@@ -6,8 +6,7 @@
 
 define.class("$system/base/node", function(require) {
 // 	The gyro receives gyroscope and compass data where available.
-// See [https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation](https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation)
-// and [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
+// See [deviceorientation](https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation) and [DeviceOrientationEvent](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
 
 	this.name = "gyroscope";
 
@@ -57,8 +56,14 @@ define.class("$system/base/node", function(require) {
 	var gyroscope = this.constructor;
 	this.constructor.examples = {
 		Usage: function() {
+			var label = require("$ui/label");
 			return [
-				gyroscope()
+				gyroscope({
+					onorientation:function(ev,v,o) {
+						o.find("gyro").text = "Current gyro value is a:" + v[0] +", b:" + v[1] + ", g:" + v[2]
+					}
+				}),
+				label({name:"gyro", text:"Searching for gyroscope ..."})
 			]
 		}
 	}

@@ -76,7 +76,7 @@
  * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
  */
 /**
- * @attribute {vec4} [clearcolor="0,0,0,0"]
+ * @attribute {vec4} [clearcolor="undefined"]
  * the clear color of the view when it is in '2D' or '3D' viewport mode
  */
 /**

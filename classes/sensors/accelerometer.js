@@ -50,8 +50,15 @@ define.class("$system/base/node", function(require) {
 	var accelerometer = this.constructor;
 	this.constructor.examples = {
 		Usage: function() {
+			var label = require("$ui/label");
+
 			return [
-				accelerometer()
+				accelerometer({
+					onacceleration:function(ev,v,o) {
+						o.find("accel").text = "Current acceleration is x:" + v[0] +", y:" + v[1] + ", z:" + v[2]
+					}
+				}),
+				label({name:"accel", text:"Searching for accelerometer ..."})
 			]
 		}
 	}

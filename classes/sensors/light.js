@@ -4,7 +4,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$system/base/node", function() {
+define.class("$system/base/node", function(require) {
 // 	The light sensor receives ambient light data where available.
 
 	this.name = "ambient";
@@ -30,8 +30,15 @@ define.class("$system/base/node", function() {
 	var light = this.constructor;
 	this.constructor.examples = {
 		Usage: function() {
+			var label = require("$ui/label");
+
 			return [
-				light()
+				light({
+					onluminosity:function(ev,v,o) {
+					    o.find("lux").text = "Current luminosity is: " + v;
+					}
+				}),
+				label({name:"lux", text:"Searching for ambient light sensor ..."})
 			]
 		}
 	}

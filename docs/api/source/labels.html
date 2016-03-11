@@ -323,6 +323,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n169" name="n169">169</a>
 <strong><a href="#n170" name="n170">170</a></strong>
 <a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -352,6 +353,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                         <span class="keyword">var</span> zoom = view.zoom
+                        <span class="comment">// hack to trigger update on scroll change</span>
                         <span class="keyword">var</span> scroll = view.scroll
                         <span class="keyword">var</span> w = view.parent._layout.width
                         <span class="keyword">var</span> h = view.parent._layout.height

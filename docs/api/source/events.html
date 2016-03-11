@@ -477,6 +477,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n323" name="n323">323</a>
 <a href="#n324" name="n324">324</a>
 <a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
+<a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
+<strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -486,69 +492,72 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view, label) {
 
+        <span class="keyword">var</span> ROW_HEIGHT = <span class="integer">28</span>
+
         <span class="local-variable">this</span>.text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.bgcolor = vec4(<span class="integer">1</span>, <span class="integer">1</span>, <span class="integer">1</span>, <span class="float">0.01</span>)
-        <span class="local-variable">this</span>.pickalpha = <span class="integer">0</span>
-        <span class="local-variable">this</span>.height = <span class="integer">28</span>
+        <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+        <span class="local-variable">this</span>.height = ROW_HEIGHT
+        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.data</span><span class="delimiter">'</span></span>)}),
                 <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
                 <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
+                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.data</span><span class="delimiter">'</span></span>)}),
                 <span class="key">rows</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>})
         }
 
         <span class="local-variable">this</span>.<span class="function">onrows</span> = <span class="keyword">function</span> () {
-                <span class="local-variable">this</span>.height = <span class="local-variable">this</span>.rows * <span class="integer">28</span>
+                <span class="local-variable">this</span>.height = <span class="local-variable">this</span>.rows * ROW_HEIGHT
         }
 
-        <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event) {
-                <span class="keyword">var</span> eventghost = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">eventghost</span><span class="delimiter">'</span></span>)
-                <span class="keyword">var</span> timeline = <span class="local-variable">this</span>.parent
-                eventghost.title = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                eventghost.start = timeline.getRangeStart() + timeline.getRange() * (event.min[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width)
-                eventghost.end = timeline.getRangeStart() + timeline.getRange() * (event.max[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width)
-                <span class="local-variable">this</span>.redraw()
-        }
-
-        <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event) {
-                <span class="keyword">var</span> eventghost = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">eventghost</span><span class="delimiter">'</span></span>)
-                <span class="keyword">var</span> timeline = <span class="local-variable">this</span>.parent
-                <span class="keyword">if</span> (abs(event.delta.x) &gt; <span class="integer">2</span>) {
-                        <span class="keyword">var</span> eventdata = {
-                                <span class="key">title</span>: <span class="string"><span class="delimiter">'</span><span class="content">New Event</span><span class="delimiter">'</span></span>,
-                                <span class="key">date</span>: eventghost.start,
-                                <span class="key">enddate</span>: eventghost.end,
-                                <span class="key">metadata</span>: {
-                                        <span class="key">location</span>: {
-                                                <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">New Location</span><span class="delimiter">'</span></span>,
-                                                <span class="key">lattitude</span>: <span class="integer">0</span>,
-                                                <span class="key">longitute</span>: <span class="integer">0</span>
-                                        }
-                                }
-                        }
-                        timeline.makeEvent(eventdata)
-                }
-                eventghost.start = <span class="integer">0</span>
-                eventghost.end = <span class="integer">0</span>
-        }
+        <span class="comment">// Temporarily disable new event creation on drag</span>
+        <span class="comment">// this.pointermove = function(event) {</span>
+        <span class="comment">//         var eventghost = this.find('eventghost')</span>
+        <span class="comment">//         var timeline = this.parent</span>
+        <span class="comment">//         eventghost.title = ''</span>
+        <span class="comment">//         eventghost.start = timeline.getRangeStart() + timeline.getRange() * (event.min[0] / this.layout.width)</span>
+        <span class="comment">//         eventghost.end = timeline.getRangeStart() + timeline.getRange() * (event.max[0] / this.layout.width)</span>
+        <span class="comment">//         timeline.lockscroll = true</span>
+        <span class="comment">//         this.redraw()</span>
+        <span class="comment">// }</span>
+        <span class="comment">//</span>
+        <span class="comment">// this.pointerend = function(event) {</span>
+        <span class="comment">//         var eventghost = this.find('eventghost')</span>
+        <span class="comment">//         var timeline = this.parent</span>
+        <span class="comment">//         if (abs(event.delta.x) &gt; 2) {</span>
+        <span class="comment">//                 var eventdata = {</span>
+        <span class="comment">//                         title: 'New Event',</span>
+        <span class="comment">//                         date: eventghost.start,</span>
+        <span class="comment">//                         enddate: eventghost.end,</span>
+        <span class="comment">//                         metadata: {</span>
+        <span class="comment">//                                 location: {</span>
+        <span class="comment">//                                         name: 'New Location',</span>
+        <span class="comment">//                                         lattitude: 0,</span>
+        <span class="comment">//                                         longitute: 0</span>
+        <span class="comment">//                                 }</span>
+        <span class="comment">//                         }</span>
+        <span class="comment">//                 }</span>
+        <span class="comment">//                 timeline.makeEvent(eventdata)</span>
+        <span class="comment">//         }</span>
+        <span class="comment">//         eventghost.start = 0</span>
+        <span class="comment">//         eventghost.end = 0</span>
+        <span class="comment">//         timeline.lockscroll = false</span>
+        <span class="comment">// }</span>
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">event</span><span class="delimiter">'</span></span>, view, <span class="keyword">function</span>(){
 
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#999999</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>
-                <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.borderradius = <span class="integer">6</span>
+                <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>
 
                 <span class="keyword">var</span> RESIZE_HANDLE_WIDTH = <span class="integer">10</span>
 
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">title</span>: <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
                         <span class="key">id</span>: <span class="predefined-constant">null</span>,
-                        <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
-                        <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
                         <span class="key">color</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>),
                         <span class="key">duration</span>: <span class="integer">1</span>,
                         <span class="key">offset</span>: <span class="integer">0</span>,
@@ -560,7 +569,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> editmode = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
 
                 <span class="local-variable">this</span>.pointerhover = <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span> (event) {
-                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>
                         editmode = <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>
 
                         <span class="keyword">var</span> localstart = <span class="local-variable">this</span>.globalToLocal(event.position)
@@ -568,10 +577,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> pxduration = <span class="local-variable">this</span>.duration * event.view.layout.width
 
                         <span class="keyword">if</span> (localstartx &lt; min(RESIZE_HANDLE_WIDTH, pxduration / <span class="integer">2</span>)) {
-                                <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>
+                                <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">w-resize</span><span class="delimiter">'</span></span>
                                 editmode = <span class="string"><span class="delimiter">'</span><span class="content">setstart</span><span class="delimiter">'</span></span>
                         } <span class="keyword">else</span> <span class="keyword">if</span> (pxduration - localstartx &lt; min(RESIZE_HANDLE_WIDTH, pxduration / <span class="integer">2</span>)) {
-                                <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>
+                                <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">e-resize</span><span class="delimiter">'</span></span>
                                 editmode = <span class="string"><span class="delimiter">'</span><span class="content">setend</span><span class="delimiter">'</span></span>
                         }
                 }
@@ -595,6 +604,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 eventghost.start = eventghost.end
                                 eventghost.end = start
                         }
+                        timeline.lockscroll = <span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.redraw()
                 }
 
@@ -608,6 +618,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         })
                         eventghost.start = <span class="integer">0</span>
                         eventghost.end = <span class="integer">0</span>
+                        timeline.lockscroll = <span class="predefined-constant">false</span>
                 }
 
                 <span class="local-variable">this</span>.<span class="function">pointertap</span> = <span class="keyword">function</span>(event) {
@@ -629,6 +640,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
+                        <span class="local-variable">this</span>.scroll = <span class="local-variable">this</span>.parent.scroll
                         <span class="local-variable">this</span>.duration = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime() - <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()
                         <span class="local-variable">this</span>.duration = <span class="local-variable">this</span>.duration / <span class="local-variable">this</span>.parent.parent.TIME_SCALE / <span class="local-variable">this</span>.parent.zoom
                         <span class="local-variable">this</span>.offset = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime() - <span class="local-variable">this</span>.parent.parent.getStart()
@@ -640,7 +652,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.roundedrect = {
                         <span class="function">position</span>: <span class="keyword">function</span>(){
                                 pos = mesh.pos.xy
-                                pos.x = pos.x * view.duration + (view.offset - view.scroll[<span class="integer">0</span>]) * view.layout.width
+                                pos.x = pos.x * view.duration + (view.offset - view.scroll.x) * view.layout.width
                                 <span class="keyword">var</span> ca = cos(mesh.angle + PI)
                                 <span class="keyword">var</span> sa = sin(mesh.angle + PI)
                                 <span class="keyword">var</span> rad  = (mesh.radmult.x * view.borderradius.x + mesh.radmult.y * view.borderradius.y + mesh.radmult.z * view.borderradius.z + mesh.radmult.w * view.borderradius.w)
@@ -662,7 +674,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.hardrect = {
                         <span class="function">position</span>: <span class="keyword">function</span>(){
-                                <span class="keyword">var</span> pos = vec2(mesh.x * view.duration + view.offset - view.scroll[<span class="integer">0</span>], mesh.y)
+                                <span class="keyword">var</span> pos = vec2(mesh.x * view.duration + view.offset - view.scroll.x, mesh.y)
                                 <span class="keyword">return</span> vec4(pos.x * view.layout.width, pos.y * view.layout.height, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                         }
                 }
@@ -787,7 +799,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">//</span>
         <span class="comment">//         this.position = function(){</span>
         <span class="comment">//                 var pos = mesh.pos</span>
-        <span class="comment">//                 pos.x = pos.x - view.zoom * view.scroll[0]</span>
+        <span class="comment">//                 pos.x = pos.x - view.zoom * view.scroll.x</span>
         <span class="comment">//                 pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)</span>
         <span class="comment">//                 return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix</span>
         <span class="comment">//         }</span>

@@ -198,6 +198,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
 <a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -205,11 +216,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, service, <span class="predefined">$ui$</span>, screen, view, <span class="predefined">$widgets$timeline$</span>, timeline) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, <span class="predefined">$widgets$timeline$</span>, timeline) {
 
-        <span class="keyword">var</span> START_DATE = <span class="string"><span class="delimiter">&quot;</span><span class="content">Feb 1 2016</span><span class="delimiter">&quot;</span></span>
-        <span class="keyword">var</span> END_DATE = <span class="string"><span class="delimiter">&quot;</span><span class="content">Feb 17 2016</span><span class="delimiter">&quot;</span></span>
         <span class="keyword">var</span> EVENT_COUNT = <span class="integer">10</span>
+
+        <span class="keyword">var</span> now = <span class="keyword">new</span> Date()
+        <span class="keyword">var</span> startDate = now.toString()
+
+        now.setHours(<span class="integer">96</span>)
+        <span class="keyword">var</span> endDate = now.toString()
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
@@ -223,7 +238,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">var</span> events = []
                                                 <span class="keyword">var</span> date
                                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; EVENT_COUNT; i++) {
-                                                        date = <span class="keyword">new</span> Date(<span class="keyword">new</span> Date(START_DATE).getTime() + i * (<span class="integer">6</span> + floor(random() * <span class="integer">3</span>) ) * hstep)
+                                                        date = <span class="keyword">new</span> Date(<span class="keyword">new</span> Date(startDate).getTime() + i * (<span class="integer">6</span> + floor(random() * <span class="integer">3</span>) ) * hstep)
                                                         events.push({
                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">'</span><span class="content">E</span><span class="delimiter">'</span></span> + i,
                                                                 <span class="key">id</span>: i + <span class="integer">1</span>,
@@ -231,14 +246,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="key">enddate</span>: <span class="keyword">new</span> Date(date.getTime() + (<span class="integer">64</span> - floor(random() * <span class="integer">64</span>) ) * hstep / <span class="integer">4</span>)
                                                         })
                                                 }
+                                                events.push({
+                                                        <span class="key">title</span>: <span class="string"><span class="delimiter">'</span><span class="content">event</span><span class="delimiter">'</span></span>,
+                                                        <span class="key">id</span>: <span class="integer">999</span>,
+                                                        <span class="key">date</span>: <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">'</span><span class="content">Mar 10 2016</span><span class="delimiter">'</span></span>),
+                                                        <span class="key">enddate</span>: <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">'</span><span class="content">Mar 11 2016</span><span class="delimiter">'</span></span>)
+                                                })
                                                 timeline.data = events
                                         }
                                 },[
                                         timeline({
                                                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">timeline</span><span class="delimiter">'</span></span>,
-                                                <span class="key">start</span>: START_DATE,
-                                                <span class="key">end</span>: END_DATE,
-                                                <span class="key">zoom</span>: <span class="integer">1</span>
+                                                <span class="key">start</span>: startDate,
+                                                <span class="key">end</span>: endDate,
+                                                <span class="key">zoom</span>: <span class="float">2.8</span>,
+                                                <span class="key">autoexpand</span>: <span class="predefined-constant">true</span>
                                         })
                                 ])
                         ])
