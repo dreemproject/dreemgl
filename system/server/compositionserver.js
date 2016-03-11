@@ -195,7 +195,7 @@ define.class(function(require){
 			})
 			req.on('end', function(){
 
-				if (boundary) {
+				if (boundary && buffer) {
 
 					var cursor = buffer.indexOf(boundary) + boundary.length;
 
@@ -228,7 +228,7 @@ define.class(function(require){
 
 					res.end();
 					return
-				} else {
+				} else if (buffer) {
 					try{
 						var json = JSON.parse(buffer.toString())
 						this.composition.postAPI(json, {send:function(msg){
@@ -243,6 +243,11 @@ define.class(function(require){
 						res.end()
 						return
 					}
+				} else {
+					res.writeHead(500, {"Content-Type": "text/html"})
+					res.write('FAIL')
+					res.end()
+					return
 				}
 			}.bind(this))
 			return
