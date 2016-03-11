@@ -12,8 +12,8 @@ There are a number of examples designed to help you see recommended practices wi
 | inputdevice.js | Example that displays input events, like position, click, hover, wheel, and so on.|
 | lists.js       | Simple scrollable list example: vertical, horizontal, and position that is adjusted programmatically with buttons.|
 | morph.js       | Shape morphing from a square to a circle to a cross.|
-| rpcremote.js   | Currently broken: see DREEM-104070960.|
-| selection.js   | Currently being revised: see DREEM-104070964.|
+| rpcremote.js   | Example of using rpc to remotely control a square. Add '?remote' to the URL for one window; and add '?mobile' to the URL of the second window. Use the mobile screen to remotely drag around the square on the remote screen.|
+| selection.js   | Basic example of dragging a selection square around a block of text.|
 | sliders.js     | Example of a basic slider that displays a current value, as well as a custom handle with an image. |
 | tables.js      | Standard example showing tables constructed with rows and columns that include text or images and can be syled with borders and background colors. |
 | text.js        | An example with static text, multiline text, text with background images, styled text, and corresponding text boxes that can be used as input fields. |
