@@ -23,7 +23,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.rect = function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
-				this.margin = 1
 			}
 
 			this.onpointerhover = function(event){
@@ -34,17 +33,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.fgcolor = [0.5,1,0.5,1]
 
-			this.margin = 0
+			this.margin = 1
 			this.padding = [0,0,0,0]
 			this.draw = function(){
 				var c = this.canvas
 				//c.margins = this.padding
-				//c.layerRect()
-				c.drawRect(200,100)
-				c.beginAlign(c.CENTER|c.INSIDE, this.margin, this.padding)
+				c.layerRect()
+				c.beginAlign(c.LEFT, this.margin, this.padding)
 				c.drawLabel(this.text)
-				c.endAlign()//c.INSIDE)
-				//c.drawRect()
+				c.endAlign(c.INSIDE)
+				c.drawRect()
 			}
 
 			this.canvasverbs = {
@@ -59,7 +57,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.draw = function(){
 			var c = this.canvas 
-			//c.drawRect()
+			
+			c.drawRect(10+500*abs(sin(this.time)),10+500*abs(sin(this.time)))
+
 			c.beginAlign(c.LEFT|c.WRAP)
 			c.fontsize = 5
 

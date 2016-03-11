@@ -460,7 +460,7 @@ define.class('$base/node', function(require){
 
 	this.drawChildren = function(){
 		var c = this.canvas
-
+		var redraw
 		// TODO add boundingbox clipping
 		for(var i = 0;i < this.children.length;i++){
 			var child = this.children[i]
@@ -468,13 +468,14 @@ define.class('$base/node', function(require){
 			c.addCanvas(child.canvas, i)
 			child.drawView()
 		}
+		return redraw
 	}
 
 	this.drawView = function(){
 		var c = this.canvas
 		c.width = this._layout.width
 		c.height = this._layout.height
-
+		this._time = this.screen._time
 		if(!this._viewport && !this.draw_dirty) return
 
 		// clear commandset
@@ -482,7 +483,7 @@ define.class('$base/node', function(require){
 		this.pickdraw = 0
 		// update matrices
 		this.updateMatrix()
-
+		var redraw 
 		// alright its a viewport, render to a texture
 		if(this._viewport){
 			// do the 2d
@@ -502,7 +503,7 @@ define.class('$base/node', function(require){
 			if(this.draw_dirty){
 				c.clear()
 				this.atAttributeGetFlag = 2
-				this.draw()
+				redraw = this.draw()
 				this.atAttributeGetFlag = 0
 				this.draw_dirty = false
 			}
@@ -511,11 +512,15 @@ define.class('$base/node', function(require){
 		}
 		else if(this.draw_dirty){
 			this.atAttributeGetFlag = 2
-			this.draw()
+			redraw = this.draw()
 			this.atAttributeGetFlag = 0
 			this.draw_dirty = false
 		}
 		this.layoutchanged = false
+		// check time
+		if(this._flag_time&2 || redraw){
+			this.screen.anim_redraw.push(this)
+		}
 	}
 
 

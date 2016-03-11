@@ -255,6 +255,8 @@ define.class('$base/view', function(require, exports, $base$, view) {
 		var anim_redraw = this.anim_redraw
 		anim_redraw.length = 0
 
+		this._time = stime
+
 		this.doAnimation(stime, anim_redraw)
 
 		// lets lay it out
