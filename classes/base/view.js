@@ -9,10 +9,12 @@ define.class('$base/node', function(require){
 
 	var FlexLayout = require('$system/lib/layout')
 
-	this.Shader = require('$system/platform/$platform/shader$platform')
 	var view = this.constructor
-
 	var Canvas = require('$base/canvas')
+
+	this.Shader = require('$base/shader')
+	this.Texture = require('$base/texture')
+
 	this.Canvas = Canvas.prototype
 
 	this.attributes = {
@@ -513,6 +515,7 @@ define.class('$base/node', function(require){
 			this.atAttributeGetFlag = 0
 			this.draw_dirty = false
 		}
+		this.layoutchanged = false
 	}
 
 
@@ -1017,8 +1020,9 @@ define.class('$base/node', function(require){
 		if(layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height){
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
+			ref.oldlayout = layout
+			ref.layoutchanged = true
 		}
-		ref.oldlayout = layout
 
 		if(ref._bgimage){
 			ref.onbgimagemode()

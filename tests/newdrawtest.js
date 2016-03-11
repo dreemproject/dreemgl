@@ -8,15 +8,96 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
 
+		define.class(this, 'label', '$shaders/fontmonoshader', function(){
+			this.margins = [10,10,0,10]
+			this.fgcolor = vec4('white')
+		})
+
+		define.class(this, 'inner', '$shaders/fontmonoshader', function(){
+			this.margins = [10,10,0,0]
+			this.fgcolor = vec4('black')
+		})
+
+		define.class(this, 'more', this.rect, function(){
+			this.fgcolor = vec4('red')
+			this.margins = [0,0,0,0]
+		})
+
+		this.rect = {
+			margins:[0,0,1,0],
+			fgcolor:vec4('orange')
+		}
+
+
+		// create a little draw based button with hover anim
+		define.class(this, 'button', '$base/stamp', function(){
+			define.class(this, 'label', '$shaders/fontmonoshader', function(){
+				this.fontsize = 30
+			})
+
+			this.onpointerhover = function(event){
+				this.fgcolorRect = Animate({1:[1,0,0,1]})
+				//this.wRect = Animate({0.5:40})
+				//this.hRect = Animate({0.5:40})
+			}
+
+			this.fgcolor = [0.5,1,0.5,1]
+			this.margins = [2,2,2,2]
+			this.padding = [1,1,0,0]
+			this.draw = function(){
+				var c = this.canvas
+				c.margins = this.padding
+				c.layerRect() // make sure the rect is behind
+				c.beginAlign(c.LEFT,this.margins)
+				c.fgcolor = [1,1,1,1]
+				c.drawLabel(this.text)
+				c.endAlign(c.INSIDE, this.margins)
+				c.fgcolor = [0.25,0.25,0.25,1]
+				c.drawRect()
+			}
+
+			this.canvasverbs = {
+				draw: function(text, x, y, w, h){
+					if(w === undefined && x !== undefined) w = x, x = undefined
+					if(h ===undefined && y !== undefined) h = y, y = undefined
+					this.GETSTAMP()
+					stamp.draw()
+				}
+			}
+		})
+
 		this.draw = function(){
 			var c = this.canvas 
-			c.color = [0,1,1,1]
 			//c.drawRect()
-			
+			c.beginAlign(c.LEFT|c.WRAP)
+			c.fontsize = 5
+
+			var dt = performance.now()
+			//console.log(this.layoutchanged)
+			if(c.startCache('button',this.layoutchanged)){
+				for(var i = 0; i < 1000; i++){
+					//c.color=[random(),random(),random(),1.]
+					//c.drawButton('hi',50,30)
+					
+					//c.drawRect(70,50)
+					//c.drawRect(70,50)
+					//c.beginAlign(c.LEFT,[10,10,10,10])
+					c.drawButton('Btn'+i,30,30)
+					//c.drawInner('CEN')
+					//c.drawMore(20,30)
+					//c.endAlign(c.INSIDE)
+					//c.drawRect()
+					//c.drawRect(50,40)
+					
+				}
+				c.stopCache()
+			}
+			//c.endAlign()
+			/*
 			// this allows reuse of commandbuffers
 			if(c.startCache('button', true)){
 
-				c.startAlign('leftfloor',10)
+				c.startAlign('leftfloor',20)
 				c.margin = [1,0,0,0.5]
 
 				//c.drawRect(random()*300, random()*300, 10, 10)
@@ -25,40 +106,18 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//for(var j = 0; j < 150;j++){
 
 				//var dt = performance.now()
-				for(var i = 0; i < 10000;i++)
+				for(var i = 0; i < 10000;i++){
 					c.drawRect(4,10+10*sin(i))
+				}
 				//console.log(performance.now()-dt)
 			//}
 					//c.drawRect(i*6,j*6, 5, 5)
 				//	}
 				//}
 				c.stopCache()
-			}
+			}*/
 		}
 
-		// create a little draw based button with hover anim
-		define.class(this, 'button', '$base/stamp', function(){
-
-			this.onpointerhover = function(event){
-				this.colorRect = Animate({1:[0,1,1,1]})
-				this.wRect = Animate({0.5:40})
-				this.hRect = Animate({0.5:40})
-			}
-
-			this.color = [0.5,0.5,0.5,1]
-	
-			this.draw = function(){
-				this.canvas.drawRect()
-			}
-
-			this.canvasverbs = {
-				draw: function(label, x, y, w, h){
-					if(w === undefined && x !== undefined) w = x, x = undefined
-					if(h ===undefined && y !== undefined) h = y, y = undefined
-					this.drawINLINE()					
-				}
-			}
-		})
 	})
 
 	this.render = function(){ return [

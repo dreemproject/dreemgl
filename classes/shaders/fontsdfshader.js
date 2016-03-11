@@ -10,10 +10,8 @@ define.class('$shaders/pickshader', function(){
 		return res
 	}
 
-	this.fgcolor = vec4('gray')
-
 	this.color = function(){
-		var col = canvas.fgcolor
+		var col = canvas.color
 		return vec4(col.rgb, col.a)
 	}
 
@@ -22,13 +20,13 @@ define.class('$shaders/pickshader', function(){
 		y:'this.scope._layout?0:this.scope.y',
 		w:'this.scope._layout?this.scope._layout.width:this.scope.w',
 		h:'this.scope._layout?this.scope._layout.height:this.scope.h',
-		fgcolor:'this.scope._layout?this.scope._bgcolor:this.scope.color'
+		color:'this.scope._layout?this.scope._bgcolor:this.scope.color'
 	}
 
 	this.canvas = {
 		visible:float,
 		matrix:mat4,
-		fgcolor:vec4,
+		color:vec4,
 		x:float,
 		y:float,
 		w:float,
@@ -37,17 +35,11 @@ define.class('$shaders/pickshader', function(){
 	}
 
 	this.canvasverbs = {
-		layer:function(){
-			this.GETBUFFER()
-		},
 		draw:function(x, y, w, h){
 			if(w === undefined && x !== undefined) w = x, x = undefined
 			if(h ===undefined && y !== undefined) h = y, y = undefined
 			// this processes the args and builds up a buffer
-			this.GETBUFFER()
-			this.ARGSTOCANVAS()
-			if((x === undefined || y === undefined)) this.runAlign(this.classNAME, buffer)
-			this.CANVASTOBUFFER()
+			this.drawINLINE()
 		}
 	}
 })

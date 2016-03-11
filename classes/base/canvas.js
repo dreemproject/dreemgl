@@ -5,64 +5,200 @@ define.class(function(exports){
 		this.scope = view
 		this.matrix = mat4.identity()
 		this.cmds = []
+		this.stackAlign = []
+		this.trackAlign = []
+		this.align = this.stackAlign[0] = {x:0,y:0,w:0,h:0,flags:0,total:0}
 	}
 
 	this.clearCmds = function(){
 		this.cmds.length = 0
-		this.visible = 1.0
+		this.stackAlign.len = 0
+		this.trackAlign.length = 0
+		var align = this.align = this.stackAlign[0]
+		align.total = 0
+		align.x = this.x = 0
+		align.y = this.y = 0
+		align.w = this.w = this.width
+		align.h = this.h = this.height
 	}
+
+	this.TOP = 0
+	this.LEFT = 1
+	this.RIGHT = 2
+	this.HCENTER = 4
+	this.BOTTOM = 8
+	this.VCENTER = 16
+	this.CENTER = this.HCENTER|this.VCENTER
+	this.WRAP = 32
+	this.INSIDE = 64
+	this.NEEDTRACK = this.WRAP| this.RIGHT | this.HCENTER | this.BOTTOM | this.VCENTER
+
+	this.margins = [0,0,0,0]
+	this.padding = [0,0,0,0]
+
+	// start an alignment
+	this.beginAlign = function(flags, padding){
+		// ok lets push the align props
+
+		// store old align
+		var oldalign = this.stackAlign[this.stackAlign.len] = this.align
+		this.stackAlign.len++
+
+		// fetch new one
+		var align = this.align = this.stackAlign[this.stackAlign.len] || {}
 		
-	this.leftfloorAlign = function(x, y){
-		if(x !== undefined) return
-		this.x = this.px + this.margin[3]
-		this.y = this.py + this.margin[0] + this.pmax - this.h
-		this.px += this.w + this.margin[1] + this.margin[3]
-		var hs = this.h + this.margin[0] + this.margin[2]
-		if(this.px >= this.width){
-			this.py += this.pmax
-			this.x = 0 + this.margin[3]
-			this.y = this.py + this.margin[0] + this.pmax - this.h
-			this.px = this.w + this.margin[1] + this.margin[3]
-		}
-		this.visible = this.py >= this.height?0.:1.0
-	}
-
-	this.leftAlign = function(x, y){
-		if(x !== undefined) return
-		this.x = this.px + this.margin[3]
-		this.y = this.py + this.margin[0]
-		this.px += this.w + this.margin[1] + this.margin[3]
-		var hs = this.h + this.margin[0] + this.margin[2]
-		if(hs > this.ph) this.ph = hs
-		if(this.px >= this.width){
-			this.py += this.ph 
-			this.ph = 0
-			this.x = 0 + this.margin[3]
-			this.y = this.py + this.margin[0]
-			this.px = this.w + this.margin[1] + this.margin[3]
-		}
-		this.visible = this.py >= this.height?0.:1.0
-	}
-
-	this.startAlign = function(fn, pmax){
-		this.pmax = pmax
-		this.px = 0
-		this.py = 0
-		this.ph = 0
-		this.margin = [0,0,0,0]
-		if(typeof fn === 'string'){
-			this.align = this[fn + 'Align']
+		align.flags = flags
+		var pad = align.padding = padding || this.padding
+		var xs,ys,ws,hs 
+		if(flags & this.INSIDE){
+			xs = this.x
+			ys = this.y
+			ws = this.w
+			hs = this.h 
 		}
 		else{
-			this.align = fn || this.alignLeft
+			xs = oldalign.x
+			ys = oldalign.y
+			ws = oldalign.w
+			hs = oldalign.h
 		}
+		align.total |= oldalign.total|flags
+		align.xstart =
+		align.x = xs + pad[3]		
+		align.ystart = 
+		align.y = ys + pad[0]
+		align.w = ws - pad[1] - pad[3]
+		align.h = hs - pad[0] - pad[2]
+		align.trackstart = this.trackAlign && this.trackAlign.length || 0
+		align.maxx = 0
+		align.maxy = 0
+		align.maxh = 0
 	}
 
-	this.stopAlign = function(){
+	this.displaceAlign = function(start, key, displace, dbg){
+		var track = this.trackAlign
+		for(var i = start; i < track.length; i += 3){
+			var buf = track[i]
+			var off = track[i+1]
+			var range = track[i+2]
+			var slots = buf.struct.slots
+			var rel = buf.struct.offsets[key]
+			var array = buf.array
+			for(var j = off; j < off+range; j++){
+				var offset = j * slots + rel
+				array[offset] += displace
+			}
+		}
+	}
+	
+	this.endAlign = function(argflags, margins){
+		// if we are align HCENTER/RIGHT lets do the h-align.
+		var align = this.align
+		var dx = align.maxx - align.xstart
+		var dy = align.maxy - align.ystart
 
+		var start = align.trackstart
+		// if the w / h things are NaN.. what do we do
+		//if(isNaN(align.w)) align.w = dx
+		//if(isNaN(align.h)) align.h = dy
+
+		if(align.flags & this.HCENTER){
+			this.displaceAlign(start, 'x', (align.w - dx) / 2)
+		}
+		else if(align.flags & this.RIGHT){
+			this.displaceAlign(start, 'x', align.w - dx)
+		}
+		if(align.flags & this.VCENTER){
+			this.displaceAlign(start, 'y', (align.h - dy) / 2)
+		}
+		else if(align.flags & this.BOTTOM){
+			this.displaceAlign(start, 'y', align.h - dy)
+		}
+
+		this.w = dx + align.padding[1] + align.padding[3]
+		this.h = dy + align.padding[0] + align.padding[2]
+
+		var oldalign = align
+		align = this.align = this.stackAlign[--this.stackAlign.len]
+	
+		// check if we need to wrap our nested alignment
+		if(align.flags & this.WRAP && !(oldalign.flags&this.INSIDE)){
+			// ifso we need to check what to delta.
+			if(align.x + this.w > align.w){
+				var dx = align.xstart - align.x
+				var dy = align.maxh + this.padding[0]+ this.padding[2] 
+				align.x = align.xstart 
+				align.y += dy
+				this.displaceAlign(start, 'x', dx, 1)
+				this.displaceAlign(start, 'y', dy, 1)
+			}
+		}
+
+		if(margins){
+			this.displaceAlign(start, 'x', margins[3], 1)
+			this.displaceAlign(start, 'y', margins[0], 1)
+		}
+
+		if(dy > align.maxh) align.maxh = dy
+
+		if(!(argflags & this.INSIDE) && !(oldalign.flags & this.INSIDE)){
+			this.runAlign()
+		}
+		align.total |= oldalign.total
+	}
+	Object.defineProperty(this, 'h2', {
+		get:function(){
+			return this._h
+		},
+		set:function(v){
+			if(v === 46)debugger
+			this._h = v
+		}
+	})
+	this.runAlign = function(cls, buffer, range){
+		// ok so if we have 
+		var align = this.align
+		if(!align || !align.flags) return
+		var margins = cls && cls.margins || this.margins
+
+		if(align.total & this.NEEDTRACK && buffer){
+			this.trackAlign.push(buffer, buffer.length, range || 1)
+		}
+
+		this.x = align.x + margins[3]
+		this.y = align.y + margins[0]
+
+		align.x += this.w + margins[3] + margins[1]
+		var hs = this.h + margins[0] + margins[2]
+
+		if(hs > align.maxh) align.maxh = hs
+
+		// use the next y as the maxy
+		var hy = align.y + hs
+
+		if( hy> align.maxy) align.maxy = hy
+
+		if(align.x > align.maxx) align.maxx = align.x
+		//if(align.maxy === 36) debugger
+		if(align.flags & this.WRAP && align.x >= align.w){
+			this.newline()
+			this.x = align.x + margins[3]
+			this.y = align.y + margins[0]
+			align.x += this.w + margins[3] + margins[1]
+		}
+
+	}
+
+	// break terminates an align cycle and does a newline
+	this.newline = function(pad){
+		var align = this.align
+		align.x = align.xstart 
+		align.y += align.maxh + this.padding[0]+ this.padding[2] + (pad || 0)
 	}
 
 	this.addCanvas = function(ctx, index){
+		ctx.trackAlign = this.trackAlign
+		ctx.stackAlign = this.stackAlign
 		ctx.frameid = this.frameid
 		this.cmds.push('canvas', ctx.cmds, ctx.view)
 	}
@@ -177,7 +313,6 @@ define.class(function(exports){
 		if(!iframes) iframes = 2
 		// lets return a double buffered target which flips on every request
 	}
-
 
 	// Copied from texturewebgl
 	this.RGB = 1 <<0
@@ -319,69 +454,88 @@ define.class(function(exports){
 
 		for(var verb in verbs){
 			var fn = verbs[verb]
-			var args = define.getFunctionArgs(fn)
-			var fnstr = fn.toString()	
-			if(!struct){
-				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
+			if(typeof fn === 'function'){
+				var args = define.getFunctionArgs(fn)
+				var fnstr = fn.toString()	
+
+				// macros
+				fnstr = fnstr.replace(/(\t*)this\.GETSTAMP\s*\(\s*\)/,function(m, ind){
 					var write = 
-					ind+'var draw_canvas = this.view.draw_canvas\n'+
-					ind+'var canvas = draw_canvas["'+cap+'"]\n'+
+					ind+'var _draw_canvas = this.view.draw_canvas\n'+
+					ind+'var canvas = _draw_canvas["'+cap+'"]\n'+
 					ind+'if(!canvas){\n'+
-					ind+'\tdraw_canvas["'+cap+'"] = canvas = Object.create(this.class'+cap+'.Canvas)\n'+
+					ind+'\t_draw_canvas["'+cap+'"] = canvas = Object.create(this.class'+cap+'.Canvas)\n'+
 					ind+'\tcanvas.initCanvas(this.view)\n'+
+					ind+'}\n'+
+					ind+'if(canvas.frameid !== this.frameid){\n'+
+					ind+'\tcanvas.frameid = this.frameid\n'+
 					ind+'\tthis.addCanvas(canvas)\n'+
+					ind+'\tcanvas.cmds.length = 0\n'+
 					ind+'}\n'+
 
-					ind+'var pickdraw = canvas.pickdraw = ++this.view.pickdraw\n'+
-					ind+'var draw_objects = this.view.draw_objects\n'+
-					ind+'var obj = draw_objects[pickdraw] || (draw_objects[pickdraw] = Object.create(this.class'+cap+'))\n'+
-					ind+'obj.pickdraw = pickdraw\n'+
-					ind+'canvas.scope = obj\n'+
-					ind+'obj.canvas = canvas\n'
-
+					ind+'var _pickdraw = canvas.pickdraw = ++this.view.pickdraw\n'+
+					ind+'var _draw_objects = this.view.draw_objects\n'+
+					ind+'var stamp = _draw_objects[_pickdraw] || (_draw_objects[_pickdraw] = Object.create(this.class'+cap+'))\n'+
+					ind+'stamp.pickdraw = _pickdraw\n'+
+					ind+'canvas.scope = stamp\n'+
+					ind+'canvas.align = this.align\n'+
+					ind+'stamp.canvas = canvas\n'
 					for(var i = 0; i < args.length; i++){
-						write += 'obj.'+args[i]+' = '+args[i] + '\n'
+						write += 'canvas.'+args[i]+' = stamp.'+args[i]+' = '+args[i] + '\n'
 					}
-					write += 'obj.draw()\n'
 					return write
 				})
-			}
-			else{
 
-				fnstr = fnstr.replace(/(\t*)this\.drawINLINE\s*\(\s*\)/,function(m, ind){
-					var write = ind+'var _buf = this.buffer'+cap+'\n'+
-						ind+'if(!_buf){\n'+
-						ind+'\tthis.buffer'+cap+' = _buf = this.alloc'+cap+'?this.array'+cap+'.array(this.alloc'+cap+'):this.array'+cap+'.array()\n' + 
-						ind+'\t_buf.frameid = this.frameid\n'+
+				fnstr = fnstr.replace(/(\t*)this\.GETBUFFER\s*\(\s*([^\)]*)\s*\)/,function(m, ind, needed){
+					var write = ind+'var buffer = this.buffer'+cap+'\n'+
+						ind+'if(!buffer){\n'+
+						ind+'\tthis.buffer'+cap+' = buffer = this.alloc'+cap+'?this.array'+cap+'.array(this.alloc'+cap+'):this.array'+cap+'.array()\n' + 
+						ind+'\tbuffer.frameid = this.frameid\n'+
 						ind+'\tthis.flush'+cap+'()\n'+
-						ind+'\tthis.buffer'+cap+' = _buf\n'+
+						ind+'\tthis.buffer'+cap+' = buffer\n'+
 						ind+'}\n'+
-						ind+'if(!_buf.appendonly && _buf.frameid !== this.frameid){\n'+
-						ind+'\t_buf.length = 0, _buf.frameid = this.frameid\n'+
+						ind+'if(!buffer.appendonly && buffer.frameid !== this.frameid){\n'+
+						ind+'\tbuffer.length = 0, buffer.frameid = this.frameid\n'+
 						ind+'\tthis.flush'+cap+'()\n'+
-						ind+'\tthis.buffer'+cap+' = _buf\n'+
+						ind+'\tthis.buffer'+cap+' = buffer\n'+
 						ind+'}\n'+
-						ind+'_buf.clean = false\n'+
-						ind+'var _len = _buf.length, _alloc = _buf.allocated\n'+
-						ind+'this.scope.index'+cap+' = _len\n'+
-						ind+'_buf.instancedivisor = this.instancedivisor'+cap+'|| 1\n'+
-						ind+'if(_buf.length >= _buf.allocated){\n'+
-							ind+'\tvar _ns = _buf.allocated * 2 || 1\n'+
-							ind+'\tfor(var _n = new _buf.arrayconstructor(_ns * '+slots+'), _o = _buf.array, _i = 0, _s = _buf.allocated * '+slots+'; _i < _s; _i++) _n[_i] = _o[_i]\n'+
-							ind+'\t_buf.array = _n, _buf.allocated = _ns\n'+
-						ind+'}\n'+
-						ind+'var _array = _buf.array, _off = _len*'+slots+', _obj\n'
-
+						ind+'buffer.clean = false\n'+
+						ind+'this.scope.index'+cap+' = buffer.length\n'+
+						ind+'buffer.instancedivisor = this.instancedivisor'+cap+'|| 1\n'+
+						ind+'var _needed = '+(needed?(needed+' || 1'):'1')+'\n'+
+						ind+'if(buffer.length + _needed >= buffer.allocated){\n'+
+							ind+'\tvar _ns = (buffer.length + _needed > buffer.allocated * 2)? (buffer.length + _needed): buffer.allocated * 2\n'+
+							ind+'\tfor(var _n = new buffer.arrayconstructor(_ns * '+slots+'), _o = buffer.array, _i = 0, _s = buffer.allocated * '+slots+'; _i < _s; _i++) _n[_i] = _o[_i]\n'+
+							ind+'\tbuffer.array = _n, buffer.allocated = _ns\n'+
+						ind+'}\n'
+						//ind+'var _array = buffer.array, _off = _len*'+slots+', _obj\n'
+					return write	
+				})
+				
+				fnstr = fnstr.replace(/(\t*)this\.ARGSTOCANVAS\s*\(\s*\)/,function(m, ind){
+					var write = ''
 					for(var key in def) if(typeof def[key] === 'function' && args.indexOf(key) !== -1){
-						write += 'if('+key+'!==undefined) this.'+key+' = '+key+'\n'
-					}
+						write += ind+'if('+key+'!==undefined) this.'+key+' = '+key+'\n'
+					}						
+					return write
+				})
 
-					if('x' in def && 'y' in def){
-						var xoff = struct.keyInfo('x').offset / 4 || 0
-						var yoff = struct.keyInfo('y').offset / 4 || 0
-						write += 'if(this.align)this.align(x,y,_buf,_off+'+xoff+',_off+'+yoff+')\n'
+				// push canvas into buffer
+				fnstr = fnstr.replace(/(\t*)this\.CANVASTOBUFFER\s*\(\s*([^\)]*)\s*\)/,function(m, ind, argmapstr){
+					var argmap = {}
+					var NaNCheck = false
+					if(argmapstr === 'NaN'){
+						NaNCheck = true
 					}
-
+					else if(argmapstr){ // quickly parse map {key:value}
+						// fetch string baseclasses for nested classes and add them
+						var maprx = new RegExp(/([$_\w]+)\:([^},\n]+)/g)
+						var resul
+						while((result = maprx.exec(argmapstr)) !== null) {
+							argmap[result[1]] = result[2]
+						}
+					}
+					var write = 'var _array = buffer.array, _off = buffer.length * '+slots+', _obj\n'
 					// iterate over the keys
 					var off = 0
 					for(var key in def) if(typeof def[key] === 'function'){
@@ -391,36 +545,36 @@ define.class(function(exports){
 						if(key in defaults) dft = defaults[key]
 
 						var itemslots = def[key].slots
+						var value = 'this.'+key+'!==undefined?this.'+key+':this.class'+cap+'.'+key+'!==undefined?this.class'+cap+'.'+key+':'+dft
+						if(key in argmap) value = argmap[key]
 						if(itemslots>1){
-							//if(args.indexOf(key) !== -1){
-							//	write += ind+'_obj = '+key+'!==undefined?'+key+':this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							//}
-							//else{
-							write += ind+'_obj = this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							//}
+							write += ind+'_obj = '+value+'\n'
 							write += ind+'if(_obj !== undefined){\n'
 							for(var i = 0; i < itemslots; i++, off++){
-								write += ind+'\t_array[_off + ' + off + '] = _obj['+i+']\n'
+								write += ind + '\t'
+								if(NaNCheck) write += 'if(isNaN(_array[_off + ' + off + ']))'
+								write += '_array[_off + ' + off + '] = _obj['+i+']\n'
 							}
 							write += ind+'}\n'
 						}
 						else{
-							//if(args.indexOf(key) !== -1){
-							//	write += ind+'_array[_off + ' + off + '] = '+key+'!==undefined?'+key+':this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							//}
-							//else{
-							write += ind+'_array[_off + ' + off + '] = this.'+key+'!==undefined?this.'+key+':'+dft+'\n'
-							//}
+							write += ind+'\t'
+							if(NaNCheck) write += 'if(isNaN(_array[_off + ' + off + '])) this.'+key+'='
+							write += '_array[_off + ' + off + '] = '+value+'\n'
 							off++
 						}
 					}
-					write += ind+'_buf.length++\n'
+					write += ind+'buffer.length++\n'
 					return write
 				})
+
+				//console.log(fnstr)
+				fnstr = fnstr.replace(/NAME/g, cap)
+				canvas[verb+cap] = Function('return '+fnstr)()
 			}
-			//console.log(fnstr)
-			fnstr = fnstr.replace(/NAME/g, cap)
-			canvas[verb+cap] = Function('return '+fnstr)()
+			else{
+				canvas[verb] = fn
+			}
 		}
 	}
 })

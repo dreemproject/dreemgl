@@ -5,14 +5,14 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function(require, $ui$, screen, view){
+define.class('$base/composition', function(require, $base$, screen, view){
 
-	var arpeggiator = define.class(function($ui$, view, label){
+	var arpeggiator = define.class('$base/view', function(){
 
 		var midiAttributes = require('$system/platform/$platform/midi$platform').midiAttributes
 
 		this.fwd = true
-		this.inid = 1
+		this.inid = 2
 		this.outid = 0
 		this.bpm = 120
 		this.last_note = -1
@@ -118,8 +118,6 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 				for(var key in midiAttributes){
 					inp[key] = (function(key){
 						return function(event){
-							console.log(event)
-
 							if(obj[key]) obj[key](event.value)
 						}
 					})(key)
@@ -181,10 +179,17 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					this.loop
 				},
 				arp1:function(l, m, n, o, p){
-					for(var i = 4; i < 7; i++){
+					var map = [3,5,4,3,4,3,4,2,2,3]
+					for(var j = 0; j < map.length; j++){
+						var i = map[j]
 						p['c'+i]
-						p[this.slide]
+						p['e'+i]
+						//p[this.slide]
 						p['g'+i]
+						p['d'+i]
+						p['a'+i]
+						p['g'+i]
+						p['c'+i]
 					}
 					this.loop
 				}

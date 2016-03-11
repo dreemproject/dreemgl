@@ -1879,6 +1879,17 @@
 			return {offset:offset, type:type}
 		}
 
+		Struct.offsets = {}
+		if(myarray){
+			var offset = 0
+			for(var ikey in Struct.def){
+				Struct.offsets[ikey] = offset / myarray.BYTES_PER_ELEMENT
+				var itype = Struct.def[ikey] 
+				offset += itype.bytes
+			}
+		}
+
+
 		Struct.keyType = function(key){
 			// look it up normally
 			var type = this.def[key]

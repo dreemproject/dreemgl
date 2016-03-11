@@ -209,11 +209,11 @@ define.class('$base/view', function(require, exports, $base$, view) {
 			if(!tgt){
 				if(ismain){
 					if(!this.debug_pick){
-						tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, 1, 1, this.device)
+						tgt = this.Texture.createRenderTarget(pass.target.flags, 1, 1, this.device)
 					}
 				}
 				else{
-					tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+					tgt = this.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
 				}
 				this.pick_rendertargets[guid] = tgt
 			}

@@ -4,7 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
-define.class('$system/platform/$platform/shader$platform', function(require, exports, baseclass){
+define.class('$shaders/pickshader', function(require, exports, baseclass){
 	//internal
 
 	// the font

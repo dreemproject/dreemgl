@@ -1,4 +1,4 @@
-define.class('$system/platform/$platform/shader$platform', function(require){
+define.class('$base/shader', function(require){
 	// baseclass shader with a pick entry point for UI picking
 
 	this.noise = require('./shaderlib/noiselib')
