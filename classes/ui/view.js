@@ -572,10 +572,11 @@ define.class('$system/base/node', function(require){
 	}
 
 
+	// image can be an image, or a Texture (has array property).
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
-		var img = shader.texture = Shader.Texture.fromImage(image);
+		var img = shader.texture = (image.array) ? image : Shader.Texture.fromImage(image)
 		if(this.bgimagemode === "resize"){
 			this._size = img.size
 			this.relayout()

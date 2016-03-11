@@ -64,12 +64,17 @@ define.class(function($ui$, view, label, bargraphic){
 			this.audioElement.play();
 			this.playing = true;
 
-			// The ontimeupdate event happens pretty slowly. Update more frequently
-			// using a timer.
-			this.timer = setInterval(function() {
-				this.updateviz();
-			}.bind(this), 100);
-			
+			// Updating in the animation loop is better than waiting for
+			// the infrequent ontimeupdate events.
+			if (window) {
+				this.animFrame = function(time){
+					this.updateviz();
+					if (this.playing)
+						window.requestAnimationFrame(this.animFrame)
+				}.bind(this);
+
+				window.requestAnimationFrame(this.animFrame)
+			}
 
 			//console.log('play', this.audioElement);
 		}
@@ -91,11 +96,6 @@ define.class(function($ui$, view, label, bargraphic){
 
 	// Stop the audio
 	this.stop = function() {
-		if (this.timer) {
-			clearInterval(this.timer);
-			this.timer = undefined;
-		}
-
 		var viz = this.screen.find('viz');
 		if (viz)
 			viz.clear();
@@ -113,6 +113,9 @@ define.class(function($ui$, view, label, bargraphic){
 
 	// Update the current visualization
 	this.updateviz = function() {
+		if (!this.audioElement)
+			return;
+
 		this.currenttime = this.audioElement.currentTime;
 		this.fftNode.getByteFrequencyData(this.fftData);
 
