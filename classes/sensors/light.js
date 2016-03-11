@@ -6,6 +6,7 @@
 
 define.class("$system/base/node", function(require) {
 // 	The light sensor receives ambient light data where available.
+// <br/><a href="/examples/sensors">example &raquo;</a>
 
 	this.name = "ambient";
 

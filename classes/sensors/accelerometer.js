@@ -6,6 +6,7 @@
 
 define.class("$system/base/node", function(require) {
 // 	The accelerometer receives acceleration data where available.
+// <br/><a href="/examples/sensors">example &raquo;</a>
 
 	this.name = "accelerometer";
 

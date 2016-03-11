@@ -7,7 +7,8 @@
 define.class("$system/base/node", function(require) {
 // 	The gyro receives gyroscope and compass data where available.
 // See [deviceorientation](https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation) and [DeviceOrientationEvent](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
-
+// <br/><a href="/examples/sensors">example &raquo;</a>
+	
 	this.name = "gyroscope";
 
 	this.attributes = {
