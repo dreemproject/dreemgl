@@ -4,11 +4,27 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, label, $sensors$, gyroscope, accelerometer, light){
+define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, label, $sensors$, gyroscope, accelerometer, light, proximity){
 
 	this.render = function() {
 		return [
 			screen({name:'default', clearcolor:vec4('black')},
+				proximity({
+					name:"prox",
+					onmin:function(ev,v,o) {
+						o.find("min").text = v;
+					},
+					onmax:function(ev,v,o) {
+						o.find("max").text = v;
+					},
+					ondistance:function(ev,v,o) {
+						o.find("distance").text = v;
+					},
+					onsupported:function(ev,v,o) {
+						o.find("proxsearching").visible = false;
+						o.find("proxout").visible = true;
+					}
+				}),
 				light({
 					name:"lights",
 					onluminosity:function(ev,v,o) {
@@ -55,7 +71,7 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						justifycontent:"flex-start",
 						alignitems:"flex-start"
 					},
-					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#666", fontsize:20, margintop:10}),
+					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#888", fontsize:20, margintop:10}),
 					view({  name:"gyrout",
 						    visible:false,
 							flexdirection:"column",
@@ -70,7 +86,7 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"beta", fontsize:12}),     label({fgcolor:"blue", name:"beta", text:"0", fontsize:12}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"gamma", fontsize:12}),    label({fgcolor:"blue", name:"gamma", text:"0", fontsize:12}) )
 					),
-					label({name:"accelsearching", visible:true, text:"Searching for accelerometer...", fgcolor:"#666", fontsize:20, margintop:10}),
+					label({name:"accelsearching", visible:true, text:"Searching for accelerometer ...", fgcolor:"#888", fontsize:20, margintop:10}),
 					view({  name:"accelout",
 							visible:false,
 							flexdirection:"column",
@@ -83,7 +99,7 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						view({padding:2}, label({marginright:10, fgcolor:"red", text:"y", fontsize:12}),     label({fgcolor:"blue", name:"y", text:"0", fontsize:12}) ),
 						view({padding:2}, label({marginright:10, fgcolor:"red", text:"z", fontsize:12}),     label({fgcolor:"blue", name:"z", text:"0", fontsize:12}) )
 					),
-					label({name:"lightsearching", visible:true, text:"Searching for ambient light sensor...", fgcolor:"#666", fontsize:20}),
+					label({name:"lightsearching", visible:true, text:"Searching for ambient light sensor ...", fgcolor:"#888", fontsize:20}),
 					view({  name:"lightout",
 							visible:false,
 							flexdirection:"column",
@@ -92,6 +108,19 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						},
 						label({marginbottom:10, text:"Move your device into different light conditions to see luminosity values change:", fgcolor:"#666", fontsize:12}),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"luminosity"}),     label({fgcolor:"blue", name:"lux", text:"0", fontsize:12}) )
+					),
+					label({name:"proxsearching", visible:true, text:"Searching objects in proximity ...", fgcolor:"#888", fontsize:20}),
+					view({  name:"proxout",
+							visible:false,
+							flexdirection:"column",
+							justifycontent:"space-around",
+							alignitems:"center",
+							margintop:10
+						},
+						label({marginbottom:10, text:"Move your device object to change proximity:", fgcolor:"#666", fontsize:12}),
+						view({padding:2}, label({marginright:10, fgcolor:"red", text:"min", fontsize:12}),      label({fgcolor:"blue", name:"min", text:"0", fontsize:12}) ),
+						view({padding:2}, label({marginright:10, fgcolor:"red", text:"max", fontsize:12}),      label({fgcolor:"blue", name:"max", text:"0", fontsize:12}) ),
+						view({padding:2}, label({marginright:10, fgcolor:"red", text:"distance", fontsize:12}), label({fgcolor:"blue", name:"distance", text:"0", fontsize:12}) )
 					)
 				)
 			)
