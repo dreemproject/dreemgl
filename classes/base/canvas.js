@@ -126,7 +126,7 @@ define.class(function(exports){
 			// ifso we need to check what to delta.
 			if(align.x + this.w > align.w){
 				var dx = align.xstart - align.x
-				var dy = align.maxh + this.padding[0]+ this.padding[2] 
+				var dy = align.maxh //this.padding[0]+ this.padding[2] 
 				align.x = align.xstart 
 				align.y += dy
 				this.displaceAlign(start, 'x', dx, 1)
@@ -134,16 +134,22 @@ define.class(function(exports){
 			}
 		}
 
-		if(margins){
-			this.displaceAlign(start, 'x', margins[3], 1)
-			this.displaceAlign(start, 'y', margins[0], 1)
-		}
-
 		if(dy > align.maxh) align.maxh = dy
 
 		if(!(argflags & this.INSIDE) && !(oldalign.flags & this.INSIDE)){
 			this.runAlign()
 		}
+
+		if(margins){
+			var m0,m1,m2,m3
+			if(typeof margins === 'number') m0 = m1 = m2 = m3 = margins
+			else m0 = margins[0], m1 = margins[1], m2 = margins[2], m3 = margins[3]
+
+			this.displaceAlign(start, 'x', m3, 1)
+			this.displaceAlign(start, 'y', m0, 1)
+			this.align.margins = margins
+		}
+
 		align.total |= oldalign.total
 	}
 	Object.defineProperty(this, 'h2', {
@@ -159,17 +165,20 @@ define.class(function(exports){
 		// ok so if we have 
 		var align = this.align
 		if(!align || !align.flags) return
-		var margins = cls && cls.margins || this.margins
+		var margins = cls && cls.margins || align.margins || this.margins
+		var m0,m1,m2,m3
+		if(typeof margins === 'number') m0 = m1 = m2 = m3 = margins
+		else m0 = margins[0], m1 = margins[1], m2 = margins[2], m3 = margins[3]
 
 		if(align.total & this.NEEDTRACK && buffer){
 			this.trackAlign.push(buffer, buffer.length, range || 1)
 		}
 
-		this.x = align.x + margins[3]
-		this.y = align.y + margins[0]
+		this.x = align.x + m3
+		this.y = align.y + m0
 
-		align.x += this.w + margins[3] + margins[1]
-		var hs = this.h + margins[0] + margins[2]
+		align.x += this.w + m3 + m1
+		var hs = this.h + m0 + m2
 
 		if(hs > align.maxh) align.maxh = hs
 
@@ -182,9 +191,9 @@ define.class(function(exports){
 		//if(align.maxy === 36) debugger
 		if(align.flags & this.WRAP && align.x >= align.w){
 			this.newline()
-			this.x = align.x + margins[3]
-			this.y = align.y + margins[0]
-			align.x += this.w + margins[3] + margins[1]
+			this.x = align.x + m3
+			this.y = align.y + m0
+			align.x += this.w + m3 + m1
 		}
 
 	}

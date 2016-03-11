@@ -12,8 +12,9 @@ define.class('$shaders/pickshader', function(require){
 	}
 	
 	this.fgcolor = vec4('gray')
+	this.fontsize = 10
 
-	this.canvas = {
+	this.canvas = {	
 		fgcolor: vec4,
 		outlinecolor: vec4,
 		boldness: float,
@@ -49,7 +50,6 @@ define.class('$shaders/pickshader', function(require){
 	// i suggest we make a separate shader
 
 	this.canvasverbs = {
-		fontsize:10,
 		linespacing:1.3,
 		baseline:1,
 		drawWrap:function(str, x, y){
@@ -134,16 +134,17 @@ define.class('$shaders/pickshader', function(require){
 			this.ARGSTOCANVAS()
 
 			var glyphs = (this.font || this.classNAME.font).glyphs
+			var fontsize = this.fontsize || this.classNAME.fontsize
 			var off = 0
 			var strlen = str.length
 
 			var width = 0
 			for(var i = 0; i < strlen; i++){
 				var unicode = str.charCodeAt(i)
-				width += glyphs[unicode].advance * this.fontsize
+				width += glyphs[unicode].advance * fontsize
 			}
 			this.w = width 
-			this.h = this.fontsize * this.linespacing
+			this.h = fontsize * this.linespacing
 			// do alignment on our full thing
 			if((x === undefined || y === undefined)) this.runAlign(this.classNAME, buffer, strlen)
 
@@ -163,9 +164,10 @@ define.class('$shaders/pickshader', function(require){
 					maxy:info.max_y,
 					unicode:unicode,
 					texx:texx,
-					texy:texy
+					texy:texy,
+					fontsize:fontsize
 				})
-				this.x += info.advance * this.fontsize
+				this.x += info.advance * fontsize
 			}
 		}
 	}

@@ -8,51 +8,39 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
 
-		define.class(this, 'label', '$shaders/fontmonoshader', function(){
-			this.margins = [10,10,0,10]
-			this.fgcolor = vec4('white')
-		})
-
-		define.class(this, 'inner', '$shaders/fontmonoshader', function(){
-			this.margins = [10,10,0,0]
-			this.fgcolor = vec4('black')
-		})
-
-		define.class(this, 'more', this.rect, function(){
-			this.fgcolor = vec4('red')
-			this.margins = [0,0,0,0]
-		})
-
-		this.rect = {
-			margins:[0,0,1,0],
-			fgcolor:vec4('orange')
+		this.rect = function(){
+			this.margins = [0,0,1,0],
+			this.fgcolor = vec4('orange')
 		}
 
-
-		// create a little draw based button with hover anim
+		// create a little stamp based button with hover anim
 		define.class(this, 'button', '$base/stamp', function(){
 			define.class(this, 'label', '$shaders/fontmonoshader', function(){
-				this.fontsize = 30
+				this.margins = [5,5,5,5]
+				this.fontsize = 20
+				this.fgcolor = [1,1,1,1]
 			})
 
+			this.rect = function(){
+				this.fgcolor = [0.25,0.25,0.25,1]
+			}
+
 			this.onpointerhover = function(event){
-				this.fgcolorRect = Animate({1:[1,0,0,1]})
+				this.fgcolorRect = Animate({1:[0,1,0,1]})
 				//this.wRect = Animate({0.5:40})
 				//this.hRect = Animate({0.5:40})
 			}
 
 			this.fgcolor = [0.5,1,0.5,1]
-			this.margins = [2,2,2,2]
-			this.padding = [1,1,1,1]
+			this.margins = [1,1,1,1]
+			this.padding = [5,5,5,5]
 			this.draw = function(){
 				var c = this.canvas
-				c.margins = this.padding
+				//c.margins = this.padding
 				c.layerRect()
-				c.beginAlign(c.LEFT,this.margins)
-				c.fgcolor = [1,1,1,1]
+				c.beginAlign(c.LEFT, this.padding)
 				c.drawLabel(this.text)
 				c.endAlign(c.INSIDE, this.margins)
-				c.fgcolor = [0.25,0.25,0.25,1]
 				c.drawRect()
 			}
 
@@ -84,7 +72,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					//c.beginAlign(c.LEFT,[10,10,10,10])
 					c.drawButton('Btn'+i,30,30)
 					//c.drawInner('CEN')
-					//c.drawMore(20,30)
+					//c.drawMore(10,10)
 					//c.endAlign(c.INSIDE)
 					//c.drawRect()
 					//c.drawRect(50,40)
