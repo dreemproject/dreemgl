@@ -5,23 +5,24 @@
  See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$system/base/node", function(require) {
-// 	The gyro receives gyroscope and compass data where available.
-// See [https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation](https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation)
-// and [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
+// 	The accelerometer receives acceleration data where available.
+
+	this.name = "accelerometer";
 
 	this.attributes = {
-		// True if gyro is supported
+		// True if accelerometer is supported
 		supported:Config({type:Boolean, value:false}),
 
+		// Three component (x, y, z) instant acceleration of the device
 		acceleration:Config({type:vec3, value:vec3(0,0,0)}),
 
-		// alias for the x component of acceleration
+		// Alias for the x component of acceleration
 		x: Config({alias:'acceleration', index:0}),
 
-		// alias for the y component of acceleration
+		// Alias for the y component of acceleration
 		y: Config({alias:'acceleration', index:1}),
 
-		// alias for the z component of acceleration
+		// Alias for the z component of acceleration
 		z: Config({alias:'acceleration', index:2})
 
 	};

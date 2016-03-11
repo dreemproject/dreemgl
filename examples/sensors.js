@@ -4,11 +4,21 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, label, $sensors$, gyroscope, accelerometer){
+define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, label, $sensors$, gyroscope, accelerometer, light){
 
 	this.render = function() {
 		return [
 			screen({name:'default', clearcolor:vec4('black')},
+				light({
+					name:"lights",
+					onluminosity:function(ev,v,o) {
+						o.find("lux").text = v;
+					},
+					onsupported:function(ev,v,o) {
+						o.find("lightsearching").visible = false;
+						o.find("lightout").visible = true;
+					}
+				}),
 				gyroscope({
 					name:"gyro",
 					onorientation:function(ev,v,o) {
@@ -45,6 +55,16 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						justifycontent:"space-around",
 						alignitems:"center"
 					},
+					label({name:"lightsearching", visible:true, text:"Searching for ambient light sensor...", fgcolor:"#666", fontsize:40}),
+					view({  name:"lightout",
+							visible:false,
+							flexdirection:"column",
+							justifycontent:"space-around",
+							alignitems:"center"
+						},
+						label({marginbottom:15, text:"Move your device into different light conditions\nto see luminosity values change:", fgcolor:"#666", fontsize:20}),
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"luminosity"}),     label({fgcolor:"blue", name:"lux", text:"0"}) )
+					),
 					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#666", fontsize:40}),
 					view({  name:"gyrout",
 						    visible:false,

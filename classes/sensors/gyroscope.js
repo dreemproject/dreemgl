@@ -9,19 +9,22 @@ define.class("$system/base/node", function(require) {
 // See [https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation](https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation)
 // and [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
 
+	this.name = "gyroscope";
+
 	this.attributes = {
 		// True if gyro is supported
 		supported:Config({type:Boolean, value:false}),
 
+		// Three component (alpha, beta, gamma) orientation of the device
 		orientation:Config({type:vec3, value:vec3(0,0,0)}),
 
-		// alias for the alpha component of orientation
+		// Alias for the alpha component of orientation
 		alpha: Config({alias:'orientation', index:0}),
 
-		// alias for the beta component of orientation
+		// Alias for the beta component of orientation
 		beta: Config({alias:'orientation', index:1}),
 
-		// alias for the gamma component of orientation
+		// Alias for the gamma component of orientation
 		gamma: Config({alias:'orientation', index:2}),
 
 		// The compass orientation, see [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
