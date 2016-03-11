@@ -52,41 +52,43 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 				cadgrid({
 						flex:1,
 						flexdirection:"column",
-						justifycontent:"space-around",
-						alignitems:"center"
+						justifycontent:"flex-start",
+						alignitems:"flex-start"
 					},
-					label({name:"lightsearching", visible:true, text:"Searching for ambient light sensor...", fgcolor:"#666", fontsize:40}),
+					label({name:"lightsearching", visible:true, text:"Searching for ambient light sensor...", fgcolor:"#666", fontsize:20}),
 					view({  name:"lightout",
 							visible:false,
 							flexdirection:"column",
 							justifycontent:"space-around",
 							alignitems:"center"
 						},
-						label({marginbottom:15, text:"Move your device into different light conditions\nto see luminosity values change:", fgcolor:"#666", fontsize:20}),
+						label({marginbottom:15, text:"Move your device into different light conditions\nto see luminosity values change:", fgcolor:"#666", fontsize:12}),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"luminosity"}),     label({fgcolor:"blue", name:"lux", text:"0"}) )
 					),
-					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#666", fontsize:40}),
+					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#666", fontsize:20, margintop:10}),
 					view({  name:"gyrout",
 						    visible:false,
 							flexdirection:"column",
 							justifycontent:"space-around",
-							alignitems:"center"
+							alignitems:"center",
+						    margintop:10
 						},
-						label({marginbottom:15, text:"Move your device to see\ngyroscope values change:", fgcolor:"#666", fontsize:20}),
+						label({marginbottom:15, text:"Move your device to see\ngyroscope values change:", fgcolor:"#666", fontsize:12}),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"compass"}),  label({fgcolor:"blue", name:"compass", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"accuracy"}), label({fgcolor:"blue", name:"accuracy", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"alpha"}),    label({fgcolor:"blue", name:"alpha", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"beta"}),     label({fgcolor:"blue", name:"beta", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"gamma"}),    label({fgcolor:"blue", name:"gamma", text:"0"}) )
 					),
-					label({name:"accelsearching", visible:true, text:"Searching for accelerometer...", fgcolor:"#666", fontsize:40}),
+					label({name:"accelsearching", visible:true, text:"Searching for accelerometer...", fgcolor:"#666", fontsize:20, margintop:10}),
 					view({  name:"accelout",
 							visible:false,
 							flexdirection:"column",
 							justifycontent:"space-around",
-							alignitems:"center"
+							alignitems:"center",
+						    margintop:10
 						},
-						label({marginbottom:15, text:"Move your device to see\naccelerometer values change:", fgcolor:"#666", fontsize:20}),
+						label({marginbottom:15, text:"Move your device to see\naccelerometer values change:", fgcolor:"#666", fontsize:12}),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"x"}),     label({fgcolor:"blue", name:"x", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"y"}),     label({fgcolor:"blue", name:"y", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"z"}),     label({fgcolor:"blue", name:"z", text:"0"}) )
