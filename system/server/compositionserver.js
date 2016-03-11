@@ -195,7 +195,7 @@ define.class(function(require){
 			})
 			req.on('end', function(){
 
-				if (boundary && buffer) {
+				if (boundary && buffer && buffer.indexOf) {
 
 					var cursor = buffer.indexOf(boundary) + boundary.length;
 
