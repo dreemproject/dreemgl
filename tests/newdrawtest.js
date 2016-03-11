@@ -43,11 +43,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.fgcolor = [0.5,1,0.5,1]
 			this.margins = [2,2,2,2]
-			this.padding = [1,1,0,0]
+			this.padding = [1,1,1,1]
 			this.draw = function(){
 				var c = this.canvas
 				c.margins = this.padding
-				c.layerRect() // make sure the rect is behind
+				c.layerRect()
 				c.beginAlign(c.LEFT,this.margins)
 				c.fgcolor = [1,1,1,1]
 				c.drawLabel(this.text)
