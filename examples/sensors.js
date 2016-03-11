@@ -4,26 +4,39 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, label, $sensors$, gyro){
+define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, label, $sensors$, gyroscope, accelerometer){
 
 	this.render = function() {
 		return [
 			screen({name:'default', clearcolor:vec4('black')},
-				gyro({
+				gyroscope({
 					name:"gyro",
-					onacceleration:function(ev,v,o) {
-						o.find("x").text = v[0];
-						o.find("y").text = v[1];
-						o.find("z").text = v[2];
-					},
 					onorientation:function(ev,v,o) {
 						o.find("alpha").text = v[0];
 						o.find("beta").text  = v[1];
 						o.find("gamma").text = v[2];
 					},
+					oncompass:function(ev,v,o) {
+						o.find("compass").text = v;
+					},
+					onaccuracy:function(ev,v,o) {
+						o.find("accuracy").text = v;
+					},
 					onsupported:function(ev,v,o) {
-						o.find("searching").visible = false;
+						o.find("gyrosearching").visible = false;
 						o.find("gyrout").visible = true;
+					}
+				}),
+				accelerometer({
+					name:"accel",
+					onacceleration:function(ev,v,o) {
+						o.find("x").text = v[0];
+						o.find("y").text = v[1];
+						o.find("z").text = v[2];
+					},
+					onsupported:function(ev,v,o) {
+						o.find("accelsearching").visible = false;
+						o.find("accelout").visible = true;
 					}
 				}),
 				cadgrid({
@@ -32,8 +45,7 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						justifycontent:"space-around",
 						alignitems:"center"
 					},
-					label({name:"searching", visible:true, text:"Searching for gyro device...", fgcolor:"#666", fontsize:40}),
-
+					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#666", fontsize:40}),
 					view({  name:"gyrout",
 						    visible:false,
 							flexdirection:"column",
@@ -41,12 +53,23 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 							alignitems:"center"
 						},
 						label({marginbottom:15, text:"Move your device to see\ngyroscope values change:", fgcolor:"#666", fontsize:20}),
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"compass"}),  label({fgcolor:"blue", name:"compass", text:"0"}) ),
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"accuracy"}), label({fgcolor:"blue", name:"accuracy", text:"0"}) ),
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"alpha"}),    label({fgcolor:"blue", name:"alpha", text:"0"}) ),
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"beta"}),     label({fgcolor:"blue", name:"beta", text:"0"}) ),
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"gamma"}),    label({fgcolor:"blue", name:"gamma", text:"0"}) )
+					),
+					label({name:"accelsearching", visible:true, text:"Searching for accelerometer...", fgcolor:"#666", fontsize:40}),
+					view({  name:"accelout",
+							visible:false,
+							flexdirection:"column",
+							justifycontent:"space-around",
+							alignitems:"center"
+						},
+						label({marginbottom:15, text:"Move your device to see\naccelerometer values change:", fgcolor:"#666", fontsize:20}),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"x"}),     label({fgcolor:"blue", name:"x", text:"0"}) ),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"y"}),     label({fgcolor:"blue", name:"y", text:"0"}) ),
-						view({padding:5}, label({marginright:10, fgcolor:"red", text:"z"}),     label({fgcolor:"blue", name:"z", text:"0"}) ),
-						view({padding:5}, label({marginright:10, fgcolor:"red", text:"alpha"}), label({fgcolor:"blue", name:"alpha", text:"0"}) ),
-						view({padding:5}, label({marginright:10, fgcolor:"red", text:"beta"}),  label({fgcolor:"blue", name:"beta", text:"0"}) ),
-						view({padding:5}, label({marginright:10, fgcolor:"red", text:"gamma"}), label({fgcolor:"blue", name:"gamma", text:"0"}) )
+						view({padding:5}, label({marginright:10, fgcolor:"red", text:"z"}),     label({fgcolor:"blue", name:"z", text:"0"}) )
 					)
 				)
 			)

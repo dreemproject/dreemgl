@@ -22,24 +22,8 @@ define.class("$system/base/node", function(require) {
 		y: Config({alias:'acceleration', index:1}),
 
 		// alias for the z component of acceleration
-		z: Config({alias:'acceleration', index:2}),
+		z: Config({alias:'acceleration', index:2})
 
-		orientation:Config({type:vec3, value:vec3(0,0,0)}),
-
-		// alias for the alpha component of orientation
-		alpha: Config({alias:'orientation', index:0}),
-
-		// alias for the beta component of orientation
-		beta: Config({alias:'orientation', index:1}),
-
-		// alias for the gamma component of orientation
-		gamma: Config({alias:'orientation', index:2}),
-
-		// The compass orientation, see [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
-		compass:Config({type:Number, value:0}),
-
-		// The compass accuracy, see [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
-		accuracy:Config({type:Number, value:0})
 	};
 
 	this.init = function() {
@@ -60,30 +44,13 @@ define.class("$system/base/node", function(require) {
 				}
 			}
 		}.bind(this));
-
-		window.addEventListener('deviceorientation', function(ev) {
-			var orientationevents = ['alpha', 'beta', 'gamma'];
-			for (var i = 0; i < orientationevents.length;i++) {
-				var name = orientationevents[i];
-				var value = ev[name];
-				if (typeof(value) !== "undefined") {
-					if (!this._supported) {
-						this.supported = true;
-					}
-					this[name] = value;
-				}
-			}
-
-			this.accuracy = ev.webkitCompassAccuracy;
-			this.compass = ev.webkitCompassHeading;
-		}.bind(this));
 	};
 
-	var gyro = this.constructor;
+	var accelerometer = this.constructor;
 	this.constructor.examples = {
 		Usage: function() {
 			return [
-				gyro()
+				accelerometer()
 			]
 		}
 	}
