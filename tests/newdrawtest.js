@@ -58,7 +58,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		this.draw = function(){
 			var c = this.canvas 
 			
-			c.drawRect(10+500*abs(sin(this.time)),10+500*abs(sin(this.time)))
+			c.drawRect(10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 
 			c.beginAlign(c.LEFT|c.WRAP)
 			c.fontsize = 5
