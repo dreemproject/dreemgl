@@ -1,4 +1,4 @@
-Third party modules and libraries used by DreemGL:  
+### Third party modules and libraries used by DreemGL:  
 
 Facebook flexbox layout: /system/lib/layout.js  
 Flexbox layout JavaScript module. Copyright (c) 2014, Facebook, Inc. BSD license  
@@ -26,3 +26,20 @@ Ported to DreemGL class module, original Copyright (c) 2015, Mapbox - https://gi
 
 Map widget utilizes mapzen vector tile API (http://mapzen.com)
 Vector data Copyright OpenStreetMap contributors, Who’s On First (http://openstreetmapdata.com)
+
+
+### Assets
+
+MP3 audio file:  
+/examples/assets/YACHT_-_09_-_Im_In_Love_With_A_Ripper_Party_Mix_Instrumental.mp3  
+Used by /examples/audio.js and /examples/audio2.js  
+http://freemusicarchive.org/music/YACHT/See_Mystery_Lights_Instrumentals/Im_In_Love_With_A_Ripper_Party_Mix_Instrumental
+
+MP4 video file (13 seconds, 1280 x 720):  
+/examples/assets/big_buck_bunny_720p_2mb.mp4  
+Used by /examples/video.js  
+https://peach.blender.org/about/
+
+Number images: /test/dalitests/assets/{0-9}.png  
+Used by /test/dalitests/images.js  
+http://www.iconarchive.com/show/red-orb-alphabet-icons-by-iconarchive.html
