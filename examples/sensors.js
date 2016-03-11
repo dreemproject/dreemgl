@@ -108,20 +108,21 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						},
 						label({marginbottom:10, text:"Move your device into different light conditions to see luminosity values change:", fgcolor:"#666", fontsize:12}),
 						view({padding:5}, label({marginright:10, fgcolor:"red", text:"luminosity"}),     label({fgcolor:"blue", name:"lux", text:"0", fontsize:12}) )
-					),
-					label({name:"proxsearching", visible:true, text:"Searching objects in proximity ...", fgcolor:"#888", fontsize:20}),
-					view({  name:"proxout",
-							visible:false,
-							flexdirection:"column",
-							justifycontent:"space-around",
-							alignitems:"center",
-							margintop:10
-						},
-						label({marginbottom:10, text:"Move your device object to change proximity:", fgcolor:"#666", fontsize:12}),
-						view({padding:2}, label({marginright:10, fgcolor:"red", text:"min", fontsize:12}),      label({fgcolor:"blue", name:"min", text:"0", fontsize:12}) ),
-						view({padding:2}, label({marginright:10, fgcolor:"red", text:"max", fontsize:12}),      label({fgcolor:"blue", name:"max", text:"0", fontsize:12}) ),
-						view({padding:2}, label({marginright:10, fgcolor:"red", text:"distance", fontsize:12}), label({fgcolor:"blue", name:"distance", text:"0", fontsize:12}) )
 					)
+					//,
+					//label({name:"proxsearching", visible:true, text:"Searching objects in proximity ...", fgcolor:"#888", fontsize:20}),
+					//view({  name:"proxout",
+					//		visible:false,
+					//		flexdirection:"column",
+					//		justifycontent:"space-around",
+					//		alignitems:"center",
+					//		margintop:10
+					//	},
+					//	label({marginbottom:10, text:"Move your device object to change proximity:", fgcolor:"#666", fontsize:12}),
+					//	view({padding:2}, label({marginright:10, fgcolor:"red", text:"min", fontsize:12}),      label({fgcolor:"blue", name:"min", text:"0", fontsize:12}) ),
+					//	view({padding:2}, label({marginright:10, fgcolor:"red", text:"max", fontsize:12}),      label({fgcolor:"blue", name:"max", text:"0", fontsize:12}) ),
+					//	view({padding:2}, label({marginright:10, fgcolor:"red", text:"distance", fontsize:12}), label({fgcolor:"blue", name:"distance", text:"0", fontsize:12}) )
+					//)
 				)
 			)
 		]
