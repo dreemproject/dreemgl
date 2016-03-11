@@ -9,14 +9,14 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	var myview = define.class(view, function(){
 
 		this.rect = function(){
-			this.margins = [0,0,1,0],
+			this.margin = [0,0,1,0],
 			this.fgcolor = vec4('orange')
 		}
 
 		// create a little stamp based button with hover anim
 		define.class(this, 'button', '$base/stamp', function(){
 			define.class(this, 'label', '$shaders/fontmonoshader', function(){
-				this.margins = [5,5,5,5]
+				this.margin = [5,5,5,5]
 				this.fontsize = 20
 				this.fgcolor = [1,1,1,1]
 			})
@@ -32,15 +32,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 
 			this.fgcolor = [0.5,1,0.5,1]
-			this.margins = [1,1,1,1]
-			this.padding = [5,5,5,5]
+
+			this.margin = 1
+			this.padding = 1
 			this.draw = function(){
 				var c = this.canvas
 				//c.margins = this.padding
 				c.layerRect()
-				c.beginAlign(c.LEFT, this.padding)
+				c.beginAlign(c.LEFT, this.margin, this.padding)
 				c.drawLabel(this.text)
-				c.endAlign(c.INSIDE, this.margins)
+				c.endAlign(c.INSIDE)
 				c.drawRect()
 			}
 

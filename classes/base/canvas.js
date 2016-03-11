@@ -33,11 +33,8 @@ define.class(function(exports){
 	this.INSIDE = 64
 	this.NEEDTRACK = this.WRAP| this.RIGHT | this.HCENTER | this.BOTTOM | this.VCENTER
 
-	this.margins = [0,0,0,0]
-	this.padding = [0,0,0,0]
-
 	// start an alignment
-	this.beginAlign = function(flags, padding){
+	this.beginAlign = function(flags, margin, padding){
 		// ok lets push the align props
 
 		// store old align
@@ -48,7 +45,13 @@ define.class(function(exports){
 		var align = this.align = this.stackAlign[this.stackAlign.len] || {}
 		
 		align.flags = flags
-		var pad = align.padding = padding || this.padding
+		
+		if(!padding || typeof padding === 'number') align.p0 = align.p1 = align.p2 = align.p3 = padding || 0
+		else align.p0 = padding[0], align.p1 = padding[1], align.p2 = padding[2], align.p3 = padding[3]
+
+		if(!margin || typeof margin === 'number') align.m0 = align.m1 = align.m2 = align.m3 = margin || 0
+		else align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
+
 		var xs,ys,ws,hs 
 		if(flags & this.INSIDE){
 			xs = this.x
@@ -64,11 +67,11 @@ define.class(function(exports){
 		}
 		align.total |= oldalign.total|flags
 		align.xstart =
-		align.x = xs + pad[3]		
+		align.x = xs + align.p3	+ align.m3
 		align.ystart = 
-		align.y = ys + pad[0]
-		align.w = ws - pad[1] - pad[3]
-		align.h = hs - pad[0] - pad[2]
+		align.y = ys + align.p0 + align.m0
+		align.w = ws - align.p1 - align.p3
+		align.h = hs - align.p0 - align.p2
 		align.trackstart = this.trackAlign && this.trackAlign.length || 0
 		align.maxx = 0
 		align.maxy = 0
@@ -91,7 +94,7 @@ define.class(function(exports){
 		}
 	}
 	
-	this.endAlign = function(argflags, margins){
+	this.endAlign = function(argflags){
 		// if we are align HCENTER/RIGHT lets do the h-align.
 		var align = this.align
 		var dx = align.maxx - align.xstart
@@ -115,8 +118,8 @@ define.class(function(exports){
 			this.displaceAlign(start, 'y', align.h - dy)
 		}
 
-		this.w = dx + align.padding[1] + align.padding[3]
-		this.h = dy + align.padding[0] + align.padding[2]
+		this.w = dx + align.p1 + align.p3
+		this.h = dy + align.p0 + align.p2
 
 		var oldalign = align
 		align = this.align = this.stackAlign[--this.stackAlign.len]
@@ -140,14 +143,11 @@ define.class(function(exports){
 			this.runAlign()
 		}
 
-		if(margins){
-			var m0,m1,m2,m3
-			if(typeof margins === 'number') m0 = m1 = m2 = m3 = margins
-			else m0 = margins[0], m1 = margins[1], m2 = margins[2], m3 = margins[3]
-
-			this.displaceAlign(start, 'x', m3, 1)
-			this.displaceAlign(start, 'y', m0, 1)
-			this.align.margins = margins
+		if(argflags & this.INSIDE){ // signal a margin for the first call
+			align.fm0 = oldalign.m0
+			align.fm1 = oldalign.m1
+			align.fm2 = oldalign.m2
+			align.fm3 = oldalign.m3
 		}
 
 		align.total |= oldalign.total
@@ -165,10 +165,22 @@ define.class(function(exports){
 		// ok so if we have 
 		var align = this.align
 		if(!align || !align.flags) return
-		var margins = cls && cls.margins || align.margins || this.margins
+
 		var m0,m1,m2,m3
-		if(typeof margins === 'number') m0 = m1 = m2 = m3 = margins
-		else m0 = margins[0], m1 = margins[1], m2 = margins[2], m3 = margins[3]
+		if(cls && cls.margin){
+			var margin = cls.margin
+			if(typeof margin === 'number') m0 = m1 = m2 = m3 = margin
+			else m0 = margin[0], m1 = margin[1], m2 = margin[2], m3 = margin[3]
+		}
+		else{
+			if(align.fm0 !== undefined){
+				m0 = align.fm0, m1 = align.fm1, m2 = align.fm2, m3 = align.fm3
+				align.fm0 = undefined
+			}
+			else{
+				m0 = align.m0, m1 = align.m1, m2 = align.m2, m3 = align.m3
+			}
+		}
 
 		if(align.total & this.NEEDTRACK && buffer){
 			this.trackAlign.push(buffer, buffer.length, range || 1)
@@ -202,7 +214,7 @@ define.class(function(exports){
 	this.newline = function(pad){
 		var align = this.align
 		align.x = align.xstart 
-		align.y += align.maxh + this.padding[0]+ this.padding[2] + (pad || 0)
+		align.y += align.maxh + (pad || 0)
 	}
 
 	this.addCanvas = function(ctx, index){
