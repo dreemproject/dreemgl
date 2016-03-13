@@ -68,7 +68,7 @@ define(function(require, exports, module){
 		
 		if(dump_sdf){
 			mymesh = vec2Rect(0,0,1,1)
-			vertex: mymesh[]*vec2(8.,8.) * (m_mesh * m_world * device.m_camera)
+			vertex: mymesh[] * vec2(8.,8.) * (m_mesh * m_world * device.m_camera)
 			pixel: sdf_texture.sample(pixel mymesh[])// + mix(#black,#red,pixel mymesh[].y)
 		}
 

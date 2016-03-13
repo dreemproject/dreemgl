@@ -68,139 +68,7 @@ define.class('$system/platform/base/shader', function(require, exports){
 
 		return shader		
 	}
-	/*
-	this.useShader = function(gl, shader){
-		if(!shader) return
-		if(shader.use) return shader.use(gl, shader, this)
-		// use the shader
-		gl.useProgram(shader)
-
-		// set uniforms
-		var uniset = shader.uniset
-		var unilocs = shader.unilocs
-		for(var key in uniset){
-			var loc = unilocs[key]
-			var split = loc.split
-			if(split){
-				for(var i = 0, prop = this; i < split.length; i ++) prop = prop[split[i]]
-				if(loc.last !== prop){
-					loc.last = prop
-					uniset[key](gl, loc.loc, prop)
-				}
-			}
-			else{
-				var prop = this['_' + key]
-				//if(this.dbg) console.log(key, prop)
-				if(loc.last !== prop){
-					loc.last = prop
-					uniset[key](gl, loc.loc, prop)
-				}
-			}
-		}
-		// textures
-		var texlocs = shader.texlocs
-		var texid = 0
-		for(var key in texlocs){
-			var texinfo = texlocs[key]
-			var split = texinfo.split
-			if(split){
-				for(var texture = this, i = 0; i < split.length; i ++) texture = texture[split[i]]
-			}
-			else{
-				var texture = this['_' + texinfo.name] || this[texinfo.name]
-			}
-			// lets fetch the sampler
-			var gltex = texture[texinfo.samplerid]
-			// lets do the texture slots correct
-			if(!gltex){
-				gltex = texture.createGLTexture(gl, texid, texinfo)
-				if(!gltex){
-					gltex = this.default_texture.createGLTexture(gl, texid, texinfo)
-				}
-			}
-			else{
-				gl.activeTexture(gl.TEXTURE0 + texid)
-				gl.bindTexture(gl.TEXTURE_2D, gltex)
-				if(texture.updateid !== gltex.updateid){
-					texture.updateGLTexture(gl, gltex)
-				}
-			}
-			gl.uniform1i(texinfo.loc, texid)
-			texid++
-		}
-
-		// set attributes
-		var attrlocs = shader.attrlocs
-		var len = 0 // pull the length out of the buffers
-		var lastbuf
-		for(var key in attrlocs){
-			var attrloc = attrlocs[key]
-
-			if(attrloc.name){
-				var buf = this['_' + attrloc.name]
-			}
-			else{
-				var buf = this['_' + key]
-			}
-
-			if(lastbuf !== buf){
-				lastbuf = buf
-				if(!buf.glvb) buf.glvb = gl.createBuffer()
-				if(buf.length > len) len = buf.length
-				gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
-				if(!buf.clean){
-					gl.bufferData(gl.ARRAY_BUFFER, buf.array.buffer, gl.STREAM_DRAW )
-					buf.clean = true
-				}
-			}
-			var loc = attrloc.loc
-			gl.enableVertexAttribArray(loc)
-
-			if(attrloc.name){ // ok so. lets set the vertexAttribPointer
-				gl.vertexAttribPointer(loc, attrloc.slots, gl.FLOAT, false, buf.stride, attrloc.offset)
-			}
-			else{
-				gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)
-			}
-		}
-
-		// set up blend mode
-		if(this.alpha_blend_eq.op){
-			var constant = this.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3?constant[3]:1)
-			gl.enable(gl.BLEND)
-			gl.blendEquationSeparate(this.color_blend_eq.op, this.alpha_blend_eq.op)
-			gl.blendFuncSeparate(
-				this.color_blend_eq.src,
-				this.color_blend_eq.dst,
-				this.alpha_blend_eq.src,
-				this.alpha_blend_eq.dst
-			)
-		}
-		else if(this.color_blend_eq.op){
-			var constant = this.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3?constant[3]:1)
-			gl.enable(gl.BLEND)
-			gl.blendEquation(this.color_blend_eq.op)
-			gl.blendFunc(this.color_blend_eq.src, this.color_blend_eq.dst)
-		}
-		else{
-			gl.disable(gl.BLEND)
-		}
-		// set up depth test
-		if(this.depth_test_eq.func > 1){
-			gl.enable(gl.DEPTH_TEST)
-			gl.depthFunc(this.depth_test_eq.func)
-		}
-		else{
-			gl.disable(gl.DEPTH_TEST)
-		}
-		
-		return len
-	}*/
-
-	//this.compile_use = true
-
+	
 	this.useShaderTemplate = function(gldevice, shader, root, overlay){
 		var gl = gldevice.gl
 		var ANGLE_instanced_arrays = gldevice.ANGLE_instanced_arrays
@@ -217,8 +85,8 @@ define.class('$system/platform/base/shader', function(require, exports){
 		var gltex = texture.TEXTURE_SAMPLER
 		// lets do the texture slots correct
 		if(!gltex){
-			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture)
-			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
+			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture, gldevice)
+			gltex = texture.createGLTexture(TEXTURE_ID, TEXTURE_INFO, gldevice)
 			if(!gltex) return 0
 			gltex.updateid = texture.updateid
 		}
@@ -466,6 +334,7 @@ define.class('$system/platform/base/shader', function(require, exports){
 				}
 			}
 		}
+		if(this.atDraw) this.atDraw(len)
 		return len
 	}
 

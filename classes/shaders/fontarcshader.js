@@ -1,47 +1,11 @@
-define.class('$shaders/pickshader', function(require){
-
-	this.Texture = require('$base/texture')
-
-	this.mesh = vec2.array()
-	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-
-	this.defaults = {
-		x:'this.scope._layout?0:this.scope.x',
-		y:'this.scope._layout?0:this.scope.y',
-		color:'this.scope._layout?this.scope._bgcolor:this.scope.color'
-	}
+define.class('$shaders/fontsdfshader', function(require){
 	
-	this.fgcolor = vec4('gray')
-	this.fontsize = 10
-
-	this.canvas = {	
-		fgcolor: vec4,
-		outlinecolor: vec4,
-		boldness: float,
-		outline: float,
-		x: float,		
-		y: float,
-		fontsize:float,
-		minx:float,
-		miny:float,
-		maxx:float, 
-		maxy:float,
-		texx: float,
-		texy: float,
-		unicode:float,
-		baseline:float,
-		clipx:float,
-		clipy:float,
-		clipw:float,
-		cliph:float
-		//line: float,
-		//char: float,
-		//charpos: float,
-		//addpos: float
-		//w: float,
-		//h: float,
-		//texx2: float,
-		//texx2: float,
+	this.font = {
+		texture:this.Texture,
+		tex_geom:ivec2(0),
+		item_geom:ivec2(0),
+		item_geom_f:vec2(0),
+		tex_geom_f:vec2(0)
 	}
 
 	// ok how shall we do the different font types?
@@ -50,135 +14,25 @@ define.class('$shaders/pickshader', function(require){
 	// i suggest we make a separate shader
 
 	this.canvasverbs = {
-		linespacing:1.3,
-		baseline:1,
-		drawWrap:function(str, x, y){
-			if(x !== undefined) this.px = x
-			if(y !== undefined) this.py = y
-			// ok so how does this work.
-			if(typeof str !== 'string') str = str+''
-
-			// well first we get the buffer
-			this.GETBUFFER(str.length)
-
-			// then we plug our args on canvas
-			this.ARGSTOCANVAS()
-
-			var glyphs = (this.font || this.classNAME.font).glyphs
-			var off = 0
-			var strlen = str.length
-
-			while(off < strlen){
-				var wordwidth = 0
-				for(var i = off; i < strlen; i++){
-					var unicode = str.charCodeAt(i)
-					if(unicode === 32) break
-					wordwidth += glyphs[unicode].advance * this.fontsize
-				}
-				this.w = wordwidth 
-				this.h = this.fontsize * this.linespacing
-				if(wordwidth){
-					// do alignment on a word width
-					// if this.px > this.width lets move to the next line
-					if(this.x > this.width){
-						this.y += this.fontsize * this.linespacing
-						this.x = 0 + this.marginleft
-					}
-
-					// lets output a word
-					for(var i = off; i < strlen; i++){
-						var unicode = str.charCodeAt(i)
-						if(unicode === 32) break
-						var info = glyphs[unicode]
-
-						var texx = ((info.atlas_x<<6) | info.nominal_w)
-						var texy = ((info.atlas_y<<6) | info.nominal_h)
-						//this.w = 
-						//this.h = this.fontsize * this.linespacing
-						// write the item
-						this.CANVASTOBUFFER({
-							minx:info.min_x,
-							maxx:info.max_x,
-							miny:info.min_y,
-							maxy:info.max_y,
-							unicode:unicode,
-							texx:texx,
-							texy:texy
-						})
-						this.x += info.advance * this.fontsize
-					}
-					off = i
-				}
-				else{
-					off++
-					this.x += glyphs[32].advance * this.fontsize
-				}
-				// lets skip spaces
-
-				// and then lets loop for more words
-
-			}
-			this.px = this.x
-			this.py = this.y
+		_ADDTOBUFFER:function(){
+			var texx = ((info.atlas_x<<6) | info.nominal_w)
+			var texy = ((info.atlas_y<<6) | info.nominal_h)
+			//this.w = 
+			//this.h = this.fontsize * this.linespacing
+			// write the item
+			this.CANVASTOBUFFER({
+				minx:info.min_x,
+				maxx:info.max_x,
+				miny:info.min_y,
+				maxy:info.max_y,
+				unicode:unicode,
+				texminx:texx,
+				texminy:texy,
+				fontsize:fontsize,
+				baseline:baseline
+			})
 		},
-		draw:function(str, x, y){
-			if(x !== undefined) this.px = x
-			if(y !== undefined) this.py = y
-			// ok so how does this work.
-			if(typeof str !== 'string') str = str+''
-
-			// well first we get the buffer
-			this.GETBUFFER(str.length)
-
-			// then we plug our args on canvas
-			this.ARGSTOCANVAS()
-
-			var glyphs = (this.font || this.classNAME.font).glyphs
-			var fontsize = this.fontsize || this.classNAME.fontsize
-			var off = 0
-			var strlen = str.length
-
-			var width = 0
-			for(var i = 0; i < strlen; i++){
-				var unicode = str.charCodeAt(i)
-				width += glyphs[unicode].advance * fontsize
-			}
-			this.w = width 
-			this.h = fontsize * this.linespacing
-			// do alignment on our full thing
-			if((x === undefined || y === undefined)) this.runAlign(this.classNAME, buffer, strlen)
-
-			// lets output a word
-			for(var i = 0; i < strlen; i++){
-				var unicode = str.charCodeAt(i)
-				var info = glyphs[unicode]
-				var texx = ((info.atlas_x<<6) | info.nominal_w)
-				var texy = ((info.atlas_y<<6) | info.nominal_h)
-				//this.w = 
-				//this.h = this.fontsize * this.linespacing
-				// write the item
-				this.CANVASTOBUFFER({
-					minx:info.min_x,
-					maxx:info.max_x,
-					miny:info.min_y,
-					maxy:info.max_y,
-					unicode:unicode,
-					texx:texx,
-					texy:texy,
-					fontsize:fontsize
-				})
-				this.x += info.advance * fontsize
-			}
-		}
-	}
-
-	this.arc_vertex_transcode = function(){
-		var v = vec2(canvas.texx, canvas.texy)
-		var g = ivec2(v)
-		var corner = ivec2(mesh.xy)//ivec2(mod (v, 2.))
-		// g /= 2
-		var nominal_size = ivec2(mod(v, 64.))
-		return vec4(corner * nominal_size, g * 4)
+		
 	}
 
 	this.position = function(){
@@ -191,82 +45,13 @@ define.class('$shaders/pickshader', function(require){
 		return atlas_draw()
 	}
 
-	this.font_style_t = define.struct({
-		pos:vec2,
-		fontsize:float,
-		fgcolor: vec4,
-		outlinecolor: vec4,
-		boldness: float,
-		outline: float,
-		visible: bool
-	}, "font_style_t")
-
-		// default text style
-	this.style = function(style){
-		return style
-	}
-
-	this.pixelstyle = function(){
-		return style
-	}
-	
-	this.polygonoffset = 0.
-	this.pixel_contrast = 1.4
-	this.pixel_gamma_adjust = vec3(1.2)
-	this.subpixel_off = 1.0115
-	this.subpixel_distance = 3.
-
-	this.font_pixelstyle_t = define.struct({
-		pos: vec2,
-		fontsize: float,
-		fgcolor:vec4,
-		outlinecolor: vec4,
-		boldness: float,
-		outline: float,
-		field: float
-	}, "font_pixelstyle_t")
-
-	this.compute_position = function(){
-		// we want to compute a measure of scale relative to the actual pixels
-		var matrix = view.totalmatrix  * state.viewmatrix
-
-		var s = font_style_t(
-			vec2(canvas.x, canvas.y),
-			canvas.fontsize,
-			canvas.fgcolor,
-			canvas.outlinecolor,
-			canvas.boldness,
-			canvas.outline,
-			(abs(canvas.unicode - 10.)<0.001 || abs(canvas.unicode - 32.)<0.001)?false:true
-		)
-
-		s = style(s)
-
-		var pos = mix(
-			vec2(
-				s.pos.x + s.fontsize * canvas.minx,
-				s.pos.y - s.fontsize * canvas.miny + s.fontsize * canvas.baseline
-			),
-			vec2(
-				s.pos.x + s.fontsize * canvas.maxx,
-				s.pos.y - s.fontsize * canvas.maxy+ s.fontsize * canvas.baseline
-			),
-			mesh.xy
-		)
-
-
-		// plug it into varyings
-		stylefgcolor = s.fgcolor
-		styleoutlinecolor = s.outlinecolor
-		stylepack = vec2(s.boldness, s.outline)
-
-		// hide it
-		if(!s.visible) return vec4(0.)
-
-		var pos1 = vec4(pos.x, pos.y, 0., 1.) * matrix
-		pos1.w += polygonoffset;
-
-		return pos1
+	this.arc_vertex_transcode = function(){
+		var v = vec2(canvas.texminx, canvas.texminy)
+		var g = ivec2(v)
+		var corner = ivec2(mesh.xy)//ivec2(mod (v, 2.))
+		// g /= 2
+		var nominal_size = ivec2(mod(v, 64.))
+		return vec4(corner * nominal_size, g * 4)
 	}
 
 	this.atlas_draw = function(){
@@ -479,9 +264,6 @@ define.class('$shaders/pickshader', function(require){
 		return l
 	}
 
-	this.antialias = function(d){
-		return smoothstep(-.75, +.75, d)
-	}
 
 	this.arc_list = function(p, nominal_size, _atlas_pos){
 		var cell_offset = arc_list_offset(p, nominal_size)
@@ -600,10 +382,6 @@ define.class('$shaders/pickshader', function(require){
 		return vec4(enc,enc,enc,1.)
 	}
 
-	this.sdf_decode = function(value){
-		return ((.75-value.r)*4.)
-	}
-
 	this.sdf_generate = function(){
 		var glyph = glyph_vertex_transcode(coords)
 		var nominal_size = (ivec2(mod(glyph.zw, 256.)) + 2) / 4
@@ -611,23 +389,6 @@ define.class('$shaders/pickshader', function(require){
 
 		var p = glyph.xy
 		return sdf_encode(sdf(p, nominal_size, atlas_pos))
-	}
-
-	this.sdf_lookup = function(pos){
-		return texture2D(this.font.texture, pos, {
-			MIN_FILTER: 'LINEAR',
-			MAG_FILTER: 'LINEAR',
-			WRAP_S: 'CLAMP_TO_EDGE',
-			WRAP_T: 'CLAMP_TO_EDGE'
-		})
-	}
-
-	this.font = {
-		texture:this.Texture,
-		tex_geom:ivec2(0),
-		item_geom:ivec2(0),
-		item_geom_f:vec2(0),
-		tex_geom_f:vec2(0)
 	}
 
 	this.atlas_lookup = function(offset, _atlas_pos){

@@ -2389,7 +2389,7 @@
 			height: 1
 		}
 
-		font.texture = {array:font.tex_array, size:font.tex_geom}
+		font.texture = {array:font.tex_array, width:font.tex_geom[0], height:font.tex_geom[1]}
 
 		return font
 	}

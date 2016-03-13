@@ -15,7 +15,7 @@ define.class('$base/node', function(require){
 	this.Shader = require('$base/shader')
 	this.Texture = require('$base/texture')
 
-	this.Canvas = Canvas.prototype
+	this.Canvas = Object.create(Canvas.prototype)
 
 	this.attributes = {
 		// wether to draw it
@@ -423,6 +423,12 @@ define.class('$base/node', function(require){
 		this.atFlag4 = this.rematrix
 	}
 
+	this.atViewDestroy = function(){
+		for(var key in this.render_targets){
+			this.screen.destroyRenderTarget(this.render_targets[key])
+		}
+	}
+
 	this.drawBackground = function(){
 		var c = this.canvas
 		if(this._viewport === '2d'){
@@ -490,15 +496,13 @@ define.class('$base/node', function(require){
 			var tgt
 			if(this._viewport === '2d'){
 				this.viewport_target =
-				tgt = c.getTarget("viewport", c.RGBA|c.PICK)
-				c.pushTarget(tgt, 'viewport')
+				tgt = c.pushTarget("viewport", c.RGBA|c.PICK)
 				c.setOrthoViewMatrix(!this.parent)
 			}
 			else{
 				this.viewport_target =
-				tgt = c.getTarget("viewport", c.RGBA|c.DEPTH|c.PICK)
-				c.pushTarget(tgt, 'viewport')
-				c.setPerspectiveViewMatrix(tgt)
+				tgt = c.pushTarget("viewport", c.RGBA|c.DEPTH|c.PICK)
+				c.setPerspectiveViewMatrix()
 			}
 			if(this.draw_dirty){
 				c.clear()
@@ -521,6 +525,14 @@ define.class('$base/node', function(require){
 		if(this._flag_time&2 || redraw){
 			this.screen.anim_redraw.push(this)
 		}
+
+		for(var guid in this.render_targets){
+			var target = this.render_targets[guid]
+			if(target.frameid !== c.frameid){
+				this.render_targets[guid] = undefined
+				this.screen.destroyRenderTarget(target)
+			}
+		}
 	}
 
 
@@ -540,7 +552,10 @@ define.class('$base/node', function(require){
 		}
 		if(cls._canvasverbs){
 			if(!this.hasOwnProperty('Canvas')) this.Canvas = Object.create(this.Canvas)
+
 			Canvas.compileCanvasVerbs(this, this.Canvas, key, cls)
+			//}
+			//else debugger
 		}
 	}
 
@@ -1097,7 +1112,8 @@ define.class('$base/node', function(require){
 	}
 
 	// the draw api
-	define.class(this, 'rect', '$shaders/rectshader')
+	define.class(this, 'Rect', '$shaders/rectshader')
+	define.class(this, 'Image', '$shaders/imageshader')
 
 	// Basic usage of the splitcontainer
 	this.constructor.examples = {

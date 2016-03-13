@@ -7,6 +7,8 @@ define.class(function(exports){
 		this.cmds = []
 		this.stackAlign = []
 		this.trackAlign = []
+		this.matrixStack = [this.matrix]
+		this.matrixStackLen = 0
 		this.align = this.stackAlign[0] = {x:0,y:0,w:0,h:0,flags:0,total:0}
 	}
 
@@ -14,6 +16,12 @@ define.class(function(exports){
 		this.cmds.length = 0
 		this.stackAlign.len = 0
 		this.trackAlign.length = 0
+		this.matrixStackLen = 0
+		var o = this.matrix
+		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = 0,
+		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = 0,
+		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= 0,
+		o[12]= 0, o[13]= 0, o[14]= 0, o[15]= 1
 		var align = this.align = this.stackAlign[0]
 		align.total = 0
 		align.x = this.x = 0
@@ -32,6 +40,53 @@ define.class(function(exports){
 	this.WRAP = 32
 	this.INSIDE = 64
 	this.NEEDTRACK = this.WRAP| this.RIGHT | this.HCENTER | this.BOTTOM | this.VCENTER
+
+	this.push = function(){
+		var len = ++this.matrixStackLen
+		var n = this.matrix
+		var o = this.matrixStack[len] || (this.matrixStack[len] = mat4())
+		o[0] = n[0], o[1] = n[1], o[2] = n[2], o[3] = n[3]
+		o[4] = n[4], o[5] = n[5], o[6] = n[6], o[7] = n[7]
+		o[8] = n[8], o[9] = n[9], o[10]= n[10], o[11]= n[11]
+		o[12]= n[12], o[13]= n[13], o[14]= n[14], o[15]= n[15]
+	}
+
+	this.pop = function(){
+		if(this.matrixStackLen <= 0) return
+		var len = --this.matrixStackLen
+		this.matrix = this.matrixStack[len]
+	}
+
+	this.translate = function(x, y, z){
+		mat4.translateXYZ(this.matrix, x, y, z, this.matrix)
+	}
+
+	this.rotate = function(x, y, z, r){
+		mat4.rotateXYZ(this.matrix, r, x, y, z, this.matrix)
+	}
+
+	this.rotateX = function(r){
+		mat4.rotateX(this.matrix, r, this.matrix)
+	}
+
+	this.rotateY = function(r){
+		mat4.rotateY(this.matrix, r, this.matrix)
+	}
+
+	this.rotateZ = function(r){
+		mat4.rotateZ(this.matrix, r, this.matrix)
+	}
+
+	this.scale = function(x,y,z){
+		mat4.scaleXYZ(this.matrix, x, y, z, this.matrix)
+	}
+
+	// readpixel
+	this.readPixels = function(x, y, w, h, buffer){
+		return new define.Promise(function(resolve, reject){
+			this.cmds.push('readPixels', {x:x,y:y,w:w,h:h, buffer:buffer, resolve:resolve})
+		}.bind(this))
+	}
 
 	// start an alignment
 	this.beginAlign = function(flags, margin, padding){
@@ -132,6 +187,8 @@ define.class(function(exports){
 				var dy = align.maxh //this.padding[0]+ this.padding[2] 
 				align.x = align.xstart 
 				align.y += dy
+
+
 				this.displaceAlign(start, 'x', dx, 1)
 				this.displaceAlign(start, 'y', dy, 1)
 			}
@@ -221,11 +278,15 @@ define.class(function(exports){
 		ctx.trackAlign = this.trackAlign
 		ctx.stackAlign = this.stackAlign
 		ctx.frameid = this.frameid
+		ctx.target = this.target
+		ctx.has_view_matrix_set = this.has_view_matrix_set
 		this.cmds.push('canvas', ctx.cmds, ctx.view)
 	}
 
-	this.clear = function(){
-		this.cmds.push('clear', this.clearcolor !== undefined?this.clearcolor:this.view.clearcolor)
+	this.clear = function(r, g, b ,a){
+		var color = r
+		if(r !== undefined && g !== undefined) color = [r,g,b,a]
+		this.cmds.push('clear', color !== undefined?color:this.scope.clearcolor)
 	}
 
 	this.startCache = function(uid, isdirty){
@@ -252,7 +313,24 @@ define.class(function(exports){
 		}
 	}
 	
-		// create or reuse a matrix by name
+	this.drawShaderCmd = function(shader, buffer){
+		if(!this.has_view_matrix_set){
+			if(this.target.flags&this.DEPTH){
+				this.setPerspectiveViewMatrix()
+			}
+			else{
+				this.setOrthoViewMatrix()
+			}
+		}
+		shader.view = this.view
+		shader._canvas = buffer
+		this.cmds.push(
+			'drawShader',
+			shader
+		)
+	}
+
+	// create or reuse a matrix by name
 	this.getMatrix = function(name, itarget){
 		var target = itarget !== undefined? itarget: this.target.targetguid
 		var store = this.view.matrix_store[target]
@@ -280,6 +358,7 @@ define.class(function(exports){
 			viewmatrix,
 			isstring?iviewmatrix:undefined
 		)
+		this.has_view_matrix_set = true
 	}
 	
 		// sets the view matrix to default ortho projection which is in device pixels top left 0,0
@@ -349,31 +428,39 @@ define.class(function(exports){
 	this.HALF_FLOAT_LINEAR = 1<<13
 
 	this.getTarget = function(name, iflags, iwidth, iheight){
+		if(typeof name !== 'string'){
+			throw new Error('Please provide a string unique target identifier')
+		}
 		var width = iwidth !== undefined?iwidth:this.scope._layout.width
 		var height = iheight !== undefined?iheight:this.scope._layout.height
 		var flags = iflags !== undefined?iflags:this.RGBA
 		var targetguid = this.view.guid + '_' + flags + '_'+ (name || this.cmds.length)
-		this.cmds.push(
-			'createTarget', 
-			targetguid, 
-			flags, 
-			width,
-			height
-		)
-		return {targetguid:targetguid, width:width, height:height, flags:flags}
+		var target = {targetguid:targetguid, name:name, width:width, height:height, flags:flags, frameid:this.frameid}
+
+		// mark it for the GC
+		if(!this.view.render_targets) this.view.render_targets = {}
+		this.view.render_targets[targetguid] = target
+
+		//this.cmds.push(
+		//	'getTarget', 
+		//	target
+		//)
+		return target
 	}
 
-	this.pushTarget = function(target, passname, outputname){
+	this.pushTarget = function(name, iflags, iwidth, iheight){
+		var target = name
+		if(typeof name !== 'object') target = this.getTarget(name, iflags, iwidth, iheight)
 
 		if(!this.cmdstack) this.cmdstack = []
 		this.cmdstack.push(this.cmds, this.target)
 		this.cmds = []
 		this.target = target
-
+		this.width = target.width
+		this.height = target.height
+		this.has_matrix_set = false
 		var pass = {
-			passname:passname,
 			target:target, 
-			outputname:outputname, 
 			cmds:this.cmds, 
 			view:this.view
 		}
@@ -390,12 +477,20 @@ define.class(function(exports){
 				pick_passes.push(target.targetguid, pass)
 			}
 		}
+
+		this.has_view_matrix_set = false
+
+		return target
 	}
 
 	this.popTarget = function(){
 		if(!this.cmdstack.length) throw new Error('popTarget empty')
 		this.target = this.cmdstack.pop()
 		this.cmds = this.cmdstack.pop()
+		if(this.target){
+			this.height = this.target.height
+			this.width = this.target.width
+		}
 	}
 		
 	// compile the verbs
@@ -407,6 +502,20 @@ define.class(function(exports){
 		var slots = struct && struct.slots
 		var def = struct && struct.def
 		var cap = name.charAt(0).toUpperCase() + name.slice(1)		
+
+		canvas['array' + cap] = struct
+		canvas['class' + cap] = cls
+
+		// bail if we dont have any new functions or struct data
+		if(canvas[name+'_canvasverbs'] === verbs &&
+			canvas[name+'_canvasstruct'] === struct){
+			return
+		}
+
+		canvas[name+'_canvasverbs'] = verbs
+		canvas[name+'_canvasstruct'] = struct
+
+		//!TODO use a proper JS parser / codegen to mod the code
 
 		// put accessors on our root
 		if(struct){
@@ -470,14 +579,17 @@ define.class(function(exports){
 			}
 		}
 
-		canvas['array' + cap] = struct
-		canvas['class' + cap] = cls
-
 		for(var verb in verbs){
+			if(verb[0] === '_') continue
 			var fn = verbs[verb]
 			if(typeof fn === 'function'){
 				var args = define.getFunctionArgs(fn)
 				var fnstr = fn.toString()	
+
+				fnstr = fnstr.replace(/(\t*)this\.([\_]+[\_A-Z0-9]+)\s*\(\s*\)/,function(m,ind,name){
+					var str = verbs[name].toString()
+					return str.slice(12,-1)
+				})
 
 				// macros
 				fnstr = fnstr.replace(/(\t*)this\.GETSTAMP\s*\(\s*\)/,function(m, ind){
@@ -511,13 +623,6 @@ define.class(function(exports){
 					var write = ind+'var buffer = this.buffer'+cap+'\n'+
 						ind+'if(!buffer){\n'+
 						ind+'\tthis.buffer'+cap+' = buffer = this.alloc'+cap+'?this.array'+cap+'.array(this.alloc'+cap+'):this.array'+cap+'.array()\n' + 
-						ind+'\tbuffer.frameid = this.frameid\n'+
-						ind+'\tthis.flush'+cap+'()\n'+
-						ind+'\tthis.buffer'+cap+' = buffer\n'+
-						ind+'}\n'+
-						ind+'if(!buffer.appendonly && buffer.frameid !== this.frameid){\n'+
-						ind+'\tbuffer.length = 0, buffer.frameid = this.frameid\n'+
-						ind+'\tthis.flush'+cap+'()\n'+
 						ind+'\tthis.buffer'+cap+' = buffer\n'+
 						ind+'}\n'+
 						ind+'buffer.clean = false\n'+
@@ -528,6 +633,14 @@ define.class(function(exports){
 							ind+'\tvar _ns = (buffer.length + _needed > buffer.allocated * 2)? (buffer.length + _needed): buffer.allocated * 2\n'+
 							ind+'\tfor(var _n = new buffer.arrayconstructor(_ns * '+slots+'), _o = buffer.array, _i = 0, _s = buffer.allocated * '+slots+'; _i < _s; _i++) _n[_i] = _o[_i]\n'+
 							ind+'\tbuffer.array = _n, buffer.allocated = _ns\n'+
+						ind+'}\n'+
+						ind+'if(buffer.frameid !== this.frameid){\n'+
+						ind+'\tthis.buffer'+cap+' = buffer\n'+
+						ind+'\tbuffer.length = 0\n'+
+						ind+'\tbuffer.frameid = this.frameid\n'+
+						ind+'\tvar _shader = Object.create(this.class'+cap+')\n'+
+						ind+'\tthis.shaderNAME = _shader\n'+
+						ind+'\tthis.drawShaderCmd(_shader, buffer)\n'+
 						ind+'}\n'
 						//ind+'var _array = buffer.array, _off = _len*'+slots+', _obj\n'
 					return write	
@@ -588,7 +701,7 @@ define.class(function(exports){
 					write += ind+'buffer.length++\n'
 					return write
 				})
-
+	
 				//console.log(fnstr)
 				fnstr = fnstr.replace(/NAME/g, cap)
 				canvas[verb+cap] = Function('return '+fnstr)()

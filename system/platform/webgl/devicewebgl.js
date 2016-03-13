@@ -21,11 +21,9 @@ define.class(function(require, exports){
 
 	this.document = typeof window !== 'undefined'?window : null
 
-	this.atResize = function(){
-	}
-
-	this.atDraw = function(time, frameid){
-	}
+	this.atResize = function(){}
+	this.atDraw = function(time, frameid){}
+	this.atResolveRenderTarget = function(stub){}
 
 	this.atConstructor = function(previous){
 
@@ -141,9 +139,11 @@ define.class(function(require, exports){
 			// store our w/h and pixelratio on our frame
 
 			this.main_frame.ratio = pixelRatio
-			this.main_frame.size = vec2(sw, sh) // actual size
+			this.main_frame.width = sw 
+			this.main_frame.height = sh // = vec2(sw, sh) // actual size
 
-			this.size = vec2(w, h)
+			this.width = w
+			this.height = h
 			this.ratio = this.main_frame.ratio
 
 		}.bind(this)
@@ -177,12 +177,12 @@ define.class(function(require, exports){
 		if(!frame) frame = this.main_frame
 		this.frame = frame
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
-		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
+		this.gl.viewport(0, 0, frame.width, frame.height)
 	}
 
-	this.readPixels = function(x, y, w, h){
-		var buf = new Uint8Array(w * h * 4)
-		this.gl.readPixels(x , y , w , h, this.gl.RGBA, this.gl.UNSIGNED_BYTE, buf)
+	this.readPixels = function(x, y, w, h, buffer, format){
+		var buf = buffer || new Uint8Array(w * h * 4)
+		this.gl.readPixels(x , y , w , h, format || this.gl.RGBA, this.gl.UNSIGNED_BYTE, buf)
 		return buf
 	}
 

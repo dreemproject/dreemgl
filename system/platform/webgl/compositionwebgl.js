@@ -25,7 +25,7 @@ define.class('$system/platform/base/compositionclient', function(require, basecl
 		}
 		baseclass.atConstructor.call(this, previous, parent)
 		this.device.screen = this.screen
-		this.screen._size = this.device.size
+		this.screen._size = vec2(this.device.width, this.device.height)
 	}
 
 	this.createBus = function(){

@@ -12,14 +12,18 @@ define.class('$system/platform/base/texture', function(exports){
 	this.atConstructor = function(type, w, h, device){
 		this.device = device
 		this.type = type
-		this.size = vec2(w, h)
+		this.width = w 
+		this.height = h
 	}
 
 	this.ratio = 1
 	this.frame_buf = null
 
-	Texture.fromStub = function(stub){
-		var tex = new Texture(stub.type || 'rgba', stub.size[0], stub.size[1])
+	Texture.fromStub = function(stub, device){
+		if(stub.targetguid){ // its a render target. resolve it
+			return device.atResolveRenderTarget(stub)
+		}
+		var tex = new Texture(stub.type || 'rgba', stub.width, stub.height)
 		tex.array = stub.array
 		tex.image = stub.image
 		return tex
@@ -41,7 +45,7 @@ define.class('$system/platform/base/texture', function(exports){
 		return tex
 	}
 
-	Texture.createRenderTarget = function(type, width, height, device){
+	Texture.asRenderTarget = function(type, width, height, device){
 		var tex = new Texture(type, width, height, device)
 		tex.initAsRendertarget()
 		return tex
@@ -118,7 +122,7 @@ define.class('$system/platform/base/texture', function(exports){
 			this.gldata_type = gl.FLOAT
 		}
 
-		gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, null)
+		gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.width, this.height, 0, this.glbuf_type, this.gldata_type, null)
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this.glframe_buf)
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.gltex, 0)
 
@@ -137,7 +141,7 @@ define.class('$system/platform/base/texture', function(exports){
 				this.glattach_type = gl.STENCIL_ATTACHMENT
 			}
 			gl.bindRenderbuffer(gl.RENDERBUFFER, this.gldepth_buf)
-			gl.renderbufferStorage(gl.RENDERBUFFER, this.gldepth_type, this.size[0], this.size[1])
+			gl.renderbufferStorage(gl.RENDERBUFFER, this.gldepth_type, this.width, this.height)
 			gl.framebufferRenderbuffer(gl.FRAMEBUFFER, this.glattach_type, gl.RENDERBUFFER, this.gldepth_buf)
 
 			gl.bindRenderbuffer(gl.RENDERBUFFER, null)
@@ -163,14 +167,17 @@ define.class('$system/platform/base/texture', function(exports){
 	}
 
 	this.resize = function(width, height){
-		this.delete
-		this.size = vec2(width, height)
+		this.delete()
+		this.width = width
+		this.height = height
 		this.initAsRendertarget()
 	}
 
-	this.size = vec2(0, 0)
+	this.width = 0
+	this.height = 0
 	
-	this.createGLTexture = function(gl, texid, texinfo){
+	this.createGLTexture = function(texid, texinfo, device){
+		var gl = device.gl
 		var samplerid = texinfo.samplerid
 
 		if(this.image && this.image[samplerid]){
@@ -192,7 +199,7 @@ define.class('$system/platform/base/texture', function(exports){
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, samplerdef.UNPACK_PREMULTIPLY_ALPHA_WEBGL || false)
 
 		if(this.array){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.array))
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.array))
 		}
 		else if(this.image){
 			var image = this.image
@@ -231,9 +238,10 @@ define.class('$system/platform/base/texture', function(exports){
 		return gltex
 	}
 
-	this.updateGLTexture = function(gl, gltex){
+	this.updateGLTexture = function(gltex, device){
+		var gl = device.gl
 		if(this.array){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
 		}
 		else if(this.image){
 			console.log("UPDATING!")
@@ -242,7 +250,7 @@ define.class('$system/platform/base/texture', function(exports){
 		gltex.updateid = this.updateid
 	}
 
-	// Shders
+	// Shader accessors
 	this.sample2 = function(x, y){ return sample(vec2(x, y)) }
 	this.sample = function(v){
 		return texture2D(this, v, {
@@ -292,7 +300,7 @@ define.class('$system/platform/base/texture', function(exports){
 	}
 
 	this.array1d = function(index){
-		return texture2D(this, vec2(mod(index, this.size.x), floor(index / this.size.x)), {
+		return texture2D(this, vec2(mod(index, this.width), floor(index / this.width)), {
 			MIN_FILTER: 'NEAREST',
 			MAG_FILTER: 'NEAREST',
 			WRAP_S: 'CLAMP_TO_EDGE',
@@ -301,7 +309,7 @@ define.class('$system/platform/base/texture', function(exports){
 	}
 
 	this.array2d = function(v){
-		return texture2D(this, vec2(v.x * this.size.x, v.y * this.size.y), {
+		return texture2D(this, vec2(v.x * this.width, v.y * this.height), {
 			MIN_FILTER: 'NEAREST',
 			MAG_FILTER: 'NEAREST',
 			WRAP_S: 'CLAMP_TO_EDGE',

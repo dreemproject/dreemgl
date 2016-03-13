@@ -1,8 +1,5 @@
 define.class('$shaders/pickshader', function(){
 
-	this.mesh = vec2.array()
-	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
-
 	this.position = function(){
 		if(canvas.visible < 0.5) return vec4(0.)
 		var pos = vec3(canvas.x + mesh.x * canvas.w, canvas.y + mesh.y * canvas.h, canvas.z)

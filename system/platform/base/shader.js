@@ -745,8 +745,8 @@ define.class(function(require, exports){
 		if(this.dump){
 			console.log(vtx)
 			console.log(pix_color)
-			console.log(pix_pick)
-			console.log(pix_debug)
+			//console.log(pix_pick)
+			//console.log(pix_debug)
 		}
 		vtx_state.code = vtx
 		pix_state.code_color = pix_color

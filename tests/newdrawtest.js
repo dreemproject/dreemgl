@@ -8,7 +8,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
 
-		this.rect = function(){
+		this.Rect = function(){
 			this.margin = [0,0,1,0],
 			this.fgcolor = vec4('orange')
 		}
@@ -17,7 +17,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		define.class(this, 'button', '$base/stamp', function(){
 			define.class(this, 'label', '$shaders/fontmonoshader', function(){
 				this.margin = [5,5,5,5]
-				this.fontsize = 20
+				this.fontsize = 15
 				this.fgcolor = [1,1,1,1]
 			})
 
@@ -58,7 +58,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		this.draw = function(){
 			var c = this.canvas 
 			
-			c.drawRect(10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
+			//c.drawRect(10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 
 			c.beginAlign(c.LEFT|c.WRAP)
 			c.fontsize = 5
@@ -73,7 +73,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					//c.drawRect(70,50)
 					//c.drawRect(70,50)
 					//c.beginAlign(c.LEFT,[10,10,10,10])
-					c.drawButton('Btn'+i,30,30)
+					c.drawButton('Btn'+i,30,50)
 					//c.drawInner('CEN')
 					//c.drawMore(10,10)
 					//c.endAlign(c.INSIDE)

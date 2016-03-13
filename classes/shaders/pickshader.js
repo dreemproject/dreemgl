@@ -9,8 +9,12 @@ define.class('$base/shader', function(require){
 	this.material = require('./shaderlib/materiallib')
 	this.colorlib = require('./shaderlib/colorlib')
 
+	this.Texture = require('$base/texture')
+
 	this.view = {totalmatrix:mat4(), pickview:0.}
 	this.state = {viewmatrix:mat4()}
+
+	// baseic rect
 	this.mesh = vec2.array()
 	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 
@@ -37,19 +41,5 @@ define.class('$base/shader', function(require){
 
 	this.canvas = {
 		pickdraw:float,
-	}
-
-	this.canvasverbs = {
-		flush:function(start, end){
-			// output drawcommand
-			var shader = Object.create(this.classNAME)
-			shader.view = this.view
-			shader._canvas = this.bufferNAME
-			this.cmds.push(
-				'drawShader',
-				shader
-			)
-			this.bufferNAME = undefined
-		}
 	}
 })

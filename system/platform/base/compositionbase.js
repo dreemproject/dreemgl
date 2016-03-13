@@ -197,6 +197,7 @@ define.class('$base/node',function(require){
 		if(old_children) for(;i < old_children.length;i++){
 			var child = old_children[i]
 			child.destroyed = true
+			child.atViewDestroy()
 			child.emit('destroy')
 		}
 
@@ -207,7 +208,7 @@ define.class('$base/node',function(require){
 				var id = old_version.screen.device.animate_hooks.indexOf(old_version)
 				if(id !== -1) old_version.screen.device.animate_hooks.splice(id, 1)
 			}
-
+			old_version.atViewDestroy()
 			old_version.emit('destroy')
 		}
 

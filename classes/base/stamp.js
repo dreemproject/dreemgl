@@ -11,8 +11,7 @@ define.class('$base/node', function(require){
 	var Canvas = require('$base/canvas')
 	// use the drawing canvas from view
 
-	this.Canvas = Canvas.prototype
-	this.compileCanvasVerbs = Canvas.compileCanvasVerbs
+	this.Canvas = Object.create(Canvas.prototype)
 	this.atInnerClassAssign = view.prototype.atInnerClassAssign
 
 	Object.defineProperty(this, 'canvasverbs',{

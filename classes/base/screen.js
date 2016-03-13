@@ -46,14 +46,12 @@ define.class('$base/view', function(require, exports, $base$, view) {
 	}
 
 	this.oninit = function () {
-		// ok. lets bind inputs
 		this.modal_stack = []
 		this.draw_passes = []
 		this.pick_passes = []
 		this.anim_redraw = []
-		// use 2 different matrix stores
 
-		this.commandRunner =this.CommandRunner.create(this.device)
+		this.commandRunner =this.CommandRunner.create(this)
 
 		this.pick_map = {}
 		this.pick_viewmatrix = mat4()
@@ -68,8 +66,9 @@ define.class('$base/view', function(require, exports, $base$, view) {
 		this.midi = this.device.midi
 		this.bindInputs()
 
-		this.device.atDraw = this.doDraw.bind(this)
-		this.device.atResize = this.doResize.bind(this)
+		this.device.atDraw = this.drawColor.bind(this)
+		this.device.atResize = this.resizeScreen.bind(this)
+		this.device.atResolveRenderTarget = this.resolveRenderTarget.bind(this)
 	}
 
 	this.nextViewWalk = function(iter, end){
@@ -99,9 +98,9 @@ define.class('$base/view', function(require, exports, $base$, view) {
 		}
 	}
 
-	this.doResize = function(){
+	this.resizeScreen = function(){
 		this._maxsize =
-		this._size = vec2(this.device.main_frame.size[0] / this.device.ratio, this.device.main_frame.size[1] / this.device.ratio)
+		this._size = vec2(this.device.main_frame.width / this.device.ratio, this.device.main_frame.height / this.device.ratio)
 		this.relayout()
 	}
 
@@ -116,9 +115,10 @@ define.class('$base/view', function(require, exports, $base$, view) {
 
 	// command execution
 	this.CommandRunner = {
-		create:function(device){
+		create:function(screen){
 			var obj =  Object.create(this)
-			this.device = device
+			this.screen = screen
+			this.device = screen.device
 			this.cmdstack = []
 			return obj
 		},
@@ -138,6 +138,10 @@ define.class('$base/view', function(require, exports, $base$, view) {
 					this.cmds = this.cmdstack.pop()
 				}
 			}
+		},
+		getTarget: function(){
+			var target = this.cmds[this.cmdid+1]
+			this.cmdid += 2
 		},
 		drawShader: function(){
 			var shader = this.cmds[this.cmdid+1]
@@ -163,15 +167,53 @@ define.class('$base/view', function(require, exports, $base$, view) {
 			this.cmdstack.push(this.cmds, this.cmdid + 3)
 			this.cmdid = 0
 			this.cmds = cmds
+		},
+		readPixels: function(){
+			var prop = this.cmds[this.cmdid + 1]
+			this.cmdid += 2
+			prop.resolve(this.device.readPixels(prop.x, prop.y, prop.w, prop.h, prop.buffer))
 		}
 	}
 
 	this.debug_pick = false
 
-	// lets pick the screen
+	this.resolveRenderTarget = function(target){
+		var res 
+		if(this.current_pass_is_pick && target.flags & this.Canvas.PICK){
+			res = this.pick_rendertargets[target.targetguid]
+		}
+		else{
+			res = this.color_rendertargets[target.targetguid]
+		}
+		return res
+	}
+
+	this.destroyRenderTarget = function(target){
+		var tgt
+		if(target.flags & this.Canvas.PICK){
+			tgt = this.pick_rendertargets[target.targetguid]
+			if(tgt){
+				delete this.pick_rendertargets[target.targetguid]
+				tgt.delete()
+			}
+		}
+		tgt = this.color_rendertargets[target.targetguid]
+		if(tgt){
+			delete this.color_rendertargets[target.targetguid]
+			tgt.delete()
+		}
+	}
+
 	this.doPick = function(pointer){
+		return this.drawPick(pointer)
+	}
+
+	// lets pick the screen
+	this.drawPick = function(pointer){
 
 		if(!this.pick_passes || !this.pick_passes.length) return {}
+
+		this.current_pass_is_pick = true
 
 		var overlay = {			
 			_pixelentry:1
@@ -194,11 +236,11 @@ define.class('$base/view', function(require, exports, $base$, view) {
 
 		var last_pick_main
 		var pick_passes = this.pick_passes
-		for(var passid = 0; passid < pick_passes.length;passid +=2){
+		for(var passid = pick_passes.length - 1; passid >=0 ;passid -=2){
 			// execute the commandbuffer
-			var pass = pick_passes[passid + 1]
+			var pass = pick_passes[passid]
 
-			var ismain = !pass.view.parent && pass.passname === 'viewport'
+			var ismain = !pass.view.parent && pass.target.name === 'viewport'
 		
 			if(ismain) last_pick_main = pass
 		
@@ -209,13 +251,16 @@ define.class('$base/view', function(require, exports, $base$, view) {
 			if(!tgt){
 				if(ismain){
 					if(!this.debug_pick){
-						tgt = this.Texture.createRenderTarget(pass.target.flags, 1, 1, this.device)
+						tgt = this.Texture.asRenderTarget(pass.target.flags, 1, 1, this.device)
 					}
 				}
 				else{
-					tgt = this.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+					tgt = this.Texture.asRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
 				}
 				this.pick_rendertargets[guid] = tgt
+			}
+			else if(tgt.width !== pass.target.width || tgt.height !== pass.target.height){
+				tgt.resize(pass.target.width, pass.target.height)
 			}
 
 			this.device.bindFramebuffer(tgt)
@@ -247,10 +292,12 @@ define.class('$base/view', function(require, exports, $base$, view) {
 			pickdraw:drawid
 		}
 
+		this.current_pass_is_pick = false
+
 		return match
 	}
 
-	this.doDraw = function(stime, frameid){
+	this.drawColor = function(stime, frameid){
 
 		var anim_redraw = this.anim_redraw
 		anim_redraw.length = 0
@@ -271,29 +318,35 @@ define.class('$base/view', function(require, exports, $base$, view) {
 		this.drawView()
 
 		var overlay = {
-			_pixelentry:0,
-			vertex_displace:vec4(0,0,0,0)
+			_pixelentry:0
 		}
 		
 		this.device.bindFramebuffer(null)
 
 		// lets run over the drawpasses
 		var draw_passes = this.draw_passes
-		for(var passid = 0; passid < draw_passes.length;passid +=5){
+		for(var passid = draw_passes.length-1; passid >=0; passid -= 2){
 			// execute the commandbuffer
-			var pass = draw_passes[passid + 1]
-			var ismain = !pass.view.parent && pass.passname === 'viewport'
+			var pass = draw_passes[passid]
+			var ismain = !pass.view.parent && pass.target.name === 'viewport'
 			// Create the render targets
 			var guid = pass.target.targetguid
 			var tgt = this.color_rendertargets[guid]
 			if(!tgt && !ismain){
-				this.color_rendertargets[guid] = tgt = this.Shader.Texture.createRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
+				this.color_rendertargets[guid] = tgt = this.Shader.Texture.asRenderTarget(pass.target.flags, pass.target.width, pass.target.height, this.device)
 			}
+			else if(tgt && (tgt.width !== pass.target.width || tgt.height !== pass.target.height)){
+				tgt.resize(pass.target.width, pass.target.height)
+			}
+
 			this.device.bindFramebuffer(tgt)
 			this.commandRunner.execute(pass.cmds, overlay)
 		}
 		// gc the framebuffer set somehow?
 		this.draw_passes.length = 0
+
+		// lets rapidly walk all the commands for a getTarget
+
 
 		if(anim_redraw.length){
 			//console.log("REDRAWIN", this.draw_hooks)
