@@ -1,0 +1,8 @@
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+	console.log('hi')
+	var dt = performance.now()
+	io('http://localhost:3000',{ transports: ['xhr-polling'] }).on('buf', function(data){
+		console.log(dt - performance.now(), data.byteLength)
+	})
+</script>

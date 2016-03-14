@@ -95,19 +95,11 @@ define.class(function(require, exports){
 				for(var i = 0; i < binary.length; i+=2){
 					var data = binary[i]
 					var msg = binary[i+1]
-					var sent = 0
-
-					if(data.length > 65535){
-						var rpcrandom = rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()
-						binrpc_outgoing[rpcrandom] = data
-
-						sock.send("$"+rpcrandom)
-						msg.____binary = rpcrandom
-					}
-					else{
-						msg.____binary = sent++
-						sock.send(data)
-					}
+					// lets send 10x
+					//var data = new Uint8Array(1000)
+					//for(var i = 0; i < 8000; i++){
+					sock.send(data.buffer)//data.buffer)
+					//}
 				}
 				var jsonmsg = JSON.stringify(newmsg)
 				sock.send(jsonmsg)

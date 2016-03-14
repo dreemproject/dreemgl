@@ -6,6 +6,12 @@
 
 define.class('$base/composition', function(require, $base$, screen, view, $server$, fileio){
 
+	var input_font = require('$resources/fonts/ubuntu_medium_256_arc.glf')
+	var output_font = '$resources/fonts/ubuntu_medium_256.glf'
+	var varwidth = true
+	var xsize = 32
+	var ysize = 32
+
 	var myview = define.class(view, function(){
 
 		this.Rect = function(){
@@ -15,7 +21,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 
 		// make our sdf font shader
 		define.class(this, 'Sdfgen', '$shaders/fontarcshader', function(){
-			this.font = require('$resources/fonts/fontawesome.glf')
+			this.font = input_font
 			this.compute_position = function(){
 				// we want to compute a measure of scale relative to the actual pixels
 				var matrix = view.totalmatrix  * state.viewmatrix
@@ -39,8 +45,6 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			this.color = function(){
 				var nominal_size = (ivec2(mod(glyph.zw, 256.)) + 2) / 4
 				var atlas_pos = ivec2(glyph.zw) / 256
-				var pos = glyph.xy
-				
 				var dist = arc_sdf(glyph.xy, nominal_size, atlas_pos) //+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6
 
 				return sdf_encode(dist)
@@ -78,21 +82,22 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			var px = 0
 			var py = 0
 			var pad = 4
-			var xsize = 64
-			var ysize = 64
+			
 			var font = c.classSdfgen.font
 			var glyphs = font.glyphs
 			var xymap = {}
 
 			for(var unicode in glyphs){
-				xymap[unicode] = {x:px, y:py}
+				var info = glyphs[unicode]
+				var pw = varwidth?Math.ceil((info.max_x - info.min_x) * xsize):xsize
+				xymap[unicode] = {x:px, y:py, w:pw, h:ysize}
 				if(unicode == 10 || unicode == 32 || unicode == 9)continue
-				c.drawUnicodeSdfgen(unicode, px, py, px + xsize, py + ysize)
-				px += xsize + pad
+				c.drawUnicodeSdfgen(unicode, px, py, px + pw, py + ysize)
+				px += pw + pad
 				if(px+xsize >= width) px = 0, py += ysize + pad
 			}
 
-			var sdf_pixel_width = 2048
+			var sdf_pixel_width = width
 			var sdf_pixel_height = int.nextHighestPowerOfTwo(py)
 
 			var header = 12 + font.count * 10 * 4 
@@ -110,11 +115,11 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			off++
 			vuint32[off++] = font.count
 			var glyphs = font.glyphs
-			var normwidth = xsize / sdf_pixel_width
-			var normheight = ysize / sdf_pixel_height
 			for(var unicode in glyphs){
 				var info = glyphs[unicode]
 				var map = xymap[unicode]
+				var normwidth = map.w / sdf_pixel_width
+				var normheight = map.h / sdf_pixel_height
 
 				vuint32[off++] = unicode
 				vfloat32[off++] = info.min_x
@@ -132,8 +137,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			//var storepixels = alldata.subarray(header)
 			var pixoffset = header
 			var pixuint8 = new Uint8Array(alldata.buffer)
-			//var myvuint32 = new Uint32Array(alldata.buffer)
-
+			// see if this throws
 			define.parseGLF(alldata.buffer)
 			//console.log(myvuint32[0] === 0x02F01175)
 			c.readPixels(0, 0, sdf_pixel_width, sdf_pixel_height).then(function(result){
@@ -142,9 +146,14 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 						pixuint8[pixoffset + y * sdf_pixel_width + x] = result[y * sdf_pixel_width * 4 + x * 4]
 					}
 				}
-				this.rpc.fileio.writefile("$resources/fonts/fontawesome_baked.glf",alldata).then(function(){
-					console.log('file written')
+				var dt = performance.now()
+				this.rpc.fileio.writefile(output_font,alldata).then(function(result){
+					//console.log('Got result', result, performance.now()-dt)
 				})
+
+				//this.rpc.fileio.writefile(output_font,alldata).then(function(){
+				//	console.log('file written')
+				//})
 			}.bind(this))
 
 			c.popTarget()

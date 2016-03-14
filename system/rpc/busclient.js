@@ -34,7 +34,7 @@ define.class(function(require, exports){
 
 		this.socket = new this.websocketclass(this.url)
 
-		//this.socket.binaryType = 'arraybuffer'
+		this.socket.binaryType = 'arraybuffer'
 
 		this.socket.atConnect =
 		this.socket.onopen = function(){
@@ -113,12 +113,12 @@ define.class(function(require, exports){
 			this.socket.onmessage = function(event){
 				// if its huuuge and value has escaped json, dont parse it
 				var data = event.data
-				if(data instanceof Blob){
+				if(data instanceof ArrayBuffer){
 					binary_buf.push(event.data)
 					return
 				}
 				// lets retrieve the missing binary blobs via XHR
-				msg = define.structFromJSON(msg, binary_buf)
+				var msg = define.structFromJSON(JSON.parse(data), binary_buf)
 				this.atMessage(msg, this)
 			}.bind(this)
 		}

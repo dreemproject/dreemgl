@@ -4,6 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
+
 // Dreem/Dali server
 require = require('./system/define') // support define.js modules
 
@@ -215,6 +216,15 @@ function main(){
 		}
 		else{
 			define.$platform = 'nodejs'
+			//require('socket.io')(3000).on('connection', function(e){
+			//	console.log("SOCKET HERE")
+			//	var buf = new Uint8Array(8000000)
+			//	e.emit('buf', 'hello')
+			//	for(var i = 0; i<1; i++){
+			//		e.emit('buf', new Buffer(buf))
+			//	}
+			//})
+
 			var RootServer = require('$system/server/rootserver')
 			new RootServer(args)
 		}

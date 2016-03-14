@@ -1,6 +1,6 @@
 define.class('$shaders/fontsdfshader', function(require, baseclass){
 	// simple placeholder that requires a font
-	this.font = require('$resources/fonts/fontawesome_baked.glf')
+	this.font = require('$resources/fonts/fontawesome_low.glf')
 
 	this.canvasverbs = {
 		drawText: baseclass._canvasverbs.draw,
@@ -8,7 +8,7 @@ define.class('$shaders/fontsdfshader', function(require, baseclass){
 			this.drawTextNAME(this.classNAME.table[str], x, y)
 		}
 	}
-	this.fgcolor = vec4('white')
+	this.fgcolor = 'blue'
 	this.fontsize = 32
 
 	// the font awesome

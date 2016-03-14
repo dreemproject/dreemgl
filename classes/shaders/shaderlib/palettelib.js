@@ -47,10 +47,10 @@ define(function (require, exports) {
 		return a + b * cos(6.28318 * (c * t + d));
 	}
 
-	exports.texture = require('$resources/textures/noise.png');
-	exports.checkertex  = require('$resources/textures/checker.png');
-	exports.crystaltex  = require('$resources/textures/hex_tiles.png');
-
+	//exports.texture = require('$resources/textures/noise.png');
+	//exports.checkertex  = require('$resources/textures/checker.png');
+	//exports.crystaltex  = require('$resources/textures/hex_tiles.png');
+/*
 	exports.fetch = function (pos) {
 		return texture.sample(pos)
 	}
@@ -96,7 +96,8 @@ define(function (require, exports) {
 
 		return col;
 		
-	}
+	}*/
+	
 	exports.band_no_dither = function (y, col) {
 		var f = fract(y);
 		col *= smoothstep(0.49, 0.47, abs(f - 0.5));

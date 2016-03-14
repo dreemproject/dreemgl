@@ -492,6 +492,22 @@ define.class(function(exports){
 			this.width = this.target.width
 		}
 	}
+
+	var staticCacheMax = 256000
+	var staticCache = {}
+	var staticCol = vec4()
+	this.parseColor = function(col, stc){
+		if(stc){
+			var out = staticCache[col]
+			if(out) return out 
+			if(!staticCacheMax){
+				return vec4.parse(col, true, staticCol)
+			}
+			staticCacheMax--
+			return staticCache[col] = vec4.parse(col, undefined, true)
+		}
+		return vec4.parse(col, undefined, true)
+	}
 		
 	// compile the verbs
 	exports.compileCanvasVerbs = function(root, canvas, name, cls){
@@ -684,6 +700,8 @@ define.class(function(exports){
 						if(itemslots>1){
 							write += ind+'_obj = '+value+'\n'
 							write += ind+'if(_obj !== undefined){\n'
+							if(itemslots === 4)
+								write += ind+'if(typeof _obj === "string") _obj = this.parseColor(_obj, true)\n'
 							for(var i = 0; i < itemslots; i++, off++){
 								write += ind + '\t'
 								if(NaNCheck) write += 'if(isNaN(_array[_off + ' + off + ']))'

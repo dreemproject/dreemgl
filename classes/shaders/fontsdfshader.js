@@ -143,11 +143,12 @@ define.class('$shaders/pickshader', function(require){
 	this.sdf_draw = function(){
 		var pos = mesh.xy
 
-		var m = length(vec2(length(dFdx(texturepos)), length(dFdy(texturepos))))*SQRT_1_2//*0.1
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*0.05
 
 		var dist = sdf_decode( sdf_lookup(texturepos)) * 0.003
+		var boldness = stylepack.x
 
-		dist -= stylepack.x / 300.
+		dist -= boldness / 300.
 		dist = dist / m * pixel_contrast
 
 		if(stylepack.y>0.){

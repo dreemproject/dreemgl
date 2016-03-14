@@ -13,17 +13,19 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			this.fgcolor = vec4('orange')
 		}
 
-		
-
 		// create a little stamp based button with hover anim
-		define.class(this, 'button', '$base/stamp', function(){
-			define.class(this, 'label', '$shaders/fontmonoshader', function(){
+		define.class(this, 'Button', '$base/stamp', function(){
+			define.class(this, 'Label', '$shaders/fontshader', function(){
 				this.margin = [5,5,5,5]
-				this.fontsize = 15
+				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
 			})
 			
-			define.class(this, 'icon', '$shaders/iconshader')
+			define.class(this, 'Icon', '$shaders/iconshader', function(){
+				this.fgcolor = 'white'
+				this.fontsize = 20
+				this.margin = [0,10,0,0]
+			})
 
 			this.rect = function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
@@ -45,13 +47,13 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				c.layerRect()
 				c.beginAlign(c.LEFT, this.margin, this.padding)
 				c.drawLabel(this.text)
-				c.drawIcon('android')
+				c.drawIcon(this.icon)
 				c.endAlign(c.INSIDE)
 				c.drawRect()
 			}
 
 			this.canvasverbs = {
-				draw: function(text, x, y, w, h){
+				draw: function(text,icon,x, y, w, h){
 					if(w === undefined && x !== undefined) w = x, x = undefined
 					if(h ===undefined && y !== undefined) h = y, y = undefined
 					this.GETSTAMP()
@@ -71,6 +73,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			var dt = performance.now()
 			//console.log(this.layoutchanged)
 			if(c.startCache('button',this.layoutchanged)){
+				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				for(var i = 0; i < 1000; i++){
 					//c.color=[random(),random(),random(),1.]
 					//c.drawButton('hi',50,30)
@@ -78,7 +81,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					//c.drawRect(70,50)
 					//c.drawRect(70,50)
 					//c.beginAlign(c.LEFT,[10,10,10,10])
-					c.drawButton('Btn'+i,30,50)
+					c.drawButton('Btn'+i,icons[i],30,50)
 					//c.drawInner('CEN')
 					//c.drawMore(10,10)
 					//c.endAlign(c.INSIDE)
