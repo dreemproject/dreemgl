@@ -5,8 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class( function(require, label){
-
+define.class( function(require, exports, label){
 	// not-supported: DALi
 	// The icon class provides an easy way to access most of the commonly used web icons. Look at the FontAwesome cheat sheet to see what can be used.
 
@@ -705,6 +704,7 @@ define.class( function(require, label){
 		'youtube-play':'\uf16a',
 		'youtube-square':'\uf166'
 	}
+	exports.icontable = table
 
 	var icon = this.constructor
 	this.constructor.examples = {
