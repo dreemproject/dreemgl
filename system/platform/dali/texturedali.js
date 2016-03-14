@@ -36,7 +36,7 @@ define.class('$system/base/texture', function(exports, require){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub){
-		return Texture.buildDaliTexture(stub.array, stub.size[0], stub.size[1]);
+		return Texture.buildDaliTexture(stub.array, stub.type, stub.size[0], stub.size[1]);
 	}
 
 	Texture.fromType = function(type){
@@ -55,7 +55,7 @@ define.class('$system/base/texture', function(exports, require){
 
 		var img = new dali.ResourceImage({url: fullpath});
 
-		var tex = new Texture('rgba', img.getWidth(), img.getHeight())
+		var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight())
 		//console.log('********** fromImage', img.getWidth(), img.getHeight());
 		tex.image = img
 
@@ -67,29 +67,44 @@ define.class('$system/base/texture', function(exports, require){
 	}
 
 	Texture.fromArray = function(array, w, h){
-		return Texture.buildDaliTexture(array, w, h);
+		return Texture.buildDaliTexture(array, Texture.RGBA, w, h);
 	}
 
 
 	// Construct a texture from a ArrayBuffer, with a width/height (DALI)
-	Texture.buildDaliTexture = function(array, w, h){
+	Texture.buildDaliTexture = function(array, type, w, h){
 		var dali = DaliApi.dali;		
 
-		var texture_key = DaliApi.getHash(array);
-		var tex = Texture.Cache[texture_key];
-		if (tex)
-			return tex;
-
-		tex = new Texture('rgba', w, h)
+		var tex = new Texture(type, w, h)
 		tex.array = array
 
-		// Dali wants a byte array
+		// Dali wants a byte array. Use a checksum + size to cache the data
 		var uint8 = new Uint8Array(array);
+
+		var sum = 0;
+		var offset = 0;
+		var nbytes = w * h * ((type == Texture.RGBA) ? 4 : 1);
+		for (var i=0; i<nbytes; i++) {
+			sum += uint8[offset++];
+		}
+
+		// Cache the texture based upon its size and texture data
+		var texture_key = w + ':' + h + ':' + sum;
+		if (texture_key in Texture.Cache) {
+			tex = Texture.Cache[texture_key];
+			//console.log('Found cached texture', type, w, h, texture_key);
+			return tex;
+		}
+
+		//console.log('buildDaliTexture', type, w, h, texture_key);
+
+		// Support 1-byte per pixel and 4-byte per pixel textures.
+		var pixel_type = (type == Texture.LUMINANCE) ? dali.PIXEL_FORMAT_L8 : dali.PIXEL_FORMAT_RGBA8888;
 
 		var image_options = {
 			width: w,
 			height: h,
-			pixelFormat : dali.PIXEL_FORMAT_RGBA8888
+			pixelFormat : pixel_type
 		};
 		//console.log('********** fromArray', image_options, uint8.length);
 
@@ -106,14 +121,14 @@ define.class('$system/base/texture', function(exports, require){
 					console.log('File ERROR', err);
 					throw err;
 				}
-				console.log('File Saved');
+				//console.log('File Saved');
 			});
 
 			console.log('DALICODE: var texture' + tex.id + ';');
 			console.log('DALICODE: var fs = require(\'fs\');');
 			console.log('DALICODE: var texturedata' + tex.id + ' = fs.readFileSync(\'font_' + tex.id + '.bin\');');
 
-			console.log('DALICODE: var image_options' + tex.id + ' = {width: ' + w + ', height: ' + h + ', pixelFormat : dali.PIXEL_FORMAT_RGBA8888}');
+			console.log('DALICODE: var image_options' + tex.id + ' = {width: ' + w + ', height: ' + h + ', pixelFormat : ' + pixel_type + '}');
 			console.log('DALICODE: var uint8_' + tex.id + ' = new Uint8Array(texturedata' + tex.id + ');');
 			console.log('DALICODE: var texture' + tex.id + ' = new dali.BufferImage(uint8_' + tex.id + ', image_options' + tex.id + ')');
 			tex.img = img;
