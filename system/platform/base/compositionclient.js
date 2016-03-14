@@ -87,15 +87,6 @@ define.class('./compositionbase', function(require, baseclass){
 	this.callRpcMethod = function(msg){
 		var prom = this.rpc.allocPromise()
 		msg.uid  = prom.uid
-		// lets see if our msg args are array buffers
-		var prestack = 0
-		for(var i = 0; i < msg.args.length; i++){
-			var arg = msg.args[i]
-			if(arg && arg.buffer instanceof ArrayBuffer){
-				msg.args[i] = {__arraybuffer__:prestack++}
-				this.bus.send(arg)
-			}
-		}
 		this.bus.send(msg)
 		return prom
 	}

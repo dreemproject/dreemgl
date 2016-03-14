@@ -15,7 +15,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 
 		// make our sdf font shader
 		define.class(this, 'Sdfgen', '$shaders/fontarcshader', function(){
-			this.font = require('$resources/fonts/ubuntu_medium_256.glf')
+			this.font = require('$resources/fonts/fontawesome.glf')
 			this.compute_position = function(){
 				// we want to compute a measure of scale relative to the actual pixels
 				var matrix = view.totalmatrix  * state.viewmatrix
@@ -79,7 +79,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			var py = 0
 			var pad = 4
 			var xsize = 64
-			var ysize = 96
+			var ysize = 64
 			var font = c.classSdfgen.font
 			var glyphs = font.glyphs
 			var xymap = {}
@@ -96,7 +96,8 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			var sdf_pixel_height = int.nextHighestPowerOfTwo(py)
 
 			var header = 12 + font.count * 10 * 4 
-			var body = sdf_pixel_width * sdf_pixel_height * 4
+			var body = sdf_pixel_width * sdf_pixel_height * 1
+
 			var alldata = new Uint8Array(header + body)
 			var vuint32 = new Uint32Array(alldata.buffer)
 			var vfloat32 = new Float32Array(alldata.buffer)
@@ -122,16 +123,28 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 				vfloat32[off++] = info.max_y
 				vfloat32[off++] = info.advance
 				vfloat32[off++] = map.x / sdf_pixel_width
-				vfloat32[off++] = map.y / sdf_pixel_height
-				vfloat32[off++] = map.x / sdf_pixel_width + normwidth
 				vfloat32[off++] = map.y / sdf_pixel_height + normheight
+				vfloat32[off++] = map.x / sdf_pixel_width + normwidth
+				vfloat32[off++] = map.y / sdf_pixel_height
 			}
 
 			// lets send the data over
-			var pixels = alldata.subarray(header)
-			
-			c.readPixels(0, 0, sdf_pixel_width, sdf_pixel_height, pixels).then(function(result){
-				this.rpc.fileio.test()
+			//var storepixels = alldata.subarray(header)
+			var pixoffset = header
+			var pixuint8 = new Uint8Array(alldata.buffer)
+			//var myvuint32 = new Uint32Array(alldata.buffer)
+
+			define.parseGLF(alldata.buffer)
+			//console.log(myvuint32[0] === 0x02F01175)
+			c.readPixels(0, 0, sdf_pixel_width, sdf_pixel_height).then(function(result){
+				for(var y = 0; y < sdf_pixel_height; y++){
+					for(var x = 0; x < sdf_pixel_width; x++){
+						pixuint8[pixoffset + y * sdf_pixel_width + x] = result[y * sdf_pixel_width * 4 + x * 4]
+					}
+				}
+				this.rpc.fileio.writefile("$resources/fonts/fontawesome_baked.glf",alldata).then(function(){
+					console.log('file written')
+				})
 			}.bind(this))
 
 			c.popTarget()
@@ -140,9 +153,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 	})
 
 	this.render = function(){ return [
-		fileio({name:'fileio', test:function(arg1){
-			console.log('here!', arg1)
-		}}),
+		fileio({name:'fileio'}),
 		screen({name:'default', bgcolor:'orange',rect:{color:function(){return 'blue'}},clearcolor:vec4('purple')},
 			myview({flex:1, bgcolor:'orange'})
 		)

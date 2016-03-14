@@ -13,6 +13,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			this.fgcolor = vec4('orange')
 		}
 
+		
+
 		// create a little stamp based button with hover anim
 		define.class(this, 'button', '$base/stamp', function(){
 			define.class(this, 'label', '$shaders/fontmonoshader', function(){
@@ -20,6 +22,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.fontsize = 15
 				this.fgcolor = [1,1,1,1]
 			})
+			
+			define.class(this, 'icon', '$shaders/iconshader')
 
 			this.rect = function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
@@ -41,6 +45,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				c.layerRect()
 				c.beginAlign(c.LEFT, this.margin, this.padding)
 				c.drawLabel(this.text)
+				c.drawIcon('android')
 				c.endAlign(c.INSIDE)
 				c.drawRect()
 			}

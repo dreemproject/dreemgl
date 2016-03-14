@@ -107,6 +107,8 @@ define.class(function(require){
 		this.paylen = 0 // payload length
 		this.readyState = 1
 		this.partial_msg = ''
+		this.partial_binary = []
+		this.partial_binary_bytes = 0
 		// 10 second ping frames
 		this.pingframe = new Buffer(2)
 		this.pingframe[0] = 9 | 128
@@ -134,6 +136,10 @@ define.class(function(require){
 			this.close()
 		}.bind(this))
 	}
+	
+	this.atBinaryMessage = function(message){
+
+	}
 
 	this.atMessage = function(message){
 	}
@@ -150,7 +156,7 @@ define.class(function(require){
 		this.close()
 	}
 
-	this.send = function(data){
+	this.send = function(data, ispartial, iscontinuation, domask){
 		if(this.first_queue){
 			// put a tiny gap between a server connect and first data send
 			if(!this.first_queue.length){
@@ -165,7 +171,10 @@ define.class(function(require){
 			this.first_queue.push(data)
 			return
 		}
-		if(typeof data !== 'string' && !(data instanceof Buffer)) data = JSON.stringify(data)
+		//if(typeof data !== 'string' && !(data instanceof Buffer)){
+		//	var msg = define.
+		//	data = JSON.stringify(data)
+		//}
 		if(!this.socket) return
 		var head
 		var buf = new Buffer(data)
@@ -184,10 +193,27 @@ define.class(function(require){
 			head[2] = head[3] = head[4] = head[5] = 0
 			head.writeUInt32BE(buf.length, 6)
 		}
-		head[0] = 128 | 1
-		var mask = new Buffer(4)
-		mask[0] = mask[1] = mask[2] = mask[3] = 0
+		var type = 1
+		if(data instanceof Buffer || data instanceof ArrayBuffer) type = 2
+		if(iscontinuation) type = 0
+		head[0] = (ispartial?0:128) | type
+		
 		this.socket.write(head)
+	
+		// lets mask the data
+		if(domask){
+			head[1] |= 128
+			var mask = new Buffer(4)
+			mask[0] = 0x7f
+			mask[1] = 0x7f
+			mask[2] = 0x7f
+			mask[3] = 0x7f
+			this.socket.write(mask)
+			for(var i = 0; i < buf.length; i++){
+				buf[i] ^= mask[i&3]
+			}
+		}
+
 		this.socket.write(buf)
 	}
 
@@ -209,8 +235,9 @@ define.class(function(require){
 		if(this.written > this.header.length) return this.err("unexpected data in header"+ se + s.toString())
 		return this.expected != 0
 	}
-
+	var total =  0
 	this.data = function(){
+
 		if(this.masked){
 			while(this.expected > 0 && this.read < this.input.length){
 				this.output[this.written++] = this.input[this.read++] ^ this.header[this.maskoff + (this.maskcount++&3)]
@@ -227,7 +254,36 @@ define.class(function(require){
 		}
 
 		if(this.expected) return false
-		if(!this.partial){
+		if(this.binary){
+			// single message binary
+			if(!this.partial && !this.partial_binary_bytes){
+				var msg = new Uint8Array(this.written)
+				for(var i = 0; i < this.written; i++) msg[i] = this.output[i]
+				this.atBinaryMessage(msg.buffer)
+			}
+			else{ // multi message binary
+				var store = new Uint8Array(this.written)
+				this.partial_binary.push(store)
+				for(var i = 0; i < this.written; i++){
+					store[i] = this.output[i]
+				}
+				this.partial_binary_bytes += i
+				if(!this.partial){
+					var msg = new Uint8Array(this.partial_binary_bytes)
+					var off = 0
+					for(var i = 0; i < this.partial_binary.length; i++){
+						var item = this.partial_binary[i]
+						for(var j = 0; j < item.length; j++, off++){
+							msg[off] = item[j]
+						}
+					}
+					this.partial_binary.length = 0
+					this.partial_binary_bytes = 0
+					this.atBinaryMessage(msg.buffer)
+				}
+			}
+		}
+		else if(!this.partial){
 			this.atMessage(this.partial_msg + this.output.toString('utf8', 0, this.written))
 			this.partial_msg = ''
 		}
@@ -358,17 +414,18 @@ define.class(function(require){
 		if(this.head()) return
 		var frame = this.header[0] & 128
 		var type = this.header[0] & 15
-		if(type === 0 || type == 1){
-			if(!frame){
+		if(type === 0 || type == 1 || type == 2){
+			if(!frame){          
 			 //return this.error("only final frames supported")
 				this.partial = true
 			}
 			else{
 				this.partial = false
 			}
-
+			this.binary = type === 2 || type === 0 && this.last_type === 2
 			this.expected = 1
 			this.state = this.len1
+			if(type) this.last_type = type
 			return true
 		}
 		if(type == 8) return this.close()

@@ -46,7 +46,7 @@ define.class('$system/platform/base/compositionbase', function(require, exports,
 		else response.send({type:'error', message:'please set "msg.type" to "attribute" or "method"'})
 	}
 
-	this.handleRpcMethod = function(msg){
+	this.handleRpcMethod = function(msg, socket){
 		// lets make a promise
 		return new define.Promise(function(resolve, reject){
 			var parts = msg.rpcid.split('.')
@@ -68,7 +68,7 @@ define.class('$system/platform/base/compositionbase', function(require, exports,
 						res.push(prom)
 						prom.origuid = msg.uid
 						msg.uid = prom.uid
-						screensock.send(msg)
+						screensock.sendJSON(msg)
 					}
 				}
 				// lets wait for all screens of this name
@@ -109,13 +109,13 @@ define.class('$system/platform/base/compositionbase', function(require, exports,
 					})
 				}
 				else{
-					if(!define.isSafeJSON(ret)){
-						rmsg.error = 'Result not json safe'
-						rmsg.ret = undefined
-						console.log("Rpc result is not json safe "+msg.rpcid+"."+msg.method)
-					}
+					//if(!define.isSafeJSON(ret)){
+					//	rmsg.error = 'Result not json safe'
+					//	rmsg.ret = undefined
+					//	console.log("Rpc result is not json safe "+msg.rpcid+"."+msg.method)
+					//}
 					resolve(rmsg)
-					socket.send(rmsg)
+					//socket.sendJSON(rmsg)
 				}
 			}
 		}.bind(this))
@@ -161,7 +161,7 @@ define.class('$system/platform/base/compositionbase', function(require, exports,
 					continue
 				}
 				if(sock.readyState === 1){
-					sock.send(msg)
+					sock.sendJSON(msg)
 				}
 			}
 		}
@@ -180,7 +180,7 @@ define.class('$system/platform/base/compositionbase', function(require, exports,
 		bus.broadcast({type:'sessionCheck', session:this.session})
 
 		bus.atConnect = function(socket){
-			socket.send({type:'sessionCheck', session:this.session})
+			socket.sendJSON({type:'sessionCheck', session:this.session})
 		}.bind(this)
 
 		bus.atClose = function(socket){
@@ -207,14 +207,14 @@ define.class('$system/platform/base/compositionbase', function(require, exports,
 				// lets let everyone know a new screen joined, for what its worth
 				this.bus.broadcast({type:'connectScreen', name:msg.name, index:index}, socket)
 				// and send the OK back to the screen
-				socket.send({type:'connectScreenOK', attributes:this.server_attributes, index:index})
+				socket.sendJSON({type:'connectScreenOK', attributes:this.server_attributes, index:index})
 			}
 			else if(msg.type == 'attribute'){
 				this.setRpcAttribute(msg, socket)
 			}
 			else if(msg.type == 'method'){
-				this.handleRpcMethod(msg).then(function(result){
-					socket.send(result)
+				this.handleRpcMethod(msg, socket).then(function(result){
+					socket.sendJSON(result)
 				})
 			}
 			else if(msg.type == 'return'){

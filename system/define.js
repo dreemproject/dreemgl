@@ -251,7 +251,6 @@
 			var factory = define.factory[abs_path]
 
 			if(!factory && dep_path.indexOf('$') === -1 && dep_path.charAt(0) !== '.'){
-				console.log(abs_path)
 				//console.log('skipping', dep_path)
 				return null
 			}
@@ -2038,22 +2037,86 @@
 		return outoff
 	}
 
-	define.structFromJSON = function(node){
+	define.structFromJSON = function(node, binary){
 		if (typeof(node) === "object" && node){
 			if  (node.____struct){
 				var lookup  = define.typemap.types[node.____struct] ;
 				return lookup.apply(null, node.data);
 			}
+			else if(node.____binary !== undefined){
+				return new define.typedArrayTypes[node.type](binary[node.____binary])
+			}
 			else{
-				for(var key in node){
-					node[key] = define.structFromJSON(node[key]);
+				if(Array.isArray(node)){
+					for(var i = 0; i < node.length; i++){
+						node[i] = define.structFromJSON(node[i], binary)
+					}
+				}
+				else for(var key in node){
+					node[key] = define.structFromJSON(node[key], binary)
 				}
 			}
 		}
 		return node;
 	}
 
-	define.isSafeJSON = function(obj, stack){
+	define.typedArrayTypes = {
+		Float32Array:Float32Array,
+		Float64Array:Float64Array,
+		Int32Array:Int32Array,
+		Uint32Array:Uint32Array,
+		Int8Array:Int8Array,
+		Uint8Array:Uint8Array,
+		Int16Array:Int16Array,
+		Uint16Array:Uint16Array,
+	}
+
+	define.makeJSONSafe = function(obj, binary, stack){
+		if(obj === undefined || obj === null) return obj
+		if(typeof obj === 'function') return null
+		if(typeof obj !== 'object') return obj
+		if(!stack) stack = []
+		stack.push(obj)
+
+		if(Array.isArray(obj)){
+			var out = []
+			for(var i = 0; i < obj.length; i++){
+				var prop = obj[i]
+				if(stack.indexOf(prop) === -1){
+					out[i] = define.makeJSONSafe(prop, binary, stack)
+				}
+				else out[i] = null
+			}
+			stack.pop()
+			return out
+		}
+
+		if(typeof obj.toJSON === 'function') return obj
+
+		if(obj.buffer instanceof ArrayBuffer){
+			binary.push(obj)
+			var msg =  {____binary:binary.length - 1, type:obj.constructor.name}
+			binary.push(msg)
+			return msg
+		}
+
+		var out = {}
+		for(var key in obj){
+			var prop = obj[key]
+			if(typeof prop == 'object'){
+				if(stack.indexOf(prop) === -1){
+					out[key] = define.makeJSONSafe(prop, binary, stack)
+				}
+				else out[key] = null
+			}
+			else if(typeof prop == 'function') out[key] = null
+			else out[key] = prop
+		}
+		stack.pop()
+		return out
+	}
+
+	define.isSafeJSON = function(obj, stack, binary){
 		if(obj === undefined || obj === null) return true
 		if(typeof obj === 'function') return false
 		if(typeof obj !== 'object') return true
@@ -2069,7 +2132,7 @@
 		}
 
 		if(typeof obj.toJSON === 'function') return true
-
+		
 		if(Object.getPrototypeOf(obj) !== Object.prototype) return false
 
 		for(var key in obj){
@@ -2275,7 +2338,7 @@
 		var vuint8 = new Uint8Array(blob)
 
 		var font = {}
-
+		var pixel_type
 		if(vuint32[0] == 0x02F01175){ // baked format
 			font.baked = true
 			// lets parse the glyph set
@@ -2305,6 +2368,14 @@
 				glyph.height = glyph.max_y - glyph.min_y
 			}
 			font.tex_array = blob.slice(off * 4)
+
+			if(font.tex_array.byteLength === font.tex_geom[0] * font.tex_geom[1]){
+				pixel_type = 1 << 6 // luminance
+			}
+			else{
+				pixel_type = 1 << 1 // RGBA
+			}
+			
 		}
 		else if(vuint32[0] == 0x01F01175){ // glyphy format
 			// lets parse the glyph set
@@ -2337,6 +2408,7 @@
 				glyph.height = glyph.max_y - glyph.min_y
 			}
 			font.tex_array = blob.slice(off * 4)
+			pixel_type = 1 << 1 // RGBA
 		}
 		else throw new Error('Error in font file')
 
@@ -2389,7 +2461,7 @@
 			height: 1
 		}
 
-		font.texture = {array:font.tex_array, width:font.tex_geom[0], height:font.tex_geom[1]}
+		font.texture = {type:pixel_type, array:font.tex_array, width:font.tex_geom[0], height:font.tex_geom[1]}
 
 		return font
 	}

@@ -15,7 +15,6 @@ define.class(function(require, exports){
 
 	this.methodRpc = function(name, msg){
 		msg.rpcid = name
-
 		return this.__host.callRpcMethod(msg)
 	}
 

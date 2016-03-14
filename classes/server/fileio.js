@@ -60,6 +60,11 @@ define.class('$base/service', function(require){
 		try{
 			var fullname = define.expandVariables(name);
 			console.log("writing file:",fullname);
+			
+			//var myvuint32 = new Uint32Array(data.buffer)
+			if(data.buffer instanceof ArrayBuffer) data = new Buffer(data.buffer)
+			//console.log(myvuint32[0] === 0x02F01175)
+
 			return fs.writeFileSync(fullname, data)
 		}
 		catch(e){
