@@ -71,6 +71,7 @@ define.class('$server/composition', function($ui$, screen, cadgrid, view, icon, 
 						justifycontent:"flex-start",
 						alignitems:"flex-start"
 					},
+					label({marginbottom:10, text:"Open this example on a device with motion, orientation\nor ambient light sensors to see readings below:", fgcolor:"#333", fontsize:14}),
 					label({name:"gyrosearching", visible:true, text:"Searching for gyroscope ...", fgcolor:"#888", fontsize:20, margintop:10}),
 					view({  name:"gyrout",
 						    visible:false,

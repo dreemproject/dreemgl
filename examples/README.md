@@ -14,6 +14,7 @@ There are a number of examples designed to help you see recommended practices wi
 | morph.js       | Shape morphing from a square to a circle to a cross.|
 | rpcremote.js   | Example of using rpc to remotely control a square. Add '?remote' to the URL for one window; and add '?mobile' to the URL of the second window. Use the mobile screen to remotely drag around the square on the remote screen.|
 | selection.js   | Basic example of dragging a selection square around a block of text.|
+| sensors.js     | If opened on a mobile device with accelerometer, gyroscope or ambeint light sensor available this example will display those available sensor readings.|
 | sliders.js     | Example of a basic slider that displays a current value, as well as a custom handle with an image. |
 | tables.js      | Standard example showing tables constructed with rows and columns that include text or images and can be syled with borders and background colors. |
 | text.js        | An example with static text, multiline text, text with background images, styled text, and corresponding text boxes that can be used as input fields. |
