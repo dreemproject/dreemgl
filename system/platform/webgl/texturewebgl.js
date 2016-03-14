@@ -19,7 +19,8 @@ define.class('$system/base/texture', function(exports){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub){
-		var tex = new Texture(stub.type || 'rgba', stub.size[0], stub.size[1])
+		console.log(stub.type)
+		var tex = new Texture(stub.type || Texture.RGBA, stub.size[0], stub.size[1])
 		tex.array = stub.array
 		tex.image = stub.image
 		return tex
@@ -30,13 +31,13 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	Texture.fromImage = function(img){
-		var tex = new Texture('rgba', img.width, img.height)
+		var tex = new Texture(Texture.RGBA, img.width, img.height)
 		tex.image = img
 		return tex
 	}
 
 	Texture.fromArray = function(array, w, h){
-		var tex = new Texture('rgba', w, h)
+		var tex = new Texture(Texture.RGBA, w, h)
 		tex.array = array
 		return tex
 	}
@@ -72,26 +73,11 @@ define.class('$system/base/texture', function(exports){
 		return str
 	}
 
-	this.initAsRendertarget = function(){
-		var gl = this.device.gl
-		
-		if(!this.type) this.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
-		var type = this.type
-
-		this.glframe_buf = gl.createFramebuffer()
-		this.gltex = this.IL_AL_SC_TC = gl.createTexture()
-
-		// our normal render to texture thing
-		gl.bindTexture(gl.TEXTURE_2D, this.gltex)
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-
+	this.typeFlagsToGLType = function(gl, type){
 		this.glbuf_type = gl.RGB
 		if(type & Texture.LUMINANCE){
 			this.glbuf_type = gl.LUMINANCE
-			if(type & TEXTURE.ALPHA) this.glbuf_type = gl.LUMINANCE_ALPHA
+			if(type & Texture.ALPHA) this.glbuf_type = gl.LUMINANCE_ALPHA
 		}
 		else if(type & Texture.ALPHA) this.glbuf_type = gl.ALPHA
 		else if(type & Texture.RGBA) this.glbuf_type = gl.RGBA
@@ -117,6 +103,24 @@ define.class('$system/base/texture', function(exports){
 			if(!ext) throw new Error('No OES_texture_float')
 			this.gldata_type = gl.FLOAT
 		}
+	}
+
+	this.initAsRendertarget = function(){
+		var gl = this.device.gl
+		
+		if(!this.type) this.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+
+		this.glframe_buf = gl.createFramebuffer()
+		this.gltex = this.IL_AL_SC_TC = gl.createTexture()
+
+		// our normal render to texture thing
+		gl.bindTexture(gl.TEXTURE_2D, this.gltex)
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+
+		this.typeFlagsToGLType(gl, this.type)
 
 		gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, null)
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this.glframe_buf)
@@ -192,7 +196,8 @@ define.class('$system/base/texture', function(exports){
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, samplerdef.UNPACK_PREMULTIPLY_ALPHA_WEBGL || false)
 
 		if(this.array){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.array))
+			this.typeFlagsToGLType(gl, this.type)
+			gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, new Uint8Array(this.array))
 		}
 		else if(this.image){
 			var image = this.image

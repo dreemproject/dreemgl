@@ -25,7 +25,7 @@ define.class( function(require, label){
 
 	this.bgcolor = NaN
 
-	this.font = require('$resources/fonts/fontawesome.glf')
+	this.font = require('$resources/fonts/fontawesome_baked.glf')
 
 	// the font awesome
 	var table = {
