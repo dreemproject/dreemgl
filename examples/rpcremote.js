@@ -24,6 +24,9 @@ define.class('$server/composition', function(
 	}),
 	screen({
 		name:'mobile',
+		testcall:function(){
+			console.log("CALLED FROM REMOTE!")
+		},
 		flowdata:{x:10,y:10},
 		// make an exportable attribute to something internal
 		pointerpos: Config({type:vec2, value:wire('find.main.pos')})
@@ -45,7 +48,8 @@ define.class('$server/composition', function(
 			pos: wire('this.screen.movepos'),
 			bgcolor: 'red',
 			init: function(){
-				console.log("screen2", this.rpc.myservice.test)
+				//console.log("screen2", this.rpc.myservice.test)
+				this.rpc.mobile.testcall()
 			}
 		})
 	)
