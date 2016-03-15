@@ -186,6 +186,7 @@ define.class('./compositionbase', function(require, baseclass){
 						if(!obj) return console.log("Invalid rpc attribute "+ msg.rpcid)
 					}
 				}
+				if(!obj) return console.log("Invalid rpc attribute "+ msg.rpcid)
 				var value =  define.structFromJSON(msg.value)
 				var attrset = obj.atAttributeSet
 				obj.atAttributeSet = undefined
