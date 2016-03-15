@@ -17,33 +17,79 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 							majorevery:5,
 							majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1),
 							minorline:vec4(0.2823529541492462,0.2823529541492462,0.2823529541492462,1),
-							alignitems:'center',
 							alignself:'stretch',
-							flexdirection:'column',
-							justifycontent:'center'
+							flexdirection:'row',
+							alignitems:'center',
+							justifycontent:'space-around'
 						},
-						label({
-							name:"current",
-							width:200,
-							height:30,
-							bgcolor:NaN,
-							marginbottom:30,
-							text:"The current value is: 0"
-						}),
-						slider({
-							width:400,
-							minhandlethreshold:26,
-							height:5,
-							value:0.0,
-							bgcolor:"pink",
-							fgcolor:"white",
-							onvalue:function(ev,v,o) {
-								var current = this.screen.find("current");
-								if (current) {
-									current.text = "The current value is: " + v
+						view({flexdirection:"column"},
+							label({
+								text:"Basic Usage",
+								marginbottom:30
+							}),
+							slider({
+								flex:0,
+								width:400,
+								minhandlethreshold:26,
+								height:5,
+								value:0.1,
+								bgcolor:"darkyellow",
+								fgcolor:"white",
+								onvalue:function(ev,v,o) {
+									var current = this.find("current");
+									if (current) {
+										current.text = "The current value is: " + v
+									}
+									this.height = 5 + 30 * v
 								}
-								this.height = 5 + 30 * v
-							}})
+							}),
+							label({
+								name:"current",
+								margintop:30,
+								fontsize:12,
+								text:"The current value is: 0.1"
+							})
+						),
+						view({flexdirection:"column"},
+							label({
+								text:"Custom Handle w/Image",
+								marginbottom:30
+							}),
+							slider({
+								flex:0,
+								width: 400,
+								height: 5,
+								bgcolor: vec4(1,1,1,0.2),
+								fgcolor: "white",
+								value:0.6,
+								smooth:false,
+								onvalue:function(ev,v,o) {
+									var current = this.find("current");
+									if (current) {
+										current.text = "The current value is: " + v
+									}
+									var handle = this.find("handle")
+									if (handle) {
+										handle.rotate = vec3(0,0,v*5)
+									}
+								}
+							}, view({
+								name:"handle",
+								width:40,
+								height:40,
+								rotate:vec3(0,0,0.6),
+								borderradius:7,
+								bgimagemode:"stretch",
+								bgimage:"$resources/textures/bluecloud.png"
+							  })
+							),
+							label({
+								name:"current",
+								margintop:30,
+								fontsize:12,
+								text:"The current value is: 0.6"
+							})
+						)
 					)
 				)
 			]

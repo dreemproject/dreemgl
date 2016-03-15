@@ -4,7 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo, urlfetch)
+define.class("$ui/view", function(require, $ui$, view, label, button, labelset, $$, geo, urlfetch)
 {
 
 	var BufferGen = require("$widgets/map/mapbuffers")();
@@ -13,7 +13,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.attributes = {
 		// TODO(aki): Why latlong inverse?
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
-		// 
+		//
 		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
 		latlongchange: Config({type: Event})
@@ -29,7 +29,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.onpointerwheel = function(ev){
-		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1]/120);
+		if (!ev.touch) {
+			this.zoomTo(this.dataset.zoomlevel - ev.wheel[1]/120);
+		}
 	}
 
 	this.onpointerend = function(ev){
@@ -341,7 +343,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			//this.setCenter(33656/2,21534/2, 16)
 		}
 	})
-	
+
 	// Every time we re-draw process the
 	this.atAnimate = function(){
 		this.updateTiles();
@@ -409,22 +411,22 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.tap = function(ev){
-		
-		// 
+
+		//
 		var coord  =  this.globalToLocal(ev.position);
-		var R = this.projectonplane(coord);	
+		var R = this.projectonplane(coord);
 		if (R){
-			// 
+			//
 			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1])
 
 			var zoomoffs = 0;
 			if (ev.clicker == 2) zoomoffs ++;
-	
-			// convert GL unit to map meters	
+
+			// convert GL unit to map meters
 			var r0 = (R[0]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
 			var r2 = (-R[2]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
-			
-			// 
+
+			//
 			//	var M = this.find("MARKER");
 			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1]+ r2);
 			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel + zoomoffs, 1);
@@ -470,7 +472,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	// All tiles use tilebasemixin
 	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
-			// the translate in integer units 
+			// the translate in integer units
 			trans: vec2(0),
 			// the coordinate in integer units
 			coord: vec2(0),
@@ -519,13 +521,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.pointertap = function(ev){
-			
-			this.host.tap(ev);			
+
+			this.host.tap(ev);
 		}
 
 		this.lastpos = vec2(0);
 
-		// return the tile position 
+		// return the tile position
 		this.calctilepos = function(){
 			var x = Math.floor( this._coord[0] + this._trans[0]);
 			var y = Math.floor(this._coord[1] + this._trans[1]);
@@ -648,7 +650,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 	});
-	
+
 	// view implementation of the land
 	define.class(this,"landtile", "$ui/view", function(){
 
@@ -721,36 +723,34 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 	});
-	
+
 	// view implementation of the label tile
-	define.class(this,"labeltile", "$ui/labelset", function(){
-		this.polygonoffset = 10.0;
+	define.class(this, "labeltile", "$ui/labelset", function(){
+		this.polygonoffset = 100.0;
 		this.outline = false;
 		this.outline_thickness = 0;
 		this.is = tilebasemixin;
 		this.outline_color = "black" ;
 		this.fgcolor = "black"
+
 		this.textpositionfn = function(pos, tag){
 		//	idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 		}
 
 		this.textstyle = function(style, tag){
 			var pos = style.pos
-			var rpos = vec2(1,-1)*pos.xz ;
+			var rpos = vec2(1,-1) * pos.xz;
 			rpos.y += pos.y;
 			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
 			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
 
-			// pos.xy /= pow(2.0,view.layeroffset - view.fraczoom - 2)
-			// rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
 			style.pos = vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 
 			style.fgcolor = "black";
-			//style.outlinecolor = "black" ;
-			//style.outline_thickness = 120.0;
-			//style.outline = false;
+			// style.outlinecolor = "white";
+			// style.outlinethickness = 1.0;
+			// style.outline = true;
 			return style
-			//return vec4(tag.yzw, 1.0);
 		}
 
 		this.resetbuffer = function(){
@@ -778,14 +778,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 			for (var i =0 ; i<LabelSource.length; i++){
 				var l = LabelSource[i];
-				var f = 20;
+				var f = 30;
 				if (l.scalerank !== undefined){
 					f = rankfontsizes[l.scalerank] * Math.pow(2, this.layeroffset-1);
 					//f+= l.scalerank?(100/l.scalerank):0;
 				}
 
 				if (f >-1){
-					var l2 = {text:l.name,fontsize:f,outline:false, color: vec4("black"), outlinecolor: vec4("black"), pos: vec3(l.x, -11,l.y)};
+					var l2 = {text:l.name,fontsize:f,outline:false, color: vec4("white"), outlinecolor: vec4("black"), pos: vec3(l.x, -11,l.y)};
 					thelabels.push(l2);
 				}
 			}
@@ -990,6 +990,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 		var zoom = 0.25
+		//
+		//console.log(-this.camdist*zoom*0.13,this.camdist*zoom*0.3)
 		res.push(
 			view({
 				bgcolor:"red",
@@ -999,7 +1001,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				nearplane: 100 ,
 				fov: fov,
 				farplane: this.camdist * 2,
-				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3), fov: fov,
+				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3), 
+				fov: fov,
 				up: vec3(0,1,0),
 				lookat: vec3(0,0,0)
 			},[
@@ -1013,6 +1016,25 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			])
 		);
 		//res.push(this.constructor_children);
+		var camdist = this.camdist
+		res.push(button({
+			position:'absolute',
+			top:20,
+			label:'2D/3D',
+			mode:1,
+			click:function(){
+				var map = this.find('mapinside')
+				if(this.mode == 1){
+					this.mode = 2
+					map.camera = Animate({1:vec3(0,-4650,150)})
+				}
+				else {
+					this.mode = 1	
+					map.camera = Animate({1:vec3(0,-camdist*zoom*0.13,camdist*zoom*0.3)})
+				}
+
+			}
+		}))
 		res.push(label({
 			bottom:10,
 			fontsize:8,

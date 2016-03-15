@@ -194,15 +194,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n40" name="n40">40</a></strong>
 <a href="#n41" name="n41">41</a>
 <a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and limitations under the License.*/</span>
+ Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">//Pure JS based composition</span>
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, cadgrid, view){
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, cadgrid, view, icon, label){
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>
@@ -218,20 +249,51 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.visible = <span class="predefined-constant">false</span>
         })
 
+        <span class="local-variable">this</span>.style = {
+                <span class="key">icon</span>: {
+                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">margin</span>:<span class="integer">40</span>,
+                        <span class="key">fontsize</span>:<span class="integer">60</span>
+                }
+        }
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                 screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>)},
                         cadgrid({
-                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                <span class="function">pointermove</span>:<span class="keyword">function</span>(event){
-                                        <span class="keyword">var</span> select = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>)
-                                        select.visible = <span class="predefined-constant">true</span>
-                                        select.pos = vec2(event.min[<span class="integer">0</span>], event.min[<span class="integer">1</span>])
-                                        select.size = vec2(event.max[<span class="integer">0</span>] - event.min[<span class="integer">0</span>], event.max[<span class="integer">1</span>] - event.min[<span class="integer">1</span>])
+                                        <span class="key">flex</span>:<span class="integer">1</span>,
+                                        <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="function">pointermove</span>:<span class="keyword">function</span>(event){
+                                                <span class="keyword">var</span> select = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
+                                                select.visible = <span class="predefined-constant">true</span>;
+                                                select.pos = vec2(event.min[<span class="integer">0</span>], event.min[<span class="integer">1</span>]);
+                                                select.size = vec2(event.max[<span class="integer">0</span>] - event.min[<span class="integer">0</span>], event.max[<span class="integer">1</span>] - event.min[<span class="integer">1</span>])
+                                        },
+                                        <span class="function">pointerend</span>:<span class="keyword">function</span>(event){
+
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt; <span class="local-variable">this</span>.children.length;i++) {
+                                                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i];
+                                                        child.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
+                                                }
+
+                                                <span class="keyword">var</span> select = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
+                                                <span class="keyword">var</span> rect = vec4(event.min[<span class="integer">0</span>], event.min[<span class="integer">1</span>], event.max[<span class="integer">0</span>] - event.min[<span class="integer">0</span>], event.max[<span class="integer">1</span>] - event.min[<span class="integer">1</span>])
+
+
+                                                <span class="keyword">var</span> selection = <span class="local-variable">this</span>.screen.childrenInRect(rect, [select]);
+
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt; selection.length;i++) {
+                                                        <span class="keyword">var</span> selected = selection[i];
+                                                        <span class="keyword">if</span> (selected.noselect !== <span class="predefined-constant">true</span>) {
+                                                                selected.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>;
+                                                        }
+                                                }
+
+                                                select.visible = <span class="predefined-constant">false</span>
+                                        }
                                 },
-                                <span class="function">pointerend</span>:<span class="keyword">function</span>(event){
-                                        <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>).visible = <span class="predefined-constant">false</span>
-                                }
-                                },
+                                label({<span class="key">noselect</span>:<span class="predefined-constant">true</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Drag the selection box around the objects below to demonstrate selection</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>}),
+                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>}), icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle-o</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>}), icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">square-o</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>}),
                                 <span class="local-variable">this</span>.selectorrect()
                         )
                 )

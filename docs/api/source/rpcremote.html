@@ -233,7 +233,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">mobile</span><span class="delimiter">'</span></span>,
                 <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">10</span>,<span class="key">y</span>:<span class="integer">10</span>},
                 <span class="comment">// make an exportable attribute to something internal</span>
-                <span class="key">pointerpos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.main.pos</span><span class="delimiter">'</span></span>)
+                <span class="key">pointerpos</span>: Config({<span class="key">type</span>:vec2, <span class="key">value</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">find.main.pos</span><span class="delimiter">'</span></span>)})
                 },
                 view({
                         <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>,
@@ -245,14 +245,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         screen({
                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">remote</span><span class="delimiter">'</span></span>,
                 <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">30</span>,<span class="key">y</span>:<span class="octal">00</span>},
-                <span class="key">movepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.mobile.pointerpos</span><span class="delimiter">'</span></span>)
+                <span class="key">movepos</span>: Config({<span class="key">type</span>:vec2,<span class="key">value</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.mobile.pointerpos</span><span class="delimiter">'</span></span>)})
                 },
                 view({
                         <span class="key">size</span>: vec2(<span class="integer">200</span>, <span class="integer">200</span>),
                         <span class="key">pos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.screen.movepos</span><span class="delimiter">'</span></span>),
                         <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
                         <span class="function">init</span>: <span class="keyword">function</span>(){
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">screen2</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.rpc.server.test)
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">screen2</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.rpc.myservice.test)
                         }
                 })
         )

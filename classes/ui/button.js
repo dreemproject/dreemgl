@@ -7,11 +7,11 @@
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
 // Simple gradient button: a rectangle with a textlabel and an icon
+// <br/><a href="/examples/buttons">examples &raquo;</a>
 
 	this.attributes = {
 		// The label for the button
 		text: Config({type: String, value: ""}),
-		label: Config({type: String, value: ""}),
 
 		// The icon for the button, see FontAwesome for the available icon-names.
 		icon: Config({type: String, value: "", meta:"icon"}),
@@ -66,9 +66,11 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		borderwidth: 2,
 		margin: 0,
 		bordercolor: vec4("#636363"),
+		pickalpha:-1,
+		iconmargin:4,
 
-		alignitems: "flex-start",
-		justifycontent: "flex-start"
+		alignitems: "center",
+		justifycontent: "center"
 	}
 
 	this.style = {
@@ -90,10 +92,6 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		}
 	}
 
-	this.onlabel = function(ev,v,o) {
-		this.text = v;
-	};
-
 	//this.buttonres = {};
 	this.font = require('$resources/fonts/opensans_bold_ascii.glf')
 
@@ -113,30 +111,32 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		return mix(col1, col2, pos.y)
 	}
 
+	this.setTextColor = function(color) {
+		if (this.iconres) this.iconres.fgcolor = color;
+		if (this.buttonres) this.buttonres.fgcolor = color;
+	}
+
 	// the hover state when someone hovers over the button
 	this.statehover = function(){
-		this.col1 = this.hovercolor1
-		this.col2 = this.hovercolor2
-		this.shadowopacity = 1.0
-		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
-		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
+		this.col1 = this.hovercolor1;
+		this.col2 = this.hovercolor2;
+		this.shadowopacity = 1.0;
+		this.setTextColor(this.textactivecolor)
 	}
 
 	// the normal button state
-	this.statenormal = function(first){
-		this.col1 = Mark(this.buttoncolor1, first)
-		this.col2 = Mark(this.buttoncolor2, first)
+	this.statenormal = function(first) {
+		this.col1 = Mark(this.buttoncolor1, first);
+		this.col2 = Mark(this.buttoncolor2, first);
 		this.shadowopacity = 0.0
-		if(this.iconres)this.iconres.fgcolor = this.textcolor
-		if(this.buttonres) this.buttonres.fgcolor = this.textcolor;
+		this.setTextColor(this.textcolor)
 	}
 
 	// clicked state
 	this.stateclick = function(){
-		this.col1 = this.pressedcolor1
-		this.col2 = this.pressedcolor2
-		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
-		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
+		this.col1 = this.pressedcolor1;
+		this.col2 = this.pressedcolor2;
+		this.setTextColor(this.textactivecolor)
 	}
 
 	this.init = function(){
@@ -147,14 +147,16 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this._isover = true
 		this.statehover()
 	}
+
 	this.pointerout = function(){
 		this._isover = false
 		this.statenormal()
 	}
-	this.pointerstart = function(){
 
+	this.pointerstart = function(){
 		this.stateclick()
 	}
+
 	this.pointerend = function(event){
 		if (event.isover){
 			this.statehover();
@@ -164,7 +166,26 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			this.statenormal()
 		}
 	}
-	
+
+	this.buildIconRes = function() {
+		return icon({
+			drawtarget:"color",
+			fgcolor:this.textcolor,
+			fontsize: this.fontsize,
+			icon: this.icon
+		})
+	};
+
+	this.buildButtonRes = function(iconres) {
+		return label({
+			drawtarget:"color",
+			marginleft: iconres ? this.iconmargin : 0,
+			fontsize: this.fontsize,
+			fgcolor:this.textcolor,
+			text: this.text
+		})
+	};
+
 	this.render = function(){
 		if (this.constructor_children.length > 0) return this.constructor_children;
 		var res = []
@@ -172,24 +193,12 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.iconres = undefined
 
 		if (this.icon && this.icon.length > 0){
-			this.iconres = icon({
-				drawtarget:"color",
-				fgcolor:this.textcolor,
-				fontsize: this.fontsize,
-				icon: this.icon
-			})
+			this.iconres = this.buildIconRes();
 			res.push(this.iconres)
 		}
 
 		if (this.text && this.text.length > 0){
-			this.buttonres = label({
-				drawtarget:"color",
-				marginleft:this.iconres?4:0,
-				//bgcolor:this.bgcolor,
-				fontsize: this.fontsize,
-				fgcolor:this.textcolor,
-				text: this.text
-			})
+			this.buttonres = this.buildButtonRes(this.iconres);
 			res.push(this.buttonres)
 		}
 
@@ -203,7 +212,26 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			return [
 				button({text:"Press me!"}),
 				button({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  }),
-				button({text:"With an icon!", icon:"flask" })
+				button({text:"With an icon!", icon:"flask" }),
+				button({
+					text:"Button With Image",
+					textcolor:"white",
+					textactivecolor:"black",
+					bgimage:"$resources/textures/redcloud.png",
+					bgimagemode:"stretch",
+					selected:false,
+					click:function() { this.selected = !this.selected; },
+					statenormal:function() {
+						if (this.selected) {
+							this.bgimage = "$resources/textures/bluecloud.png";
+							this.setTextColor(this.textactivecolor)
+						} else {
+							this.bgimage = "$resources/textures/redcloud.png";
+							this.setTextColor(this.textcolor)
+						}
+					},
+					onselected:function() { this.statenormal() }
+				})
 			]
 		}
 	}

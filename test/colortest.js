@@ -28,7 +28,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					)
 					,view({flexdirection:"row", bgcolor:"transparent",padding:7 },
 						button({
-							label:"Set Vec4",
+							text:"Set Vec4",
 							click:function(){
 								var cp = this.find("colorpicker");
 								cp.value = vec4("blue");
@@ -37,7 +37,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 						}),
 
 						button({
-							label:"Set HSL",
+							text:"Set HSL",
 							click:function(){
 								var cp = this.find("colorpicker");
 								cp.value = vec4.fromHSL(Math.random(),Math.random(),Math.random());

@@ -488,6 +488,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n334" name="n334">334</a>
 <a href="#n335" name="n335">335</a>
 <a href="#n336" name="n336">336</a>
+<a href="#n337" name="n337">337</a>
+<a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -570,6 +574,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">nodePathFor</span> = <span class="keyword">function</span>(v) {
                 <span class="keyword">var</span> ast = <span class="local-variable">this</span>.nodeFor(v);
+                <span class="keyword">if</span> (!ast.fn) {
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Yikes!</span><span class="delimiter">&quot;</span></span>, ast, v)
+                        <span class="keyword">return</span>;
+                }
 
                 <span class="keyword">var</span> parentpath;
                 <span class="keyword">var</span> index = -<span class="integer">1</span>;

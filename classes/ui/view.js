@@ -53,12 +53,12 @@ define.class('$system/base/node', function(require){
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
+		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"resize"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
-		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
+		clearcolor: Config({group:"style",type:vec4, value: NaN, meta:"color"}),
 
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
@@ -572,10 +572,11 @@ define.class('$system/base/node', function(require){
 	}
 
 
+	// image can be an image, or a Texture (has array property).
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
-		var img = shader.texture = Shader.Texture.fromImage(image);
+		var img = shader.texture = (image.array) ? image : Shader.Texture.fromImage(image)
 		if(this.bgimagemode === "resize"){
 			this._size = img.size
 			this.relayout()
@@ -1340,8 +1341,7 @@ define.class('$system/base/node', function(require){
 		this.position = function(){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			var res = vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
-			res.w -= 0.004
+			var res = vec4(pos, -0.004, 1) * view.totalmatrix * view.viewmatrix
 			return res;
 		}
 		this.color = function(){
@@ -1449,6 +1449,63 @@ define.class('$system/base/node', function(require){
 					} else {
 						this.bgimageaspect = vec2(1.0/ratio, 1.0);
 					}
+				} else if (this.bgimagemode === "center"
+					|| this.bgimagemode === "left"
+					|| this.bgimagemode === "right"
+					|| this.bgimagemode === "top"
+					|| this.bgimagemode === "top-left"
+					|| this.bgimagemode === "top-right"
+					|| this.bgimagemode === "bottom"
+					|| this.bgimagemode === "bottom-left"
+					|| this.bgimagemode === "bottom-right") {
+
+					var rx, ry;
+					if (uselayout) {
+						rx = this._layout.width / imgw;
+						ry = this._layout.height / imgh;
+					} else {
+						rx = this._width / imgw;
+						ry = this._height / imgh;
+					}
+
+					this.bgimageaspect = vec2(rx, ry);
+
+					if (this.bgimagemode === "center") {
+						this.bgimageoffset = vec2(0.5, 0.5);
+
+					} else if (this.bgimagemode === "left") {
+
+						this.bgimageoffset = vec2(0, 0.5);
+
+					} else if (this.bgimagemode === "right") {
+
+						this.bgimageoffset = vec2(1.0 - rx, 0.5);
+
+					} else if (this.bgimagemode === "top") {
+
+						this.bgimageoffset = vec2(0.5, 0);
+
+					} else if (this.bgimagemode === "top-left") {
+
+						this.bgimageoffset = vec2(0, 0);
+
+					} else if (this.bgimagemode === "top-right") {
+
+						this.bgimageoffset = vec2(1.0 - rx, 0);
+
+					} else if (this.bgimagemode === "bottom") {
+
+						this.bgimageoffset = vec2(0.5, 1.0 - ry);
+
+					} else if (this.bgimagemode === "bottom-left") {
+
+						this.bgimageoffset = vec2(0, 1.0 - ry); //
+
+					} else if (this.bgimagemode === "bottom-right") {
+
+						this.bgimageoffset = vec2(1.0 - rx, 1.0 - ry); //
+					}
+
 				}
 			}
 		}
@@ -1532,7 +1589,9 @@ define.class('$system/base/node', function(require){
 			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
 			sized = vec2(pos.x, pos.y)
-			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
+			var res = vec4(sized.x, sized.y, -0.004, 1) * view.totalmatrix * view.viewmatrix
+			//res.w -= 0.004
+			return res
 		}
 	})
 
@@ -1710,10 +1769,13 @@ define.class('$system/base/node', function(require){
 	};
 
 	this.boundsInsideRect = function(r) {
-		return r.x <= this._layout.left
-			&& r.y <= this._layout.top
-			&& r.w >= this._layout.width
-			&& r.z >= this._layout.height;
+
+		var inside = r[0] <= this._layout.absx
+			&& r[1] <= this._layout.absy
+			&& r[0] + r[2] >= this._layout.absx + this._layout.width
+			&& r[1] + r[3] >= this._layout.absy + this._layout.height;
+
+		return inside;
 	};
 
 	define.class(this, 'viewportblend', this.Shader, function(){

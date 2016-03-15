@@ -286,6 +286,21 @@ console.log('*******************************************************************
 		else{
 			gl.activeTexture(TEXTUREGL_ID) // gl.TEXTURE0 + TEXTURE_ID
 			gl.bindTexture(gl.TEXTURE_2D, gltex)
+
+			if (texture.image) {
+				var sampler = new dali.Sampler();
+				sampler.setFilterMode(dali.FILTER_MODE_LINEAR, dali.FILTER_MODE_LINEAR);
+				sampler.setWrapMode(dali.WRAP_MODE_CLAMP_TO_EDGE, dali.WRAP_MODE_CLAMP_TO_EDGE);
+				if (DaliApi.emitcode) {
+					console.log('DALICODE: var sampler' + dalimaterial.id + ' = new dali.Sampler();');
+					console.log('DALICODE: sampler' + dalimaterial.id + '.setFilterMode(dali.FILTER_MODE_LINEAR, dali.FILTER_MODE_LINEAR);');
+					console.log('DALICODE: sampler' + dalimaterial.id + '.setWrapMode(dali.WRAP_MODE_CLAMP_TO_EDGE, dali.WRAP_MODE_CLAMP_TO_EDGE);');
+				}
+
+				var ti = TEXTURE_INFO
+				var index = dalimaterial.addTexture(texture, ti.loc, sampler);
+			}
+
 			if(texture.updateid !== gltex.updateid){
 				texture.updateGLTexture(gl, gltex)
 				if (gltex.texture_index) {

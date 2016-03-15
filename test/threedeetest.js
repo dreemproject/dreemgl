@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, button, $3d$, cube, sphere, plane){
+define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, button, $3d$, cube, spherecone, plane){
 
 	var pointerdebug = define.class(function pointerdebug($ui$view){
 
@@ -106,69 +106,29 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					camera:Config({motion:'linear', duration:1, persist:true}),
 					fov:Config({motion:'easein', duration:1, persist:true})
 					}
-					,cube({pos:vec3(0,1,0), size:vec3(0.5)})
-					,cube({pos:vec3(1,0,0), size:vec3(0.5)})
-					,cube({pos:vec3(0,0,0), size:vec3(0.5)})
-					,cube({pos:vec3(0,0,1), size:vec3(0.5)})
-					,plane({pos:vec3(0,-2,0), size:vec3(500), rotate:vec3(PI/2,0,0)})
-					,sphere({pos:vec3(0,0,2), radius:0.5})
 
-					,view({viewport:'2d', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), pos:vec3(0,2,0), rotate:vec3(PI/2,0, 0)}
-						,pointerdebug({width:100, height:100})
-					)
+					,spherecone({
+						prop:0,
+						pointerstart:function(){
+							this.prop = Animate({1:{value:10, motion:'inquad'}})
+						},
+						shape3d:{
+							color:function(){
+								var ambient = mix('gray','red',view.prop)
+								var diffuse = 'white'
+								var specular = 'white'
+								var tn = normalize(transnorm.xyz);
+								var mypos =  vec4(0,0,1,1.) * view.normalmatrix
 
-					,view({viewport:'2d', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
-						,button({text:"LKJQEW", click:function(){
+								var ref = dot(tn, mypos.xyz)
+								return vec4(ambient.xyz*0.3 + diffuse.xyz * ref*0.4 + specular.xyz * pow(ref, 18.0)*0.01,1.)
+								return 'red'
+							}
+						},
+						pos:vec3(0,-0.25,0), 
+						radius:0.5
+					})
 
-							var cam = this.find("theview");
-							cam.camera = vec3(1,2,3);
-							cam.fov = 30;
-							}
-						}),
-						pointerdebug({width:100, height:100}),
-						button({
-							label:"Far",
-							click:function(){
-								var cam = this.find("theview");
-								cam.camera = vec3(4,0.2,4);
-								cam.fov = 90;
-							}
-						}),
-						pointerdebug({width:100, height:100}),
-						button({
-							label:"Left",
-							click:function(){
-								var cam = this.find("theview");
-								cam.camera = vec3(-4,0.2,-0.5);
-								cam.fov = 90;
-							}
-						})
-
-						)
-					,view({viewport:'2d', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)},
-						button({text:"this is really fast!", click:function(){
-							var cam = this.find("theview");
-							cam.camera = vec3(0,2,-5);
-							cam.fov = 30;
-							}
-						})
-						,pointerdebug({width:100, height:100})
-						,button({text:"B", click:function(){
-							var cam = this.find("theview");
-							cam.camera = vec3(3,3,-4);
-							cam.fov = 90;
-							}
-
-						})
-						,pointerdebug({width:100, height:100})
-						,button({text:"C", click:function(){
-							var cam = this.find("theview");
-							cam.camera = vec3(-3,3,-3);
-							cam.fov = 90;
-							}
-						})
-
-					)
 				)
 			)
 		)

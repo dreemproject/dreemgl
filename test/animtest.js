@@ -11,7 +11,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 				view({
 					flex:1,
 					myvalue:0.,
-					pointerstart:function(){ 
+					pointerstart:function(){
 						console.log("Animate!")
 						this.animate('myvalue',{1:1}).then(function(){
 							console.log('Anim1 Complete')
@@ -20,7 +20,9 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 							}.bind(this))
 						}.bind(this))
 					},
-					pointerend:function(){},
+					pointerend:function(){
+						this.stopAnimation('myvalue')
+					},
 					bgcolorfn:function(mesh){
 						//return vec4(0,1,0,1)
 						// gradient

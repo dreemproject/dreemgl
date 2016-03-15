@@ -7,26 +7,31 @@
 define.class('$ui/view', function () {
 
 	this.fgcolor = 'black'
+	this.cursor = 'move'
+
+	this.TIME_SCALE = 86400000 // millis to days
 
 	this.attributes = {
-		zoom: Config({type: Number, value: 1}),
-		scroll: Config({type: vec2, value: vec2()}),
+		zoom: wire('this.parent.zoom'),
+		scroll: wire('this.parent.scroll'),
 		hoursegs: Config({type: Number, value: 24}),
-		segments: Config({type: vec3, value: vec3()})
+		segments: Config({type: vec3, value: vec3()}),
+		dayoffset: Config({type: Number, value: 1})
 	}
 
 	this.layout = function(){
 		this.layout.top = 0
-		this.layout.width = this.parent.layout.width
-		this.layout.height = this.parent.layout.height
+		this.layout.width = this.parent._layout.width
+		this.layout.height = this.parent._layout.height
 	}
 
 	// Data-binding is buggy. set values at draw.
 	this.atDraw = function () {
-		this.zoom = this.parent._zoom
-		this.scroll = this.parent._scroll
 		this.segments = this.parent._segments
 		this.hoursegs = this.parent._hoursegs
+		// TODO(aki): this is a hack. Handle dates and timezones better
+		var startDate = new Date(this.parent.getStart())
+		this.dayoffset = 1 - ((startDate.getTime() - startDate.getTimezoneOffset() * 60 * 1000) / this.TIME_SCALE) % 1
 	}
 
 	this.hardrect = function(){
@@ -37,7 +42,7 @@ define.class('$ui/view', function () {
 			var array = new Float32Array(4 * 2048)
 			var start = this.view.parent.getStart()
 			for(var i = 0; i < array.length / 4; i++) {
-				var day = new Date(start + i * 86400000)
+				var day = new Date(start + i * this.TIME_SCALE)
 				array[i * 4 + 0] = day.getDate()
 				array[i * 4 + 1] = day.getDay()
 				array[i * 4 + 2] = day.getMonth()
@@ -70,8 +75,8 @@ define.class('$ui/view', function () {
 			var a = 24.0 / view.layout.height
 			var b = 48.0 / view.layout.height
 
-			var dayfield1 = (uv.x + view.scroll.x) * view.zoom
-			var dayfield2 = (uv.x + 1.0 / view.layout.width + view.scroll.x) * view.zoom
+			var dayfield1 = (uv.x + (view.scroll.x)) * view.zoom - view.dayoffset
+			var dayfield2 = (uv.x + 1.0 / view.layout.width + (view.scroll.x)) * view.zoom - view.dayoffset
 			var caldata1 = this.caltexture.point(vec2(dayfield1 / 2048, 0.0)) * 255.0
 			var caldata2 = this.caltexture.point(vec2(dayfield2 / 2048, 0.0)) * 255.0
 

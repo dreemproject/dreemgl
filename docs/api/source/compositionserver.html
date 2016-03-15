@@ -428,6 +428,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n274" name="n274">274</a>
 <a href="#n275" name="n275">275</a>
 <a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
+<strong><a href="#n280" name="n280">280</a></strong>
+<a href="#n281" name="n281">281</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -626,7 +631,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         })
                         req.on(<span class="string"><span class="delimiter">'</span><span class="content">end</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
 
-                                <span class="keyword">if</span> (boundary) {
+                                <span class="keyword">if</span> (boundary &amp;&amp; buffer &amp;&amp; buffer.indexOf) {
 
                                         <span class="keyword">var</span> cursor = buffer.indexOf(boundary) + boundary.length;
 
@@ -659,7 +664,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                         res.end();
                                         <span class="keyword">return</span>
-                                } <span class="keyword">else</span> {
+                                } <span class="keyword">else</span> <span class="keyword">if</span> (buffer) {
                                         <span class="keyword">try</span>{
                                                 <span class="keyword">var</span> json = JSON.parse(buffer.toString())
                                                 <span class="local-variable">this</span>.composition.postAPI(json, {<span class="function">send</span>:<span class="keyword">function</span>(msg){
@@ -674,6 +679,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 res.end()
                                                 <span class="keyword">return</span>
                                         }
+                                } <span class="keyword">else</span> {
+                                        res.writeHead(<span class="integer">500</span>, {<span class="key"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">text/html</span><span class="delimiter">&quot;</span></span>})
+                                        res.write(<span class="string"><span class="delimiter">'</span><span class="content">FAIL</span><span class="delimiter">'</span></span>)
+                                        res.end()
+                                        <span class="keyword">return</span>
                                 }
                         }.bind(<span class="local-variable">this</span>))
                         <span class="keyword">return</span>

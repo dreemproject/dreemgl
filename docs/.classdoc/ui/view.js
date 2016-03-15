@@ -3,8 +3,8 @@
  * @extends node
  * Base UI view object
  * 
- * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/view.js"></iframe>
- * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/view.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/view.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/view.js">open example in new tab &raquo;</a>
  * 
  */
 /**
@@ -76,7 +76,7 @@
  * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
  */
 /**
- * @attribute {vec4} [clearcolor="0,0,0,0"]
+ * @attribute {vec4} [clearcolor="undefined"]
  * the clear color of the view when it is in '2D' or '3D' viewport mode
  */
 /**

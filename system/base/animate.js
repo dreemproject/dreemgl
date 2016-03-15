@@ -27,7 +27,13 @@ define.class(function(require, exports){
 		this.track = track
 		//else this.track = config
 
-		if(config.motion) this.motion = config.motion
+		if (config.motion) this.motion = config.motion
+
+		if (track) {
+			if (track.bounce) this.bounce = track.bounce
+			if (track.repeat) this.repeat = track.repeat
+			if (track.speed) this.speed = track.speed
+		}
 
 		if(typeof this.motion === 'string') this.motion = float.ease[this.motion] || float.ease.linear
 		if(!config) debugger

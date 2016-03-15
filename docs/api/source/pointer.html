@@ -497,6 +497,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n343" name="n343">343</a>
 <a href="#n344" name="n344">344</a>
 <a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -678,6 +681,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// Internal: emits `start` event.</span>
+        <span class="comment">// TODO(aki): down with button 2 seems to trigger end and tap. Investigate.</span>
         <span class="local-variable">this</span>.<span class="function">setstart</span> = <span class="keyword">function</span>(pointerlist) {
 
                 <span class="comment">// scan for handoff hooks on in flight pointers</span>
@@ -738,7 +742,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span> (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
                         }
                         <span class="local-variable">this</span>._move.setPointer(pointer)
-                        <span class="keyword">if</span> (pointer.touch) {
+                        <span class="comment">// TODO(aki): check list length per view</span>
+                        <span class="keyword">if</span> (pointer.touch &amp;&amp; pointerlist.length === <span class="integer">1</span>) {
                                 <span class="keyword">if</span> (abs(pointer.movement[<span class="integer">0</span>]) &gt; abs(pointer.movement[<span class="integer">1</span>])) {
                                         pointer.wheel = vec2(-pointer.movement[<span class="integer">0</span>], <span class="integer">0</span>)
                                 } <span class="keyword">else</span> {
@@ -806,6 +811,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>._out.setPointer(previous)
                                 }
                         }
+                        <span class="comment">// TODO(aki): fix hover, over, out and drag API</span>
                         <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._hover, <span class="string"><span class="delimiter">'</span><span class="content">hover</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._over, <span class="string"><span class="delimiter">'</span><span class="content">over</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._out, <span class="string"><span class="delimiter">'</span><span class="content">out</span><span class="delimiter">'</span></span>)

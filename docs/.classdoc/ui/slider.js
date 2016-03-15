@@ -2,10 +2,10 @@
  * @class slider
  * @extends view
  * Slider with customizable handle.  To customize the handle put views as the slider's constructor children.
- * [example](http://localhost:2000/examples/slider)
+ * <br/><a href="/examples/sliders">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:600px" src="http://localhost:2000/apps/docs/example#path=$root/ui/slider.js"></iframe>
- * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/slider.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:600px" src="/apps/docs/example#path=$root/ui/slider.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/slider.js">open example in new tab &raquo;</a>
  * 
  */
 /**

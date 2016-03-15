@@ -93,6 +93,7 @@ function main(){
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
+		'sensors':'$root/classes/sensors',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
 		'docs':'$root/docs',

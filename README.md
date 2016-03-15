@@ -33,6 +33,7 @@ The default path symbols are:
 	'3d':'$root/classes/3d',
 	'behaviors':'$root/classes/behaviors',
 	'server':'$root/classes/server',
+	'sensors':'$root/classes/sensors',
 	'ui':'$root/classes/ui',
 	'testing':'$root/classes/testing',
 	'widgets':'$root/classes/widgets',

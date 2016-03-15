@@ -29,7 +29,7 @@ define.class('$server/composition', function(
 		},
 		flowdata:{x:10,y:10},
 		// make an exportable attribute to something internal
-		pointerpos: Config({type:vec2,value:wire('find.main.pos')})
+		pointerpos: Config({type:vec2, value:wire('find.main.pos')})
 		},
 		view({
 			name:'main',

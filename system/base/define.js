@@ -2247,7 +2247,7 @@
 		var vuint8 = new Uint8Array(blob)
 
 		var font = {}
-
+		var pixel_type
 		if(vuint32[0] == 0x02F01175){ // baked format
 			font.baked = true
 			// lets parse the glyph set
@@ -2277,6 +2277,12 @@
 				glyph.height = glyph.max_y - glyph.min_y
 			}
 			font.tex_array = blob.slice(off * 4)
+			if(font.tex_array.byteLength === font.tex_geom[0] * font.tex_geom[1]){
+				pixel_type = 1 << 6 // luminance
+			}
+			else{
+				pixel_type = 1 << 1 // RGBA
+			}
 		}
 		else if(vuint32[0] == 0x01F01175){ // glyphy format
 			// lets parse the glyph set
@@ -2309,6 +2315,7 @@
 				glyph.height = glyph.max_y - glyph.min_y
 			}
 			font.tex_array = blob.slice(off * 4)
+			pixel_type = 1 << 1 // RGBA
 		}
 		else throw new Error('Error in font file')
 
@@ -2361,7 +2368,7 @@
 			height: 1
 		}
 
-		font.texture = {array:font.tex_array, size:font.tex_geom}
+		font.texture = {type:pixel_type, array:font.tex_array, size:font.tex_geom}
 
 		return font
 	}
