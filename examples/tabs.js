@@ -171,7 +171,7 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, label
 									name:"favorites",
 									icon:"star",
 									text:"Favorites",
-									bgimage: "$resources/textures/bluecloud.png",
+									bgimage: require("$resources/textures/bluecloud.png"),
 									padding:10,
 									fontsize:15
 								},
@@ -179,7 +179,7 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, label
 									name:"bookmark",
 									icon:"bookmark",
 									text:"Bookmarks",
-									bgimage: "$resources/textures/purplecloud.png",
+									bgimage: require("$resources/textures/purplecloud.png"),
 									padding:10,
 									fontsize:15
 								}
@@ -187,12 +187,12 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, label
 							onactivetab:function(ev,tabid,bar) {
 								for (var i=0;i<bar.tabs.length;i++) {
 									if (i != tabid) {
-										bar.tabs[i].bgimage = "$resources/textures/purplecloud.png"
+										bar.tabs[i].bgimage = require("$resources/textures/purplecloud.png")
 									}
 								}
 
 								var tab = bar.tabs[tabid];
-								tab.bgimage = "$resources/textures/bluecloud.png";
+								tab.bgimage = require("$resources/textures/bluecloud.png");
 
 								var name = tab.name;
 								var tabpanel = this.find("tabpanel");

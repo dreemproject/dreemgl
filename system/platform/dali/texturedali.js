@@ -51,6 +51,11 @@ define.class('$system/base/texture', function(exports, require){
 		// With dali, the references should either be absolute, or relative
 		// to the path where dali runs.
 		var fullpath = imagedata.path;
+		if (!fullpath) {
+			console.error('Error: Use require() to load images for DALi platform');
+			return new Texture(Texture.RGBA, 0, 0);
+		}
+
 		if (imagedata.path[0] !== '/') fullpath = define.$example + fullpath;
 
 		var img = new dali.ResourceImage({url: fullpath});
