@@ -154,8 +154,15 @@ this.style = {
 }
 ```
 
+## API Docs
 
-Have fun!
+Auto generated DreemGL API documentation can be access with [/apps/docs](/apps/docs).  To generate HTML documentaion
+first run the documentation builder:
+
+    ./resources/bin/buiddocs
+
+And then the documentationw will be visible here [/docs/api/index.html](/docs/api/index.html)
+
 
 ## License
 This software is licensed under the  Apache License, Version 2.0. You will find the terms in the file named
