@@ -1593,6 +1593,13 @@
 
 			noderequirewrapper.module = module
 
+			noderequirewrapper.loaded = function(path, ext){
+				var dep_path = define.joinPath(cache_path_root, define.expandVariables(path))
+				if(define.factory[dep_path]){
+					return true
+				}
+			}
+
 			noderequirewrapper.async = function(modname){
 				// For dali (and probably nodejs) relative paths must be made
 				// absolute to where the example is located.
