@@ -105,8 +105,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 	}
 
 	// Set the background
-	// vec2 pos: position
-	// return;
+	// <pos> {vec2} position
 	this.bgcolorfn = function(pos){
 		return mix(col1, col2, pos.y)
 	}

@@ -335,6 +335,11 @@
  * tabstop, sorted by number
  */
 /**
+ * @method setBgImage
+ * image can be an image, or a Texture (has array property).
+ * @param image
+ */
+/**
  * @method globalToLocal
  * Internal: remap the x and y coordinates to local space
  * @param value

@@ -2061,6 +2061,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1907" name="n1907">1907</a>
 <a href="#n1908" name="n1908">1908</a>
 <a href="#n1909" name="n1909">1909</a>
+<strong><a href="#n1910" name="n1910">1910</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2636,10 +2637,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
 
+        <span class="comment">// image can be an image, or a Texture (has array property).</span>
         <span class="local-variable">this</span>.<span class="function">setBgImage</span> = <span class="keyword">function</span>(image){
                 <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.hardimage || <span class="local-variable">this</span>.shaders.roundedimage
                 <span class="keyword">if</span>(!shader) <span class="keyword">return</span>
-                <span class="keyword">var</span> img = shader.texture = Shader.Texture.fromImage(image);
+                <span class="keyword">var</span> img = shader.texture = (image.array) ? image : Shader.Texture.fromImage(image)
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">resize</span><span class="delimiter">&quot;</span></span>){
                         <span class="local-variable">this</span>._size = img.size
                         <span class="local-variable">this</span>.relayout()

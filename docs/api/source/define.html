@@ -2945,6 +2945,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2791" name="n2791">2791</a>
 <a href="#n2792" name="n2792">2792</a>
 <a href="#n2793" name="n2793">2793</a>
+<a href="#n2794" name="n2794">2794</a>
+<a href="#n2795" name="n2795">2795</a>
+<a href="#n2796" name="n2796">2796</a>
+<a href="#n2797" name="n2797">2797</a>
+<a href="#n2798" name="n2798">2798</a>
+<a href="#n2799" name="n2799">2799</a>
+<strong><a href="#n2800" name="n2800">2800</a></strong>
+<a href="#n2801" name="n2801">2801</a>
+<a href="#n2802" name="n2802">2802</a>
+<a href="#n2803" name="n2803">2803</a>
+<a href="#n2804" name="n2804">2804</a>
+<a href="#n2805" name="n2805">2805</a>
+<a href="#n2806" name="n2806">2806</a>
+<a href="#n2807" name="n2807">2807</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -4541,6 +4555,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         noderequirewrapper.module = module
 
+                        noderequirewrapper.<span class="function">loaded</span> = <span class="keyword">function</span>(path, ext){
+                                <span class="keyword">var</span> dep_path = define.joinPath(cache_path_root, define.expandVariables(path))
+                                <span class="keyword">if</span>(define.factory[dep_path]){
+                                        <span class="keyword">return</span> <span class="predefined-constant">true</span>
+                                }
+                        }
+
                         noderequirewrapper.<span class="function">async</span> = <span class="keyword">function</span>(modname){
                                 <span class="comment">// For dali (and probably nodejs) relative paths must be made</span>
                                 <span class="comment">// absolute to where the example is located.</span>
@@ -5195,7 +5216,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> vuint8 = <span class="keyword">new</span> Uint8Array(blob)
 
                 <span class="keyword">var</span> font = {}
-
+                <span class="keyword">var</span> pixel_type
                 <span class="keyword">if</span>(vuint32[<span class="integer">0</span>] == <span class="hex">0x02F01175</span>){ <span class="comment">// baked format</span>
                         font.baked = <span class="predefined-constant">true</span>
                         <span class="comment">// lets parse the glyph set</span>
@@ -5225,6 +5246,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 glyph.height = glyph.max_y - glyph.min_y
                         }
                         font.tex_array = blob.slice(off * <span class="integer">4</span>)
+                        <span class="keyword">if</span>(font.tex_array.byteLength === font.tex_geom[<span class="integer">0</span>] * font.tex_geom[<span class="integer">1</span>]){
+                                pixel_type = <span class="integer">1</span> &lt;&lt; <span class="integer">6</span> <span class="comment">// luminance</span>
+                        }
+                        <span class="keyword">else</span>{
+                                pixel_type = <span class="integer">1</span> &lt;&lt; <span class="integer">1</span> <span class="comment">// RGBA</span>
+                        }
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(vuint32[<span class="integer">0</span>] == <span class="hex">0x01F01175</span>){ <span class="comment">// glyphy format</span>
                         <span class="comment">// lets parse the glyph set</span>
@@ -5257,6 +5284,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 glyph.height = glyph.max_y - glyph.min_y
                         }
                         font.tex_array = blob.slice(off * <span class="integer">4</span>)
+                        pixel_type = <span class="integer">1</span> &lt;&lt; <span class="integer">1</span> <span class="comment">// RGBA</span>
                 }
                 <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Error in font file</span><span class="delimiter">'</span></span>)
 
@@ -5309,7 +5337,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">height</span>: <span class="integer">1</span>
                 }
 
-                font.texture = {<span class="key">array</span>:font.tex_array, <span class="key">size</span>:font.tex_geom}
+                font.texture = {<span class="key">type</span>:pixel_type, <span class="key">array</span>:font.tex_array, <span class="key">size</span>:font.tex_geom}
 
                 <span class="keyword">return</span> font
         }

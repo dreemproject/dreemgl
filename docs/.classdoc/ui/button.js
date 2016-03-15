@@ -67,9 +67,8 @@
 /**
  * @method bgcolorfn
  * Set the background
- * vec2 pos: position
- * return;
- * @param pos
+ * @param {vec2} pos
+ * position
  */
 /**
  * @method statehover

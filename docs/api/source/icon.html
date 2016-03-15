@@ -880,8 +880,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Sprite class</span>
 
-define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, label){
-
+define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, exports, label){
         <span class="comment">// not-supported: DALi</span>
         <span class="comment">// The icon class provides an easy way to access most of the commonly used web icons. Look at the FontAwesome cheat sheet to see what can be used.</span>
 
@@ -900,7 +899,7 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
 
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
-        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/fontawesome.glf</span><span class="delimiter">'</span></span>)
+        <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/fontawesome_baked.glf</span><span class="delimiter">'</span></span>)
 
         <span class="comment">// the font awesome</span>
         <span class="keyword">var</span> table = {
@@ -1580,6 +1579,7 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
                 <span class="key"><span class="delimiter">'</span><span class="content">youtube-play</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">\uf16a</span><span class="delimiter">'</span></span>,
                 <span class="key"><span class="delimiter">'</span><span class="content">youtube-square</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">\uf166</span><span class="delimiter">'</span></span>
         }
+        exports.icontable = table
 
         <span class="keyword">var</span> icon = <span class="local-variable">this</span>.constructor
         <span class="local-variable">this</span>.constructor.examples = {

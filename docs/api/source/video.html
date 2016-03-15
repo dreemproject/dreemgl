@@ -202,22 +202,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n48" name="n48">48</a>
 <a href="#n49" name="n49">49</a>
 <strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
-<a href="#n54" name="n54">54</a>
-<a href="#n55" name="n55">55</a>
-<a href="#n56" name="n56">56</a>
-<a href="#n57" name="n57">57</a>
-<a href="#n58" name="n58">58</a>
-<a href="#n59" name="n59">59</a>
-<strong><a href="#n60" name="n60">60</a></strong>
-<a href="#n61" name="n61">61</a>
-<a href="#n62" name="n62">62</a>
-<a href="#n63" name="n63">63</a>
-<a href="#n64" name="n64">64</a>
-<a href="#n65" name="n65">65</a>
-<a href="#n66" name="n66">66</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -225,66 +209,50 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$system/base/node</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require) {
-<span class="comment">//         The accelerometer receives acceleration data where available.</span>
-<span class="comment">// &lt;br/&gt;&lt;a href=&quot;/examples/sensors&quot;&gt;example &amp;raquo;&lt;/a&gt;</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, label, button, view, <span class="predefined">$widgets$</span>, videoplayer) {
 
-        <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">accelerometer</span><span class="delimiter">&quot;</span></span>;
-
-        <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// True if accelerometer is supported</span>
-                <span class="key">supported</span>:Config({<span class="key">type</span>:Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
-
-                <span class="comment">// Three component (x, y, z) instant acceleration of the device</span>
-                <span class="key">acceleration</span>:Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)}),
-
-                <span class="comment">// Alias for the x component of acceleration</span>
-                <span class="key">x</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">acceleration</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
-
-                <span class="comment">// Alias for the y component of acceleration</span>
-                <span class="key">y</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">acceleration</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
-
-                <span class="comment">// Alias for the z component of acceleration</span>
-                <span class="key">z</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">acceleration</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>})
-
-        };
-
-        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>() {
-                <span class="comment">// TODO: use lzidle to throttle</span>
-                window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">devicemotion</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(ev) {
-                        <span class="keyword">var</span> accel = ev.accelerationIncludingGravity
-                        <span class="keyword">if</span> (accel) {
-                                <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> accel) {
-                                        <span class="keyword">if</span> (accel.hasOwnProperty(key)) {
-                                                <span class="keyword">var</span> value = ev.accelerationIncludingGravity[key]
-                                                <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>) {
-                                                        <span class="keyword">if</span> (!<span class="local-variable">this</span>._supported) {
-                                                                <span class="local-variable">this</span>.supported = <span class="predefined-constant">true</span>;
-                                                        }
-                                                        <span class="local-variable">this</span>[key] = value
-                                                }
-                                        }
-                                }
-                        }
-                }.bind(<span class="local-variable">this</span>));
-        };
-
-        <span class="keyword">var</span> accelerometer = <span class="local-variable">this</span>.constructor;
-        <span class="local-variable">this</span>.constructor.examples = {
-                <span class="function">Usage</span>: <span class="keyword">function</span>() {
-                        <span class="keyword">var</span> label = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/label</span><span class="delimiter">&quot;</span></span>);
-
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                         <span class="keyword">return</span> [
-                                accelerometer({
-                                        <span class="function">onacceleration</span>:<span class="keyword">function</span>(ev,v,o) {
-                                                o.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">accel</span><span class="delimiter">&quot;</span></span>).text = <span class="string"><span class="delimiter">&quot;</span><span class="content">Current acceleration is x:</span><span class="delimiter">&quot;</span></span> + v[<span class="integer">0</span>] +<span class="string"><span class="delimiter">&quot;</span><span class="content">, y:</span><span class="delimiter">&quot;</span></span> + v[<span class="integer">1</span>] + <span class="string"><span class="delimiter">&quot;</span><span class="content">, z:</span><span class="delimiter">&quot;</span></span> + v[<span class="integer">2</span>]
-                                        }
-                                }),
-                                label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">accel</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Searching for accelerometer ...</span><span class="delimiter">&quot;</span></span>})
+                                screen(
+                                        view({<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">justifycontents</span>:<span class="string"><span class="delimiter">'</span><span class="content">space-around</span><span class="delimiter">'</span></span>},
+
+                                                         <span class="comment">// You can use bgimagemode 'aspect-fit', or another setting,</span>
+                                                         <span class="comment">// to force the video to the size of the player. The default</span>
+                                                         <span class="comment">// value is 'resize' which sizes the videoplayer to the size</span>
+                                                         <span class="comment">// of the video.</span>
+                                                         videoplayer({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">player</span><span class="delimiter">'</span></span>, <span class="key">autoplay</span>: <span class="predefined-constant">false</span>,
+                                                                                                                <span class="key">width</span>: <span class="integer">640</span>, <span class="key">height</span>: <span class="integer">480</span>,
+                                                                                                                <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>),
+                                                                                                                <span class="key">url</span>: <span class="string"><span class="delimiter">'</span><span class="content">./assets/big_buck_bunny_720p_2mb.mp4</span><span class="delimiter">'</span></span>,
+                                                                                                                <span class="function">update</span>: <span class="keyword">function</span>() {
+                                                                                                                        <span class="local-variable">this</span>.screen.find(<span class="string"><span class="delimiter">'</span><span class="content">time</span><span class="delimiter">'</span></span>).text = <span class="string"><span class="delimiter">'</span><span class="content">time: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.currenttime.toFixed(<span class="integer">2</span>)
+                                                                                                                }
+                                                                                                         }),
+
+                                                         view({<span class="key">width</span>: <span class="integer">640</span>, <span class="key">height</span>: <span class="integer">50</span>, <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>},
+                                                                                button({<span class="key">text</span>: <span class="string"><span class="delimiter">'</span><span class="content">Start/Stop</span><span class="delimiter">'</span></span>, <span class="key">width</span>: <span class="integer">100</span>, <span class="key">height</span>: <span class="integer">30</span>, <span class="key">flex</span>:<span class="integer">0</span>,
+                                                                                                                <span class="function">click</span>: <span class="keyword">function</span>() {
+                                                                                                                        <span class="keyword">var</span> player = <span class="local-variable">this</span>.screen.find(<span class="string"><span class="delimiter">'</span><span class="content">player</span><span class="delimiter">'</span></span>)
+                                                                                                                        <span class="keyword">if</span> (player.playing)
+                                                                                                                                player.stop();
+                                                                                                                        <span class="keyword">else</span>
+                                                                                                                                player.play();
+                                                                                                                }
+                                                                                                         }),
+                                                                                button({<span class="key">text</span>: <span class="string"><span class="delimiter">'</span><span class="content">Pause</span><span class="delimiter">'</span></span>, <span class="key">width</span>: <span class="integer">100</span>, <span class="key">height</span>: <span class="integer">30</span>, <span class="key">flex</span>:<span class="integer">0</span>,
+                                                                                                                <span class="function">click</span>: <span class="keyword">function</span>() {
+                                                                                                                        <span class="keyword">var</span> player = <span class="local-variable">this</span>.screen.find(<span class="string"><span class="delimiter">'</span><span class="content">player</span><span class="delimiter">'</span></span>)
+                                                                                                                        player.pause();
+                                                                                                                }
+                                                                                                         }),
+                                                                                label({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">time</span><span class="delimiter">'</span></span>, <span class="key">text</span>: <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, <span class="key">marginleft</span>:<span class="integer">10</span>, <span class="key">width</span>: <span class="integer">200</span>})
+                                                                         )
+                                                        )
+                                )
                         ]
                 }
-        }
-});
+}
+)
 </pre></td>
 </tr></table>
 

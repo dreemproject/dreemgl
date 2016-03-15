@@ -547,7 +547,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">favorites</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Favorites</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">bgimage</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/bluecloud.png</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">bgimage</span>: require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/bluecloud.png</span><span class="delimiter">&quot;</span></span>),
                                                                         <span class="key">padding</span>:<span class="integer">10</span>,
                                                                         <span class="key">fontsize</span>:<span class="integer">15</span>
                                                                 },
@@ -555,7 +555,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">bookmark</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">bookmark</span><span class="delimiter">&quot;</span></span>,
                                                                         <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Bookmarks</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">bgimage</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/purplecloud.png</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">bgimage</span>: require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/purplecloud.png</span><span class="delimiter">&quot;</span></span>),
                                                                         <span class="key">padding</span>:<span class="integer">10</span>,
                                                                         <span class="key">fontsize</span>:<span class="integer">15</span>
                                                                 }
@@ -563,12 +563,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="function">onactivetab</span>:<span class="keyword">function</span>(ev,tabid,bar) {
                                                                 <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;bar.tabs.length;i++) {
                                                                         <span class="keyword">if</span> (i != tabid) {
-                                                                                bar.tabs[i].bgimage = <span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/purplecloud.png</span><span class="delimiter">&quot;</span></span>
+                                                                                bar.tabs[i].bgimage = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/purplecloud.png</span><span class="delimiter">&quot;</span></span>)
                                                                         }
                                                                 }
 
                                                                 <span class="keyword">var</span> tab = bar.tabs[tabid];
-                                                                tab.bgimage = <span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/bluecloud.png</span><span class="delimiter">&quot;</span></span>;
+                                                                tab.bgimage = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/bluecloud.png</span><span class="delimiter">&quot;</span></span>);
 
                                                                 <span class="keyword">var</span> name = tab.name;
                                                                 <span class="keyword">var</span> tabpanel = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">tabpanel</span><span class="delimiter">&quot;</span></span>);

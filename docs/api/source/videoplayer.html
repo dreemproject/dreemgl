@@ -362,6 +362,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n208" name="n208">208</a>
 <a href="#n209" name="n209">209</a>
 <strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -370,197 +379,207 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label, bargraphic){
-<span class="comment">// Simple audio player, without controls. While the audio plays, a visual</span>
-<span class="comment">// representation of the audio can be displayed in the view</span>
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, bargraphic){
+        <span class="comment">// Simple video player, without controls. Frames from a html5 video are</span>
+        <span class="comment">// copied into a canvas element. Each image is written to the view's texture.</span>
+        <span class="comment">// The view needs to use the hardimage shader, so the view is initialized</span>
+        <span class="comment">// with an empty texture. The video and canvas resources are allocated when</span>
+        <span class="comment">// the video plays, and released when the video is finished.</span>
+
+        <span class="keyword">var</span> Shader = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/shader$platform</span><span class="delimiter">'</span></span>)
+  <span class="keyword">var</span> emptytexture = Shader.Texture.fromArray(<span class="keyword">new</span> Uint8Array(<span class="integer">4</span>, <span class="integer">1</span>), <span class="integer">1</span>, <span class="integer">1</span>);
+
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// The URL to an audio file to play</span>
+                <span class="comment">// The URL to an video file to play</span>
                 <span class="key">url</span>: Config({<span class="key">type</span>:string, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>})
 
-                <span class="comment">// When true (default), start the audio track automatically.</span>
+                <span class="comment">// When true (default), start the video track automatically.</span>
                 ,<span class="key">autoplay</span>: Config({<span class="key">type</span>:bool, <span class="key">value</span>:<span class="predefined-constant">true</span>})
 
-                <span class="comment">// Audio volume (0-1)</span>
+                <span class="comment">// Video volume (0-1)</span>
                 ,<span class="key">volume</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="float">0.5</span>})
-
-                <span class="comment">// Number of fft frames to use. Non-zero power of two from 32 to 2048</span>
-                ,<span class="key">fftsize</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">512</span>})
-
-                <span class="comment">// Amount of smoothing to apply to the fft analysis (0-1)</span>
-                ,<span class="key">fftsmoothing</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="float">0.8</span>})
 
                 <span class="comment">// Event generated when screen updates</span>
                 ,<span class="key">update</span>: Config({<span class="key">type</span>:Event}),
         }
 
-        <span class="comment">// True if the audio is playing</span>
+        <span class="comment">// True if the video is playing</span>
         <span class="local-variable">this</span>.playing = <span class="predefined-constant">false</span>;
 
-        <span class="comment">// True if the audio is paused</span>
+        <span class="comment">// True if the video is paused</span>
         <span class="local-variable">this</span>.paused = <span class="predefined-constant">false</span>;
 
-        <span class="comment">// Length of audio (seconds)</span>
+        <span class="comment">// Length of video (seconds)</span>
         <span class="local-variable">this</span>.duration = -<span class="integer">1</span>;
+
+        <span class="comment">// Dimensions of video vec2;</span>
+        <span class="local-variable">this</span>.dimensions = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
 
         <span class="comment">// Current location (time) of playback</span>
         <span class="local-variable">this</span>.currenttime = -<span class="integer">1</span>;
 
-        <span class="comment">// Current data to visualize</span>
-        <span class="local-variable">this</span>.fftData = <span class="keyword">new</span> Uint8Array((<span class="local-variable">this</span>.fftsize &gt; <span class="integer">0</span>) ? <span class="local-variable">this</span>.fftsize/<span class="integer">2</span> : <span class="integer">2</span>);
-        <span class="local-variable">this</span>.<span class="function">fftData</span> = <span class="keyword">function</span>() {
-                <span class="comment">//console.log('***** fftData is updated');</span>
-        }
+        <span class="comment">// We want to use the hardimage shader, so specifying a bgimage is needed.</span>
+        <span class="comment">// In our case, we specify a texture instead of an image.</span>
+        <span class="local-variable">this</span>.bgimage = emptytexture;
 
-
-        <span class="comment">// Play the audio</span>
+        <span class="comment">// Play the video</span>
         <span class="local-variable">this</span>.<span class="function">play</span> = <span class="keyword">function</span>() {
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.url)
                         <span class="keyword">return</span>;
                 
-                <span class="local-variable">this</span>.audioinit();
+                <span class="local-variable">this</span>.videoinit();
 
-                <span class="comment">// play the music</span>
-    <span class="local-variable">this</span>.audioElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">src</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.url)
+                <span class="comment">// play the video</span>
+    <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">src</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.url)
+                <span class="local-variable">this</span>.videoElement.load();
                 
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.audioElement) {
-                        <span class="local-variable">this</span>.audioElement.currentTime = <span class="integer">0</span>;
-                        <span class="local-variable">this</span>.currenttime = <span class="integer">0</span>;
-                        <span class="local-variable">this</span>.audioElement.play();
-                        <span class="local-variable">this</span>.playing = <span class="predefined-constant">true</span>;
+                <span class="local-variable">this</span>.videoElement.currentTime = <span class="integer">0</span>;
+                <span class="local-variable">this</span>.currenttime = <span class="integer">0</span>;
+                <span class="local-variable">this</span>.videoElement.play();
+                <span class="local-variable">this</span>.playing = <span class="predefined-constant">true</span>;
 
-                        <span class="comment">// Updating in the animation loop is better than waiting for</span>
-                        <span class="comment">// the infrequent ontimeupdate events.</span>
-                        <span class="keyword">if</span> (window) {
-                                <span class="local-variable">this</span>.<span class="function">animFrame</span> = <span class="keyword">function</span>(time){
-                                        <span class="local-variable">this</span>.updateviz();
-                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.playing)
-                                                window.requestAnimationFrame(<span class="local-variable">this</span>.animFrame)
-                                }.bind(<span class="local-variable">this</span>);
-
+                <span class="comment">// Updating in the animation loop is better than waiting for</span>
+                <span class="comment">// the infrequent ontimeupdate events.</span>
+                <span class="local-variable">this</span>.<span class="function">animFrame</span> = <span class="keyword">function</span>(time){
+                        <span class="local-variable">this</span>.updatevideo();
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.playing)
                                 window.requestAnimationFrame(<span class="local-variable">this</span>.animFrame)
-                        }
-
-                        <span class="comment">//console.log('play', this.audioElement);</span>
-                }
+                }.bind(<span class="local-variable">this</span>);
+                
+                window.requestAnimationFrame(<span class="local-variable">this</span>.animFrame)
         }
 
-        <span class="comment">// Pause or restart the audio</span>
+        <span class="comment">// Pause or restart the video</span>
         <span class="local-variable">this</span>.<span class="function">pause</span> = <span class="keyword">function</span>() {
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.playing) {
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.paused) {
                                 <span class="local-variable">this</span>.paused = <span class="predefined-constant">false</span>;
-                                <span class="local-variable">this</span>.audioElement.play();
+                                <span class="local-variable">this</span>.videoElement.play();
                         }
                         <span class="keyword">else</span> {
                                 <span class="local-variable">this</span>.paused = <span class="predefined-constant">true</span>;
-                                <span class="local-variable">this</span>.audioElement.pause();
+                                <span class="local-variable">this</span>.videoElement.pause();
                         }
                 }
         }
 
-        <span class="comment">// Stop the audio</span>
+        <span class="comment">// Stop the video</span>
         <span class="local-variable">this</span>.<span class="function">stop</span> = <span class="keyword">function</span>() {
-                <span class="keyword">var</span> viz = <span class="local-variable">this</span>.screen.find(<span class="string"><span class="delimiter">'</span><span class="content">viz</span><span class="delimiter">'</span></span>);
-                <span class="keyword">if</span> (viz)
-                        viz.clear();
-
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.audioElement) {
-                        <span class="local-variable">this</span>.audioElement.pause();
-                        <span class="local-variable">this</span>.audioElement.currentTime = <span class="integer">0</span>;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.videoElement) {
+                        <span class="local-variable">this</span>.videoElement.pause();
+                        <span class="local-variable">this</span>.videoElement.currentTime = <span class="integer">0</span>;
                         <span class="local-variable">this</span>.currenttime = -<span class="integer">1</span>;
                 }
 
                 <span class="local-variable">this</span>.playing = <span class="predefined-constant">false</span>;
 
-                <span class="local-variable">this</span>.audiocleanup ();
+                <span class="local-variable">this</span>.videocleanup ();
         }
 
-        <span class="comment">// Update the current visualization</span>
-        <span class="local-variable">this</span>.<span class="function">updateviz</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>.audioElement)
+        <span class="comment">// Update the texture with a current screenshot from the video.</span>
+        <span class="local-variable">this</span>.<span class="function">updatevideo</span> = <span class="keyword">function</span>() {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.videoElement)
                         <span class="keyword">return</span>;
+                
+                <span class="local-variable">this</span>.currenttime = <span class="local-variable">this</span>.videoElement.currentTime;
+                t0 = <span class="keyword">new</span> Date();
 
-                <span class="local-variable">this</span>.currenttime = <span class="local-variable">this</span>.audioElement.currentTime;
-                <span class="local-variable">this</span>.fftNode.getByteFrequencyData(<span class="local-variable">this</span>.fftData);
-
-                <span class="keyword">var</span> viz = <span class="local-variable">this</span>.screen.find(<span class="string"><span class="delimiter">'</span><span class="content">viz</span><span class="delimiter">'</span></span>);
-                <span class="keyword">if</span> (viz) {
-                        <span class="comment">//viz.data = this.fftData;</span>
-                        <span class="keyword">var</span> data = [];
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;<span class="local-variable">this</span>.fftData.length; i++) {
-                                data.push(<span class="local-variable">this</span>.fftData[i]/<span class="float">255.0</span>);
-                        }
-                        
-                        viz.data = data;
-                        <span class="comment">//console.log('data set', viz);</span>
+                <span class="comment">// Create the canvas once the video frame size is known</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.dimensions.x === <span class="integer">0</span>)
+                        <span class="keyword">return</span>;
+                
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.canvas) {
+                        <span class="local-variable">this</span>.canvas = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">canvas</span><span class="delimiter">'</span></span>);
+                        <span class="local-variable">this</span>.canvas.width = <span class="local-variable">this</span>.dimensions.x;
+                        <span class="local-variable">this</span>.canvas.height = <span class="local-variable">this</span>.dimensions.y;
+                        <span class="local-variable">this</span>.canvasContext = <span class="local-variable">this</span>.canvas.getContext(<span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>);
                 }
+
+                <span class="comment">// Draw the current video frame to the canvas</span>
+                <span class="local-variable">this</span>.canvasContext.drawImage(<span class="local-variable">this</span>.videoElement, <span class="integer">0</span>, <span class="integer">0</span>, <span class="local-variable">this</span>.canvas.width, <span class="local-variable">this</span>.canvas.height);
+
+                <span class="comment">// Retrieve the canvas image as a rgba buffer</span>
+                <span class="keyword">var</span> pels = <span class="local-variable">this</span>.canvasContext.getImageData(<span class="integer">0</span>, <span class="integer">0</span>, <span class="local-variable">this</span>.canvas.width, <span class="local-variable">this</span>.canvas.height);
+
+                <span class="comment">// Save to a texture and use as the background image</span>
+                <span class="keyword">var</span> texture = Shader.Texture.fromArray(pels.data, <span class="local-variable">this</span>.canvas.width, <span class="local-variable">this</span>.canvas.height);
+                <span class="local-variable">this</span>.setBgImage(texture);
+
+                pels = <span class="predefined-constant">null</span>;
+                texture = <span class="predefined-constant">null</span>;
+
+                t1 = <span class="keyword">new</span> Date();
+                <span class="comment">//console.log('update elapsed', (t1-t0));</span>
 
                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">update</span><span class="delimiter">'</span></span>)
         }
 
 
-        <span class="comment">// Initialize the AudioContext</span>
-        <span class="local-variable">this</span>.<span class="function">audioinit</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>.context) {
-                        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-                        <span class="local-variable">this</span>.context = <span class="keyword">new</span> AudioContext();
-                }
+        <span class="comment">// Initialize the VideoContext</span>
+        <span class="local-variable">this</span>.<span class="function">videoinit</span> = <span class="keyword">function</span>() {
+    <span class="keyword">if</span> (!<span class="local-variable">this</span>.videoElement) {
+      <span class="local-variable">this</span>.videoElement = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">video</span><span class="delimiter">'</span></span>)
+      <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">volume</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.volume);
+      <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">width</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.width);
+      <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">height</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.height);
 
-    <span class="keyword">if</span> (!<span class="local-variable">this</span>.audioElement) {
-      <span class="local-variable">this</span>.audioElement = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">audio</span><span class="delimiter">'</span></span>)
-      <span class="local-variable">this</span>.audioElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">volume</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.volume);
-      <span class="local-variable">this</span>.audioElement.<span class="function">ondurationchange</span> = <span class="keyword">function</span>(data) {
-        <span class="comment">//console.log('ondurationchange', this.audioElement.duration)</span>
-                                <span class="local-variable">this</span>.duration = <span class="local-variable">this</span>.audioElement.duration;
-      }.bind(<span class="local-variable">this</span>);
-      <span class="local-variable">this</span>.audioElement.<span class="function">onprogress</span> = <span class="keyword">function</span>(evt) {
-                                <span class="comment">//console.log('onprogress', evt);</span>
+                        <span class="comment">// Try and prevent CORS issues when loading from another domain</span>
+      <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">crossorigin</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">anonymous</span><span class="delimiter">'</span></span>);
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.autoplay)
+                                <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">autoplay</span><span class="delimiter">'</span></span>, <span class="predefined-constant">true</span>);
+
+                        <span class="comment">// On chrome, preload loads a lot of content, increasing memory usage.</span>
+                        <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">preload</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">none</span><span class="delimiter">'</span></span>);
+                        
+      <span class="local-variable">this</span>.videoElement.<span class="function">ondurationchange</span> = <span class="keyword">function</span>(data) {
+                                <span class="keyword">if</span> (!<span class="local-variable">this</span>.videoElement)
+                                        <span class="keyword">return</span>;
+                                
+        <span class="comment">//console.log('ondurationchange', this.videoElement.duration)</span>
+                                <span class="local-variable">this</span>.dimensions = vec2(<span class="local-variable">this</span>.videoElement.videoWidth, <span class="local-variable">this</span>.videoElement.videoHeight);
+                                <span class="local-variable">this</span>.duration = <span class="local-variable">this</span>.videoElement.duration;
       }.bind(<span class="local-variable">this</span>);
 
-                        <span class="comment">// This event does not fire often enough</span>
-      <span class="comment">//this.audioElement.ontimeupdate = function(evt) {</span>
-                        <span class="comment">//        this.updateviz();</span>
+                        <span class="comment">// This event does not fire often enough. Use animation frame instead.</span>
+      <span class="comment">//this.videoElement.ontimeupdate = function(evt) {</span>
+                        <span class="comment">//        if (!this.videoElement)</span>
+                        <span class="comment">//                return;</span>
+                        <span class="comment">//</span>
+                        <span class="comment">//        console.log('ontimeupdate', this.videoElement.currentTime);</span>
+                        <span class="comment">//        this.updatevideo();</span>
                         <span class="comment">//}.bind(this);</span>
 
-      <span class="local-variable">this</span>.audioElement.<span class="function">onended</span> = <span class="keyword">function</span>(evt) {
+                        <span class="comment">// When the video is done, stop the playback and delete the canvas and</span>
+                        <span class="comment">// video element.</span>
+      <span class="local-variable">this</span>.videoElement.<span class="function">onended</span> = <span class="keyword">function</span>(evt) {
                                 <span class="local-variable">this</span>.stop();
                                 <span class="comment">//console.log('onended', evt);</span>
                         }.bind(<span class="local-variable">this</span>);
-                        
-                        <span class="comment">// Create fft</span>
-                        <span class="comment">//console.log('create fft', this.fftsize, this.fftsmoothing);</span>
-                        <span class="local-variable">this</span>.fftNode = <span class="local-variable">this</span>.context.createAnalyser();
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.fftsize) {
-                                <span class="local-variable">this</span>.fftNode.fftSize = <span class="local-variable">this</span>.fftsize;
-                                <span class="local-variable">this</span>.fftNode.smoothingTimeConstant = <span class="local-variable">this</span>.fftsmoothing;
-                        }
 
-                        <span class="comment">// Connect the audio to the analyzer, and to the output</span>
-                        <span class="local-variable">this</span>.source = <span class="local-variable">this</span>.context.createMediaElementSource(<span class="local-variable">this</span>.audioElement);
-                        <span class="local-variable">this</span>.source.connect(<span class="local-variable">this</span>.fftNode);
-                        <span class="local-variable">this</span>.fftNode.connect(<span class="local-variable">this</span>.context.destination);
-                        <span class="local-variable">this</span>.fftData = <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.fftNode.frequencyBinCount);
     }
         }
         
-        <span class="comment">// Cleanup the AudioContext</span>
-        <span class="local-variable">this</span>.<span class="function">audiocleanup</span> = <span class="keyword">function</span>() {
-    <span class="keyword">if</span> (<span class="local-variable">this</span>.audioElement) {
-                        <span class="local-variable">this</span>.source = <span class="predefined-constant">null</span>;
-                        <span class="local-variable">this</span>.fftNode = <span class="predefined-constant">null</span>;
-                        <span class="local-variable">this</span>.audioElement = <span class="predefined-constant">null</span>;
+        <span class="comment">// Cleanup the VideoContext and canvas</span>
+        <span class="local-variable">this</span>.<span class="function">videocleanup</span> = <span class="keyword">function</span>() {
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.canvas) {
+                        <span class="local-variable">this</span>.canvasContext = <span class="predefined-constant">null</span>;
+                        <span class="local-variable">this</span>.canvas = <span class="predefined-constant">null</span>;
                 }
-
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.context) {
-                        <span class="local-variable">this</span>.context = <span class="predefined-constant">null</span>;
+                
+    <span class="keyword">if</span> (<span class="local-variable">this</span>.videoElement) {
+                        <span class="local-variable">this</span>.videoElement.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">src</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
+                        <span class="local-variable">this</span>.videoElement = <span class="predefined-constant">null</span>;
                 }
 
                 <span class="local-variable">this</span>.currenttime = -<span class="integer">1</span>;
         }
 
+
+
         <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(){
-                <span class="comment">//console.log('oninit');</span>
+                <span class="comment">// console.log('oninit');</span>
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.autoplay)
                         <span class="local-variable">this</span>.play();
         }
@@ -568,8 +587,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> [
-                        bargraphic({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">viz</span><span class="delimiter">'</span></span>, <span class="key">width</span>: <span class="local-variable">this</span>.width, <span class="key">height</span>: <span class="local-variable">this</span>.height, <span class="key">fgcolor</span>: <span class="local-variable">this</span>.fgcolor, <span class="key">data</span>: <span class="local-variable">this</span>.fftData}
-                                                                )]
+                ]
         }
                                                                                 
 })

@@ -464,6 +464,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n310" name="n310">310</a></strong>
 <a href="#n311" name="n311">311</a>
 <a href="#n312" name="n312">312</a>
+<a href="#n313" name="n313">313</a>
+<a href="#n314" name="n314">314</a>
+<a href="#n315" name="n315">315</a>
+<a href="#n316" name="n316">316</a>
+<a href="#n317" name="n317">317</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -486,7 +491,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.frame_buf = <span class="predefined-constant">null</span>
 
         Texture.<span class="function">fromStub</span> = <span class="keyword">function</span>(stub){
-                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(stub.type || <span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, stub.size[<span class="integer">0</span>], stub.size[<span class="integer">1</span>])
+                console.log(stub.type)
+                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(stub.type || Texture.RGBA, stub.size[<span class="integer">0</span>], stub.size[<span class="integer">1</span>])
                 tex.array = stub.array
                 tex.image = stub.image
                 <span class="keyword">return</span> tex
@@ -497,13 +503,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         Texture.<span class="function">fromImage</span> = <span class="keyword">function</span>(img){
-                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, img.width, img.height)
+                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.width, img.height)
                 tex.image = img
                 <span class="keyword">return</span> tex
         }
 
         Texture.<span class="function">fromArray</span> = <span class="keyword">function</span>(array, w, h){
-                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, w, h)
+                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, w, h)
                 tex.array = array
                 <span class="keyword">return</span> tex
         }
@@ -539,26 +545,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> str
         }
 
-        <span class="local-variable">this</span>.<span class="function">initAsRendertarget</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> gl = <span class="local-variable">this</span>.device.gl
-                
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.type) <span class="local-variable">this</span>.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
-                <span class="keyword">var</span> type = <span class="local-variable">this</span>.type
-
-                <span class="local-variable">this</span>.glframe_buf = gl.createFramebuffer()
-                <span class="local-variable">this</span>.gltex = <span class="local-variable">this</span>.IL_AL_SC_TC = gl.createTexture()
-
-                <span class="comment">// our normal render to texture thing</span>
-                gl.bindTexture(gl.TEXTURE_2D, <span class="local-variable">this</span>.gltex)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-
+        <span class="local-variable">this</span>.<span class="function">typeFlagsToGLType</span> = <span class="keyword">function</span>(gl, type){
                 <span class="local-variable">this</span>.glbuf_type = gl.RGB
                 <span class="keyword">if</span>(type &amp; Texture.LUMINANCE){
                         <span class="local-variable">this</span>.glbuf_type = gl.LUMINANCE
-                        <span class="keyword">if</span>(type &amp; TEXTURE.ALPHA) <span class="local-variable">this</span>.glbuf_type = gl.LUMINANCE_ALPHA
+                        <span class="keyword">if</span>(type &amp; Texture.ALPHA) <span class="local-variable">this</span>.glbuf_type = gl.LUMINANCE_ALPHA
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(type &amp; Texture.ALPHA) <span class="local-variable">this</span>.glbuf_type = gl.ALPHA
                 <span class="keyword">else</span> <span class="keyword">if</span>(type &amp; Texture.RGBA) <span class="local-variable">this</span>.glbuf_type = gl.RGBA
@@ -584,6 +575,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(!ext) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">No OES_texture_float</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.gldata_type = gl.FLOAT
                 }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">initAsRendertarget</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> gl = <span class="local-variable">this</span>.device.gl
+                
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.type) <span class="local-variable">this</span>.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+
+                <span class="local-variable">this</span>.glframe_buf = gl.createFramebuffer()
+                <span class="local-variable">this</span>.gltex = <span class="local-variable">this</span>.IL_AL_SC_TC = gl.createTexture()
+
+                <span class="comment">// our normal render to texture thing</span>
+                gl.bindTexture(gl.TEXTURE_2D, <span class="local-variable">this</span>.gltex)
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+
+                <span class="local-variable">this</span>.typeFlagsToGLType(gl, <span class="local-variable">this</span>.type)
 
                 gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.gldata_type, <span class="predefined-constant">null</span>)
                 gl.bindFramebuffer(gl.FRAMEBUFFER, <span class="local-variable">this</span>.glframe_buf)
@@ -659,7 +668,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, samplerdef.UNPACK_PREMULTIPLY_ALPHA_WEBGL || <span class="predefined-constant">false</span>)
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.array){
-                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, gl.RGBA, gl.UNSIGNED_BYTE, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.array))
+                        <span class="local-variable">this</span>.typeFlagsToGLType(gl, <span class="local-variable">this</span>.type)
+                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.gldata_type, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.array))
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.image){
                         <span class="keyword">var</span> image = <span class="local-variable">this</span>.image

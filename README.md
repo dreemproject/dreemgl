@@ -168,7 +168,6 @@ To generate HTML documentaion run the documentation builder:
 
 And then the documentation will be visible here [/docs/api/index.html](http://localhost:2000/docs/api/index.html)
 
-
 ## License
 This software is licensed under the  Apache License, Version 2.0. You will find the terms in the file named
 ["LICENSE.md"](LICENSE.md) in this directory.
