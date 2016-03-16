@@ -26,47 +26,47 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.mainwidth = 250;
 
 	this.style = {
-		label_head:{bgcolor:NaN,margin:vec4(6,3,4,0), bold:true},
-		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
-		view_header:{width:this.mainwidth, bgcolor:NaN, flex:1, justifycontent:"space-between"},
+		label_head: {bgcolor: NaN,margin: vec4(6,3,4,0), bold: true},
+		view_main: {bgcolor: "#292929", width: this.mainwidth, flex: 1, margin: 1,justifycontent: "center"},
+		view_header: {width: this.mainwidth, bgcolor: NaN, flex: 1, justifycontent: "space-between"},
 
-		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},
-		view_between1:{bgcolor:NaN, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
-		view_between2:{bgcolor:NaN, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
-		view_head:{bgcolor:NaN, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
-		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bgcolor:NaN, justifycontent:"space-between"}
+		button_header: {buttoncolor2: "#292929", buttoncolor1: "#292929", bordercolor: "#292929", marginright: 4},
+		view_between1: {bgcolor: NaN, width: this.mainwidth, flex: 1, justifycontent: "space-between"},
+		view_between2: {bgcolor: NaN, position: "relative", x: 8,alignself: "flex-start", flexdirection: "column"},
+		view_head: {bgcolor: NaN, position: "relative", x: -8,alignself: "flex-start", flexdirection: "column"},
+		view_addbuttons: {flexdirection: "row", position: "absolute",alignitems: "stretch",width: 140, bgcolor: NaN, justifycontent: "space-between"}
 	}
 
 	this.attributes = {
-		flowdata:{},
+		flowdata: {},
 		//pos: Config({persist: true}),
-		inputattributes: Config({type:Object, value:["color"]}),
-		outputattributes: Config({type:Object, value:["clicked","something"]}),
-		title: Config({type:String, value:"Untitled"}),
-		snap: Config({type:int, value:1}),
-		bordercolor: Config({motion:"linear", duration: 0.1}),
-		borderselected: Config({type:float, value:0, motion:"linear", duration: 0.1}),
-		focusbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"}),
-		hoverbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"}),
-		inselection : Config({type:boolean, value:false}),
-		inputs: [{name:"a0", title:"test input!", color:vec4("blue")}],
-		outputs:[{name:"b1", title:"output? ", color:vec4("yellow")}]
+		inputattributes: Config({type: Object, value: ["color"]}),
+		outputattributes: Config({type: Object, value: ["clicked","something"]}),
+		title: Config({type: String, value: "Untitled"}),
+		snap: Config({type: int, value: 1}),
+		bordercolor: Config({motion: "linear", duration: 0.1}),
+		borderselected: Config({type: float, value: 0, motion: "linear", duration: 0.1}),
+		focusbordercolor: Config({motion: "linear", duration: 0.1, type: vec4, value: "#d0d0d0", meta: "color"}),
+		hoverbordercolor: Config({motion: "linear", duration: 0.1, type: vec4, value: "#e0e0e0", meta: "color"}),
+		inselection : Config({type: boolean, value: false}),
+		inputs: [{name: "a0", title: "test input!", color: vec4("blue")}],
+		outputs: [{name: "b1", title: "output? ", color: vec4("yellow")}]
 	}
 
 	this.colormap = {
-		Number:vec4("#FF7260"),
-		int:vec4("#FF0080"),
-		int32:vec4("#FF0080"),
-		IntLike:vec4("#FF0080"),
-		float32:vec4("#D23641"),
-		float:vec4("#D23641"),
-		FloatLike:vec4("#D23641"),
-		Array:vec4("#0198E1"),
-		vec4:vec4("#4FD5D6"),
-		vec3:vec4("#31C3E7"),
-		vec2:vec4("#BF5FFF"),
-		String:vec4("#6ADA7A"),
-		Object:vec4("#ffee14")
+		Number: vec4("#FF7260"),
+		int: vec4("#FF0080"),
+		int32: vec4("#FF0080"),
+		IntLike: vec4("#FF0080"),
+		float32: vec4("#D23641"),
+		float: vec4("#D23641"),
+		FloatLike: vec4("#D23641"),
+		Array: vec4("#0198E1"),
+		vec4: vec4("#4FD5D6"),
+		vec3: vec4("#31C3E7"),
+		vec2: vec4("#BF5FFF"),
+		String: vec4("#6ADA7A"),
+		Object: vec4("#ffee14")
 	}
 
 	this.tooltip = 'issablock'
@@ -98,7 +98,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.bordercolorfn = function(pos){
-		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0:0.0;
+		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0: 0.0;
 		return mix(bordercolor, mix(vec4(focusbordercolor.xyz*.8,1.0), focusbordercolor, check), borderselected);
 		return vec4(check);
 	}
@@ -232,14 +232,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 	}
 
-	define.class(this, "inputbutton","$ui/view",  function($ui$, view, label){
+	define.class(this, "inputbutton", "$ui/view", function($ui$, view, label){
 		//this.drawtarget = 'pick'
 
 		this.attributes = {
-			color:Config({type:vec4, value:vec4(0,0,0,0), meta:"color"}),
-			name:"thing",
-			title:"tadaa",
-			type:""
+			color: Config({type: vec4, value: vec4(0,0,0,0), meta: "color"}),
+			name: "thing",
+			title: "tadaa",
+			type: ""
 		}
 
 		this.marginbottom = 4
@@ -254,23 +254,28 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.screen.status = this.hovertext
 		}
 
-		this.render =function(){
-			this.hovertext = "Input " + this.title+ (this.type?(": "+ this.type):"");
+		this.render = function(){
+			this.hovertext = "Input " + this.title+ (this.type?(": "+ this.type): "");
 			return [
-				ballbutton({borderwidth:2, bgcolor:this.color, click: this.tapped.bind(this), alignself:"center"}),
-				label({marginleft:5, text:uppercaseFirst(this.title), bgcolor:NaN, alignself:"center"})
+				ballbutton({borderwidth: 2, bgcolor: this.color, click: this.tapped.bind(this), alignself: "center"}),
+				label({marginleft: 5, text: uppercaseFirst(this.title), bgcolor: NaN, alignself: "center"})
 			]
 		}
 	})
 
-	define.class(this, "outputbutton","$ui/view",  function($ui$, view, label){
+	define.class(this, "outputbutton", "$ui/view", function($ui$, view, label){
 		//this.drawtarget = 'pick'
 
+		this.flexdirection = 'row'
+		this.bgcolor = NaN
+		this.flex = 1
+		this.width = 120
+
 		this.attributes = {
-			color:Config({type:vec4, value:vec4(0,0,0,0), meta:"color"}),
-			name:"thing",
-			title:"thing",
-			type:""
+			color: Config({type: vec4, value: vec4(0,0,0,0), meta: "color"}),
+			name: "thing",
+			title: "thing",
+			type: ""
 		}
 
 		this.pointerover  = function(){
@@ -285,12 +290,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		this.marginbottom = 4;
 
-		this.render =function(){
-				this.hovertext = "Output " + this.title+ (this.type?(": "+ this.type):"");
+		this.render = function(){
+				this.hovertext = "Output " + this.title+ (this.type?(": "+ this.type): "");
 
 			return [
-				label({text:uppercaseFirst(this.name), bgcolor:NaN, alignself:"center", marginright: 5}),
-				ballbutton({borderwidth:2, bgcolor: this.color, click: this.tapped.bind(this), alignself:"center"})
+				label({text: uppercaseFirst(this.name), bgcolor: NaN, alignself: "center", align: "right", marginright: 5, flex: 1}),
+				ballbutton({borderwidth: 2, bgcolor: this.color, click: this.tapped.bind(this), alignself: "center"})
 			]
 		}
 	})
@@ -299,7 +304,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var res = [];
 		for(var i = 0;i<this.inputs.length;i++){
 			var inp = this.inputs[i];
-			res.push(this.inputbutton({name:inp.name, type:inp.type.name, title:inp.title, color:inp.color}))
+			res.push(this.inputbutton({name: inp.name, type: inp.type.name, title: inp.title, color: inp.color}))
 		}
 		return res;
 	}
@@ -308,18 +313,18 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var res = [];
 		for(var i = 0;i<this.outputs.length;i++){
 			var outp = this.outputs[i];
-			res.push(this.outputbutton({name:outp.name, type:outp.type.name, title:outp.title, color:outp.color}))
+			res.push(this.outputbutton({name: outp.name, type: outp.type.name, title: outp.title, color: outp.color}))
 		}
 		return res;
 	}
 
 	this.renameBlock = function(e){
 		this.screen.openModal(function(){
-			return renameblockdialog({oldname:this.name, width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute",
+			return renameblockdialog({oldname: this.name, width: this.screen.size[0],height: this.screen.size[1],
+				position: "absolute",
 				x: e.value.x,
 				y: e.value.y + 20,
-				blur:function(){
+				blur: function(){
 					this.screen.closeModal(false)
 
 			}} );
@@ -339,21 +344,21 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 	this.render = function(){
 		return [
-			view({class:'header',alignitems:"center" }
-				,view({bgcolor:NaN, justifycontent:"center", alignitems:"center" }
-					,label({text:this.title,class:'head'})
-					,button({class:"header", icon:"pencil",click:function(e){this.renameBlock(e);}.bind(this)})
+			view({class: 'header',alignitems: "center" }
+				,view({bgcolor: NaN, justifycontent: "center", alignitems: "center" }
+					,label({text: this.title,class: 'head'})
+					,button({class: "header", icon: "pencil",click: function(e){this.renameBlock(e);}.bind(this)})
 				)
-				,button({class:"header", icon:"remove",click:function(e){this.removeBlock(e);}.bind(this)})
+				,button({class: "header", icon: "remove",click: function(e){this.removeBlock(e);}.bind(this)})
 			)
-			,view({class:'main'},
-				view({bgimage:require("./placeholder.png") })
+			,view({class: 'main'},
+				view({bgimage: require("./placeholder.png") })
 			)
-			,view({class:'between1'}
-				,view({class:'head',render: function(){return this.renderInputs()}.bind(this)}
+			,view({class: 'between1'}
+				,view({class: 'head',render: function(){return this.renderInputs()}.bind(this)}
 
 				)
-				,view({class:'between2',render: function(){return this.renderOutputs()}.bind(this)}
+				,view({class: 'between2', flexdirection: 'column', render: function(){return this.renderOutputs()}.bind(this)}
 
 				)
 			)
