@@ -351,6 +351,22 @@
  * @param render
  */
 /**
+ * @method animate
+ * Animates an attribute over time.
+ * Returns a promise that resolves when the animation completes. This allows animations
+ * to be chained together, or other behaviors to occur when an animation ends.
+ * @param {String} attribute
+ * The name of the attribute to animate on this view.
+ * @param {Object} track
+ * An object consisting of keys with time offset (in seconds)/value pairs. Each value can be discrete, or an object with motion and value keys where motion describes the interpolation from the previous value to this one, and value describes the value to animate to.
+ */
+/**
+ * @method stopAnimation
+ * Stops a running animation for an attribute
+ * @param attribute
+ * String
+ */
+/**
  * @method bgcolorfn
  * Determines the background color that should be drawn at a given position.
  * Returns a vec4 color value, defaults to bgcolor.

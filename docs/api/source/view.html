@@ -2061,7 +2061,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1907" name="n1907">1907</a>
 <a href="#n1908" name="n1908">1908</a>
 <a href="#n1909" name="n1909">1909</a>
-<strong><a href="#n1910" name="n1910">1910</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -3346,29 +3345,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">animate</span> = <span class="keyword">function</span>(key, track){
+        <span class="comment">// Animates an attribute over time.</span>
+        <span class="comment">// &lt;attribute&gt; {String} The name of the attribute to animate on this view.</span>
+        <span class="comment">// &lt;track&gt; {Object} An object consisting of keys with time offset (in seconds)/value pairs. Each value can be discrete, or an object with motion and value keys where motion describes the interpolation from the previous value to this one, and value describes the value to animate to.</span>
+        <span class="comment">// Returns a promise that resolves when the animation completes. This allows animations</span>
+        <span class="comment">// to be chained together, or other behaviors to occur when an animation ends.</span>
+        <span class="local-variable">this</span>.<span class="function">animate</span> = <span class="keyword">function</span>(attribute, track){
                 <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
-                        <span class="local-variable">this</span>.startAnimation(key, <span class="predefined-constant">undefined</span>, track, resolve)
+                        <span class="local-variable">this</span>.startAnimation(attribute, <span class="predefined-constant">undefined</span>, track, resolve)
                 }.bind(<span class="local-variable">this</span>))
         }
 
-        <span class="local-variable">this</span>.<span class="function">startAnimation</span> = <span class="keyword">function</span>(key, value, track, resolve){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startAnimationRoot(<span class="local-variable">this</span>, key, value, track, resolve)
+        <span class="comment">// internal, called by animation setters</span>
+        <span class="local-variable">this</span>.<span class="function">startAnimation</span> = <span class="keyword">function</span>(attribute, value, track, resolve){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startAnimationRoot(<span class="local-variable">this</span>, attribute, value, track, resolve)
                 <span class="keyword">else</span>{
                         <span class="keyword">return</span> <span class="predefined-constant">false</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">stopAnimation</span> = <span class="keyword">function</span>(key){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.stopAnimationRoot(<span class="local-variable">this</span>, key)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">playAnimation</span> = <span class="keyword">function</span>(key){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.playAnimationRoot(<span class="local-variable">this</span>, key)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">pauseAnimation</span> = <span class="keyword">function</span>(key){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.pauseAnimationRoot(<span class="local-variable">this</span>, key)
+        <span class="comment">// Stops a running animation for an attribute</span>
+        <span class="local-variable">this</span>.<span class="function">stopAnimation</span> = <span class="keyword">function</span>(attribute<span class="comment">/*String*/</span>){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.stopAnimationRoot(<span class="local-variable">this</span>, attribute)
         }
 
         <span class="comment">// Determines the background color that should be drawn at a given position.</span>

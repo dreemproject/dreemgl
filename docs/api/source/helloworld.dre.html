@@ -163,59 +163,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n9" name="n9">9</a>
 <strong><a href="#n10" name="n10">10</a></strong>
 <a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and limitations under the License.*/</span>
-
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$$</span>, omdb) {
-
-    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
-        omdb({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">omdb</span><span class="delimiter">'</span></span>, <span class="key">keyword</span>:<span class="string"><span class="delimiter">'</span><span class="content">Monkey</span><span class="delimiter">'</span></span>}),
-        screen(
-            view({
-                <span class="key">flex</span>:<span class="integer">1</span>,
-                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>,
-                <span class="key">movielist</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">rpc.omdb.results</span><span class="delimiter">'</span></span>),
-                <span class="function">render</span>:<span class="keyword">function</span>(){
-                    <span class="keyword">var</span> views = [];
-                    <span class="keyword">if</span> (<span class="local-variable">this</span>.movielist) {
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.movielist.length; i++) {
-                            <span class="keyword">var</span> movie = <span class="local-variable">this</span>.movielist[i];
-                            <span class="keyword">if</span> (movie.Poster &amp;&amp; movie.Poster.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>)) {
-                                views.push(view({<span class="key">bgimage</span>:movie.Poster}))
-                            }
-                        }
-                    }
-                    <span class="keyword">return</span> views;
-                }
-            })
-        )
-    ] }
-});
-</pre></td>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, label){
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>},
+                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello world!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="function">bgcolorfn</span>: <span class="keyword">function</span>(pos) {
+                  <span class="keyword">return</span> mix(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>, pos.y)
+          }})
+                        )
+                ];
+        }
+});</pre></td>
 </tr></table>
 
 </body>

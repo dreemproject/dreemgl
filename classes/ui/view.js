@@ -1281,29 +1281,28 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	this.animate = function(key, track){
+	// Animates an attribute over time.
+	// <attribute> {String} The name of the attribute to animate on this view.
+	// <track> {Object} An object consisting of keys with time offset (in seconds)/value pairs. Each value can be discrete, or an object with motion and value keys where motion describes the interpolation from the previous value to this one, and value describes the value to animate to.
+	// Returns a promise that resolves when the animation completes. This allows animations
+	// to be chained together, or other behaviors to occur when an animation ends.
+	this.animate = function(attribute, track){
 		return new define.Promise(function(resolve, reject){
-			this.startAnimation(key, undefined, track, resolve)
+			this.startAnimation(attribute, undefined, track, resolve)
 		}.bind(this))
 	}
 
-	this.startAnimation = function(key, value, track, resolve){
-		if(this.initialized) return this.screen.startAnimationRoot(this, key, value, track, resolve)
+	// internal, called by animation setters
+	this.startAnimation = function(attribute, value, track, resolve){
+		if(this.initialized) return this.screen.startAnimationRoot(this, attribute, value, track, resolve)
 		else{
 			return false
 		}
 	}
 
-	this.stopAnimation = function(key){
-		if(this.initialized) this.screen.stopAnimationRoot(this, key)
-	}
-
-	this.playAnimation = function(key){
-		if(this.initialized) this.screen.playAnimationRoot(this, key)
-	}
-
-	this.pauseAnimation = function(key){
-		if(this.initialized) this.screen.pauseAnimationRoot(this, key)
+	// Stops a running animation for an attribute
+	this.stopAnimation = function(attribute/*String*/){
+		if(this.initialized) this.screen.stopAnimationRoot(this, attribute)
 	}
 
 	// Determines the background color that should be drawn at a given position.
