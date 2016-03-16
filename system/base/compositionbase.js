@@ -11,7 +11,7 @@ define.class('$system/base/node',function(require){
 	var Render = require('./render')
 
 	this._atConstructor = function(){
-		
+
 	}
 
 	this.atConstructor = function(){
@@ -49,7 +49,7 @@ define.class('$system/base/node',function(require){
 		this._intervals.push(id)
 		return id
 	}
- 
+
 	this.clearInterval = function(id){
 		var i = teem._intervals.indexOf(id)
 		if(i != -1) teem._intervals.splice(i, 1)
@@ -59,7 +59,7 @@ define.class('$system/base/node',function(require){
 	this.renderComposition = function(){
 		// we have to render the RPC bus
 		Render.process(this, undefined, undefined, false, true)
-		
+
 		//this.children = this.render()
 
 		this.names = {}

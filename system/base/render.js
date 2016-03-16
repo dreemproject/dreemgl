@@ -141,7 +141,6 @@ define.class(function(exports){
 
 		if(!nochild && new_children) for(var i = 0; i < new_children.length; i++){
 			var new_child = new_children[i]
-
 			if(Array.isArray(new_child)){ // splice in the children
 				var args = Array.prototype.slice.call(new_child)
 				args.unshift(1)
@@ -190,7 +189,7 @@ define.class(function(exports){
 		}
 
 		if(is_root){
-			
+
 
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){

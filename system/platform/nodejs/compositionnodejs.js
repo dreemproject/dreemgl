@@ -131,7 +131,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	}
 
 
-	this.setRpcAttribute = function(msg, socket){
+	this.setRpcAttribute = function(msg, socket, real){
 		var parts = msg.rpcid.split('.')
 		// keep it around for new joins
 		this.server_attributes[msg.rpcid + '_' + msg.attribute] = msg
@@ -152,6 +152,12 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 					obj[msg.attribute] = msg.value
 				}
 			}
+		} else if (real) { // write it on the rpc system for local loopback
+			var obj = this.rpc[parts[0]]
+			var last_set = obj.atAttributeSet
+			obj.atAttributeSet = undefined
+			obj[msg.attribute] = msg.value
+			obj.atAttributeSet = last_set
 		}
 		// lets send this attribute to everyone except socket
 		for(var scrkey in this.connected_screens){
@@ -243,7 +249,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			if(!child.environment || child.environment === define.$environment){
 				var init = []
 				child.connectWires(init)
-
 				for(var j = 0; j < init.length;j++) init[j]()
 				child.emit('init')
 			}

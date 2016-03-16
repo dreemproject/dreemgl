@@ -19,9 +19,9 @@ define.class(function(require, exports){
 		return this.__host.callRpcMethod(msg)
 	}
 
-	this.attributeRpc = function(name, msg){
+	this.attributeRpc = function(name, msg, real){
 		msg.rpcid = name
-		return this.__host.setRpcAttribute(msg, null )
+		return this.__host.setRpcAttribute(msg, null, real)
 	}
 
 	// lets disconnect all listeners
@@ -49,7 +49,7 @@ define.class(function(require, exports){
 	}
 
 	exports.allocPromise = this.allocPromise = function(){
-		var uid 
+		var uid
 		if(this.__uid === undefined) this.__uid = 0
 		if(!this.__promises) this.__promises = {}
 		if(!this.__uid_free) this.__uid_free = []
