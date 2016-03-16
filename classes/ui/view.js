@@ -1301,7 +1301,8 @@ define.class('$system/base/node', function(require){
 	}
 
 	// Stops a running animation for an attribute
-	this.stopAnimation = function(attribute/*String*/){
+	// <attribute> {String} The name of the attribute to stop animating on this view.
+	this.stopAnimation = function(attribute){
 		if(this.initialized) this.screen.stopAnimationRoot(this, attribute)
 	}
 

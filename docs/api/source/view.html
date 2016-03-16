@@ -2061,6 +2061,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1907" name="n1907">1907</a>
 <a href="#n1908" name="n1908">1908</a>
 <a href="#n1909" name="n1909">1909</a>
+<strong><a href="#n1910" name="n1910">1910</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -3365,7 +3366,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// Stops a running animation for an attribute</span>
-        <span class="local-variable">this</span>.<span class="function">stopAnimation</span> = <span class="keyword">function</span>(attribute<span class="comment">/*String*/</span>){
+        <span class="comment">// &lt;attribute&gt; {String} The name of the attribute to stop animating on this view.</span>
+        <span class="local-variable">this</span>.<span class="function">stopAnimation</span> = <span class="keyword">function</span>(attribute){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.stopAnimationRoot(<span class="local-variable">this</span>, attribute)
         }
 

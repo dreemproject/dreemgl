@@ -363,8 +363,8 @@
 /**
  * @method stopAnimation
  * Stops a running animation for an attribute
- * @param attribute
- * String
+ * @param {String} attribute
+ * The name of the attribute to stop animating on this view.
  */
 /**
  * @method bgcolorfn
