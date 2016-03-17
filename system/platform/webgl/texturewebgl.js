@@ -8,7 +8,7 @@
 define.class('$system/base/texture', function(exports){
 	var Texture = exports
 	Texture.Image = typeof window !== 'undefined'? window.Image: function(){}
-	
+
 	this.atConstructor = function(type, w, h, device){
 		this.device = device
 		this.type = type
@@ -19,7 +19,7 @@ define.class('$system/base/texture', function(exports){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub){
-		console.log(stub.type)
+		// console.log(stub.type)
 		var tex = new Texture(stub.type || Texture.RGBA, stub.size[0], stub.size[1])
 		tex.array = stub.array
 		tex.image = stub.image
@@ -107,7 +107,7 @@ define.class('$system/base/texture', function(exports){
 
 	this.initAsRendertarget = function(){
 		var gl = this.device.gl
-		
+
 		if(!this.type) this.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
 
 		this.glframe_buf = gl.createFramebuffer()
@@ -128,7 +128,7 @@ define.class('$system/base/texture', function(exports){
 
 		if(type & Texture.DEPTH || type & Texture.STENCIL){
 			this.gldepth_buf = gl.createRenderbuffer()
-	
+
 			this.gldepth_type = gl.DEPTH_COMPONENT16
 			this.glattach_type = gl.DEPTH_ATTACHMENT
 
@@ -149,7 +149,7 @@ define.class('$system/base/texture', function(exports){
 		gl.bindTexture(gl.TEXTURE_2D, null)
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null)
 	}
-	
+
 	this.delete = function(){
 		if(!this.device) return
 		var gl = this.device.gl
@@ -173,7 +173,7 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	this.size = vec2(0, 0)
-	
+
 	this.createGLTexture = function(gl, texid, texinfo){
 		var samplerid = texinfo.samplerid
 
@@ -213,14 +213,14 @@ define.class('$system/base/texture', function(exports){
 				    image = canvas
 				}
 			}
-	
+
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 			this.image[samplerid] = gltex
 		}
 		else{
 			return undefined
 		}
-		
+
 		gltex.updateid = this.updateid
 		// set up sampler parameters
 		gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[samplerdef.MIN_FILTER])
@@ -238,7 +238,7 @@ define.class('$system/base/texture', function(exports){
 
 	this.updateGLTexture = function(gl, gltex){
 		if(this.array){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data))
 		}
 		else if(this.image){
 			console.log("UPDATING!")

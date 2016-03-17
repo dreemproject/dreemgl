@@ -15,7 +15,6 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
 		//
 		zoomlevel: Config({type: Number, value: 16}),
-		pointdata: Config({type: Array}),
 		latlongchange: Config({type: Event})
 	}
 
@@ -51,7 +50,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 	}
 
 
-	this.flyTo = function(lat,lng, zoom,time){
+	this.flyTo = function(lat, lng, zoom, time){
 		if (this.dataset) this.dataset.flyTo(lat,lng, zoom, time);
 	}
 
@@ -430,13 +429,13 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 			//	var M = this.find("MARKER");
 			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1]+ r2);
 			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel + zoomoffs, 1);
-			this.emitUpward('latlongchange', latlong)
+			this.emitUpward('latlongchange', [latlong[0], latlong[1], this.zoomlevel])
 		}
 	}
 
 	this.startDrag = function(ev){
 		var coord  =  this.globalToLocal(ev.position);
-		var R = this.projectonplane( coord);
+		var R = this.projectonplane(coord);
 		if (R){
 			this.startvect = vec2(R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 16))
 			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
@@ -464,7 +463,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 	}
 
 	this.stopDrag = function(){
-		this.emitUpward('latlongchange', this.latlong)
+		this.emitUpward('latlongchange', [this.latlong[0], this.latlong[1], this.zoomlevel])
 	}
 	// debug tile counter
 	var alltiles = 0
@@ -915,7 +914,6 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 	}
 
 	this.render = function(){
-
 		this.tilestoupdate = [];
 
 		var res = [this.dataset];
@@ -1001,7 +999,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 				nearplane: 100 ,
 				fov: fov,
 				farplane: this.camdist * 2,
-				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3), 
+				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3),
 				fov: fov,
 				up: vec3(0,1,0),
 				lookat: vec3(0,0,0)
@@ -1029,7 +1027,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 					map.camera = Animate({1:vec3(0,-4650,150)})
 				}
 				else {
-					this.mode = 1	
+					this.mode = 1
 					map.camera = Animate({1:vec3(0,-camdist*zoom*0.13,camdist*zoom*0.3)})
 				}
 
