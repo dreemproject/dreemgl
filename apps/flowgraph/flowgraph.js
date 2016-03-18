@@ -8,21 +8,21 @@ define.class('$ui/view', function(require,
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, palette, propviewer, searchbox, jseditor,
 		$server$, sourceset, dataset,
-		$$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
+		$$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection) {
 
 	this.name = 'flowgraph'
 	this.flex = 1
 	this.clearcolor = "#565656"
 	this.bgcolor = "#565656"
-	this.flexdirection = "column";
+	this.flexdirection = "column"
 
 	this.attributes = {
 		sourceset:{}
 	}
 
-	define.class(this, "selectorrect", view, function(){
+	define.class(this, "selectorrect", view, function() {
 		//debugger
-		this.bordercolorfn = function(pos){
+		this.bordercolorfn = function(pos) {
 			var check = (int(mod(0.20 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0
 			return vec4(check * vec3(0.8), 1)
 		}
@@ -34,38 +34,38 @@ define.class('$ui/view', function(require,
 		this.visible = false
 	})
 
-	this.addToSelection = function(obj){
+	this.addToSelection = function(obj) {
 		var f = this.currentselection.indexOf(obj)
 		if (f == -1) this.currentselection.push(obj)
 		else return
 
 		this.updateSelectedItems()
 
-		if (this.currentselection.length > 1) return false;
-		return true;
+		if (this.currentselection.length > 1) return false
+		return true
 	}
 
-	this.removeFromSelection = function(obj){
-		if(this.currentblock == obj){
+	this.removeFromSelection = function(obj) {
+		if (this.currentblock == obj) {
 			this.currentblock = undefined
 			this.updatePopupUIPosition()
 		}
 
 		var f = this.currentselection.indexOf(obj)
-		if(f>-1) this.currentselection.splice(f,1)
+		if (f>-1) this.currentselection.splice(f,1)
 
 		this.updateSelectedItems()
 	}
 
-	this.updateSelectedItems = function(){
-		for(var a in this.allblocks){
+	this.updateSelectedItems = function() {
+		for (var a in this.allblocks) {
 			var obj = this.allblocks[a]
 			var f = this.currentselection.indexOf(obj)
 			var newval = 0
 			if (f > -1) newval = 1
 			if (obj._inselection != newval) obj.inselection = newval
 		}
-		for(var a in this.allconnections){
+		for (var a in this.allconnections) {
 			var obj = this.allconnections[a]
 			var f = this.currentselection.indexOf(obj)
 			var newval = 0
@@ -75,31 +75,31 @@ define.class('$ui/view', function(require,
 		this.updatePopupUIPosition()
 	}
 
-	this.inSelection = function(obj){
+	this.inSelection = function(obj) {
 		var f = this.currentselection.indexOf(obj)
 		if (f > -1) return true
 		return false
 	}
 
-	this.setupSelectionMove = function(){
-		for(var a in this.currentselection){
+	this.setupSelectionMove = function() {
+		for (var a in this.currentselection) {
 			var obj = this.currentselection[a]
 			obj.setupMove()
 		}
 	}
 
-	this.moveSelected = function(dx, dy, store){
+	this.moveSelected = function(dx, dy, store) {
 		var snap = 1
-		for(var a in this.currentselection){
+		for (var a in this.currentselection) {
 			var obj = this.currentselection[a]
 			obj.updateMove(dx, dy, snap)
 		}
 
-		if(store){
-			this.sourceset.fork(function(){
-				for(var a in this.currentselection){
+		if (store) {
+			this.sourceset.fork(function() {
+				for (var a in this.currentselection) {
 					var obj = this.currentselection[a]
-					if(!(obj instanceof block)) continue
+					if (!(obj instanceof block)) continue
 					var flowdata = obj.flowdata
 					flowdata.x = obj.pos[0]
 					flowdata.y = obj.pos[1]
@@ -112,25 +112,25 @@ define.class('$ui/view', function(require,
 		this.updatePopupUIPosition()
 	}
 
-	this.clearSelection = function(update){
+	this.clearSelection = function(update) {
 		this.currentblock = undefined
 		this.currentconnection = undefined
 		this.currentselection = []
 		if (update) this.updateSelectedItems()
 	}
 
-	this.addBlock = function(folder, blockname){
-		//console.log("adding block from library! TODODODODODODO");
-		this.sourceset.fork(function(){
+	this.addBlock = function(folder, blockname) {
+		//console.log("adding block from library! TODODODODODODO")
+		this.sourceset.fork(function() {
 			this.sourceset.addBlock(folder, blockname)
 		}.bind(this))
 	}
 
-	this.removeBlock = function (block){
+	this.removeBlock = function (block) {
 		if (block == undefined) block = this.currentblock
-		if (block){
+		if (block) {
 
-			this.sourceset.fork(function(){
+			this.sourceset.fork(function() {
 				this.sourceset.removeBlock(block.name)
 			}.bind(this))
 
@@ -141,11 +141,11 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.removeConnection = function (conn){
+	this.removeConnection = function (conn) {
 		if (conn == undefined) conn = this.currentconnection
-		if (conn){
+		if (conn) {
 
-			this.sourceset.fork(function(){
+			this.sourceset.fork(function() {
 				this.sourceset.deleteWire(
 					conn.from,
 					conn.fromoutput,
@@ -161,246 +161,238 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.updatePopupUIPosition = function(){
+	this.updatePopupUIPosition = function() {
 		var bg = this.findChild("blockui")
 		var cg = this.findChild("connectionui")
 		var gg = this.findChild("groupui")
 		var gbg = this.findChild("groupbg")
 
-		gbg.visible =false;
-		gg.visible = false;
-		bg.visible = false;
+		gbg.visible =false
+		gg.visible = false
+		bg.visible = false
 
-		return;
+		return
 		// todo - decide if the group UI is needed at all..
 
-		if (this.currentselection.length == 1){
+		if (this.currentselection.length == 1) {
 
-			gg.visible = false;
-			gbg.visible = false;
-			this.currentblock = undefined;
-			this.currentconnection = undefined;
+			gg.visible = false
+			gbg.visible = false
+			this.currentblock = undefined
+			this.currentconnection = undefined
 
-			var b= this.currentselection[0];
+			var b= this.currentselection[0]
 
-			if (b instanceof block) this.currentblock = b;
-			if (b instanceof connection) this.currentconnection  = b;
+			if (b instanceof block) this.currentblock = b
+			if (b instanceof connection) this.currentconnection  = b
 
-			if (this.currentblock){
-				bg.x = this.currentblock.pos[0];
-				bg.y = this.currentblock.pos[1]-bg.layout.height - 3;
-				bg.visible = true;
+			if (this.currentblock) {
+				bg.x = this.currentblock.pos[0]
+				bg.y = this.currentblock.pos[1]-bg.layout.height - 3
+				bg.visible = true
+			} else {
+				bg.visible = false
 			}
-			else{
-				bg.visible = false;
-			}
 
-			if (this.currentconnection){
+			if (this.currentconnection) {
 				cg.x = (this.currentconnection.frompos[0] + this.currentconnection.topos[0])/2
 				cg.y = (this.currentconnection.frompos[1] + this.currentconnection.topos[1])/2
-				cg.visible = true;
+				cg.visible = true
 			}else{
-				cg.visible = false;
+				cg.visible = false
 			}
 
-		}
-		else{
-			cg.visible = false;
-			bg.visible = false;
+		} else {
+			cg.visible = false
+			bg.visible = false
 			if (this.currentselection.length > 1)
 			{
-				gg.visible = true;
-				gbg.visible = true;
-				var minx = 10000;
-				var maxx = -10000;
-				var miny = 10000;
-				var maxy = -10000;
-				var cx = 0;
-				var cy = 0;
-				var n = 0;
-				for(var a in this.currentselection){
-					var bl = this.currentselection[a];
-					if (bl instanceof block){
-						n++;
-						if (bl.pos[0] < minx) minx = bl.pos[0];else if (bl.pos[0]>maxx) maxx = bl.pos[0];
-						if (bl.pos[1] < miny) miny = bl.pos[1];else if (bl.pos[1]>maxy) maxy = bl.pos[1];
+				gg.visible = true
+				gbg.visible = true
+				var minx = 10000
+				var maxx = -10000
+				var miny = 10000
+				var maxy = -10000
+				var cx = 0
+				var cy = 0
+				var n = 0
+				for (var a in this.currentselection) {
+					var bl = this.currentselection[a]
+					if (bl instanceof block) {
+						n++
+						if (bl.pos[0] < minx) minx = bl.pos[0];else if (bl.pos[0]>maxx) maxx = bl.pos[0]
+						if (bl.pos[1] < miny) miny = bl.pos[1];else if (bl.pos[1]>maxy) maxy = bl.pos[1]
 
-						var x2 = bl.pos[0] + bl.layout.width;
-						var y2 = bl.pos[1] + bl.layout.height;
-						if (x2 < minx) minx = x2;else if (x2>maxx) maxx = x2;
-						if (y2 < miny) miny = y2;else if (y2>maxy) maxy = y2;
+						var x2 = bl.pos[0] + bl.layout.width
+						var y2 = bl.pos[1] + bl.layout.height
+						if (x2 < minx) minx = x2; else if (x2 > maxx) maxx = x2
+						if (y2 < miny) miny = y2; else if (y2 > maxy) maxy = y2
 
 
-						cx += bl.pos[0] + bl.layout.width/2;
-						cy += bl.pos[1] + bl.layout.height/2;
-					}
-					else{
-						if (bl instanceof connection){
-							var ax = bl.frompos[0];
-							var ay = bl.frompos[1];
+						cx += bl.pos[0] + bl.layout.width/2
+						cy += bl.pos[1] + bl.layout.height/2
+					} else {
+						if (bl instanceof connection) {
+							var ax = bl.frompos[0]
+							var ay = bl.frompos[1]
 
-							var bx = bl.topos[0];
-							var by = bl.topos[1];
+							var bx = bl.topos[0]
+							var by = bl.topos[1]
 
-							if (ax > maxx) maxx = ax;else if (ax<minx) minx = ax;
-							if (bx > maxx) maxx = bx;else if (bx<minx) minx = bx;
-							if (ay > maxy) maxy = ay;else if (ay<miny) miny = ay;
-							if (by > maxy) maxy = by;else if (by<miny) miny = by;
+							if (ax > maxx) maxx = ax; else if (ax < minx) minx = ax
+							if (bx > maxx) maxx = bx; else if (bx < minx) minx = bx
+							if (ay > maxy) maxy = ay; else if (ay < miny) miny = ay
+							if (by > maxy) maxy = by; else if (by < miny) miny = by
 
-							cx += (ax+bx)/2;
-							cy += (ay+by)/2;
-							n++;
+							cx += (ax + bx) / 2
+							cy += (ay + by) / 2
+							n++
 						}
 					}
 				}
-				cx /= n;
-				cy /= n;
+				cx /= n
+				cy /= n
 
 				gg.pos = vec2(cx - cg.layout.width/2, cy - cg.layout.height/2)
 
-				gbg.pos = vec2(minx-20,miny-20);
-				gbg.size = vec2(maxx-minx + 40, maxy-miny+ 40);
+				gbg.pos = vec2(minx-20,miny-20)
+				gbg.size = vec2(maxx-minx + 40, maxy-miny+ 40)
 
-			}
-			else{
-				gg.visible = false;
-				gbg.visible = false;
+			} else {
+				gg.visible = false
+				gbg.visible = false
 
 			}
 		}
 	}
 
-	this.setActiveBlock = function(block){
+	this.setActiveBlock = function(block) {
 		this.currentblock = block
-		if(block){
+		if (block) {
 			this.currentconnection = undefined
 			this.addToSelection(block)
 		}
 		this.updatePopupUIPosition()
 	}
 
-	this.setActiveConnection = function(conn){
-		this.currentconnection = conn;
+	this.setActiveConnection = function(conn) {
+		this.currentconnection = conn
 
-		if(conn){
-			this.currentblock = undefined;
-			this.addToSelection(conn);
+		if (conn) {
+			this.currentblock = undefined
+			this.addToSelection(conn)
 		}
-		this.updatePopupUIPosition();
+		this.updatePopupUIPosition()
 	}
 
-	this.updateConnections = function(){
-		var cl = this.find("connectionlayer");
-		for(var a in cl.children){
+	this.updateConnections = function() {
+		var cl = this.find("connectionlayer")
+		for (var a in cl.children) {
 			cl.children[a].calculateposition()
 			//cl.children[a].layout = 1
 		}
 	}
 
-	this.init = function(){
-		this.screen.onstatus = function(){
-			this.find("themenu").statustext = this.screen.status;
+	this.init = function() {
+		this.screen.onstatus = function() {
+			this.find("themenu").statustext = this.screen.status
 		}
-		this.currentselection = [];
-		this.currentblock = undefined;
-		this.currentconnection = undefined;
-		this.allblocks = [];
-		this.allconnections = [];
-		this.newconnection = {};
-		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});
-		this.librarydata = dataset({children:[]});
+		this.currentselection = []
+		this.currentblock = undefined
+		this.currentconnection = undefined
+		this.allblocks = []
+		this.allconnections = []
+		this.newconnection = {}
+		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"})
+		this.librarydata = dataset({children:[]})
 
 		this.sourceset = sourceset()
 
-		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result){
-			var lib = this.find('thelibrary');
+		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result) {
+			var lib = this.find('thelibrary')
 			var tree = result.value
 			tree.name = 'Library'
 			tree.collapsed = false
 			lib.dataset = this.librarydata  = dataset(tree)
-
 		}.bind(this))
 
-		this.screen.locationhash = function(event){
-			if(event.value.composition)
-			require.async(event.value.composition).then(function(result){
+		this.screen.locationhash = function(event) {
+			if (event.value.composition)
+			require.async(event.value.composition).then(function(result) {
 
 				this.sourceset.parse(result)
 				console.log('>>', this.sourceset.ast)
 
 				// write it back to disk
-				this.sourceset.onchange = function(){
+				this.sourceset.onchange = function() {
 					this.rpc.fileio.saveComposition(event.value.composition, this.sourceset.last_source)
 				}.bind(this)
 
-				//this.find('jsviewer').sourceset = this.sourceset
-
+				this.find('jsviewer').sourceset = this.sourceset
 			}.bind(this))
 		}.bind(this)
 
-		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
+		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result) {
 			var filetree = this.find('filetree')
 				var tree = result.value
 				tree.collapsed = false
 				// lets make a dataset
-
 		}.bind(this))
 	}
 
 	// right before the recalculateMatrix call
-	this.atMatrix = function(){
-		this.updateConnections();
+	this.atMatrix = function() {
+		this.updateConnections()
 	}
 
-	this.updateZoom = function(z){
+	this.updateZoom = function(z) {
 	}
 
-	this.gridDrag = function(event){
+	this.gridDrag = function(event) {
 		var cg = this.find("centralconstructiongrid")
 		var fg = this.find("flowgraph")
 		var sq = this.findChild("selectorrect")
 		var min = cg.globalToLocal(event.min)
 		var max = cg.globalToLocal(event.max)
 
-		if(sq){
-			sq.visible = true;
-			sq.redraw();
-			sq.pos = vec2(min[0],min[1]);
-			sq.size = vec3(max[0]-min[0], max[1]-min[1], 1);
-			fg.dragselectset = [];
-			for(var a in fg.allblocks){
-				var bl = fg.allblocks[a];
+		if (sq) {
+			sq.visible = true
+			sq.redraw()
+			sq.pos = vec2(min[0],min[1])
+			sq.size = vec3(max[0]-min[0], max[1]-min[1], 1)
+			fg.dragselectset = []
+			for (var a in fg.allblocks) {
+				var bl = fg.allblocks[a]
 
-				cx = bl.pos[0] + bl.layout.width/2;
-				cy = bl.pos[1] + bl.layout.height/2;
+				cx = bl.pos[0] + bl.layout.width/2
+				cy = bl.pos[1] + bl.layout.height/2
 
 				if (cx >= min[0] && cx <= max[0] && cy >= min[1] && cy <=max[1]) {
-					bl.inselection = 1;
-					fg.dragselectset.push(bl);
+					bl.inselection = 1
+					fg.dragselectset.push(bl)
 				}
 				else{
 					if (fg.originalselection.indexOf(bl) >-1)
 					{
-						bl.inselection = 1;
-					}
-					else{
-						bl.inselection = 0;
+						bl.inselection = 1
+					} else {
+						bl.inselection = 0
 					}
 				}
 			}
-			for(var a in fg.allconnections){
-				var con = fg.allconnections[a];
+			for (var a in fg.allconnections) {
+				var con = fg.allconnections[a]
 
 
-				ax = con.frompos[0];
-				ay = con.frompos[1];
+				ax = con.frompos[0]
+				ay = con.frompos[1]
 
-				bx = con.topos[0];
-				by = con.topos[1];
+				bx = con.topos[0]
+				by = con.topos[1]
 
 
-				cx = (ax+bx)/2;
-				cy = (ay+by)/2;
+				cx = (ax+bx)/2
+				cy = (ay+by)/2
 
 				if ( (ax >= min[0] && ax <= max[0] && ay >= min[1] && ay <=max[1])
 						||
@@ -409,39 +401,44 @@ define.class('$ui/view', function(require,
 					(cx >= min[0] && cx <= max[0] && cy >= min[1] && cy <=max[1])
 					)
 				 {
-					con.inselection = 1;
-					fg.dragselectset.push(con);
+					con.inselection = 1
+					fg.dragselectset.push(con)
 				}
 				else{
 					if (fg.originalselection.indexOf(con) >-1)
 					{
-						con.inselection = 1;
-					}
-					else{
-						con.inselection = 0;
+						con.inselection = 1
+					} else {
+						con.inselection = 0
 					}
 				}
 			}
 		}
 	}
-	this.gridDragStart = function(){
+	this.gridDragStart = function() {
 		this.cancelConnection()
 		this.startDragSelect()
 	}
-	this.gridDragEnd = function(){
-		var sq = this.findChild("selectorrect");
-		if (sq){
-			sq.visible = false;
-			sq.redraw();
+	this.gridDragEnd = function() {
+		var sq = this.findChild("selectorrect")
+		if (sq) {
+			sq.visible = false
+			sq.redraw()
 		}
 		this.find("flowgraph").commitdragselect()
 	}
 
-	this.makeNewConnection = function(){
+	this.makeNewConnection = function() {
 		// DO CONNECTION HERE!
 		console.log("making connection...")
+		this.sourceset.fork(function() {
+			this.sourceset.deleteWire(
+				this.newconnection.sourceblock,
+				this.newconnection.sourceoutput,
+				this.newconnection.targetblock,
+				this.newconnection.targetinput
+			)
 
-		this.sourceset.fork(function(){
 			this.sourceset.createWire(
 				this.newconnection.sourceblock,
 				this.newconnection.sourceoutput,
@@ -453,134 +450,130 @@ define.class('$ui/view', function(require,
 		this.cancelConnection()
 	}
 
-
-	this.setBlockName = function(block, newname){
-		console.log("TODODODODODODO: setBlockName - change name to", newname);
+	this.setBlockName = function(block, newname) {
+		console.log("TODODODODODODO: setBlockName - change name to", newname)
 	}
 
-	this.cancelConnection = function(){
-		console.log("cancelling exiting connection setup...");
-		this.newconnection = {};
+	this.cancelConnection = function() {
+		console.log("cancelling exiting connection setup...")
+		this.newconnection = {}
 
-		var connectingconnection = this.find("openconnector");
+		var connectingconnection = this.find("openconnector")
 		if (connectingconnection && connectingconnection.visible)
 		{
-			connectingconnection.from = undefined;
-			connectingconnection.fromoutput  = undefined;
-			connectingconnection.to = undefined;
-			connectingconnection.toinput = undefined;
-			connectingconnection.visible = false;
-			connectingconnection.calculateposition();
-			connectingconnection.redraw();
+			connectingconnection.from = undefined
+			connectingconnection.fromoutput  = undefined
+			connectingconnection.to = undefined
+			connectingconnection.toinput = undefined
+			connectingconnection.visible = false
+			connectingconnection.calculateposition()
+			connectingconnection.redraw()
 		}
 	}
 
-	this.setupConnectionPointerMove = function(){
-		console.log("setting up new connection drag...");
+	this.setupConnectionPointerMove = function() {
+		console.log("setting up new connection drag...")
 
-		var connectingconnection = this.find("openconnector");
-		if (connectingconnection)
-		{
-			connectingconnection.visible = true;
-			connectingconnection.from = this.newconnection.sourceblock;
-			connectingconnection.fromoutput = this.newconnection.sourceoutput;
-			connectingconnection.to = this.newconnection.targetblock;
-			connectingconnection.toinput = this.newconnection.targetinput;
+		var connectingconnection = this.find("openconnector")
+		if (connectingconnection) {
+			connectingconnection.visible = true
+			connectingconnection.from = this.newconnection.sourceblock
+			connectingconnection.fromoutput = this.newconnection.sourceoutput
+			connectingconnection.to = this.newconnection.targetblock
+			connectingconnection.toinput = this.newconnection.targetinput
 
-			console.log(this.newconnection.sourceblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput);
+			console.log(this.newconnection.sourceblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput)
 
-			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length>0){
-				console.log("setting to??", connectingconnection.to);
-				var b = this.find(connectingconnection.to);
-				if (b){
-					var ball = b.findChild(connectingconnection.toinput);
-					connectingconnection.bgcolor = ball.bgcolor;
+			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length > 0) {
+				console.log("setting to??", connectingconnection.to)
+				var b = this.find(connectingconnection.to)
+				if (b) {
+					var ball = b.findChild(connectingconnection.toinput)
+					connectingconnection.bgcolor = ball.bgcolor
 				}
-			}
-			else{
-				if(connectingconnection.from && connectingconnection.from !== "undefined"&& connectingconnection.from.length>0){
-					console.log(connectingconnection.from);
-					var b = this.find(connectingconnection.from);
-					if(b){
-						var ball = b.findChild(connectingconnection.fromoutput);
-						connectingconnection.bgcolor = ball.bgcolor;
+			} else {
+				if (connectingconnection.from && connectingconnection.from !== "undefined"&& connectingconnection.from.length > 0) {
+					console.log(connectingconnection.from)
+					var b = this.find(connectingconnection.from)
+					if (b) {
+						var ball = b.findChild(connectingconnection.fromoutput)
+						connectingconnection.bgcolor = ball.bgcolor
 					}
 				}
 			}
-			connectingconnection.calculateposition();
+			connectingconnection.calculateposition()
 		}
 	}
 
-	this.setConnectionStartpoint = function(sourceblockname, outputname){
-		this.newconnection.sourceblock = sourceblockname;
-		this.newconnection.sourceoutput = outputname;
-		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ){
-			this.makeNewConnection();
-		}
-		else{
-			this.setupConnectionPointerMove();
-		}
-	}
-
-	this.setConnectionEndpoint = function(targetblockname, inputname){
-		this.newconnection.targetblock = targetblockname;
-		this.newconnection.targetinput = inputname;
-		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ){
-			this.makeNewConnection();
-		}
-		else{
-			this.setupConnectionPointerMove();
+	this.setConnectionStartpoint = function(sourceblockname, outputname) {
+		this.newconnection.sourceblock = sourceblockname
+		this.newconnection.sourceoutput = outputname
+		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ) {
+			this.makeNewConnection()
+		} else {
+			this.setupConnectionPointerMove()
 		}
 	}
 
-	this.startDragSelect = function(){
-		this.dragselectset = [];
-		if (!this.screen.keyboard.shift){
-			this.clearSelection(true);
-		}
-		this.originalselection =[];
-		for(var i in this.currentselection){
-			this.originalselection.push(this.currentselection[i]);
+	this.setConnectionEndpoint = function(targetblockname, inputname) {
+		console.log(targetblockname, inputname)
+		this.newconnection.targetblock = targetblockname
+		this.newconnection.targetinput = inputname
+		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ) {
+			this.makeNewConnection()
+		} else {
+			this.setupConnectionPointerMove()
 		}
 	}
 
-	this.renderConnections = function(){
-		if (!this.sourceset) return;
-		if (!this.sourceset.data) return;
-		var res = [];
-		for(var i = 0;i<this.sourceset.data.children.length;i++){
-			var node = this.sourceset.data.children[i];
+	this.startDragSelect = function() {
+		this.dragselectset = []
+		if (!this.screen.keyboard.shift) {
+			this.clearSelection(true)
+		}
+		this.originalselection =[]
+		for (var i in this.currentselection) {
+			this.originalselection.push(this.currentselection[i])
+		}
+	}
+
+	this.renderConnections = function() {
+		if (!this.sourceset) return
+		if (!this.sourceset.data) return
+		var res = []
+		for (var i = 0;i<this.sourceset.data.children.length;i++) {
+			var node = this.sourceset.data.children[i]
 			// block({name:"e", title:"block E", x:450, y:600})
 
-			if (node.wires){
-				for(var j = 0;j<node.wires.length;j++) {
-					var w = node.wires[j];
+			if (node.wires) {
+				for (var j = 0;j<node.wires.length;j++) {
+					var w = node.wires[j]
 					res.push(connection({
 						from:w.from,
 						fromoutput:w.output,
 						to:node.name,
 						toinput:w.input
-					}));
+					}))
 				}
 			}
 		}
 
-		return res;
+		return res
 	}
 
 	function uppercaseFirst (inp) {
-		if (!inp || inp.length == 0) return inp;
-		return inp.charAt(0).toUpperCase() + inp.slice(1);
+		if (!inp || inp.length == 0) return inp
+		return inp.charAt(0).toUpperCase() + inp.slice(1)
 	}
 
-	this.renderBlocks = function(){
-		var res = [];
-		if (!this.sourceset) return;
-		if (!this.sourceset.data) return;
-		for(var i = 0;i<this.sourceset.data.children.length;i++){
-			var node = this.sourceset.data.children[i];
+	this.renderBlocks = function() {
+		var res = []
+		if (!this.sourceset) return
+		if (!this.sourceset.data) return
+		for (var i = 0;i<this.sourceset.data.children.length;i++) {
+			var node = this.sourceset.data.children[i]
 			// block({name:"e", title:"block E", x:450, y:600})
-			var fd = node.flowdata;
+			var fd = node.flowdata
 			if (!fd) {
 				fd = {x:0, y:0}
 			}
@@ -595,61 +588,61 @@ define.class('$ui/view', function(require,
 				})
 			)
 		}
-		return res;
+		return res
 	}
 
-	this.commitdragselect = function(){
-		for(var i in this.dragselectset){
-			var bl = this.dragselectset[i];
-			this.addToSelection(bl);
+	this.commitdragselect = function() {
+		for (var i in this.dragselectset) {
+			var bl = this.dragselectset[i]
+			this.addToSelection(bl)
 		}
-		this.updatePopupUIPosition();
+		this.updatePopupUIPosition()
 	}
 
-	this.getCompositionName = function(){
+	this.getCompositionName = function() {
 		// todo: get actual name from here..
-		return "somename.js";
+		return "somename.js"
 	}
 
-	this.openComposition = function(){
-		this.screen.closeModal(false);
-		this.screen.openModal(function(){
+	this.openComposition = function() {
+		this.screen.closeModal(false)
+		this.screen.openModal(function() {
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
 
 
 
-				blur:function(){
+				blur:function() {
 					this.screen.closeModal(false)
 
-			}} );
+			}} )
 
-		}.bind(this)).then(function(res){
-				if(res){
-					console.log(res);
+		}.bind(this)).then(function(res) {
+				if (res) {
+					console.log(res)
 					this.screen.locationhash = {
 						composition:"$compositions/"+ res
 					}
 
 				}
-			console.log(" opencomp result: " , res);
-		}.bind(this));
+			console.log(" opencomp result: " , res)
+		}.bind(this))
 
 	}
 
-	this.newComposition = function(){
-		this.screen.closeModal(false);
+	this.newComposition = function() {
+		this.screen.closeModal(false)
 
-		this.screen.openModal(function(){
+		this.screen.openModal(function() {
 			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				blur:function(){
+				blur:function() {
 					this.screen.closeModal(false)
 
-			}} );
-		}).then(function(res){
-			if(res){
-				this.rpc.fileio.newComposition(res).then(function(result){
+			}} )
+		}).then(function(res) {
+			if (res) {
+				this.rpc.fileio.newComposition(res).then(function(result) {
 					console.log(result)
 					// switch to new thing
 					this.screen.locationhash = {
@@ -657,91 +650,91 @@ define.class('$ui/view', function(require,
 					}
 				}.bind(this))
 			}
-			console.log(" newcomp result: " , res);
-		}.bind(this));
+			console.log(" newcomp result: " , res)
+		}.bind(this))
 	}
 
-	this.renameComposition = function(){
-		this.screen.closeModal(false);
+	this.renameComposition = function() {
+		this.screen.closeModal(false)
 
-		this.screen.openModal(function(){
+		this.screen.openModal(function() {
 			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				blur:function(){
+				blur:function() {
 					this.screen.closeModal(false)
 
-			}} );
-		}.bind(this)).then(function(res){
+			}} )
+		}.bind(this)).then(function(res) {
 
-			console.log(" rename composition result: " , res);
-		});
+			console.log(" rename composition result: " , res)
+		})
 
 	}
-	this.helpAbout = function(){
-		this.screen.openModal(function(){
+	this.helpAbout = function() {
+		this.screen.openModal(function() {
 			return aboutdialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				blur:function(){
+				blur:function() {
 					this.screen.closeModal(false)
 
-			}} );
-		}.bind(this)).then(function(res){
+			}} )
+		}.bind(this)).then(function(res) {
 
-		});
+		})
 
 	}
-	this.helpReference = function(){
-		this.screen.openModal(function(){
+	this.helpReference = function() {
+		this.screen.openModal(function() {
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
 				title:"Reference",
-				blur:function(){
+				blur:function() {
 					this.screen.closeModal(false)
 
-			}} );
-		}.bind(this)).then(function(res){
+			}} )
+		}.bind(this)).then(function(res) {
 
-		});
+		})
 	}
-	this.helpGettingStarted = function(){
-		this.screen.openModal(function(){
+	this.helpGettingStarted = function() {
+		this.screen.openModal(function() {
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
 				title:"Getting started",
-				blur:function(){
+				blur:function() {
 					this.screen.closeModal(false)
 
-			}} );
-		}.bind(this)).then(function(res){
+			}} )
+		}.bind(this)).then(function(res) {
 
-		});
+		})
 	}
 
-	this.undo = function(){
-		this.sourceset.undo();
+	this.undo = function() {
+		this.sourceset.undo()
 	}
-	this.redo = function(){
-		this.sourceset.redo();
+	this.redo = function() {
+		this.sourceset.redo()
 	}
-	this.render = function(){
+	this.render = function() {
 		return [
 			menubar({flex:0, height:20, viewport:'2d', name:"themenu", menus:[
 				{name:"File", commands:[
-					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
-					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},
-						{name: "Rename composition", clickaction:function(){this.renameComposition();return true;}.bind(this), enabled: false}
+					{name:"Open composition", clickaction:function() {this.openComposition();return true;}.bind(this)},
+					{name:"New composition", clickaction:function() {this.newComposition();return true;}.bind(this)},
+						{name: "Rename composition", clickaction:function() {this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
 			{name:"Edit", commands:[
-				{name:"Undo", icon:"undo", clickaction:function(){this.undo();}.bind(this)},
-				{name:"Redo",icon:"redo",  clickaction:function(){this.redo();}.bind(this)}
+				{name:"Undo", icon:"undo", clickaction:function() {this.undo();}.bind(this)},
+				{name:"Redo",icon:"redo",  clickaction:function() {this.redo();}.bind(this)}
 
 			]}
 				,
 			{name:"Help", commands:[
-				{name:"About Flowgraph", clickaction:function(){this.helpAbout();return true;}.bind(this)},
-				{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
-				{name:"Reference", clickaction:function(){this.helpReference();return true;}.bind(this)}
+				{name:"About Flowgraph", clickaction:function() {this.helpAbout();return true;}.bind(this)},
+				{name:"Getting started", clickaction:function() {this.helpGettingStarted();return true;}.bind(this)},
+				{name:"Reference", clickaction:function() {this.helpReference();return true;}.bind(this)}
 			]}
 				]})
 			,splitcontainer({}
@@ -761,12 +754,12 @@ define.class('$ui/view', function(require,
 							pointerstart: this.gridDragStart.bind(this),
 							pointermove: this.gridDrag.bind(this),
 							pointerend: this.gridDragEnd.bind(this),
-							overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+							overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function() {this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bgcolor:NaN}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 						)
-						,view({name:"connectionlayer", bgcolor:NaN, dataset: this.sourceset, render:function(){
-							return this.renderConnections();
+						,view({name:"connectionlayer", bgcolor:NaN, dataset: this.sourceset, render:function() {
+							return this.renderConnections()
 						}.bind(this)}
 						/*
 							,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
@@ -777,8 +770,8 @@ define.class('$ui/view', function(require,
 							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
 						*/)
 						,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
-						,view({name:"blocklayer", bgcolor:NaN,  dataset: this.sourceset, render:function(){
-							return this.renderBlocks();
+						,view({name:"blocklayer", bgcolor:NaN,  dataset: this.sourceset, render:function() {
+							return this.renderBlocks()
 						}.bind(this)}
 						/*	,block({name:"phone", title:"Phone", x:200, y:20})
 							,block({name:"tv", title:"Television", x:50, y:200})
@@ -795,18 +788,18 @@ define.class('$ui/view', function(require,
 						,view({name:"popuplayer", bgcolor:NaN},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
 								label({text:"Connection", bgcolor:NaN, margin:4})
-								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								,button({padding:0, borderwidth:0, click:function() {this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"Block", bgcolor:NaN, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								,button({padding:0,borderwidth:0, click:function() {this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 
 							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"Group", bgcolor:NaN, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								,button({padding:0,borderwidth:0, click:function() {this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,this.selectorrect({name:"selectorrect"})
 							,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
@@ -815,6 +808,6 @@ define.class('$ui/view', function(require,
 					 ,jseditor({name:'jsviewer', fontsize:14,sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 			)
-		];
+		]
 	}
-});
+})
