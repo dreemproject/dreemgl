@@ -14,7 +14,7 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 		this.name = 'fileio';
 
 		this.saveComposition = function(name, data){
-			this.writefile(name + '/index.js', 'define.class("$server/composition",'+data+')')
+			this.writefile(name, 'define.class("$server/composition",'+data+')')
 		};
 
 		this.newComposition = function(name){
