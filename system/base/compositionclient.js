@@ -14,13 +14,17 @@ define.class('./compositionbase', function(require, baseclass){
 	var ASTScanner = require('$system/parse/astscanner')
 	var OneJSParser = require('$system/parse/onejsparser')
 
+	this.screenForClient = function() {
+		return typeof location !== 'undefined' && location.search && location.search.slice(1)
+	};
+
 	this.atConstructor = function(previous, parent){
 		this.parent = parent
 
 		// how come this one doesnt get patched up?
 		baseclass.atConstructor.call(this)
 
-		this.screenname = typeof location !== 'undefined' && location.search && location.search.slice(1)
+		this.screenname = this.screenForClient()
 		this.cached_attributes = {}
 		// web environment
 		if(previous){
