@@ -822,7 +822,6 @@ define.class('$system/base/node', function(require){
 		var shaders = this.shader_update_list
 		for(var i = 0; i < shaders.length; i ++){
 			var shader = shaders[i]
-			if(shader.view !== this)debugger
 			if(shader.update && shader.update_dirty){
 				shader.update_dirty = false
 				shader.update()

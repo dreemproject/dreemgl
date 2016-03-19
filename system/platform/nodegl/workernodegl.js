@@ -86,6 +86,10 @@ define.class('$system/platform/webgl/workerwebgl', function(require, exports){
 			var sock = worker._socket = new NodeWebsocket(io)
 			sock.makeJSONSocket()
 
+			worker.postMessage = function(msg){
+				sock.sendJSON({message:msg})
+			}
+
 			sock.atJSONMessage = function(msg){
 				if(msg.initid){
 					worker.workerid = msg.workerid
@@ -95,6 +99,7 @@ define.class('$system/platform/webgl/workerwebgl', function(require, exports){
 					worker.onmessage(msg.message)
 					return
 				}
+
 				var ret = worker[msg.name].apply(worker, msg.args);
 				if(ret && ret.then) ret.then(function(value){
 					sock.sendJSON({value:value, uid:msg.uid, workerid:msg.workerid})
@@ -120,5 +125,10 @@ define.class('$system/platform/webgl/workerwebgl', function(require, exports){
 			}.bind(this)
 		}
 
+		this.postMessage = function(msg, transfer, tgtid){
+			// post to a worker
+			var workerid = tgtid || 0
+			this._workers[workerid].postMessage({message:msg})
+		}	
 	}
 })

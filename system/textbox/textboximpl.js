@@ -225,7 +225,7 @@ define.mixin(function(require){
 
 	this.keydown = function(v){
 		var keyboard = this.screen.keyboard
-		keyboard.textarea.focus()
+		keyboard.textareaFocus()
 		var name = 'key' + v.name[0].toUpperCase() + v.name.slice(1)
 		this.undo_group++
 

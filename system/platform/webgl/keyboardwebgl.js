@@ -44,6 +44,16 @@ define.class('$system/base/keyboard', function (require, exports){
 		59:186 // semicolon
 	}
 
+	this.textAreaRespondToMouse = function(pos){
+		this.textarea.focus()
+		//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
+		//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
+	}
+
+	this.textareaFocus = function(){
+		this.textarea.focus()
+	}
+
 	this.atConstructor = function(){
 
 		var special_key_hack = false
@@ -144,12 +154,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		}.bind(this)
 		// lets output a css
 
-		this.textAreaRespondToMouse = function(pos){
-			this.textarea.focus()
-			//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
-			//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
-		}
-
+		
 		this.textarea = document.createElement('textarea')
 		this.textarea.style.width = '1'
 		this.textarea.style.height = '1'

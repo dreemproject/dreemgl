@@ -79,6 +79,8 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 			if(this.onkeyup) this.onkeyup(event)
 		}.bind(this))
 
+
+
 		//  GLFW.events.on('event', console.dir);
 		GLFW.events.on('quit', function () { 
 			process.exit(0)
@@ -136,21 +138,25 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 		this.getExtension('OES_standard_derivatives')
 
   		this.doSize()
-
+  		var last_anim, last_time 
   		this.redrawCall = function(){
-	        GLFW.PollEvents()
-  			// renderloop	        
-	        var anim_frame = this.req_anim_frame
-	        if(anim_frame){
-	        	this.req_anim_frame = undefined
-	        	anim_frame(GLFW.GetTime()*1000.0)
-	        	GLFW.SwapBuffers(this.glfwindow)
-	        }
+ 			if(last_anim) GLFW.SwapBuffers(this.glfwindow)
+			GLFW.PollEvents()
+			// renderloop	        
+			var anim_frame = last_anim = this.req_anim_frame
+			if(anim_frame){
+				this.req_anim_frame = undefined
+				var time = GLFW.GetTime()
+				//console.log((last_time - time)*1000)
+				last_time = time
+				anim_frame(time*1000)
+			}
+
   		}
 
         setInterval(function(){
         	this.redrawCall()
-        }.bind(this), 1)
+        }.bind(this), 0)
     }
 
 	this.doSize = function(width, height){

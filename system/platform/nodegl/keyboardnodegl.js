@@ -7,7 +7,10 @@
 define.class('$system/base/keyboard', function (require, exports){
 
 	this.toKey = { // slap a usable name on keys
-		8:'backspace',9:'tab',13:'enter',340:'shift',344:'shift',341:'ctrl',345:'ctrl',342:'alt',346:'alt',
+		8:'backspace',
+		259:'backspace',9:'tab',
+		257:'enter',
+		13:'enter',340:'shift',344:'shift',341:'ctrl',345:'ctrl',342:'alt',346:'alt',
 		19:'pause',20:'caps',27:'escape',
 		32:'space',266:'pgup',267:'pgdn',
 		269:'end',268:'home',263:'leftarrow',265:'uparrow',262:'rightarrow',264:'downarrow',
@@ -36,7 +39,15 @@ define.class('$system/base/keyboard', function (require, exports){
 		var key = this.toKey[ k ]
 		this.toCode[key] = k
 		if(!this.isAttribute(key))
-			this.defineAttribute(key, {type:int})
+			this.defineAttribute(key, Config({type:int}))
+	}
+	
+	this.textareaFocus = function(){
+
+	}
+
+	this.textAreaRespondToMouse = function(){
+
 	}
 
 	this.checkSpecialKeys = function(){
@@ -58,7 +69,11 @@ define.class('$system/base/keyboard', function (require, exports){
 			msg[msg.name] = 1
 
 			this.emit('down', msg)
+
 		}.bind(this))
+
+		document.addEventListener('keypress', function(e){
+		})
 
 		document.addEventListener('keyup', function(e){
 			var code = e.which>255?e.which:e.keyCode
