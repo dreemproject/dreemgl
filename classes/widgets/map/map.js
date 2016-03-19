@@ -181,10 +181,10 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 
 		// prunes the loadedblocks to live below throwawaythreshold
 		this.cleanLoadedBlocks = function(){
-			var keys = Object.keys(this.loadedblocks);
-			if (keys.length < this.throwawaythreshold	) return;
+			var keys = Object.keys(this.loadedblocks)
+			if (keys.length < this.throwawaythreshold) return
 
-			var zscalar = 1280;
+			var zscalar = 1280
 
 			var dellist = [];
 			for (var i = 0; i<keys.length; i++){
@@ -744,7 +744,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
 			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
 
-			style.pos = vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
+			style.pos = vec3(rpos.x,-100+ this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 
 			style.fgcolor = "black";
 			// style.outlinecolor = "white";

@@ -16,8 +16,8 @@ define.class(function(require, exports){
 			var img = new Image()
 			img.src = name
 			return img
-		}
 
+		}
 		console.log(args['-nodegl'])
 		console.log('Downloading nodegl')
 		// lets make the math library requireable

@@ -11,9 +11,6 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 
 	// require embedded classes
 	this.Shader = require('./shadernodegl')
-
-	this.Shader.prototype.set_precision = false
-
 	this.Texture = require('./texturenodegl')
 	this.DrawPass = require('./drawpassnodegl')
 
@@ -79,9 +76,6 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 			if(this.onkeyup) this.onkeyup(event)
 		}.bind(this))
 
-
-
-		//  GLFW.events.on('event', console.dir);
 		GLFW.events.on('quit', function () { 
 			process.exit(0)
 		})
@@ -91,16 +85,6 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 			if (evt.keyCode === 27) process.exit(0);  // ESC
 		});
 
-		//var attribs = GLFW.WINDOW
-		//if (width == 0 || height == 0) {
-		//	attribs = GLFW.FULLSCREEN
-		//	width = height = 0
-		//}
-
-		//var resizeListeners = [], rl = GLFW.events.listeners("framebuffer_resize");
-		//for (var l = 0, ln = rl.length; l < ln; ++l)
-		//resizeListeners[l] = rl[l];
-		//GLFW.events.removeAllListeners("framebuffer_resize");
 		GLFW.DefaultWindowHints()
 		GLFW.WindowHint(GLFW.RESIZABLE, 1)
 		GLFW.WindowHint(GLFW.VISIBLE, 1)

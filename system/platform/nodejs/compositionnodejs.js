@@ -159,14 +159,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			obj[msg.attribute] = msg.value
 			obj.atAttributeSet = last_set
 		}
-		else{ // write it on the rpc system for local loopback
-			var obj = this.rpc[parts[0]]
-			var last_set = obj.atAttributeSet
-			obj.atAttributeSet = undefined
-			obj[msg.attribute] = msg.value
-			obj.atAttributeSet = last_set
-		}
-
+		
 		// lets send this attribute to everyone except socket
 		for(var scrkey in this.connected_screens){
 			var array = this.connected_screens[scrkey]
