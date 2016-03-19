@@ -288,6 +288,7 @@ define.class('$system/base/shader', function(require, exports){
 			if(len === 0) return 0
 			if(!buf.glvb){
 				buf.glvb = gl.createBuffer()
+				buf.clean = false
 			}
 			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
 			if(!buf.clean){

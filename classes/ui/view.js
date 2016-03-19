@@ -528,6 +528,7 @@ define.class('$system/base/node', function(require){
 				this.screen.device.gl.deleteBuffer(shader.mesh.glvb)
 				shader.mesh.glvb = undefined
 			}
+			shader.reused = undefined
 		}
 	}
 
