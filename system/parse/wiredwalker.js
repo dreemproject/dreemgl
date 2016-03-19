@@ -5,7 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 // Acorn binding walker
 
-define.class("./onejsserialize", function(require){
+define.class("$system/parse/onejsserialize", function(require){
 
 	this.newState = function(){
 		return {

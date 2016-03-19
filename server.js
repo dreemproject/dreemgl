@@ -191,7 +191,7 @@ function main(){
 
 				var composition = args['-dali'];
 				if (composition === true)
-			composition = 'examples/rendertest'
+					composition = 'examples/rendertest'
 
 				define.$platform = 'dali'
 				define.$environment = 'dali' // Otherwise it is nodejs

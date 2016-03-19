@@ -39,11 +39,14 @@ define.class('$system/base/keyboard', function (require, exports){
 			this.defineAttribute(key, {type:int})
 	}
 
+	this.checkSpecialKeys = function(){
+
+	}
+
 	this.atConstructor = function(device){
 		var document = device.document
 
-
-		document.on('keydown', function(e){
+		document.addEventListener('keydown', function(e){
 			var code = e.which>255?e.which:e.keyCode
 			var keyname = this.toKey[ code ]
 			if( keyname ) this[keyname] = 1
@@ -57,7 +60,7 @@ define.class('$system/base/keyboard', function (require, exports){
 			this.emit('down', msg)
 		}.bind(this))
 
-		document.on('keyup', function(e){
+		document.addEventListener('keyup', function(e){
 			var code = e.which>255?e.which:e.keyCode
 			var keyname = this.toKey[ code ]
 

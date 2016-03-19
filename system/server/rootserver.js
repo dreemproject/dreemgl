@@ -26,6 +26,8 @@ define.class(function(require){
 	// Doccumentation
 	this.atConstructor = function(args){
 		this.compositions = {}
+		this.binrpc_incoming = {}
+		this.binrpc_outgoing = {}
 
 		this.args = args
 		var port = this.args['-port'] || process.env.PORT || 2000
@@ -138,8 +140,10 @@ define.class(function(require){
 		var sock = new NodeWebSocket(req, sock, head)
 		sock.url = req.url
 		var mypath = req.url.slice(1)
-		if(mypath) this.getComposition('$' + decodeURIComponent(mypath)).busserver.addWebSocket(sock, req)
-		else this.busserver.addWebSocket(sock, req)
+		var busserver
+		if(mypath) busserver = this.getComposition('$' + decodeURIComponent(mypath)).busserver
+		else busserver = this.busserver
+		busserver.addWebSocket(sock, req, this.binrpc_outgoing, this.binrpc_incoming)
 	}
 
 	// maps an input path into our files
@@ -173,6 +177,44 @@ define.class(function(require){
 		var host = req.headers.host
 		var requrl = req.url
 
+		if(requrl.indexOf('/binrpc?') === 0){
+			var where = decodeURIComponent(requrl.slice(8))
+			if(req.method == 'POST'){
+				// alright lets store this somewhere
+				var buf = new Uint8Array(req.headers['content-length'])
+				var off = 0
+				
+				req.on('data', function(data){
+					for(var i = 0; i < data.length; i ++, off++){
+						buf[off] = data[i]
+					}
+				})
+				req.on('end', function(){
+					this.binrpc_incoming[where] = buf
+					res.writeHead(200)
+					res.end()
+				}.bind(this))
+			}
+			else{
+				if(!this.binrpc_outgoing[where]){
+					res.writeHead(404)
+					res.end()
+					return
+				}
+				var out = this.binrpc_outgoing[where]
+				if(out.remoteAddress !== req.connection.remoteAddress){
+					res.writeHead(404)
+					res.end()
+					return
+				}
+				var buf = new Buffer(out.data)
+				res.writeHead(200, {'content-length':buf.length, 'content-type': 'application/octet-binary'})
+				res.write(buf)
+				this.binrpc_outgoing[where] = undefined
+				res.end()
+			}
+			return
+		}
 		// otherwise handle as static file
 		if(requrl.indexOf('/proxy?') === 0){
 			// lets connect a http request and forward it back!

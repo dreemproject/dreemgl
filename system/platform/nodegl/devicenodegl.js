@@ -4,11 +4,10 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("../webgl/devicewebgl", function(require, exports){
+define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 
 	this.Keyboard = require('./keyboardnodegl')
-	// TODO(aki): replace mouse with pointer
-	this.Mouse = require('./mousenodegl')
+	this.Pointer = require('./pointernodegl')
 
 	// require embedded classes
 	this.Shader = require('./shadernodegl')
@@ -18,43 +17,163 @@ define.class("../webgl/devicewebgl", function(require, exports){
 	this.Texture = require('./texturenodegl')
 	this.DrawPass = require('./drawpassnodegl')
 
-	var WebGL = require('node-webgl')
-  	var Image;
-	if (WebGL) {
-		Image = WebGL.Image
-		this.document = WebGL.document()
-		this.Texture.Image = Image
+	var WebGL = require('node-webgl/lib/webgl')
+	var Image = require('node-webgl/lib/image')
+	var GLFW = require('node-glfw')
+
+	this.atConstructor = function(){
+		this.window = 
+		this.document = this
+		baseclass.atConstructor.call(this)
 	}
+
+	// make a fake window/document interface
+	this.addEventListener = function(name, callback){
+		if(!callback) throw new Error('invalid listener')
+		this['on' + name] = callback
+	}
+
+	this.removeEventListener = function (name, callback) {
+		if (callback && typeof(callback) === "function") {
+			this['on' + name] = undefined
+		}
+	}
+
+	this.requestAnimationFrame = function (callback, delay) {
+		this.req_anim_frame = callback
+    }
+
+	this.Texture.Image = Image
 
 	// create nodegl context
 	this.createContext = function(){
-		// lets create a nodegl context
-		this.canvas = this.document.createElement("canvas",800,600);
-		this.document.setTitle("DreemGL")
-	    this.gl = this.canvas.getContext("experimental-webgl");
-    	this.gl.viewportWidth = this.canvas.width;
-  		this.gl.viewportHeight = this.canvas.height;
-  		this.doSize()
-	}
 
-	this.doSize = function(){
-		var sw = this.canvas.width
-		var sh = this.canvas.height
-		this.gl.viewport(0, 0, sw, sh)
+		var width = 800, height = 600
+
+		if (process.platform !== 'win32') process.on('SIGINT', function () { 
+			process.exit(0)
+		})
+		
+		GLFW.Init()
+		
+		GLFW.events.on('mousemove', function(event){
+			event.pageX = event.x, event.pageY = event.y
+			if(this.onmousemove) this.onmousemove(event)
+		}.bind(this))
+
+		GLFW.events.on('mousedown', function(event){
+			event.pageX = event.x, event.pageY = event.y
+			if(this.onmousedown) this.onmousedown(event)
+		}.bind(this))
+
+		GLFW.events.on('mouseup', function(event){
+			event.pageX = event.x, event.pageY = event.y
+			if(this.onmouseup) this.onmouseup(event)
+		}.bind(this))
+
+		GLFW.events.on('keydown', function(event){
+			if(this.onkeydown) this.onkeydown(event)
+		}.bind(this))
+
+		GLFW.events.on('keyup', function(event){
+			if(this.onkeyup) this.onkeyup(event)
+		}.bind(this))
+
+		//  GLFW.events.on('event', console.dir);
+		GLFW.events.on('quit', function () { 
+			process.exit(0)
+		})
+
+		GLFW.events.on("keydown", function (evt) {
+			if (evt.keyCode === 'C'.charCodeAt(0) && evt.ctrlKey) { process.exit(0); }// Control+C
+			if (evt.keyCode === 27) process.exit(0);  // ESC
+		});
+
+		//var attribs = GLFW.WINDOW
+		//if (width == 0 || height == 0) {
+		//	attribs = GLFW.FULLSCREEN
+		//	width = height = 0
+		//}
+
+		//var resizeListeners = [], rl = GLFW.events.listeners("framebuffer_resize");
+		//for (var l = 0, ln = rl.length; l < ln; ++l)
+		//resizeListeners[l] = rl[l];
+		//GLFW.events.removeAllListeners("framebuffer_resize");
+		GLFW.DefaultWindowHints()
+		GLFW.WindowHint(GLFW.RESIZABLE, 1)
+		GLFW.WindowHint(GLFW.VISIBLE, 1)
+		GLFW.WindowHint(GLFW.DECORATED, 1)
+		GLFW.WindowHint(GLFW.RED_BITS, 8)
+		GLFW.WindowHint(GLFW.GREEN_BITS, 8)
+		GLFW.WindowHint(GLFW.BLUE_BITS, 8)
+		GLFW.WindowHint(GLFW.DEPTH_BITS, 24)
+		GLFW.WindowHint(GLFW.REFRESH_RATE, 0)
+
+		if (!(this.glfwindow = GLFW.CreateWindow(width, height))) {
+			GLFW.Terminate()
+			throw "Can't initialize GL surface"
+		}
+
+		GLFW.MakeContextCurrent(this.glfwindow)
+
+		GLFW.SetWindowTitle("WebGL")
+
+		// make sure GLEW is initialized
+		WebGL.Init()
+
+		GLFW.SwapBuffers(this.glfwindow)
+		GLFW.SwapInterval(1)
+
+		//for (var l = 0, ln = resizeListeners.length; l < ln; ++l)
+		GLFW.events.addListener("framebuffer_resize", function(){
+			this.doSize()
+			//this.redrawCall()
+		}.bind(this))
+
+		this.gl = WebGL
+
+        this.getExtension('OES_standard_derivatives')
+
+  		this.doSize()
+
+  		this.clear(0,0,0,1.)
+  		GLFW.SwapBuffers(this.glfwindow)
+
+  		this.redrawCall = function(){
+	        GLFW.PollEvents()
+  			// renderloop	        
+	        var anim_frame = this.req_anim_frame
+	        if(anim_frame){
+	        	this.req_anim_frame = undefined
+	        	anim_frame(GLFW.GetTime()*1000.0)
+	        	GLFW.SwapBuffers(this.glfwindow)
+	        }
+  		}
+
+        setInterval(function(){
+        	this.redrawCall()
+        }.bind(this), 1)
+    }
+
+	this.doSize = function(width, height){
+		var sizeWin = GLFW.GetWindowSize(this.glfwindow)
+		var sizeFB = GLFW.GetFramebufferSize(this.glfwindow)
+
+		this.ratio = sizeFB.width / sizeWin.width
+		this.width = sizeWin.width
+		this.height = sizeWin.height
+		//var sw = width
+		//var sh = height
+		this.gl.viewport(0, 0, sizeFB.width, sizeFB.height)
 		// store our w/h and pixelratio on our frame
-		this.main_frame.ratio = 2
-		this.main_frame.size = vec2(sw, sh) // actual size
-		this.size = vec2(sw, sh)
-		this.ratio = this.main_frame.ratio
+		this.main_frame.ratio = this.ratio
+		this.size = vec2(sizeWin.width, sizeWin.height)
+		this.main_frame.size = vec2(sizeFB.width, sizeFB.height) // actual size
+		//this.ratio = this.main_frame.ratio
+		this.atResize ()
 	}
 
 	this.initResize = function(){
-		this.document.on("resize", function (evt) {
-			this.canvas.width = evt.width * this.main_frame.ratio;
-			this.canvas.height = evt.height * this.main_frame.ratio;
-			this.doSize()
-			this.relayout()
-		}.bind(this))
 	}
 
 })

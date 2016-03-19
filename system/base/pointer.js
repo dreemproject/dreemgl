@@ -222,6 +222,10 @@ define.class('$system/base/node', function(){
 		this._wheel.length = 0
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
+			if(!previous){
+				console.log('pointer lost!')
+				continue
+			}
 			var start = this._start.getById(previous.id)
 			var first = this._first.getById(previous.id)
 
@@ -261,9 +265,13 @@ define.class('$system/base/node', function(){
 		this._end.length = 0
 		this._tap.length = 0
 		for (var i = 0; i < pointerlist.length; i++) {
-
+			var closest = this._move.getClosest(pointerlist[i])
+			if(!closest){
+				console.log('pointer lost!')
+				continue
+			}
 			// emit event hooks
-			var start = this._start.getById(this._move.getClosest(pointerlist[i]).id)
+			var start = this._start.getById(closest.id)
 			if (start){
 				if (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
 			}

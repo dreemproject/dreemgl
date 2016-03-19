@@ -48,46 +48,13 @@ define.class(function(require, exports){
 		this.view = this.outer
 	}
 
-	this.set_precision = true
-
-	this.extensions = ''
-	// put extensions as setters to not have to scan for them
-	/*
-	function defExt(ext){
-		Object.defineProperty(self, key,{
-			get:function(){
-				this.extensions.indexOf(ext) !== -1
-			},
-			set:function(value){
-				if(this.extensions.indexOf(ext) !== -1)
-					return
-				if(this.extensions) this.extensions += '|'
-				this.extensions += ext
-			}
-		})
-	}*/
-	//for(var key in gltypes.extensions) defExt(key)
-
-	//this.OES_standard_derivatives = 1
-
-	this.precision = 'highp'
+	this.set_precision = 'precision highp float;\n'
+	this.set_extensions = '#extension GL_OES_standard_derivatives : enable\n'
 
 	this.compileHeader = function(){
 		var ret = '';
-		// ehm how do we find extensions to enable?
-		// Extensions come first.
-		ret += '#extension GL_OES_standard_derivatives : enable\n'
-
-		ret += this.set_precision?'precision ' + this.precision + ' float;\n':''
-		//	'precision ' + this.precision + ' int;'
-
-		//var ret = ''
-		//for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
-		//	var ext = exts[i]
-	//		if(gltypes.extensions[ext] === 1)
-	//			ret += '\n#extension GL_' + ext + ' : enable'
-	//	}
-	
+		if(this.set_extensions) ret += this.set_extensions
+		if(this.set_precision) ret += this.set_precision
 		return ret + '\n'
 	}
 

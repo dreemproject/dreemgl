@@ -290,7 +290,7 @@ define.class('$system/base/shader', function(require, exports){
 			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
 			if(!buf.clean){
 				var dt = Date.now()
-				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STREAM_DRAW)
+				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
 				buf.clean = true
 			}
 		}

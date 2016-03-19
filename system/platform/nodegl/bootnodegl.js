@@ -13,10 +13,12 @@ define.class(function(require, exports){
 		define.$platform = 'nodegl'
 		console.log(args['-nodegl'])
 		console.log('Downloading nodegl')
+		// lets make the math library requireable
+		
 		require.async(args['-nodegl']).then(function(composition){		
 			console.log('Booting nodegl')
 			this.comp = new composition(undefined, undefined, args['-nodegl'])
-
+			
 		}).catch(function(error){
 			console.log(error.stack)
 		})

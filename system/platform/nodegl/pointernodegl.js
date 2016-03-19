@@ -5,8 +5,14 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('../webgl/shaderwebgl', function(require, exports){
-	exports.Texture = this.Texture = require('./texturenodegl')
-	this.set_precision = ""
-	this.set_extensions = ""//'#extension GL_OES_standard_derivatives : enable\n'
+define.class('../webgl/pointerwebgl', function(require, exports){
+
+	Object.defineProperty(this, 'cursor', {
+		get:function() {
+			return this._cursor
+		},
+		set:function(value) {
+			// todo
+		}
+	})
 })

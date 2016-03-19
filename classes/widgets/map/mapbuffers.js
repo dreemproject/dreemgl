@@ -6,8 +6,9 @@
 
 define.class(function(require, $server$, service){
 
-	var earcut = require('$system/lib/earcut-port.js')().earcut;
-
+	var earcut = require('$system/lib/earcut-port.js')().earcut
+	var styleset = require("$widgets/map/mapstyle.js")()
+	
 	this.TileSize = 256.0;
 
 	var KindSet = this.KindSet = {};
@@ -97,8 +98,6 @@ define.class(function(require, $server$, service){
 		riverbank:true,reservoir:true,
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true
 	};
-	
-	var styleset = require("./mapstyle.js")();
 	
 	var mapstyle = this.mapstyle = 	styleset.mapstyle;
 	

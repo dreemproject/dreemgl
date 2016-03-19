@@ -242,6 +242,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 				r.hash = hash;
 
 				this.workers.build(str, r).then(function(result){
+					if(!result) return
 					var dt = Date.now()
 					this.loadedblocks[r.hash] = result.value
 					this.loadqueuehash[r.hash] = undefined;
