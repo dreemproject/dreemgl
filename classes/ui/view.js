@@ -487,7 +487,7 @@ define.class('$system/base/node', function(require){
 							shobj.reupdate(shkey)
 						}
 					}
-					prev.shaders[key] = undefined
+					prevshader.reused = true
 				}
 				else{
 					shobj = new shader(this)
@@ -524,11 +524,10 @@ define.class('$system/base/node', function(require){
 	this.atViewDestroy = function(){
 		for(var key in this.shaders){
 			var shader = this.shaders[key]
-			if(shader && shader.hasOwnProperty('mesh') && !shader.mesh.sticky){
+			if(!shader.reused && shader.hasOwnProperty('mesh') && !shader.mesh.sticky){
 				this.screen.device.gl.deleteBuffer(shader.mesh.glvb)
 				shader.mesh.glvb = undefined
 			}
-			console.log(shader)
 		}
 	}
 
