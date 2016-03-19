@@ -69,7 +69,7 @@ define.class(function(require, $ui$, view){
 		this.updateorder = 3
 		this.draworder = 5
 		this.subpixel = false
-
+		
 		// set the right shaders
 		this.glyphy_mesh = this.glyphy_mesh_sdf
 		this.glyphy_pixel = this.glyphy_sdf_draw

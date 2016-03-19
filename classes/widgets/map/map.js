@@ -726,7 +726,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 
 	// view implementation of the label tile
 	define.class(this, "labeltile", "$ui/labelset", function(){
-		this.polygonoffset = 100.0;
+		//this.polygonoffset = 100.0;
 		this.outline = false;
 		this.outline_thickness = 0;
 		this.is = tilebasemixin;
@@ -744,7 +744,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
 			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
 
-			style.pos = vec3(rpos.x,-100+ this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
+			style.pos = vec3(rpos.x, -25+ this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 
 			style.fgcolor = "black";
 			// style.outlinecolor = "white";
@@ -793,7 +793,10 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 			return true;
 		}
 
-		this.depth_test = "disabled"
+		this.typeface = function(){
+			this.depth_test = 'src_depth <= dst_depth'
+		}
+		//this.depth_test = "enabled"
 
 		this.position = "absolute"
 		this.bgcolor = NaN;
