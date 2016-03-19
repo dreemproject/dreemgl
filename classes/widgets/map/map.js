@@ -206,7 +206,20 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 
 			for(var i =this.throwawaythreshold ; i<dellist.length; i++){
 				var todelete = dellist[i];
-				delete this.loadedblocks[todelete.hash];
+				var blk = this.loadedblocks[todelete.hash];
+				delete this.loadedblocks[todelete.hash]
+				if(blk.buildingVertexBuffer.glvb){
+					this.screen.device.gl.deleteBuffer(blk.buildingVertexBuffer.glvb)
+					blk.buildingVertexBuffer.glvb = undefined
+				}
+				if(blk.landVertexBuffer.glvb){
+					this.screen.device.gl.deleteBuffer(blk.landVertexBuffer.glvb)
+					blk.landVertexBuffer.glvb = undefined
+				}
+				if(blk.roadVertexBuffer.glvb){
+					this.screen.device.gl.deleteBuffer(blk.roadVertexBuffer.glvb)
+					blk.roadVertexBuffer.glvb = undefined
+				}
 			}
 		}
 
@@ -615,6 +628,8 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 		this.loadBufferFromTile = function(tile){
 			if (!this.shaders || !this.shaders.hardrect) return false;
 			this.shaders.hardrect.mesh = tile.buildingVertexBuffer;
+			this.shaders.hardrect.mesh.sticky = true
+
 			return true;
 		}
 
@@ -658,7 +673,9 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 
 		this.loadBufferFromTile = function(tile){
 			if (!this.shaders || !this.shaders.hardrect) return false;
-				this.shaders.hardrect.mesh = tile.landVertexBuffer;
+			this.shaders.hardrect.mesh = tile.landVertexBuffer;
+			this.shaders.hardrect.mesh.sticky = true
+
 			return true;
 		}
 		this.pickalpha  = 0.1
@@ -812,6 +829,7 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 		this.loadBufferFromTile = function(tile){
 			if (!this.shaders || !this.shaders.hardrect) return;
 			this.shaders.hardrect.mesh = tile.roadVertexBuffer;
+			this.shaders.hardrect.mesh.sticky = true
 			return true;
 		}
 

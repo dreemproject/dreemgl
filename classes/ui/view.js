@@ -519,6 +519,17 @@ define.class('$system/base/node', function(require){
 		this.sortShaders()
 	}
 
+	// lets destroy some shaders/vertexbuffers
+	this.atViewDestroy = function(){
+		for(var key in this.shaders){
+			var shader = this.shaders[key]
+			if(shader.hasOwnProperty('mesh') && !shader.mesh.sticky){
+				this.screen.device.gl.deleteBuffer(shader.mesh.glvb)
+				shader.mesh.glvb = undefined
+			}
+		}
+	}
+
 	Object.defineProperty(this, 'bg', {
 		get:function(){},
 		set:function(){
