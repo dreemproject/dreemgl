@@ -1091,15 +1091,16 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		var m = length(vec2(length(dFdx(mesh.pos)), length(dFdy(mesh.pos))))*SQRT_1_2*0.003
 
-		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
+		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.004
 
 		dist -= stylepack.x / 300.
 		dist = dist / m * pixel_contrast
 
-		dist = moddist(pos, dist)
+		//dist = moddist(pos, dist)
 
+		var dist2 = dist;
 		if(stylepack.z>0.){
-			dist = abs(dist) - (stylepack.y)
+			dist2 = abs(dist) - (stylepack.y)
 		}
 
 		// TODO(aki): verify that this is correct
@@ -1107,8 +1108,17 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			discard
 		}
 
-		//return 'red'
-		return vec4(stylefgcolor.xyz, glyphy_antialias(-dist))
+		var alpha = glyphy_antialias(-dist)
+		var alpha2 = glyphy_antialias(-dist2)
+
+		//if(mesh.gamma_adjust.r != 1.){
+		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
+		//}
+
+		var rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha);
+
+		return vec4(this.textpixel(rgb, pos, dist), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
+
 		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
 	}
 
