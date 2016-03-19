@@ -1588,7 +1588,7 @@ define.class('$system/base/node', function(require){
 			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
 			sized = vec2(pos.x, pos.y)
-			var res = vec4(sized.x, sized.y, -0.008, 1) * view.totalmatrix * view.viewmatrix
+			var res = vec4(sized.x, sized.y, -0.05, 1) * view.totalmatrix * view.viewmatrix
 			//res.w -= 0.004
 			return res
 		}
