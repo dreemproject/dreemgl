@@ -822,7 +822,6 @@ define.class('$system/base/node', function(require){
 		var shaders = this.shader_update_list
 		for(var i = 0; i < shaders.length; i ++){
 			var shader = shaders[i]
-			if(shader.view !== this)debugger
 			if(shader.update && shader.update_dirty){
 				shader.update_dirty = false
 				shader.update()
@@ -1589,7 +1588,7 @@ define.class('$system/base/node', function(require){
 			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
 			sized = vec2(pos.x, pos.y)
-			var res = vec4(sized.x, sized.y, -0.004, 1) * view.totalmatrix * view.viewmatrix
+			var res = vec4(sized.x, sized.y, -0.008, 1) * view.totalmatrix * view.viewmatrix
 			//res.w -= 0.004
 			return res
 		}

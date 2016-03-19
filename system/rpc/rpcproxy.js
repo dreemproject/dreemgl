@@ -33,18 +33,7 @@ define.class('$system/base/node', function(require, exports){
 
 	RpcProxy.defineMethod = function(obj, key){
 		obj[key] = function(){
-			var args = []
-			var msg = {type:'method', method:key, args:args}
-
-			for(var i = 0; i < arguments.length; i++){
-				var arg = arguments[i]
-
-				if(typeof arg == 'function' || typeof arg == 'object' && !define.isSafeJSON(arg)){
-					throw new Error('RPC call ' + key + ' can only support JSON safe objects')
-				}
-
-				args.push(arg)
-			}
+			var msg = {type:'method', method:key, args:Array.prototype.slice.apply(arguments)}
 			return this.parent.methodRpc(this.name, msg)
 		}
 	}

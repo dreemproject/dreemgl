@@ -9,23 +9,76 @@ define.class(function(require, exports){
 
 	this.atConstructor = function(){
 		this.sockets = []
+		this.binrpc_waiting = []
+	}
+	
+	this.use_xhr_fallback_for_binary = true
+
+	this.binRpcIncoming = function(binrpc){
+
 	}
 
 	// adds a WebSocket to the BusServer
-	this.addWebSocket = function(sock, req){
+	this.addWebSocket = function(sock, req, binrpc_outgoing, binrpc_incoming){
 		this.sockets.push(sock)
 		var origin = req.headers.origin
-		sock.atClose = function(){
+		var referer = req.headers.origin+req.url
+		var remoteAddress = req.connection.remoteAddress
+		
+		sock.onclose = function(){
 			this.sockets.splice(this.sockets.indexOf(sock), 1)
-			sock.atClose = undefined			
+			sock.onclose = undefined			
 			this.atClose(sock);
 		}.bind(this)
 
-		sock.atMessage = function(message){
-			var jsonmsg = JSON.parse(message)
-			jsonmsg.origin = origin
-			this.atMessage(jsonmsg, sock)
-		}.bind(this)
+		if(this.use_xhr_fallback_for_binary){
+			var binary_xhr = []
+
+			sock.onmessage = function(event){
+				var message = event.data
+				if(message.charAt(0) === '$'){
+					binary_xhr.push(message.slice(1))
+					return
+				}
+				for(var i = 0; i < binary_xhr.length; i++){
+					var id = binary_xhr[i]
+					binary_xhr[i] = binrpc_incoming[id]
+					binrpc_incoming[id] = undefined
+				}
+				var jsonmsg = JSON.parse(message)
+				jsonmsg = define.structFromJSON(jsonmsg, binary_xhr)
+				binary_xhr.length = 0
+				jsonmsg.origin = origin
+				this.atMessage(jsonmsg, sock)
+			}.bind(this)
+
+			function rndhex4(){ return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) }
+
+			sock.sendJSON = function(msg){
+				var binary = []
+				var newmsg = define.makeJSONSafe(msg, binary)
+				for(var i = 0; i < binary.length; i++){
+					var data = binary[i].data
+
+					var rpcrandom = rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()
+					binrpc_outgoing[rpcrandom] = {
+						data:data,
+						remoteAddress:remoteAddress
+					}
+
+					sock.send("$"+rpcrandom)
+				}
+				var jsonmsg = JSON.stringify(newmsg)
+				sock.send(jsonmsg)
+			}
+		}	
+		else{
+			sock.makeJSONSocket()
+			sock.atJSONMessage = function(jsonmsg){
+				jsonmsg.origin = origin
+				this.atMessage(jsonmsg, sock)
+			}.bind(this)
+		}
 
 		this.atConnect(sock)
 	}
@@ -44,10 +97,9 @@ define.class(function(require, exports){
 
     // Send a message to all connected sockets
 	this.broadcast = function(message, ignore){
-		message = JSON.stringify(message)
 		for(var i = 0;i<this.sockets.length;i++){
 			var socket = this.sockets[i]
-			if(socket !== ignore) socket.send(message)
+			if(socket !== ignore) socket.sendJSON(message)
 		}
 	}
 
@@ -58,4 +110,4 @@ define.class(function(require, exports){
 		}
 		this.sockets = []
 	}
-})
+})	

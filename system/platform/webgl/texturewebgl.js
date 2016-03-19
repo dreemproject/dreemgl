@@ -19,7 +19,6 @@ define.class('$system/base/texture', function(exports){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub){
-		// console.log(stub.type)
 		var tex = new Texture(stub.type || Texture.RGBA, stub.size[0], stub.size[1])
 		tex.array = stub.array
 		tex.image = stub.image
@@ -126,17 +125,17 @@ define.class('$system/base/texture', function(exports){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this.glframe_buf)
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.gltex, 0)
 
-		if(type & Texture.DEPTH || type & Texture.STENCIL){
+		if(this.type & Texture.DEPTH || this.type & Texture.STENCIL){
 			this.gldepth_buf = gl.createRenderbuffer()
 
 			this.gldepth_type = gl.DEPTH_COMPONENT16
 			this.glattach_type = gl.DEPTH_ATTACHMENT
 
-			if(type & Texture.DEPTH && type & Texture.STENCIL){
+			if(this.type & Texture.DEPTH && this.type & Texture.STENCIL){
 				this.gldepth_type = gl.DEPTH_STENCIL
 				this.glattach_type = gl.DEPTH_STENCIL_ATTACHMENT
 			}
-			else if(type & Texture.STENCIL){
+			else if(this.type & Texture.STENCIL){
 				this.gldepth_type = gl.STENCIL_INDEX
 				this.glattach_type = gl.STENCIL_ATTACHMENT
 			}
@@ -241,7 +240,6 @@ define.class('$system/base/texture', function(exports){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data))
 		}
 		else if(this.image){
-			console.log("UPDATING!")
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
 		}
 		gltex.updateid = this.updateid

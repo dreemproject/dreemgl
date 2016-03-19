@@ -14,6 +14,9 @@ define.class(function(require, exports){
 		this.reconnect()
 	}
 
+	this.use_xhr_fallback_for_binary = true
+	this.socket_use_blob_send = true
+
 	this.disconnect = function(){
 		if(this.socket){
 			this.socket.onclose = undefined
@@ -32,7 +35,8 @@ define.class(function(require, exports){
 
 		this.socket = new this.websocketclass(this.url)
 
-		this.socket.atConnect =
+		this.socket.binaryType = 'arraybuffer'
+
 		this.socket.onopen = function(){
 			this.backoff = 1
 			for(var i = 0;i<this.queue.length;i++){
@@ -41,12 +45,10 @@ define.class(function(require, exports){
 			this.queue = undefined
 		}.bind(this)
 
-		this.socket.atError =
 		this.socket.onerror = function(event){
 			this.backoff = 500
 		}.bind(this)
 
-		this.socket.atClose =
 		this.socket.onclose = function(){
 			this.backoff *= 2
 			if(this.backoff > 1000) this.backoff = 1000
@@ -54,39 +56,124 @@ define.class(function(require, exports){
 				this.reconnect()
 			}.bind(this),this.backoff)
 		}.bind(this)
-
-		this.socket.atMessage = function(imsg){
-			if(typeof imsg === 'object') console.log(new Error().stack)
-			var msg = JSON.parse(imsg)
-			this.atMessage(msg, this)
-		}.bind(this)
-
-		this.socket.onmessage = function(event){
-			// if its huuuge and value has escaped json, dont parse it
-			var data = event.data
-			var msg = JSON.parse(event.data)
-			this.atMessage(msg, this)
-		}.bind(this)
-	}
-
 	
-	// Send a message to the server
-	this.send = function(msg){
-		msg = JSON.stringify(msg)
-		if(this.queue) this.queue.push(msg)
-		else this.socket.send(msg)
-	}
+		if(this.use_xhr_fallback_for_binary){
+			var binary_xhr = []
 
-	// Causes a console.color on the server
-	this.color = function(data){
-		this.send({type:'color', value:data})
-	}
+			this.socket.onmessage = function(event){
 
-	// Causes a console.log on the server
-	this.log = function(data){
-		this.send({type:'log', value:data})
-	}
+				// if its huuuge and value has escaped json, dont parse it
+				var data = event.data
+				if(data.charAt(0) === '$'){
+					binary_xhr.push(new define.Promise(function(resolve, reject){
+						// lets XHR download it
+						var xhr = new XMLHttpRequest()
+						xhr.open('GET', '/binrpc?'+data.slice(1), true);
+						xhr.responseType = 'arraybuffer'
+						xhr.onload = function(e) {
+							resolve(xhr)
+						}
+						xhr.upload.onprogress = function(e){
+						}
+						xhr.send()
+					}))
+					return
+				}
+				var bin_xhr = binary_xhr
+				binary_xhr = []
 
+				var msg = JSON.parse(data)
+				if(bin_xhr.length){
+					define.Promise.all(bin_xhr).then(function(results){
+						var out = []
+						for(var i = 0; i < results.length; i++){
+							out[i] = results[i].response
+						}
+						msg = define.structFromJSON(msg, out)
+						this.atMessage(msg, this)
+					}.bind(this))
+				}
+				else{
+					// lets retrieve the missing binary blobs via XHR
+					msg = define.structFromJSON(msg)
+					this.atMessage(msg, this)
+				}
+			}.bind(this)
+
+			function rndhex4(){ return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) }
+
+			this.send = function(msg){
+				var binary = []
+				var newmsg = define.makeJSONSafe(msg, binary)
+				var allbin = []
+
+				for(var i = 0; i < binary.length; i++){
+					var data = binary[i].data
+					var blobmsg = new Blob([data.buffer], {type: 'application/octet-binary'})
+
+					var rpcrandom = rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()
+					allbin.push(new define.Promise(function(resolve, reject){
+						var xhr = new XMLHttpRequest()
+						xhr.open('POST', '/binrpc?'+rpcrandom, true);
+						xhr.onload = function(e) {
+							resolve()
+						}
+						//xhr.upload.onprogress = function(e){
+						//}
+						xhr.send(blobmsg)
+					}))
+					if(this.queue) this.queue.push('$'+rpcrandom)
+					else this.socket.send('$'+rpcrandom)
+				}
+
+				var jsonmsg = JSON.stringify(newmsg)
+
+				if(this.queue) this.queue.push(jsonmsg)
+				else {
+					define.Promise.all(allbin).then(function(){
+						this.socket.send(jsonmsg)
+					}.bind(this))
+				}
+			}
+
+		}
+		else{
+			var binary_buf = []
+			this.socket.onmessage = function(event){
+				// if its huuuge and value has escaped json, dont parse it
+				var data = event.data
+				if(data instanceof ArrayBuffer){
+					binary_buf.push(event.data)
+					return
+				}
+				// lets retrieve the missing binary blobs via XHR
+				var msg = define.structFromJSON(JSON.parse(data), binary_buf)
+				this.atMessage(msg, this)
+			}.bind(this)
+
+			this.send = function(msg){
+				var binary = []
+				var newmsg = define.makeJSONSafe(msg, binary)
+
+				for(var i = 0; i < binary.length; i++){
+					var data = binary[i].data
+					var datamsg = 
+						this.socket_use_blob_send?
+							new Blob([data.buffer], {type: 'application/octet-binary'}):
+							data.buffer
+
+					//var binmsg = binary[i+1]
+					if(this.queue) this.queue.push(datamsg)
+					else this.socket.send(datamsg)
+				}
+
+				var jsonmsg = JSON.stringify(newmsg)
+				if(this.queue) this.queue.push(jsonmsg)
+				else this.socket.send(jsonmsg)
+			}
+		}
+	}
+	
 	// Called when a message is received
 	this.atMessage = function(message){}
 })

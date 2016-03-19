@@ -6,17 +6,26 @@
 
 define.class(function(require, exports){
 
-	var NodeWebSocket = require('$system/server/nodewebsocket')
-
 	this.atConstructor = function(args){
 		// allright lets fire up 
 		define.$platform = 'nodegl'
+
+		var Image = require('node-webgl/lib/image') 
+
+		define.loadImage = function(name){
+			var img = new Image()
+			img.src = name
+			return img
+
+		}
 		console.log(args['-nodegl'])
 		console.log('Downloading nodegl')
-		require.async(args['-nodegl']).then(function(composition){		
+		// lets make the math library requireable
+		
+		require.async(args['-nodegl']).then(function(composition){	
 			console.log('Booting nodegl')
 			this.comp = new composition(undefined, undefined, args['-nodegl'])
-
+			
 		}).catch(function(error){
 			console.log(error.stack)
 		})

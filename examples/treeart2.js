@@ -18,6 +18,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				},
 				hardrect:{
 					color:function(){
+						//return 'red'
 						if(mesh.depth>13.){
 							var len = min(pow(1.5-length(mesh.pos),8.),1.)
 							if(mesh.isberry>0.){
@@ -54,7 +55,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						// the direction vector is rotated as we go
 						var dir = vec2(0,-0.8)
 						// the turbulence factor
-						var turbulence = 3.
+						var turbulence =3.
 						// the depth of the rectangle we are processing
 						var depth = int(mesh.depth)
 
@@ -90,12 +91,12 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						var vcen = vec2(-.8,-.4)
 						// we are a leaf or berry
 						if(depth > 13){
-							var noise = noise.noise3d(vec3(pos.x*.3,pos.y*.3,0.5*view.time)) * turbulence
+							var noise = noise.noise3d(vec3(pos.x*.1,pos.y*.1,0.5*view.time)) * turbulence
 							colornoise = noise
 							// only rotate the leaves
 
 							if(mesh.isberry > 0.){
-								mycolor = 'red'
+								mycolor = 'blue'
 								scale *= vec2(0.5,0.5)
 							}
 							else{

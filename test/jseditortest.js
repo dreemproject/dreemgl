@@ -9,8 +9,12 @@ define.class(function(require, $server$, composition, $ui$, screen, view, $widge
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
 			jseditor({
-				flex:1, overflow:'scroll',fontsize:12,
-				source:require('./rendertest').module.factory.body.toString()
+				atDraw:function(){
+					this.zoom = sin(Date.now()/1000.)*3+4.
+					return true
+				},
+				flex:1, overflow:'scroll',fontsize:15,
+				source:require('$ui/view').module.factory.body.toString()
 			},[1])
 		)
 	]}

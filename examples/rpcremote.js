@@ -14,6 +14,9 @@ define.class('$server/composition', function(
 		name:'myservice',
 		flowdata:{x:30,y:20},
 		test: 10,
+		init:function(){
+			console.log(new Error().stack)
+		},
 		dosomething: function(){
 			console.log("dosomething called on server")
 			this.test = 40

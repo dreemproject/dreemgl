@@ -167,6 +167,7 @@ define.class(function(exports){
 			new_child.rpc = new_version.rpc
 			new_child.parent_viewport = new_version.parent_viewport
 			new_children[i] = render(new_child, old_child, state, childreuse)
+			if(new_version.atChildRendered) new_version.atChildRendered(new_child)
 		}
 
 		if(new_version.atChildrenRendered) new_version.atChildrenRendered()

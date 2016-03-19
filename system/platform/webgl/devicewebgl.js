@@ -20,6 +20,7 @@ define.class(function(require, exports){
 	this.antialias = false
 	this.debug_pick = false
 
+	this.window =
 	this.document = typeof window !== 'undefined'?window : null
 
 	this.atConstructor = function(previous){
@@ -73,7 +74,7 @@ define.class(function(require, exports){
 		setInterval(function(){
 			var now = Date.now()
 			if(now - last > 1000 && this.screen){
-				this.doresize()
+				this.doSize()
  				this.redraw()
 				this.screen.emit('wakeup')
 			}
@@ -114,7 +115,7 @@ define.class(function(require, exports){
 	this.initResize = function(){
 		//canvas.webkitRequestFullscreen()
 
-		var resize = this.doresize = function(){
+		var resize = this.doSize = function(){
 			var pixelRatio = window.devicePixelRatio
 
 			var w = this.parent.offsetWidth
@@ -160,7 +161,8 @@ define.class(function(require, exports){
 	this.getExtension = function(name){
 		var ext = this.extensions[name]
 		if(ext) return ext
-		return this.extensions[name] = this.gl.getExtension(name)
+		ext = this.extensions[name] = this.gl.getExtension(name)
+		return ext
 	}
 
 	this.redraw = function(){

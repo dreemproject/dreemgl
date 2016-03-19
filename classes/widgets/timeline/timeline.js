@@ -120,6 +120,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.onscroll = function() {
+		var win = typeof window !== 'undefined'? window: global
 		if (this.autoexpand) {
 
 			var starttime = this.getStart()
@@ -139,8 +140,8 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 				expand = true
 			}
 			if (expand) {
-				window.clearTimeout(this.expandTimeout)
-				this.expandTimeout = setTimeout(function() {
+				win.clearTimeout(this.expandTimeout)
+				this.expandTimeout = win.setTimeout(function() {
 					this.start = new Date(starttime).toString()
 					this.end = new Date(endtime).toString()
 					this.scroll = vec2(this.scroll[0] + (oldstarttime - this.getStart()) / this.zoom / this.TIME_SCALE, 0)
@@ -149,8 +150,8 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 		}
 
-		window.clearTimeout(this.emitChangeTimeout)
-		this.emitChangeTimeout = setTimeout(function() {
+		win.clearTimeout(this.emitChangeTimeout)
+		this.emitChangeTimeout = win.setTimeout(function() {
 			this.emitUpward('change', {
 				data: this.data,
 				start: this.start,
