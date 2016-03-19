@@ -5,17 +5,26 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, exports){
-
-	var NodeWebSocket = require('$system/server/nodewebsocket')
+	
+	
 
 	this.atConstructor = function(args){
 		// allright lets fire up 
 		define.$platform = 'nodegl'
+
+		var Image = require('node-webgl/lib/image') 
+
+		define.loadImage = function(name){
+			var img = new Image()
+			img.src = name
+			return img
+		}
+
 		console.log(args['-nodegl'])
 		console.log('Downloading nodegl')
 		// lets make the math library requireable
 		
-		require.async(args['-nodegl']).then(function(composition){		
+		require.async(args['-nodegl']).then(function(composition){	
 			console.log('Booting nodegl')
 			this.comp = new composition(undefined, undefined, args['-nodegl'])
 			

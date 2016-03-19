@@ -176,7 +176,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 					continue
 				}
 				if(sock.readyState === 1){
-					sock.send(msg)
+					sock.sendJSON(msg)
 				}
 			}
 		}

@@ -23,8 +23,6 @@ define.class(function(require, baseclass){
 			viewmatrix: mat4.identity(),
 			noscrollmatrix: mat4.identity()
 		}
-
-		this.debugrect = new DebugRect()
 	}
 
 	this.atDestroy = function(){
@@ -414,7 +412,7 @@ define.class(function(require, baseclass){
 		}
 		return hastime
 	}
-
+/*
 	var DebugRect = define.class(Shader, function(){
 		this.view = {totalmatrix:mat4(), viewmatrix:mat4(), layout:{width:0, height:0}}
 
@@ -428,5 +426,5 @@ define.class(function(require, baseclass){
 			return vec4(1,0,0,0.5)
 		}
 	})
-
+*/
 })

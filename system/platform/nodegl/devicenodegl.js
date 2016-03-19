@@ -18,7 +18,7 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 	this.DrawPass = require('./drawpassnodegl')
 
 	var WebGL = require('node-webgl/lib/webgl')
-	var Image = require('node-webgl/lib/image')
+	var Image = this.Image = require('node-webgl/lib/image')
 	var GLFW = require('node-glfw')
 
 	this.atConstructor = function(){
@@ -116,12 +116,15 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 
 		GLFW.MakeContextCurrent(this.glfwindow)
 
-		GLFW.SetWindowTitle("WebGL")
+		GLFW.SetWindowTitle(this.glfwindow,"WebGL")
 
 		// make sure GLEW is initialized
 		WebGL.Init()
+		this.gl = WebGL
 
-		GLFW.SwapBuffers(this.glfwindow)
+		this.clear(0,0,0,1.)
+  		GLFW.SwapBuffers(this.glfwindow)
+
 		GLFW.SwapInterval(1)
 
 		//for (var l = 0, ln = resizeListeners.length; l < ln; ++l)
@@ -130,14 +133,9 @@ define.class("../webgl/devicewebgl", function(require, exports, baseclass){
 			//this.redrawCall()
 		}.bind(this))
 
-		this.gl = WebGL
-
-        this.getExtension('OES_standard_derivatives')
+		this.getExtension('OES_standard_derivatives')
 
   		this.doSize()
-
-  		this.clear(0,0,0,1.)
-  		GLFW.SwapBuffers(this.glfwindow)
 
   		this.redrawCall = function(){
 	        GLFW.PollEvents()

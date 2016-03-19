@@ -1559,11 +1559,14 @@
 				if(ext !== '' && ext !== 'js'){
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
-						if(define.$platform === 'dali'){
-							var tex = define.expandVariables('$system/platform/$platform/texture$platform')
-							var Texture = define.require(tex);
-							return new Texture.Image(full_name)
-						}
+						if(define.loadImage) return define.loadImage(name)
+						//if(define.$platform === 'dali' || define.$platform === 'nodegl'){
+						//	var tex = define.expandVariables('$system/platform/$platform/texture$platform')
+						//	var Texture = define.require(tex);
+						//	return new Texture.Image(name)
+						// 	return {path:name}
+						//}
+						//console.log('READING PNG', define.$platform)
 						return undefined
 					}
 					else{
@@ -1631,7 +1634,7 @@
 
 				return new define.Promise(function(resolve, reject){
 					loadModuleAsync(modname, "root").then(function(path){
-						resolve(require(path))
+						resolve(noderequirewrapper(path))
 					}).catch(function(e){
 						console.log("ERROR", e.stack)
 					})
