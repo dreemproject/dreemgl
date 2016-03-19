@@ -1089,7 +1089,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.glyphy_sdf_draw = function(){
 		var pos = mesh.tex
 
-		var m = length(vec2(length(dFdx(mesh.pos)), length(dFdy(mesh.pos))))*SQRT_1_2*0.003
+		var m = length(vec2(length(dFdx(mesh.pos)), length(dFdy(mesh.pos))))*0.002
 
 		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.004
 
