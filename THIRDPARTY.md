@@ -4,13 +4,13 @@ Facebook flexbox layout: /system/lib/layout.js
 Flexbox layout JavaScript module. Copyright (c) 2014, Facebook, Inc. BSD license  
 
 Acorn JS: /system/lib/acorn.js  
-Acorn JavaScript parser. Written by Marijn Haverbeke, released under an MIT license.  
+Acorn JavaScript parser. Written by Marijn Haverbeke. Released under the MIT license.  
 
 CoffeeScript: /system/lib/coffee-script.js 
 CoffeeScript language, copyright 2011, Jeremy Ashkenas. Released under the MIT License. 
  
 Shader noise function /system/shaderlib/noiselib.js
-Math and algorithm inspired by Stefan Gustavson, Ian McEwan, Ashima Arts. Released under MIT License.  
+Math and algorithm inspired by Stefan Gustavson, Ian McEwan, Ashima Arts. Released under the MIT License.  
 
 Shader shape math /system/shaderlib/shapelib.js
 Math inspired by Inigio Quilez http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
@@ -26,6 +26,9 @@ Ported to DreemGL class module, original Copyright (c) 2015, Mapbox - https://gi
 
 Map widget utilizes mapzen vector tile API (http://mapzen.com)
 Vector data Copyright OpenStreetMap contributors, Who’s On First (http://openstreetmapdata.com)
+
+Font Awesome icons /classes/ui/icon.js 
+Font Awesome by Dave Gandy - http://fortawesome.github.io/Font-Awesome/license/. Released under SIL OFL 1.1.
 
 
 ### Assets
