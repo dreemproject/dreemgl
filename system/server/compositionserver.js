@@ -133,6 +133,8 @@ define.class(function(require){
 			}
 		}
 
+		var additionalHeader = this.composition.headHTML || "";
+
 		return '<html lang="en">\n'+
 			' <head>\n'+
 			'  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n'+
@@ -147,7 +149,7 @@ define.class(function(require){
   			'		-moz-user-select: none;\n'+
   			'		-user-select: none;\n'+
   			'    }\n'+
-			'    body {background-color:darkgray;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
+			'    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
 			'  </style>'+
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
@@ -168,6 +170,7 @@ define.class(function(require){
 			'    }\n'+
 			'  </script>\n'+
 			'  <script type="text/javascript" src="/system/base/define.js"></script>\n'+
+			additionalHeader +
 			' </head>\n'+
 			' <body class="unselectable">\n'+
 			' </body>\n'+

@@ -1429,7 +1429,6 @@ define.class('$system/base/node', function(require){
 		}
 	})
 
-
 	this.onbgimagemode = function(ev, v, o) {
 
 		if (this.shaders) {
