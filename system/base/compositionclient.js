@@ -110,11 +110,7 @@ define.class('./compositionbase', function(require, baseclass){
 					if(this.session) location.href = location.href
 					else {
 						this.session = msg.session
-						if (this.screenname) {
-							this.bus.send({type:'connectScreen', name:this.screenname})
-						} else {
-							console.log("Hmm, there was a sessionCheck before the screen was selected, is this a race condition?")
-						}
+						this.bus.send({type:'connectScreen', name:this.screenname})
 					}
 				}
 			}

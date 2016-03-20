@@ -118,9 +118,11 @@ define.class(function(require){
 
 	this.loadHTML = function(title, boot, paths, pathset){
 
-		var preload = this.composition.preload_rpc_attributes;
-
+		// These rpc attributes we will write directly into the header so that they are available even before the screen connects
 		var preloadattrs = {};
+
+		// preload_rpc_attributes can be `true` to include everything or an array of `rpcobj_rpcattr` identifiers
+		var preload = this.composition.preload_rpc_attributes;
 		if (preload === true) {
 			preloadattrs = this.composition.server_attributes;
 		} else if (Array.isArray(preload)) {
