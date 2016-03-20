@@ -185,8 +185,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		this.connected_screens = previous && previous.connected_screens || {}
 		this.server_attributes = previous && previous.server_attributes || {}
 
-		bus.broadcast({type:'sessionCheck', session:this.session})
-
 		bus.atConnect = function(socket){
 			socket.sendJSON({type:'sessionCheck', session:this.session})
 		}.bind(this)
@@ -237,6 +235,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 				console.log.apply(console, msg.args)
 			}
 		}.bind(this)
+
+		bus.broadcast({type:'sessionCheck', session:this.session})
 
 		this.renderComposition()
 

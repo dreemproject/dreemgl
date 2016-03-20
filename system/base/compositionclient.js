@@ -18,14 +18,16 @@ define.class('./compositionbase', function(require, baseclass){
 		return typeof location !== 'undefined' && location.search && location.search.slice(1)
 	};
 
-	this.atConstructor = function(previous, parent){
+	this.atConstructor = function(previous, parent, precached){
 		this.parent = parent
 
 		// how come this one doesnt get patched up?
 		baseclass.atConstructor.call(this)
 
-		this.screenname = this.screenForClient()
-		this.cached_attributes = {}
+		this.cached_attributes = precached
+		if (!this.cached_attributes) {
+			this.cached_attributes = {}
+		}
 		// web environment
 		if(previous){
 			this.session = previous.session
@@ -51,6 +53,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.bus.atMessage(attrmsg)
 		}
 
+		this.screenname = this.screenForClient()
 		this.screen = this.names[this.screenname]
 		if(!this.screen){
 			// find the first screen
@@ -107,7 +110,11 @@ define.class('./compositionbase', function(require, baseclass){
 					if(this.session) location.href = location.href
 					else {
 						this.session = msg.session
-						this.bus.send({type:'connectScreen', name:this.screenname})
+						if (this.screenname) {
+							this.bus.send({type:'connectScreen', name:this.screenname})
+						} else {
+							console.log("Hmm, there was a sessionCheck before the screen was selected, is this a race condition?")
+						}
 					}
 				}
 			}

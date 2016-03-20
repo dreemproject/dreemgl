@@ -117,6 +117,22 @@ define.class(function(require){
 	}
 
 	this.loadHTML = function(title, boot, paths, pathset){
+
+		var preload = this.composition.preload_rpc_attributes;
+
+		var preloadattrs = {};
+		if (preload === true) {
+			preloadattrs = this.composition.server_attributes;
+		} else if (Array.isArray(preload)) {
+			for (var i = 0; i< preload.length;i++) {
+				var key = preload[i];
+				var attr = this.composition.server_attributes[key];
+				if (attr) {
+					preloadattrs[key] = attr
+				}
+			}
+		}
+
 		return '<html lang="en">\n'+
 			' <head>\n'+
 			'  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n'+
@@ -143,7 +159,8 @@ define.class(function(require){
 			'        define.endLoader()\n'+
 			'		 require(modules[0])\n'+
 			'		 var Composition = require(modules[1])\n'+
-			'        define.rootComposition = new Composition(define.rootComposition)\n'+
+			'		 var serverattrs = ' + JSON.stringify(preloadattrs) + '\n'+
+			'        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs)\n'+
 			'      },\n'+
 			'	   atEnd:function(){\n'+
 			'         define.startLoader()\n'+

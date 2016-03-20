@@ -11,7 +11,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var WebRTC = require('$system/rpc/webrtc')
 	var BusClient = require('$system/rpc/busclient')
 
-	this.atConstructor = function(previous, parent){
+	this.atConstructor = function(previous, parent, precached){
 		window.composition = this
 		if(previous){
 			this.reload = (previous.reload || 0) + 1
@@ -24,7 +24,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 			this.device = new Device()
 		}
 
-		baseclass.atConstructor.call(this, previous, parent)
+		baseclass.atConstructor.call(this, previous, parent, precached)
 		this.screen._size = this.device.size
 	}
 
@@ -48,7 +48,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 		})
 
 		this.decodeLocationHash = function(){
-			// lets split it on & into a=b pairs, 
+			// lets split it on & into a=b pairs,
 			var obj = {}
 			var parts = location.hash.slice(1).split(/\&/)
 			for(var i = 0; i < parts.length; i++){

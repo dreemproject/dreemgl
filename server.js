@@ -107,7 +107,7 @@ function main(){
 		});
 	}
 
-	if(args['-unsafe']){
+	if(args['-unsafeorigin']){
 		Object.defineProperty(define, "$unsafeorigin", {
 			value: true,
 			writable: false
