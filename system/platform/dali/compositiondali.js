@@ -10,9 +10,25 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var BusClient = require('$system/rpc/busclient')
 	var NodeWebSocket = require('$system/server/nodewebsocket')
 
+	// Override from compositionclient. Returns the screen name from the url.
+	// compositionclient assumes a browser (ie. the location object exists)
+	this.screenForClient = function() {
+		// console.log('screenForClient', this.query);
+		return this.query;
+	};
+
 	this.atConstructor = function(previous, parent, baseurl){
 		console.log('compositiondali', previous, parent, baseurl);
+
+		// baseurl can contain a screen name. Remove query parameters and
+		// store as this.query
 		this.baseurl = baseurl;
+		var pos = this.baseurl.indexOf('?');
+		if (pos >= 0) {
+			this.query = this.baseurl.substring(pos+1);
+			this.baseurl = this.baseurl.substring(0, pos);
+		}
+
 		//TODO
 		//previous = null
 		//parent = null
