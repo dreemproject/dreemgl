@@ -4,13 +4,16 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/label', function () {
+define.class('$ui/label', function (require) {
 
 	this.position = 'absolute'
 	this.bgcolor = NaN
 	this.fgcolor = 'white'
 	this.drawtarget = 'color'
 	this.bold = true
+
+	var ubuntufont = require('$resources/fonts/ubuntu_medium_256_baked.glf')
+	this.font = ubuntufont
 
 	this.attributes = {
 		zoom: wire('this.parent.zoom'),

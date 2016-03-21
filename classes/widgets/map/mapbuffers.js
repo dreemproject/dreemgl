@@ -8,37 +8,37 @@ define.class(function(require, $server$, service){
 
 	var earcut = require('$system/lib/earcut-port.js')().earcut
 	var styleset = require("$widgets/map/mapstyle.js")()
-	
+
 	this.TileSize = 256.0;
 
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};
 
 	var roadwidths = {
-			water:20, 
+			water:20,
 			ferry:6,
 			Ferry:6,
 			rail: 6,
-			railway: 6,	
-			racetrack:6,			
+			railway: 6,
+			racetrack:6,
 			minor_road: 4,
-			major_road: 6, 
+			major_road: 6,
 			path: 4, highway:15,
 			Road:200
 	}
-	
+
 	var roadcolors = {
-		water:"#30a0ff", 
-		path:"#d0d0d0", 
-		ferry:"lightblue", 
+		water:"#30a0ff",
+		path:"#d0d0d0",
+		ferry:"lightblue",
 		rail: vec4("purple"),
-		minor_road: vec4("#505050"), 
-		major_road: vec4("#404040"), 
+		minor_road: vec4("#505050"),
+		major_road: vec4("#404040"),
 		highway:vec4("#303030")
 	}
-	
+
 	var roadmarkcolors = {
-		water:"#30a0ff", 
+		water:"#30a0ff",
 		major_road:"white",
 		 minor_road:"#a0a0a0"
 	}
@@ -46,12 +46,12 @@ define.class(function(require, $server$, service){
 	//this.ignoreuse = {}
 	//this.displaykinds = {}
 	this.displaykinds ={
-		water: true, 
-		meadow:true, 
-		playa:true, 
+		water: true,
+		meadow:true,
+		playa:true,
 		forest: true,
 		pedestrian: true,
-		earth:true, 
+		earth:true,
 		river:true,
 		beach: true,
 		grass: true,
@@ -73,7 +73,7 @@ define.class(function(require, $server$, service){
 		farmyard:true, scrub:true,
 		forest:true,nature_reserve:false,riverbank:true, railway:true, runway:true, farmland:true
 	}
-	
+
 	this.noignoreuse = {
 		allotments:true,
 		apron:true,
@@ -98,16 +98,16 @@ define.class(function(require, $server$, service){
 		riverbank:true,reservoir:true,
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true
 	};
-	
+
 	var mapstyle = this.mapstyle = 	styleset.mapstyle;
-	
+
 	if (true){
 
 		for (var a in this.mapstyle){
 			var st = this.mapstyle[a];
 		//	if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
 		//	if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
-		
+
 		}
 	}
 
@@ -218,7 +218,7 @@ define.class(function(require, $server$, service){
 		var c0 = buildingcolor[0];
 		var c1 = buildingcolor[1];
 		var c2 = buildingcolor[2];
-		
+
 		for(var i = 0;i<buildings.length;i++){
 			var building = buildings[i];
 
@@ -304,7 +304,7 @@ define.class(function(require, $server$, service){
 				t = mapstyle["default"];
 			//	console.log("defaulting for:", land.kind);
 			};
-			
+
 			if (t.color1) color1 = t.color1;else {
 				UnhandledKindSet[land.kind] = "land - no color1";
 				console.log("no color for: ", land.kind);
@@ -334,7 +334,7 @@ define.class(function(require, $server$, service){
 						array[o + 1] = tris[a + 1]
 						array[o + 2] = i
 						array[o + 3] = 0
-						
+
 						//array[o + 2] = off
 						array[o + 4] = color1[0]
 						array[o + 5] = color1[1]
@@ -372,7 +372,7 @@ define.class(function(require, $server$, service){
 				//console.log("no width:", R.kind);
 				UnhandledKindSet[R.kind] = "road" ;
 			}
-			
+
 			linewidth *= Math.pow(2.0, zoomlevel - 13);
 			if (st.roadcolor){
 				color = st.roadcolor
@@ -380,8 +380,8 @@ define.class(function(require, $server$, service){
 				UnhandledKindSet[R.kind] = "road" ;
 				//console.log("roadkind with no color", R.kind);
 			}
-			
-		
+
+
 			var colorid = i;
 			//var markcolor = color;
 			//if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
@@ -390,10 +390,10 @@ define.class(function(require, $server$, service){
 			var showcaps = false;
 			var showfill = true;
 			var showcorner = true;
-			
+
 			for(var rr = 0;rr<R.arcs.length;rr++){
-		
-				
+
+
 				var currentarc = R.arcs[rr]
 				if (currentarc.length == 1){
 					continue
@@ -415,97 +415,97 @@ define.class(function(require, $server$, service){
 				var dist = 0;
 				var dist2 = 0;
 				var lastsdelta = vec2(0,0);
-				
+
 				if (showcaps){
 					mesh.push(
 						nx,
 						ny,
-						pre_side_delta[0], 
-						pre_side_delta[1], 
-						1, 
-						dist, 
-						linewidth, 
-						colorid, 
-						color[0], 
-						color[1], 
+						pre_side_delta[0],
+						pre_side_delta[1],
+						1,
+						dist,
+						linewidth,
+						colorid,
+						color[0],
+						color[1],
 						color[2],
 						color[3]
 					)
 					mesh.push(
 						nx,
 						ny,
-						pre_side_delta[0], 
-						pre_side_delta[1], 
-						-1, 
-						dist, 
-						linewidth, 
-						colorid, 
-						color[0], 
-						color[1], 
-						color[2], 
-						color[3]
-					);
-					mesh.push(
-						nx - predelta[0]*linewidth*0.5,
-						ny - predelta[1]*linewidth*0.5, 
-						pre_side_delta[0], 
-						pre_side_delta[1], 
-						0.5, 
-						-linewidth,
+						pre_side_delta[0],
+						pre_side_delta[1],
+						-1,
+						dist,
 						linewidth,
-						colorid, 
-						color[0], 
-						color[1], 
-						color[2], 
-						color[3]
-					);
-
-					mesh.push(
-						nx - predelta[0]*linewidth*0.5,
-						ny - predelta[1]*linewidth*0.5, 
-						pre_side_delta[0], 
-						pre_side_delta[1], 
-						0.5, 
-						-linewidth,
-						linewidth,
-						colorid, 
-						color[0], 
-						color[1], 
-						color[2], 
+						colorid,
+						color[0],
+						color[1],
+						color[2],
 						color[3]
 					);
 					mesh.push(
 						nx - predelta[0]*linewidth*0.5,
 						ny - predelta[1]*linewidth*0.5,
-						pre_side_delta[0], 
-						pre_side_delta[1], 
-						-0.5, 
+						pre_side_delta[0],
+						pre_side_delta[1],
+						0.5,
 						-linewidth,
 						linewidth,
-						colorid, 
-						color[0], 
-						color[1], 
-						color[2], 
+						colorid,
+						color[0],
+						color[1],
+						color[2],
+						color[3]
+					);
+
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5,
+						pre_side_delta[0],
+						pre_side_delta[1],
+						0.5,
+						-linewidth,
+						linewidth,
+						colorid,
+						color[0],
+						color[1],
+						color[2],
+						color[3]
+					);
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5,
+						pre_side_delta[0],
+						pre_side_delta[1],
+						-0.5,
+						-linewidth,
+						linewidth,
+						colorid,
+						color[0],
+						color[1],
+						color[2],
 						color[3]
 					);
 					mesh.push(
 						nx,
-						ny, 
-						pre_side_delta[0], 
-						pre_side_delta[1], 
-						-1, 
+						ny,
+						pre_side_delta[0],
+						pre_side_delta[1],
+						-1,
 						dist,
 						linewidth,
-						colorid, 
-						color[0], 
-						color[1], 
-						color[2], 
+						colorid,
+						color[0],
+						color[1],
+						color[2],
 						color[3]
 					);
 				}
 
 				var lastdelta = vec2(0);
-				
+
 				for(var a = 1;a<currentarc.length;a++){
 					var A =currentarc[a];
 
@@ -515,7 +515,7 @@ define.class(function(require, $server$, service){
 					var delta = vec2.normalize(predelt);
 					var sdelta = vec2.rotate(delta, PI/2);
 
-					
+
 					var dist2 = dist +  vec2.len(predelt);
 					if (a>1 && showcorner){
 						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
@@ -624,7 +624,7 @@ define.class(function(require, $server$, service){
 			TargetSet.push(B);
 		}
 	}
-	
+
 	this.getRoadSortKey = function(kind){
 		if (!kind) return 0;
 		var s = mapstyle[kind];
@@ -632,11 +632,11 @@ define.class(function(require, $server$, service){
 		if (s.sortkey) return s.sortkey;
 		return 0;
 	}
-	
+
 	this.sortroads = function(a, b) {
 		return a.sortkey - b.sortkey;
 	}
-	
+
 	this.build = function(target, sourcedata){
 		var dt = Date.now()
 		var Bset = [];
@@ -715,9 +715,9 @@ define.class(function(require, $server$, service){
 			Rset.push(B);
 			KindSet[B.kind] = true;
 		}
-		
+
 		Rset.sort(this.sortroads);
-		
+
 		/*  Skip transits for now..
 		for (var i = 0;i<objects.transit.geometries.length;i++){
 			var Bb = objects.transit.geometries[i];
