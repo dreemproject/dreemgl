@@ -55,9 +55,6 @@ define.class(function(require, exports){
 	,texImage2D: function() {}
 	};
 
-	// DaliApi is a static object to access the dali api
-	this.DaliApi = require('./dali_api')
-
 	this.Keyboard = require('./keyboarddali')
 	this.Pointer = require('./pointerdali')
 
@@ -74,6 +71,8 @@ define.class(function(require, exports){
 	this.document = null
 
 	this.atConstructor = function(previous){
+		// DaliApi is a static object to access the dali api
+		this.DaliApi = require('./dali_api')
 
 		this.extensions = previous && previous.extensions || {}
 		this.shadercache = previous &&  previous.shadercache || {}

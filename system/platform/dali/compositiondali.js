@@ -7,17 +7,20 @@
 define.class('$system/base/compositionclient', function(require, baseclass){
 
 	var Device = require('$system/platform/$platform/device$platform')
-	var WebRTC = require('$system/rpc/webrtc')
 	var BusClient = require('$system/rpc/busclient')
+	var NodeWebSocket = require('$system/server/nodewebsocket')
 
-	this.atConstructor = function(previous, parent){
+	this.atConstructor = function(previous, parent, baseurl){
+		console.log('compositiondali', previous, parent, baseurl);
+		this.baseurl = baseurl;
 		//TODO
-		previous = null
-		parent = null
+		//previous = null
+		//parent = null
 
 		if(previous){
 			this.reload = (previous.reload || 0) + 1
-			this.device = previous.device// new Device(previous.device) //previous.device
+			this.device = new Device(previous.device) //previous.device
+//			this.device = previous.device// new Device(previous.device) //previous.device
 			this.device.reload = this.reload
 			console.log("Reload " + this.reload)
 		}
@@ -26,17 +29,27 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 			this.device = new Device()
 		}
 
-		baseclass.atConstructor.call(this, previous, parent)
+		//baseclass.atConstructor.call(this, previous, parent)
+		baseclass.atConstructor.call(this)
+		this.screen._size = this.device.size
 
 	    //Render the display
 	    this.doRender();
 	}
 
 	this.createBus = function(){
-		console.log('compositiondali.createBus is NOT implemented');
-		this.bus = {
-			send: function() {}
-		};
+		// Only create the bus if baseurl defined (ie. running from remote server)
+		if (this.baseurl) {
+			console.log('createBus', this.baseurl);
+			this.bus = new BusClient(this.baseurl, NodeWebSocket)
+		}
+		else {
+			// Stub out rpc when running locally
+			console.log('compositiondali.createBus is NOT implemented when running locally');
+			this.bus = {
+				send: function() {}
+			};
+		}
 	}
 
 
