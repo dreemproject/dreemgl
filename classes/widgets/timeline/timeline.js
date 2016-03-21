@@ -131,12 +131,12 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			var scrollend = new Date(this.getRangeEnd() + this.getRange())
 			var expand = false
 
-			if (scrollend > endtime) {
-				endtime = scrollend
+			if (scrollend.getTime() > endtime + 1000) {
+				endtime = scrollend.getTime()
 				expand = true
 			}
-			if (scrollstart < starttime) {
-				starttime = scrollstart
+			if (scrollstart.getTime() < starttime - 1000) {
+				starttime = scrollstart.getTime()
 				expand = true
 			}
 			if (expand) {
@@ -147,7 +147,6 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 					this.scroll = vec2(this.scroll[0] + (oldstarttime - this.getStart()) / this.zoom / this.TIME_SCALE, 0)
 				}.bind(this), 50)
 			}
-
 		}
 
 		win.clearTimeout(this.emitChangeTimeout)
@@ -160,7 +159,6 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 				scroll: this.scroll
 			})
 		}.bind(this), 100)
-
 	}
 
 	this.atDraw = function () {
