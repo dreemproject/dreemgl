@@ -78,7 +78,7 @@ define.class('$ui/label', function () {
 				date = new Date("0")
 				date.setYear(firstYear)
 				date.setMonth(firstMonth)
-				xoffset = (date.getTime() - first) / ts / zoom * w
+				xoffset = (date.getTime() - first) / ts / zoom * w + 1
 				x = 0, i = -1
 				while (x < w && i < 100) {
 					date = new Date(first)
@@ -97,7 +97,7 @@ define.class('$ui/label', function () {
 				date.setYear(firstYear)
 				date.setMonth(firstMonth)
 				date.setDate(firstDate)
-				xoffset = (date.getTime() - first) / ts / zoom * w
+				xoffset = (date.getTime() - first) / ts / zoom * w + 5
 				x = 0, i = -1
 				while (x < w && i < 100) {
 					date = new Date(first)
