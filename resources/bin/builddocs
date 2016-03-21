@@ -7,6 +7,7 @@ CLASSDOC_DIR="$DOCS_DIR/.classdoc"
 API_DOCS_DIR="$DOCS_DIR/api"
 SRC_DOCS_DIR="$DOCS_DIR/api/source"
 GUIDES_JSON=$DOCS_DIR/guides.json
+CONFIG_JSON=$DOCS_DIR/jsduck-config.json
 
 DOCS_TITLE="DreemGL API documentation"
 COPYRIGHT="Copyright (c) 2015-2016 Teem"
@@ -21,9 +22,12 @@ rm -rf "$CLASSDOC_DIR"
 node $ROOT_DIR/server.js -jsduckgen
 
 echo "Building docs..."
-jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES" --guides $GUIDES_JSON --guides-toc-level=3
+jsduck "$CLASSDOC_DIR" --config=$CONFIG_JSON --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES" --guides $GUIDES_JSON --guides-toc-level=3
 
 echo "Building source docs..."
 rm -rf "$SRC_DOCS_DIR"/*
 "$BIN_DIR/buildsourcedocs.rb"
 
+# Copy custom JavaScript for automatic example loading for 2nd screen into api folder
+mkdir $API_DOCS_DIR/scripts
+cp -R $DOCS_DIR/scripts/* $API_DOCS_DIR/scripts
