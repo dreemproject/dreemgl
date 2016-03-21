@@ -21,11 +21,12 @@ define.class('$ui/view', function(require,
 	}
 
 	define.class(this, "selectorrect", view, function() {
-		//debugger
+
 		this.bordercolorfn = function(pos) {
 			var check = (int(mod(0.20 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0
 			return vec4(check * vec3(0.8), 1)
 		}
+
 		this.bordercolor = vec4(1, 1, 1, 0.4)
 		this.borderwidth = 2
 		this.bgcolor = vec4(1, 1, 1, 0.07)
@@ -52,7 +53,7 @@ define.class('$ui/view', function(require,
 		}
 
 		var f = this.currentselection.indexOf(obj)
-		if (f>-1) this.currentselection.splice(f,1)
+		if (f > -1) this.currentselection.splice(f,1)
 
 		this.updateSelectedItems()
 	}
@@ -120,7 +121,6 @@ define.class('$ui/view', function(require,
 	}
 
 	this.addBlock = function(folder, blockname) {
-		//console.log("adding block from library! TODODODODODODO")
 		this.sourceset.fork(function() {
 			this.sourceset.addBlock(folder, blockname)
 		}.bind(this))
@@ -129,11 +129,9 @@ define.class('$ui/view', function(require,
 	this.removeBlock = function (block) {
 		if (block == undefined) block = this.currentblock
 		if (block) {
-
 			this.sourceset.fork(function() {
 				this.sourceset.removeBlock(block.name)
 			}.bind(this))
-
 			this.removeFromSelection(block)
 			this.setActiveBlock(undefined)
 			this.updateSelectedItems()
@@ -144,7 +142,6 @@ define.class('$ui/view', function(require,
 	this.removeConnection = function (conn) {
 		if (conn == undefined) conn = this.currentconnection
 		if (conn) {
-
 			this.sourceset.fork(function() {
 				this.sourceset.deleteWire(
 					conn.from,
@@ -153,7 +150,6 @@ define.class('$ui/view', function(require,
 					conn.toinput
 				)
 			}.bind(this))
-
 			this.removeFromSelection(conn)
 			this.setActiveConnection(undefined)
 			this.updateSelectedItems()
@@ -172,7 +168,7 @@ define.class('$ui/view', function(require,
 		bg.visible = false
 
 		return
-		// todo - decide if the group UI is needed at all..
+		// TODO - decide if the group UI is needed at all..
 
 		if (this.currentselection.length == 1) {
 
@@ -181,7 +177,7 @@ define.class('$ui/view', function(require,
 			this.currentblock = undefined
 			this.currentconnection = undefined
 
-			var b= this.currentselection[0]
+			var b = this.currentselection[0]
 
 			if (b instanceof block) this.currentblock = b
 			if (b instanceof connection) this.currentconnection  = b
@@ -198,15 +194,13 @@ define.class('$ui/view', function(require,
 				cg.x = (this.currentconnection.frompos[0] + this.currentconnection.topos[0])/2
 				cg.y = (this.currentconnection.frompos[1] + this.currentconnection.topos[1])/2
 				cg.visible = true
-			}else{
+			} else {
 				cg.visible = false
 			}
-
 		} else {
 			cg.visible = false
 			bg.visible = false
-			if (this.currentselection.length > 1)
-			{
+			if (this.currentselection.length > 1) {
 				gg.visible = true
 				gbg.visible = true
 				var minx = 10000
@@ -261,7 +255,6 @@ define.class('$ui/view', function(require,
 			} else {
 				gg.visible = false
 				gbg.visible = false
-
 			}
 		}
 	}
@@ -277,7 +270,6 @@ define.class('$ui/view', function(require,
 
 	this.setActiveConnection = function(conn) {
 		this.currentconnection = conn
-
 		if (conn) {
 			this.currentblock = undefined
 			this.addToSelection(conn)
@@ -303,7 +295,13 @@ define.class('$ui/view', function(require,
 		this.allblocks = []
 		this.allconnections = []
 		this.newconnection = {}
-		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"})
+		this.model = dataset({
+			children:[
+				{name:"Role"},
+				{name:"Server"}
+			],
+			name:"Composition"
+		})
 		this.librarydata = dataset({children:[]})
 
 		this.sourceset = sourceset()
@@ -317,19 +315,18 @@ define.class('$ui/view', function(require,
 		}.bind(this))
 
 		this.screen.locationhash = function(event) {
-			if (event.value.composition)
-			require.async(event.value.composition).then(function(result) {
+			if (event.value.composition) {
+				require.async(event.value.composition).then(function(result) {
+					this.sourceset.parse(result)
+					// console.log('>>', this.sourceset.ast)
+					// write it back to disk
+					this.sourceset.onchange = function() {
+						this.rpc.fileio.saveComposition(event.value.composition, this.sourceset.last_source)
+					}.bind(this)
 
-				this.sourceset.parse(result)
-				console.log('>>', this.sourceset.ast)
-
-				// write it back to disk
-				this.sourceset.onchange = function() {
-					this.rpc.fileio.saveComposition(event.value.composition, this.sourceset.last_source)
-				}.bind(this)
-
-				this.find('jsviewer').sourceset = this.sourceset
-			}.bind(this))
+					this.find('jsviewer').sourceset = this.sourceset
+				}.bind(this))
+			}
 		}.bind(this)
 
 		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result) {
@@ -345,8 +342,7 @@ define.class('$ui/view', function(require,
 		this.updateConnections()
 	}
 
-	this.updateZoom = function(z) {
-	}
+	this.updateZoom = function(z) {}
 
 	this.gridDrag = function(event) {
 		var cg = this.find("centralconstructiongrid")
@@ -359,7 +355,7 @@ define.class('$ui/view', function(require,
 			sq.visible = true
 			sq.redraw()
 			sq.pos = vec2(min[0],min[1])
-			sq.size = vec3(max[0]-min[0], max[1]-min[1], 1)
+			sq.size = vec3(max[0] - min[0], max[1] - min[1], 1)
 			fg.dragselectset = []
 			for (var a in fg.allblocks) {
 				var bl = fg.allblocks[a]
@@ -370,26 +366,21 @@ define.class('$ui/view', function(require,
 				if (cx >= min[0] && cx <= max[0] && cy >= min[1] && cy <=max[1]) {
 					bl.inselection = 1
 					fg.dragselectset.push(bl)
-				}
-				else{
-					if (fg.originalselection.indexOf(bl) >-1)
-					{
+				} else {
+					if (fg.originalselection.indexOf(bl) >-1) {
 						bl.inselection = 1
 					} else {
 						bl.inselection = 0
 					}
 				}
 			}
+
 			for (var a in fg.allconnections) {
 				var con = fg.allconnections[a]
-
-
 				ax = con.frompos[0]
 				ay = con.frompos[1]
-
 				bx = con.topos[0]
 				by = con.topos[1]
-
 
 				cx = (ax+bx)/2
 				cy = (ay+by)/2
@@ -400,13 +391,11 @@ define.class('$ui/view', function(require,
 					||
 					(cx >= min[0] && cx <= max[0] && cy >= min[1] && cy <=max[1])
 					)
-				 {
+				{
 					con.inselection = 1
 					fg.dragselectset.push(con)
-				}
-				else{
-					if (fg.originalselection.indexOf(con) >-1)
-					{
+				} else {
+					if (fg.originalselection.indexOf(con) >-1) {
 						con.inselection = 1
 					} else {
 						con.inselection = 0
@@ -415,10 +404,12 @@ define.class('$ui/view', function(require,
 			}
 		}
 	}
+
 	this.gridDragStart = function() {
 		this.cancelConnection()
 		this.startDragSelect()
 	}
+
 	this.gridDragEnd = function() {
 		var sq = this.findChild("selectorrect")
 		if (sq) {
@@ -459,8 +450,7 @@ define.class('$ui/view', function(require,
 		this.newconnection = {}
 
 		var connectingconnection = this.find("openconnector")
-		if (connectingconnection && connectingconnection.visible)
-		{
+		if (connectingconnection && connectingconnection.visible) {
 			connectingconnection.from = undefined
 			connectingconnection.fromoutput  = undefined
 			connectingconnection.to = undefined
@@ -541,12 +531,12 @@ define.class('$ui/view', function(require,
 		if (!this.sourceset) return
 		if (!this.sourceset.data) return
 		var res = []
-		for (var i = 0;i<this.sourceset.data.children.length;i++) {
+		for (var i = 0; i < this.sourceset.data.children.length; i++) {
 			var node = this.sourceset.data.children[i]
 			// block({name:"e", title:"block E", x:450, y:600})
 
 			if (node.wires) {
-				for (var j = 0;j<node.wires.length;j++) {
+				for (var j = 0; j < node.wires.length; j++) {
 					var w = node.wires[j]
 					res.push(connection({
 						from:w.from,
@@ -570,7 +560,7 @@ define.class('$ui/view', function(require,
 		var res = []
 		if (!this.sourceset) return
 		if (!this.sourceset.data) return
-		for (var i = 0;i<this.sourceset.data.children.length;i++) {
+		for (var i = 0; i < this.sourceset.data.children.length; i++) {
 			var node = this.sourceset.data.children[i]
 			// block({name:"e", title:"block E", x:450, y:600})
 			var fd = node.flowdata
@@ -609,37 +599,30 @@ define.class('$ui/view', function(require,
 		this.screen.openModal(function() {
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-
-
-
-				blur:function() {
+				blur: function() {
 					this.screen.closeModal(false)
-
-			}} )
-
-		}.bind(this)).then(function(res) {
-				if (res) {
-					console.log(res)
-					this.screen.locationhash = {
-						composition:"$compositions/"+ res
-					}
-
 				}
+			})
+		}.bind(this)).then(function(res) {
+			if (res) {
+				console.log(res)
+				this.screen.locationhash = {
+					composition:"$compositions/"+ res
+				}
+			}
 			console.log(" opencomp result: " , res)
 		}.bind(this))
-
 	}
 
 	this.newComposition = function() {
 		this.screen.closeModal(false)
-
 		this.screen.openModal(function() {
 			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				blur:function() {
+				blur: function() {
 					this.screen.closeModal(false)
 
-			}} )
+				}} )
 		}).then(function(res) {
 			if (res) {
 				this.rpc.fileio.newComposition(res).then(function(result) {
@@ -660,152 +643,130 @@ define.class('$ui/view', function(require,
 		this.screen.openModal(function() {
 			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				blur:function() {
+				blur: function() {
 					this.screen.closeModal(false)
-
-			}} )
+				}
+			})
 		}.bind(this)).then(function(res) {
-
 			console.log(" rename composition result: " , res)
 		})
-
 	}
+
 	this.helpAbout = function() {
 		this.screen.openModal(function() {
 			return aboutdialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				blur:function() {
+				blur: function() {
 					this.screen.closeModal(false)
-
-			}} )
-		}.bind(this)).then(function(res) {
-
-		})
-
+				}
+			})
+		}.bind(this)).then(function(res) {})
 	}
+
 	this.helpReference = function() {
 		this.screen.openModal(function() {
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
 				title:"Reference",
-				blur:function() {
+				blur: function() {
 					this.screen.closeModal(false)
-
-			}} )
-		}.bind(this)).then(function(res) {
-
-		})
+				}
+			})
+		}.bind(this)).then(function(res) {})
 	}
+
 	this.helpGettingStarted = function() {
 		this.screen.openModal(function() {
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
 				title:"Getting started",
-				blur:function() {
+				blur: function() {
 					this.screen.closeModal(false)
-
-			}} )
-		}.bind(this)).then(function(res) {
-
-		})
+				}
+			})
+		}.bind(this)).then(function(res) {})
 	}
 
 	this.undo = function() {
 		this.sourceset.undo()
 	}
+
 	this.redo = function() {
 		this.sourceset.redo()
 	}
+
 	this.render = function() {
 		return [
-			menubar({flex:0, height:20, viewport:'2d', name:"themenu", menus:[
-				{name:"File", commands:[
-					{name:"Open composition", clickaction:function() {this.openComposition();return true;}.bind(this)},
-					{name:"New composition", clickaction:function() {this.newComposition();return true;}.bind(this)},
-						{name: "Rename composition", clickaction:function() {this.renameComposition();return true;}.bind(this), enabled: false}
+			menubar({flex: 0, height: 20, viewport: '2d', name: "themenu", menus: [
+				{name: "File", commands: [
+					{name: "Open composition", clickaction: function() {this.openComposition();return true;}.bind(this)},
+					{name: "New composition", clickaction: function() {this.newComposition();return true;}.bind(this)},
+						{name: "Rename composition", clickaction: function() {this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
-			{name:"Edit", commands:[
-				{name:"Undo", icon:"undo", clickaction:function() {this.undo();}.bind(this)},
-				{name:"Redo",icon:"redo",  clickaction:function() {this.redo();}.bind(this)}
+			{name: "Edit", commands: [
+				{name: "Undo", icon: "undo", clickaction: function() {this.undo();}.bind(this)},
+				{name: "Redo",icon: "redo",  clickaction: function() {this.redo();}.bind(this)}
 
 			]}
 				,
-			{name:"Help", commands:[
-				{name:"About Flowgraph", clickaction:function() {this.helpAbout();return true;}.bind(this)},
-				{name:"Getting started", clickaction:function() {this.helpGettingStarted();return true;}.bind(this)},
-				{name:"Reference", clickaction:function() {this.helpReference();return true;}.bind(this)}
+			{name: "Help", commands: [
+				{name: "About Flowgraph", clickaction: function() {this.helpAbout();return true;}.bind(this)},
+				{name: "Getting started", clickaction: function() {this.helpGettingStarted();return true;}.bind(this)},
+				{name: "Reference", clickaction: function() {this.helpReference();return true;}.bind(this)}
 			]}
 				]})
 			,splitcontainer({}
-				,splitcontainer({flex:0.2, flexdirection:"column", direction:"horizontal"}
-					,dockpanel({title:"Composition" , flex: 0.2}
+				,splitcontainer({flex: 0.2, flexdirection: "column", direction: "horizontal"}
+					,dockpanel({title: "Composition" , flex: 0.2}
 						//,searchbox()
 
-						,treeview({flex:1, dataset: this.sourceset})
+						,treeview({flex: 1, dataset: this.sourceset})
 					)
-					,dockpanel({title:"Library", viewport:"2D" }
+					,dockpanel({title: "Library", viewport: "2D" }
 						//,searchbox()
-						,library({name:"thelibrary", dataset:this.librarydata})
+						,library({name: "thelibrary", dataset: this.librarydata})
 					)
 				)
-				,splitcontainer({flexdirection:"column", direction:"horizontal"}
-					,cadgrid({name:"centralconstructiongrid",
+				,splitcontainer({flexdirection: "column", direction: "horizontal"}
+					,cadgrid({name: "centralconstructiongrid",
 							pointerstart: this.gridDragStart.bind(this),
 							pointermove: this.gridDrag.bind(this),
 							pointerend: this.gridDragEnd.bind(this),
-							overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function() {this.updateZoom(this.zoom)}.bind(this)}
-						,view({name:"underlayer", bgcolor:NaN}
-							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
+							overflow: "scroll" ,bgcolor: "#4e4e4e",gridsize: 5,majorevery: 5,  majorline: "#575757", minorline: "#484848", zoom: function() {this.updateZoom(this.zoom)}.bind(this)}
+						,view({name: "underlayer", bgcolor: NaN}
+							,view({name: "groupbg",visible: false, bgcolor: vec4(1,1,1,0.08) , borderradius: 8, borderwidth: 0, bordercolor: vec4(0,0,0.5,0.9),position: "absolute", flexdirection: "column"})
 						)
-						,view({name:"connectionlayer", bgcolor:NaN, dataset: this.sourceset, render:function() {
+						,view({name: "connectionlayer", bgcolor: NaN, dataset: this.sourceset, render: function() {
 							return this.renderConnections()
 						}.bind(this)}
-						/*
-							,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
-							,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
-							,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
-							,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
-							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
-							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
-						*/)
-						,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
-						,view({name:"blocklayer", bgcolor:NaN,  dataset: this.sourceset, render:function() {
+						)
+						,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+						,view({name: "blocklayer", bgcolor: NaN,  dataset: this.sourceset, render: function() {
 							return this.renderBlocks()
-						}.bind(this)}
-						/*	,block({name:"phone", title:"Phone", x:200, y:20})
-							,block({name:"tv", title:"Television", x:50, y:200})
-							,block({name:"tablet", title:"Tablet",x:300, y:120})
-							,block({name:"thing", title:"Thing",x:500, y:120})
-							,block({name:"a", title:"block A", x:50, y:300})
-							,block({name:"b", title:"block B", x:150, y:500})
-							,block({name:"c", title:"block C", x:250, y:400})
-							,block({name:"d", title:"block D", x:350, y:500})
-							,block({name:"e", title:"block E", x:450, y:600})
-							,block({name:"f", title:"block F", x:550, y:700})
-						*/)
+						}.bind(this)})
 
-						,view({name:"popuplayer", bgcolor:NaN},
-							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
-								label({text:"Connection", bgcolor:NaN, margin:4})
-								,button({padding:0, borderwidth:0, click:function() {this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+						,view({name: "popuplayer", bgcolor: NaN},
+							view({name: "connectionui",visible: false,bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(1,14,14,14), borderwidth: 1, bordercolor: "black",position: "absolute", flexdirection: "column"},
+								label({text: "Connection", bgcolor: NaN, margin: 4})
+								,button({padding: 0, borderwidth: 0, click: function() {this.removeConnection(undefined)}.bind(this),  icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
 							)
-							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
-							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-								label({text:"Block", bgcolor:NaN, margin:4})
-								,button({padding:0,borderwidth:0, click:function() {this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+							,view({name: "blockui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(10,10,10,1), borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
+							//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
+								label({text: "Block", bgcolor: NaN, margin: 4})
+								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
 							)
 
-							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
-							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-								label({text:"Group", bgcolor:NaN, margin:4})
-								,button({padding:0,borderwidth:0, click:function() {this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+							,view({name: "groupui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),borderradius: 8, borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
+							//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
+								label({text: "Group", bgcolor: NaN, margin: 4})
+								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
 							)
-							,this.selectorrect({name:"selectorrect"})
-							,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
+							,this.selectorrect({name: "selectorrect"})
+							,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
 						)
 					)
-					 ,jseditor({name:'jsviewer', fontsize:14,sourceset:this.sourceset, overflow:'scroll', flex:0.4})
+					,jseditor({name: 'jsviewer', fontsize: 14,sourceset: this.sourceset, overflow: 'scroll', flex: 0.1})
 				)
 			)
 		]
