@@ -22,7 +22,26 @@ There is a default folder hard coded into the Dreem
 | height  | Optional | Height of dali stage. defualt = 1080 pixels |
 | name    | Optional | Window name to display |
 | dumpprog| Optional | Write DALi statements to the console. This can be used to debug a stand-alone DALi application. Each line starts with ```DALICODE: ```. |
-| dali    | Required | Location of the dreemgl application to run. This can be the name of a directory containing the application, or the name of a single javascript file (without the ```.js``` suffix)
+| dali    | Required | Location of the dreemgl application to run. This can be the name of a directory containing the application, or the name of a single javascript file (without the ```.js``` suffix). If an url is specified, the composition, and all system files, are retrieved from a remote server (see below).
+
+### Remote server support
+
+The above example demonstrates using the DALi runtime locally. All the composition and system files are retrieved locally from the file system. The DALi runtime also supports using a remote dreemgl server. In this mode, all files needed to run the composition are retrieved from the remote server. RPC support is enabled when a remote server is used. To use a remote server, the path to the composition is an url, rather than a path in the local file system.
+
+For example, if the remote server is running at http://192.168.1.19:2000, you can run the rpcremote example, by running a browser window as the mobile screen:
+
+```Bash
+http://192.168.1.19:2000/examples/rpcremote?mobile
+```
+
+On the DALi system you will run the remote screen with:
+
+```Bash
+node server.js -width 600 -height 600 -dali http://192.168.1.19:2000/examples/rpcremote?remote
+```
+
+As you drag around the yellow box in the browser, you should see the red box in the DALi composition follow the yellow box.
+
 
 ## Debugging DALi Runtime
 

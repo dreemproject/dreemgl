@@ -54,6 +54,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.colormap = {
+		bool: vec4("#7260FF"),
+		bool32: vec4("#7260FF"),
+		Boolean: vec4("#7260FF"),
+		BooleanLike: vec4("#7260FF"),
 		Number: vec4("#FF7260"),
 		int: vec4("#FF0080"),
 		int32: vec4("#FF0080"),

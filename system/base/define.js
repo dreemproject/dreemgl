@@ -2077,17 +2077,23 @@
 				if(stack.indexOf(prop) === -1){
 					out[i] = define.makeJSONSafe(prop, binary, stack)
 				}
-				else out[i] = null
+				else {
+					out[i] = null
+				}
 			}
 			stack.pop()
 			return out
 		}
 
-		if(typeof obj.toJSON === 'function') return obj
+		if(typeof obj.toJSON === 'function'){
+			stack.pop()
+			return obj
+		}
 
 		if(obj.buffer instanceof ArrayBuffer){
 			var msg =  {____binary:binary.length, type:obj.constructor.name}
 			binary.push({data:obj, msg:msg})
+			stack.pop()
 			return msg
 		}
 
@@ -2098,7 +2104,9 @@
 				if(stack.indexOf(prop) === -1){
 					out[key] = define.makeJSONSafe(prop, binary, stack)
 				}
-				else out[key] = null
+				else {
+					out[key] = null
+				}
 			}
 			else if(typeof prop == 'function') out[key] = null
 			else out[key] = prop
