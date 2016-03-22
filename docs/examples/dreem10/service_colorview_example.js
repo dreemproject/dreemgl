@@ -23,10 +23,7 @@ define.class("$server/composition",
 
 			// Set up the interval for calling randomizeBoxDims
 			this.oninit = function(){
-				console.log('type: ' + typeof this.randinterval)
-				this.randinterval = this.setInterval(this.randomizeViewProps, 6000);
-				this.viewprops1 = [];
-				this.viewprops2 = [];
+				this.randinterval = this.setInterval(this.randomizeViewProps, 2500);
 			}
 
 			// Gen
@@ -51,7 +48,7 @@ define.class("$server/composition",
 		// View class which will receive the props from boxrandomizer service
 		define.class(this, "colorview", view, function() {
 
-			// this.borderradius = vec4(10);
+			this.borderradius = vec4(10);
 
 			this.attributes = {
 				dimensions: Config({value: vec4(0), type:vec4}),
@@ -76,7 +73,6 @@ define.class("$server/composition",
 
 			this.ondimensions = function() {
 				var dims = this.dimensions;
-				console.log("x1=" + dims[0] + ", y1=" + dims[1] + ", x2=" + dims[2] + ", y2=" + dims[3] )
 				this.newx = Config({value:dims[0], motion:"inoutquad", duration:.75})
 				this.newy = Config({value:dims[1], motion:"inoutquad", duration:.95})
 				this.neww = Config({value:dims[2], motion:"inoutquad", duration:1.1})
