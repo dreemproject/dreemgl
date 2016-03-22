@@ -447,10 +447,10 @@ define.class('$base/node', function(require){
 		}
 		else if(!isNaN(this.bgcolor[0])){
 			if(this.borderradius[0]>0){
-				c.drawRoundedrect()
+				c.drawRoundedrect(0, 0, c.width, c.height)
 			}
 			else{
-				c.drawRect()
+				c.drawRect(0, 0, c.width, c.height)
 			}
 		}
 		if(this._viewport === '2d'){

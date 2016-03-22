@@ -7,34 +7,44 @@
 define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
-
 		this.Rect = function(){
-			this.margin = [0,0,1,0],
-			this.fgcolor = vec4('orange')
+			this.margin = [10,10,0,10],
+			this.fgcolor = vec4('blue')
+			this.color = function(){
+				return mix('red',this.fgcolor,length(mesh.xy*2-1.))
+			}
 		}
 
 		// create a little stamp based button with hover anim
 		define.class(this, 'Button', '$base/stamp', function(){
+
 			define.class(this, 'Label', '$shaders/fontshader', function(){
 				this.margin = [5,5,5,5]
 				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
+				//this.color = function(){
+				//	return 'red'
+				//}
 			})
 			
 			define.class(this, 'Icon', '$shaders/iconshader', function(){
 				this.fgcolor = 'white'
 				this.fontsize = 20
-				this.margin = [0,10,0,0]
+				this.margin = [0,5,0,5]
 			})
 
-			this.rect = function(){
+			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
-			}
+				this.content = ""
+				this.padding = 5
+				this.margin = 1
+				//this.h = 200
+				//this.h = 50
+				//this.w = NaN
+			})
 
 			this.onpointerhover = function(event){
-				this.fgcolorRect = Animate({1:[0,1,0,1]})
-				//this.wRect = Animate({0.5:40})
-				//this.hRect = Animate({0.5:40})
+				this.fgcolorBackground = Animate({1:[0,1,0,1]})
 			}
 
 			this.fgcolor = [0.5,1,0.5,1]
@@ -43,20 +53,19 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			this.padding = [0,0,0,0]
 			this.draw = function(){
 				var c = this.canvas
-				//c.margins = this.padding
-				c.layerRect()
-				c.beginAlign(c.LEFT, this.margin, this.padding)
+				c.beginBackground()
 				c.drawLabel(this.text)
 				c.drawIcon(this.icon)
-				c.endAlign(c.INSIDE)
-				c.drawRect()
+				//c.drawIcon(this.icon)
+				c.endBackground()
 			}
 
 			this.canvasverbs = {
-				draw: function(text,icon,x, y, w, h){
-					if(w === undefined && x !== undefined) w = x, x = undefined
-					if(h ===undefined && y !== undefined) h = y, y = undefined
+				draw: function(text, icon, x, y, w, h){
 					this.GETSTAMP()
+					if(x !== undefined) canvas.align.x = x
+					if(y !== undefined) canvas.align.y = y
+					this.ARGSTOCANVAS()
 					stamp.draw()
 				}
 			}
@@ -64,33 +73,19 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.draw = function(){
 			var c = this.canvas 
-			
-			//c.drawRect(10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
-
-			c.beginAlign(c.LEFT|c.WRAP)
+			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
+			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
-
-			var dt = performance.now()
-			//console.log(this.layoutchanged)
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
-				for(var i = 0; i < 1000; i++){
-					//c.color=[random(),random(),random(),1.]
-					//c.drawButton('hi',50,30)
-					
-					//c.drawRect(70,50)
-					//c.drawRect(70,50)
-					//c.beginAlign(c.LEFT,[10,10,10,10])
-					c.drawButton('Btn'+i,icons[i],30,50)
-					//c.drawInner('CEN')
-					//c.drawMore(10,10)
-					//c.endAlign(c.INSIDE)
-					//c.drawRect()
-					//c.drawRect(50,40)
-					
+				for(var i = 0; i < 100; i++){
+					//c.drawRect(NaN,100)
+					c.drawButton('BUTTON'+i,icons[10])
 				}
 				c.stopCache()
 			}
+			//c.endAlign()
+			//console.log(performance.now()-dt)
 			//c.endAlign()
 			/*
 			// this allows reuse of commandbuffers

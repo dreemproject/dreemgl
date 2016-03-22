@@ -9,8 +9,8 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 	var input_font = require('$resources/fonts/ubuntu_medium_256_arc.glf')
 	var output_font = '$resources/fonts/ubuntu_medium_256.glf'
 	var varwidth = true
-	var xsize = 32
-	var ysize = 32
+	var xsize = 64
+	var ysize = 64
 
 	var myview = define.class(view, function(){
 
@@ -72,7 +72,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 
 		this.draw = function(){
 			var c = this.canvas
-
+			
 			var tgt = c.pushTarget('surface', c.RGBA, 2048, 2048)
 
 			c.clear(0,0,0,1.)

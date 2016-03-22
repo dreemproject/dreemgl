@@ -8,8 +8,7 @@ define.class('$shaders/rectshader', function(){
 
 	this.canvasverbs = {
 		draw:function(image, x, y, w, h){
-			if(w === undefined && x !== undefined) w = x, x = undefined
-			if(h ===undefined && y !== undefined) h = y, y = undefined
+			this.RECTARGS()
 			// this processes the args and builds up a buffer
 			this.GETBUFFER()
 			this.shaderNAME.image = image

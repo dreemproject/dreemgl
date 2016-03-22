@@ -11,13 +11,32 @@ define.class(function(require){
 	var url = require('url')
 	var http = require('http')
 
-	this.atConstructor = function(req, socket){
-		if(typeof req == 'string'){
-			this.initClient(req)
+	this.atConstructor = function(req, socket, head){
+		if(arguments.length === 1){
+			if(typeof req === 'string'){
+				this.initClient(req)
+			}
+			else{
+				this.initBare(req)
+			}
 		}
-		else{
-			this.initServer(req, socket)
-		}
+		if(arguments.length === 3) this.initServer(req, socket, head)
+	}
+
+	// events (looks just like browser websocket)
+	this.onmessage = function(event){
+	}
+
+	this.onclose = function(){
+	}
+
+	this.onerror = function(error){
+	}
+
+	// us it as a communication pipe over any socket
+	this.initBare = function(socket){
+		this.socket = socket
+		this.initState()
 	}
 
 	this.initClient = function(server_url){
@@ -62,7 +81,7 @@ define.class(function(require){
 			}
 			this.socket = socket
 			this.initState()
-			if(this.atConnect) this.atConnect()
+			if(this.onopen) this.onopen()
 		}.bind(this))
 
 		req.end()
@@ -137,22 +156,10 @@ define.class(function(require){
 		}.bind(this))
 	}
 	
-	this.atBinaryMessage = function(message){
-
-	}
-
-	this.atMessage = function(message){
-	}
-
-	this.atClose = function(){
-	}
-
-	this.atError = function(error){
-	}
 
 	this.error = function(t){
 		console.log("Error on websocket " + t)
-		this.atError(t)
+		this.onerror(t)
 		this.close()
 	}
 
@@ -219,7 +226,7 @@ define.class(function(require){
 
 	this.close = function(){
 		if(this.socket){
-			this.atClose()
+			this.onclose()
 			this.socket.destroy()
 			clearInterval(this.ping_interval)
 			this.readyState = 3
@@ -259,7 +266,7 @@ define.class(function(require){
 			if(!this.partial && !this.partial_binary_bytes){
 				var msg = new Uint8Array(this.written)
 				for(var i = 0; i < this.written; i++) msg[i] = this.output[i]
-				this.atBinaryMessage(msg.buffer)
+				this.onmessage({data:msg.buffer})
 			}
 			else{ // multi message binary
 				var store = new Uint8Array(this.written)
@@ -279,12 +286,12 @@ define.class(function(require){
 					}
 					this.partial_binary.length = 0
 					this.partial_binary_bytes = 0
-					this.atBinaryMessage(msg.buffer)
+					this.onmessage({data:msg.buffer})
 				}
 			}
 		}
 		else if(!this.partial){
-			this.atMessage(this.partial_msg + this.output.toString('utf8', 0, this.written))
+			this.onmessage({data:this.partial_msg + this.output.toString('utf8', 0, this.written)})
 			this.partial_msg = ''
 		}
 		else{
@@ -416,7 +423,6 @@ define.class(function(require){
 		var type = this.header[0] & 15
 		if(type === 0 || type == 1 || type == 2){
 			if(!frame){          
-			 //return this.error("only final frames supported")
 				this.partial = true
 			}
 			else{

@@ -10,6 +10,9 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var Device = require('$system/platform/$platform/device$platform')
 	var BusClient = require('$system/rpc/busclient')
 	var NodeWebSocket = require('$system/server/nodewebsocket')
+	
+	BusClient.prototype.use_xhr_fallback_for_binary = false
+	BusClient.prototype.socket_use_blob_send = false
 
 	this.atConstructor = function(previous, parent, baseurl){
 		this.baseurl = baseurl

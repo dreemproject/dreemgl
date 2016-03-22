@@ -9,7 +9,7 @@ define.class(function(exports){
 		this.trackAlign = []
 		this.matrixStack = [this.matrix]
 		this.matrixStackLen = 0
-		this.align = this.stackAlign[0] = {x:0,y:0,w:0,h:0,flags:0,total:0}
+		this.align = this.stackAlign[0] = {x:0,y:0,w:0,h:0,flags:this.LEFT,total:0}
 	}
 
 	this.clearCmds = function(){
@@ -22,24 +22,18 @@ define.class(function(exports){
 		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = 0,
 		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= 0,
 		o[12]= 0, o[13]= 0, o[14]= 0, o[15]= 1
-		var align = this.align = this.stackAlign[0]
-		align.total = 0
-		align.x = this.x = 0
-		align.y = this.y = 0
-		align.w = this.w = this.width
-		align.h = this.h = this.height
+		this.w = this.width
+		this.h = this.height
+		this.beginAlign(this.LEFT|this.TOP, this.view.padding)
 	}
 
-	this.TOP = 0
 	this.LEFT = 1
-	this.RIGHT = 2
-	this.HCENTER = 4
+	this.TOP = 2
+	this.RIGHT = 4
 	this.BOTTOM = 8
-	this.VCENTER = 16
-	this.CENTER = this.HCENTER|this.VCENTER
-	this.WRAP = 32
+	this.NOWRAP = 16
 	this.INSIDE = 64
-	this.NEEDTRACK = this.WRAP| this.RIGHT | this.HCENTER | this.BOTTOM | this.VCENTER
+	//this.NEEDTRACK = this.WRAP| this.RIGHT | this.HCENTER | this.BOTTOM | this.VCENTER
 
 	this.push = function(){
 		var len = ++this.matrixStackLen
@@ -90,8 +84,6 @@ define.class(function(exports){
 
 	// start an alignment
 	this.beginAlign = function(flags, margin, padding){
-		// ok lets push the align props
-
 		// store old align
 		var oldalign = this.stackAlign[this.stackAlign.len] = this.align
 		this.stackAlign.len++
@@ -107,30 +99,36 @@ define.class(function(exports){
 		if(!margin || typeof margin === 'number') align.m0 = align.m1 = align.m2 = align.m3 = margin || 0
 		else align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
 
-		var xs,ys,ws,hs 
-		if(flags & this.INSIDE){
-			xs = this.x
-			ys = this.y
-			ws = this.w
-			hs = this.h 
-		}
-		else{
-			xs = oldalign.x
-			ys = oldalign.y
-			ws = oldalign.w
-			hs = oldalign.h
-		}
-		align.total |= oldalign.total|flags
+		// support NaN w/h 
+		if(Number.isNaN(this.w)) this.w = this.width - (align.m1 + align.m3)
+		if(Number.isNaN(this.h)) this.h = this.height- (align.m0 + align.m2)
+
+		var xs = this.x !== undefined? this.x: oldalign.x
+		var ys = this.y !== undefined? this.y: oldalign.y
+		var ws = this.w !== undefined? this.w: oldalign.x
+		var hs = this.h !== undefined? this.h: oldalign.x
+
+		// turn off margins if we have absolute width/height
+		align.computew = true
+		align.computeh = true
+		if(!isNaN(this.w)) align.computew = false
+		if(!isNaN(this.h)) align.computeh = false
+		
 		align.xstart =
-		align.x = xs + align.p3	+ align.m3
+		align.x = xs + align.p3	+ align.m3 //+ align.m1
 		align.ystart = 
-		align.y = ys + align.p0 + align.m0
-		align.w = ws - align.p1 - align.p3
+		align.y = ys + align.p0 + align.m0 //+ align.m2
+		align.w = ws - align.p1 - align.p3 
 		align.h = hs - align.p0 - align.p2
+		// store w/h/x/y for use in size to content shapes
+		if(!this.w) align.wrapx = this.width
+		else align.wrapx = xs + this.w
+
 		align.trackstart = this.trackAlign && this.trackAlign.length || 0
 		align.maxx = 0
 		align.maxy = 0
 		align.maxh = 0
+		align.lastmaxh = 0
 	}
 
 	this.displaceAlign = function(start, key, displace, dbg){
@@ -149,28 +147,25 @@ define.class(function(exports){
 		}
 	}
 	
-	this.endAlign = function(argflags){
+	this.endAlign = function(){
 		// if we are align HCENTER/RIGHT lets do the h-align.
 		var align = this.align
 		var dx = align.maxx - align.xstart
 		var dy = align.maxy - align.ystart
 
 		var start = align.trackstart
-		// if the w / h things are NaN.. what do we do
-		//if(isNaN(align.w)) align.w = dx
-		//if(isNaN(align.h)) align.h = dy
 
-		if(align.flags & this.HCENTER){
-			this.displaceAlign(start, 'x', (align.w - dx) / 2)
-		}
-		else if(align.flags & this.RIGHT){
+		if(align.flags & this.RIGHT){
 			this.displaceAlign(start, 'x', align.w - dx)
 		}
-		if(align.flags & this.VCENTER){
-			this.displaceAlign(start, 'y', (align.h - dy) / 2)
+		else if(!(align.flags & this.LEFT)){
+			this.displaceAlign(start, 'x', (align.w - dx) / 2)
 		}
-		else if(align.flags & this.BOTTOM){
+		if(align.flags & this.BOTTOM){
 			this.displaceAlign(start, 'y', align.h - dy)
+		}
+		else if(!(align.flags & this.TOP)){
+			this.displaceAlign(start, 'y', (align.h - dy) / 2)
 		}
 
 		this.w = dx + align.p1 + align.p3
@@ -179,104 +174,74 @@ define.class(function(exports){
 		var oldalign = align
 		align = this.align = this.stackAlign[--this.stackAlign.len]
 	
-		// check if we need to wrap our nested alignment
-		if(align.flags & this.WRAP && !(oldalign.flags&this.INSIDE)){
-			// ifso we need to check what to delta.
-			if(align.x + this.w > align.w){
-				var dx = align.xstart - align.x
-				var dy = align.maxh //this.padding[0]+ this.padding[2] 
-				align.x = align.xstart 
-				align.y += dy
-
-
-				this.displaceAlign(start, 'x', dx, 1)
-				this.displaceAlign(start, 'y', dy, 1)
-			}
-		}
-
-		if(dy > align.maxh) align.maxh = dy
-
-		if(!(argflags & this.INSIDE) && !(oldalign.flags & this.INSIDE)){
-			this.runAlign()
-		}
-
-		if(argflags & this.INSIDE){ // signal a margin for the first call
-			align.fm0 = oldalign.m0
-			align.fm1 = oldalign.m1
-			align.fm2 = oldalign.m2
-			align.fm3 = oldalign.m3
-		}
-
-		align.total |= oldalign.total
+		//if(dy > align.maxh) align.maxh = dy
 	}
-	Object.defineProperty(this, 'h2', {
-		get:function(){
-			return this._h
-		},
-		set:function(v){
-			if(v === 46)debugger
-			this._h = v
-		}
-	})
-	this.runAlign = function(cls, buffer, range){
-		// ok so if we have 
-		var align = this.align
-		if(!align || !align.flags) return
 
-		var m0,m1,m2,m3
-		if(cls && cls.margin){
-			var margin = cls.margin
-			if(typeof margin === 'number') m0 = m1 = m2 = m3 = margin
-			else m0 = margin[0], m1 = margin[1], m2 = margin[2], m3 = margin[3]
+	this.runAlign = function(cls, buffer, range, oldalign){
+
+		var align = this.align
+
+		var m0 = 0,m1 = 0,m2 = 0,m3 = 0
+		if(oldalign){
+			m0 = oldalign.m0, m1 = oldalign.m1, m2 = oldalign.m3, m3 = oldalign.m3
 		}
 		else{
-			if(align.fm0 !== undefined){
-				m0 = align.fm0, m1 = align.fm1, m2 = align.fm2, m3 = align.fm3
-				align.fm0 = undefined
-			}
-			else{
-				m0 = align.m0, m1 = align.m1, m2 = align.m2, m3 = align.m3
+			var margin = cls && cls.margin
+			if(margin !== undefined){
+				if(typeof margin === 'number') m0 = m1 = m2 = m3 = margin
+				else m0 = margin[0], m1 = margin[1], m2 = margin[2], m3 = margin[3]
 			}
 		}
 
-		if(align.total & this.NEEDTRACK && buffer){
-			this.trackAlign.push(buffer, buffer.length, range || 1)
-		}
+		this.trackAlign.push(buffer, buffer.length, range || 1)
 
-		this.x = align.x + m3
+		var first = Math.abs(align.x-align.xstart) < 0.001
+		this.x = align.x + m3 
 		this.y = align.y + m0
 
 		align.x += this.w + m3 + m1
 		var hs = this.h + m0 + m2
 
-		if(hs > align.maxh) align.maxh = hs
-
-		// use the next y as the maxy
-		var hy = align.y + hs
-
-		if( hy> align.maxy) align.maxy = hy
-
-		if(align.x > align.maxx) align.maxx = align.x
-		//if(align.maxy === 36) debugger
-		if(align.flags & this.WRAP && align.x >= align.w){
-			this.newline()
-			this.x = align.x + m3
-			this.y = align.y + m0
-			align.x += this.w + m3 + m1
+		var oldh = align.maxh
+		if(hs > align.maxh){
+			align.maxh = hs
 		}
 
+		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x >= align.wrapx){
+			align.x = align.xstart 
+			align.y += align.lastmaxh || align.maxh
+			var newx = align.xstart + m3
+			var newy =  align.y + m0
+			var dx = newx - this.x
+			var dy = newy - this.y
+			align.x += this.w + m3 + m1
+			if(oldalign){
+				//console.log('here')
+				var start = oldalign.trackstart
+				this.displaceAlign(start, 'x', dx, 1)
+				this.displaceAlign(start, 'y', dy, 1)
+			}
+			this.x = newx
+			this.y = newy
+		}
+		align.lastmaxh = align.maxh
+		if(align.x > align.maxx) align.maxx = align.x
+		var hy = align.y + hs
+		if( hy> align.maxy) align.maxy = hy
 	}
 
 	// break terminates an align cycle and does a newline
-	this.newline = function(pad){
+	this.newline = function(height){
 		var align = this.align
 		align.x = align.xstart 
-		align.y += align.maxh + (pad || 0)
+		align.y += align.maxh
 	}
 
 	this.addCanvas = function(ctx, index){
 		ctx.trackAlign = this.trackAlign
 		ctx.stackAlign = this.stackAlign
+		ctx.width = this.width
+		ctx.height = this.height
 		ctx.frameid = this.frameid
 		ctx.target = this.target
 		ctx.has_view_matrix_set = this.has_view_matrix_set
@@ -634,6 +599,24 @@ define.class(function(exports){
 					}
 					return write
 				})
+				
+				fnstr = fnstr.replace(/(\t*)this\.RECTARGS\s*\(\s*\)/,function(m, ind){
+					return ind+'if(w === undefined && x !== undefined) w = x, x = undefined\n'+
+					ind+'if(h ===undefined && y !== undefined) h = y, y = undefined\n'+
+					ind+'if(Number.isNaN(w)){\n'+
+					ind+'\tw = this.width \n'+
+					ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
+					ind+'\tif(typeof _margin === "number") w -= _margin * 2\n'+
+					ind+'\telse if(_margin) w -= (_margin[1] + _margin[3])\n'+
+					ind+'}\n'+
+					ind+'if(Number.isNaN(h)){\n'+
+					ind+'\th = this.height\n'+
+					ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
+					ind+'\tif(typeof _margin === "number") w -= _margin * 2\n'+
+					ind+'\telse if(_margin) w -= (_margin[0] + _margin[2])\n'+
+					ind+'}\n'
+				})
+
 
 				fnstr = fnstr.replace(/(\t*)this\.GETBUFFER\s*\(\s*([^\)]*)\s*\)/,function(m, ind, needed){
 					var write = ind+'var buffer = this.buffer'+cap+'\n'+

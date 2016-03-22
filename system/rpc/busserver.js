@@ -25,16 +25,17 @@ define.class(function(require, exports){
 		var referer = req.headers.origin+req.url
 		var remoteAddress = req.connection.remoteAddress
 		
-		sock.atClose = function(){
+		sock.onclose = function(){
 			this.sockets.splice(this.sockets.indexOf(sock), 1)
-			sock.atClose = undefined			
+			sock.onclose = undefined			
 			this.atClose(sock);
 		}.bind(this)
 
 		if(this.use_xhr_fallback_for_binary){
 			var binary_xhr = []
 
-			sock.atMessage = function(message){
+			sock.onmessage = function(event){
+				var message = event.data
 				if(message.charAt(0) === '$'){
 					binary_xhr.push(message.slice(1))
 					return
@@ -56,9 +57,8 @@ define.class(function(require, exports){
 			sock.sendJSON = function(msg){
 				var binary = []
 				var newmsg = define.makeJSONSafe(msg, binary)
-				for(var i = 0; i < binary.length; i+=2){
-					var data = binary[i]
-					var msg = binary[i+1]
+				for(var i = 0; i < binary.length; i++){
+					var data = binary[i].data
 
 					var rpcrandom = rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()
 					binrpc_outgoing[rpcrandom] = {
@@ -73,37 +73,11 @@ define.class(function(require, exports){
 			}
 		}	
 		else{
-
-			var binary_buf = []
-			sock.atBinaryMessage = function(message){
-				binary_buf.push(message)
-			}
-
-			sock.atMessage = function(message){
-				var jsonmsg = JSON.parse(message)
-				jsonmsg = define.structFromJSON(jsonmsg, binary_buf)
-				binary_buf.length = 0
+			sock.makeJSONSocket()
+			sock.atJSONMessage = function(jsonmsg){
 				jsonmsg.origin = origin
 				this.atMessage(jsonmsg, sock)
 			}.bind(this)
-
-			function rndhex4(){ return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) }
-
-			sock.sendJSON = function(msg){
-				var binary = []
-				var newmsg = define.makeJSONSafe(msg, binary)
-				for(var i = 0; i < binary.length; i+=2){
-					var data = binary[i]
-					var msg = binary[i+1]
-					// lets send 10x
-					//var data = new Uint8Array(1000)
-					//for(var i = 0; i < 8000; i++){
-					sock.send(data.buffer)//data.buffer)
-					//}
-				}
-				var jsonmsg = JSON.stringify(newmsg)
-				sock.send(jsonmsg)
-			}
 		}
 
 		this.atConnect(sock)

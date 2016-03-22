@@ -2076,9 +2076,9 @@
 		if(typeof obj === 'function') return null
 		if(typeof obj !== 'object') return obj
 		if(!stack) stack = []
-		stack.push(obj)
 
 		if(Array.isArray(obj)){
+			stack.push(obj)
 			var out = []
 			for(var i = 0; i < obj.length; i++){
 				var prop = obj[i]
@@ -2094,13 +2094,13 @@
 		if(typeof obj.toJSON === 'function') return obj
 
 		if(obj.buffer instanceof ArrayBuffer){
-			binary.push(obj)
-			var msg =  {____binary:binary.length - 1, type:obj.constructor.name}
-			binary.push(msg)
+			var msg =  {____binary:binary.length, type:obj.constructor.name}
+			binary.push({data:obj, msg:msg})
 			return msg
 		}
 
 		var out = {}
+		stack.push(obj)
 		for(var key in obj){
 			var prop = obj[key]
 			if(typeof prop == 'object'){
