@@ -22,8 +22,11 @@ define.class(function(exports){
 		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = 0,
 		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= 0,
 		o[12]= 0, o[13]= 0, o[14]= 0, o[15]= 1
+		this.x = undefined
+		this.y = undefined
 		this.w = this.width
 		this.h = this.height
+		this.align = this.stackAlign[0]
 		this.beginAlign(this.LEFT|this.TOP, this.view.padding)
 	}
 
@@ -104,7 +107,7 @@ define.class(function(exports){
 
 		// stretching
 		if(this.w === stretch) this.w = this.width - (align.m1 + align.m3)
-		if(this.h === stretch) this.h = this.height- (align.m0 + align.m2)
+		if(this.h === stretch) this.h = this.height - (align.m0 + align.m2)
 
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
@@ -631,7 +634,9 @@ define.class(function(exports){
 					//ind+'if(w === undefined && x !== undefined) w = x, x = undefined, console.log("hi")\n'+
 					//ind+'if(h ===undefined && y !== undefined) h = y, y = undefined\n'+
 
-					return  ind+'if(isNaN(x)) x = this.x\n'+
+					return  ''+
+					ind+'if(typeof x === "object") w = x.w, h = x.h, y = x.y, x = x.x\n'+
+					ind+'if(isNaN(x)) x = this.x\n'+
 					ind+'if(isNaN(y)) y = this.y\n'+
 					ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
 					ind+'if(h === undefined) h = this.class'+cap+'.h\n'+

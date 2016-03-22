@@ -22,9 +22,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.margin = [5,5,5,5]
 				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
-				//this.color = function(){
-				//	return 'red'
-				//}
 			})
 			
 			define.class(this, 'Icon', '$shaders/iconshader', function(){
@@ -35,23 +32,10 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
-				this.content = ""
-				
-				this.padding = 10
-				this.margin = 10
-				//this.h = 200
-				//this.w = 100
+				//this.content = ""
+				this.padding = 5
+				this.margin = 1
 				this.w = 300
-			})
-
-			define.class(this, 'Background2', '$shaders/rectshader', function(){
-			
-				this.fgcolor = [1,0,1,1]
-				this.w = 100
-				this.h = 100
-				this.color = function(){
-					return 'red'
-				}
 			})
 
 			this.onpointerhover = function(event){
@@ -60,14 +44,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.fgcolor = [0.5,1,0.5,1]
 
-			this.margin = 10
-			this.padding = [0,0,0,0]
-
-			this.w = stretch
-
 			this.draw = function(){
 				var c = this.canvas
-				c.beginBackground(this.x, this.y, this.w, this.h)
+				c.beginBackground(this)
 				c.drawLabel(this.text)
 				c.drawIcon(this.icon)
 				c.endBackground()
@@ -88,10 +67,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
 			if(c.startCache('button',this.layoutchanged)){
+				console.log(c.align.y)
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
-				for(var i = 0; i < 1; i++){
-					//c.drawRect(NaN,100)
-					c.drawButton('BUTTON'+i,icons[10],auto,auto,100,stretch)
+				for(var i = 0; i < 40; i++){
+					c.drawButton('BUTTON'+i,icons[10],auto,auto,auto)
+					c.drawRect(auto,auto,100,100)
 				}
 				c.stopCache()
 			}

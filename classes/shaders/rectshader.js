@@ -51,6 +51,7 @@ define.class('$shaders/pickshader', function(require){
 
 	this.margin = [0,0,0,0]
 	this.padding = [0,0,0,0]
+	this.content = ''
 
 	this.canvasverbs = {
 		begin:function(x, y, w, h, margin, padding, flags){
@@ -66,9 +67,7 @@ define.class('$shaders/pickshader', function(require){
 		end:function(){
 			var oldalign = this.align 
 			this.endAlign()
-			// copy over the max height
 			var buffer = this.bufferNAME
-			// if this thing wraps we need to do stuff
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
 				this.runAlign(this.classNAME, buffer, 1, oldalign)
 			}
@@ -77,7 +76,6 @@ define.class('$shaders/pickshader', function(require){
 		draw:function(x, y, w, h){
 			var doalign = isNaN(x) || isNaN(y)
 			this.RECTARGS()
-			// this processes the args and builds up a buffer
 			this.GETBUFFER()
 			this.ARGSTO(this)
 			if(doalign) this.runAlign(this.classNAME, buffer)
