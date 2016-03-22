@@ -1537,16 +1537,18 @@
 					console.log("Cannot find "+e+" in module "+module.filename)
 					throw e
 				}
+
 				if(name.indexOf('://') !== -1){
 					name = define.mapToCacheDir(name)
 				}
 
+				var full_name = name;
 				try{
-					var full_name = Module._resolveFilename(name, module)
+					full_name = Module._resolveFilename(name, module)
 				}
 				catch(e){
-					console.log("Cannot find module " + name + ' in module! ' + module.filename)
-					throw e
+					// Don't generate an error becaues the image might be
+					// remote, or a relative path was specified.
 				}
 				if (full_name instanceof Array) full_name = full_name[0]
 
