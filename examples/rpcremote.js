@@ -15,7 +15,7 @@ define.class('$server/composition', function(
 		flowdata:{x:30,y:20},
 		test: 10,
 		init:function(){
-			console.log(new Error().stack)
+			//console.log(new Error().stack)
 		},
 		dosomething: function(){
 			console.log("dosomething called on server")
