@@ -24,6 +24,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		hasball: true
 
 	}
+	this.pickalpha = -1;
 
 	this.B1 = function (t) { return t * t * t; }
 	this.B2 = function (t) { return 3 * t * t * (1 - t); }
@@ -107,7 +108,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			}
 		}
 
-		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);
 				var H = this.findChild("handle");
 
 		if (H){
