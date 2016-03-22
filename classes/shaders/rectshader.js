@@ -53,52 +53,34 @@ define.class('$shaders/pickshader', function(require){
 	this.padding = [0,0,0,0]
 
 	this.canvasverbs = {
-		begin:function(x, y, w, h, flags, margin, padding){
-			if(!isNaN(x)) this.x = x
-			if(!isNaN(y)) this.y = y
-
-			this.w = w !== undefined?w: this.classNAME.w !== undefined? this.classNAME.w: this.w
-			this.h = h !== undefined?h: this.classNAME.h !== undefined? this.classNAME.h: this.h
-			margin = margin !== undefined? margin: this.classNAME.margin,
-			padding = padding !== undefined? padding: this.classNAME.padding
-
-			// get the flags
-			var flags = flags !== undefined? flags: this.classNAME._content
-			// flag off 
-			if(isNaN(this.w)) flags = (flags&~this.RIGHT)|this.LEFT
-			if(isNaN(this.h)) flags = (flags&~this.BOTTOM)|this.TOP
-
+		begin:function(x, y, w, h, margin, padding, flags){
+			this.RECTARGS()
+			this.x = x, this.y = y, this.w = w, this.h = h
 			this.beginAlign(
-				flags, 
-				margin,
-				padding
+				flags !== undefined? flags: this.classNAME._content, 
+				margin !== undefined? margin: this.classNAME.margin,
+				padding !== undefined? padding: this.classNAME.padding
 			)
-			// keep input width/height
-			this.align.inw = this.w
-			this.align.inh = this.h
 			this.GETBUFFER()
 		},
 		end:function(){
 			var oldalign = this.align 
 			this.endAlign()
-			var align = this.align
 			// copy over the max height
-			align.maxh = oldalign.maxh
-			// do a bit of math to size our rect to the computed size
-			this.w = (oldalign.computew? oldalign.maxx + oldalign.p1 - oldalign.m1: align.x + oldalign.inw) - this.align.x
-			this.h = (oldalign.computeh? oldalign.y + oldalign.maxh + oldalign.p2 - oldalign.m2: align.y + oldalign.inh) - this.align.y
-
 			var buffer = this.bufferNAME
 			// if this thing wraps we need to do stuff
-			this.runAlign(this.classNAME, buffer, 1, oldalign)
+			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
+				this.runAlign(this.classNAME, buffer, 1, oldalign)
+			}
 			this.CANVASTOBUFFER()
 		},
 		draw:function(x, y, w, h){
+			var doalign = isNaN(x) || isNaN(y)
 			this.RECTARGS()
 			// this processes the args and builds up a buffer
 			this.GETBUFFER()
-			this.ARGSTOCANVAS()
-			if((x === undefined || y === undefined)) this.runAlign(this.classNAME, buffer)
+			this.ARGSTO(this)
+			if(doalign) this.runAlign(this.classNAME, buffer)
 			this.CANVASTOBUFFER()
 		}
 	}

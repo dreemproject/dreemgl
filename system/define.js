@@ -2789,6 +2789,12 @@
 			obj.track = track
 			return obj
 		}
+
+		exports.auto = function auto(){
+		}
+
+		exports.stretch = function stretch(){
+		}
 	}
 
 	defineGlobals(typeof process !== 'undefined'? global: typeof window !== 'undefined'? window: self)

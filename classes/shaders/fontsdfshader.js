@@ -234,7 +234,7 @@ define.class('$shaders/pickshader', function(require){
 
 			// well first we get the buffer
 			this.GETBUFFER(str.length)
-			this.ARGSTOCANVAS()
+			this.ARGSTO(this)
 
 			var glyphs = (this.font || this.classNAME.font).glyphs
 			var off = 0
@@ -305,7 +305,7 @@ define.class('$shaders/pickshader', function(require){
 
 			// well first we get the buffer
 			this.GETBUFFER(str.length)
-			this.ARGSTOCANVAS()
+			this.ARGSTO(this)
 
 			// do alignment on our full thing
 			if((x === undefined || y === undefined)) this.runAlign(this.classNAME, buffer, strlen)

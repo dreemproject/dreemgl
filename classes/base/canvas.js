@@ -102,14 +102,14 @@ define.class(function(exports){
 		if(!margin || typeof margin === 'number') align.m0 = align.m1 = align.m2 = align.m3 = margin || 0
 		else align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
 
-		// support NaN w/h 
-		if(Number.isNaN(this.w)) this.w = this.width - (align.m1 + align.m3)
-		if(Number.isNaN(this.h)) this.h = this.height- (align.m0 + align.m2)
+		// stretching
+		if(this.w === stretch) this.w = this.width - (align.m1 + align.m3)
+		if(this.h === stretch) this.h = this.height- (align.m0 + align.m2)
 
-		var xs = this.x !== undefined? this.x: oldalign.x
-		var ys = this.y !== undefined? this.y: oldalign.y
-		var ws = this.w !== undefined? this.w: oldalign.x
-		var hs = this.h !== undefined? this.h: oldalign.x
+		var xs = !isNaN(this.x)? this.x: oldalign.x
+		var ys = !isNaN(this.y)? this.y: oldalign.y
+		var ws = this.w !== undefined? this.w: oldalign.w
+		var hs = this.h !== undefined? this.h: oldalign.h
 
 		// turn off margins if we have absolute width/height
 		align.computew = isNaN(this.w)
@@ -132,6 +132,8 @@ define.class(function(exports){
 		align.lastmaxh = 0
 		align.inh = this.h
 		align.inw = this.w
+		align.inx = this.x
+		align.iny = this.y
 	}
 
 	this.displaceAlign = function(start, key, displace, dbg){
@@ -180,11 +182,23 @@ define.class(function(exports){
 		if(oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
 
 		// do a bit of math to size our rect to the computed size
-		if(oldalign.computew) this.w = (oldalign.maxx + oldalign.p1 - oldalign.m1) - align.x
+		if(oldalign.computew){
+			this.w = (oldalign.maxx + oldalign.p1 - oldalign.m1)
+			if(isNaN(oldalign.inx)) this.w -= align.x
+			else this.w -= oldalign.inx
+		}
 		else this.w = oldalign.inw
-		if(oldalign.computeh) this.h = (oldalign.y + oldalign.maxh + oldalign.p2 - oldalign.m2) - align.y
+		if(oldalign.computeh){
+			this.h = (oldalign.maxy + oldalign.p2 - oldalign.m2)
+			//console.log(oldalign.iny)
+			if(isNaN(oldalign.iny)) this.h -= align.y
+			else this.h -= oldalign.iny
+			//console.log(oldalign.y)
+		}
 		else this.h = oldalign.inh
-
+		
+		this.x = oldalign.inx
+		this.y = oldalign.iny
 		//if(dy > align.maxh) align.maxh = dy
 	}
 
@@ -604,27 +618,34 @@ define.class(function(exports){
 					ind+'stamp.pickdraw = _pickdraw\n'+
 					ind+'canvas.scope = stamp\n'+
 					ind+'canvas.align = this.align\n'+
+					ind+'canvas.x = canvas.y = undefined\n'+
 					ind+'stamp.canvas = canvas\n'
-					for(var i = 0; i < args.length; i++){
-						write += 'canvas.'+args[i]+' = stamp.'+args[i]+' = '+args[i] + '\n'
-					}
+					//for(var i = 0; i < args.length; i++){
+					//	write += 'canvas.'+args[i]+' = stamp.'+args[i]+' = '+args[i] + '\n'
+					//}
 					return write
 				})
 				
 				fnstr = fnstr.replace(/(\t*)this\.RECTARGS\s*\(\s*\)/,function(m, ind){
-					return ind+'if(w === undefined && x !== undefined) w = x, x = undefined\n'+
-					ind+'if(h ===undefined && y !== undefined) h = y, y = undefined\n'+
-					ind+'if(Number.isNaN(w)){\n'+
+					 
+					//ind+'if(w === undefined && x !== undefined) w = x, x = undefined, console.log("hi")\n'+
+					//ind+'if(h ===undefined && y !== undefined) h = y, y = undefined\n'+
+
+					return  ind+'if(isNaN(x)) x = this.x\n'+
+					ind+'if(isNaN(y)) y = this.y\n'+
+					ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
+					ind+'if(h === undefined) h = this.class'+cap+'.h\n'+
+					ind+'if(w === stretch){\n'+
 					ind+'\tw = this.width \n'+
 					ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
 					ind+'\tif(typeof _margin === "number") w -= _margin * 2\n'+
 					ind+'\telse if(_margin) w -= (_margin[1] + _margin[3])\n'+
 					ind+'}\n'+
-					ind+'if(Number.isNaN(h)){\n'+
+					ind+'if(h === stretch){\n'+
 					ind+'\th = this.height\n'+
 					ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
-					ind+'\tif(typeof _margin === "number") w -= _margin * 2\n'+
-					ind+'\telse if(_margin) w -= (_margin[0] + _margin[2])\n'+
+					ind+'\tif(typeof _margin === "number") h -= _margin * 2\n'+
+					ind+'\telse if(_margin) h -= (_margin[0] + _margin[2])\n'+
 					ind+'}\n'
 				})
 
@@ -656,11 +677,16 @@ define.class(function(exports){
 					return write	
 				})
 				
-				fnstr = fnstr.replace(/(\t*)this\.ARGSTOCANVAS\s*\(\s*\)/,function(m, ind){
+				fnstr = fnstr.replace(/(\t*)this\.ARGSTO\s*\(\s*([^\)]*)\)/,function(m, ind, where){
 					var write = ''
-					for(var key in def) if(typeof def[key] === 'function' && args.indexOf(key) !== -1){
-						write += ind+'if('+key+'!==undefined) this.'+key+' = '+key+'\n'
-					}						
+					for(var i = 0; i < args.length; i ++){
+						var key = args[i]
+						write += ind+'if('+key+'!==undefined ) '+where+'.'+key+' = '+key+'\n'
+					}
+
+					//for(var key in def) if(typeof def[key] === 'function' && args.indexOf(key) !== -1){
+					//	write += ind+'if('+key+'!==undefined) this.'+key+' = '+key+'\n'
+					//}
 					return write
 				})
 

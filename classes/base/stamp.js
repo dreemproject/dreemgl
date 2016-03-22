@@ -25,7 +25,7 @@ define.class('$base/node', function(require){
 	this.totalmatrix = mat4()
 	this.pickview = 0
 	// the draw api
-	define.class(this, 'rect', '$shaders/rectshader')
+	define.class(this, 'Rect', '$shaders/rectshader')
 
 	this.attributes = {
 		// fires when pointer is pressed down.
