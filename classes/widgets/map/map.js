@@ -745,9 +745,6 @@ define.class("$ui/view", function(require, $ui$, view, label, button, labelset, 
 	// view implementation of the label tile
 	define.class(this, "labeltile", "$ui/labelset", function(){
 		//this.polygonoffset = 100.0
-		this.outline = true
-		this.outlinethickness = 1
-		this.outlinecolor = "white"
 		this.is = tilebasemixin
 		this.fgcolor = "black"
 		this.font = ubuntufont

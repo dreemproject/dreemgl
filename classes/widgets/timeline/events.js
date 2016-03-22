@@ -229,7 +229,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		var rows = [[],[],[],[],[],[]]
 		this.rows = 1
 		for (var i = 0; i < data.length; i++) {
-			var color = (data[i].metadata && data[i].metadata.color) ? data[i].metadata.color : null
+			var color = data[i].color || null
 			var event = this.event({
 				title: data[i].title,
 				id: data[i].id,

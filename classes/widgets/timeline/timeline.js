@@ -38,19 +38,11 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		var snap = eventdata.snap || 900000 // snap to 15 min by default
 		stardate = floor(stardate / snap) * snap
 		var enddate = stardate + (eventdata.duration || 10800000) // 3 hrs default
-		this.makeEvent({
-			title: eventdata.title,
-			date: stardate,
-			enddate: enddate,
-			metadata: {
-				color: eventdata.color,
-				location: {
-					title: eventdata.title,
-					lattitude: eventdata.lattitude,
-					longitude: eventdata.longitude
-				}
-			}
-		})
+
+		eventdata.date = stardate
+		eventdata.enddate = enddate
+
+		this.makeEvent(eventdata)
 	}
 
 	this.makeEvent = function (eventdata) {
