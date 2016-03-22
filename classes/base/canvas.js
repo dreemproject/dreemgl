@@ -90,7 +90,10 @@ define.class(function(exports){
 
 		// fetch new one
 		var align = this.align = this.stackAlign[this.stackAlign.len] || {}
-		
+
+		if(isNaN(this.w)) flags = (flags&~this.RIGHT)|this.LEFT
+		if(isNaN(this.h)) flags = (flags&~this.BOTTOM)|this.TOP
+
 		align.flags = flags
 		
 		if(!padding || typeof padding === 'number') align.p0 = align.p1 = align.p2 = align.p3 = padding || 0
@@ -109,10 +112,8 @@ define.class(function(exports){
 		var hs = this.h !== undefined? this.h: oldalign.x
 
 		// turn off margins if we have absolute width/height
-		align.computew = true
-		align.computeh = true
-		if(!isNaN(this.w)) align.computew = false
-		if(!isNaN(this.h)) align.computeh = false
+		align.computew = isNaN(this.w)
+		align.computeh = isNaN(this.h)
 		
 		align.xstart =
 		align.x = xs + align.p3	+ align.m3 //+ align.m1
@@ -129,6 +130,8 @@ define.class(function(exports){
 		align.maxy = 0
 		align.maxh = 0
 		align.lastmaxh = 0
+		align.inh = this.h
+		align.inw = this.w
 	}
 
 	this.displaceAlign = function(start, key, displace, dbg){
@@ -173,7 +176,15 @@ define.class(function(exports){
 
 		var oldalign = align
 		align = this.align = this.stackAlign[--this.stackAlign.len]
-	
+		
+		if(oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
+
+		// do a bit of math to size our rect to the computed size
+		if(oldalign.computew) this.w = (oldalign.maxx + oldalign.p1 - oldalign.m1) - align.x
+		else this.w = oldalign.inw
+		if(oldalign.computeh) this.h = (oldalign.y + oldalign.maxh + oldalign.p2 - oldalign.m2) - align.y
+		else this.h = oldalign.inh
+
 		//if(dy > align.maxh) align.maxh = dy
 	}
 
