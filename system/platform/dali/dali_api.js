@@ -18,20 +18,22 @@ define.class(function(exports){
 	 * static dali object to access dali api.
 	 */
 	Object.defineProperty(DaliApi, 'dali', {
+		// Internally, the dalimodule is stored in global
 		get: function() {
-			if (!this.value) {
+			if (!global.dalimodule) {
 				console.trace('DaliApi: Dali has not been initialized');
 			}
-			return this.value;
+			return global.dalimodule;
 		}
 		,set: function(v) {
-			if (this.value) {
+			if (global.dalimodule) {
 				console.log('DaliApi: Dali has already been initialized');
 			}
-			this.value = v;
+			global.dalimodule = v;
 		}
 	});
 
+//	DaliApi.dali = global.dalimodule;
 
 	// Set emitcode to true to emit dali code to the console. These lines
 	// are preceeded with DALICODE to make it easier to extract into a file.
@@ -139,9 +141,10 @@ define.class(function(exports){
 		}
 
 		try {
-            // Load the library and make available as DaliApi.dali
+      // Load the library and make available as DaliApi.dali
 			// console.log('LOADING', dalilib);
-			DaliApi.dali = define.require(DaliApi.dalilib)(options);
+			var dalimodule = define.require(DaliApi.dalilib)(options);
+			DaliApi.dali = dalimodule;
 
 			// Create a top-level 2D layer to the stage.
 			var dali = DaliApi.dali;
