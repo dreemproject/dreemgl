@@ -1,13 +1,8 @@
-<!--
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.
--->
-
 # DreemGL Appendix
 
-## Constants
-### Predefined colors values
+This appendix lists all predefined color values available to developers in DreemGL, and shows all icons which are available in <a href='https://fortawesome.github.io/Font-Awesome/'>Font Awesome</a>. From time to time new icons are being added to Font Awesome. If you see any icon missing here, please report back to us.
 
+## Colors and Fonts
+
+### Predefined Colors
 
