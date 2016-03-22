@@ -1337,7 +1337,7 @@
 		}
 
 		// fetch it async!
-		function httpGetCached(httpurl){
+		define.httpGetCached = function(httpurl){
 			return new define.Promise(function(resolve, reject){
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
@@ -1442,7 +1442,7 @@
 				// we need to fetch the url, then look at its dependencies, fetch those
 				return define.download_queue[modurl] = new define.Promise(function(resolve, reject){
 					// lets make sure we dont already have the module in our system
-					httpGetCached(modurl).then(function(result){
+					define.httpGetCached(modurl).then(function(result){
 
 						// the root
 						if(result.type === 'text/json' && define.fileExt(parsedmodurl.path) === ''){
@@ -1560,13 +1560,6 @@
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
 						if(define.loadImage) return define.loadImage(name)
-						//if(define.$platform === 'dali' || define.$platform === 'nodegl'){
-						//	var tex = define.expandVariables('$system/platform/$platform/texture$platform')
-						//	var Texture = define.require(tex);
-						//	return new Texture.Image(name)
-						// 	return {path:name}
-						//}
-						//console.log('READING PNG', define.$platform)
 						return undefined
 					}
 					else{

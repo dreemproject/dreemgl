@@ -44,8 +44,28 @@ define.class('$system/base/texture', function(exports, require){
 		return new Texture(type,0,0)
 	}
 
-	// imagedata is an instance of DaliImage
-	Texture.fromImage = function(imagedata){
+	// Load from a local image file. Returns the Texture
+	Texture.fromLocalImage = function(path){
+		var dali = DaliApi.dali;
+
+		var img = new dali.ResourceImage({url: path});
+
+		var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight())
+		tex.image = img
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + fullpath + '\'});');
+		}
+
+		return tex
+	}
+
+
+	// Load texture from a local file or remote url.
+	// imagedata is an instance of DaliImage.
+	// If the image is loaded remotely, the callback function is called when
+	// the texture is loaded.
+	Texture.fromImage = function(imagedata, callback){
 		var dali = DaliApi.dali;		
 
 		// With dali, the references should either be absolute, or relative
@@ -58,17 +78,31 @@ define.class('$system/base/texture', function(exports, require){
 
 		if (imagedata.path[0] !== '/') fullpath = define.$example + fullpath;
 
-		var img = new dali.ResourceImage({url: fullpath});
+		if (fullpath.indexOf('http') < 0) {
+			// Local assets
+			return Texture.fromLocalImage(fullpath);
+		}
 
-		var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight())
-		//console.log('********** fromImage', img.getWidth(), img.getHeight());
-		tex.image = img
+		// Remote assets are loaded into the cache
+		var localpath = define.mapToCacheDir(fullpath);
+		try {
+			if (fs.statSync(localpath).isFile()) {
+				// File is already in the cache
+				return Texture.fromLocalImage(localpath);
+			}
+		}
+		catch (e) {
+		}
 
-		if (DaliApi.emitcode) {
-			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + fullpath + '\'});');
-		}		
+		// Load the image into the cache.
+		define.httpGetCached(fullpath).then(function(result){
+			var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight());
+			var img = new dali.ResourceImage({url: result.path});
+			tex.image = img;
 
-		return tex
+			if (callback)
+				callback(tex);
+		});
 	}
 
 	Texture.fromArray = function(array, w, h){

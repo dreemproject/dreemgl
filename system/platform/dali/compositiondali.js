@@ -18,17 +18,18 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	};
 
 	this.atConstructor = function(previous, parent, baseurl){
-		console.log('compositiondali', previous, parent, baseurl);
+		//console.log('compositiondali', previous, parent, baseurl);
 
-		// baseurl can contain a screen name. Remove query parameters and
-		// store as this.query
+		// baseurl can contain a screen name (if remote).
+		// Remove query parameters and store as this.query
 		this.baseurl = baseurl;
-		var pos = this.baseurl.indexOf('?');
-		if (pos >= 0) {
-			this.query = this.baseurl.substring(pos+1);
-			this.baseurl = this.baseurl.substring(0, pos);
+		if (this.baseurl) {
+			var pos = this.baseurl.indexOf('?');
+			if (pos >= 0) {
+				this.query = this.baseurl.substring(pos+1);
+				this.baseurl = this.baseurl.substring(0, pos);
+			}
 		}
-
 		//TODO
 		//previous = null
 		//parent = null

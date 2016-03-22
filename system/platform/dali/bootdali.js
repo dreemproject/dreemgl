@@ -27,10 +27,20 @@ define.class(function(require){
 	var ScriptError = require('$system/parse/scripterror')
 	var legacy_support = 0
 
+	var Texture = require('$system/platform/$platform/texture$platform')
+
 	this.atConstructor = function(
 		args, //Object: Process arguments
 		compname, //String: name of the composition
 		rootserver){ //TeemServer: teem server object
+
+		define.$platform = 'dali'
+
+		// Called from define.noderequirewrapper to load a texture
+		define.loadImage = function(name){
+			//console.log('loadImage', name);
+			return new Texture.Image(name)
+		}
 
 		// Dali stage settings (from command-line), or defaults
 		this.width = parseInt(args['-width']) || 1920;
