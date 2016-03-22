@@ -74,7 +74,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 	}
 
-	this.keydownDelete = function(){
+	this.keydownBackspace = this.keydownDelete = function(){
 		this.find("flowgraph").removeConnection(this);
 	}
 
@@ -83,7 +83,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.keydown = function(v){
-		this.screen.defaultKeyboardHandler(this, v);
+		this.screen.defaultKeyboardHandler.call(this, v);
 	}
 
 	this.over = false;

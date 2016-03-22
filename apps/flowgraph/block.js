@@ -30,7 +30,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		view_main: {bgcolor: "#292929", width: this.mainwidth, flex: 1, margin: 1,justifycontent: "center"},
 		view_header: {width: this.mainwidth, bgcolor: NaN, flex: 1, justifycontent: "space-between"},
 
-		button_header: {buttoncolor2: "#292929", buttoncolor1: "#292929", bordercolor: "#292929", marginright: 4},
+		button_header: {buttoncolor2: "transparent", buttoncolor1: "transparent", bordercolor: "transparent", marginright: 4},
 		view_between1: {bgcolor: NaN, width: this.mainwidth, flex: 1, justifycontent: "space-between"},
 		view_between2: {bgcolor: NaN, position: "relative", x: 8,alignself: "flex-start", flexdirection: "column"},
 		view_head: {bgcolor: NaN, position: "relative", x: -8,alignself: "flex-start", flexdirection: "column"},
@@ -345,12 +345,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			view({class: 'header',alignitems: "center" }
 				,view({bgcolor: NaN, justifycontent: "center", alignitems: "center" }
 					,label({text: this.title,class: 'head'})
-					,button({class: "header", icon: "pencil",click: function(e){this.renameBlock(e);}.bind(this)})
+					,button({
+						class: "header",
+						icon: "pencil",
+						click: function(e){this.renameBlock(e);}.bind(this)})
 				)
 				,button({class: "header", icon: "remove",click: function(e){this.removeBlock(e);}.bind(this)})
 			)
-			,view({class: 'main'},
-				view({bgimage: require("./placeholder.png") })
+			,view({class: 'main', height:20, bgcolor:vec4(0.2,0.3,0.3,0.5)}
 			)
 			,view({class: 'between1'}
 				,view({class: 'head',render: function(){return this.renderInputs()}.bind(this)}
