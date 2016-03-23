@@ -578,13 +578,27 @@ define.class('$ui/view', function(require,
 
 			if (node.wires) {
 				for (var j = 0; j < node.wires.length; j++) {
-					var w = node.wires[j]
-					res.push(connection({
-						from:w.from,
-						fromoutput:w.output,
-						to:node.name,
-						toinput:w.input
-					}))
+					var w = node.wires[j];
+
+					// check to make sure the other wire recognizes this as a flow-visible attribute
+					var found = false;
+					for (var k=0;k<node.inputs.length;k++) {
+						var input = node.inputs[k];
+						if (w.input === input.name) {
+							found = true;
+							break;
+						}
+					}
+
+					if (found) {
+						res.push(connection({
+							from:w.from,
+							fromoutput:w.output,
+							to:node.name,
+							toinput:w.input
+						}))
+					}
+
 				}
 			}
 		}
@@ -608,16 +622,18 @@ define.class('$ui/view', function(require,
 			if (!fd) {
 				fd = {x:0, y:0}
 			}
-			res.push(
-				block({
-					flowdata:fd,
-					pos:vec3(fd.x, fd.y, 0),
-					name:node.name,
-					title:uppercaseFirst(node.classname + ': ' + node.name),
-					inputs:node.inputs,
-					outputs:node.outputs
-				})
-			)
+			if (fd.visible !== false) {
+				res.push(
+					block({
+						flowdata:fd,
+						pos:vec3(fd.x, fd.y, 0),
+						name:node.name,
+						title:uppercaseFirst(node.classname + ': ' + node.name),
+						inputs:node.inputs,
+						outputs:node.outputs
+					})
+				)
+			}
 		}
 		return res
 	}

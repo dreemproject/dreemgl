@@ -121,21 +121,26 @@ define.class(function(require){
 		// These rpc attributes we will write directly into the header so that they are available even before the screen connects
 		var preloadattrs = {};
 
-		// preload_rpc_attributes can be `true` to include everything or an array of `rpcobj_rpcattr` identifiers
-		var preload = this.composition.preload_rpc_attributes;
-		if (preload === true) {
-			preloadattrs = this.composition.server_attributes;
-		} else if (Array.isArray(preload)) {
-			for (var i = 0; i< preload.length;i++) {
-				var key = preload[i];
-				var attr = this.composition.server_attributes[key];
-				if (attr) {
-					preloadattrs[key] = attr
+		var additionalHeader = "";
+
+		if (this.composition) {
+
+			// preload_rpc_attributes can be `true` to include everything or an array of `rpcobj_rpcattr` identifiers
+			var preload = this.composition.preload_rpc_attributes;
+			if (preload === true) {
+				preloadattrs = this.composition.server_attributes;
+			} else if (Array.isArray(preload)) {
+				for (var i = 0; i< preload.length;i++) {
+					var key = preload[i];
+					var attr = this.composition.server_attributes[key];
+					if (attr) {
+						preloadattrs[key] = attr
+					}
 				}
 			}
+			additionalHeader = this.composition.headHTML || "";
 		}
 
-		var additionalHeader = this.composition.headHTML || "";
 
 		return '<html lang="en">\n'+
 			' <head>\n'+
