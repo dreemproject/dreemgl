@@ -18,6 +18,39 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		// create a little stamp based button with hover anim
 		define.class(this, 'Button', '$base/stamp', function(){
 
+			define.class(this, 'SubStamp', '$base/stamp', function(){
+
+				define.class(this, 'Background', '$shaders/rectshader', function(){
+					this.fgcolor = [0.25,0,0.5,1]
+					//this.content = ""
+					this.align = 'left|top'
+					this.padding = 3
+					this.margin = 2
+					//this.left = 0
+					//this.top = 0
+					this.w = 100
+				})
+			
+				this.onpointerhover = function(event){
+					this.fgcolorBackground = Animate({1:[0,1,0,1]})
+				}
+
+				this.draw = function(){
+					var c = this.canvas
+					c.beginBackground(this)
+					c.drawRect(auto, auto, 20,20)
+					c.endBackground()
+				}
+
+				this.canvasverbs = {
+					draw: function(x, y, w, h){
+						this.GETSTAMP()
+						this.ARGSTO(stamp)
+						stamp.draw()
+					}
+				}
+			})
+
 			define.class(this, 'Label', '$shaders/fontshader', function(){
 				//this.align = 'center'
 				this.margin = [5,5,5,5]
@@ -42,8 +75,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.fgcolor = [0.25,0.25,0.25,1]
 				//this.content = ""
 				this.align = 'left|top'
-				this.padding = 5
-				this.margin = 1
+				this.padding = 0
+				this.margin = 10
 				this.w = 300
 			})
 
@@ -57,7 +90,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				var c = this.canvas
 				c.beginBackground(this)
 				c.drawLabel(this.text)
-				//c.drawIcon2(this.icon)
+				c.drawSubStamp()
 				c.drawIcon(this.icon)
 				c.endBackground()
 			}
@@ -73,6 +106,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.Rect = function(){
 			this.align = 'right|top'
+			this.w = fill
+			this.h = 20
 		}
 
 		this.draw = function(){
@@ -80,16 +115,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
-			c.beginAlign(c.TOP)
+			c.beginAlign(c.TOP|c.RIGHT)
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 1; i++){
-					c.drawButton('Btn'+i,icons[i+2],50,150)
-					c.drawRect(auto,auto,50,50)
+				for(var i = 0; i < 10; i++){
+					//drawButton('Btn'+i,icons[i+2],50,150)
+					//c.drawRect()//,50,50)
 					//c.draw
-					c.newline()
-					c.drawButton(i,icons[i+1],auto,auto,fill)
+					//c.newline()
+					c.drawButton(i,icons[i+1],auto,auto)
 				}
 				c.stopCache()
 			}

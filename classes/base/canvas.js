@@ -294,6 +294,19 @@ define.class(function(exports){
 				this.x = align.xstart + m3 + cls._left
 			}
 			this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len - 1)
+			// absolutely align a sub thing
+			if(oldalign){
+				var dx = this.x - oldalign.xstart + oldalign.p3
+				var dy = this.y - oldalign.ystart + oldalign.p0
+				var start = oldalign.trackstart
+				this.displaceAlign(start, 'x', dx, 1)
+				this.displaceAlign(start, 'y', dy, 1)
+			}
+			var maxx = this.x + this.w + m3
+			if(maxx > align.maxx) align.maxx = maxx
+			var maxy = this.y + this.h + m0
+			if( maxy> align.maxy) align.maxy = maxy
+
 			return
 		}
 
@@ -305,10 +318,6 @@ define.class(function(exports){
 
 		align.x += this.w + m3 + m1
 		var hs = this.h + m0 + m2
-
-		//if(hs > align.maxh){
-		//	align.maxh = hs
-		//}
 
 		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x > align.wrapx){
 			align.x = align.xstart 

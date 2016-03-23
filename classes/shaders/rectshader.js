@@ -44,12 +44,12 @@ define.class('$shaders/pickshader', function(require){
 			)
 			this.GETBUFFER()
 		},
-		end:function(){
+		end:function(dbg){
 			var oldalign = this.align 
 			this.endAlign()
 			var buffer = this.bufferNAME
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
-				this.align.computeh = false
+				//this.align.computeh = false
 				this.runAlign(this.classNAME, buffer, undefined, 1, oldalign)
 			}
 			else{ // we have to mark our nesting to be absolute and not touched by outer layouts
