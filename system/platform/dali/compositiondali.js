@@ -62,7 +62,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 		}
 		else {
 			// Stub out rpc when running locally
-			console.log('compositiondali.createBus is NOT implemented when running locally');
+			console.log('compositiondali.createBus is NOT supported when running locally');
 			this.bus = {
 				send: function() {}
 			};

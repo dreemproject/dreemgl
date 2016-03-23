@@ -96,8 +96,8 @@ define.class('$system/base/texture', function(exports, require){
 
 		// Load the image into the cache.
 		define.httpGetCached(fullpath).then(function(result){
-			var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight());
 			var img = new dali.ResourceImage({url: result.path});
+			var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight());
 			tex.image = img;
 
 			if (callback)
