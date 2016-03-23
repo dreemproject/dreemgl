@@ -382,9 +382,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 				texel: [53.0731212,4.712878]
 			}
 
-			// this.gotoCity('manhattan', 13)
-
-			this.onlatlong()
+			this.gotoCity('manhattan', 13)
 
 			// interval to poll the loadqueue
 			//!TODO maybe remove
