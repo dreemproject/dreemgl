@@ -55,6 +55,7 @@ define.class('$shaders/pickshader', function(require){
 			else{ // we have to mark our nesting to be absolute and not touched by outer layouts
 				this.markAbsolute(oldalign)
 			}
+			//console.error(this.align.x, this.align.y)
 			this.CANVASTOBUFFER()
 		},
 		draw:function(x, y, w, h, margin){

@@ -11,7 +11,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//this.margin = [10,10,0,10],
 			this.fgcolor = vec4('blue')
 			this.color = function(){
-				return mix('red',this.fgcolor,length(mesh.xy*2-1.))
+				return mix(vec4(0,0,0,0),this.fgcolor,length(mesh.xy*2-1.))
 			}
 		}
 
@@ -22,12 +22,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 				define.class(this, 'Background', '$shaders/rectshader', function(){
 					this.fgcolor = [0.25,0,0.5,1]
-					//this.content = ""
 					this.align = 'left|top'
 					this.padding = 3
 					this.margin = 2
-					//this.left = 0
-					//this.top = 0
 					this.w = 100
 				})
 			
@@ -52,18 +49,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			})
 
 			define.class(this, 'Label', '$shaders/fontshader', function(){
-				//this.align = 'center'
 				this.margin = [7,5,5,5]
 				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
-
 			})
 			
 			define.class(this, 'Icon', '$shaders/iconshader', function(){
 				this.fgcolor = 'white'
 				this.fontsize = 20
 				//this.right = 0
-				//this.top = 3
+				//this.top = 0
 				this.margin = [0,5,0,5]
 			})
 			define.class(this, 'Icon2', '$shaders/iconshader', function(){
@@ -74,10 +69,10 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			})
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
-				//this.content = ""
-				this.align = 'left|top'
-				this.padding = 0
-				//this.margin = 10
+				this.aligndraw = ''
+				this.margin = 1
+				this.padding = 10
+				this.w = 50
 			})
 
 			this.onpointerhover = function(event){
@@ -105,9 +100,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		})
 
 		this.Rect = function(){
-			this.align = 'right|top'
 			this.w = fill
-			this.h = 20
+			this.margin = 1
+			this.h = 60
 		}
 
 		this.draw = function(){
@@ -120,8 +115,21 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
 				for(var i = 0; i < 1000; i++){
+					//c.drawRect(auto,auto,10,10)//,50,50)
+
 					c.drawButton('Btn'+i,icons[i+2])
-					//c.drawRect()//,50,50)
+					//c.drawRect()
+					//console.log(c.align.y, c.align.x)
+					//c.newline()
+					//console.log("MARK")
+					//c.drawButton('Btn'+i,icons[i+2])
+					//console.log(c.align.x, c.align.y)
+					
+					//c.drawRect(auto,auto,fill,50)
+					//c.drawRect(auto,auto,20,20)//,50,50)
+					//c.drawRect(auto,auto,20,20)//,50,50)
+					
+					//c.drawRect()
 					//c.draw
 					//c.newline()
 					//c.drawButton(i,icons[i+1],auto,auto)

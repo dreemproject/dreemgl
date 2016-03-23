@@ -41,9 +41,9 @@ define.class('$base/shader', function(require){
 
 	this.pixelentries = ['color','pick']
 
-	Object.defineProperty(this, 'align',{
+	Object.defineProperty(this, 'aligndraw',{
 		set:function(value){
-			this._align = 0
+			this._aligndraw = 0
 			if(typeof value === 'number') return this._align = value
 			if(value.indexOf('left') !== -1) this._align |= Canvas.LEFT
 			if(value.indexOf('top') !== -1) this._align |= Canvas.TOP
@@ -52,7 +52,7 @@ define.class('$base/shader', function(require){
 			if(value.indexOf('nowrap') !== -1) this._align |= Canvas.NOWRAP
 		},
 		get:function(){
-			return this._align
+			return this._aligndraw
 		}
 	})
 

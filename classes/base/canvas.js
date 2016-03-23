@@ -134,7 +134,9 @@ define.class(function(exports){
 		}
 		else if(this.w === fill){
 			align.computew = false
-			this.w = this.width - align.x - align.m1 + align.p1// - align.m3 //+align.p1
+			this.w = this.width - align.x - align.m1 - align.m3 + align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+			if(align.m1+align.m3 === 0) this.w -= 2
+			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3 - 1//- align.p1
 			align.w = this.w - align.p1 - align.p3 
 		}
 		else{
@@ -154,7 +156,7 @@ define.class(function(exports){
 		}
 		else if(this.h === fill){
 			align.computeh = false
-			this.h = this.height - align.y - align.m2 + align.p2
+			this.h = this.height - align.m2 + align.p2
 			align.h = this.h - align.p0 - align.p2
 		}
 		else{
@@ -250,6 +252,8 @@ define.class(function(exports){
 		
 		this.x = oldalign.inx
 		this.y = oldalign.iny
+
+		//if(align && align.maxy< oldalign.maxy) align.maxy = oldalign.maxy
 	}
 
 	this.runAlign = function(cls, buffer, range, imargin, oldalign){
@@ -322,26 +326,22 @@ define.class(function(exports){
 		this.y = align.y + m0
 
 		align.x += this.w + m3 + m1
+
 		var hs = this.h + m0 + m2
+		//console.log(first, align.y, align.wrapx)
+		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x >= align.wrapx){
 
-		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x > align.wrapx){
 			align.x = align.xstart 
-
-			if(strw){
-				align.maxh = this.h
-				align.y += align.maxy - align.y
-			}
-			else{
-				align.y += align.maxy - align.y//align.lastmaxh || align.maxh
-			}
+			align.y += align.maxy - align.y 
 
 			var newx = align.xstart + m3
-			var newy =  align.y + m0
+			var newy =  align.y + m2
 			var dx = newx - this.x
-			var dy = newy - this.y
-
+			var dy = newy - this.y			
 			align.x += this.w + m3 + m1
-
+			//if(align.x >= align.wrapx ){
+			//	align.x = align.xstart
+			//}
 			if(oldalign){
 				var start = oldalign.trackstart
 				this.displaceAlign(start, 'x', dx, 1)
