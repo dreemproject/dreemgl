@@ -53,16 +53,17 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			define.class(this, 'Label', '$shaders/fontshader', function(){
 				//this.align = 'center'
-				this.margin = [5,5,5,5]
+				this.margin = [7,5,5,5]
 				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
+
 			})
 			
 			define.class(this, 'Icon', '$shaders/iconshader', function(){
-				this.right = 10
-				this.bottom = 0
 				this.fgcolor = 'white'
 				this.fontsize = 20
+				//this.right = 0
+				//this.top = 3
 				this.margin = [0,5,0,5]
 			})
 			define.class(this, 'Icon2', '$shaders/iconshader', function(){
@@ -76,8 +77,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//this.content = ""
 				this.align = 'left|top'
 				this.padding = 0
-				this.margin = 10
-				this.w = 300
+				//this.margin = 10
+				//this.w = 300
 			})
 
 			this.onpointerhover = function(event){
@@ -90,7 +91,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				var c = this.canvas
 				c.beginBackground(this)
 				c.drawLabel(this.text)
-				c.drawSubStamp()
+				//c.drawSubStamp()
 				c.drawIcon(this.icon)
 				c.endBackground()
 			}
@@ -115,22 +116,22 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
-			c.beginAlign(c.TOP|c.RIGHT)
+			c.beginAlign(c.LEFT|c.TOP)
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 10; i++){
-					//drawButton('Btn'+i,icons[i+2],50,150)
+				for(var i = 0; i < 1000; i++){
+					c.drawButton('Btn'+i,icons[i+2])
 					//c.drawRect()//,50,50)
 					//c.draw
 					//c.newline()
-					c.drawButton(i,icons[i+1],auto,auto)
+					//c.drawButton(i,icons[i+1],auto,auto)
 				}
 				c.stopCache()
 			}
 			c.endAlign()
 			//c.endAlign()
-			//console.log(performance.now()-dt)
+			console.log(performance.now()-dt)
 			//c.endAlign()
 			/*
 			// this allows reuse of commandbuffers

@@ -29,7 +29,9 @@ define.class(function(exports){
 		this.align = this.stackAlign[0]
 		this.beginAlign(this.LEFT|this.TOP, this.view.padding)
 	}
-
+	this.CENTER = 0
+	this.VCENTER = 0
+	this.HCENTER = 0
 	this.LEFT = 1
 	this.TOP = 2
 	this.RIGHT = 4
@@ -162,6 +164,10 @@ define.class(function(exports){
 
 		align.flags = flags
 		align.trackstart = this.trackAlign && this.trackAlign.length || 0
+		// bounding rect (includes abs position)
+		align.boundx = 0
+		align.boundy = 0
+		// alignment rect (excludes abs position)
 		align.maxx = 0
 		align.maxy = 0
 		align.inh = this.h
@@ -228,17 +234,17 @@ define.class(function(exports){
 		var oldalign = align
 		align = this.align = this.stackAlign[--this.stackAlign.len]
 		
-		if(align && oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
+		//if(align && oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
 
 		// do a bit of math to size our rect to the computed size
 		if(oldalign.computew){
-			this.w = (oldalign.maxx + oldalign.p1 - oldalign.m1)
+			this.w = (oldalign.boundx + oldalign.p1 - oldalign.m1)
 			if(isNaN(oldalign.inx)) this.w -= align.x
 			else this.w -= oldalign.inx
 		}
 		else this.w = oldalign.inw
 		if(oldalign.computeh){
-			this.h = (oldalign.maxy + oldalign.p2 - oldalign.m2)
+			this.h = (oldalign.boundy + oldalign.p2 - oldalign.m2)
 			//console.log(oldalign.iny)
 			if(isNaN(oldalign.iny)) this.h -= align.y
 			else this.h -= oldalign.iny
@@ -279,12 +285,13 @@ define.class(function(exports){
 		}
 
 		if(cls._absolute){
+			//return
 			if(cls._absolute&1){
 				this.y = align.ystart + m0 + cls._top
 			}
 			if(cls._absolute&2){
 				if(isNaN(align.w)) this.x = align.xstart + m3 + cls._right
-				this.x = align.xstart + align.w - this.w - cls._right - m1//0//this.width - this.w//align.xstart - m3 + cls._right
+				else this.x = align.xstart + align.w - this.w - cls._right - m1//0//this.width - this.w//align.xstart - m3 + cls._right
 			}
 			if(cls._absolute&4){
 				if(isNaN(align.h)) this.y = align.ystart + m0 + cls._bottom
@@ -294,19 +301,22 @@ define.class(function(exports){
 				this.x = align.xstart + m3 + cls._left
 			}
 			this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len - 1)
+
 			// absolutely align a sub thing
 			if(oldalign){
 				var dx = this.x - oldalign.xstart + oldalign.p3
 				var dy = this.y - oldalign.ystart + oldalign.p0
+
 				var start = oldalign.trackstart
 				this.displaceAlign(start, 'x', dx, 1)
 				this.displaceAlign(start, 'y', dy, 1)
 			}
-			var maxx = this.x + this.w + m3
-			if(maxx > align.maxx) align.maxx = maxx
-			var maxy = this.y + this.h + m0
-			if( maxy> align.maxy) align.maxy = maxy
-
+			if(!cls.noabsolutebounds){
+				var maxx = this.x + this.w + m3
+				if(maxx > align.boundx) align.boundx = maxx
+				var maxy = this.y + this.h + m0
+				if( maxy> align.boundy) align.boundy = maxy
+			}
 			return
 		}
 
@@ -348,9 +358,13 @@ define.class(function(exports){
 			this.y = newy
 		}
 		//align.lastmaxh = align.maxh
-		if(align.x > align.maxx) align.maxx = align.x
+		var ax = align.x
+		if( ax > align.maxx) align.maxx = ax
+		if( ax > align.boundx) align.boundx = ax
 		var hy = align.y + hs
 		if( hy> align.maxy) align.maxy = hy
+		if( hy > align.boundy) align.boundy = hy
+
 	}
 
 	// break terminates an align cycle and does a newline
