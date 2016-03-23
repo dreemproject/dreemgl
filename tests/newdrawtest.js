@@ -69,10 +69,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 1000; i++){
+				for(var i = 0; i < 300; i++){
 					c.drawButton('Btn'+i,icons[i])
-					//c.drawButton('Thing2',icons[10],auto,auto,fill,40)
-					//c.drawRect(auto,auto,fill,10)
+					//c.newline()
+					c.drawButton(i,icons[i+1],auto,auto,fill)
+					c.drawRect(auto,auto,fill,50)
 				}
 				console.log(performance.now()-dt)
 				c.stopCache()

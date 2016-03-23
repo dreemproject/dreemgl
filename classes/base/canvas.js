@@ -131,7 +131,7 @@ define.class(function(exports){
 			align.w = this.w - align.p1 - align.p3 
 		}
 		else if(this.w === fill){
-			this.w = this.width - (align.m1 + align.m3)
+			this.w = this.width - align.x - align.m1 + align.p1// - align.m3 //+align.p1
 			align.computew = false
 			align.w = this.w - align.p1 - align.p3 
 		}
@@ -150,8 +150,8 @@ define.class(function(exports){
 			align.computeh = true
 			align.h = this.h - align.p0 - align.p2
 		}
-		else if(this.w === fill){
-			this.h = this.height - (align.m0 + align.m2)
+		else if(this.h === fill){
+			this.h = this.height - align.y - align.m2 + align.p2
 			align.computeh = false
 			align.h = this.h - align.p0 - align.p2
 		}
@@ -259,11 +259,11 @@ define.class(function(exports){
 		var strw, strh
 		if(this.w === fill){
 			strw = true
-			this.w = this.width
+			this.w = this.width - align.xstart - m3
 			this.w -= m1 + m3
 		}
 		if(this.h === fill){
-			this.h = this.height
+			this.h = this.height - align.y
 			this.h -= m0 + m2
 		}
 
@@ -294,7 +294,7 @@ define.class(function(exports){
 		//	align.maxh = hs
 		//}
 
-		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x >= align.wrapx){
+		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x > align.wrapx){
 			align.x = align.xstart 
 
 			if(strw){
@@ -332,7 +332,7 @@ define.class(function(exports){
 	this.newline = function(height){
 		var align = this.align
 		align.x = align.xstart 
-		align.y += align.maxh
+		align.y += align.maxy - align.y
 	}
 
 	this.addCanvas = function(ctx, index){
