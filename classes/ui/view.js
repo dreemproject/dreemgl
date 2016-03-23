@@ -589,14 +589,24 @@ define.class('$system/base/node', function(require){
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
-		var img = shader.texture = (image.array) ? image : Shader.Texture.fromImage(image)
-		if(this.bgimagemode === "resize"){
-			this._size = img.size
-			this.relayout()
-		} else if (img) {
-			this.onbgimagemode()
-		}
-		else this.redraw()
+
+		// Callback method to update the bgimage. Some platforms support a
+		// second argument to Texture.fromImage for delayed loading
+		var update = function(img) {
+			if (!img)
+				return;
+
+			shader.texture = img;
+			if(this.bgimagemode === "resize"){
+				this._size = img.size
+				this.relayout()
+			} else if (img) {
+				this.onbgimagemode()
+			}
+			else this.redraw()
+		}.bind(this)
+
+		update((image.array) ? image : Shader.Texture.fromImage(image, update));
 	}
 
 	// internal, emit an event upward (to all parents) untill a listener is hit

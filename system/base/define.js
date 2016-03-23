@@ -1337,7 +1337,7 @@
 		}
 
 		// fetch it async!
-		function httpGetCached(httpurl){
+		define.httpGetCached = function(httpurl){
 			return new define.Promise(function(resolve, reject){
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
@@ -1442,7 +1442,7 @@
 				// we need to fetch the url, then look at its dependencies, fetch those
 				return define.download_queue[modurl] = new define.Promise(function(resolve, reject){
 					// lets make sure we dont already have the module in our system
-					httpGetCached(modurl).then(function(result){
+					define.httpGetCached(modurl).then(function(result){
 
 						// the root
 						if(result.type === 'text/json' && define.fileExt(parsedmodurl.path) === ''){
@@ -1537,16 +1537,18 @@
 					console.log("Cannot find "+e+" in module "+module.filename)
 					throw e
 				}
+
 				if(name.indexOf('://') !== -1){
 					name = define.mapToCacheDir(name)
 				}
 
+				var full_name = name;
 				try{
-					var full_name = Module._resolveFilename(name, module)
+					full_name = Module._resolveFilename(name, module)
 				}
 				catch(e){
-					console.log("Cannot find module " + name + ' in module! ' + module.filename)
-					throw e
+					// Don't generate an error becaues the image might be
+					// remote, or a relative path was specified.
 				}
 				if (full_name instanceof Array) full_name = full_name[0]
 
@@ -1560,13 +1562,6 @@
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
 						if(define.loadImage) return define.loadImage(name)
-						//if(define.$platform === 'dali' || define.$platform === 'nodegl'){
-						//	var tex = define.expandVariables('$system/platform/$platform/texture$platform')
-						//	var Texture = define.require(tex);
-						//	return new Texture.Image(name)
-						// 	return {path:name}
-						//}
-						//console.log('READING PNG', define.$platform)
 						return undefined
 					}
 					else{
