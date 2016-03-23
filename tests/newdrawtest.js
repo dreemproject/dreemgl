@@ -78,7 +78,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.align = 'left|top'
 				this.padding = 0
 				//this.margin = 10
-				//this.w = 300
 			})
 
 			this.onpointerhover = function(event){
@@ -131,7 +130,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 			c.endAlign()
 			//c.endAlign()
-			console.log(performance.now()-dt)
+			//console.log(performance.now()-dt)
 			//c.endAlign()
 			/*
 			// this allows reuse of commandbuffers

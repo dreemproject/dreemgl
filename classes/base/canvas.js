@@ -123,18 +123,18 @@ define.class(function(exports){
 		align.ystart = align.y = ys + align.p0 + align.m0 //+ align.m2
 
 		if(this.w === undefined){
-			flags = flags | this.LEFT
 			align.computew = true
+			flags = flags | this.LEFT
 			align.wrapx = this.width
 		}
 		else if(this.w === auto){
-			flags = flags | this.LEFT
 			align.computew = true
+			flags = flags | this.LEFT
 			align.w = this.w - align.p1 - align.p3 
 		}
 		else if(this.w === fill){
-			this.w = this.width - align.x - align.m1 + align.p1// - align.m3 //+align.p1
 			align.computew = false
+			this.w = this.width - align.x - align.m1 + align.p1// - align.m3 //+align.p1
 			align.w = this.w - align.p1 - align.p3 
 		}
 		else{
@@ -144,17 +144,17 @@ define.class(function(exports){
 		}
 
 		if(this.h === undefined){
-			flags = flags | this.TOP
 			align.computeh = true
+			flags = flags | this.TOP
 		}
 		else if(this.h === auto){
-			flags = flags | this.TOP
 			align.computeh = true
+			flags = flags | this.TOP
 			align.h = this.h - align.p0 - align.p2
 		}
 		else if(this.h === fill){
-			this.h = this.height - align.y - align.m2 + align.p2
 			align.computeh = false
+			this.h = this.height - align.y - align.m2 + align.p2
 			align.h = this.h - align.p0 - align.p2
 		}
 		else{
@@ -233,8 +233,6 @@ define.class(function(exports){
 
 		var oldalign = align
 		align = this.align = this.stackAlign[--this.stackAlign.len]
-		
-		//if(align && oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
 
 		// do a bit of math to size our rect to the computed size
 		if(oldalign.computew){
@@ -245,16 +243,13 @@ define.class(function(exports){
 		else this.w = oldalign.inw
 		if(oldalign.computeh){
 			this.h = (oldalign.boundy + oldalign.p2 - oldalign.m2)
-			//console.log(oldalign.iny)
 			if(isNaN(oldalign.iny)) this.h -= align.y
 			else this.h -= oldalign.iny
-			//console.log(oldalign.y)
 		}
 		else this.h = oldalign.inh
 		
 		this.x = oldalign.inx
 		this.y = oldalign.iny
-		//if(dy > align.maxh) align.maxh = dy
 	}
 
 	this.runAlign = function(cls, buffer, range, imargin, oldalign){
@@ -339,7 +334,6 @@ define.class(function(exports){
 			else{
 				align.y += align.maxy - align.y//align.lastmaxh || align.maxh
 			}
-			//console.log(align.y)
 
 			var newx = align.xstart + m3
 			var newy =  align.y + m0
@@ -349,7 +343,6 @@ define.class(function(exports){
 			align.x += this.w + m3 + m1
 
 			if(oldalign){
-				//console.log('here')
 				var start = oldalign.trackstart
 				this.displaceAlign(start, 'x', dx, 1)
 				this.displaceAlign(start, 'y', dy, 1)
