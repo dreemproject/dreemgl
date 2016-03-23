@@ -1,7 +1,5 @@
 define.class('$shaders/pickshader', function(require){
 
-	var Canvas = require('$base/canvas').prototype
-
 	this.position = function(){
 		if(canvas.visible < 0.5) return vec4(0.)
 		var pos = vec3(canvas.x + mesh.x * canvas.w, canvas.y + mesh.y * canvas.h, canvas.z)
@@ -35,30 +33,12 @@ define.class('$shaders/pickshader', function(require){
 		z:float
 	}
 
-	Object.defineProperty(this, 'content',{
-		set:function(value){
-			this._content = 0
-			if(value.indexOf('left') !== -1) this._content |= Canvas.LEFT
-			if(value.indexOf('top') !== -1) this._content |= Canvas.TOP
-			if(value.indexOf('right') !== -1) this._content |= Canvas.RIGHT
-			if(value.indexOf('bottom') !== -1) this._content |= Canvas.BOTTOM
-			if(value.indexOf('nowrap') !== -1) this._content |= Canvas.NOWRAP
-		},
-		get:function(){
-			return this._content
-		}
-	})
-
-	this.margin = [0,0,0,0]
-	this.padding = [0,0,0,0]
-	this.content = ''
-
 	this.canvasverbs = {
 		begin:function(x, y, w, h, margin, padding, flags){
 			this.RECTARGS()
 			this.x = x, this.y = y, this.w = w, this.h = h
 			this.beginAlign(
-				flags !== undefined? flags: this.classNAME._content, 
+				flags !== undefined? flags: this.classNAME._align, 
 				margin !== undefined? margin: this.classNAME.margin,
 				padding !== undefined? padding: this.classNAME.padding
 			)
@@ -69,7 +49,11 @@ define.class('$shaders/pickshader', function(require){
 			this.endAlign()
 			var buffer = this.bufferNAME
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
+				this.align.computeh = false
 				this.runAlign(this.classNAME, buffer, undefined, 1, oldalign)
+			}
+			else{ // we have to mark our nesting to be absolute and not touched by outer layouts
+				this.markAbsolute(oldalign)
 			}
 			this.CANVASTOBUFFER()
 		},

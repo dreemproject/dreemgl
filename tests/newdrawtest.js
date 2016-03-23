@@ -19,23 +19,32 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		define.class(this, 'Button', '$base/stamp', function(){
 
 			define.class(this, 'Label', '$shaders/fontshader', function(){
+				//this.align = 'center'
 				this.margin = [5,5,5,5]
 				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
 			})
 			
 			define.class(this, 'Icon', '$shaders/iconshader', function(){
+				this.right = 10
+				this.bottom = 0
 				this.fgcolor = 'white'
 				this.fontsize = 20
 				this.margin = [0,5,0,5]
 			})
-
+			define.class(this, 'Icon2', '$shaders/iconshader', function(){
+				///this.align = 'center'
+				this.fgcolor = 'white'
+				this.fontsize = 20
+				this.margin = [0,5,0,5]
+			})
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
 				//this.content = ""
+				this.align = 'left|top'
 				this.padding = 5
 				this.margin = 1
-			//	this.w = 300
+				this.w = 300
 			})
 
 			this.onpointerhover = function(event){
@@ -48,6 +57,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				var c = this.canvas
 				c.beginBackground(this)
 				c.drawLabel(this.text)
+				//c.drawIcon2(this.icon)
 				c.drawIcon(this.icon)
 				c.endBackground()
 			}
@@ -61,23 +71,29 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 		})
 
+		this.Rect = function(){
+			this.align = 'right|top'
+		}
+
 		this.draw = function(){
 			var c = this.canvas 
 			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
+			c.beginAlign(c.TOP)
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 300; i++){
-					c.drawButton('Btn'+i,icons[i])
-					//c.newline()
+				for(var i = 0; i < 1; i++){
+					c.drawButton('Btn'+i,icons[i+2],50,150)
+					c.drawRect(auto,auto,50,50)
+					//c.draw
+					c.newline()
 					c.drawButton(i,icons[i+1],auto,auto,fill)
-					c.drawRect(auto,auto,fill,50)
 				}
-				console.log(performance.now()-dt)
 				c.stopCache()
 			}
+			c.endAlign()
 			//c.endAlign()
 			//console.log(performance.now()-dt)
 			//c.endAlign()

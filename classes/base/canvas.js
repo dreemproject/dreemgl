@@ -172,10 +172,13 @@ define.class(function(exports){
 
 	this.displaceAlign = function(start, key, displace, dbg){
 		var track = this.trackAlign
-		for(var i = start; i < track.length; i += 3){
+		var current = this.stackAlign.len
+		for(var i = start; i < track.length; i += 4){
 			var buf = track[i]
 			var off = track[i+1]
 			var range = track[i+2]
+			var level = track[i+3]
+			if(current > level) continue
 			var slots = buf.struct.slots
 			var rel = buf.struct.offsets[key]
 			var array = buf.array
@@ -185,7 +188,15 @@ define.class(function(exports){
 			}
 		}
 	}
-	
+		
+	this.markAbsolute = function(align){
+		var start = align.trackstart
+		var track = this.trackAlign
+		for(var i = start; i < track.length; i += 4){
+			track[i+3] = -1
+		}
+	}
+
 	this.endAlign = function(){
 		// if we are align HCENTER/RIGHT lets do the h-align.
 		var align = this.align
@@ -193,7 +204,6 @@ define.class(function(exports){
 		var dy = align.maxy - align.ystart
 
 		var start = align.trackstart
-
 		
 		if(align.flags & this.LEFT){
 		}
@@ -218,7 +228,7 @@ define.class(function(exports){
 		var oldalign = align
 		align = this.align = this.stackAlign[--this.stackAlign.len]
 		
-		if(oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
+		if(align && oldalign.maxh > align.maxh) align.maxh  = oldalign.maxh
 
 		// do a bit of math to size our rect to the computed size
 		if(oldalign.computew){
@@ -256,6 +266,7 @@ define.class(function(exports){
 				else m0 = margin[0], m1 = margin[1], m2 = margin[2], m3 = margin[3]
 			}
 		}
+
 		var strw, strh
 		if(this.w === fill){
 			strw = true
@@ -267,21 +278,26 @@ define.class(function(exports){
 			this.h -= m0 + m2
 		}
 
-/*
-		ind+'if(w === stretch){\n'+
-		ind+'\tw = this.width \n'+
-		ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
-		ind+'\tif(typeof _margin === "number") w -= _margin * 2\n'+
-		ind+'\telse if(_margin) w -= (_margin[1] + _margin[3])\n'+
-		ind+'}\n'+
-		ind+'if(h === stretch){\n'+
-		ind+'\th = this.height\n'+
-		ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
-		ind+'\tif(typeof _margin === "number") h -= _margin * 2\n'+
-		ind+'\telse if(_margin) h -= (_margin[0] + _margin[2])\n'+
-		ind+'}\n'*/
+		if(cls._absolute){
+			if(cls._absolute&1){
+				this.y = align.ystart + m0 + cls._top
+			}
+			if(cls._absolute&2){
+				if(isNaN(align.w)) this.x = align.xstart + m3 + cls._right
+				this.x = align.xstart + align.w - this.w - cls._right - m1//0//this.width - this.w//align.xstart - m3 + cls._right
+			}
+			if(cls._absolute&4){
+				if(isNaN(align.h)) this.y = align.ystart + m0 + cls._bottom
+				else this.y = align.ystart + align.h - this.h - m2//t - align.ystart + m3 + cls._bottom
+			}
+			if(cls._absolute&8){
+				this.x = align.xstart + m3 + cls._left
+			}
+			this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len - 1)
+			return
+		}
 
-		this.trackAlign.push(buffer, buffer.length, range || 1)
+		this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len)
 
 		var first = Math.abs(align.x-align.xstart) < 0.001
 		this.x = align.x + m3 

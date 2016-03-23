@@ -1,6 +1,8 @@
 define.class('$base/shader', function(require){
 	// baseclass shader with a pick entry point for UI picking
 
+	var Canvas = require('$base/canvas').prototype
+
 	this.noise = require('./shaderlib/noiselib')
 	this.pal = require('./shaderlib/palettelib')
 	this.shape = require('./shaderlib/shapelib')
@@ -38,6 +40,58 @@ define.class('$base/shader', function(require){
 	}
 
 	this.pixelentries = ['color','pick']
+
+	Object.defineProperty(this, 'align',{
+		set:function(value){
+			this._align = 0
+			if(typeof value === 'number') return this._align = value
+			if(value.indexOf('left') !== -1) this._align |= Canvas.LEFT
+			if(value.indexOf('top') !== -1) this._align |= Canvas.TOP
+			if(value.indexOf('right') !== -1) this._align |= Canvas.RIGHT
+			if(value.indexOf('bottom') !== -1) this._align |= Canvas.BOTTOM
+			if(value.indexOf('nowrap') !== -1) this._align |= Canvas.NOWRAP
+		},
+		get:function(){
+			return this._align
+		}
+	})
+
+	this._absolute = 0
+	Object.defineProperty(this, 'top',{
+		set:function(value){
+			if(value === undefined) return this._absolute &= 2|4|8
+			this._top = value
+			this._absolute |= 1
+		},
+		get:function(){return this._top}
+	})
+	Object.defineProperty(this, 'right',{
+		set:function(value){
+			if(value === undefined) return this._absolute &= 1|4|8
+			this._right = value
+			this._absolute |= 2
+		},
+		get:function(){return this._right}
+	})
+	Object.defineProperty(this, 'bottom',{
+		set:function(value){
+			if(value === undefined) return this._absolute &= 1|2|8
+			this._bottom = value
+			this._absolute |= 4
+		},
+		get:function(){return this._bottom}
+	})
+	Object.defineProperty(this, 'left',{
+		set:function(value){
+			if(value === undefined) return this._absolute &= 1|2|4
+			this._left = value
+			this._absolute |= 88
+		},
+		get:function(){return this._left}
+	})
+
+	this.margin = [0,0,0,0]
+	this.padding = [0,0,0,0]
 
 	this.canvas = {
 		pickdraw:float,

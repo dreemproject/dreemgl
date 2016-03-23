@@ -520,6 +520,7 @@ define.class('$base/node', function(require){
 			this.atAttributeGetFlag = 0
 			this.draw_dirty = false
 		}
+		c.endAlign()
 		this.layoutchanged = false
 		// check time
 		if(this._flag_time&2 || redraw){
