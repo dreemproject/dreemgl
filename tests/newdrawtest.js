@@ -46,7 +46,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.draw = function(){
 				var c = this.canvas
-				c.beginBackground()
+				c.beginBackground(this)
 				c.drawLabel(this.text)
 				c.drawIcon(this.icon)
 				c.endBackground()
@@ -70,7 +70,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
 				for(var i = 0; i < 1000; i++){
-					c.drawButton(icons[i],icons[10])//,auto,auto,auto,40)
+					c.drawButton('Btn'+i,icons[i])
 					//c.drawButton('Thing2',icons[10],auto,auto,fill,40)
 					//c.drawRect(auto,auto,fill,10)
 				}
