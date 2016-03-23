@@ -8,32 +8,30 @@ define.class(function(require, $ui$, view){
 
 	define.class(this, 'shape3d', this.Shader, function(){
 		this.draworder = 0
-		
+
 		this.depth_test = 'src_depth < dst_depth'
-		
+
 		this.vertexstruct = define.struct({
 			pos: vec3,
 			norm: vec3,
 			uv: vec2
 		})
-	
+
 		this.diffusecolor = vec4("#ffffff")
 		this.mesh = this.vertexstruct.array()
-		
-		this.position = function() {				
-			
+
+		this.position = function() {
 			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix)
 			transnorm = temp.xyz
 			pos = vec4(mesh.pos, 1) * view.totalmatrix * view.viewmatrix
-			return pos // * matrix *viewmatrix
+			return pos
 		}
-				
+
 		this.color = function() {
-			//return vec4("yellow") ;			
 			var tn = normalize(transnorm.xyz);
-			return vec4(tn*0.5+0.5,1.0);		
+			return vec4(tn * 0.5 + 0.5, 1.0);
 		}
 	})
-	this.shape3d = true	
+	this.shape3d = true
 	this.hardrect =false;
 })

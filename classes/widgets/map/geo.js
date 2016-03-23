@@ -23,8 +23,6 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define.class(function(require, $server$, service){
-
-
 	this.init = function(){
 		console.log("geo init");
 	}
