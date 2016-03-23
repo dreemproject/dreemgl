@@ -88,11 +88,13 @@ define.class(function(require, exports){
 		this.animFrame = function(time){
 			//console.log('animFrame', time);
 			var interval = 16;
-			var t = this.doColor(time);
+			var cur = new Date().getTime();
+			var t = this.doColor(cur);
+
 			if(t){
 				this.anim_req = true
-                this.time += interval;
-                setTimeout(function() {this.animFrame(this.time);}.bind(this), interval)
+        this.time += interval;
+        setTimeout(function() {this.animFrame(this.time);}.bind(this), interval)
 			}
 			else this.anim_req = false
 			//if(this.pick_resolve.length) this.doPick()

@@ -243,12 +243,13 @@ define.class(function(exports){
 	 * @param {Object} Format hash, suitable for dali.PropertyBuffer.
 	 * The hash looks like {name : type}. See dali docs for dali.PropertyBuffer.
 	 * @param {Number} nrecs The number of records, in the buffer.
+	 * @param {Boolean} cache Set to true to re-use dali.PropertyBuffers.
 	 * @return {Object} [dali.PropertyBuffer, id]. This is the same value stored
 	 * in the cache DaliApi.BufferCache.
 	 */
 	DaliApi.BufferId = 0
 	DaliApi.BufferCache = {}; // key: hash  value: [Dali.PropertyBuffer, id]
-	DaliApi.daliBuffer = function(vals, format, nrecs) {
+	DaliApi.daliBuffer = function(vals, format, nrecs, cache) {
 		//console.log('daliBuffer format', format, 'nrecs', nrecs, 'vals', vals.length);
 		var dali = DaliApi.dali;
 
@@ -258,9 +259,11 @@ define.class(function(exports){
 		// console.trace('daliBuffer with', nrecs, 'items', 'length = ', data.length);
 
 		// Reuse an existing propertybuffer
-		var hash = DaliApi.getHash(vals);
-		if (DaliApi.BufferCache[hash]) {
-			return DaliApi.BufferCache[hash];
+		if (cache) {
+			var hash = DaliApi.getHash(vals);
+			if (DaliApi.BufferCache[hash]) {
+				return DaliApi.BufferCache[hash];
+			}
 		}
 
 		// Create the dali.PropertyBuffer
@@ -277,7 +280,10 @@ define.class(function(exports){
 		DaliApi.writeDaliBuffer(buffer, DaliApi.BufferId, data);
 
 		var ret = [buffer, DaliApi.BufferId];
-		DaliApi.BufferCache[hash] = ret;
+		if (cache) {
+			DaliApi.BufferCache[hash] = ret;
+		}
+
 		return ret;
 	}
 

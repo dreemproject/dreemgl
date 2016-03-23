@@ -264,6 +264,8 @@ define.class(function(require, exports){
 	this.addAttributeGeometry = function(shader_dali, attrlocs) {
 		var dali = DaliApi.dali;
 
+		var object_id = 'attribgeom_' + shader_dali.view.name;
+
 		if (Object.keys(attrlocs) == 0)
 			return;
 
@@ -345,7 +347,7 @@ define.class(function(require, exports){
 
 		// Add or update a vertex buffer
 		if (data.length > 0)
-			this.updateVertexBuffer('attribgeom', data, format, nslots);
+			this.updateVertexBuffer(object_id, data, format, nslots);
 	}
 
 
@@ -366,11 +368,14 @@ define.class(function(require, exports){
 		var buffer;
 		var bufferindex;
 
+		// Cache [hash of format, hash of data, dali buffer index, dali.PropertyBuffer, our buffer id, length of data, number of items per data point ]
 		var cache = this.vertex_buffers[name];
 		if (cache) {
 			var oformathash = cache[0];
 			var odatahash = cache[1];
-			if (format_hash == oformathash) {
+            var data_length = cache[5];
+			var item_length = cache[6];
+			if ((format_hash == oformathash) && (data.length == data_length) && (nitems == item_length)) {
 				if (data_hash == odatahash) {
 					// No change to the value
 					return;
@@ -386,8 +391,11 @@ define.class(function(require, exports){
 				console.log('addGeometry: vertex buffer already exists: ', name, index, '. Removing');
 
 				//TODO daliwrite
-				this.daligeometry.removeVertexBuffer(index);
+				if (index) {
+					this.daligeometry.removeVertexBuffer(index);
+				}
 				delete this.vertex_buffers[name];
+				buffer = null;
 			}
 		}
 
@@ -403,11 +411,12 @@ define.class(function(require, exports){
 			}
 
 			// Store the index so it can be removed later
-			this.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex];
+			this.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex, data.length, nitems];
 		}
 		else {
 			// Update an existing buffer using setData
 			DaliApi.writeDaliBuffer(buffer, bufferindex, data)
+			this.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex, data.length, nitems];
 		}
 
 
