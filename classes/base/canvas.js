@@ -119,7 +119,7 @@ define.class(function(exports){
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
 
-		align.xstart = align.x = xs //+ align.p3	+ align.m3 //+ align.m1
+		align.xstart = align.x = xs + align.p3	+ align.m3 //+ align.m1
 		align.ystart = align.y = ys + align.p0 + align.m0 //+ align.m2
 
 		if(this.w === undefined){
@@ -134,11 +134,9 @@ define.class(function(exports){
 		}
 		else if(this.w === fill){
 			align.computew = false
-			this.w = this.width - align.x - align.m1 - align.m3 -1//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
-			//if(align.m1+align.m3 === 0) this.w -= 1
-			//console.log(this.w)
+			this.w = this.width - align.x - align.m1 - align.m3 + align.p3  ///- align.m3 //- align.p1// - align.m3 //+align.p1
 			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3//- align.p1
-			else this.w++
+			else this.w++ // off by one
 
 			align.w = this.w - align.p1 - align.p3 
 		}
@@ -279,8 +277,7 @@ define.class(function(exports){
 		if(this.w === fill){
 			strw = true
 			this.w = this.width - align.x - m1 - m3 + align.p1   ///- align.m3 //- align.p1// - align.m3 //+align.p1
-			//if(align.m1+align.m3 === 0) this.w -= 2
-			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3 //- align.p1
+			if(this.w <= 0)	this.w = this.width - m1 - m3 //- align.p1
 		}
 		if(this.h === fill){
 			this.h = this.height - align.y
@@ -327,11 +324,12 @@ define.class(function(exports){
 
 		var first = Math.abs(align.x-align.xstart) < 0.001
 		this.x = align.x + m3 
-		this.y = align.y + m0
+		this.y = align.y + m0 
 
 		align.x += this.w + m3 + m1
 
 		var hs = this.h + m0 + m2
+
 		//console.log(first, align.y, align.wrapx)
 		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x > align.wrapx){
 
@@ -339,20 +337,18 @@ define.class(function(exports){
 			align.y += align.maxy - align.y 
 
 			var newx = align.xstart + m3
-			var newy =  align.y + m2
+			var newy =  align.y + m0
 			var dx = newx - this.x
 			var dy = newy - this.y			
 			align.x += this.w + m3 + m1
-			//if(align.x >= align.wrapx ){
-			//	align.x = align.xstart
-			//}
+
 			if(oldalign){
 				var start = oldalign.trackstart
 				this.displaceAlign(start, 'x', dx, 1)
 				this.displaceAlign(start, 'y', dy, 1)
 			}
 			this.x = newx
-			this.y = newy
+			this.y = newy 
 		}
 		//align.lastmaxh = align.maxh
 		var ax = align.x

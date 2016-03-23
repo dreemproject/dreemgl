@@ -69,9 +69,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			})
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
-				this.aligndraw = ''
-				this.margin = 4
-				this.padding = 10
+				this.aligndraw = 'left'
+				this.margin = 1
+				this.padding = [10,0,10,0]
 				this.w = fill
 			})
 
@@ -101,8 +101,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.Rect = function(){
 			this.w = fill
-			this.margin = 0
-			this.h = 60
+			this.margin = [0,0,0,0]
+			this.h = 50
 		}
 
 		this.draw = function(){
@@ -114,9 +114,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 1000; i++){
+				for(var i = 0; i < 8; i++){
 					//c.drawRect(auto,auto,10,10)//,50,50)
-					//c.drawRect(auto,auto,20,20)//,50,50)
+					c.drawRect(auto,auto,20,20)//,50,50)
 					c.drawButton('Btn'+i,icons[i+2])
 					c.drawRect()
 					//console.log(c.align.y, c.align.x)
