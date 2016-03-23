@@ -119,7 +119,7 @@ define.class(function(exports){
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
 
-		align.xstart = align.x = xs + align.p3	+ align.m3 //+ align.m1
+		align.xstart = align.x = xs //+ align.p3	+ align.m3 //+ align.m1
 		align.ystart = align.y = ys + align.p0 + align.m0 //+ align.m2
 
 		if(this.w === undefined){
@@ -134,9 +134,12 @@ define.class(function(exports){
 		}
 		else if(this.w === fill){
 			align.computew = false
-			this.w = this.width - align.x - align.m1 - align.m3 + align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
-			if(align.m1+align.m3 === 0) this.w -= 2
-			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3 - 1//- align.p1
+			this.w = this.width - align.x - align.m1 - align.m3 -1//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+			//if(align.m1+align.m3 === 0) this.w -= 1
+			//console.log(this.w)
+			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3//- align.p1
+			else this.w++
+
 			align.w = this.w - align.p1 - align.p3 
 		}
 		else{
@@ -275,8 +278,9 @@ define.class(function(exports){
 		var strw, strh
 		if(this.w === fill){
 			strw = true
-			this.w = this.width - align.xstart - m3
-			this.w -= m1 + m3
+			this.w = this.width - align.x - m1 - m3 + align.p1   ///- align.m3 //- align.p1// - align.m3 //+align.p1
+			//if(align.m1+align.m3 === 0) this.w -= 2
+			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3 //- align.p1
 		}
 		if(this.h === fill){
 			this.h = this.height - align.y
@@ -329,7 +333,7 @@ define.class(function(exports){
 
 		var hs = this.h + m0 + m2
 		//console.log(first, align.y, align.wrapx)
-		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x >= align.wrapx){
+		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x > align.wrapx){
 
 			align.x = align.xstart 
 			align.y += align.maxy - align.y 

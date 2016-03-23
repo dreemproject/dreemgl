@@ -70,9 +70,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
 				this.aligndraw = ''
-				this.margin = 1
+				this.margin = 4
 				this.padding = 10
-				this.w = 50
+				this.w = fill
 			})
 
 			this.onpointerhover = function(event){
@@ -101,7 +101,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.Rect = function(){
 			this.w = fill
-			this.margin = 1
+			this.margin = 0
 			this.h = 60
 		}
 
@@ -116,9 +116,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				var dt = performance.now()
 				for(var i = 0; i < 1000; i++){
 					//c.drawRect(auto,auto,10,10)//,50,50)
-
+					//c.drawRect(auto,auto,20,20)//,50,50)
 					c.drawButton('Btn'+i,icons[i+2])
-					//c.drawRect()
+					c.drawRect()
 					//console.log(c.align.y, c.align.x)
 					//c.newline()
 					//console.log("MARK")
