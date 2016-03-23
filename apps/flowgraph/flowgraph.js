@@ -121,6 +121,7 @@ define.class('$ui/view', function(require,
 	}
 
 	this.addBlock = function(folder, blockname) {
+		console.log("Add", folder, blockname)
 		this.sourceset.fork(function() {
 			this.sourceset.addBlock(folder, blockname)
 		}.bind(this))
@@ -309,17 +310,21 @@ define.class('$ui/view', function(require,
 
 		this.sourceset = sourceset()
 
-		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result) {
-			var tree = result.value
-			tree.name = 'Library'
-			tree.collapsed = false
+		//this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result) {
+		//	var tree = result.value
+		//	tree.name = 'Library'
+		//	tree.collapsed = false
+        //
+		//	var lib = this.find('thelibrary')
+		//	if (lib) {
+		//		lib.dataset = this.librarydata  = dataset(tree)
+		//	} else {
+		//		this.librarydata  = dataset(tree)
+		//	}
+		//}.bind(this))
 
-			var lib = this.find('thelibrary')
-			if (lib) {
-				lib.dataset = this.librarydata  = dataset(tree)
-			} else {
-				this.librarydata  = dataset(tree)
-			}
+
+		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result) {
 		}.bind(this))
 
 		this.screen.locationhash = function(event) {
@@ -336,6 +341,31 @@ define.class('$ui/view', function(require,
 					if (viewer) {
 						viewer.sourceset = this.sourceset
 					}
+
+					var lib = this.find('thelibrary')
+					if (lib) {
+						var children = [];
+						var defs = this.sourceset.ast.steps[0].params;
+
+						var category;
+						for (var i=0;i<defs.length;i++) {
+							var def = defs[i];
+							var name = def.id.name;
+							if (name[0] === '$' && name[name.length - 1] === '$') {
+								category = {
+									name:name,//.substring(1, name.length).replace(/\$/g, "/"),
+									children:[]
+								};
+								children.push(category);
+							} else if (category) {
+								category.children.push({name:name + ".js"})
+							}
+						}
+						console.log(">", children)
+
+						lib.dataset = this.librarydata = dataset({children:children})
+					}
+
 				}.bind(this))
 			}
 		}.bind(this)
@@ -708,120 +738,121 @@ define.class('$ui/view', function(require,
 
 	this.render = function() {
 
+		//return [
+        //
+		//	cadgrid({name: "centralconstructiongrid",
+		//			pointerstart: this.gridDragStart.bind(this),
+		//			pointermove: this.gridDrag.bind(this),
+		//			pointerend: this.gridDragEnd.bind(this),
+		//			overflow: "scroll" ,bgcolor: "#4e4e4e",gridsize: 5,majorevery: 5,  majorline: "#575757", minorline: "#484848", zoom: function() {this.updateZoom(this.zoom)}.bind(this)}
+		//		,view({name: "underlayer", bgcolor: NaN}
+		//			,view({name: "groupbg",visible: false, bgcolor: vec4(1,1,1,0.08) , borderradius: 8, borderwidth: 0, bordercolor: vec4(0,0,0.5,0.9),position: "absolute", flexdirection: "column"})
+		//		)
+		//		,view({name: "connectionlayer", bgcolor: NaN, dataset: this.sourceset, render: function() {
+		//				return this.renderConnections()
+		//			}.bind(this)}
+		//		)
+		//		,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+		//		,view({name: "blocklayer", bgcolor: NaN,  dataset: this.sourceset, render: function() {
+		//			return this.renderBlocks()
+		//		}.bind(this)})
+        //
+		//		,view({name: "popuplayer", bgcolor: NaN},
+		//			view({name: "connectionui",visible: false,bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(1,14,14,14), borderwidth: 1, bordercolor: "black",position: "absolute", flexdirection: "column"},
+		//				label({text: "Connection", bgcolor: NaN, margin: 4})
+		//				,button({padding: 0, borderwidth: 0, click: function() {this.removeConnection(undefined)}.bind(this),  icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+		//			)
+		//			,view({name: "blockui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(10,10,10,1), borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
+		//				//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
+		//				label({text: "Block", bgcolor: NaN, margin: 4})
+		//				,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+		//			)
+        //
+		//			,view({name: "groupui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),borderradius: 8, borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
+		//				//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
+		//				label({text: "Group", bgcolor: NaN, margin: 4})
+		//				,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+		//			)
+		//			,this.selectorrect({name: "selectorrect"})
+		//			,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+		//		)
+		//	)
+		//]
+
 		return [
+			//menubar({flex: 0, height: 20, viewport: '2d', name: "themenu", menus: [
+			//	{name: "File", commands: [
+			//		{name: "Open composition", clickaction: function() {this.openComposition();return true;}.bind(this)},
+			//		{name: "New composition", clickaction: function() {this.newComposition();return true;}.bind(this)},
+			//			{name: "Rename composition", clickaction: function() {this.renameComposition();return true;}.bind(this), enabled: false}
+			//		]}
+			//	,
+			//{name: "Edit", commands: [
+			//	{name: "Undo", icon: "undo", clickaction: function() {this.undo();}.bind(this)},
+			//	{name: "Redo",icon: "redo",  clickaction: function() {this.redo();}.bind(this)}
+            //
+			//]}
+			//	,
+			//{name: "Help", commands: [
+			//	{name: "About Flowgraph", clickaction: function() {this.helpAbout();return true;}.bind(this)},
+			//	{name: "Getting started", clickaction: function() {this.helpGettingStarted();return true;}.bind(this)},
+			//	{name: "Reference", clickaction: function() {this.helpReference();return true;}.bind(this)}
+			//]}
+			//	]})
+			//,
+			splitcontainer({}
+				,splitcontainer({flex: 0.2, flexdirection: "column", direction: "horizontal"}
+					,dockpanel({title: "Composition" , flex: 0.2}
+						//,searchbox()
 
-			cadgrid({name: "centralconstructiongrid",
-					pointerstart: this.gridDragStart.bind(this),
-					pointermove: this.gridDrag.bind(this),
-					pointerend: this.gridDragEnd.bind(this),
-					overflow: "scroll" ,bgcolor: "#4e4e4e",gridsize: 5,majorevery: 5,  majorline: "#575757", minorline: "#484848", zoom: function() {this.updateZoom(this.zoom)}.bind(this)}
-				,view({name: "underlayer", bgcolor: NaN}
-					,view({name: "groupbg",visible: false, bgcolor: vec4(1,1,1,0.08) , borderradius: 8, borderwidth: 0, bordercolor: vec4(0,0,0.5,0.9),position: "absolute", flexdirection: "column"})
+						,treeview({flex: 1, dataset: this.sourceset})
+					)
+					,dockpanel({title: "Library", viewport: "2D" }
+						//,searchbox()
+						,library({name: "thelibrary", dataset: this.librarydata})
+					)
 				)
-				,view({name: "connectionlayer", bgcolor: NaN, dataset: this.sourceset, render: function() {
-						return this.renderConnections()
-					}.bind(this)}
-				)
-				,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
-				,view({name: "blocklayer", bgcolor: NaN,  dataset: this.sourceset, render: function() {
-					return this.renderBlocks()
-				}.bind(this)})
+				,splitcontainer({flexdirection: "column", direction: "horizontal"}
+					,cadgrid({name: "centralconstructiongrid",
+							pointerstart: this.gridDragStart.bind(this),
+							pointermove: this.gridDrag.bind(this),
+							pointerend: this.gridDragEnd.bind(this),
+							overflow: "scroll" ,bgcolor: "#4e4e4e",gridsize: 5,majorevery: 5,  majorline: "#575757", minorline: "#484848", zoom: function() {this.updateZoom(this.zoom)}.bind(this)}
+						,view({name: "underlayer", bgcolor: NaN}
+							,view({name: "groupbg",visible: false, bgcolor: vec4(1,1,1,0.08) , borderradius: 8, borderwidth: 0, bordercolor: vec4(0,0,0.5,0.9),position: "absolute", flexdirection: "column"})
+						)
+						,view({name: "connectionlayer", bgcolor: NaN, dataset: this.sourceset, render: function() {
+							return this.renderConnections()
+						}.bind(this)}
+						)
+						,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+						,view({name: "blocklayer", bgcolor: NaN,  dataset: this.sourceset, render: function() {
+							return this.renderBlocks()
+						}.bind(this)})
 
-				,view({name: "popuplayer", bgcolor: NaN},
-					view({name: "connectionui",visible: false,bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(1,14,14,14), borderwidth: 1, bordercolor: "black",position: "absolute", flexdirection: "column"},
-						label({text: "Connection", bgcolor: NaN, margin: 4})
-						,button({padding: 0, borderwidth: 0, click: function() {this.removeConnection(undefined)}.bind(this),  icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
-					)
-					,view({name: "blockui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(10,10,10,1), borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
-						//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
-						label({text: "Block", bgcolor: NaN, margin: 4})
-						,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
-					)
+						,view({name: "popuplayer", bgcolor: NaN},
+							view({name: "connectionui",visible: false,bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(1,14,14,14), borderwidth: 1, bordercolor: "black",position: "absolute", flexdirection: "column"},
+								label({text: "Connection", bgcolor: NaN, margin: 4})
+								,button({padding: 0, borderwidth: 0, click: function() {this.removeConnection(undefined)}.bind(this),  icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+							)
+							,view({name: "blockui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(10,10,10,1), borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
+							//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
+								label({text: "Block", bgcolor: NaN, margin: 4})
+								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+							)
 
-					,view({name: "groupui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),borderradius: 8, borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
-						//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
-						label({text: "Group", bgcolor: NaN, margin: 4})
-						,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+							,view({name: "groupui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),borderradius: 8, borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
+							//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
+								label({text: "Group", bgcolor: NaN, margin: 4})
+								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
+							)
+							,this.selectorrect({name: "selectorrect"})
+							,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+						)
 					)
-					,this.selectorrect({name: "selectorrect"})
-					,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+//					,jseditor({name: 'jsviewer', fontsize: 14,sourceset: this.sourceset, overflow: 'scroll', flex: 0.1})
 				)
 			)
 		]
-
-//		return [
-//			menubar({flex: 0, height: 20, viewport: '2d', name: "themenu", menus: [
-//				{name: "File", commands: [
-//					{name: "Open composition", clickaction: function() {this.openComposition();return true;}.bind(this)},
-//					{name: "New composition", clickaction: function() {this.newComposition();return true;}.bind(this)},
-//						{name: "Rename composition", clickaction: function() {this.renameComposition();return true;}.bind(this), enabled: false}
-//					]}
-//				,
-//			{name: "Edit", commands: [
-//				{name: "Undo", icon: "undo", clickaction: function() {this.undo();}.bind(this)},
-//				{name: "Redo",icon: "redo",  clickaction: function() {this.redo();}.bind(this)}
-//
-//			]}
-//				,
-//			{name: "Help", commands: [
-//				{name: "About Flowgraph", clickaction: function() {this.helpAbout();return true;}.bind(this)},
-//				{name: "Getting started", clickaction: function() {this.helpGettingStarted();return true;}.bind(this)},
-//				{name: "Reference", clickaction: function() {this.helpReference();return true;}.bind(this)}
-//			]}
-//				]})
-//			,splitcontainer({}
-//				,splitcontainer({flex: 0.2, flexdirection: "column", direction: "horizontal"}
-//					,dockpanel({title: "Composition" , flex: 0.2}
-//						//,searchbox()
-//
-//						,treeview({flex: 1, dataset: this.sourceset})
-//					)
-//					,dockpanel({title: "Library", viewport: "2D" }
-//						//,searchbox()
-//						,library({name: "thelibrary", dataset: this.librarydata})
-//					)
-//				)
-//				,splitcontainer({flexdirection: "column", direction: "horizontal"}
-//					,cadgrid({name: "centralconstructiongrid",
-//							pointerstart: this.gridDragStart.bind(this),
-//							pointermove: this.gridDrag.bind(this),
-//							pointerend: this.gridDragEnd.bind(this),
-//							overflow: "scroll" ,bgcolor: "#4e4e4e",gridsize: 5,majorevery: 5,  majorline: "#575757", minorline: "#484848", zoom: function() {this.updateZoom(this.zoom)}.bind(this)}
-//						,view({name: "underlayer", bgcolor: NaN}
-//							,view({name: "groupbg",visible: false, bgcolor: vec4(1,1,1,0.08) , borderradius: 8, borderwidth: 0, bordercolor: vec4(0,0,0.5,0.9),position: "absolute", flexdirection: "column"})
-//						)
-//						,view({name: "connectionlayer", bgcolor: NaN, dataset: this.sourceset, render: function() {
-//							return this.renderConnections()
-//						}.bind(this)}
-//						)
-//						,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
-//						,view({name: "blocklayer", bgcolor: NaN,  dataset: this.sourceset, render: function() {
-//							return this.renderBlocks()
-//						}.bind(this)})
-//
-//						,view({name: "popuplayer", bgcolor: NaN},
-//							view({name: "connectionui",visible: false,bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(1,14,14,14), borderwidth: 1, bordercolor: "black",position: "absolute", flexdirection: "column"},
-//								label({text: "Connection", bgcolor: NaN, margin: 4})
-//								,button({padding: 0, borderwidth: 0, click: function() {this.removeConnection(undefined)}.bind(this),  icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
-//							)
-//							,view({name: "blockui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),padding: 5, borderradius: vec4(10,10,10,1), borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
-//							//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
-//								label({text: "Block", bgcolor: NaN, margin: 4})
-//								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
-//							)
-//
-//							,view({name: "groupui",visible: false, bgcolor: vec4(0.2,0.2,0.2,0.5),borderradius: 8, borderwidth: 2, bordercolor: "black",position: "absolute", flexdirection: "column"},
-//							//,view({name: "blockui",x: -200,bg: 1,clearcolor: vec4(0,0,0,0),bgcolor: vec4(0,0,0,0),position: "absolute"},
-//								label({text: "Group", bgcolor: NaN, margin: 4})
-//								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
-//							)
-//							,this.selectorrect({name: "selectorrect"})
-//							,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
-//						)
-//					)
-////					,jseditor({name: 'jsviewer', fontsize: 14,sourceset: this.sourceset, overflow: 'scroll', flex: 0.1})
-//				)
-//			)
-//		]
 	}
 })
