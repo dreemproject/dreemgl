@@ -123,7 +123,7 @@ define.class('$ui/view', function(require,
 	this.addBlock = function(folder, blockname) {
 		console.log("Add", folder, blockname)
 		this.sourceset.fork(function() {
-			this.sourceset.addBlock(folder, blockname)
+			this.sourceset.addBlock(undefined, blockname)
 		}.bind(this))
 	}
 

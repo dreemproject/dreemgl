@@ -60,29 +60,31 @@ define.class(function(require, $server$, dataset){
 			uname = classname + id
 		}
 
-		// add it to the deplist.
-		var deps = this.ast.steps[0].params
-		var $folder = '$'+folder.replace(/\//g,'$')+'$'
+		if (folder) {
+			// add it to the deplist.
+			var deps = this.ast.steps[0].params
+			var $folder = '$'+folder.replace(/\//g,'$')+'$'
 
-		var dir = '$$'
-		for(var i = 0; i < deps.length; i ++){
-			var name = deps[i].id.name
-			if(name === $folder) break
-		}
-		if(i === deps.length){
-			deps.push(
-				{type:'Def',id:{type:'Id', name:$folder}},
-				{type:'Def',id:{type:'Id', name:classname}}
-			)
-		}
-		else{
-			for(var j = i; j < deps.length; j ++){
-				if(deps[j].id.name === classname) break
+			var dir = '$$'
+			for(var i = 0; i < deps.length; i ++){
+				var name = deps[i].id.name
+				if(name === $folder) break
 			}
-			if(j === deps.length){
-				deps.splice(i,0,
+			if(i === deps.length){
+				deps.push(
+					{type:'Def',id:{type:'Id', name:$folder}},
 					{type:'Def',id:{type:'Id', name:classname}}
 				)
+			}
+			else{
+				for(var j = i; j < deps.length; j ++){
+					if(deps[j].id.name === classname) break
+				}
+				if(j === deps.length){
+					deps.splice(i,0,
+						{type:'Def',id:{type:'Id', name:classname}}
+					)
+				}
 			}
 		}
 
