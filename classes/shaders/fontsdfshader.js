@@ -42,9 +42,9 @@ define.class('$shaders/pickshader', function(require){
 	}
 
 	this.defaults = {
-		x:'this.scope._layout?0:this.scope.x',
-		y:'this.scope._layout?0:this.scope.y',
-		fgcolor:'this.scope._layout?this.scope._fggcolor:this.scope.fgcolor'
+//		x:'this.scope._layout?0:this.scope.x',
+//		y:'this.scope._layout?0:this.scope.y',
+//		fgcolor:'this.scope._layout?this.scope._fggcolor:this.scope.fgcolor'
 	}
 
 	this.font_style_t = define.struct({

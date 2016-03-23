@@ -17,11 +17,11 @@ define.class('$shaders/pickshader', function(require){
 	}
 
 	this.defaults = {
-		x:'this.scope._layout?0:this.scope.x',
-		y:'this.scope._layout?0:this.scope.y',
-		w:'this.scope._layout?this.scope._layout.width:this.scope.w',
-		h:'this.scope._layout?this.scope._layout.height:this.scope.h',
-		fgcolor:'this.scope._layout?this.scope._bgcolor:this.scope.color'
+	//	x:'this.scope._layout?0:this.scope.x',
+//		y:'this.scope._layout?0:this.scope.y',
+//		w:'this.scope._layout?this.scope._layout.width:this.scope.w',
+//		h:'this.scope._layout?this.scope._layout.height:this.scope.h',
+//		fgcolor:'this.scope._layout?this.scope._bgcolor:this.scope.color'
 	}
 
 	this.canvas = {
@@ -69,16 +69,16 @@ define.class('$shaders/pickshader', function(require){
 			this.endAlign()
 			var buffer = this.bufferNAME
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
-				this.runAlign(this.classNAME, buffer, 1, oldalign)
+				this.runAlign(this.classNAME, buffer, undefined, 1, oldalign)
 			}
 			this.CANVASTOBUFFER()
 		},
-		draw:function(x, y, w, h){
+		draw:function(x, y, w, h, margin){
 			var doalign = isNaN(x) || isNaN(y)
 			this.RECTARGS()
 			this.GETBUFFER()
 			this.ARGSTO(this)
-			if(doalign) this.runAlign(this.classNAME, buffer)
+			if(doalign) this.runAlign(this.classNAME, buffer,1, margin)
 			this.CANVASTOBUFFER()
 		}
 	}

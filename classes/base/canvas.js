@@ -93,9 +93,10 @@ define.class(function(exports){
 
 		// fetch new one
 		var align = this.align = this.stackAlign[this.stackAlign.len] || {}
-
-		if(isNaN(this.w)) flags = (flags&~this.RIGHT)|this.LEFT
-		if(isNaN(this.h)) flags = (flags&~this.BOTTOM)|this.TOP
+	
+		// stretching
+		if(isNaN(this.w) && this.w !== stretch) flags = (flags&~this.RIGHT)|this.LEFT
+		if(isNaN(this.h) && this.h !== stretch) flags = (flags&~this.BOTTOM)|this.TOP
 
 		align.flags = flags
 		
@@ -105,7 +106,6 @@ define.class(function(exports){
 		if(!margin || typeof margin === 'number') align.m0 = align.m1 = align.m2 = align.m3 = margin || 0
 		else align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
 
-		// stretching
 		if(this.w === stretch) this.w = this.width - (align.m1 + align.m3)
 		if(this.h === stretch) this.h = this.height - (align.m0 + align.m2)
 
@@ -131,8 +131,8 @@ define.class(function(exports){
 		align.trackstart = this.trackAlign && this.trackAlign.length || 0
 		align.maxx = 0
 		align.maxy = 0
-		align.maxh = 0
-		align.lastmaxh = 0
+		//align.maxh = 0
+		//align.lastmaxh = 0
 		align.inh = this.h
 		align.inw = this.w
 		align.inx = this.x
@@ -205,7 +205,7 @@ define.class(function(exports){
 		//if(dy > align.maxh) align.maxh = dy
 	}
 
-	this.runAlign = function(cls, buffer, range, oldalign){
+	this.runAlign = function(cls, buffer, range, imargin, oldalign){
 
 		var align = this.align
 
@@ -214,12 +214,36 @@ define.class(function(exports){
 			m0 = oldalign.m0, m1 = oldalign.m1, m2 = oldalign.m3, m3 = oldalign.m3
 		}
 		else{
-			var margin = cls && cls.margin
+			var margin = imargin || cls && cls.margin
 			if(margin !== undefined){
 				if(typeof margin === 'number') m0 = m1 = m2 = m3 = margin
 				else m0 = margin[0], m1 = margin[1], m2 = margin[2], m3 = margin[3]
 			}
 		}
+		var strw, strh
+		if(this.w === stretch){
+			strw = true
+			this.w = this.width
+			this.w -= m1 + m3
+		}
+		if(this.h === stretch){
+			this.h = this.height
+			this.h -= m0 + m2
+		}
+
+/*
+		ind+'if(w === stretch){\n'+
+		ind+'\tw = this.width \n'+
+		ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
+		ind+'\tif(typeof _margin === "number") w -= _margin * 2\n'+
+		ind+'\telse if(_margin) w -= (_margin[1] + _margin[3])\n'+
+		ind+'}\n'+
+		ind+'if(h === stretch){\n'+
+		ind+'\th = this.height\n'+
+		ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
+		ind+'\tif(typeof _margin === "number") h -= _margin * 2\n'+
+		ind+'\telse if(_margin) h -= (_margin[0] + _margin[2])\n'+
+		ind+'}\n'*/
 
 		this.trackAlign.push(buffer, buffer.length, range || 1)
 
@@ -230,19 +254,29 @@ define.class(function(exports){
 		align.x += this.w + m3 + m1
 		var hs = this.h + m0 + m2
 
-		var oldh = align.maxh
-		if(hs > align.maxh){
-			align.maxh = hs
-		}
+		//if(hs > align.maxh){
+		//	align.maxh = hs
+		//}
 
 		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x >= align.wrapx){
 			align.x = align.xstart 
-			align.y += align.lastmaxh || align.maxh
+
+			if(strw){
+				align.maxh = this.h
+				align.y += align.maxy - align.y
+			}
+			else{
+				align.y += align.maxy - align.y//align.lastmaxh || align.maxh
+			}
+			//console.log(align.y)
+
 			var newx = align.xstart + m3
 			var newy =  align.y + m0
 			var dx = newx - this.x
 			var dy = newy - this.y
+
 			align.x += this.w + m3 + m1
+
 			if(oldalign){
 				//console.log('here')
 				var start = oldalign.trackstart
@@ -252,7 +286,7 @@ define.class(function(exports){
 			this.x = newx
 			this.y = newy
 		}
-		align.lastmaxh = align.maxh
+		//align.lastmaxh = align.maxh
 		if(align.x > align.maxx) align.maxx = align.x
 		var hy = align.y + hs
 		if( hy> align.maxy) align.maxy = hy
@@ -639,7 +673,8 @@ define.class(function(exports){
 					ind+'if(isNaN(x)) x = this.x\n'+
 					ind+'if(isNaN(y)) y = this.y\n'+
 					ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
-					ind+'if(h === undefined) h = this.class'+cap+'.h\n'+
+					ind+'if(h === undefined) h = this.class'+cap+'.h\n'
+					/*
 					ind+'if(w === stretch){\n'+
 					ind+'\tw = this.width \n'+
 					ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
@@ -651,7 +686,7 @@ define.class(function(exports){
 					ind+'\tvar _margin =  this.class'+cap+'.margin\n'+
 					ind+'\tif(typeof _margin === "number") h -= _margin * 2\n'+
 					ind+'\telse if(_margin) h -= (_margin[0] + _margin[2])\n'+
-					ind+'}\n'
+					ind+'}\n'*/
 				})
 
 

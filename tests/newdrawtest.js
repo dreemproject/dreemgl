@@ -8,7 +8,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
 		this.Rect = function(){
-			this.margin = [10,10,0,10],
+			//this.margin = [10,10,0,10],
 			this.fgcolor = vec4('blue')
 			this.color = function(){
 				return mix('red',this.fgcolor,length(mesh.xy*2-1.))
@@ -67,11 +67,12 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
 			if(c.startCache('button',this.layoutchanged)){
-				console.log(c.align.y)
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				for(var i = 0; i < 40; i++){
-					c.drawButton('BUTTON'+i,icons[10],auto,auto,auto)
-					c.drawRect(auto,auto,100,100)
+					c.drawRect(auto,auto,stretch,10)
+					c.drawButton('BUTTON'+i,icons[10],auto,auto,stretch,40)
+					c.drawButton('BUTTON'+i,icons[10],auto,auto,stretch,80)
+
 				}
 				c.stopCache()
 			}
