@@ -2793,7 +2793,7 @@
 		exports.auto = function auto(){
 		}
 
-		exports.stretch = function stretch(){
+		exports.fill = function fill(){
 		}
 	}
 

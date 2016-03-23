@@ -90,49 +90,80 @@ define.class(function(exports){
 		// store old align
 		var oldalign = this.stackAlign[this.stackAlign.len] = this.align
 		this.stackAlign.len++
-
+		
 		// fetch new one
 		var align = this.align = this.stackAlign[this.stackAlign.len] || {}
 	
-		// stretching
-		if(isNaN(this.w) && this.w !== stretch) flags = (flags&~this.RIGHT)|this.LEFT
-		if(isNaN(this.h) && this.h !== stretch) flags = (flags&~this.BOTTOM)|this.TOP
-
-		align.flags = flags
+		if(Array.isArray(padding)){
+			 align.p0 = padding[0], align.p1 = padding[1], align.p2 = padding[2], align.p3 = padding[3]
+		}
+		else if(typeof padding === 'number'){
+			 align.p0 = align.p1 = align.p2 = align.p3 = padding
+		}
+		else{
+			align.p0 = align.p1 = align.p2 = align.p3 = 0
+		}
 		
-		if(!padding || typeof padding === 'number') align.p0 = align.p1 = align.p2 = align.p3 = padding || 0
-		else align.p0 = padding[0], align.p1 = padding[1], align.p2 = padding[2], align.p3 = padding[3]
-
-		if(!margin || typeof margin === 'number') align.m0 = align.m1 = align.m2 = align.m3 = margin || 0
-		else align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
-
-		if(this.w === stretch) this.w = this.width - (align.m1 + align.m3)
-		if(this.h === stretch) this.h = this.height - (align.m0 + align.m2)
-
+		if(Array.isArray(margin)){
+			align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
+		}
+		else if(typeof margin === 'number'){
+			align.m0 = align.m1 = align.m2 = align.m3 = margin
+		}
+		else{
+			align.m0 = align.m1 = align.m2 = align.m3 = 0
+		}
+		
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
-		var ws = this.w !== undefined? this.w: oldalign.w
-		var hs = this.h !== undefined? this.h: oldalign.h
 
-		// turn off margins if we have absolute width/height
-		align.computew = isNaN(this.w)
-		align.computeh = isNaN(this.h)
-		
-		align.xstart =
-		align.x = xs + align.p3	+ align.m3 //+ align.m1
-		align.ystart = 
-		align.y = ys + align.p0 + align.m0 //+ align.m2
-		align.w = ws - align.p1 - align.p3 
-		align.h = hs - align.p0 - align.p2
-		// store w/h/x/y for use in size to content shapes
-		if(!this.w) align.wrapx = this.width
-		else align.wrapx = xs + this.w
+		align.xstart = align.x = xs + align.p3	+ align.m3 //+ align.m1
+		align.ystart = align.y = ys + align.p0 + align.m0 //+ align.m2
 
+		if(this.w === undefined){
+			flags = flags | this.LEFT
+			align.computew = true
+			align.wrapx = this.width
+		}
+		else if(this.w === auto){
+			flags = flags | this.LEFT
+			align.computew = true
+			align.w = this.w - align.p1 - align.p3 
+		}
+		else if(this.w === fill){
+			this.w = this.width - (align.m1 + align.m3)
+			align.computew = false
+			align.w = this.w - align.p1 - align.p3 
+		}
+		else{
+			align.computew = false
+			align.w = this.w - align.p1 - align.p3 
+			align.wrapx = xs + this.w
+		}
+
+		if(this.h === undefined){
+			flags = flags | this.TOP
+			align.computeh = true
+		}
+		else if(this.h === auto){
+			flags = flags | this.TOP
+			align.computeh = true
+			align.h = this.h - align.p0 - align.p2
+		}
+		else if(this.w === fill){
+			this.h = this.height - (align.m0 + align.m2)
+			align.computeh = false
+			align.h = this.h - align.p0 - align.p2
+		}
+		else{
+			align.computeh = false
+			align.h = this.h - align.p0 - align.p2
+		}
+
+		align.flags = flags
 		align.trackstart = this.trackAlign && this.trackAlign.length || 0
 		align.maxx = 0
 		align.maxy = 0
-		//align.maxh = 0
-		//align.lastmaxh = 0
 		align.inh = this.h
 		align.inw = this.w
 		align.inx = this.x
@@ -163,16 +194,21 @@ define.class(function(exports){
 
 		var start = align.trackstart
 
-		if(align.flags & this.RIGHT){
+		
+		if(align.flags & this.LEFT){
+		}
+		else if(align.flags & this.RIGHT){
 			this.displaceAlign(start, 'x', align.w - dx)
 		}
-		else if(!(align.flags & this.LEFT)){
+		else {
 			this.displaceAlign(start, 'x', (align.w - dx) / 2)
 		}
-		if(align.flags & this.BOTTOM){
+		if(align.flags & this.TOP){
+		}
+		else if(align.flags & this.BOTTOM){
 			this.displaceAlign(start, 'y', align.h - dy)
 		}
-		else if(!(align.flags & this.TOP)){
+		else{
 			this.displaceAlign(start, 'y', (align.h - dy) / 2)
 		}
 
@@ -221,12 +257,12 @@ define.class(function(exports){
 			}
 		}
 		var strw, strh
-		if(this.w === stretch){
+		if(this.w === fill){
 			strw = true
 			this.w = this.width
 			this.w -= m1 + m3
 		}
-		if(this.h === stretch){
+		if(this.h === fill){
 			this.h = this.height
 			this.h -= m0 + m2
 		}

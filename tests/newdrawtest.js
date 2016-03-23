@@ -35,7 +35,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//this.content = ""
 				this.padding = 5
 				this.margin = 1
-				this.w = 300
+			//	this.w = 300
 			})
 
 			this.onpointerhover = function(event){
@@ -46,7 +46,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.draw = function(){
 				var c = this.canvas
-				c.beginBackground(this)
+				c.beginBackground()
 				c.drawLabel(this.text)
 				c.drawIcon(this.icon)
 				c.endBackground()
@@ -68,12 +68,13 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			c.fontsize = 5
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
-				for(var i = 0; i < 40; i++){
-					c.drawRect(auto,auto,stretch,10)
-					c.drawButton('BUTTON'+i,icons[10],auto,auto,stretch,40)
-					c.drawButton('BUTTON'+i,icons[10],auto,auto,stretch,80)
-
+				var dt = performance.now()
+				for(var i = 0; i < 1000; i++){
+					c.drawButton(icons[i],icons[10])//,auto,auto,auto,40)
+					//c.drawButton('Thing2',icons[10],auto,auto,fill,40)
+					//c.drawRect(auto,auto,fill,10)
 				}
+				console.log(performance.now()-dt)
 				c.stopCache()
 			}
 			//c.endAlign()

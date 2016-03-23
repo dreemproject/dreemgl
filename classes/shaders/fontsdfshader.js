@@ -300,8 +300,8 @@ define.class('$shaders/pickshader', function(require){
 			this.w = width 
 			this.h = fontsize * linespacing
 
-			if(x !== undefined) this.px = x
-			if(y !== undefined) this.py = y
+			//if(x !== undefined) this.px = x
+			//if(y !== undefined) this.py = y
 
 			// well first we get the buffer
 			this.GETBUFFER(str.length)
