@@ -78,44 +78,6 @@ define.class(function(exports){
 		}.bind(this))
 	}
 
-	float.WRAP = function(align, canvas, oldalign){
-		var a = align
-
-		var first = Math.abs(a.x - a.xstart) < 0.001
-		canvas.x = a.x + a.m3 
-		canvas.y = a.y + a.m0 
-
-		a.x += canvas.w + a.m3 + a.m1
-		var hs = canvas.h + a.m0 + a.m2
-
-		if(!a.computew && !first && a.x > a.wrapx){
-
-			a.x = a.xstart 
-			a.y += a.maxy - a.y 
-
-			var newx = a.xstart + a.m3
-			var newy =  a.y + a.m0
-			var dx = newx - canvas.x
-			var dy = newy - canvas.y			
-			a.x += canvas.w + a.m3 + a.m1
-
-			if(oldalign){
-				var start = oldalign.trackstart
-				canvas.displaceAlign(start, 'x', dx, 1)
-				canvas.displaceAlign(start, 'y', dy, 1)
-			}
-			canvas.x = newx
-			canvas.y = newy 
-		}
-
-		var ax = a.x
-		if( ax > a.maxx) a.maxx = ax
-		if( ax > a.boundx) a.boundx = ax
-
-		var hy = a.y + hs
-		if( hy> a.maxy) a.maxy = hy
-		if( hy > a.boundy) a.boundy = hy
-	}
 
 	float.NOWRAP = function(align, canvas, oldalign){
 		var a = align
@@ -213,7 +175,9 @@ define.class(function(exports){
 
 		if(isNaN(factor)){
 			return function(align){
-				return align.left + align.width - align.x - align.m1 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+				var w = align.left + align.width - align.x - align.m1 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+				if(w<=0) w = align.left + align.width - align.m1 + delta
+				return w
 			}
 		}
 		else{
@@ -233,7 +197,9 @@ define.class(function(exports){
 
 		if(isNaN(factor)){
 			return function(align){
-				return align.top + align.height - align.maxy - align.m2 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+				var h = align.top + align.height - align.maxy - align.m2 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+				if(h<=0) w = align.top + align.height - align.m2 + delta
+				return h
 			}
 		} 
 		else{
@@ -271,7 +237,7 @@ define.class(function(exports){
 		else{
 			a.m0 = a.m1 = a.m2 = a.m3 = 0
 		}
-		
+
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
 
@@ -279,7 +245,7 @@ define.class(function(exports){
 		a.top = oldalign.ystart
 		a.width = oldalign.w
 		a.height = oldalign.h
-		a.xstart = a.x = xs + a.p3+ a.m3 //+ a.m1
+		a.xstart = a.x = xs + a.p3+ a.m3  //+ a.m1
 		a.ystart = a.y = ys + a.p0 + a.m0 //+ a.m2
 
 		if(this.w === undefined || this.w === float){
@@ -364,6 +330,7 @@ define.class(function(exports){
 
 		var dx = a.maxx - a.xstart
 		var dy = a.maxy - a.ystart
+
 		this.w = dx + a.p1 + a.p3
 		this.h = dy + a.p0 + a.p2
 
@@ -372,20 +339,61 @@ define.class(function(exports){
 
 		// do a bit of math to size our rect to the computed size
 		if(oa.computew){
-			this.w = (oa.boundx + oa.p1 - oa.m1)
-			if(isNaN(oa.inx)) this.w -= a.x
-			else this.w -= oldalign.inx
+			this.w = (oa.boundx - oa.xstart + oa.p1 + oa.p3)//- oa.m1)
+			//if(isNaN(oa.inx)) this.w -= a.x
+			//else this.w -= oa.inx
 		}
-		else this.w = oa.inw
+		//else this.w = oa.inw
+
 		if(oa.computeh){
-			this.h = (oa.boundy + oa.p2 - oa.m2)
-			if(isNaN(oa.iny)) this.h -= a.y
-			else this.h -= oa.iny
+			this.h = (oa.boundy - oa.ystart + oa.p2 + oa.p0)// - oa.m2)
+			//if(isNaN(oa.iny)) this.h -= a.y
+			//else this.h -= oa.iny
 		}
-		else this.h = oa.inh
-		
+		//else this.h = oa.inh
+
 		this.x = oa.inx
 		this.y = oa.iny
+	}
+
+	float.WRAP = function(align, canvas, oldalign){
+		var a = align
+
+		var first = Math.abs(a.x - a.xstart) < 0.001
+		canvas.x = a.x + a.m3 
+		canvas.y = a.y + a.m0 
+		a.x += canvas.w + a.m3 + a.m1 
+
+		//console.error(a.x)
+		var hs = canvas.h + a.m0 + a.m2
+
+		if(!a.computew && !first && a.x > a.wrapx){
+
+			a.x = a.xstart 
+			a.y += a.maxy - a.y 
+
+			var newx = a.xstart + a.m3
+			var newy =  a.y + a.m0
+			var dx = newx - canvas.x
+			var dy = newy - canvas.y			
+			a.x += canvas.w + a.m3 + a.m1
+
+			if(oldalign){
+				var start = oldalign.trackstart
+				canvas.displaceAlign(start, 'x', dx, 1)
+				canvas.displaceAlign(start, 'y', dy, 1)
+			}
+			canvas.x = newx
+			canvas.y = newy 
+		}
+
+		var ax = a.x
+		if( ax > a.maxx) a.maxx = ax 
+		if( ax > a.boundx) a.boundx = ax
+
+		var hy = a.y + hs
+		if( hy> a.maxy) a.maxy = hy
+		if( hy > a.boundy) a.boundy = hy
 	}
 
 	this.runAlign = function(buffer, range, margin, oldalign){
@@ -790,6 +798,11 @@ define.class(function(exports){
 			if(typeof fn === 'function'){
 				var args = define.getFunctionArgs(fn)
 				var fnstr = fn.toString()	
+				fnstr = fnstr.replace(/(\t*)this\.DOSTAMP\s*\(\s*\)/,function(m, ind){
+					return '\tthis.GETSTAMP()\n'+
+					       '\tthis.ARGSTO(stamp)\n'+
+			               '\tstamp.draw()\n'
+				})
 
 				fnstr = fnstr.replace(/(\t*)this\.([\_]+[\_A-Z0-9]+)\s*\(\s*\)/,function(m,ind,name){
 					var str = verbs[name].toString()
@@ -831,13 +844,22 @@ define.class(function(exports){
 					 
 					//ind+'if(w === undefined && x !== undefined) w = x, x = undefined, console.log("hi")\n'+
 					//ind+'if(h ===undefined && y !== undefined) h = y, y = undefined\n'+
+					var write =  ''+
+						ind+'if(typeof x === "object")'
 
-					return  ''+
-					ind+'if(typeof x === "object") w = x.w, h = x.h, y = x.y, x = x.x\n'+
-					ind+'if(isNaN(x)) x = this.x\n'+
-					ind+'if(isNaN(y)) y = this.y\n'+
+					if(args.indexOf('padding')!== -1) write += 'padding = x.padding,'
+					if(args.indexOf('margin') !==-1) write += 'margin = x.margin,'
+					write += 'w = x.w, h = x.h, y = x.y, x = x.x\n'
+					//ind+'if(isNaN(x)) x = this.x\n'+
+					//ind+'if(isNaN(y)) y = this.y\n'+
+					if(args.indexOf('padding')!== -1) write += ind+'if(padding === undefined) padding = this.class'+cap+'.padding\n'
+					if(args.indexOf('margin')!== -1) write += ind+'if(margin === undefined) margin = this.class'+cap+'.margin\n'
+					write +=
+					ind+'if(x === undefined) w = this.class'+cap+'.x\n'+
+					ind+'if(y === undefined) h = this.class'+cap+'.y\n'
 					ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
 					ind+'if(h === undefined) h = this.class'+cap+'.h\n'
+					return write
 					/*
 					ind+'if(w === stretch){\n'+
 					ind+'\tw = this.width \n'+

@@ -38,14 +38,18 @@ define.class('$shaders/pickshader', function(require){
 
 	this.canvasverbs = {
 		begin:function(x, y, w, h, margin, padding, alignfn, wrapfn){
+			//console.log(this.align.x)
 			this.RECTARGS()
 			this.x = x, this.y = y, this.w = w, this.h = h
+			// just store the margin on our align
+			this.align.margin = margin,
 			this.beginAlign(
 				alignfn !== undefined? alignfn: this.classNAME.aligncontent, 
 				wrapfn !== undefined? wrapfn: this.classNAME.wrapcontent, 
-				margin !== undefined? margin: this.classNAME.margin,
-				padding !== undefined? padding: this.classNAME.padding
+				this.align.margin,
+				padding
 			)
+
 			this.GETBUFFER()
 		},
 		end:function(dbg){
@@ -53,21 +57,21 @@ define.class('$shaders/pickshader', function(require){
 			this.endAlign()
 			var buffer = this.bufferNAME
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
-				//this.align.computeh = false
-				this.runAlign(buffer, 1, this.classNAME.margin, oldalign)
+				this.runAlign(buffer, 1, this.align.margin, oldalign)
 			}
 			else{ // we have to mark our nesting to be absolute and not touched by outer layouts
 				this.markAbsolute(oldalign)
 			}
 			//console.error(this.align.x, this.align.y)
 			this.CANVASTOBUFFER()
+
 		},
 		draw:function(x, y, w, h, margin){
 			var doalign = isNaN(x) || isNaN(y)
 			this.RECTARGS()
 			this.GETBUFFER()
 			this.ARGSTO(this)
-			if(doalign) this.runAlign(buffer,1, margin || this.classNAME.margin)
+			if(doalign) this.runAlign(buffer,1, margin)
 			this.CANVASTOBUFFER()
 		}
 	}

@@ -15,13 +15,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 		}
 
+		define.class(this, 'Button', '$stamps/buttonstamp', function(){
+		})
+
 		// create a little stamp based button with hover anim
-		define.class(this, 'Button', '$base/stamp', function(){
+		define.class(this, 'Test', '$base/stamp', function(){
 
 			define.class(this, 'SubStamp', '$base/stamp', function(){
 
 				define.class(this, 'Background', '$shaders/rectshader', function(){
-					this.fgcolor = [0.25,0,0.5,1]
+					this.fgcolor = [0.25, 0, 0.5, 1]
 					this.aligncontent = float.TOPLEFT
 					this.padding = 3
 					this.margin = 0
@@ -72,7 +75,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.aligncontent = float.LEFT
 				//this.margin = [1,0,0,1]
 				this.margin = 1
-				//this.h = float.height("10%")
+				this.h = float.height("10%")
 				this.padding = 10//[10,0,10,0]
 				//this.w = float//float.width("50%")
 			})
@@ -81,13 +84,13 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.fgcolorBackground = Animate({1:[0,1,0,1]})
 			}
 
-			this.fgcolor = [0.5,1,0.5,1]
+			this.fgcolor = [0.5, 1, 0.5, 1]
 
 			this.draw = function(){
 				var c = this.canvas
 				c.beginBackground(this)
 				c.drawLabel(this.text)
-				//c.drawSubStamp()
+				c.drawSubStamp()
 				c.drawIcon(this.icon)
 				c.endBackground()
 			}
@@ -114,14 +117,19 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			c.fontsize = 5
 			c.beginAlign(float.TOPLEFT)
 			if(c.startCache('button',this.layoutchanged)){
-				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
+				var icons = Object.keys(this.Test.prototype.Icon.prototype.table)
 				var dt = performance.now()
 				for(var i = 0; i < 1000; i++){
-					//c.drawRect(auto,auto,10,10)//,50,50)
+					//c.drawRect(float,float,10,10)//,50,50)
 					//c.drawRect(auto,auto,20,20)//,50,50)
-					c.drawButton('Btn'+i,icons[i+2])
+					c.drawButton('Hi','')
+					c.drawButton('Hi','')
+					
+					//c.drawTest('Btn'+i,icons[i+2])
 					//c.drawRect()
 					//c.drawRect()
+					//c.drawRect()
+
 					//console.log(c.align.y, c.align.x)
 					//c.newline()
 					//console.log("MARK")
@@ -140,32 +148,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				c.stopCache()
 			}
 			c.endAlign()
-			//c.endAlign()
-			console.log(performance.now()-dt)
-			//c.endAlign()
-			/*
-			// this allows reuse of commandbuffers
-			if(c.startCache('button', true)){
-
-				c.startAlign('leftfloor',20)
-				c.margin = [1,0,0,0.5]
-
-				//c.drawRect(random()*300, random()*300, 10, 10)
-				c.color = [1,1,1,0.5]
-				//for(var j = 0; j < 5;j++){
-				//for(var j = 0; j < 150;j++){
-
-				//var dt = performance.now()
-				for(var i = 0; i < 10000;i++){
-					c.drawRect(4,10+10*sin(i))
-				}
-				//console.log(performance.now()-dt)
-			//}
-					//c.drawRect(i*6,j*6, 5, 5)
-				//	}
-				//}
-				c.stopCache()
-			}*/
 		}
 
 	})

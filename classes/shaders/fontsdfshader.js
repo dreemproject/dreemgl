@@ -302,7 +302,8 @@ define.class('$shaders/pickshader', function(require){
 
 			if(x === undefined && this.classNAME.x !== undefined) x = this.classNAME.x
 			if(y === undefined && this.classNAME.y !== undefined) y = this.classNAME.y
-
+			if(x === float) x = undefined
+			if(y === float) y = undefined
 			//if(x !== undefined) this.px = x
 			//if(y !== undefined) this.py = y
 
@@ -311,7 +312,7 @@ define.class('$shaders/pickshader', function(require){
 			this.ARGSTO(this)
 
 			// do alignment on our full thing
-			if(isNaN(x) || isNaN(y)) this.runAlign(buffer, strlen, margin || this.classNAME.margin)
+			if(isNaN(x) || isNaN(y)) this.runAlign(buffer, strlen, margin!==undefined?margin:this.classNAME.margin)
 
 			// lets output a word
 			for(var i = 0; i < strlen; i++){

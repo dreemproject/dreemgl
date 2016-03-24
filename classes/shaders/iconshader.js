@@ -4,8 +4,8 @@ define.class('$shaders/fontsdfshader', function(require, baseclass){
 
 	this.canvasverbs = {
 		drawText: baseclass._canvasverbs.draw,
-		draw: function(str, x, y){
-			this.drawTextNAME(this.classNAME.table[str], x, y)
+		draw: function(str, x, y, margin){
+			this.drawTextNAME(this.classNAME.table[str], x, y, margin)
 		}
 	}
 	this.fgcolor = 'blue'
