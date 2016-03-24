@@ -87,7 +87,7 @@ define.class(function(require, exports){
 	this.tab = function(indent){
 		// lets add a tab
 		this.actual_indent = indent
-		// alright lets write it on the previous newline.		
+		// alright lets write it on the previous newline.
 		this.add('\t', 4*256 + indent)
 		//this.add(Array(indent+1).join('\t') )
 	}

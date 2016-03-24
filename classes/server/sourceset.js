@@ -350,13 +350,25 @@ define.class(function(require, $server$, dataset){
 			out:'',
 			charCodeAt: function(i){return this.out.charCodeAt(i)},
 			char_count:0
-		}
+		};
+
 		jsformatter.walk(this.ast, buf, {}, function(str){
-//			console.log(str)
-			buf.char_count += str.length
+
+			if(str === '\n'){
+				this.last_is_newline = true;
+				return
+			}
+			if(str === '\t' && this.last_is_newline){
+				str = '\n';
+				for (var i = 0; i < this.actual_indent;i++) {
+					str += '  '
+				}
+			}
+			this.last_is_newline = false;
+
+			buf.char_count += str.length;
 			buf.out += str
-		})
-		console.log(buf.out)
+		});
 		return buf.out
 	}
 })
