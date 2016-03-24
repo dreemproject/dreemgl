@@ -26,6 +26,18 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		change: Config({type: Event})
 	}
 
+	this.emitChange = function () {
+		this.emitUpward('change', {
+			data: this.data,
+			start: this.start,
+			end: this.end,
+			rangeStart: this.getRangeStart(),
+			rangeEnd: this.getRangeEnd(),
+			zoom: this.zoom,
+			scroll: this.scroll
+		})
+	}
+
 	this.onzoom = function () {
 		if (this._zoom > this.getDuration() / this.TIME_SCALE) {
 			this.zoom = this.getDuration() / this.TIME_SCALE
@@ -49,13 +61,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		eventdata.id = eventdata.id || this.data.length + 1
 		this.data.push(eventdata)
 		this.data = this.data
-		this.emitUpward('change', {
-			data: this.data,
-			start: this.start,
-			end: this.end,
-			zoom: this.zoom,
-			scroll: this.scroll
-		})
+		this.emitChange()
 	}
 
 	this.updateEvent = function (id, eventdata) {
@@ -65,13 +71,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 					this.data[i][key] = eventdata[key]
 				}
 				this.data = this.data
-				this.emitUpward('change', {
-					data: this.data,
-					start: this.start,
-					end: this.end,
-					zoom: this.zoom,
-					scroll: this.scroll
-				})
+				this.emitChange()
 				break
 			}
 		}
@@ -82,13 +82,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			if (this.data[i].id === id) {
 				this.data.splice(i, 1)
 				this.data = this.data
-				this.emitUpward('change', {
-					data: this.data,
-					start: this.start,
-					end: this.end,
-					zoom: this.zoom,
-					scroll: this.scroll
-				})
+				this.emitChange()
 				break
 			}
 		}
@@ -143,13 +137,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 		win.clearTimeout(this.emitChangeTimeout)
 		this.emitChangeTimeout = win.setTimeout(function() {
-			this.emitUpward('change', {
-				data: this.data,
-				start: this.start,
-				end: this.end,
-				zoom: this.zoom,
-				scroll: this.scroll
-			})
+			this.emitChange()
 		}.bind(this), 100)
 	}
 
