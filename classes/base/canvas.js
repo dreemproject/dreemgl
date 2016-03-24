@@ -194,11 +194,10 @@ define.class(function(exports){
 			str = str.slice(0,id)
 		}
 		var factor = parseFloat(str)/100
-
 		if(isNaN(factor)){
 			return function(align){
 				var h = align.top + align.height - align.maxy - align.m2 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
-				if(h<=0) w = align.top + align.height - align.m2 + delta
+				if(h<=0) h = align.top + align.height - align.m2 + delta
 				return h
 			}
 		} 
@@ -266,7 +265,7 @@ define.class(function(exports){
 			a.wrapx = a.w + a.xstart
 		}
 
-		if(this.h === undefined || this. h === float){
+		if(this.h === undefined || this.h === float){
 			a.computeh = true
 			a.h = a.height - a.p1 - a.p3  
 		}
@@ -855,10 +854,10 @@ define.class(function(exports){
 					if(args.indexOf('padding')!== -1) write += ind+'if(padding === undefined) padding = this.class'+cap+'.padding\n'
 					if(args.indexOf('margin')!== -1) write += ind+'if(margin === undefined) margin = this.class'+cap+'.margin\n'
 					write +=
-					ind+'if(x === undefined) w = this.class'+cap+'.x\n'+
-					ind+'if(y === undefined) h = this.class'+cap+'.y\n'
-					ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
-					ind+'if(h === undefined) h = this.class'+cap+'.h\n'
+						ind+'if(x === undefined) w = this.class'+cap+'.x\n'+
+						ind+'if(y === undefined) h = this.class'+cap+'.y\n'+
+						ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
+						ind+'if(h === undefined) h = this.class'+cap+'.h\n'
 					return write
 					/*
 					ind+'if(w === stretch){\n'+

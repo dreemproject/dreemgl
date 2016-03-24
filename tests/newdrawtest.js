@@ -15,8 +15,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 		}
 
-		define.class(this, 'Button', '$stamps/buttonstamp', function(){
-		})
 
 		// create a little stamp based button with hover anim
 		define.class(this, 'Test', '$base/stamp', function(){
@@ -97,9 +95,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			this.canvasverbs = {
 				draw: function(text, icon, x, y, w, h){
-					this.GETSTAMP()
-					this.ARGSTO(stamp)
-					stamp.draw()
+					this.DOSTAMP()
 				}
 			}
 		})
@@ -110,6 +106,10 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			this.margin = 0
 		}
 
+		define.class(this, 'Button', '$stamps/buttonstamp', function(){
+			this.padding = 5
+		})
+
 		this.draw = function(){
 			var c = this.canvas 
 			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
@@ -119,11 +119,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Test.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 1000; i++){
+				for(var i = 0; i < 500; i++){
 					//c.drawRect(float,float,10,10)//,50,50)
 					//c.drawRect(auto,auto,20,20)//,50,50)
-					c.drawButton('Hi','')
-					c.drawButton('Hi','')
+					c.drawButton(icons[i],icons[i])
+					//c.drawButton('Hi','')
 					
 					//c.drawTest('Btn'+i,icons[i+2])
 					//c.drawRect()
