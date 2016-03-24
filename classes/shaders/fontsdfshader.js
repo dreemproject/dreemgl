@@ -281,7 +281,7 @@ define.class('$shaders/pickshader', function(require){
 			this.px = this.x
 			this.py = this.y
 		},
-		draw:function(str, x, y){
+		draw:function(str, x, y, margin){
 			// ok so how does this work.
 			if(typeof str !== 'string') str = str+''
 
@@ -300,6 +300,9 @@ define.class('$shaders/pickshader', function(require){
 			this.w = width 
 			this.h = fontsize * linespacing
 
+			if(x === undefined && this.classNAME.x !== undefined) x = this.classNAME.x
+			if(y === undefined && this.classNAME.y !== undefined) y = this.classNAME.y
+
 			//if(x !== undefined) this.px = x
 			//if(y !== undefined) this.py = y
 
@@ -308,7 +311,7 @@ define.class('$shaders/pickshader', function(require){
 			this.ARGSTO(this)
 
 			// do alignment on our full thing
-			if((x === undefined || y === undefined)) this.runAlign(this.classNAME, buffer, strlen)
+			if(isNaN(x) || isNaN(y)) this.runAlign(buffer, strlen, margin || this.classNAME.margin)
 
 			// lets output a word
 			for(var i = 0; i < strlen; i++){

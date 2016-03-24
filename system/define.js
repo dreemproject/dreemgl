@@ -2789,10 +2789,6 @@
 			obj.track = track
 			return obj
 		}
-
-		exports.auto = function auto(){
-		}
-
 	}
 
 	defineGlobals(typeof process !== 'undefined'? global: typeof window !== 'undefined'? window: self)

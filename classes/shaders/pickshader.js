@@ -26,6 +26,9 @@ define.class('$base/shader', function(require){
 		return res
 	}
 
+	this.aligncontent = float.LEFTTOP
+	this.alignwrap = float.WRAP
+
 	this.color = function(){
 		return vec4('red')
 	}
@@ -40,55 +43,6 @@ define.class('$base/shader', function(require){
 	}
 
 	this.pixelentries = ['color','pick']
-
-	Object.defineProperty(this, 'aligncontent',{
-		set:function(value){
-			this._aligncontent = 0
-			if(typeof value === 'number') return this._aligncontent = value
-			if(value.indexOf('left') !== -1) this._aligncontent |= Canvas.LEFT
-			if(value.indexOf('top') !== -1) this._aligncontent |= Canvas.TOP
-			if(value.indexOf('right') !== -1) this._aligncontent |= Canvas.RIGHT
-			if(value.indexOf('bottom') !== -1) this._aligncontent |= Canvas.BOTTOM
-			if(value.indexOf('nowrap') !== -1) this._aligncontent |= Canvas.NOWRAP
-		},
-		get:function(){
-			return this._aligncontent
-		}
-	})
-
-	this._absolute = 0
-	Object.defineProperty(this, 'top',{
-		set:function(value){
-			if(value === undefined) return this._absolute &= 2|4|8
-			this._top = value
-			this._absolute |= 1
-		},
-		get:function(){return this._top}
-	})
-	Object.defineProperty(this, 'right',{
-		set:function(value){
-			if(value === undefined) return this._absolute &= 1|4|8
-			this._right = value
-			this._absolute |= 2
-		},
-		get:function(){return this._right}
-	})
-	Object.defineProperty(this, 'bottom',{
-		set:function(value){
-			if(value === undefined) return this._absolute &= 1|2|8
-			this._bottom = value
-			this._absolute |= 4
-		},
-		get:function(){return this._bottom}
-	})
-	Object.defineProperty(this, 'left',{
-		set:function(value){
-			if(value === undefined) return this._absolute &= 1|2|4
-			this._left = value
-			this._absolute |= 88
-		},
-		get:function(){return this._left}
-	})
 
 	this.margin = [0,0,0,0]
 	this.padding = [0,0,0,0]

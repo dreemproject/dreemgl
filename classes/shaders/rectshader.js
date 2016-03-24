@@ -22,6 +22,9 @@ define.class('$shaders/pickshader', function(require){
 //		fgcolor:'this.scope._layout?this.scope._bgcolor:this.scope.color'
 	}
 
+	this.contentalign = 
+	this.wrapalign = 
+
 	this.canvas = {
 		visible:float,
 		matrix:mat4,
@@ -34,11 +37,12 @@ define.class('$shaders/pickshader', function(require){
 	}
 
 	this.canvasverbs = {
-		begin:function(x, y, w, h, margin, padding, flags){
+		begin:function(x, y, w, h, margin, padding, alignfn, wrapfn){
 			this.RECTARGS()
 			this.x = x, this.y = y, this.w = w, this.h = h
 			this.beginAlign(
-				flags !== undefined? flags: this.classNAME._aligncontent, 
+				alignfn !== undefined? alignfn: this.classNAME.aligncontent, 
+				wrapfn !== undefined? wrapfn: this.classNAME.wrapcontent, 
 				margin !== undefined? margin: this.classNAME.margin,
 				padding !== undefined? padding: this.classNAME.padding
 			)
@@ -50,7 +54,7 @@ define.class('$shaders/pickshader', function(require){
 			var buffer = this.bufferNAME
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
 				//this.align.computeh = false
-				this.runAlign(this.classNAME, buffer, undefined, 1, oldalign)
+				this.runAlign(buffer, 1, this.classNAME.margin, oldalign)
 			}
 			else{ // we have to mark our nesting to be absolute and not touched by outer layouts
 				this.markAbsolute(oldalign)
@@ -63,7 +67,7 @@ define.class('$shaders/pickshader', function(require){
 			this.RECTARGS()
 			this.GETBUFFER()
 			this.ARGSTO(this)
-			if(doalign) this.runAlign(this.classNAME, buffer,1, margin)
+			if(doalign) this.runAlign(buffer,1, margin)
 			this.CANVASTOBUFFER()
 		}
 	}

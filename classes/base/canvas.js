@@ -27,18 +27,9 @@ define.class(function(exports){
 		this.w = this.width
 		this.h = this.height
 		this.align = this.stackAlign[0]
-		this.beginAlign(this.LEFT|this.TOP, this.view.padding)
+		this.beginAlign(float.TOPLEFT, float.WRAP, this.view.padding)
 	}
-	this.CENTER = 0
-	this.VCENTER = 0
-	this.HCENTER = 0
-	this.LEFT = 1
-	this.TOP = 2
-	this.RIGHT = 4
-	this.BOTTOM = 8
-	this.NOWRAP = 16
-	this.INSIDE = 64
-	//this.NEEDTRACK = this.WRAP| this.RIGHT | this.HCENTER | this.BOTTOM | this.VCENTER
+
 
 	this.push = function(){
 		var len = ++this.matrixStackLen
@@ -87,103 +78,255 @@ define.class(function(exports){
 		}.bind(this))
 	}
 
+	float.WRAP = function(align, canvas, oldalign){
+		var a = align
+
+		var first = Math.abs(a.x - a.xstart) < 0.001
+		canvas.x = a.x + a.m3 
+		canvas.y = a.y + a.m0 
+
+		a.x += canvas.w + a.m3 + a.m1
+		var hs = canvas.h + a.m0 + a.m2
+
+		if(!a.computew && !first && a.x > a.wrapx){
+
+			a.x = a.xstart 
+			a.y += a.maxy - a.y 
+
+			var newx = a.xstart + a.m3
+			var newy =  a.y + a.m0
+			var dx = newx - canvas.x
+			var dy = newy - canvas.y			
+			a.x += canvas.w + a.m3 + a.m1
+
+			if(oldalign){
+				var start = oldalign.trackstart
+				canvas.displaceAlign(start, 'x', dx, 1)
+				canvas.displaceAlign(start, 'y', dy, 1)
+			}
+			canvas.x = newx
+			canvas.y = newy 
+		}
+
+		var ax = a.x
+		if( ax > a.maxx) a.maxx = ax
+		if( ax > a.boundx) a.boundx = ax
+
+		var hy = a.y + hs
+		if( hy> a.maxy) a.maxy = hy
+		if( hy > a.boundy) a.boundy = hy
+	}
+
+	float.NOWRAP = function(align, canvas, oldalign){
+		var a = align
+		canvas.x = a.x + a.m3 
+		canvas.y = a.y + a.m0 
+		a.x += canvas.w + a.m3 + a.m1
+
+		var ax = a.x
+		if( ax > a.maxx) a.maxx = ax
+		if( ax > a.boundx) a.boundx = ax
+
+		var hs = canvas.h + a.m0 + a.m2
+
+		var hy = a.y + hs
+		if( hy> a.maxy) a.maxy = hy
+		if( hy > a.boundy) a.boundy = hy
+	}
+
+	float.LEFTTOP = float.TOPLEFT = function float_TOPLEFT(align, canvas){
+	}
+
+	float.LEFT =
+	float.LEFTCENTER = float.CENTERLEFT = function float_CENTERLEFT(align, canvas){
+		if(!align.computeh) canvas.displaceAlign(align.trackstart, 'y', (align.h - (align.maxy - align.ystart)) / 2)
+	}
+
+	float.LEFTBOTTOM = float.BOTTOMLEFT = function float_BOTTOMLEFT(align, canvas){
+		if(!align.computeh) canvas.displaceAlign(align.trackstart, 'y', align.h - (align.maxy - align.ystart))
+	}
+
+	float.TOP = 
+	float.CENTERTOP = float.TOPCENTER = function float_TOPCENTER(align, canvas){
+		if(!align.computew) canvas.displaceAlign(align.trackstart, 'x', (align.w - (align.maxx - align.xstart)) / 2)
+	}
+
+	float.CENTER = function float_CENTER(align, canvas){
+		if(!align.computew) canvas.displaceAlign(align.trackstart, 'x', (align.w - (align.maxx - align.xstart)) / 2)
+		if(!align.computeh) canvas.displaceAlign(align.trackstart, 'y', (align.h - (align.maxy - align.ystart)) / 2)
+	}
+	
+	float.BOTTOM =
+	float.CENTERBOTTOM = float.BOTTOMCENTER = function float_CENTERBOTTOM(align, canvas){
+		if(!align.computew) canvas.displaceAlign(align.trackstart, 'x', (align.w - (align.maxx - align.xstart)) / 2)
+		if(!align.computeh) canvas.displaceAlign(align.trackstart, 'y', align.h - (align.maxy - align.ystart))
+	}
+
+	float.TOPRIGHT = float.RIGHTTOP = function float_TOPRIGHT(align, canvas){
+		if(!align.computew) canvas.displaceAlign(align.trackstart, 'x', align.w - (align.maxx - align.xstart))
+	}
+
+	float.RIGHT =
+	float.RIGHTCENTER =  float.CENTERRIGHT = function float_CENTERRIGHT(align, canvas){
+		if(!align.computew) canvas.displaceAlign(align.trackstart, 'x', align.w - (align.maxx - align.xstart))
+		if(!align.computeh) canvas.displaceAlign(align.trackstart, 'y', (align.h - (align.maxy - align.ystart)) / 2)
+	}
+
+	float.RIGHTBOTTOM = float.BOTTOMRIGHT = function float_BOTTOMRIGHT(align, canvas){
+		if(!align.computew) canvas.displaceAlign(align.trackstart, 'x', align.w - (align.maxx - align.xstart))
+		if(!align.computeh) canvas.displaceAlign(align.trackstart, 'y', align.h - (align.maxy - align.ystart))
+	}
+
+	float.left = function float_left(left){
+		return function(align){
+			return align.xstart + align.m3 + left
+		}
+	}
+
+	float.top = function float_top(top){
+		return function(align){
+			return 	align.ystart + align.m0 + top
+		}
+	}
+
+	float.right = function float_right(right){
+		return function(align, canvas){
+			if(isNaN(align.w)) return align.xstart + align.m3 + right
+			return align.xstart + align.w - canvas.w - right - align.m1//0//this.width - this.w//align.xstart - m3 + cls._right
+		}
+	}
+
+	float.bottom = function float_bottom(bottom){
+		return function(align, canvas){
+			if(isNaN(align.h)) return align.ystart + align.m0 + bottom
+			else return align.ystart + align.h - canvas.h - align.m2//t - align.ystart + m3 + cls._bottom
+		}
+	}
+
+	float.width = function float_width(str){
+		var delta = 0, id
+		if((id = str.indexOf('+')) > 0 || (id = str.indexOf('-')) > 0){
+			delta = parseFloat(str.slice(id))
+			str = str.slice(0,id)
+		}
+		var factor = parseFloat(str)/100
+
+		if(isNaN(factor)){
+			return function(align){
+				return align.left + align.width - align.x - align.m1 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+			}
+		}
+		else{
+			return function(align){
+				return floor((align.width) * factor)- align.m1 - align.m3 + delta
+			}
+		}
+	}
+
+	float.height = function float_height(str){
+		var delta = 0, id
+		if((id = str.indexOf('+')) > 0 || (id = str.indexOf('-')) > 0){
+			delta = parseFloat(str.slice(id))
+			str = str.slice(0,id)
+		}
+		var factor = parseFloat(str)/100
+
+		if(isNaN(factor)){
+			return function(align){
+				return align.top + align.height - align.maxy - align.m2 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+			}
+		} 
+		else{
+			return function(align){
+				return floor((align.height) * factor)- align.m0 - align.m2 + delta
+			}
+		}
+	}
+
 	// start an alignment
-	this.beginAlign = function(flags, margin, padding){
+	this.beginAlign = function(alignfunction, wrapfunction, margin, padding){
 		// store old align
 		var oldalign = this.stackAlign[this.stackAlign.len] = this.align
 		this.stackAlign.len++
-		
+
 		// fetch new one
-		var align = this.align = this.stackAlign[this.stackAlign.len] || {}
+		var a = this.align = this.stackAlign[this.stackAlign.len] || {}
 	
 		if(Array.isArray(padding)){
-			 align.p0 = padding[0], align.p1 = padding[1], align.p2 = padding[2], align.p3 = padding[3]
+			 a.p0 = padding[0], a.p1 = padding[1], a.p2 = padding[2], a.p3 = padding[3]
 		}
 		else if(typeof padding === 'number'){
-			 align.p0 = align.p1 = align.p2 = align.p3 = padding
+			 a.p0 = a.p1 = a.p2 = a.p3 = padding
 		}
 		else{
-			align.p0 = align.p1 = align.p2 = align.p3 = 0
+			a.p0 = a.p1 = a.p2 = a.p3 = 0
 		}
 		
 		if(Array.isArray(margin)){
-			align.m0 = margin[0], align.m1 = margin[1], align.m2 = margin[2], align.m3 = margin[3]
+			a.m0 = margin[0], a.m1 = margin[1], a.m2 = margin[2], a.m3 = margin[3]
 		}
 		else if(typeof margin === 'number'){
-			align.m0 = align.m1 = align.m2 = align.m3 = margin
+			a.m0 = a.m1 = a.m2 = a.m3 = margin
 		}
 		else{
-			align.m0 = align.m1 = align.m2 = align.m3 = 0
+			a.m0 = a.m1 = a.m2 = a.m3 = 0
 		}
 		
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
 
-		align.xstart = align.x = xs + align.p3+ align.m3 //+ align.m1
-		align.ystart = align.y = ys + align.p0 + align.m0 //+ align.m2
+		a.left = oldalign.xstart
+		a.top = oldalign.ystart
+		a.width = oldalign.w
+		a.height = oldalign.h
+		a.xstart = a.x = xs + a.p3+ a.m3 //+ a.m1
+		a.ystart = a.y = ys + a.p0 + a.m0 //+ a.m2
 
-		if(this.w === undefined){
-			align.computew = true
-			flags = flags | this.LEFT
-			align.wrapx = this.width
+		if(this.w === undefined || this.w === float){
+			a.computew = true
+			a.w = a.width - a.p1 - a.p3 
+			a.wrapx = a.w + a.xstart
 		}
-		else if(this.w === auto){
-			align.computew = true
-			flags = flags | this.LEFT
-			align.w = this.w - align.p1 - align.p3 
-		}
-		else if(typeof this.w === 'string'){
-			align.computew = false
-			var factor = parseFloat(this.w)/100
-			if(isNaN(factor)){
-				this.w = this.width - align.x - align.m1 + align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
-				if(this.w <= 0)	this.w = this.width - align.m1 - align.m3//- align.p1
-				//else this.w += align.m1 // off by margin
-			}
-			else{
-				this.w = floor((this.width) * factor)- align.m1 - align.m3
-			}
-			align.w = this.w - align.p1 - align.p3 
+		else if(typeof this.w === 'function'){
+			this.w = this.w(a, this)
+			a.computew = false
+			a.w = this.w - a.p1 - a.p3 
+			a.wrapx = a.w + a.xstart
 		}
 		else{
-			align.computew = false
-			align.w = this.w - align.p1 - align.p3 
-			align.wrapx = xs + this.w
+			a.computew = false
+			a.w = this.w - a.p1 - a.p3 
+			a.wrapx = a.w + a.xstart
 		}
 
-		if(this.h === undefined){
-			align.computeh = true
-			flags = flags | this.TOP
+		if(this.h === undefined || this. h === float){
+			a.computeh = true
+			a.h = a.height - a.p1 - a.p3  
 		}
-		else if(this.h === auto){
-			align.computeh = true
-			flags = flags | this.TOP
-			align.h = this.h - align.p0 - align.p2
-		}
-		else if(typeof this.h === 'string'){
-			align.computeh = false
-			var factor = parseFloat(this.h) / 100
-			this.h = this.height - align.m2 + align.p2
-			this.h *= factor			
-			align.h = this.h - align.p0 - align.p2
+		else if(typeof this.h === 'function'){
+			a.computeh = false
+			this.h = this.h(a, this)
+			a.h = this.h - a.p0 - a.p2
 		}
 		else{
-			align.computeh = false
-			align.h = this.h - align.p0 - align.p2
+			a.computeh = false
+			a.h = this.h - a.p0 - a.p2
 		}
 
-		align.flags = flags
-		align.trackstart = this.trackAlign && this.trackAlign.length || 0
+		a.alignfunction = alignfunction || float.TOPLEFT
+		a.wrapfunction = wrapfunction || float.WRAP
+
+		a.trackstart = this.trackAlign && this.trackAlign.length || 0
 		// bounding rect (includes abs position)
-		align.boundx = 0
-		align.boundy = 0
+		a.boundx = 0
+		a.boundy = 0
 		// alignment rect (excludes abs position)
-		align.maxx = 0
-		align.maxy = 0
-		align.inh = this.h
-		align.inw = this.w
-		align.inx = this.x
-		align.iny = this.y
+		a.maxx = 0
+		a.maxy = 0
+		a.inh = this.h
+		a.inw = this.w
+		a.inx = this.x
+		a.iny = this.y
 	}
 
 	this.displaceAlign = function(start, key, displace, dbg){
@@ -214,108 +357,73 @@ define.class(function(exports){
 	}
 
 	this.endAlign = function(){
-		// if we are align HCENTER/RIGHT lets do the h-align.
-		var align = this.align
-		var dx = align.maxx - align.xstart
-		var dy = align.maxy - align.ystart
+		var a = this.align
 
-		var start = align.trackstart
-		
-		if(align.flags & this.LEFT){
-		}
-		else if(align.flags & this.RIGHT){
-			this.displaceAlign(start, 'x', align.w - dx)
-		}
-		else {
-			this.displaceAlign(start, 'x', (align.w - dx) / 2)
-		}
-		if(align.flags & this.TOP){
-		}
-		else if(align.flags & this.BOTTOM){
-			this.displaceAlign(start, 'y', align.h - dy)
-		}
-		else{
-			this.displaceAlign(start, 'y', (align.h - dy) / 2)
-		}
+		a.alignfunction(a, this)
 
-		this.w = dx + align.p1 + align.p3
-		this.h = dy + align.p0 + align.p2
+		var dx = a.maxx - a.xstart
+		var dy = a.maxy - a.ystart
+		this.w = dx + a.p1 + a.p3
+		this.h = dy + a.p0 + a.p2
 
-		var oldalign = align
-		align = this.align = this.stackAlign[--this.stackAlign.len]
+		var oa = a
+		a = this.align = this.stackAlign[--this.stackAlign.len]
 
 		// do a bit of math to size our rect to the computed size
-		if(oldalign.computew){
-			this.w = (oldalign.boundx + oldalign.p1 - oldalign.m1)
-			if(isNaN(oldalign.inx)) this.w -= align.x
+		if(oa.computew){
+			this.w = (oa.boundx + oa.p1 - oa.m1)
+			if(isNaN(oa.inx)) this.w -= a.x
 			else this.w -= oldalign.inx
 		}
-		else this.w = oldalign.inw
-		if(oldalign.computeh){
-			this.h = (oldalign.boundy + oldalign.p2 - oldalign.m2)
-			if(isNaN(oldalign.iny)) this.h -= align.y
-			else this.h -= oldalign.iny
+		else this.w = oa.inw
+		if(oa.computeh){
+			this.h = (oa.boundy + oa.p2 - oa.m2)
+			if(isNaN(oa.iny)) this.h -= a.y
+			else this.h -= oa.iny
 		}
-		else this.h = oldalign.inh
+		else this.h = oa.inh
 		
-		this.x = oldalign.inx
-		this.y = oldalign.iny
-
-		//if(align && align.maxy< oldalign.maxy) align.maxy = oldalign.maxy
+		this.x = oa.inx
+		this.y = oa.iny
 	}
 
-	this.runAlign = function(cls, buffer, range, imargin, oldalign){
+	this.runAlign = function(buffer, range, margin, oldalign){
 
-		var align = this.align
+		var a = this.align
 
-		var m0 = 0,m1 = 0,m2 = 0,m3 = 0
-		if(oldalign){
-			m0 = oldalign.m0, m1 = oldalign.m1, m2 = oldalign.m3, m3 = oldalign.m3
+		// lets store our margin on align
+		if(Array.isArray(margin)){
+			a.m0 = margin[0], a.m1 = margin[1], a.m2 = margin[2], a.m3 = margin[3]
+		}
+		else if(typeof margin === 'number'){
+			a.m0 = a.m1 = a.m2 = a.m3 = margin
 		}
 		else{
-			var margin = imargin || cls && cls.margin
-			if(margin !== undefined){
-				if(typeof margin === 'number') m0 = m1 = m2 = m3 = margin
-				else m0 = margin[0], m1 = margin[1], m2 = margin[2], m3 = margin[3]
-			}
+			a.m0 = a.m1 = a.m2 = a.m3 = 0
 		}
 
-		if(typeof this.w === "string"){
-			var factor = parseFloat(this.w)/100
-			if(isNaN(factor)){
-				this.w = this.width - align.x - m1 - m3 + align.p1   ///- align.m3 //- align.p1// - align.m3 //+align.p1
-				if(this.w <= 0)	this.w = this.width - m1 - m3 //- align.p1
-			}
-			else{
-				this.w = (this.width ) * factor - m1 - m3 + align.p1 
-			}
+		if(typeof this.w === "function"){
+			this.w = this.w(a, this)
 		}
-		if(typeof this.h === "string"){
-			var factor = parseFloat(this.h)
-			this.h = this.height - align.y
-			this.h -= m0 + m2
-			this.h *= factor
+		if(typeof this.h === "function"){
+			this.h = this.h(a, this)
 		}
 
-		if(cls._absolute){
-			//return
-			if(cls._absolute&1){
-				this.y = align.ystart + m0 + cls._top
-			}
-			if(cls._absolute&2){
-				if(isNaN(align.w)) this.x = align.xstart + m3 + cls._right
-				else this.x = align.xstart + align.w - this.w - cls._right - m1//0//this.width - this.w//align.xstart - m3 + cls._right
-			}
-			if(cls._absolute&4){
-				if(isNaN(align.h)) this.y = align.ystart + m0 + cls._bottom
-				else this.y = align.ystart + align.h - this.h - m2//t - align.ystart + m3 + cls._bottom
-			}
-			if(cls._absolute&8){
-				this.x = align.xstart + m3 + cls._left
-			}
+		var abs = false
+		if(typeof this.x === 'function'){
+			this.x = this.x(a, this)
+			abs = true
+		}
+
+		if(typeof this.y === 'function'){
+			this.y = this.y(a, this)
+			abs = true
+		}
+
+		if(abs){
 			this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len - 1)
 
-			// absolutely align a sub thing
+			// absolutely a a sub thing
 			if(oldalign){
 				var dx = this.x - oldalign.xstart + oldalign.p3
 				var dy = this.y - oldalign.ystart + oldalign.p0
@@ -324,65 +432,29 @@ define.class(function(exports){
 				this.displaceAlign(start, 'x', dx, 1)
 				this.displaceAlign(start, 'y', dy, 1)
 			}
-			if(!cls.noabsolutebounds){
-				var maxx = this.x + this.w + m3
-				if(maxx > align.boundx) align.boundx = maxx
-				var maxy = this.y + this.h + m0
-				if( maxy> align.boundy) align.boundy = maxy
-			}
+			var maxx = this.x + this.w + a.m3
+			if(maxx > a.boundx) a.boundx = maxx
+			var maxy = this.y + this.h + a.m0
+			if( maxy> a.boundy) a.boundy = maxy
 			return
 		}
 
 		this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len)
 
-		var first = Math.abs(align.x-align.xstart) < 0.001
-		this.x = align.x + m3 
-		this.y = align.y + m0 
-
-		align.x += this.w + m3 + m1
-
-		var hs = this.h + m0 + m2
-
-		//console.log(first, align.y, align.wrapx)
-		if(!(align.flags & this.NOWRAP) && !align.computew && !first && align.x > align.wrapx){
-
-			align.x = align.xstart 
-			align.y += align.maxy - align.y 
-
-			var newx = align.xstart + m3
-			var newy =  align.y + m0
-			var dx = newx - this.x
-			var dy = newy - this.y			
-			align.x += this.w + m3 + m1
-
-			if(oldalign){
-				var start = oldalign.trackstart
-				this.displaceAlign(start, 'x', dx, 1)
-				this.displaceAlign(start, 'y', dy, 1)
-			}
-			this.x = newx
-			this.y = newy 
-		}
-		//align.lastmaxh = align.maxh
-		var ax = align.x
-		if( ax > align.maxx) align.maxx = ax
-		if( ax > align.boundx) align.boundx = ax
-		var hy = align.y + hs
-		if( hy> align.maxy) align.maxy = hy
-		if( hy > align.boundy) align.boundy = hy
-
+		a.wrapfunction(a, this, oldalign)
 	}
 
-	// break terminates an align cycle and does a newline
+	// break terminates an a cycle and does a newline
 	this.newline = function(height){
-		var align = this.align
-		align.x = align.xstart 
-		align.y += align.maxy - align.y
+		var a = this.align
+		a.x = a.xstart 
+		a.y += a.maxy - a.y
 	}
 
 	this.addCanvas = function(ctx, index){
 		ctx.trackAlign = this.trackAlign
 		ctx.stackAlign = this.stackAlign
+		//console.log(this.align.w)
 		ctx.width = this.width
 		ctx.height = this.height
 		ctx.frameid = this.frameid
@@ -736,6 +808,8 @@ define.class(function(exports){
 					ind+'stamp.pickdraw = _pickdraw\n'+
 					ind+'canvas.scope = stamp\n'+
 					ind+'canvas.align = this.align\n'+
+					//ind+'canvas.innerwidth = this.align.w !== undefined? this.align.w: this.innerwidth\n'+
+					//ind+'canvas.innerheight = this.align.h !== undefined? this.align.h: this.innerheight\n'+
 					ind+'canvas.x = canvas.y = undefined\n'+
 					ind+'stamp.canvas = canvas\n'
 					//for(var i = 0; i < args.length; i++){
