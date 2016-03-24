@@ -287,7 +287,8 @@ define.class(function(require, $server$, dataset){
 					node: item,
 					children:[],
 					inputs:[],
-					outputs:[]
+					outputs:[],
+					editables:[]
 				}
 
 				// we haz classname.
@@ -315,8 +316,10 @@ define.class(function(require, $server$, dataset){
 									name:con.name,
 									title:con.title,
 									type:con.type,
-									attrib:con.attrib,
+									attrib:con.attrib
 								})
+							} else if (attrib.flow === 'edit') {
+								child.editables.push(con);
 							}
 						}
 					}

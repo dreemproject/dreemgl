@@ -4,7 +4,10 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton, renameblockdialog){
+define.class('$ui/view', function(require,
+								  $system$parse$, astscanner,
+								  $ui$, view, icon, treeview, cadgrid, label, button, textbox,
+								  $$, ballbutton, renameblockdialog){
 
 	this.cursor = "move"
 	this.position = "absolute"
@@ -49,6 +52,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		focusbordercolor: Config({motion: "linear", duration: 0.1, type: vec4, value: "#d0d0d0", meta: "color"}),
 		hoverbordercolor: Config({motion: "linear", duration: 0.1, type: vec4, value: "#e0e0e0", meta: "color"}),
 		inselection : Config({type: boolean, value: false}),
+		editables: [],
+		nodeprops:{},
 		inputs: [{name: "a0", title: "test input!", color: vec4("blue")}],
 		outputs: [{name: "b1", title: "output? ", color: vec4("yellow")}]
 	}
@@ -211,6 +216,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.over = false
 
 	this.pointerover = function(){
+		if (!this.over) {
+			var fg = this.find("flowgraph")
+			fg.inspect = this
+		}
+
 		this.over = true
 		this.screen.status = this.hovertext
 		this.updatecolor()
@@ -341,6 +351,26 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.render = function(){
+
+		var editors = [];
+
+		for (var i=0;i<this._editables.length;i++) {
+			var editable = this._editables[i];
+
+			var ast = new astscanner(this.nodeprops,[{type:"Property", name:editable.name}])
+			var value;
+			if (ast.atindex > -1 && ast.atparent && ast.atparent.keys) {
+				var found = ast.atparent.keys[ast.atindex]
+				if (found && found.value) {
+					value = found.value.value
+				}
+			}
+
+			editors.push(view({flex:1, alignitems:"center"},
+				label({flex:0.25, margin:vec4(10,5,10,5), bold:true, text:editable.title + ":"}),
+				textbox({flex:3, multiline:false, fgcolor:vec4(0.8,0.8,0.8,1), paddingleft:15, value:value})));
+		}
+
 		return [
 			view({class: 'header',alignitems: "center" }
 				,view({bgcolor: NaN, justifycontent: "center", alignitems: "center" }
@@ -352,7 +382,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				)
 				,button({class: "header", icon: "remove",click: function(e){this.removeBlock(e);}.bind(this)})
 			)
-			,view({class: 'main', height:20, bgcolor:vec4(0.2,0.3,0.3,0.5)}
+			,view({class: 'main', bgcolor:vec4(0.2,0.3,0.3,0.5)},
+				editors
 			)
 			,view({class: 'between1'}
 				,view({class: 'head',render: function(){return this.renderInputs()}.bind(this)}

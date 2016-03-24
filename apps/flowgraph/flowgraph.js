@@ -17,7 +17,8 @@ define.class('$ui/view', function(require,
 	this.flexdirection = "column"
 
 	this.attributes = {
-		sourceset:{}
+		sourceset:{},
+		inspect:Config({type:Object})
 	}
 
 	define.class(this, "selectorrect", view, function() {
@@ -121,7 +122,6 @@ define.class('$ui/view', function(require,
 	}
 
 	this.addBlock = function(folder, blockname) {
-		console.log("Add", folder, blockname)
 		this.sourceset.fork(function() {
 			this.sourceset.addBlock(undefined, blockname)
 		}.bind(this))
@@ -361,7 +361,6 @@ define.class('$ui/view', function(require,
 								category.children.push({name:name + ".js"})
 							}
 						}
-						console.log(">", children)
 
 						lib.dataset = this.librarydata = dataset({children:children})
 					}
@@ -629,6 +628,8 @@ define.class('$ui/view', function(require,
 						pos:vec3(fd.x, fd.y, 0),
 						name:node.name,
 						title:uppercaseFirst(node.classname + ': ' + node.name),
+						nodeprops:node.propobj,
+						editables:node.editables,
 						inputs:node.inputs,
 						outputs:node.outputs
 					})
@@ -827,6 +828,56 @@ define.class('$ui/view', function(require,
 						//,searchbox()
 						,library({name: "thelibrary", dataset: this.librarydata})
 					)
+					//,dockpanel({title:"Inspector", visible:false},
+					//	propviewer({
+					//		name:"inspector",
+					//		target:this.inspect,
+					//		flex:1,
+					//		overflow:"scroll",
+					//		bgcolor:"#4e4e4e",
+					//		callback:function(val, editor, commit) {
+					//			console.log("callback>>", val, editor, commit)
+					//			if (editor && editor.target && editor.propertyname) {
+					//				var t = editor.target;
+					//				if (typeof(t) === 'string') {
+					//					t = editor.find(t);
+					//				}
+                    //
+					//				if (t) {
+					//					if (commit === "file") {
+					//						var formData = new FormData();
+					//						var fileobjname;
+					//						for (var i = 0; i < val.length; i++) {
+					//							var file = val[i];
+					//							fileobjname = file.name;
+					//							formData.append('file', file);
+					//						}
+					//						if (fileobjname) {
+					//							var xhr = new XMLHttpRequest();
+					//							xhr.open('POST', window.location.pathname, true);
+					//							xhr.onload = function() {
+					//								if (xhr.status === 200) {
+					//									var compfile = t.screen.composition.constructor.module.filename;
+					//									var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+					//									var filename = compdir + "/" + fileobjname;
+                    //
+					//									console.log("oops have to write here", t, editor.propertyname, filename)
+                    //
+                    //
+					//								} else {
+					//									console.log('Oops, upload failed', xhr, val);
+					//								}
+					//							}.bind(this);
+					//							xhr.send(formData);
+					//						}
+					//					} else {
+					//						console.log("oops have to write here", t, editor.propertyname, val)
+					//					}
+					//				}
+					//			}
+					//		}.bind(this)
+					//	})
+					// )
 				)
 				,splitcontainer({flexdirection: "column", direction: "horizontal"}
 					,cadgrid({name: "centralconstructiongrid",
