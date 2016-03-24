@@ -534,16 +534,16 @@ define.class('$ui/view', function(require,
 
 		var connectingconnection = this.find("openconnector")
 		if (connectingconnection) {
-			connectingconnection.visible = true
+			connectingconnection.visible = this.newconnection.targetblock && this.newconnection.sourceblock
 			connectingconnection.from = this.newconnection.sourceblock
 			connectingconnection.fromoutput = this.newconnection.sourceoutput
 			connectingconnection.to = this.newconnection.targetblock
 			connectingconnection.toinput = this.newconnection.targetinput
 
-			console.log(this.newconnection.sourceblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput)
+			//console.log(this.newconnection.targetblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput)
 
 			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length > 0) {
-				console.log("setting to??", connectingconnection.to)
+				//console.log("setting to??", connectingconnection.to)
 				var b = this.find(connectingconnection.to)
 				if (b) {
 					var ball = b.findChild(connectingconnection.toinput)
@@ -551,7 +551,7 @@ define.class('$ui/view', function(require,
 				}
 			} else {
 				if (connectingconnection.from && connectingconnection.from !== "undefined"&& connectingconnection.from.length > 0) {
-					console.log(connectingconnection.from)
+					//console.log(connectingconnection.from)
 					var b = this.find(connectingconnection.from)
 					if (b) {
 						var ball = b.findChild(connectingconnection.fromoutput)
