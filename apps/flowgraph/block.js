@@ -278,6 +278,7 @@ define.class('$ui/view', function(require,
 		this.bgcolor = NaN
 		this.flex = 1
 		this.width = 120
+		this.justifycontent = "flex-end"
 
 		this.attributes = {
 			color: Config({type: vec4, value: vec4(0,0,0,0), meta: "color"}),
@@ -302,8 +303,8 @@ define.class('$ui/view', function(require,
 				this.hovertext = "Output " + this.title+ (this.type?(": "+ this.type): "")
 
 			return [
-				label({text: uppercaseFirst(this.name), bgcolor: NaN, alignself: "center", align: "right", marginright: 5, flex: 1}),
-				ballbutton({borderwidth: 2, bgcolor: this.color, click: this.tapped.bind(this), alignself: "center"})
+				label({text: uppercaseFirst(this.name), bgcolor: NaN, alignself: "center", align: "right", marginright: 5, flex: 0}),
+				ballbutton({flex:0, borderwidth: 2, bgcolor: this.color, click: this.tapped.bind(this), alignself: "center"})
 			]
 		}
 	})
