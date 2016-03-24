@@ -8,6 +8,7 @@ define.class('$ui/view', function(require,
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, palette, propviewer, searchbox, jseditor,
 		$server$, sourceset, dataset,
+		$system$parse$, astscanner,
 		$$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection) {
 
 	this.name = 'flowgraph'
@@ -482,7 +483,34 @@ define.class('$ui/view', function(require,
 	}
 
 	this.setBlockName = function(block, newname) {
-		console.log("TODODODODODODO: setBlockName - change name to", newname)
+
+		//TODO fix all the wires that will break when you do this!
+
+		this.sourceset.fork(function(src) {
+			var ast = new astscanner(block.nodeprops,[{type:"Property", name:"name"}])
+			var value;
+			if (ast.atindex > -1 && ast.atparent && ast.atparent.keys) {
+				var found = ast.atparent.keys[ast.atindex]
+				if (found && found.value) {
+					value = found.value;
+					value.raw = '"' + newname + '"';
+					value.value = newname
+				}
+			} else {
+				ast.at.keys.push({
+					key:{
+						type:"Property",
+						name:"name"
+					},
+					value:{
+						type:"Value",
+						kind:"string",
+						raw:'"' +  newname + '"',
+						value: newname
+					}})
+			}
+		})
+
 	}
 
 	this.cancelConnection = function() {
