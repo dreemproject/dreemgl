@@ -238,7 +238,7 @@ define.class(function(exports){
 		} 
 		else{
 			return function(align){
-				return floor((align.height) * factor)- align.m0 - align.m2 + delta
+				return floor((align.height) * factor) + delta - align.m0 - align.m2
 			}
 		}
 	}
@@ -288,9 +288,10 @@ define.class(function(exports){
 			a.wrapx = a.w + a.xstart
 		}
 		else if(typeof this.w === 'function'){
-			this.w = this.w(a, this)
+			//this.w = 
+			var w = this.w(a, this)
 			a.computew = false
-			a.w = this.w - a.p1 - a.p3 
+			a.w = w - a.p1 - a.p3 
 			a.wrapx = a.w + a.xstart
 		}
 		else{
@@ -305,8 +306,8 @@ define.class(function(exports){
 		}
 		else if(typeof this.h === 'function'){
 			a.computeh = false
-			this.h = this.h(a, this)
-			a.h = this.h - a.p0 - a.p2
+			var h = this.h(a, this)//this.h = this.h(a, this)
+			a.h = h - a.p0 - a.p2
 		}
 		else{
 			a.computeh = false
@@ -402,21 +403,29 @@ define.class(function(exports){
 			a.m0 = a.m1 = a.m2 = a.m3 = 0
 		}
 
-		if(typeof this.w === "function"){
-			this.w = this.w(a, this)
+		var w = this.w
+		if(typeof w === "function"){
+			w = w(a, this)
+			this.w = w
 		}
-		if(typeof this.h === "function"){
-			this.h = this.h(a, this)
+		var h = this.h
+		if(typeof h === "function"){
+			h = h(a, this)
+			this.h = h
 		}
 
 		var abs = false
-		if(typeof this.x === 'function'){
-			this.x = this.x(a, this)
+		var x = this.x
+		if(typeof x === 'function'){
+			x = x(a, this)
+			this.x  =x
 			abs = true
 		}
 
-		if(typeof this.y === 'function'){
-			this.y = this.y(a, this)
+		var y = this.y
+		if(typeof y === 'function'){
+			y = y(a, this)
+			this.y =y
 			abs = true
 		}
 
@@ -425,16 +434,16 @@ define.class(function(exports){
 
 			// absolutely a a sub thing
 			if(oldalign){
-				var dx = this.x - oldalign.xstart + oldalign.p3
-				var dy = this.y - oldalign.ystart + oldalign.p0
+				var dx = x - oldalign.xstart + oldalign.p3
+				var dy = y - oldalign.ystart + oldalign.p0
 
 				var start = oldalign.trackstart
 				this.displaceAlign(start, 'x', dx, 1)
 				this.displaceAlign(start, 'y', dy, 1)
 			}
-			var maxx = this.x + this.w + a.m3
+			var maxx = x + w + a.m3
 			if(maxx > a.boundx) a.boundx = maxx
-			var maxy = this.y + this.h + a.m0
+			var maxy = y + h + a.m0
 			if( maxy> a.boundy) a.boundy = maxy
 			return
 		}

@@ -67,7 +67,7 @@ define.class('$shaders/pickshader', function(require){
 			this.RECTARGS()
 			this.GETBUFFER()
 			this.ARGSTO(this)
-			if(doalign) this.runAlign(buffer,1, margin)
+			if(doalign) this.runAlign(buffer,1, margin || this.classNAME.margin)
 			this.CANVASTOBUFFER()
 		}
 	}

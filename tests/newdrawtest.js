@@ -25,7 +25,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					this.aligncontent = float.TOPLEFT
 					this.padding = 3
 					this.margin = 0
-					this.w = float.width('fill-20')
+					this.w = 80
 				})
 			
 				this.onpointerhover = function(event){
@@ -70,10 +70,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
 				this.aligncontent = float.LEFT
-				this.margin = [1,0,0,1]
-				this.h = float
+				//this.margin = [1,0,0,1]
+				this.margin = 1
+				//this.h = float.height("10%")
 				this.padding = 10//[10,0,10,0]
-				this.w = float.width("50%")
+				//this.w = float//float.width("50%")
 			})
 
 			this.onpointerhover = function(event){
@@ -101,9 +102,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		})
 
 		this.Rect = function(){
-			this.w = float.width("50%")
-			this.margin = 10
-			this.h = 100
+			this.w = float.width("fill")
+			this.h = float.height("10%")
+			this.margin = 0
 		}
 
 		this.draw = function(){
@@ -111,7 +112,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
-			c.beginAlign(float.TOPLEFT, float.WRAP)
+			c.beginAlign(float.TOPLEFT)
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
@@ -140,7 +141,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 			c.endAlign()
 			//c.endAlign()
-			//console.log(performance.now()-dt)
+			console.log(performance.now()-dt)
 			//c.endAlign()
 			/*
 			// this allows reuse of commandbuffers
