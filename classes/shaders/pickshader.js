@@ -41,18 +41,18 @@ define.class('$base/shader', function(require){
 
 	this.pixelentries = ['color','pick']
 
-	Object.defineProperty(this, 'aligndraw',{
+	Object.defineProperty(this, 'aligncontent',{
 		set:function(value){
-			this._aligndraw = 0
-			if(typeof value === 'number') return this._align = value
-			if(value.indexOf('left') !== -1) this._align |= Canvas.LEFT
-			if(value.indexOf('top') !== -1) this._align |= Canvas.TOP
-			if(value.indexOf('right') !== -1) this._align |= Canvas.RIGHT
-			if(value.indexOf('bottom') !== -1) this._align |= Canvas.BOTTOM
-			if(value.indexOf('nowrap') !== -1) this._align |= Canvas.NOWRAP
+			this._aligncontent = 0
+			if(typeof value === 'number') return this._aligncontent = value
+			if(value.indexOf('left') !== -1) this._aligncontent |= Canvas.LEFT
+			if(value.indexOf('top') !== -1) this._aligncontent |= Canvas.TOP
+			if(value.indexOf('right') !== -1) this._aligncontent |= Canvas.RIGHT
+			if(value.indexOf('bottom') !== -1) this._aligncontent |= Canvas.BOTTOM
+			if(value.indexOf('nowrap') !== -1) this._aligncontent |= Canvas.NOWRAP
 		},
 		get:function(){
-			return this._aligndraw
+			return this._aligncontent
 		}
 	})
 

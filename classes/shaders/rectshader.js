@@ -38,7 +38,7 @@ define.class('$shaders/pickshader', function(require){
 			this.RECTARGS()
 			this.x = x, this.y = y, this.w = w, this.h = h
 			this.beginAlign(
-				flags !== undefined? flags: this.classNAME._align, 
+				flags !== undefined? flags: this.classNAME._aligncontent, 
 				margin !== undefined? margin: this.classNAME.margin,
 				padding !== undefined? padding: this.classNAME.padding
 			)

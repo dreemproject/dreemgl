@@ -69,10 +69,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			})
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25,0.25,0.25,1]
-				this.aligndraw = 'left'
-				this.margin = 1
-				this.padding = [10,0,10,0]
-				this.w = fill
+				this.aligncontent = 'left'
+				this.margin = 10
+				this.h = 50
+				this.padding = 10//[10,0,10,0]
+				this.w = "fill"
 			})
 
 			this.onpointerhover = function(event){
@@ -100,8 +101,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		})
 
 		this.Rect = function(){
-			this.w = fill
-			this.margin = [0,0,0,0]
+			this.w = "50%"
+			this.margin = [10,0,0,10]
 			this.h = 50
 		}
 
@@ -114,11 +115,12 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Button.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 8; i++){
+				for(var i = 0; i < 500; i++){
 					//c.drawRect(auto,auto,10,10)//,50,50)
-					c.drawRect(auto,auto,20,20)//,50,50)
+					//c.drawRect(auto,auto,20,20)//,50,50)
 					c.drawButton('Btn'+i,icons[i+2])
 					c.drawRect()
+					//c.drawRect()
 					//console.log(c.align.y, c.align.x)
 					//c.newline()
 					//console.log("MARK")

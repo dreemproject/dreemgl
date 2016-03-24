@@ -119,7 +119,7 @@ define.class(function(exports){
 		var xs = !isNaN(this.x)? this.x: oldalign.x
 		var ys = !isNaN(this.y)? this.y: oldalign.y
 
-		align.xstart = align.x = xs + align.p3	+ align.m3 //+ align.m1
+		align.xstart = align.x = xs + align.p3+ align.m3 //+ align.m1
 		align.ystart = align.y = ys + align.p0 + align.m0 //+ align.m2
 
 		if(this.w === undefined){
@@ -132,12 +132,17 @@ define.class(function(exports){
 			flags = flags | this.LEFT
 			align.w = this.w - align.p1 - align.p3 
 		}
-		else if(this.w === fill){
+		else if(typeof this.w === 'string'){
 			align.computew = false
-			this.w = this.width - align.x - align.m1 - align.m3 + align.p3  ///- align.m3 //- align.p1// - align.m3 //+align.p1
-			if(this.w <= 0)	this.w = this.width - align.m1 - align.m3//- align.p1
-			else this.w++ // off by one
-
+			var factor = parseFloat(this.w)/100
+			if(isNaN(factor)){
+				this.w = this.width - align.x - align.m1 + align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
+				if(this.w <= 0)	this.w = this.width - align.m1 - align.m3//- align.p1
+				//else this.w += align.m1 // off by margin
+			}
+			else{
+				this.w = floor((this.width) * factor)- align.m1 - align.m3
+			}
 			align.w = this.w - align.p1 - align.p3 
 		}
 		else{
@@ -155,9 +160,11 @@ define.class(function(exports){
 			flags = flags | this.TOP
 			align.h = this.h - align.p0 - align.p2
 		}
-		else if(this.h === fill){
+		else if(typeof this.h === 'string'){
 			align.computeh = false
+			var factor = parseFloat(this.h) / 100
 			this.h = this.height - align.m2 + align.p2
+			this.h *= factor			
 			align.h = this.h - align.p0 - align.p2
 		}
 		else{
@@ -273,15 +280,21 @@ define.class(function(exports){
 			}
 		}
 
-		var strw, strh
-		if(this.w === fill){
-			strw = true
-			this.w = this.width - align.x - m1 - m3 + align.p1   ///- align.m3 //- align.p1// - align.m3 //+align.p1
-			if(this.w <= 0)	this.w = this.width - m1 - m3 //- align.p1
+		if(typeof this.w === "string"){
+			var factor = parseFloat(this.w)/100
+			if(isNaN(factor)){
+				this.w = this.width - align.x - m1 - m3 + align.p1   ///- align.m3 //- align.p1// - align.m3 //+align.p1
+				if(this.w <= 0)	this.w = this.width - m1 - m3 //- align.p1
+			}
+			else{
+				this.w = (this.width ) * factor - m1 - m3 + align.p1 
+			}
 		}
-		if(this.h === fill){
+		if(typeof this.h === "string"){
+			var factor = parseFloat(this.h)
 			this.h = this.height - align.y
 			this.h -= m0 + m2
+			this.h *= factor
 		}
 
 		if(cls._absolute){

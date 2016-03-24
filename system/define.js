@@ -2793,8 +2793,6 @@
 		exports.auto = function auto(){
 		}
 
-		exports.fill = function fill(){
-		}
 	}
 
 	defineGlobals(typeof process !== 'undefined'? global: typeof window !== 'undefined'? window: self)
