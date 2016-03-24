@@ -16,7 +16,8 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
 		//
 		zoomlevel: Config({type: Number, value: 16}),
-		latlongchange: Config({type: Event})
+		latlongchange: Config({type: Event}),
+		showlabels: Config({type: Boolean, value: false})
 	}
 
 	function createHash (x, y, z) {
@@ -127,15 +128,16 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 			else if (distance < 2500) zoom = 12
 			else if (distance < 5000) zoom = 11
 			else if (distance < 10000) zoom = 10
-			else if (distance < 20000) zoom = 9
-			else if (distance < 40000) zoom = 8
-			else if (distance < 80000) zoom = 7
-			else if (distance < 160000) zoom = 6
-			else if (distance < 320000) zoom = 5
-			else if (distance < 640000) zoom = 4
-			else if (distance < 128000) zoom = 3
-			else if (distance < 256000) zoom = 2
-			else if (distance < 512000) zoom = 1
+			else if (distance < 20000) zoom = 10
+			else if (distance < 40000) zoom = 9
+			else if (distance < 80000) zoom = 8
+			else if (distance < 160000) zoom = 7
+			else if (distance < 320000) zoom = 6
+			else if (distance < 640000) zoom = 5
+			else if (distance < 128000) zoom = 4
+			else if (distance < 256000) zoom = 3
+			else if (distance < 512000) zoom = 2
+			else if (distance < 1024000) zoom = 1
 			this.flyTo(sum[0] / pointdata.length, sum[1] / pointdata.length, zoom, time)
 		}
 
@@ -982,7 +984,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 				}
 			}
 
-			if (layer == 1) {
+			if (layer == 1 && this.showlabels) {
 				for (var x = xs; x < xe; x ++) {
 					for (var y = ys; y < ye; y ++) {
 						var labels = this.labeltile({host: this, mapdata: this.dataset, fog: this.bgcolor, tilearea: tilearea, trans: vec2(x,y), layeroffset: layer})
