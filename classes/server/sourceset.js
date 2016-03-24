@@ -42,7 +42,7 @@ define.class(function(require, $server$, dataset){
 	this.fork = function(callback){
 		this.undo_stack.push(this.last_source)
 		this.redo_stack.length = 0
-		callback()
+		callback(this)
 		// lets reserialize
 		this.last_source = this.stringify()
 		this.process()

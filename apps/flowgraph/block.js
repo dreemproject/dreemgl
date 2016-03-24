@@ -368,7 +368,45 @@ define.class('$ui/view', function(require,
 
 			editors.push(view({flex:1, alignitems:"center"},
 				label({flex:0.25, margin:vec4(10,5,10,5), bold:true, text:editable.title + ":"}),
-				textbox({flex:3, multiline:false, fgcolor:vec4(0.8,0.8,0.8,1), paddingleft:15, value:value})));
+				textbox({flex:3,
+					multiline:false,
+					fgcolor:vec4(0.8,0.8,0.8,1),
+					paddingleft:5,
+					originalvalue:value,
+					editablename:editable.name,
+					value:value,
+					onfocus: function(ev,v,o) {
+						if (!v && o._value && o._value != o._originalvalue) {
+							var fg = this.find("flowgraph")
+							if (fg && fg.sourceset) {
+								var editablename = o._editablename;
+								fg.sourceset.fork(function(src) {
+									var ast = new astscanner(this.nodeprops,[{type:"Property", name:editablename}])
+									var value;
+									if (ast.atindex > -1 && ast.atparent && ast.atparent.keys) {
+										var found = ast.atparent.keys[ast.atindex]
+										if (found && found.value) {
+											value = found.value;
+											value.raw = '"' + o._value + '"';
+											value.value = o._value
+										}
+									} else {
+										ast.at.keys.push({
+											key:{
+												type:"Property",
+												name:editablename
+											},
+											value:{
+												type:"Value",
+												kind:"string",
+												raw:'"' +  o._value + '"',
+												value: o._value
+											}})
+									}
+								}.bind(this))
+							}
+						}
+					}.bind(this)})));
 		}
 
 		return [
