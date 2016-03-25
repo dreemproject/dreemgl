@@ -219,6 +219,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 
 		// latlong changes, for all zoomlevels calculate tile centers
 		this.onlatlong = function() {
+			if(!this.latlong) return
 			this.parent.latlong = this.latlong
 			var m = geo.latLngToMeters(this.latlong[0], this.latlong[1])
 			m[0] = Math.round(m[0])
@@ -884,6 +885,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 	this.updateTiles = function() {
 		if (!this.dataset) return
 		if (!this.dataset.centers) return
+		if (!this.dataset.latlong) return
 
 		var sourcezoom = this.dataset.zoomlevel
 		this.zoomlevel = Math.ceil(sourcezoom)
