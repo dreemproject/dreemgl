@@ -43,6 +43,7 @@ define.class(function(require){
 	}
 
 	this.clearInterval = function(id){
+		if (id === undefined) return
 		var idx = this.interval_ids.indexOf(id)
 		if(idx !== -1){
 			this.interval_ids.splice(idx, 1)
@@ -65,6 +66,7 @@ define.class(function(require){
 	}
 
 	this.clearTimeout = function(id){
+		if (id === undefined) return
 		var idx = this.timeout_ids.indexOf(id)
 		if(idx !== -1){
 			this.timeout_ids.splice(idx, 1)

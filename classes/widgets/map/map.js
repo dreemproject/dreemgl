@@ -10,7 +10,6 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 	var BufferGen = require('$widgets/map/mapbuffers')()
 	var geo = this.geo = geo()
 	var ubuntufont = require('$resources/fonts/ubuntu_medium_256_baked.glf')
-	var win = typeof window !== 'undefined' ? window : global
 
 	this.attributes = {
 		// TODO(aki): Why latlong inverse?
@@ -31,14 +30,19 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 	this.onpointerwheel = function(ev) {
 		if (!ev.touch) {
 			this.zoomTo(this.dataset.zoomlevel - ev.wheel[1] / 120)
-			win.clearTimeout(this.zoomTimeout)
-			this.zoomTimeout = win.setTimeout(function() {
+			this.clearTimeout(this.zoomTimeout)
+			this.zoomTimeout = this.setTimeout(function() {
 				this.emitUpward('latlongchange', [this.latlong[0], this.latlong[1], this.zoomlevel])
 			}.bind(this), 100)
 		}
 	}
 
+	this.onpointerstart = function(ev) {
+		this.dragging = true
+	}
+
 	this.onpointermultimove = function(ev) {
+		if (!this.dragging) return
 		if (ev.length == 1) {
 			this.panByVectorMovement(ev[0].position, ev[0].movement)
 		} else if (ev.length == 2) {
@@ -78,6 +82,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 	}
 
 	this.onpointerend = function(ev) {
+		this.dragging = false
 		this.emitUpward('latlongchange', [this.latlong[0], this.latlong[1], this.zoomlevel])
 	}
 
