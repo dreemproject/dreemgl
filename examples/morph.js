@@ -51,7 +51,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 			var VTX_COUNT = 512
 
 			// Lets use triangle fan for radial shapes
-			this.drawtype = "TRIANGLE_FAN"
+			this.drawtype = this.TRIANGLE_FAN
 
 			// Vertex buffer contains three morph targets
 			var vertstruct = define.struct({
