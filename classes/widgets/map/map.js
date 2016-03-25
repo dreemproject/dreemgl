@@ -136,7 +136,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 			// tile zoom level
 			zoomlevel: 16,
 			// amount of blocks in the cache
-			throwawaythreshold: 50,
+			throwawaythreshold: 100,
 		}
 
 		// animatedly fly to a lat/long/zoom position in time with fly bounce (zoom level switching)

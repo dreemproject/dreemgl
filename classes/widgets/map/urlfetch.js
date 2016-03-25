@@ -24,14 +24,15 @@ define.class(function(require, $server$, service){
 		console.log("[Map] Session started");
 	}
 
-	this.grabmap = function(x,y,z){
+	this.cachemap = define.classPath(this) + "../../../cache/map/"
 
+	this.grabmap = function(x,y,z){
 		var nodehttp = require('$system/server/nodehttp');
 		var fs = require('fs');
 		try{
-			fs.mkdirSync(define.expandVariables(define.classPath(this) + "../../../cache/map/"));
+			fs.mkdirSync(define.expandVariables(this.cachemap))
 		}catch(e){}
-		var cachedname = define.expandVariables(define.classPath(this) + "../../../cache/map/" + x +"_"+y+"_" + z+".json");
+		var cachedname = define.expandVariables(this.cachemap + x +"_"+y+"_" + z+".json");
 		
 		//var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;
 
@@ -72,5 +73,5 @@ define.class(function(require, $server$, service){
 		})
 
 		return P;
-	}.bind(this)
+	}
 })
