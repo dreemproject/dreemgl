@@ -106,7 +106,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.onscroll = function() {
-		var win = typeof window !== 'undefined'? window: global
+		var win = typeof window !== 'undefined' ? window : global
 		if (this.autoexpand) {
 
 			var starttime = this.getStart()

@@ -10,11 +10,11 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 	var BufferGen = require('$widgets/map/mapbuffers')()
 	var geo = this.geo = geo()
 	var ubuntufont = require('$resources/fonts/ubuntu_medium_256_baked.glf')
+	var win = typeof window !== 'undefined' ? window : global
 
 	this.attributes = {
 		// TODO(aki): Why latlong inverse?
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
-		//
 		zoomlevel: Config({type: Number, value: 16}),
 		latlongchange: Config({type: Event}),
 		showlabels: Config({type: Boolean, value: false})
@@ -26,31 +26,81 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 
 	this.zoomTo = function(z, time) {
 		this.dataset.zoomTo(z, time)
-		//this.updateTiles()
 	}
 
 	this.onpointerwheel = function(ev) {
 		if (!ev.touch) {
 			this.zoomTo(this.dataset.zoomlevel - ev.wheel[1] / 120)
+			win.clearTimeout(this.zoomTimeout)
+			this.zoomTimeout = win.setTimeout(function() {
+				this.emitUpward('latlongchange', [this.latlong[0], this.latlong[1], this.zoomlevel])
+			}.bind(this), 100)
+		}
+	}
+
+	this.onpointermultimove = function(ev) {
+		if (ev.length == 1) {
+			this.panByVectorMovement(ev[0].position, ev[0].movement)
+		} else if (ev.length == 2) {
+			var center = vec2.mix(ev[0].position, ev[1].position, 0.5)
+			var movement = vec2.mix(ev[0].movement, ev[1].movement, 0.5)
+			this.panByVectorMovement(center, movement)
+			var distance = vec2.distance(ev[0].position, ev[1].position)
+			var distanceOld = vec2.distance(
+				vec2.sub(ev[0].position, ev[0].movement),
+				vec2.sub(ev[1].position, ev[1].movement)
+			)
+			var distanceDelta = (distance - distanceOld) / this.layout.width * 5
+			this.zoomTo(this.dataset.zoomlevel + distanceDelta)
+		}
+	}
+
+	this.panByVectorMovement = function (vector, movement) {
+		var startPos = vec2.sub(vector, movement)
+		var R = this.projectonplane(this.globalToLocal(startPos))
+		if (R) {
+			this.prevvect = vec2(R[0] / (BufferGen.TileSize * 16), R[2] / (BufferGen.TileSize * 16))
+		}
+		R = this.projectonplane(this.globalToLocal(vector));
+		if (R) {
+			this.newvect = vec2(R[0] / (BufferGen.TileSize * 16),R[2] / (BufferGen.TileSize * 16))
+			var metoffset = vec2(
+				(this.newvect[0] - this.prevvect[0]) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom),
+				-(this.newvect[1] - this.prevvect[1]) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom)
+			)
+			var latlongoffset = geo.metersToLatLng(metoffset[0], metoffset[1])
+			this.dataset.setCenterLatLng(
+				this.dataset.latlong[0] - latlongoffset[0],
+				this.dataset.latlong[1] - latlongoffset[1],
+				this.dataset.zoomlevel)
+			this.updateTiles()
 		}
 	}
 
 	this.onpointerend = function(ev) {
-		this.stopDrag()
+		this.emitUpward('latlongchange', [this.latlong[0], this.latlong[1], this.zoomlevel])
 	}
 
-	this.onpointerstart = function(ev) {
-		this.startDrag(ev)
-	}
-
-	this.onpointermove = function(ev) {
-		this.moveDrag(ev)
+	this.onpointertap = function(ev) {
+		var coord  =  this.globalToLocal(ev.position)
+		var R = this.projectonplane(coord)
+		if (R) {
+			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1])
+			var zoomoffs = 0
+			if (ev.clicker == 2) zoomoffs ++
+			// convert GL unit to map meters
+			var r0 = (R[0] / (BufferGen.TileSize * 16)) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom)
+			var r2 = (-R[2] / (BufferGen.TileSize * 16)) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom)
+			//	var M = this.find('MARKER')
+			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1] + r2)
+			this.dataset.setCenterLatLng(latlong[0], latlong[1] , this.dataset.zoomlevel + zoomoffs, 1)
+			this.emitUpward('latlongchange', [latlong[0], latlong[1], this.zoomlevel])
+		}
 	}
 
 	this.gotoCity = function(city, zoomlevel, time) {
 		this.dataset.gotoCity(city, zoomlevel, time)
 	}
-
 
 	this.flyTo = function(lat, lng, zoom, time) {
 		if (this.dataset) this.dataset.flyTo(lat, lng, zoom, time)
@@ -400,7 +450,6 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 	// Every time we re-draw process the
 	this.atAnimate = function() {
 		this.updateTiles()
-		//this.setTimeout(this.updateTiles, 10)
 	}
 
 	// make a new dataset and updatetiles
@@ -463,60 +512,14 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		return R
 	}
 
-	this.tap = function(ev) {
-		var coord  =  this.globalToLocal(ev.position)
-		var R = this.projectonplane(coord)
-		if (R) {
-			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1])
-			var zoomoffs = 0
-			if (ev.clicker == 2) zoomoffs ++
-			// convert GL unit to map meters
-			var r0 = (R[0] / (BufferGen.TileSize * 16)) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom)
-			var r2 = (-R[2] / (BufferGen.TileSize * 16)) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom)
-			//	var M = this.find('MARKER')
-			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1] + r2)
-			this.dataset.setCenterLatLng(latlong[0], latlong[1] , this.dataset.zoomlevel + zoomoffs, 1)
-			this.emitUpward('latlongchange', [latlong[0], latlong[1], this.zoomlevel])
-		}
-	}
-
-	this.startDrag = function(ev) {
-		var coord  =  this.globalToLocal(ev.position)
-		var R = this.projectonplane(coord)
-		if (R) {
-			this.startvect = vec2(R[0] / (BufferGen.TileSize * 16),R[2] / (BufferGen.TileSize * 16))
-			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1])
-			this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1])
-			this.moveDrag(ev)
-		}
-	}
-
-	this.moveDrag = function(ev) {
-		var coord  =  this.globalToLocal(ev.position)
-		var R = this.projectonplane(coord);
-		if (R) {
-			this.newvect = vec2(R[0] / (BufferGen.TileSize * 16),R[2] / (BufferGen.TileSize * 16))
-			var newcenter = vec2(
-				(this.startvect[0] - this.newvect[0]) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom),
-				-(this.startvect[1] - this.newvect[1]) * geo.metersPerTile(this.zoomlevel) * Math.pow(2.0, -this.fraczoom)
-			)
-			//var meters = geo.metersForTile({x: newcenter[0], y: newcenter[1], z: this.zoomlevel})
-			var latlong = geo.metersToLatLng(newcenter[0], newcenter[1])
-			latlong[0] += this.startcenter[0]
-			latlong[1] += this.startcenter[1]
-			this.dataset.setCenterLatLng(latlong[0], latlong[1] , this.dataset.zoomlevel)
-			this.updateTiles()
-		}
-	}
-
-	this.stopDrag = function() {
-		this.emitUpward('latlongchange', [this.latlong[0], this.latlong[1], this.zoomlevel])
-	}
 	// debug tile counter
 	var alltiles = 0
 
 	// All tiles use tilebasemixin
 	var tilebasemixin = define.class(Object, function() {
+
+		this.drawtarget = 'color'
+
 		this.attributes = {
 			// the translate in integer units
 			trans: vec2(0),
@@ -553,23 +556,6 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		this.frameswaited = 0
 		// not animated bufferloaded as boolean
 		this.bufferloadbool = false
-
-		this.onpointerend = function(ev) {
-			this.host.stopDrag()
-		}
-
-		this.onpointerstart = function(ev) {
-			this.host.startDrag(ev)
-		}
-
-		this.onpointermove = function(ev) {
-			this.host.moveDrag(ev)
-		}
-
-		this.pointertap = function(ev) {
-
-			this.host.tap(ev)
-		}
 
 		this.lastpos = vec2(0)
 
