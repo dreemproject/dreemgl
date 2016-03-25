@@ -331,11 +331,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.render = function(){
-		if (this.hasball) return [ballbutton({click:function(){
-			this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
-				this.keydownDelete()
-			}.bind(this)}])
-		}.bind(this),name:"handle", position:"absolute", ballsize: 24, triangle:true, bgcolor:"#303030"})];
+		//if (this.hasball) return [ballbutton({click:function(){
+		//	this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
+		//		this.keydownDelete()
+		//	}.bind(this)}])
+		//}.bind(this),name:"handle", position:"absolute", ballsize: 24, triangle:true, bgcolor:"#303030"})];
 		return [];
 	}
 })
