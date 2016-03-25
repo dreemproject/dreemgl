@@ -22,6 +22,15 @@ be live.
 
 As the server starts, it also shows other local IP's its listening on (for trying it on your phone)
 
+
+## Network interface
+
+To bind dreemGL to all interfaces for a local network usage (with phones or other devices) use 
+```node server.js -iface 0.0.0.0 ```
+
+Please note that this will expose dreemgl via http to ALL the networks your device is on (0.0.0.0 is all interfaces). DreemGL is secured via -writefile commandline to turn on filewrites explicitly for tools like the flowgraph,
+and then that only works for localhost (127.0.0.1) loopback connections for security reasons.
+
 ## Path symbols
 
 The server.js has a set of 'default path symbols' which are referencable using the $symbol syntax in require strings: '$widgets/myfile',
