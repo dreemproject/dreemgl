@@ -134,6 +134,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		fg.setupSelectionMove();
 	}
 
+	this.pointerend = function() {
+		this.keydownDelete()
+	}
+
 	this.pointermove = function(event){
 		this.find("flowgraph").moveSelected(event.delta[0], event.delta[0]);
 	}
