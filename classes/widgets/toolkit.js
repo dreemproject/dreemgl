@@ -6,7 +6,7 @@
 
 define.class("$ui/view", function(require,
 								  $ui$, view, label, textbox, icon, checkbox, treeview, button, tabbar,
-								  $widgets$, palette, propviewer, jseditor, jsviewer,
+								  $widgets$, palette, propviewer, jseditor,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
@@ -1116,7 +1116,7 @@ define.class("$ui/view", function(require,
 		if (this.__movepanel) {
 			this.__movepanel.flex = 0;
 			this.__movepanel.height = this.__movepanel._layout.height + ev.movement.y;
-			this.height = this._layout.height + ev.movement.y;
+//			this.height = this._layout.height + ev.movement.y;
 		}
 	};
 

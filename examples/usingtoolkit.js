@@ -5,7 +5,6 @@ define.class("$server/composition",function(require,$ui$,icon,button,checkbox,la
         {flexdirection:"row"},
         cadgrid({
             name:"grid",
-            flex:3,
             overflow:"scroll",
             bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1),
             gridsize:8,
@@ -16,29 +15,31 @@ define.class("$server/composition",function(require,$ui$,icon,button,checkbox,la
             alignself:'stretch',
             flexdirection:'column',
             justifycontent:'center',
-            anchor:vec3(0,0,0),
             toolmove:false,
             toolrect:false
           },
-          label({name:"reminder",tooltarget:false,visible:false,oninit:function(){
-            this.visible=!this.find("toolkit").visible
+          label({name:"reminder",tooltarget:false,oninit:function(){
+            this.opacity=this.find("toolkit").visible?0:1.0
           },fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'pink',text:"CTRL-SHIFT-T to pop up the toolkit!",position:"absolute",x:71,y:55.99999237060547}),
-          view({height:327,width:252,bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),position:"absolute",x:540.3897705078125,y:171.87277221679688,rotate:vec3(0,0,0.5)},icon({fgcolor:vec4(0.929411768913269,0.9089215993881226,0.3921568691730499,1),opaque:true,icon:"heart",fontsize:140,position:"absolute",x:56.93695831298828,y:33.16679382324219,boldness:0.95})),
-          view({height:416,width:325,bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),position:"absolute",x:17.00006103515625,y:159.00015258789062,margin:vec4(0,0,0,0)},view({height:143,width:138,bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),position:"absolute",x:92,y:174.00001525878906,borderradius:vec4(10,30,60,80),rotate:vec3(0,0,0.7999997735023499)},icon({fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1),opaque:true,icon:"flask",fontsize:80,position:"absolute",x:33,y:6,rotate:vec3(0,0,-0.11000006645917892)})),icon({fgcolor:vec4(0.885095477104187,0.8980835676193237,0.9214090704917908,1),opaque:true,icon:"ge",fontsize:80,position:"absolute",x:122.9998779296875,y:41.00006103515625})),
-          view({height:174,width:746,pickalpha:-1,bgcolor:'white',position:"absolute",x:128,y:620.9999389648438},icon({fgcolor:'#e22',bgcolor:'transparent',pickalpha:-1,icon:"heart",fontsize:80,position:"absolute",x:160.99993896484375,y:40.000091552734375})),
-          icon({fgcolor:vec4(0.9843137264251709,0.5960784554481506,0.9180433750152588,1),bgcolor:'transparent',pickalpha:-1,icon:"gear",fontsize:80,position:"absolute",x:458,y:276.9999694824219})
+          view({height:416,width:325,bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),position:"absolute",x:58,y:84.0001220703125,margin:vec4(0,0,0,0)}),
+          view({height:150,width:200,pickalpha:-1,bgcolor:vec4(0.9298506379127502,1,0.017038807272911072,1),position:"absolute",x:472.0000915527344,y:334.0000915527344}),
+          view({height:150,width:415,pickalpha:-1,bgcolor:vec4(0,0.8784517049789429,1,1),position:"absolute",x:276.0001220703125,y:599.0000610351562})
         ),
         toolkit({
           name:"toolkit",
           position:"absolute",
-          visible:true,
           onvisible:function(ev,v,o){
-            o.find("reminder").visible=!v
+            var rem=o.find("reminder")
+            if(rem){
+              rem.opacity=v?0:1.0
+            }
           },
-          x:890,
-          y:30,
+          x:685,
+          y:84.00001525878906,
           width:300,
-          height:700
+          height:774,
+          visible:true,
+          handles:false
         })
       )
     ]
