@@ -21,7 +21,7 @@ define.class(function(exports){
 		// Internally, the dalimodule is stored in global
 		get: function() {
 			if (!global.dalimodule) {
-				console.trace('DaliApi: Dali has not been initialized');
+				console.log('DaliApi: Dali has not been initialized');
 			}
 			return global.dalimodule;
 		}
@@ -33,17 +33,17 @@ define.class(function(exports){
 		}
 	});
 
-//	DaliApi.dali = global.dalimodule;
 
 	// Set emitcode to true to emit dali code to the console. These lines
 	// are preceeded with DALICODE to make it easier to extract into a file.
 	// The -dumpprog command-line option codes this value
-	DaliApi.emitcode = false;
+	DaliApi.emitcode = global.emitcode;
 
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
 	// depthIndex property of Renderers.)
-	DaliApi.rootlayer = undefined;
+	// Changed to global.rootlayer
+	// DaliApi.rootlayer = undefined;
 
 	// The current layer to use when adding actors. Set by setLayer(). If
 	// currentlayer is never set, the root layer (DaliApi.rootlayer) is used.
@@ -54,7 +54,8 @@ define.class(function(exports){
 	//     if none was specified.
 	//   - Repeat the above process. You can reset the current layer by
 	//     passing null to DaliApi.setLayer
-	DaliApi.currentlayer = undefined;
+	// Changed to global.currentlayer
+	// DaliApi.currentlayer = undefined;
 
 	/**
 	 * @method setLayer
@@ -66,9 +67,9 @@ define.class(function(exports){
 	 */
 	DaliApi.setLayer = function(layer) {
 		if (!layer)
-			layer = DaliApi.rootlayer;
+			layer = global.rootlayer;
 
-		DaliApi.currentlayer = layer;
+		global.currentlayer = layer;
 	}
 
 	/**
@@ -82,7 +83,7 @@ define.class(function(exports){
 	 */
 	DaliApi.addActor = function(actor, layer) {
 		if (!layer)
-			layer = DaliApi.currentlayer;
+			layer = global.currentlayer;
 
 		layer.add(actor);
 	}
@@ -110,7 +111,9 @@ define.class(function(exports){
 		DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
 		DaliApi.dumpprog = settings.dumpprog;
 
-		DaliApi.emitcode = DaliApi.dumpprog;
+		if (DaliApi.dumpprog)
+			global.emitcode = DaliApi.dumpprog;
+		DaliApi.emitcode = global.emitcode;
 
 		var window= {
 			x:0,
@@ -148,11 +151,11 @@ define.class(function(exports){
 
 			// Create a top-level 2D layer to the stage.
 			var dali = DaliApi.dali;
-			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
-			dali.stage.add(DaliApi.rootlayer.dalilayer);
+			global.rootlayer = global.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
+			dali.stage.add(global.rootlayer.dalilayer);
 
 			if (DaliApi.emitcode) {
-				console.log('DALICODE: dali.stage.add(' + DaliApi.rootlayer.name() + ');');
+				console.log('DALICODE: dali.stage.add(' + global.rootlayer.name() + ');');
 			}
 
 		}
@@ -302,6 +305,7 @@ define.class(function(exports){
 		var dataArray = new Float32Array(data.length);
 		dataArray.set(data);
 		buffer.setData(dataArray);
+		dataArray = null;
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var data' + bufferid + ' = ' + JSON.stringify(data));
