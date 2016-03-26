@@ -77,6 +77,7 @@
 
 	define.local_classes = {}
 	define.local_require_stack = []
+	define.ignore_reload = {}
 
 	define.partial_reload = true
 	define.reload_id = 0
@@ -1253,6 +1254,7 @@
 			this.reload_socket.onmessage = function(event){
 				var msg = JSON.parse(event.data)
 				if (msg.type === 'filechange'){
+					if(define.ignore_reload && define.ignore_reload[msg.file]) return console.log("Ignoring file change on "+msg.file)
 					var old_module = define.module[msg.file]
 					define.hideException()
 					if(define.partial_reload && old_module && typeof old_module.exports === 'function'){
