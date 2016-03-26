@@ -37,7 +37,7 @@ define.class(function(exports){
 	// Set emitcode to true to emit dali code to the console. These lines
 	// are preceeded with DALICODE to make it easier to extract into a file.
 	// The -dumpprog command-line option codes this value
-	DaliApi.emitcode = false;
+	DaliApi.emitcode = global.emitcode;
 
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
@@ -111,7 +111,9 @@ define.class(function(exports){
 		DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
 		DaliApi.dumpprog = settings.dumpprog;
 
-		DaliApi.emitcode = DaliApi.dumpprog;
+		if (DaliApi.dumpprog)
+			global.emitcode = DaliApi.dumpprog;
+		DaliApi.emitcode = global.emitcode;
 
 		var window= {
 			x:0,
