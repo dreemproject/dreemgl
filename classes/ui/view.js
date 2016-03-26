@@ -1058,7 +1058,10 @@ define.class('$system/base/node', function(require){
 		var matrix_changed = parent_changed
 		if (parentviewport === '3d'){
 			matrix_changed = true
-			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
+			if(this._scale && this._anchor && this._rotate && this._pos){
+				mat4.TSRT2(this._anchor, this._scale, this._rotate, this._pos, this.modelmatrix);
+			}
+			else mat4.identity(this.modelmatrix)
 		}
 		else {
 			// compute TSRT matrix
