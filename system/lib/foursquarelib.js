@@ -83,7 +83,6 @@ define.class(function(exports){
 						url: photoUrl,
 						id: venue.id,
 						title: venue.name,
-						category: venue.categories[0].name,
 						width: 300,
 						height: 300,
 						latitude: venue.location.lat,
