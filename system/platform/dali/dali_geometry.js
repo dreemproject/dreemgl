@@ -63,6 +63,7 @@ define.class(function(require, exports){
 		drawtype = drawtype || gltypes.gl.TRIANGLES;
 		var dali_drawtype = drawmap[drawtype];
 
+		// console.log('drawtype', drawtype, dali_drawtype);
 		this.daligeometry.setGeometryType(dali_drawtype);
 
 		if (DaliApi.emitcode) {

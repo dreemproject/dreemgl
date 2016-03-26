@@ -80,7 +80,10 @@ define.class(function(require){
 		this.rootserver = rootserver
 
 		this.busserver = new BusServer()
-		//this.busserver = null;
+
+		// Initialize dali early. Otherwise, some composition can fail
+		// when run from a remote server.
+		this.initDali();
 
 		// lets give it a session
 		this.session = Math.random() * 1000000
@@ -128,13 +131,17 @@ define.class(function(require){
 		this.mycomposition = undefined
 	}
 
-	// Load the composition. If composition is defined, load it remotely
-	this.loadComposition = function(composition){
-		require.clearCache()
-
+	// initialize dali runtime. This should be run before the composition is
+	// loaded.
+	this.initDali = function() {
 		// Load DALi module
 		this.DaliApi = require('./dali_api');
 		this.DaliApi.initialize({width: this.width, height: this.height, name: this.name, dalilib: this.dalilib, dumpprog: this.dumpprog});
+	}
+
+	// Load the composition. If composition is defined, load it remotely
+	this.loadComposition = function(composition){
+		require.clearCache()
 
 		if (composition) {
 			// Remote server

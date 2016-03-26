@@ -13,7 +13,10 @@ function DaliImage(path)
 }
 
 
-define.class('$system/base/texture', function(exports, require){
+define.class('$system/base/texture', function(require, exports){
+	// internal, DaliApi is a static object to access the dali api
+	DaliApi = require('./dali_api')
+
 	var Texture = exports
 
 	Texture.GlobalId = 0
@@ -22,7 +25,6 @@ define.class('$system/base/texture', function(exports, require){
 	// Map hash of texture to an existing texture
 	Texture.Cache = {};
 
-	DaliApi = require('./dali_api')
 	fs = require('fs');
 
 	this.atConstructor = function(type, w, h, device){
@@ -54,7 +56,7 @@ define.class('$system/base/texture', function(exports, require){
 		tex.image = img
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + fullpath + '\'});');
+			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + path + '\'});');
 		}
 
 		return tex

@@ -148,6 +148,7 @@ define.class('$system/base/node', function(require){
 		// alias for the fourth component of padding
 		paddingbottom: Config({alias:'padding', index:3}),
 
+		translate: Config({type: vec3, value:vec3(0.)}),
 		// Scale of an item, only useful for items belof a 3D viewport
 		scale: Config({type: vec3, value: vec3(1), meta:"xyz"}),
 		// The anchor point around which items scale and rotate, depending on anchor mode its either a factor of size or and absolute value
@@ -1067,31 +1068,31 @@ define.class('$system/base/node', function(require){
 			// compute TSRT matrix
 			if(layout){
 				//console.log(this.matrix_dirty)
-				var ml = this.matrix_layout
-				if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
-					ml.width !== layout.width || ml.height !== layout.height
-				    || ml.scale !== this._scale || ml.rotate !== this._rotate
-				){
-					this.matrix_layout = {
-						left:layout.left,
-						top:layout.top,
-						width:layout.width,
-						height:layout.height,
-						scale: this._scale,
-						rotate:this._rotate
-					}
+				//var ml = this.matrix_layout
+				//if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
+				//	ml.width !== layout.width || ml.height !== layout.height
+				 //   || ml.scale !== this._scale || ml.rotate !== this._rotate
+				//){
+				//	this.matrix_layout = {
+				//		left:layout.left,
+				///		top:layout.top,
+					//	width:layout.width,
+					//	height:layout.height,
+					//	scale: this._scale,
+					//	rotate:this._rotate
+				//	}
 
-					matrix_changed = true
-					var s = this._scale
-					var r = this._rotate
-					var t0 = layout.left, t1 = layout.top, t2 = 0
-					//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
-					//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
-					//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
-					var hw = layout.width / 2
-					var hh = layout.height / 2
-					mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
-				}
+				matrix_changed = true
+				var s = this._scale
+				var r = this._rotate
+				var tr = this._translate
+				var t0 = layout.left + tr[0], t1 = layout.top+ tr[1], t2 = tr[2]
+				//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
+				//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
+				//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
+				var hw = layout.width / 2
+				var hh = layout.height / 2
+				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
 			}
 			else {
 				matrix_changed = true
@@ -1233,6 +1234,8 @@ define.class('$system/base/node', function(require){
 	this.position =
 	this.relayout
 
+	this.translate =
+	this.scale =	
 	this.rotate = this.rematrix
 
 	// internal, called by the render engine
