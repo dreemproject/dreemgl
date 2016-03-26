@@ -918,7 +918,13 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		}
 	}
 
+	this.layout = function(){
+		this.dotwice = 0
+		this.rerender()
+	}
+
 	this.render = function() {
+		var layout = this._layout
 		this.tilestoupdate = []
 
 		var res = [this.dataset]
@@ -927,13 +933,13 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		var labels3d = []
 		var poi3d = []
 		var div = 512
-		this.tilewidth = Math.ceil(this.layout.width / div)
-		this.tileheight = Math.ceil(this.layout.height / div)
+		this.tilewidth = Math.ceil(layout.width / div)
+		this.tileheight = Math.ceil(layout.height / div)
 
 		this.camdist = 20000;
 
-		var aspect = this.layout.width / this.layout.height
-		var fov = (Math.atan(((this.layout.width / 2) * 40) / this.camdist) * 360 / 6.283) / aspect
+		var aspect = layout.width / layout.height
+		var fov = (Math.atan(((layout.width / 2) * 40) / this.camdist) * 360 / 6.283) / aspect
 
 		var basew = this.tilewidth / 2
 		var baseh = this.tileheight / 2
@@ -1043,6 +1049,9 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 			font: ubuntufont
 		}))
 		this.framessincerender = 0
+
+		if(!this.dotwice) this.dotwice++, this.rerender()
+
 		return res
 	}
 
