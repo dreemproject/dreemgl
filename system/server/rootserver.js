@@ -85,13 +85,13 @@ define.class(function(require){
 		}
 
 		this.watcher = new FileWatcher()
-		this.watcher.atChange = function(file){
+		this.watcher.atChange = function(ifile){
 			// ok lets get the original path
-			file=file.replace(/\\/g,"/")
+			var file = ifile.replace(/\\/g,"/")
 			for(var key in define.paths){
 				var match = define.expandVariables(define['$'+key])
 				if(file.indexOf(match) === 0){
-					file = '/'+key+file.slice(match.length)
+					file = '/'+key+'/'+file.slice(match.length)
 					break
 				}
 			}
