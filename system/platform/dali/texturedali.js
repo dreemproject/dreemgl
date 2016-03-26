@@ -56,7 +56,7 @@ define.class('$system/base/texture', function(require, exports){
 		tex.image = img
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + fullpath + '\'});');
+			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + path + '\'});');
 		}
 
 		return tex
