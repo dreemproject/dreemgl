@@ -302,7 +302,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 			this.topos = vec2(T._pos[0],T._pos[1]+yoff)
 		} else {
-			console.log(" no T", this._to);
+			console.log(" no To", this._to);
 		}
 
 
