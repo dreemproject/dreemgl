@@ -32,7 +32,7 @@ define.class(function(require){
 	this.setInterval = function(fn, mstime){
 		if(!this.interval_ids) this.interval_ids = []
 
-		var platform = typeof window !== 'undefined'?window:global;
+		var platform = typeof window !== 'undefined' ? window : global;
 
 		var id = platform.setInterval(function(){
 			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
@@ -47,7 +47,7 @@ define.class(function(require){
 		var idx = this.interval_ids.indexOf(id)
 		if(idx !== -1){
 			this.interval_ids.splice(idx, 1)
-			var platform = typeof window !== 'undefined'?window:global;
+			var platform = typeof window !== 'undefined' ? window : global;
 
 		 	platform.clearInterval(id)
 		}
@@ -55,7 +55,7 @@ define.class(function(require){
 
 	this.setTimeout = function(fn, mstime){
 		if(!this.timeout_ids) this.timeout_ids = []
-		var platform = typeof window !== 'undefined'?window:global;
+		var platform = typeof window !== 'undefined' ? window : global;
 
 		var id = platform.setTimeout(function(){
 			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
@@ -70,9 +70,36 @@ define.class(function(require){
 		var idx = this.timeout_ids.indexOf(id)
 		if(idx !== -1){
 			this.timeout_ids.splice(idx, 1)
-			var platform = typeof window !== 'undefined'?window:global;
+			var platform = typeof window !== 'undefined' ? window : global;
 
 		 	platform.clearInterval(id)
+		}
+	}
+
+	this.requestAnimationFrame = function(fn){
+		if(!this.raf_ids) this.raf_ids = []
+		if (typeof window !== 'undefined') {
+			var id = window.requestAnimationFrame(function(){
+				this.raf_ids.splice(this.raf_ids.indexOf(id), 1)
+				fn.call(this)
+			}.bind(this))
+			this.raf_ids.push(id)
+			return id
+		} else {
+			return this.setTimeout(fn, 1000 / 60)
+		}
+	}
+
+	this.cancelAnimationFrame = function(id){
+		if (id === undefined) return
+		var idx = this.raf_ids.indexOf(id)
+		if(idx !== -1){
+			this.raf_ids.splice(idx, 1)
+			if (typeof window !== 'undefined') {
+				window.cancelAnimationFrame(id)
+			} else {
+				this.clearTimeout(id)
+			}
 		}
 	}
 

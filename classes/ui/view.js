@@ -963,7 +963,7 @@ define.class('$system/base/node', function(require){
 
 				// cumulative damped wheel value.
 				// Used to decide if enough horizontal/vertical movement is present.
-				this.dampedwheel = this.dampedwheel || vec2(0, 0)
+				this.dampedwheel = this.dampedwheel || vec2(0, 0, 0)
 				this.dampedwheel = vec2(
 					(this.dampedwheel[0] * 9 + event.wheel[0]) / 10,
 					(this.dampedwheel[1] * 9 + event.wheel[1]) / 10

@@ -124,6 +124,7 @@ define.class('$system/base/pointer', function (require, exports) {
 		// Internal: handler for `touchstart` event.
 		this.touchstart = function(e) {
 			e.preventDefault()
+			this.touchwheelstart(touchToPointers(e))
 			this.setstart(touchToPointers(e))
 		}
 		window.addEventListener('touchstart', this.touchstart.bind(this))
@@ -131,17 +132,52 @@ define.class('$system/base/pointer', function (require, exports) {
 		// Internal: handler for `touchmove` event.
 		this.touchmove = function(e) {
 			e.preventDefault()
+			this.touchwheel(touchToPointers(e))
 			this.setmove(touchToPointers(e))
 		}
 		window.addEventListener('touchmove', this.touchmove.bind(this))
 
 		// Internal: handler for `touchend` event.
 		this.touchend = function(e) {
+			this.touchwheelend(touchToPointers(e))
 			this.setend(touchToPointers(e))
 		}
 		window.addEventListener('touchend', this.touchend.bind(this))
 		window.addEventListener('touchcancel', this.touchend.bind(this))
 		window.addEventListener('touchleave', this.touchend.bind(this))
+
+		this.touchwheelstart = function (e) {
+			var touch = e[0]
+			this._preventInertia = true
+			this._touchwheelpos = vec2(touch.position.x, touch.position.y)
+		}
+
+		this.touchwheel = function (e) {
+			var touch = e[0]
+			this._preventInertia = true
+			touch.wheel = vec2(this._touchwheelpos.x - touch.position.x, this._touchwheelpos.y - touch.position.y)
+			this._touchwheelpos = vec2(touch.position.x, touch.position.y)
+			this.setwheel([touch])
+			this._lasttouchwheel = touch
+		}
+
+		this.touchwheelend = function (e) {
+			var touch = e[0]
+			this._preventInertia = false
+			this.touchwheelanim()
+		}
+
+		this.touchwheelanim = function () {
+			if (this._lasttouchwheel) {
+				if (!this._preventInertia) {
+					vec2.mul_float32(this._lasttouchwheel.wheel, 0.95, this._lasttouchwheel.wheel)
+					this.setwheel([this._lasttouchwheel])
+					requestAnimationFrame(this.touchwheelanim.bind(this))
+				}
+				this._preventInertia = vec2.distance(this._lasttouchwheel.wheel, vec2()) < 0.5 ? true : false
+			}
+		}
+
 
 		// scrollwheel fun
 		// the different platforms

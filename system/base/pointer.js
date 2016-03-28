@@ -15,7 +15,7 @@ define.class('$system/base/node', function(){
 
 	// Internal: Pointer list with helper methods.
 	var PointerList = function () {
-		Array.call( this )
+		Array.call(this)
 	}
 	PointerList.prototype = Object.create( Array.prototype )
 	PointerList.prototype.constructor = PointerList
@@ -243,20 +243,8 @@ define.class('$system/base/node', function(){
 				if (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
 			this._move.setPointer(pointer)
-			// TODO(aki): check list length per view
-			if (pointer.touch && pointerlist.length === 1) {
-				if (abs(pointer.movement[0]) > abs(pointer.movement[1])) {
-					pointer.wheel = vec2(-pointer.movement[0], 0)
-				} else {
-					pointer.wheel = vec2(0, -pointer.movement[1])
-				}
-				this._wheel.setPointer(pointer)
-			}
 		}
 		this.emitPointerList(this._move, 'move')
-		if (this._wheel.length) {
-			this.emitPointerList(this._wheel, 'wheel')
-		}
 	}
 
 	// Internal: emits `end` event.
