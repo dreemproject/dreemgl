@@ -955,14 +955,30 @@ define.class('$system/base/node', function(require){
 				})
 			)
 
+
 			if(this.hscrollbar) this.hscrollbar.value = Mark(this._scroll[0])
 			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
 
 			this.pointerwheel = function(event){
-				if(this.vscrollbar && this.vscrollbar._visible){
+
+				// cumulative damped wheel value.
+				// Used to decide if enough horizontal/vertical movement is present.
+				this.dampedwheel = this.dampedwheel || vec2(0, 0)
+				this.dampedwheel = vec2(
+					(this.dampedwheel[0] * 9 + event.wheel[0]) / 10,
+					(this.dampedwheel[1] * 9 + event.wheel[1]) / 10
+				)
+
+				if (this.vscrollbar && this.vscrollbar._visible){
+					if (!this.hscrollbar || !this.hscrollbar._visible) {
+						if (abs(this.dampedwheel[0]) > abs(this.dampedwheel[1]) * 2) return
+					}
 					this.vscrollbar.value = clamp(this.vscrollbar._value + event.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
-				if(this.hscrollbar && this.hscrollbar._visible){
+				if (this.hscrollbar && this.hscrollbar._visible){
+					if (!this.vscrollbar || !this.vscrollbar._visible) {
+						if (abs(this.dampedwheel[1]) > abs(this.dampedwheel[0]) / 2) return
+					}
 					this.hscrollbar.value = clamp(this.hscrollbar._value + event.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
@@ -1235,7 +1251,7 @@ define.class('$system/base/node', function(require){
 	this.relayout
 
 	this.translate =
-	this.scale =	
+	this.scale =
 	this.rotate = this.rematrix
 
 	// internal, called by the render engine

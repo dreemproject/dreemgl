@@ -67,13 +67,21 @@ define.class("$ui/view", function(require, $ui$, view){
 
 		var value = 0;
 
+		// cumulative damped movement value.
+		// Used to decide if enough horizontal/vertical movement is present.
+		this.dampedmovement = this.dampedmovement || vec2(0, 0)
+		this.dampedmovement = vec2(
+			(this.dampedmovement[0] * 9 + p.movement[0]) / 10,
+			(this.dampedmovement[1] * 9 + p.movement[1]) / 10
+		)
+
 		if (this.direction === "vertical") {
-			if (abs(p.movement[0]) > abs(p.movement[1])) return
+			if (abs(this.dampedmovement[0]) > abs(this.dampedmovement[1]) * 2) return
 			var newy = main.y + p.movement.y;
 			newy = Math.min(Math.max(newy, 0 - main.height), this.height);
 			value = newy / this.height;
 		} else {
-			if (abs(p.movement[1]) > abs(p.movement[0])) return
+			if (abs(this.dampedmovement[1]) > abs(this.dampedmovement[0]) / 2) return
 			var newx = main.x + p.movement.x;
 			newx = Math.min(Math.max(newx, 0 - main.width), this.width);
 			value = newx / this.width;
@@ -86,7 +94,7 @@ define.class("$ui/view", function(require, $ui$, view){
 		if (value !== this.value) {
 			this.value = value;
 		}
-    };
+	};
 
 	this.pointerend = function(p, loc, v) {
 
