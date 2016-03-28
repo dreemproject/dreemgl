@@ -920,7 +920,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 
 	this.layout = function(){
 		this.dotwice = 0
-		this.rerender()
+		if (this.rerender) this.rerender()
 	}
 
 	this.render = function() {
@@ -1050,7 +1050,7 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		}))
 		this.framessincerender = 0
 
-		if(!this.dotwice) this.dotwice++, this.rerender()
+		if(!this.dotwice && this.rerender) this.dotwice++, this.rerender()
 
 		return res
 	}
