@@ -105,9 +105,13 @@ define.class("$ui/view", function(require, $ui$, view){
 		}
 
 		if (value !== this.value) {
-			this.value = value;
+			this.value = this.endvalue(value)
 		}
 	};
+
+	this.endvalue = function(value) {
+		return value;
+	}
 
 	this.init = function() {
 		this.mainview = this.constructor_children[0];

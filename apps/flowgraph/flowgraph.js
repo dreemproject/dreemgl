@@ -626,6 +626,8 @@ define.class('$ui/view', function(require,
 							to:node.name,
 							toinput:w.input
 						}))
+					} else {
+						console.log("Not rendering", w, "for", node.name)
 					}
 
 				}
