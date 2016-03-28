@@ -284,7 +284,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			}
 			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+yoff)
 		} else {
-			console.log(" no F:", this._from);
+//			console.log(" no F:", this._from);
+//			this.visible = false
 		}
 
 		if (T){
@@ -302,14 +303,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 			this.topos = vec2(T._pos[0],T._pos[1]+yoff)
 		} else {
-			console.log(" no To", this._to);
+//			console.log(" no To", this._to);
+//			this.visible = false
 		}
-
 
 		if (color1 && !color2) color2 = color1;else if (color2 && !color1) color1 = color2;
 		if (color1) this.neutralcolor1 = this.color1 = Mark(color1, !this.updatecount);
 		if (color2) this.neutralcolor2 = this.color2 = Mark(color2, !this.updatecount);
-		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);
 		this.updatecount++;
 
 		var H = this.findChild("handle");

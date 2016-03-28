@@ -393,7 +393,6 @@ define.class('$ui/view', function(require,
 		var sq = this.findChild("selectorrect")
 		var min = cg.globalToLocal(event.min)
 		var max = cg.globalToLocal(event.max)
-
 		if (sq) {
 			sq.visible = true
 			sq.redraw()
@@ -462,6 +461,21 @@ define.class('$ui/view', function(require,
 		this.find("flowgraph").commitdragselect()
 	}
 
+	this.updateConnector = function(ev) {
+		var connectingconnection = this.find("openconnector")
+		if (connectingconnection && connectingconnection.ready) {
+		  if (connectingconnection.to === "undefined") {
+			  connectingconnection.topos = this.find("centralconstructiongrid").globalToLocal(ev.position);
+			  connectingconnection.visible = true
+			  connectingconnection.redraw();
+		  } else if (connectingconnection.from === "undefined") {
+			  connectingconnection.frompos = this.find("centralconstructiongrid").globalToLocal(ev.position);
+			  connectingconnection.visible = true
+			  connectingconnection.redraw();
+		  }
+		}
+	}
+
 	this.makeNewConnection = function() {
 		// DO CONNECTION HERE!
 		console.log("making connection...")
@@ -520,12 +534,13 @@ define.class('$ui/view', function(require,
 		this.newconnection = {}
 
 		var connectingconnection = this.find("openconnector")
-		if (connectingconnection && connectingconnection.visible) {
+		if (connectingconnection && (connectingconnection.ready || connectingconnection.visible)) {
 			connectingconnection.from = undefined
 			connectingconnection.fromoutput  = undefined
 			connectingconnection.to = undefined
 			connectingconnection.toinput = undefined
 			connectingconnection.visible = false
+			connectingconnection.ready = false
 			connectingconnection.calculateposition()
 			connectingconnection.redraw()
 		}
@@ -536,7 +551,7 @@ define.class('$ui/view', function(require,
 
 		var connectingconnection = this.find("openconnector")
 		if (connectingconnection) {
-			connectingconnection.visible = this.newconnection.targetblock && this.newconnection.sourceblock
+			connectingconnection.ready = true;
 			connectingconnection.from = this.newconnection.sourceblock
 			connectingconnection.fromoutput = this.newconnection.sourceoutput
 			connectingconnection.to = this.newconnection.targetblock
@@ -576,7 +591,7 @@ define.class('$ui/view', function(require,
 	}
 
 	this.setConnectionEndpoint = function(targetblockname, inputname) {
-		console.log(targetblockname, inputname)
+		//console.log(targetblockname, inputname)
 		this.newconnection.targetblock = targetblockname
 		this.newconnection.targetinput = inputname
 		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ) {
@@ -627,7 +642,7 @@ define.class('$ui/view', function(require,
 							toinput:w.input
 						}))
 					} else {
-						console.log("Not rendering", w, "for", node.name)
+						// console.log("Not rendering", w, "for", node.name)
 					}
 
 				}
@@ -917,6 +932,7 @@ define.class('$ui/view', function(require,
 							pointerstart: this.gridDragStart.bind(this),
 							pointermove: this.gridDrag.bind(this),
 							pointerend: this.gridDragEnd.bind(this),
+						    pointerhover: this.updateConnector.bind(this),
 							overflow: "scroll" ,bgcolor: "#4e4e4e",gridsize: 5,majorevery: 5,  majorline: "#575757", minorline: "#484848", zoom: function() {this.updateZoom(this.zoom)}.bind(this)}
 						,view({name: "underlayer", bgcolor: NaN}
 							,view({name: "groupbg",visible: false, bgcolor: vec4(1,1,1,0.08) , borderradius: 8, borderwidth: 0, bordercolor: vec4(0,0,0.5,0.9),position: "absolute", flexdirection: "column"})
@@ -947,7 +963,7 @@ define.class('$ui/view', function(require,
 								,button({padding: 0,borderwidth: 0, click: function() {this.removeBlock(undefined)}.bind(this),fgcolor: "white", icon: "remove",text: "delete", margin: 4, fgcolor: "white", bgcolor: NaN})
 							)
 							,this.selectorrect({name: "selectorrect"})
-							,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+//							,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
 						)
 					)
 //					,jseditor({name: 'jsviewer', fontsize: 14,sourceset: this.sourceset, overflow: 'scroll', flex: 0.1})
