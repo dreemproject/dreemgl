@@ -16,7 +16,8 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
     };
 
     this.attributes = {
-        number: Config({type:Number, flow:"in"}),
+		number: Config({type:Number, flow:"in"}),
+		boolean: Config({type:Boolean, flow:"in"}),
         float: Config({type:float, flow:"in"}),
         int: Config({type:int, flow:"in"}),
         vec2: Config({type:vec2, flow:"in"}),

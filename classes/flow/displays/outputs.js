@@ -7,7 +7,8 @@
 define.class('$ui/screen', function(require, $ui$,screen, cadgrid){
 
     this.attributes = {
-        number: Config({type:Number, flow:"out", value:100}),
+		number: Config({type:Number, flow:"out", value:100}),
+		boolean: Config({type:Boolean, flow:"out", value:true}),
         float: Config({type:float, flow:"out", value:3.1415}),
         int: Config({type:int, flow:"out", value:42}),
         vec2: Config({type:vec2, flow:"out", value:vec2(1,2)}),
