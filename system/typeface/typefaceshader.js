@@ -1105,11 +1105,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var alpha = glyphy_antialias(-dist)
 
 		if(stylepack.z>0.){
-			var dist2 = abs(dist) - (stylepack.y) +2.
+			var dist2 = abs(dist) - (stylepack.y) + 4.
 
 			var alpha2 = glyphy_antialias(-dist2)
 
-			var rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2*8.);
+			var rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2);
 
 			return vec4(rgb, alpha * stylefgcolor.a * view.opacity)
 		}
