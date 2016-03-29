@@ -16,16 +16,16 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
     };
 
     this.attributes = {
-		number: Config({type:Number, flow:"in"}),
-		boolean: Config({type:Boolean, flow:"in"}),
-        float: Config({type:float, flow:"in"}),
-        int: Config({type:int, flow:"in"}),
-        vec2: Config({type:vec2, flow:"in"}),
-        vec3: Config({type:vec3, flow:"in"}),
-        vec4: Config({type:vec4, flow:"in"}),
-        array: Config({type:Array, flow:"in"}),
-        string: Config({type:String, flow:"in"}),
-        object: Config({type:Object, flow:"in"})
+		number: Config({type:Number, flow:"inout"}),
+		boolean: Config({type:Boolean, flow:"inout"}),
+        float: Config({type:float, flow:"inout"}),
+        int: Config({type:int, flow:"inout"}),
+        vec2: Config({type:vec2, flow:"inout"}),
+        vec3: Config({type:vec3, flow:"inout"}),
+        vec4: Config({type:vec4, flow:"inout"}),
+        array: Config({type:Array, flow:"inout"}),
+        string: Config({type:String, flow:"inout"}),
+        object: Config({type:Object, flow:"inout"})
     };
 
     this.render = function(){
@@ -56,6 +56,7 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
                 view({bg:false, flexdirection:"row", flex:1, justifycontent:"center" },
                     view({width:800, bgcolor:vec4(1,1,1,0.15),padding:40,borderradius:50,  flexdirection:"column", alignitems:"center", justifycontent:"center" },
                         view({flexdirection:"row", flex:1}, label({text:'number', paddingright:15}), label({text:this.number, fgcolor:'#FF7260'})),
+						view({flexdirection:"row", flex:1}, label({text:'boolean', paddingright:15}), label({text:this.boolean, fgcolor:'#FF7260'})),
                         view({flexdirection:"row", flex:1}, label({text:'float',  paddingright:15}), label({text:this.float,  fgcolor:'#D23641'})),
                         view({flexdirection:"row", flex:1}, label({text:'int',    paddingright:15}), label({text:this.int,    fgcolor:'#FF0080'})),
                         view({flexdirection:"row", flex:1}, label({text:'vec2',   paddingright:15}), label({text:this.vec2,   fgcolor:'#129492'})),

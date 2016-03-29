@@ -59,11 +59,11 @@ define.class('$ui/view', function(require,
 	}
 
 	this.colormap = {
-		bool: vec4("#7260FF"),
-		bool32: vec4("#7260FF"),
-		Boolean: vec4("#7260FF"),
-		BooleanLike: vec4("#7260FF"),
-		Number: vec4("#FF7260"),
+		Number: vec4("#FFA500"),
+		bool: vec4("#EE8280"),
+		bool32: vec4("#EE8280"),
+		Boolean: vec4("#EE8280"),
+		BooleanLike: vec4("#EE8280"),
 		int: vec4("#FF0080"),
 		int32: vec4("#FF0080"),
 		IntLike: vec4("#FF0080"),
