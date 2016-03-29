@@ -1554,7 +1554,7 @@
 				}
 				if (full_name instanceof Array) full_name = full_name[0]
 
-				if(define.atRequire && full_name.charAt(0) == '/'){
+				if(define.atRequire && ((full_name.charAt(0) == '/') || (full_name.indexOf('\\') >= 0)) ){
 					define.atRequire(full_name)
 				}
 
