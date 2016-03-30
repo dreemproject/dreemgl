@@ -4,26 +4,36 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-//Pure JS based composition
+
+// test/dalitests/sample.js
 define.class(function($server$, composition, $ui$, screen, view, label, require){
+
+	define.class(this, 'sampler', "$ui/view", function(require, $ui$, view){
+		this.attributes = {
+			color : vec4(0,1,0,1),
+			image : require('./assets/1.png')
+		}
+
+		this.bgcolorfn = function(mesh) {
+			var uv = mesh.xy;
+			var bg = color;
+			fg = image.sample(uv.xy);
+			fg = vec4(
+				fg.r * fg.a + bg.r * (1.0 - fg.a),
+				fg.g * fg.a + bg.g * (1.0 - fg.a),
+				fg.b * fg.a + bg.b * (1.0 - fg.a),
+				1);
+			return fg;
+		}
+
+	});
 
 	this.render = function(){
 
-		var dynviews = [];
-		for (var digit=0; digit<10; digit++) {
-			for (var w=100; w<=200; w+= 25) {
-				var v1 = view({
-					size: vec2(w, w)
-					,bgimage: require('./assets/' + digit + '.png')
-					,bgimagemode:"stretch"
-				})
-				dynviews.push(v1);
-			}
-		}
-
 		var views = [
 				screen({name:'default', clearcolor:'#484230'}
-					   ,dynviews)
+							 ,this.sampler({width: 100, height: 100, color: vec4('blue')})
+							)
 			];
 
 		return views
