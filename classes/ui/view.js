@@ -52,10 +52,15 @@ define.class('$system/base/node', function(require){
 		opacity: Config({group:"style", value: 1.0, type:float}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
-		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+
+		// Image mode alters how/where the background image is scaled, streched, fit and drawn within the view's bounds.
 		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"stretch"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
+
+		// Offets the image within the view.  This value is in texture coordinates.
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
+
+		// When using `aspect-fit`, or `apsect-fill` this property will automatically adjust the image's location within the view.
 		bgimagealign: Config({group:"style", type:Enum("none", "center", "start", "end", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"none"}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode

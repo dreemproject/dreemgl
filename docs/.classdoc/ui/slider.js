@@ -17,8 +17,8 @@
  * The current value, between 0.0 ~ 1.0
  */
 /**
- * @attribute {float32} [step="Infinity"]
- * The size of each step between 0 ~ 1, e.g. 0.01 would create 100 discrete steps.  The value of Infinity indicates a continuum.
+ * @attribute {float32} [step="undefined"]
+ * The size of each step between 0 ~ 1, e.g. 0.01 would create 100 discrete steps.  The value of 0 indicates a continuum.
  */
 /**
  * @attribute {float32} [minvalue="undefined"]

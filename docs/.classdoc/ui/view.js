@@ -73,7 +73,15 @@
  */
 /**
  * @attribute {Enum} [bgimagemode="stretch"]
- * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+ * Image mode alters how/where the background image is scaled, streched, fit and drawn within the view's bounds.
+ */
+/**
+ * @attribute {vec2} [bgimageoffset="0,0"]
+ * Offets the image within the view.  This value is in texture coordinates.
+ */
+/**
+ * @attribute {Enum} [bgimagealign="none"]
+ * When using `aspect-fit`, or `apsect-fill` this property will automatically adjust the image's location within the view.
  */
 /**
  * @attribute {vec4} [clearcolor="undefined"]
