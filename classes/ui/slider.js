@@ -17,8 +17,8 @@ define.class("$ui/view", function($ui$, view, icon) {
 		// The current value, between 0.0 ~ 1.0
 		value:Config({value:0.5, persist:true}),
 
-		// The size of each step between 0 ~ 1, e.g. 0.01 would create 100 discrete steps.  The value of Infinity indicates a continuum.
-		step:Config({value:Infinity}),
+		// The size of each step between 0 ~ 1, e.g. 0.01 would create 100 discrete steps.  The value of 0 indicates a continuum.
+		step:Config({value:0}),
 
 		// Minimum value allowed, for restricting slider range
 		minvalue:Config({value:0.0}),
@@ -56,7 +56,7 @@ define.class("$ui/view", function($ui$, view, icon) {
 	this.keydown = function(ev, v, o) {
 		var value;
 		if (ev.name === "rightarrow") {
-			if (this.step !== Infinity) {
+			if (this._step) {
 				value = this._value + this._step
 			} else {
 				if (this._horizontal) {
@@ -66,7 +66,7 @@ define.class("$ui/view", function($ui$, view, icon) {
 				}
 			}
 		} else if (ev.name === "leftarrow") {
-			if (this.step !== Infinity) {
+			if (this._step) {
 				value = this._value - this._step
 			} else {
 				if (this._horizontal) {
@@ -93,7 +93,7 @@ define.class("$ui/view", function($ui$, view, icon) {
 	}
 
 	this.stepValue = function(value) {
-		if (this._step !== Infinity) {
+		if (this._step) {
 			var size = Math.round(value / this._step)
 			value = size * this._step
 		}
