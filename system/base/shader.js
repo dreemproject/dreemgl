@@ -381,6 +381,7 @@ define.class(function(require, exports){
 	this.alpha_blend = ''
 	//this.depth_test = 'src_depth > dst_depth'
 	this.depth_test = ''
+	this.depth_mask = true
 	this.color_blend = '(1 - src_alpha) * dst_color + src_alpha * src_color'
 
 	this.alpha = ''
