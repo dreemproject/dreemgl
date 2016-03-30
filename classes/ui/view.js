@@ -53,7 +53,7 @@ define.class('$system/base/node', function(require){
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"resize"}),
+		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"stretch"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
 
