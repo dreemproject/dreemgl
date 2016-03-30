@@ -4,7 +4,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$server/composition",function(require, $ui$, slider, screen, label, view, icon, cadgrid) {
+define.class("$server/composition",function(require, $ui$, slider, screen, label, view, icon, cadgrid, button) {
 
 		this.render = function() {
 			return [
@@ -62,7 +62,8 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 								value:0.2,
 								step:0.2,
 								bgcolor:"green",
-								fgcolor:"white",
+								fgcolor:"palegreen",
+								smooth:false,
 								range:vec2(100,600),
 								onrangevalue:function(ev,v,o) {
 									var current = this.find("currentrange");

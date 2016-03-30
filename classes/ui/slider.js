@@ -125,14 +125,16 @@ define.class("$ui/view", function($ui$, view, icon) {
 	};
 
 	this.setHandle = function(value) {
-		for (var i=0;i<this.handlechildren.length;i++) {
-			var child = this.handlechildren[i];
-			if (this.horizontal) {
-				child.x = this._layout.width * value - child.width * 0.5;
-				child.y = this._layout.height * 0.5 - child.height * 0.5;
-			} else {
-				child.y = this._layout.height * value - child.height * 0.5;
-				child.x = this._layout.width * 0.5 - child.width * 0.5;
+		if (this.handlechildren) {
+			for (var i=0;i<this.handlechildren.length;i++) {
+				var child = this.handlechildren[i];
+				if (this.horizontal) {
+					child.x = this._layout.width * value - child.width * 0.5;
+					child.y = this._layout.height * 0.5 - child.height * 0.5;
+				} else {
+					child.y = this._layout.height * value - child.height * 0.5;
+					child.x = this._layout.width * 0.5 - child.width * 0.5;
+				}
 			}
 		}
 	}
@@ -155,19 +157,43 @@ define.class("$ui/view", function($ui$, view, icon) {
 		this.value = value
 	};
 
+	this.onrange = function(ev,range,o) {
+		if (range) {
+			var distance = range[1] - range[0];
+			var rangevalue = (distance * this._value) + range[0]
+			if (this._rangevalue != rangevalue) {
+				this.rangevalue = rangevalue
+			}
+		}
+	}
+
 	this.onvalue = function(ev,v,o) {
 		var value = Math.max(this._minvalue, Math.min(this._maxvalue, v));
 
 		var range = this._range;
 		var distance = range[1] - range[0];
-		this.rangevalue = (distance * value) + range[0]
+		var rangevalue = (distance * value) + range[0]
+		if (this._rangevalue != rangevalue) {
+			this.rangevalue = rangevalue
+		}
 
 		if (value != this.value) {
 			this.value = value;
 		} else {
 			this.onsize(null,this.size,this);
+			this.setHandle(value)
 		}
 	};
+
+	this.onrangevalue = function(ev,v,o) {
+		var range = this._range;
+		var distance = range[1] - range[0];
+		value = (v - range[0]) / distance;
+		if (this._value !== value) {
+			this.value = value
+		}
+
+	}
 
 	this.render = function() {
 		var views = [];
