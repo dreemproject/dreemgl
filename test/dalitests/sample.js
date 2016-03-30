@@ -10,14 +10,13 @@ define.class(function($server$, composition, $ui$, screen, view, label, require)
 
 	define.class(this, 'sampler', "$ui/view", function(require, $ui$, view){
 		this.attributes = {
-			color : vec4(0,1,0,1),
 			image : require('./assets/1.png')
 		}
 
 		this.bgcolorfn = function(mesh) {
 			var uv = mesh.xy;
-			var bg = color;
-			fg = image.sample(uv.xy);
+			var bg = vec4(uv.x, uv.y, 1, 1);
+			var fg = image.sample(uv.xy);
 			fg = vec4(
 				fg.r * fg.a + bg.r * (1.0 - fg.a),
 				fg.g * fg.a + bg.g * (1.0 - fg.a),
@@ -32,7 +31,7 @@ define.class(function($server$, composition, $ui$, screen, view, label, require)
 
 		var views = [
 				screen({name:'default', clearcolor:'#484230'}
-							 ,this.sampler({width: 100, height: 100, color: vec4('blue')})
+							 ,this.sampler({width: 100, height: 100})
 							)
 			];
 
