@@ -70,15 +70,15 @@ define.class("$ui/view", function($ui$, view, icon) {
 				value = this._value - this._step
 			} else {
 				if (this._horizontal) {
-					value = this._value - 1.0 / this.width;
+					value = this._value - 1.0 / this._layout.width;
 				} else {
-					value = this._value - 1.0 / this.height;
+					value = this._value - 1.0 / this._layout.height;
 				}
 			}
 		}
 
 		if (typeof(value) !== "undefined") {
-			value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+			value = Math.max(this._minvalue, Math.min(this._maxvalue, value));
 
 			value = this.stepValue(value)
 
@@ -110,7 +110,7 @@ define.class("$ui/view", function($ui$, view, icon) {
 			value = pos.y / this.height;
 		}
 
-		value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+		value = Math.max(this.minvalue, Math.min(this._maxvalue, value));
 
 		this.setHandle(value)
 
