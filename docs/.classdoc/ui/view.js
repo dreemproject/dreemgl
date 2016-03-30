@@ -72,7 +72,7 @@
  * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
  */
 /**
- * @attribute {Enum} [bgimagemode="resize"]
+ * @attribute {Enum} [bgimagemode="stretch"]
  * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
  */
 /**
@@ -333,6 +333,10 @@
 /**
  * @attribute {float32} [tabstop="undefined"]
  * tabstop, sorted by number
+ */
+/**
+ * @method atViewDestroy
+ * lets destroy some shaders/vertexbuffers
  */
 /**
  * @method setBgImage

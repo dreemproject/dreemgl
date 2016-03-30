@@ -189,8 +189,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
-<a href="#n39" name="n39">39</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -202,35 +200,34 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">shape3d</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
-                
+
                 <span class="local-variable">this</span>.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt; dst_depth</span><span class="delimiter">'</span></span>
-                
+
                 <span class="local-variable">this</span>.vertexstruct = define.struct({
                         <span class="key">pos</span>: vec3,
                         <span class="key">norm</span>: vec3,
                         <span class="key">uv</span>: vec2
                 })
-        
+
                 <span class="local-variable">this</span>.diffusecolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffff</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array()
-                
-                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>() {                                
-                        
+
+                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>() {
                         <span class="keyword">var</span> temp = (vec4(mesh.norm,<span class="float">1.0</span>) * view.normalmatrix)
                         transnorm = temp.xyz
                         pos = vec4(mesh.pos, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
-                        <span class="keyword">return</span> pos <span class="comment">// * matrix *viewmatrix</span>
+                        <span class="keyword">return</span> pos
                 }
-                                
+
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>() {
-                        <span class="comment">//return vec4(&quot;yellow&quot;) ;                        </span>
                         <span class="keyword">var</span> tn = normalize(transnorm.xyz);
-                        <span class="keyword">return</span> vec4(tn*<span class="float">0.5</span>+<span class="float">0.5</span>,<span class="float">1.0</span>);                
+                        <span class="keyword">return</span> vec4(tn * <span class="float">0.5</span> + <span class="float">0.5</span>, <span class="float">1.0</span>);
                 }
         })
-        <span class="local-variable">this</span>.shape3d = <span class="predefined-constant">true</span>        
+        <span class="local-variable">this</span>.shape3d = <span class="predefined-constant">true</span>
         <span class="local-variable">this</span>.hardrect =<span class="predefined-constant">false</span>;
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

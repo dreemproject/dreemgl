@@ -643,6 +643,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n489" name="n489">489</a>
 <strong><a href="#n490" name="n490">490</a></strong>
 <a href="#n491" name="n491">491</a>
+<a href="#n492" name="n492">492</a>
+<a href="#n493" name="n493">493</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -666,6 +668,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.antialias = <span class="predefined-constant">false</span>
         <span class="local-variable">this</span>.debug_pick = <span class="predefined-constant">false</span>
 
+        <span class="local-variable">this</span>.window =
         <span class="local-variable">this</span>.document = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window : <span class="predefined-constant">null</span>
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous){
@@ -719,7 +722,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 setInterval(<span class="keyword">function</span>(){
                         <span class="keyword">var</span> now = Date.now()
                         <span class="keyword">if</span>(now - last &gt; <span class="integer">1000</span> &amp;&amp; <span class="local-variable">this</span>.screen){
-                                <span class="local-variable">this</span>.doresize()
+                                <span class="local-variable">this</span>.doSize()
                                  <span class="local-variable">this</span>.redraw()
                                 <span class="local-variable">this</span>.screen.emit(<span class="string"><span class="delimiter">'</span><span class="content">wakeup</span><span class="delimiter">'</span></span>)
                         }
@@ -760,7 +763,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">initResize</span> = <span class="keyword">function</span>(){
                 <span class="comment">//canvas.webkitRequestFullscreen()</span>
 
-                <span class="keyword">var</span> resize = <span class="local-variable">this</span>.<span class="function">doresize</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> resize = <span class="local-variable">this</span>.<span class="function">doSize</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> pixelRatio = window.devicePixelRatio
 
                         <span class="keyword">var</span> w = <span class="local-variable">this</span>.parent.offsetWidth
@@ -806,7 +809,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">getExtension</span> = <span class="keyword">function</span>(name){
                 <span class="keyword">var</span> ext = <span class="local-variable">this</span>.extensions[name]
                 <span class="keyword">if</span>(ext) <span class="keyword">return</span> ext
-                <span class="keyword">return</span> <span class="local-variable">this</span>.extensions[name] = <span class="local-variable">this</span>.gl.getExtension(name)
+                ext = <span class="local-variable">this</span>.extensions[name] = <span class="local-variable">this</span>.gl.getExtension(name)
+                <span class="keyword">return</span> ext
         }
 
         <span class="local-variable">this</span>.<span class="function">redraw</span> = <span class="keyword">function</span>(){

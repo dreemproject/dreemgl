@@ -492,6 +492,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n338" name="n338">338</a>
 <a href="#n339" name="n339">339</a>
 <strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -519,6 +525,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">hasball</span>: <span class="predefined-constant">true</span>
 
         }
+        <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
 
         <span class="local-variable">this</span>.<span class="function">B1</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> t * t * t; }
         <span class="local-variable">this</span>.<span class="function">B2</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * t * (<span class="integer">1</span> - t); }
@@ -568,7 +575,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         }
 
-        <span class="local-variable">this</span>.<span class="function">keydownDelete</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.keydownBackspace = <span class="local-variable">this</span>.<span class="function">keydownDelete</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).removeConnection(<span class="local-variable">this</span>);
         }
 
@@ -577,7 +584,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
-                <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
+                <span class="local-variable">this</span>.screen.defaultKeyboardHandler.call(<span class="local-variable">this</span>, v);
         }
 
         <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
@@ -602,7 +609,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
 
-                <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);;
+                <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);
                                 <span class="keyword">var</span> H = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>);
 
                 <span class="keyword">if</span> (H){
@@ -626,6 +633,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 fg.setActiveConnection(<span class="local-variable">this</span>);
                 fg.updateSelectedItems();
                 fg.setupSelectionMove();
+        }
+
+        <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.keydownDelete()
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
@@ -774,7 +785,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                         <span class="local-variable">this</span>.frompos = vec2(F._pos[<span class="integer">0</span>]+ F._layout.width-<span class="integer">3</span>,F._pos[<span class="integer">1</span>]+yoff)
                 } <span class="keyword">else</span> {
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> no F:</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>._from);
+<span class="comment">//                        console.log(&quot; no F:&quot;, this._from);</span>
+<span class="comment">//                        this.visible = false</span>
                 }
 
                 <span class="keyword">if</span> (T){
@@ -792,14 +804,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="local-variable">this</span>.topos = vec2(T._pos[<span class="integer">0</span>],T._pos[<span class="integer">1</span>]+yoff)
                 } <span class="keyword">else</span> {
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> no T</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>._to);
+<span class="comment">//                        console.log(&quot; no To&quot;, this._to);</span>
+<span class="comment">//                        this.visible = false</span>
                 }
-
 
                 <span class="keyword">if</span> (color1 &amp;&amp; !color2) color2 = color1;<span class="keyword">else</span> <span class="keyword">if</span> (color2 &amp;&amp; !color1) color1 = color2;
                 <span class="keyword">if</span> (color1) <span class="local-variable">this</span>.neutralcolor1 = <span class="local-variable">this</span>.color1 = Mark(color1, !<span class="local-variable">this</span>.updatecount);
                 <span class="keyword">if</span> (color2) <span class="local-variable">this</span>.neutralcolor2 = <span class="local-variable">this</span>.color2 = Mark(color2, !<span class="local-variable">this</span>.updatecount);
-                <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);;
+                <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);
                 <span class="local-variable">this</span>.updatecount++;
 
                 <span class="keyword">var</span> H = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>);
@@ -825,11 +837,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.hasball) <span class="keyword">return</span> [ballbutton({<span class="function">click</span>:<span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.screen.contextMenu([{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Remove</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>, <span class="function">clickaction</span>:<span class="keyword">function</span>(){
-                                <span class="local-variable">this</span>.keydownDelete()
-                        }.bind(<span class="local-variable">this</span>)}])
-                }.bind(<span class="local-variable">this</span>),<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">ballsize</span>: <span class="integer">24</span>, <span class="key">triangle</span>:<span class="predefined-constant">true</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>})];
+                <span class="comment">//if (this.hasball) return [ballbutton({click:function(){</span>
+                <span class="comment">//        this.screen.contextMenu([{name:&quot;Remove&quot;, icon:&quot;remove&quot;, clickaction:function(){</span>
+                <span class="comment">//                this.keydownDelete()</span>
+                <span class="comment">//        }.bind(this)}])</span>
+                <span class="comment">//}.bind(this),name:&quot;handle&quot;, position:&quot;absolute&quot;, ballsize: 24, triangle:true, bgcolor:&quot;#303030&quot;})];</span>
                 <span class="keyword">return</span> [];
         }
 })

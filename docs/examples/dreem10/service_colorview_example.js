@@ -6,6 +6,7 @@
 // service example with embedded classes for service and view
 define.class("$server/composition",
 	function ($server$, service, $ui$, screen, view) {
+// internal
 
 		// Embedded service class which sends a random set of pos/size values
 		// to the client.

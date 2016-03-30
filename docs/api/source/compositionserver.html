@@ -433,6 +433,33 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n279" name="n279">279</a>
 <strong><a href="#n280" name="n280">280</a></strong>
 <a href="#n281" name="n281">281</a>
+<a href="#n282" name="n282">282</a>
+<a href="#n283" name="n283">283</a>
+<a href="#n284" name="n284">284</a>
+<a href="#n285" name="n285">285</a>
+<a href="#n286" name="n286">286</a>
+<a href="#n287" name="n287">287</a>
+<a href="#n288" name="n288">288</a>
+<a href="#n289" name="n289">289</a>
+<strong><a href="#n290" name="n290">290</a></strong>
+<a href="#n291" name="n291">291</a>
+<a href="#n292" name="n292">292</a>
+<a href="#n293" name="n293">293</a>
+<a href="#n294" name="n294">294</a>
+<a href="#n295" name="n295">295</a>
+<a href="#n296" name="n296">296</a>
+<a href="#n297" name="n297">297</a>
+<a href="#n298" name="n298">298</a>
+<a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
+<a href="#n302" name="n302">302</a>
+<a href="#n303" name="n303">303</a>
+<a href="#n304" name="n304">304</a>
+<a href="#n305" name="n305">305</a>
+<a href="#n306" name="n306">306</a>
+<a href="#n307" name="n307">307</a>
+<a href="#n308" name="n308">308</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -553,6 +580,31 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">loadHTML</span> = <span class="keyword">function</span>(title, boot, paths, pathset){
+
+                <span class="comment">// These rpc attributes we will write directly into the header so that they are available even before the screen connects</span>
+                <span class="keyword">var</span> preloadattrs = {};
+
+                <span class="keyword">var</span> additionalHeader = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.composition) {
+
+                        <span class="comment">// preload_rpc_attributes can be `true` to include everything or an array of `rpcobj_rpcattr` identifiers</span>
+                        <span class="keyword">var</span> preload = <span class="local-variable">this</span>.composition.preload_rpc_attributes;
+                        <span class="keyword">if</span> (preload === <span class="predefined-constant">true</span>) {
+                                preloadattrs = <span class="local-variable">this</span>.composition.server_attributes;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (Array.isArray(preload)) {
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt; preload.length;i++) {
+                                        <span class="keyword">var</span> key = preload[i];
+                                        <span class="keyword">var</span> attr = <span class="local-variable">this</span>.composition.server_attributes[key];
+                                        <span class="keyword">if</span> (attr) {
+                                                preloadattrs[key] = attr
+                                        }
+                                }
+                        }
+                        additionalHeader = <span class="local-variable">this</span>.composition.headHTML || <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+                }
+
+
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">&lt;html lang=&quot;en&quot;&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content"> &lt;head&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
@@ -567,7 +619,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                           <span class="string"><span class="delimiter">'</span><span class="content">                -moz-user-select: none;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                           <span class="string"><span class="delimiter">'</span><span class="content">                -user-select: none;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                           <span class="string"><span class="delimiter">'</span><span class="content">    }</span><span class="content">\n</span><span class="delimiter">'</span></span>+
-                        <span class="string"><span class="delimiter">'</span><span class="content">    body {background-color:darkgray;margin:0;padding:0;height:100%;overflow:hidden;}</span><span class="content">\n</span><span class="delimiter">'</span></span>+
+                        <span class="string"><span class="delimiter">'</span><span class="content">    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">  &lt;/style&gt;</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">  &lt;script type=&quot;text/javascript&quot;&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">    window.define = {</span><span class="content">\n</span><span class="delimiter">'</span></span>+
@@ -579,7 +631,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="string"><span class="delimiter">'</span><span class="content">        define.endLoader()</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">                 require(modules[0])</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">                 var Composition = require(modules[1])</span><span class="content">\n</span><span class="delimiter">'</span></span>+
-                        <span class="string"><span class="delimiter">'</span><span class="content">        define.rootComposition = new Composition(define.rootComposition)</span><span class="content">\n</span><span class="delimiter">'</span></span>+
+                        <span class="string"><span class="delimiter">'</span><span class="content">                 var serverattrs = </span><span class="delimiter">'</span></span> + JSON.stringify(preloadattrs) + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>+
+                        <span class="string"><span class="delimiter">'</span><span class="content">        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs)</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">      },</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">           atEnd:function(){</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">         define.startLoader()</span><span class="content">\n</span><span class="delimiter">'</span></span>+
@@ -587,6 +640,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="string"><span class="delimiter">'</span><span class="content">    }</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">  &lt;/script&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">  &lt;script type=&quot;text/javascript&quot; src=&quot;/system/base/define.js&quot;&gt;&lt;/script&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
+                        additionalHeader +
                         <span class="string"><span class="delimiter">'</span><span class="content"> &lt;/head&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content"> &lt;body class=&quot;unselectable&quot;&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content"> &lt;/body&gt;</span><span class="content">\n</span><span class="delimiter">'</span></span>+

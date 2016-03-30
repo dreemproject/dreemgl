@@ -1,17 +1,12 @@
-<!---
-   Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.
--->
-
 # DreemGL Appendix
 
-## Constants
-### Predefined colors values
+This appendix lists all predefined color values available to developers in DreemGL, and shows all icons which are available in <a href='https://fortawesome.github.io/Font-Awesome/'>Font Awesome</a>. From time to time new icons are being added to Font Awesome. If you see any icon missing here, please report back to us.
 
+## Colors and Fonts
 
-<table><header><th>Color name</th><th>Color</th><th>HEX</th><th>RGBA CSS value</th><th>vec4</th></header>
+### Predefined Colors
+
+<table><tr><th>Color name</th><th>Color</th><th>HEX</th><th>RGBA CSS value</th><th>vec4</th></tr>
 	<tr>
 		<td>acidgreen</td>
 		<td style='background-color: rgba(176,191,26,1)'></td>
@@ -7860,3 +7855,1170 @@
 		<td style='font-family: "Lucida Console", Courier, "Courier New"'>vec4(0.000,0.000,0.000,0)		</td>
 	</tr>
 </table>
+
+### Font Awesome 
+
+Font Awesome 4.5.0 Icon, CSS Class, & Unicode:
+
+<table>
+<tr><th colspan='4'>Font Awesome - The iconic font and CSS toolkit</th></tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf26e;</span>&nbsp;&nbsp;fa-500px&nbsp;&nbsp;[&amp;#xf26e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf042;</span>&nbsp;&nbsp;fa-adjust&nbsp;&nbsp;[&amp;#xf042;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf170;</span>&nbsp;&nbsp;fa-adn&nbsp;&nbsp;[&amp;#xf170;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf037;</span>&nbsp;&nbsp;fa-align-center&nbsp;&nbsp;[&amp;#xf037;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf039;</span>&nbsp;&nbsp;fa-align-justify&nbsp;&nbsp;[&amp;#xf039;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf036;</span>&nbsp;&nbsp;fa-align-left&nbsp;&nbsp;[&amp;#xf036;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf038;</span>&nbsp;&nbsp;fa-align-right&nbsp;&nbsp;[&amp;#xf038;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf270;</span>&nbsp;&nbsp;fa-amazon&nbsp;&nbsp;[&amp;#xf270;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f9;</span>&nbsp;&nbsp;fa-ambulance&nbsp;&nbsp;[&amp;#xf0f9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf13d;</span>&nbsp;&nbsp;fa-anchor&nbsp;&nbsp;[&amp;#xf13d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf17b;</span>&nbsp;&nbsp;fa-android&nbsp;&nbsp;[&amp;#xf17b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf209;</span>&nbsp;&nbsp;fa-angellist&nbsp;&nbsp;[&amp;#xf209;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf103;</span>&nbsp;&nbsp;fa-angle-double-down&nbsp;&nbsp;[&amp;#xf103;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf100;</span>&nbsp;&nbsp;fa-angle-double-left&nbsp;&nbsp;[&amp;#xf100;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf101;</span>&nbsp;&nbsp;fa-angle-double-right&nbsp;&nbsp;[&amp;#xf101;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf102;</span>&nbsp;&nbsp;fa-angle-double-up&nbsp;&nbsp;[&amp;#xf102;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf107;</span>&nbsp;&nbsp;fa-angle-down&nbsp;&nbsp;[&amp;#xf107;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf104;</span>&nbsp;&nbsp;fa-angle-left&nbsp;&nbsp;[&amp;#xf104;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf105;</span>&nbsp;&nbsp;fa-angle-right&nbsp;&nbsp;[&amp;#xf105;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf106;</span>&nbsp;&nbsp;fa-angle-up&nbsp;&nbsp;[&amp;#xf106;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf179;</span>&nbsp;&nbsp;fa-apple&nbsp;&nbsp;[&amp;#xf179;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf187;</span>&nbsp;&nbsp;fa-archive&nbsp;&nbsp;[&amp;#xf187;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1fe;</span>&nbsp;&nbsp;fa-area-chart&nbsp;&nbsp;[&amp;#xf1fe;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ab;</span>&nbsp;&nbsp;fa-arrow-circle-down&nbsp;&nbsp;[&amp;#xf0ab;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0a8;</span>&nbsp;&nbsp;fa-arrow-circle-left&nbsp;&nbsp;[&amp;#xf0a8;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf01a;</span>&nbsp;&nbsp;fa-arrow-circle-o-down&nbsp;&nbsp;[&amp;#xf01a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf190;</span>&nbsp;&nbsp;fa-arrow-circle-o-left&nbsp;&nbsp;[&amp;#xf190;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf18e;</span>&nbsp;&nbsp;fa-arrow-circle-o-right&nbsp;&nbsp;[&amp;#xf18e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf01b;</span>&nbsp;&nbsp;fa-arrow-circle-o-up&nbsp;&nbsp;[&amp;#xf01b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0a9;</span>&nbsp;&nbsp;fa-arrow-circle-right&nbsp;&nbsp;[&amp;#xf0a9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0aa;</span>&nbsp;&nbsp;fa-arrow-circle-up&nbsp;&nbsp;[&amp;#xf0aa;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf063;</span>&nbsp;&nbsp;fa-arrow-down&nbsp;&nbsp;[&amp;#xf063;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf060;</span>&nbsp;&nbsp;fa-arrow-left&nbsp;&nbsp;[&amp;#xf060;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf061;</span>&nbsp;&nbsp;fa-arrow-right&nbsp;&nbsp;[&amp;#xf061;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf062;</span>&nbsp;&nbsp;fa-arrow-up&nbsp;&nbsp;[&amp;#xf062;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf047;</span>&nbsp;&nbsp;fa-arrows&nbsp;&nbsp;[&amp;#xf047;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0b2;</span>&nbsp;&nbsp;fa-arrows-alt&nbsp;&nbsp;[&amp;#xf0b2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf07e;</span>&nbsp;&nbsp;fa-arrows-h&nbsp;&nbsp;[&amp;#xf07e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf07d;</span>&nbsp;&nbsp;fa-arrows-v&nbsp;&nbsp;[&amp;#xf07d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf069;</span>&nbsp;&nbsp;fa-asterisk&nbsp;&nbsp;[&amp;#xf069;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1fa;</span>&nbsp;&nbsp;fa-at&nbsp;&nbsp;[&amp;#xf1fa;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b9;</span>&nbsp;&nbsp;fa-automobile&nbsp;&nbsp;[&amp;#xf1b9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf04a;</span>&nbsp;&nbsp;fa-backward&nbsp;&nbsp;[&amp;#xf04a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf24e;</span>&nbsp;&nbsp;fa-balance-scale&nbsp;&nbsp;[&amp;#xf24e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf05e;</span>&nbsp;&nbsp;fa-ban&nbsp;&nbsp;[&amp;#xf05e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf19c;</span>&nbsp;&nbsp;fa-bank&nbsp;&nbsp;[&amp;#xf19c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf080;</span>&nbsp;&nbsp;fa-bar-chart&nbsp;&nbsp;[&amp;#xf080;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf080;</span>&nbsp;&nbsp;fa-bar-chart-o&nbsp;&nbsp;[&amp;#xf080;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf02a;</span>&nbsp;&nbsp;fa-barcode&nbsp;&nbsp;[&amp;#xf02a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c9;</span>&nbsp;&nbsp;fa-bars&nbsp;&nbsp;[&amp;#xf0c9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf244;</span>&nbsp;&nbsp;fa-battery-0&nbsp;&nbsp;[&amp;#xf244;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf243;</span>&nbsp;&nbsp;fa-battery-1&nbsp;&nbsp;[&amp;#xf243;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf242;</span>&nbsp;&nbsp;fa-battery-2&nbsp;&nbsp;[&amp;#xf242;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf241;</span>&nbsp;&nbsp;fa-battery-3&nbsp;&nbsp;[&amp;#xf241;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf240;</span>&nbsp;&nbsp;fa-battery-4&nbsp;&nbsp;[&amp;#xf240;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf244;</span>&nbsp;&nbsp;fa-battery-empty&nbsp;&nbsp;[&amp;#xf244;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf240;</span>&nbsp;&nbsp;fa-battery-full&nbsp;&nbsp;[&amp;#xf240;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf242;</span>&nbsp;&nbsp;fa-battery-half&nbsp;&nbsp;[&amp;#xf242;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf243;</span>&nbsp;&nbsp;fa-battery-quarter&nbsp;&nbsp;[&amp;#xf243;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf241;</span>&nbsp;&nbsp;fa-battery-three-quarters&nbsp;&nbsp;[&amp;#xf241;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf236;</span>&nbsp;&nbsp;fa-bed&nbsp;&nbsp;[&amp;#xf236;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0fc;</span>&nbsp;&nbsp;fa-beer&nbsp;&nbsp;[&amp;#xf0fc;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b4;</span>&nbsp;&nbsp;fa-behance&nbsp;&nbsp;[&amp;#xf1b4;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1b5;</span>&nbsp;&nbsp;fa-behance-square&nbsp;&nbsp;[&amp;#xf1b5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f3;</span>&nbsp;&nbsp;fa-bell&nbsp;&nbsp;[&amp;#xf0f3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0a2;</span>&nbsp;&nbsp;fa-bell-o&nbsp;&nbsp;[&amp;#xf0a2;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1f6;</span>&nbsp;&nbsp;fa-bell-slash&nbsp;&nbsp;[&amp;#xf1f6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1f7;</span>&nbsp;&nbsp;fa-bell-slash-o&nbsp;&nbsp;[&amp;#xf1f7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf206;</span>&nbsp;&nbsp;fa-bicycle&nbsp;&nbsp;[&amp;#xf206;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1e5;</span>&nbsp;&nbsp;fa-binoculars&nbsp;&nbsp;[&amp;#xf1e5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1fd;</span>&nbsp;&nbsp;fa-birthday-cake&nbsp;&nbsp;[&amp;#xf1fd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf171;</span>&nbsp;&nbsp;fa-bitbucket&nbsp;&nbsp;[&amp;#xf171;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf172;</span>&nbsp;&nbsp;fa-bitbucket-square&nbsp;&nbsp;[&amp;#xf172;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf15a;</span>&nbsp;&nbsp;fa-bitcoin&nbsp;&nbsp;[&amp;#xf15a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf27e;</span>&nbsp;&nbsp;fa-black-tie&nbsp;&nbsp;[&amp;#xf27e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf293;</span>&nbsp;&nbsp;fa-bluetooth&nbsp;&nbsp;[&amp;#xf293;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf294;</span>&nbsp;&nbsp;fa-bluetooth-b&nbsp;&nbsp;[&amp;#xf294;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf032;</span>&nbsp;&nbsp;fa-bold&nbsp;&nbsp;[&amp;#xf032;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0e7;</span>&nbsp;&nbsp;fa-bolt&nbsp;&nbsp;[&amp;#xf0e7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e2;</span>&nbsp;&nbsp;fa-bomb&nbsp;&nbsp;[&amp;#xf1e2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf02d;</span>&nbsp;&nbsp;fa-book&nbsp;&nbsp;[&amp;#xf02d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf02e;</span>&nbsp;&nbsp;fa-bookmark&nbsp;&nbsp;[&amp;#xf02e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf097;</span>&nbsp;&nbsp;fa-bookmark-o&nbsp;&nbsp;[&amp;#xf097;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0b1;</span>&nbsp;&nbsp;fa-briefcase&nbsp;&nbsp;[&amp;#xf0b1;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf15a;</span>&nbsp;&nbsp;fa-btc&nbsp;&nbsp;[&amp;#xf15a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf188;</span>&nbsp;&nbsp;fa-bug&nbsp;&nbsp;[&amp;#xf188;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ad;</span>&nbsp;&nbsp;fa-building&nbsp;&nbsp;[&amp;#xf1ad;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0f7;</span>&nbsp;&nbsp;fa-building-o&nbsp;&nbsp;[&amp;#xf0f7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0a1;</span>&nbsp;&nbsp;fa-bullhorn&nbsp;&nbsp;[&amp;#xf0a1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf140;</span>&nbsp;&nbsp;fa-bullseye&nbsp;&nbsp;[&amp;#xf140;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf207;</span>&nbsp;&nbsp;fa-bus&nbsp;&nbsp;[&amp;#xf207;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf20d;</span>&nbsp;&nbsp;fa-buysellads&nbsp;&nbsp;[&amp;#xf20d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ba;</span>&nbsp;&nbsp;fa-cab&nbsp;&nbsp;[&amp;#xf1ba;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1ec;</span>&nbsp;&nbsp;fa-calculator&nbsp;&nbsp;[&amp;#xf1ec;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf073;</span>&nbsp;&nbsp;fa-calendar&nbsp;&nbsp;[&amp;#xf073;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf274;</span>&nbsp;&nbsp;fa-calendar-check-o&nbsp;&nbsp;[&amp;#xf274;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf272;</span>&nbsp;&nbsp;fa-calendar-minus-o&nbsp;&nbsp;[&amp;#xf272;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf133;</span>&nbsp;&nbsp;fa-calendar-o&nbsp;&nbsp;[&amp;#xf133;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf271;</span>&nbsp;&nbsp;fa-calendar-plus-o&nbsp;&nbsp;[&amp;#xf271;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf273;</span>&nbsp;&nbsp;fa-calendar-times-o&nbsp;&nbsp;[&amp;#xf273;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf030;</span>&nbsp;&nbsp;fa-camera&nbsp;&nbsp;[&amp;#xf030;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf083;</span>&nbsp;&nbsp;fa-camera-retro&nbsp;&nbsp;[&amp;#xf083;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1b9;</span>&nbsp;&nbsp;fa-car&nbsp;&nbsp;[&amp;#xf1b9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d7;</span>&nbsp;&nbsp;fa-caret-down&nbsp;&nbsp;[&amp;#xf0d7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d9;</span>&nbsp;&nbsp;fa-caret-left&nbsp;&nbsp;[&amp;#xf0d9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0da;</span>&nbsp;&nbsp;fa-caret-right&nbsp;&nbsp;[&amp;#xf0da;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf150;</span>&nbsp;&nbsp;fa-caret-square-o-down&nbsp;&nbsp;[&amp;#xf150;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf191;</span>&nbsp;&nbsp;fa-caret-square-o-left&nbsp;&nbsp;[&amp;#xf191;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf152;</span>&nbsp;&nbsp;fa-caret-square-o-right&nbsp;&nbsp;[&amp;#xf152;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf151;</span>&nbsp;&nbsp;fa-caret-square-o-up&nbsp;&nbsp;[&amp;#xf151;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d8;</span>&nbsp;&nbsp;fa-caret-up&nbsp;&nbsp;[&amp;#xf0d8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf218;</span>&nbsp;&nbsp;fa-cart-arrow-down&nbsp;&nbsp;[&amp;#xf218;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf217;</span>&nbsp;&nbsp;fa-cart-plus&nbsp;&nbsp;[&amp;#xf217;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf20a;</span>&nbsp;&nbsp;fa-cc&nbsp;&nbsp;[&amp;#xf20a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1f3;</span>&nbsp;&nbsp;fa-cc-amex&nbsp;&nbsp;[&amp;#xf1f3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf24c;</span>&nbsp;&nbsp;fa-cc-diners-club&nbsp;&nbsp;[&amp;#xf24c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1f2;</span>&nbsp;&nbsp;fa-cc-discover&nbsp;&nbsp;[&amp;#xf1f2;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf24b;</span>&nbsp;&nbsp;fa-cc-jcb&nbsp;&nbsp;[&amp;#xf24b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1f1;</span>&nbsp;&nbsp;fa-cc-mastercard&nbsp;&nbsp;[&amp;#xf1f1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1f4;</span>&nbsp;&nbsp;fa-cc-paypal&nbsp;&nbsp;[&amp;#xf1f4;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1f5;</span>&nbsp;&nbsp;fa-cc-stripe&nbsp;&nbsp;[&amp;#xf1f5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1f0;</span>&nbsp;&nbsp;fa-cc-visa&nbsp;&nbsp;[&amp;#xf1f0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0a3;</span>&nbsp;&nbsp;fa-certificate&nbsp;&nbsp;[&amp;#xf0a3;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c1;</span>&nbsp;&nbsp;fa-chain&nbsp;&nbsp;[&amp;#xf0c1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf127;</span>&nbsp;&nbsp;fa-chain-broken&nbsp;&nbsp;[&amp;#xf127;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf00c;</span>&nbsp;&nbsp;fa-check&nbsp;&nbsp;[&amp;#xf00c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf058;</span>&nbsp;&nbsp;fa-check-circle&nbsp;&nbsp;[&amp;#xf058;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf05d;</span>&nbsp;&nbsp;fa-check-circle-o&nbsp;&nbsp;[&amp;#xf05d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf14a;</span>&nbsp;&nbsp;fa-check-square&nbsp;&nbsp;[&amp;#xf14a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf046;</span>&nbsp;&nbsp;fa-check-square-o&nbsp;&nbsp;[&amp;#xf046;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf13a;</span>&nbsp;&nbsp;fa-chevron-circle-down&nbsp;&nbsp;[&amp;#xf13a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf137;</span>&nbsp;&nbsp;fa-chevron-circle-left&nbsp;&nbsp;[&amp;#xf137;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf138;</span>&nbsp;&nbsp;fa-chevron-circle-right&nbsp;&nbsp;[&amp;#xf138;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf139;</span>&nbsp;&nbsp;fa-chevron-circle-up&nbsp;&nbsp;[&amp;#xf139;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf078;</span>&nbsp;&nbsp;fa-chevron-down&nbsp;&nbsp;[&amp;#xf078;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf053;</span>&nbsp;&nbsp;fa-chevron-left&nbsp;&nbsp;[&amp;#xf053;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf054;</span>&nbsp;&nbsp;fa-chevron-right&nbsp;&nbsp;[&amp;#xf054;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf077;</span>&nbsp;&nbsp;fa-chevron-up&nbsp;&nbsp;[&amp;#xf077;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1ae;</span>&nbsp;&nbsp;fa-child&nbsp;&nbsp;[&amp;#xf1ae;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf268;</span>&nbsp;&nbsp;fa-chrome&nbsp;&nbsp;[&amp;#xf268;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf111;</span>&nbsp;&nbsp;fa-circle&nbsp;&nbsp;[&amp;#xf111;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf10c;</span>&nbsp;&nbsp;fa-circle-o&nbsp;&nbsp;[&amp;#xf10c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ce;</span>&nbsp;&nbsp;fa-circle-o-notch&nbsp;&nbsp;[&amp;#xf1ce;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1db;</span>&nbsp;&nbsp;fa-circle-thin&nbsp;&nbsp;[&amp;#xf1db;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0ea;</span>&nbsp;&nbsp;fa-clipboard&nbsp;&nbsp;[&amp;#xf0ea;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf017;</span>&nbsp;&nbsp;fa-clock-o&nbsp;&nbsp;[&amp;#xf017;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf24d;</span>&nbsp;&nbsp;fa-clone&nbsp;&nbsp;[&amp;#xf24d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf00d;</span>&nbsp;&nbsp;fa-close&nbsp;&nbsp;[&amp;#xf00d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c2;</span>&nbsp;&nbsp;fa-cloud&nbsp;&nbsp;[&amp;#xf0c2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ed;</span>&nbsp;&nbsp;fa-cloud-download&nbsp;&nbsp;[&amp;#xf0ed;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0ee;</span>&nbsp;&nbsp;fa-cloud-upload&nbsp;&nbsp;[&amp;#xf0ee;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf157;</span>&nbsp;&nbsp;fa-cny&nbsp;&nbsp;[&amp;#xf157;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf121;</span>&nbsp;&nbsp;fa-code&nbsp;&nbsp;[&amp;#xf121;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf126;</span>&nbsp;&nbsp;fa-code-fork&nbsp;&nbsp;[&amp;#xf126;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1cb;</span>&nbsp;&nbsp;fa-codepen&nbsp;&nbsp;[&amp;#xf1cb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf284;</span>&nbsp;&nbsp;fa-codiepie&nbsp;&nbsp;[&amp;#xf284;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0f4;</span>&nbsp;&nbsp;fa-coffee&nbsp;&nbsp;[&amp;#xf0f4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf013;</span>&nbsp;&nbsp;fa-cog&nbsp;&nbsp;[&amp;#xf013;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf085;</span>&nbsp;&nbsp;fa-cogs&nbsp;&nbsp;[&amp;#xf085;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0db;</span>&nbsp;&nbsp;fa-columns&nbsp;&nbsp;[&amp;#xf0db;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf075;</span>&nbsp;&nbsp;fa-comment&nbsp;&nbsp;[&amp;#xf075;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e5;</span>&nbsp;&nbsp;fa-comment-o&nbsp;&nbsp;[&amp;#xf0e5;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf27a;</span>&nbsp;&nbsp;fa-commenting&nbsp;&nbsp;[&amp;#xf27a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf27b;</span>&nbsp;&nbsp;fa-commenting-o&nbsp;&nbsp;[&amp;#xf27b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf086;</span>&nbsp;&nbsp;fa-comments&nbsp;&nbsp;[&amp;#xf086;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0e6;</span>&nbsp;&nbsp;fa-comments-o&nbsp;&nbsp;[&amp;#xf0e6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf14e;</span>&nbsp;&nbsp;fa-compass&nbsp;&nbsp;[&amp;#xf14e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf066;</span>&nbsp;&nbsp;fa-compress&nbsp;&nbsp;[&amp;#xf066;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf20e;</span>&nbsp;&nbsp;fa-connectdevelop&nbsp;&nbsp;[&amp;#xf20e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf26d;</span>&nbsp;&nbsp;fa-contao&nbsp;&nbsp;[&amp;#xf26d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c5;</span>&nbsp;&nbsp;fa-copy&nbsp;&nbsp;[&amp;#xf0c5;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1f9;</span>&nbsp;&nbsp;fa-copyright&nbsp;&nbsp;[&amp;#xf1f9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf25e;</span>&nbsp;&nbsp;fa-creative-commons&nbsp;&nbsp;[&amp;#xf25e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09d;</span>&nbsp;&nbsp;fa-credit-card&nbsp;&nbsp;[&amp;#xf09d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf283;</span>&nbsp;&nbsp;fa-credit-card-alt&nbsp;&nbsp;[&amp;#xf283;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf125;</span>&nbsp;&nbsp;fa-crop&nbsp;&nbsp;[&amp;#xf125;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf05b;</span>&nbsp;&nbsp;fa-crosshairs&nbsp;&nbsp;[&amp;#xf05b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf13c;</span>&nbsp;&nbsp;fa-css3&nbsp;&nbsp;[&amp;#xf13c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b2;</span>&nbsp;&nbsp;fa-cube&nbsp;&nbsp;[&amp;#xf1b2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b3;</span>&nbsp;&nbsp;fa-cubes&nbsp;&nbsp;[&amp;#xf1b3;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c4;</span>&nbsp;&nbsp;fa-cut&nbsp;&nbsp;[&amp;#xf0c4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f5;</span>&nbsp;&nbsp;fa-cutlery&nbsp;&nbsp;[&amp;#xf0f5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e4;</span>&nbsp;&nbsp;fa-dashboard&nbsp;&nbsp;[&amp;#xf0e4;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf210;</span>&nbsp;&nbsp;fa-dashcube&nbsp;&nbsp;[&amp;#xf210;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c0;</span>&nbsp;&nbsp;fa-database&nbsp;&nbsp;[&amp;#xf1c0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf03b;</span>&nbsp;&nbsp;fa-dedent&nbsp;&nbsp;[&amp;#xf03b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1a5;</span>&nbsp;&nbsp;fa-delicious&nbsp;&nbsp;[&amp;#xf1a5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf108;</span>&nbsp;&nbsp;fa-desktop&nbsp;&nbsp;[&amp;#xf108;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1bd;</span>&nbsp;&nbsp;fa-deviantart&nbsp;&nbsp;[&amp;#xf1bd;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf219;</span>&nbsp;&nbsp;fa-diamond&nbsp;&nbsp;[&amp;#xf219;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a6;</span>&nbsp;&nbsp;fa-digg&nbsp;&nbsp;[&amp;#xf1a6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf155;</span>&nbsp;&nbsp;fa-dollar&nbsp;&nbsp;[&amp;#xf155;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf192;</span>&nbsp;&nbsp;fa-dot-circle-o&nbsp;&nbsp;[&amp;#xf192;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf019;</span>&nbsp;&nbsp;fa-download&nbsp;&nbsp;[&amp;#xf019;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf17d;</span>&nbsp;&nbsp;fa-dribbble&nbsp;&nbsp;[&amp;#xf17d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf16b;</span>&nbsp;&nbsp;fa-dropbox&nbsp;&nbsp;[&amp;#xf16b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a9;</span>&nbsp;&nbsp;fa-drupal&nbsp;&nbsp;[&amp;#xf1a9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf282;</span>&nbsp;&nbsp;fa-edge&nbsp;&nbsp;[&amp;#xf282;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf044;</span>&nbsp;&nbsp;fa-edit&nbsp;&nbsp;[&amp;#xf044;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf052;</span>&nbsp;&nbsp;fa-eject&nbsp;&nbsp;[&amp;#xf052;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf141;</span>&nbsp;&nbsp;fa-ellipsis-h&nbsp;&nbsp;[&amp;#xf141;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf142;</span>&nbsp;&nbsp;fa-ellipsis-v&nbsp;&nbsp;[&amp;#xf142;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d1;</span>&nbsp;&nbsp;fa-empire&nbsp;&nbsp;[&amp;#xf1d1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e0;</span>&nbsp;&nbsp;fa-envelope&nbsp;&nbsp;[&amp;#xf0e0;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf003;</span>&nbsp;&nbsp;fa-envelope-o&nbsp;&nbsp;[&amp;#xf003;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf199;</span>&nbsp;&nbsp;fa-envelope-square&nbsp;&nbsp;[&amp;#xf199;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf12d;</span>&nbsp;&nbsp;fa-eraser&nbsp;&nbsp;[&amp;#xf12d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf153;</span>&nbsp;&nbsp;fa-eur&nbsp;&nbsp;[&amp;#xf153;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf153;</span>&nbsp;&nbsp;fa-euro&nbsp;&nbsp;[&amp;#xf153;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ec;</span>&nbsp;&nbsp;fa-exchange&nbsp;&nbsp;[&amp;#xf0ec;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf12a;</span>&nbsp;&nbsp;fa-exclamation&nbsp;&nbsp;[&amp;#xf12a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf06a;</span>&nbsp;&nbsp;fa-exclamation-circle&nbsp;&nbsp;[&amp;#xf06a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf071;</span>&nbsp;&nbsp;fa-exclamation-triangle&nbsp;&nbsp;[&amp;#xf071;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf065;</span>&nbsp;&nbsp;fa-expand&nbsp;&nbsp;[&amp;#xf065;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf23e;</span>&nbsp;&nbsp;fa-expeditedssl&nbsp;&nbsp;[&amp;#xf23e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf08e;</span>&nbsp;&nbsp;fa-external-link&nbsp;&nbsp;[&amp;#xf08e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf14c;</span>&nbsp;&nbsp;fa-external-link-square&nbsp;&nbsp;[&amp;#xf14c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf06e;</span>&nbsp;&nbsp;fa-eye&nbsp;&nbsp;[&amp;#xf06e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf070;</span>&nbsp;&nbsp;fa-eye-slash&nbsp;&nbsp;[&amp;#xf070;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1fb;</span>&nbsp;&nbsp;fa-eyedropper&nbsp;&nbsp;[&amp;#xf1fb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09a;</span>&nbsp;&nbsp;fa-facebook&nbsp;&nbsp;[&amp;#xf09a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09a;</span>&nbsp;&nbsp;fa-facebook-f&nbsp;&nbsp;[&amp;#xf09a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf230;</span>&nbsp;&nbsp;fa-facebook-official&nbsp;&nbsp;[&amp;#xf230;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf082;</span>&nbsp;&nbsp;fa-facebook-square&nbsp;&nbsp;[&amp;#xf082;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf049;</span>&nbsp;&nbsp;fa-fast-backward&nbsp;&nbsp;[&amp;#xf049;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf050;</span>&nbsp;&nbsp;fa-fast-forward&nbsp;&nbsp;[&amp;#xf050;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ac;</span>&nbsp;&nbsp;fa-fax&nbsp;&nbsp;[&amp;#xf1ac;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09e;</span>&nbsp;&nbsp;fa-feed&nbsp;&nbsp;[&amp;#xf09e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf182;</span>&nbsp;&nbsp;fa-female&nbsp;&nbsp;[&amp;#xf182;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0fb;</span>&nbsp;&nbsp;fa-fighter-jet&nbsp;&nbsp;[&amp;#xf0fb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf15b;</span>&nbsp;&nbsp;fa-file&nbsp;&nbsp;[&amp;#xf15b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1c6;</span>&nbsp;&nbsp;fa-file-archive-o&nbsp;&nbsp;[&amp;#xf1c6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c7;</span>&nbsp;&nbsp;fa-file-audio-o&nbsp;&nbsp;[&amp;#xf1c7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c9;</span>&nbsp;&nbsp;fa-file-code-o&nbsp;&nbsp;[&amp;#xf1c9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1c3;</span>&nbsp;&nbsp;fa-file-excel-o&nbsp;&nbsp;[&amp;#xf1c3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c5;</span>&nbsp;&nbsp;fa-file-image-o&nbsp;&nbsp;[&amp;#xf1c5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c8;</span>&nbsp;&nbsp;fa-file-movie-o&nbsp;&nbsp;[&amp;#xf1c8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf016;</span>&nbsp;&nbsp;fa-file-o&nbsp;&nbsp;[&amp;#xf016;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c1;</span>&nbsp;&nbsp;fa-file-pdf-o&nbsp;&nbsp;[&amp;#xf1c1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c5;</span>&nbsp;&nbsp;fa-file-photo-o&nbsp;&nbsp;[&amp;#xf1c5;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1c5;</span>&nbsp;&nbsp;fa-file-picture-o&nbsp;&nbsp;[&amp;#xf1c5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c4;</span>&nbsp;&nbsp;fa-file-powerpoint-o&nbsp;&nbsp;[&amp;#xf1c4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c7;</span>&nbsp;&nbsp;fa-file-sound-o&nbsp;&nbsp;[&amp;#xf1c7;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf15c;</span>&nbsp;&nbsp;fa-file-text&nbsp;&nbsp;[&amp;#xf15c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f6;</span>&nbsp;&nbsp;fa-file-text-o&nbsp;&nbsp;[&amp;#xf0f6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c8;</span>&nbsp;&nbsp;fa-file-video-o&nbsp;&nbsp;[&amp;#xf1c8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1c2;</span>&nbsp;&nbsp;fa-file-word-o&nbsp;&nbsp;[&amp;#xf1c2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1c6;</span>&nbsp;&nbsp;fa-file-zip-o&nbsp;&nbsp;[&amp;#xf1c6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c5;</span>&nbsp;&nbsp;fa-files-o&nbsp;&nbsp;[&amp;#xf0c5;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf008;</span>&nbsp;&nbsp;fa-film&nbsp;&nbsp;[&amp;#xf008;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0b0;</span>&nbsp;&nbsp;fa-filter&nbsp;&nbsp;[&amp;#xf0b0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf06d;</span>&nbsp;&nbsp;fa-fire&nbsp;&nbsp;[&amp;#xf06d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf134;</span>&nbsp;&nbsp;fa-fire-extinguisher&nbsp;&nbsp;[&amp;#xf134;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf269;</span>&nbsp;&nbsp;fa-firefox&nbsp;&nbsp;[&amp;#xf269;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf024;</span>&nbsp;&nbsp;fa-flag&nbsp;&nbsp;[&amp;#xf024;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf11e;</span>&nbsp;&nbsp;fa-flag-checkered&nbsp;&nbsp;[&amp;#xf11e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf11d;</span>&nbsp;&nbsp;fa-flag-o&nbsp;&nbsp;[&amp;#xf11d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e7;</span>&nbsp;&nbsp;fa-flash&nbsp;&nbsp;[&amp;#xf0e7;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c3;</span>&nbsp;&nbsp;fa-flask&nbsp;&nbsp;[&amp;#xf0c3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf16e;</span>&nbsp;&nbsp;fa-flickr&nbsp;&nbsp;[&amp;#xf16e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c7;</span>&nbsp;&nbsp;fa-floppy-o&nbsp;&nbsp;[&amp;#xf0c7;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf07b;</span>&nbsp;&nbsp;fa-folder&nbsp;&nbsp;[&amp;#xf07b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf114;</span>&nbsp;&nbsp;fa-folder-o&nbsp;&nbsp;[&amp;#xf114;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf07c;</span>&nbsp;&nbsp;fa-folder-open&nbsp;&nbsp;[&amp;#xf07c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf115;</span>&nbsp;&nbsp;fa-folder-open-o&nbsp;&nbsp;[&amp;#xf115;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf031;</span>&nbsp;&nbsp;fa-font&nbsp;&nbsp;[&amp;#xf031;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf280;</span>&nbsp;&nbsp;fa-fonticons&nbsp;&nbsp;[&amp;#xf280;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf286;</span>&nbsp;&nbsp;fa-fort-awesome&nbsp;&nbsp;[&amp;#xf286;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf211;</span>&nbsp;&nbsp;fa-forumbee&nbsp;&nbsp;[&amp;#xf211;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf04e;</span>&nbsp;&nbsp;fa-forward&nbsp;&nbsp;[&amp;#xf04e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf180;</span>&nbsp;&nbsp;fa-foursquare&nbsp;&nbsp;[&amp;#xf180;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf119;</span>&nbsp;&nbsp;fa-frown-o&nbsp;&nbsp;[&amp;#xf119;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e3;</span>&nbsp;&nbsp;fa-futbol-o&nbsp;&nbsp;[&amp;#xf1e3;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf11b;</span>&nbsp;&nbsp;fa-gamepad&nbsp;&nbsp;[&amp;#xf11b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e3;</span>&nbsp;&nbsp;fa-gavel&nbsp;&nbsp;[&amp;#xf0e3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf154;</span>&nbsp;&nbsp;fa-gbp&nbsp;&nbsp;[&amp;#xf154;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1d1;</span>&nbsp;&nbsp;fa-ge&nbsp;&nbsp;[&amp;#xf1d1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf013;</span>&nbsp;&nbsp;fa-gear&nbsp;&nbsp;[&amp;#xf013;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf085;</span>&nbsp;&nbsp;fa-gears&nbsp;&nbsp;[&amp;#xf085;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf22d;</span>&nbsp;&nbsp;fa-genderless&nbsp;&nbsp;[&amp;#xf22d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf265;</span>&nbsp;&nbsp;fa-get-pocket&nbsp;&nbsp;[&amp;#xf265;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf260;</span>&nbsp;&nbsp;fa-gg&nbsp;&nbsp;[&amp;#xf260;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf261;</span>&nbsp;&nbsp;fa-gg-circle&nbsp;&nbsp;[&amp;#xf261;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf06b;</span>&nbsp;&nbsp;fa-gift&nbsp;&nbsp;[&amp;#xf06b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d3;</span>&nbsp;&nbsp;fa-git&nbsp;&nbsp;[&amp;#xf1d3;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1d2;</span>&nbsp;&nbsp;fa-git-square&nbsp;&nbsp;[&amp;#xf1d2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09b;</span>&nbsp;&nbsp;fa-github&nbsp;&nbsp;[&amp;#xf09b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf113;</span>&nbsp;&nbsp;fa-github-alt&nbsp;&nbsp;[&amp;#xf113;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf092;</span>&nbsp;&nbsp;fa-github-square&nbsp;&nbsp;[&amp;#xf092;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf184;</span>&nbsp;&nbsp;fa-gittip&nbsp;&nbsp;[&amp;#xf184;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf000;</span>&nbsp;&nbsp;fa-glass&nbsp;&nbsp;[&amp;#xf000;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0ac;</span>&nbsp;&nbsp;fa-globe&nbsp;&nbsp;[&amp;#xf0ac;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a0;</span>&nbsp;&nbsp;fa-google&nbsp;&nbsp;[&amp;#xf1a0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d5;</span>&nbsp;&nbsp;fa-google-plus&nbsp;&nbsp;[&amp;#xf0d5;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0d4;</span>&nbsp;&nbsp;fa-google-plus-square&nbsp;&nbsp;[&amp;#xf0d4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ee;</span>&nbsp;&nbsp;fa-google-wallet&nbsp;&nbsp;[&amp;#xf1ee;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf19d;</span>&nbsp;&nbsp;fa-graduation-cap&nbsp;&nbsp;[&amp;#xf19d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf184;</span>&nbsp;&nbsp;fa-gratipay&nbsp;&nbsp;[&amp;#xf184;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c0;</span>&nbsp;&nbsp;fa-group&nbsp;&nbsp;[&amp;#xf0c0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0fd;</span>&nbsp;&nbsp;fa-h-square&nbsp;&nbsp;[&amp;#xf0fd;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1d4;</span>&nbsp;&nbsp;fa-hacker-news&nbsp;&nbsp;[&amp;#xf1d4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf255;</span>&nbsp;&nbsp;fa-hand-grab-o&nbsp;&nbsp;[&amp;#xf255;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf258;</span>&nbsp;&nbsp;fa-hand-lizard-o&nbsp;&nbsp;[&amp;#xf258;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0a7;</span>&nbsp;&nbsp;fa-hand-o-down&nbsp;&nbsp;[&amp;#xf0a7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0a5;</span>&nbsp;&nbsp;fa-hand-o-left&nbsp;&nbsp;[&amp;#xf0a5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0a4;</span>&nbsp;&nbsp;fa-hand-o-right&nbsp;&nbsp;[&amp;#xf0a4;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0a6;</span>&nbsp;&nbsp;fa-hand-o-up&nbsp;&nbsp;[&amp;#xf0a6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf256;</span>&nbsp;&nbsp;fa-hand-paper-o&nbsp;&nbsp;[&amp;#xf256;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf25b;</span>&nbsp;&nbsp;fa-hand-peace-o&nbsp;&nbsp;[&amp;#xf25b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf25a;</span>&nbsp;&nbsp;fa-hand-pointer-o&nbsp;&nbsp;[&amp;#xf25a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf255;</span>&nbsp;&nbsp;fa-hand-rock-o&nbsp;&nbsp;[&amp;#xf255;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf257;</span>&nbsp;&nbsp;fa-hand-scissors-o&nbsp;&nbsp;[&amp;#xf257;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf259;</span>&nbsp;&nbsp;fa-hand-spock-o&nbsp;&nbsp;[&amp;#xf259;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf256;</span>&nbsp;&nbsp;fa-hand-stop-o&nbsp;&nbsp;[&amp;#xf256;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf292;</span>&nbsp;&nbsp;fa-hashtag&nbsp;&nbsp;[&amp;#xf292;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0a0;</span>&nbsp;&nbsp;fa-hdd-o&nbsp;&nbsp;[&amp;#xf0a0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1dc;</span>&nbsp;&nbsp;fa-header&nbsp;&nbsp;[&amp;#xf1dc;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf025;</span>&nbsp;&nbsp;fa-headphones&nbsp;&nbsp;[&amp;#xf025;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf004;</span>&nbsp;&nbsp;fa-heart&nbsp;&nbsp;[&amp;#xf004;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf08a;</span>&nbsp;&nbsp;fa-heart-o&nbsp;&nbsp;[&amp;#xf08a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf21e;</span>&nbsp;&nbsp;fa-heartbeat&nbsp;&nbsp;[&amp;#xf21e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1da;</span>&nbsp;&nbsp;fa-history&nbsp;&nbsp;[&amp;#xf1da;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf015;</span>&nbsp;&nbsp;fa-home&nbsp;&nbsp;[&amp;#xf015;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f8;</span>&nbsp;&nbsp;fa-hospital-o&nbsp;&nbsp;[&amp;#xf0f8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf236;</span>&nbsp;&nbsp;fa-hotel&nbsp;&nbsp;[&amp;#xf236;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf254;</span>&nbsp;&nbsp;fa-hourglass&nbsp;&nbsp;[&amp;#xf254;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf251;</span>&nbsp;&nbsp;fa-hourglass-1&nbsp;&nbsp;[&amp;#xf251;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf252;</span>&nbsp;&nbsp;fa-hourglass-2&nbsp;&nbsp;[&amp;#xf252;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf253;</span>&nbsp;&nbsp;fa-hourglass-3&nbsp;&nbsp;[&amp;#xf253;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf253;</span>&nbsp;&nbsp;fa-hourglass-end&nbsp;&nbsp;[&amp;#xf253;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf252;</span>&nbsp;&nbsp;fa-hourglass-half&nbsp;&nbsp;[&amp;#xf252;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf250;</span>&nbsp;&nbsp;fa-hourglass-o&nbsp;&nbsp;[&amp;#xf250;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf251;</span>&nbsp;&nbsp;fa-hourglass-start&nbsp;&nbsp;[&amp;#xf251;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf27c;</span>&nbsp;&nbsp;fa-houzz&nbsp;&nbsp;[&amp;#xf27c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf13b;</span>&nbsp;&nbsp;fa-html5&nbsp;&nbsp;[&amp;#xf13b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf246;</span>&nbsp;&nbsp;fa-i-cursor&nbsp;&nbsp;[&amp;#xf246;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf20b;</span>&nbsp;&nbsp;fa-ils&nbsp;&nbsp;[&amp;#xf20b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf03e;</span>&nbsp;&nbsp;fa-image&nbsp;&nbsp;[&amp;#xf03e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf01c;</span>&nbsp;&nbsp;fa-inbox&nbsp;&nbsp;[&amp;#xf01c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf03c;</span>&nbsp;&nbsp;fa-indent&nbsp;&nbsp;[&amp;#xf03c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf275;</span>&nbsp;&nbsp;fa-industry&nbsp;&nbsp;[&amp;#xf275;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf129;</span>&nbsp;&nbsp;fa-info&nbsp;&nbsp;[&amp;#xf129;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf05a;</span>&nbsp;&nbsp;fa-info-circle&nbsp;&nbsp;[&amp;#xf05a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf156;</span>&nbsp;&nbsp;fa-inr&nbsp;&nbsp;[&amp;#xf156;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf16d;</span>&nbsp;&nbsp;fa-instagram&nbsp;&nbsp;[&amp;#xf16d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf19c;</span>&nbsp;&nbsp;fa-institution&nbsp;&nbsp;[&amp;#xf19c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf26b;</span>&nbsp;&nbsp;fa-internet-explorer&nbsp;&nbsp;[&amp;#xf26b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf224;</span>&nbsp;&nbsp;fa-intersex&nbsp;&nbsp;[&amp;#xf224;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf208;</span>&nbsp;&nbsp;fa-ioxhost&nbsp;&nbsp;[&amp;#xf208;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf033;</span>&nbsp;&nbsp;fa-italic&nbsp;&nbsp;[&amp;#xf033;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1aa;</span>&nbsp;&nbsp;fa-joomla&nbsp;&nbsp;[&amp;#xf1aa;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf157;</span>&nbsp;&nbsp;fa-jpy&nbsp;&nbsp;[&amp;#xf157;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1cc;</span>&nbsp;&nbsp;fa-jsfiddle&nbsp;&nbsp;[&amp;#xf1cc;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf084;</span>&nbsp;&nbsp;fa-key&nbsp;&nbsp;[&amp;#xf084;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf11c;</span>&nbsp;&nbsp;fa-keyboard-o&nbsp;&nbsp;[&amp;#xf11c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf159;</span>&nbsp;&nbsp;fa-krw&nbsp;&nbsp;[&amp;#xf159;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ab;</span>&nbsp;&nbsp;fa-language&nbsp;&nbsp;[&amp;#xf1ab;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf109;</span>&nbsp;&nbsp;fa-laptop&nbsp;&nbsp;[&amp;#xf109;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf202;</span>&nbsp;&nbsp;fa-lastfm&nbsp;&nbsp;[&amp;#xf202;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf203;</span>&nbsp;&nbsp;fa-lastfm-square&nbsp;&nbsp;[&amp;#xf203;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf06c;</span>&nbsp;&nbsp;fa-leaf&nbsp;&nbsp;[&amp;#xf06c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf212;</span>&nbsp;&nbsp;fa-leanpub&nbsp;&nbsp;[&amp;#xf212;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e3;</span>&nbsp;&nbsp;fa-legal&nbsp;&nbsp;[&amp;#xf0e3;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf094;</span>&nbsp;&nbsp;fa-lemon-o&nbsp;&nbsp;[&amp;#xf094;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf149;</span>&nbsp;&nbsp;fa-level-down&nbsp;&nbsp;[&amp;#xf149;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf148;</span>&nbsp;&nbsp;fa-level-up&nbsp;&nbsp;[&amp;#xf148;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1cd;</span>&nbsp;&nbsp;fa-life-bouy&nbsp;&nbsp;[&amp;#xf1cd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1cd;</span>&nbsp;&nbsp;fa-life-buoy&nbsp;&nbsp;[&amp;#xf1cd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1cd;</span>&nbsp;&nbsp;fa-life-ring&nbsp;&nbsp;[&amp;#xf1cd;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1cd;</span>&nbsp;&nbsp;fa-life-saver&nbsp;&nbsp;[&amp;#xf1cd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0eb;</span>&nbsp;&nbsp;fa-lightbulb-o&nbsp;&nbsp;[&amp;#xf0eb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf201;</span>&nbsp;&nbsp;fa-line-chart&nbsp;&nbsp;[&amp;#xf201;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c1;</span>&nbsp;&nbsp;fa-link&nbsp;&nbsp;[&amp;#xf0c1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e1;</span>&nbsp;&nbsp;fa-linkedin&nbsp;&nbsp;[&amp;#xf0e1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf08c;</span>&nbsp;&nbsp;fa-linkedin-square&nbsp;&nbsp;[&amp;#xf08c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf17c;</span>&nbsp;&nbsp;fa-linux&nbsp;&nbsp;[&amp;#xf17c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf03a;</span>&nbsp;&nbsp;fa-list&nbsp;&nbsp;[&amp;#xf03a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf022;</span>&nbsp;&nbsp;fa-list-alt&nbsp;&nbsp;[&amp;#xf022;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0cb;</span>&nbsp;&nbsp;fa-list-ol&nbsp;&nbsp;[&amp;#xf0cb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ca;</span>&nbsp;&nbsp;fa-list-ul&nbsp;&nbsp;[&amp;#xf0ca;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf124;</span>&nbsp;&nbsp;fa-location-arrow&nbsp;&nbsp;[&amp;#xf124;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf023;</span>&nbsp;&nbsp;fa-lock&nbsp;&nbsp;[&amp;#xf023;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf175;</span>&nbsp;&nbsp;fa-long-arrow-down&nbsp;&nbsp;[&amp;#xf175;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf177;</span>&nbsp;&nbsp;fa-long-arrow-left&nbsp;&nbsp;[&amp;#xf177;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf178;</span>&nbsp;&nbsp;fa-long-arrow-right&nbsp;&nbsp;[&amp;#xf178;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf176;</span>&nbsp;&nbsp;fa-long-arrow-up&nbsp;&nbsp;[&amp;#xf176;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d0;</span>&nbsp;&nbsp;fa-magic&nbsp;&nbsp;[&amp;#xf0d0;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf076;</span>&nbsp;&nbsp;fa-magnet&nbsp;&nbsp;[&amp;#xf076;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf064;</span>&nbsp;&nbsp;fa-mail-forward&nbsp;&nbsp;[&amp;#xf064;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf112;</span>&nbsp;&nbsp;fa-mail-reply&nbsp;&nbsp;[&amp;#xf112;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf122;</span>&nbsp;&nbsp;fa-mail-reply-all&nbsp;&nbsp;[&amp;#xf122;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf183;</span>&nbsp;&nbsp;fa-male&nbsp;&nbsp;[&amp;#xf183;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf279;</span>&nbsp;&nbsp;fa-map&nbsp;&nbsp;[&amp;#xf279;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf041;</span>&nbsp;&nbsp;fa-map-marker&nbsp;&nbsp;[&amp;#xf041;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf278;</span>&nbsp;&nbsp;fa-map-o&nbsp;&nbsp;[&amp;#xf278;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf276;</span>&nbsp;&nbsp;fa-map-pin&nbsp;&nbsp;[&amp;#xf276;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf277;</span>&nbsp;&nbsp;fa-map-signs&nbsp;&nbsp;[&amp;#xf277;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf222;</span>&nbsp;&nbsp;fa-mars&nbsp;&nbsp;[&amp;#xf222;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf227;</span>&nbsp;&nbsp;fa-mars-double&nbsp;&nbsp;[&amp;#xf227;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf229;</span>&nbsp;&nbsp;fa-mars-stroke&nbsp;&nbsp;[&amp;#xf229;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf22b;</span>&nbsp;&nbsp;fa-mars-stroke-h&nbsp;&nbsp;[&amp;#xf22b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf22a;</span>&nbsp;&nbsp;fa-mars-stroke-v&nbsp;&nbsp;[&amp;#xf22a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf136;</span>&nbsp;&nbsp;fa-maxcdn&nbsp;&nbsp;[&amp;#xf136;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf20c;</span>&nbsp;&nbsp;fa-meanpath&nbsp;&nbsp;[&amp;#xf20c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf23a;</span>&nbsp;&nbsp;fa-medium&nbsp;&nbsp;[&amp;#xf23a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0fa;</span>&nbsp;&nbsp;fa-medkit&nbsp;&nbsp;[&amp;#xf0fa;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf11a;</span>&nbsp;&nbsp;fa-meh-o&nbsp;&nbsp;[&amp;#xf11a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf223;</span>&nbsp;&nbsp;fa-mercury&nbsp;&nbsp;[&amp;#xf223;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf130;</span>&nbsp;&nbsp;fa-microphone&nbsp;&nbsp;[&amp;#xf130;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf131;</span>&nbsp;&nbsp;fa-microphone-slash&nbsp;&nbsp;[&amp;#xf131;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf068;</span>&nbsp;&nbsp;fa-minus&nbsp;&nbsp;[&amp;#xf068;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf056;</span>&nbsp;&nbsp;fa-minus-circle&nbsp;&nbsp;[&amp;#xf056;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf146;</span>&nbsp;&nbsp;fa-minus-square&nbsp;&nbsp;[&amp;#xf146;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf147;</span>&nbsp;&nbsp;fa-minus-square-o&nbsp;&nbsp;[&amp;#xf147;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf289;</span>&nbsp;&nbsp;fa-mixcloud&nbsp;&nbsp;[&amp;#xf289;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf10b;</span>&nbsp;&nbsp;fa-mobile&nbsp;&nbsp;[&amp;#xf10b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf10b;</span>&nbsp;&nbsp;fa-mobile-phone&nbsp;&nbsp;[&amp;#xf10b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf285;</span>&nbsp;&nbsp;fa-modx&nbsp;&nbsp;[&amp;#xf285;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d6;</span>&nbsp;&nbsp;fa-money&nbsp;&nbsp;[&amp;#xf0d6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf186;</span>&nbsp;&nbsp;fa-moon-o&nbsp;&nbsp;[&amp;#xf186;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf19d;</span>&nbsp;&nbsp;fa-mortar-board&nbsp;&nbsp;[&amp;#xf19d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf21c;</span>&nbsp;&nbsp;fa-motorcycle&nbsp;&nbsp;[&amp;#xf21c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf245;</span>&nbsp;&nbsp;fa-mouse-pointer&nbsp;&nbsp;[&amp;#xf245;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf001;</span>&nbsp;&nbsp;fa-music&nbsp;&nbsp;[&amp;#xf001;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c9;</span>&nbsp;&nbsp;fa-navicon&nbsp;&nbsp;[&amp;#xf0c9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf22c;</span>&nbsp;&nbsp;fa-neuter&nbsp;&nbsp;[&amp;#xf22c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1ea;</span>&nbsp;&nbsp;fa-newspaper-o&nbsp;&nbsp;[&amp;#xf1ea;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf247;</span>&nbsp;&nbsp;fa-object-group&nbsp;&nbsp;[&amp;#xf247;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf248;</span>&nbsp;&nbsp;fa-object-ungroup&nbsp;&nbsp;[&amp;#xf248;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf263;</span>&nbsp;&nbsp;fa-odnoklassniki&nbsp;&nbsp;[&amp;#xf263;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf264;</span>&nbsp;&nbsp;fa-odnoklassniki-square&nbsp;&nbsp;[&amp;#xf264;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf23d;</span>&nbsp;&nbsp;fa-opencart&nbsp;&nbsp;[&amp;#xf23d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf19b;</span>&nbsp;&nbsp;fa-openid&nbsp;&nbsp;[&amp;#xf19b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf26a;</span>&nbsp;&nbsp;fa-opera&nbsp;&nbsp;[&amp;#xf26a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf23c;</span>&nbsp;&nbsp;fa-optin-monster&nbsp;&nbsp;[&amp;#xf23c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf03b;</span>&nbsp;&nbsp;fa-outdent&nbsp;&nbsp;[&amp;#xf03b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf18c;</span>&nbsp;&nbsp;fa-pagelines&nbsp;&nbsp;[&amp;#xf18c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1fc;</span>&nbsp;&nbsp;fa-paint-brush&nbsp;&nbsp;[&amp;#xf1fc;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1d8;</span>&nbsp;&nbsp;fa-paper-plane&nbsp;&nbsp;[&amp;#xf1d8;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d9;</span>&nbsp;&nbsp;fa-paper-plane-o&nbsp;&nbsp;[&amp;#xf1d9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c6;</span>&nbsp;&nbsp;fa-paperclip&nbsp;&nbsp;[&amp;#xf0c6;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1dd;</span>&nbsp;&nbsp;fa-paragraph&nbsp;&nbsp;[&amp;#xf1dd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ea;</span>&nbsp;&nbsp;fa-paste&nbsp;&nbsp;[&amp;#xf0ea;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf04c;</span>&nbsp;&nbsp;fa-pause&nbsp;&nbsp;[&amp;#xf04c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf28b;</span>&nbsp;&nbsp;fa-pause-circle&nbsp;&nbsp;[&amp;#xf28b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf28c;</span>&nbsp;&nbsp;fa-pause-circle-o&nbsp;&nbsp;[&amp;#xf28c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b0;</span>&nbsp;&nbsp;fa-paw&nbsp;&nbsp;[&amp;#xf1b0;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1ed;</span>&nbsp;&nbsp;fa-paypal&nbsp;&nbsp;[&amp;#xf1ed;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf040;</span>&nbsp;&nbsp;fa-pencil&nbsp;&nbsp;[&amp;#xf040;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf14b;</span>&nbsp;&nbsp;fa-pencil-square&nbsp;&nbsp;[&amp;#xf14b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf044;</span>&nbsp;&nbsp;fa-pencil-square-o&nbsp;&nbsp;[&amp;#xf044;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf295;</span>&nbsp;&nbsp;fa-percent&nbsp;&nbsp;[&amp;#xf295;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf095;</span>&nbsp;&nbsp;fa-phone&nbsp;&nbsp;[&amp;#xf095;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf098;</span>&nbsp;&nbsp;fa-phone-square&nbsp;&nbsp;[&amp;#xf098;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf03e;</span>&nbsp;&nbsp;fa-photo&nbsp;&nbsp;[&amp;#xf03e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf03e;</span>&nbsp;&nbsp;fa-picture-o&nbsp;&nbsp;[&amp;#xf03e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf200;</span>&nbsp;&nbsp;fa-pie-chart&nbsp;&nbsp;[&amp;#xf200;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a7;</span>&nbsp;&nbsp;fa-pied-piper&nbsp;&nbsp;[&amp;#xf1a7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a8;</span>&nbsp;&nbsp;fa-pied-piper-alt&nbsp;&nbsp;[&amp;#xf1a8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0d2;</span>&nbsp;&nbsp;fa-pinterest&nbsp;&nbsp;[&amp;#xf0d2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf231;</span>&nbsp;&nbsp;fa-pinterest-p&nbsp;&nbsp;[&amp;#xf231;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d3;</span>&nbsp;&nbsp;fa-pinterest-square&nbsp;&nbsp;[&amp;#xf0d3;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf072;</span>&nbsp;&nbsp;fa-plane&nbsp;&nbsp;[&amp;#xf072;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf04b;</span>&nbsp;&nbsp;fa-play&nbsp;&nbsp;[&amp;#xf04b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf144;</span>&nbsp;&nbsp;fa-play-circle&nbsp;&nbsp;[&amp;#xf144;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf01d;</span>&nbsp;&nbsp;fa-play-circle-o&nbsp;&nbsp;[&amp;#xf01d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e6;</span>&nbsp;&nbsp;fa-plug&nbsp;&nbsp;[&amp;#xf1e6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf067;</span>&nbsp;&nbsp;fa-plus&nbsp;&nbsp;[&amp;#xf067;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf055;</span>&nbsp;&nbsp;fa-plus-circle&nbsp;&nbsp;[&amp;#xf055;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0fe;</span>&nbsp;&nbsp;fa-plus-square&nbsp;&nbsp;[&amp;#xf0fe;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf196;</span>&nbsp;&nbsp;fa-plus-square-o&nbsp;&nbsp;[&amp;#xf196;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf011;</span>&nbsp;&nbsp;fa-power-off&nbsp;&nbsp;[&amp;#xf011;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf02f;</span>&nbsp;&nbsp;fa-print&nbsp;&nbsp;[&amp;#xf02f;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf288;</span>&nbsp;&nbsp;fa-product-hunt&nbsp;&nbsp;[&amp;#xf288;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf12e;</span>&nbsp;&nbsp;fa-puzzle-piece&nbsp;&nbsp;[&amp;#xf12e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d6;</span>&nbsp;&nbsp;fa-qq&nbsp;&nbsp;[&amp;#xf1d6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf029;</span>&nbsp;&nbsp;fa-qrcode&nbsp;&nbsp;[&amp;#xf029;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf128;</span>&nbsp;&nbsp;fa-question&nbsp;&nbsp;[&amp;#xf128;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf059;</span>&nbsp;&nbsp;fa-question-circle&nbsp;&nbsp;[&amp;#xf059;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf10d;</span>&nbsp;&nbsp;fa-quote-left&nbsp;&nbsp;[&amp;#xf10d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf10e;</span>&nbsp;&nbsp;fa-quote-right&nbsp;&nbsp;[&amp;#xf10e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d0;</span>&nbsp;&nbsp;fa-ra&nbsp;&nbsp;[&amp;#xf1d0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf074;</span>&nbsp;&nbsp;fa-random&nbsp;&nbsp;[&amp;#xf074;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1d0;</span>&nbsp;&nbsp;fa-rebel&nbsp;&nbsp;[&amp;#xf1d0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b8;</span>&nbsp;&nbsp;fa-recycle&nbsp;&nbsp;[&amp;#xf1b8;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a1;</span>&nbsp;&nbsp;fa-reddit&nbsp;&nbsp;[&amp;#xf1a1;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf281;</span>&nbsp;&nbsp;fa-reddit-alien&nbsp;&nbsp;[&amp;#xf281;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a2;</span>&nbsp;&nbsp;fa-reddit-square&nbsp;&nbsp;[&amp;#xf1a2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf021;</span>&nbsp;&nbsp;fa-refresh&nbsp;&nbsp;[&amp;#xf021;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf25d;</span>&nbsp;&nbsp;fa-registered&nbsp;&nbsp;[&amp;#xf25d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf00d;</span>&nbsp;&nbsp;fa-remove&nbsp;&nbsp;[&amp;#xf00d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf18b;</span>&nbsp;&nbsp;fa-renren&nbsp;&nbsp;[&amp;#xf18b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c9;</span>&nbsp;&nbsp;fa-reorder&nbsp;&nbsp;[&amp;#xf0c9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf01e;</span>&nbsp;&nbsp;fa-repeat&nbsp;&nbsp;[&amp;#xf01e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf112;</span>&nbsp;&nbsp;fa-reply&nbsp;&nbsp;[&amp;#xf112;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf122;</span>&nbsp;&nbsp;fa-reply-all&nbsp;&nbsp;[&amp;#xf122;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf079;</span>&nbsp;&nbsp;fa-retweet&nbsp;&nbsp;[&amp;#xf079;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf157;</span>&nbsp;&nbsp;fa-rmb&nbsp;&nbsp;[&amp;#xf157;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf018;</span>&nbsp;&nbsp;fa-road&nbsp;&nbsp;[&amp;#xf018;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf135;</span>&nbsp;&nbsp;fa-rocket&nbsp;&nbsp;[&amp;#xf135;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e2;</span>&nbsp;&nbsp;fa-rotate-left&nbsp;&nbsp;[&amp;#xf0e2;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf01e;</span>&nbsp;&nbsp;fa-rotate-right&nbsp;&nbsp;[&amp;#xf01e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf158;</span>&nbsp;&nbsp;fa-rouble&nbsp;&nbsp;[&amp;#xf158;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09e;</span>&nbsp;&nbsp;fa-rss&nbsp;&nbsp;[&amp;#xf09e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf143;</span>&nbsp;&nbsp;fa-rss-square&nbsp;&nbsp;[&amp;#xf143;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf158;</span>&nbsp;&nbsp;fa-rub&nbsp;&nbsp;[&amp;#xf158;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf158;</span>&nbsp;&nbsp;fa-ruble&nbsp;&nbsp;[&amp;#xf158;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf156;</span>&nbsp;&nbsp;fa-rupee&nbsp;&nbsp;[&amp;#xf156;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf267;</span>&nbsp;&nbsp;fa-safari&nbsp;&nbsp;[&amp;#xf267;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c7;</span>&nbsp;&nbsp;fa-save&nbsp;&nbsp;[&amp;#xf0c7;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c4;</span>&nbsp;&nbsp;fa-scissors&nbsp;&nbsp;[&amp;#xf0c4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf28a;</span>&nbsp;&nbsp;fa-scribd&nbsp;&nbsp;[&amp;#xf28a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf002;</span>&nbsp;&nbsp;fa-search&nbsp;&nbsp;[&amp;#xf002;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf010;</span>&nbsp;&nbsp;fa-search-minus&nbsp;&nbsp;[&amp;#xf010;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf00e;</span>&nbsp;&nbsp;fa-search-plus&nbsp;&nbsp;[&amp;#xf00e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf213;</span>&nbsp;&nbsp;fa-sellsy&nbsp;&nbsp;[&amp;#xf213;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1d8;</span>&nbsp;&nbsp;fa-send&nbsp;&nbsp;[&amp;#xf1d8;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d9;</span>&nbsp;&nbsp;fa-send-o&nbsp;&nbsp;[&amp;#xf1d9;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf233;</span>&nbsp;&nbsp;fa-server&nbsp;&nbsp;[&amp;#xf233;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf064;</span>&nbsp;&nbsp;fa-share&nbsp;&nbsp;[&amp;#xf064;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e0;</span>&nbsp;&nbsp;fa-share-alt&nbsp;&nbsp;[&amp;#xf1e0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e1;</span>&nbsp;&nbsp;fa-share-alt-square&nbsp;&nbsp;[&amp;#xf1e1;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf14d;</span>&nbsp;&nbsp;fa-share-square&nbsp;&nbsp;[&amp;#xf14d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf045;</span>&nbsp;&nbsp;fa-share-square-o&nbsp;&nbsp;[&amp;#xf045;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf20b;</span>&nbsp;&nbsp;fa-shekel&nbsp;&nbsp;[&amp;#xf20b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf20b;</span>&nbsp;&nbsp;fa-sheqel&nbsp;&nbsp;[&amp;#xf20b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf132;</span>&nbsp;&nbsp;fa-shield&nbsp;&nbsp;[&amp;#xf132;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf21a;</span>&nbsp;&nbsp;fa-ship&nbsp;&nbsp;[&amp;#xf21a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf214;</span>&nbsp;&nbsp;fa-shirtsinbulk&nbsp;&nbsp;[&amp;#xf214;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf290;</span>&nbsp;&nbsp;fa-shopping-bag&nbsp;&nbsp;[&amp;#xf290;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf291;</span>&nbsp;&nbsp;fa-shopping-basket&nbsp;&nbsp;[&amp;#xf291;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf07a;</span>&nbsp;&nbsp;fa-shopping-cart&nbsp;&nbsp;[&amp;#xf07a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf090;</span>&nbsp;&nbsp;fa-sign-in&nbsp;&nbsp;[&amp;#xf090;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf08b;</span>&nbsp;&nbsp;fa-sign-out&nbsp;&nbsp;[&amp;#xf08b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf012;</span>&nbsp;&nbsp;fa-signal&nbsp;&nbsp;[&amp;#xf012;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf215;</span>&nbsp;&nbsp;fa-simplybuilt&nbsp;&nbsp;[&amp;#xf215;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e8;</span>&nbsp;&nbsp;fa-sitemap&nbsp;&nbsp;[&amp;#xf0e8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf216;</span>&nbsp;&nbsp;fa-skyatlas&nbsp;&nbsp;[&amp;#xf216;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf17e;</span>&nbsp;&nbsp;fa-skype&nbsp;&nbsp;[&amp;#xf17e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf198;</span>&nbsp;&nbsp;fa-slack&nbsp;&nbsp;[&amp;#xf198;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1de;</span>&nbsp;&nbsp;fa-sliders&nbsp;&nbsp;[&amp;#xf1de;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e7;</span>&nbsp;&nbsp;fa-slideshare&nbsp;&nbsp;[&amp;#xf1e7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf118;</span>&nbsp;&nbsp;fa-smile-o&nbsp;&nbsp;[&amp;#xf118;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1e3;</span>&nbsp;&nbsp;fa-soccer-ball-o&nbsp;&nbsp;[&amp;#xf1e3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0dc;</span>&nbsp;&nbsp;fa-sort&nbsp;&nbsp;[&amp;#xf0dc;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf15d;</span>&nbsp;&nbsp;fa-sort-alpha-asc&nbsp;&nbsp;[&amp;#xf15d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf15e;</span>&nbsp;&nbsp;fa-sort-alpha-desc&nbsp;&nbsp;[&amp;#xf15e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf160;</span>&nbsp;&nbsp;fa-sort-amount-asc&nbsp;&nbsp;[&amp;#xf160;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf161;</span>&nbsp;&nbsp;fa-sort-amount-desc&nbsp;&nbsp;[&amp;#xf161;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0de;</span>&nbsp;&nbsp;fa-sort-asc&nbsp;&nbsp;[&amp;#xf0de;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0dd;</span>&nbsp;&nbsp;fa-sort-desc&nbsp;&nbsp;[&amp;#xf0dd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0dd;</span>&nbsp;&nbsp;fa-sort-down&nbsp;&nbsp;[&amp;#xf0dd;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf162;</span>&nbsp;&nbsp;fa-sort-numeric-asc&nbsp;&nbsp;[&amp;#xf162;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf163;</span>&nbsp;&nbsp;fa-sort-numeric-desc&nbsp;&nbsp;[&amp;#xf163;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0de;</span>&nbsp;&nbsp;fa-sort-up&nbsp;&nbsp;[&amp;#xf0de;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1be;</span>&nbsp;&nbsp;fa-soundcloud&nbsp;&nbsp;[&amp;#xf1be;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf197;</span>&nbsp;&nbsp;fa-space-shuttle&nbsp;&nbsp;[&amp;#xf197;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf110;</span>&nbsp;&nbsp;fa-spinner&nbsp;&nbsp;[&amp;#xf110;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1b1;</span>&nbsp;&nbsp;fa-spoon&nbsp;&nbsp;[&amp;#xf1b1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1bc;</span>&nbsp;&nbsp;fa-spotify&nbsp;&nbsp;[&amp;#xf1bc;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0c8;</span>&nbsp;&nbsp;fa-square&nbsp;&nbsp;[&amp;#xf0c8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf096;</span>&nbsp;&nbsp;fa-square-o&nbsp;&nbsp;[&amp;#xf096;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf18d;</span>&nbsp;&nbsp;fa-stack-exchange&nbsp;&nbsp;[&amp;#xf18d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf16c;</span>&nbsp;&nbsp;fa-stack-overflow&nbsp;&nbsp;[&amp;#xf16c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf005;</span>&nbsp;&nbsp;fa-star&nbsp;&nbsp;[&amp;#xf005;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf089;</span>&nbsp;&nbsp;fa-star-half&nbsp;&nbsp;[&amp;#xf089;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf123;</span>&nbsp;&nbsp;fa-star-half-empty&nbsp;&nbsp;[&amp;#xf123;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf123;</span>&nbsp;&nbsp;fa-star-half-full&nbsp;&nbsp;[&amp;#xf123;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf123;</span>&nbsp;&nbsp;fa-star-half-o&nbsp;&nbsp;[&amp;#xf123;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf006;</span>&nbsp;&nbsp;fa-star-o&nbsp;&nbsp;[&amp;#xf006;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1b6;</span>&nbsp;&nbsp;fa-steam&nbsp;&nbsp;[&amp;#xf1b6;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1b7;</span>&nbsp;&nbsp;fa-steam-square&nbsp;&nbsp;[&amp;#xf1b7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf048;</span>&nbsp;&nbsp;fa-step-backward&nbsp;&nbsp;[&amp;#xf048;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf051;</span>&nbsp;&nbsp;fa-step-forward&nbsp;&nbsp;[&amp;#xf051;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f1;</span>&nbsp;&nbsp;fa-stethoscope&nbsp;&nbsp;[&amp;#xf0f1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf249;</span>&nbsp;&nbsp;fa-sticky-note&nbsp;&nbsp;[&amp;#xf249;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf24a;</span>&nbsp;&nbsp;fa-sticky-note-o&nbsp;&nbsp;[&amp;#xf24a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf04d;</span>&nbsp;&nbsp;fa-stop&nbsp;&nbsp;[&amp;#xf04d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf28d;</span>&nbsp;&nbsp;fa-stop-circle&nbsp;&nbsp;[&amp;#xf28d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf28e;</span>&nbsp;&nbsp;fa-stop-circle-o&nbsp;&nbsp;[&amp;#xf28e;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf21d;</span>&nbsp;&nbsp;fa-street-view&nbsp;&nbsp;[&amp;#xf21d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0cc;</span>&nbsp;&nbsp;fa-strikethrough&nbsp;&nbsp;[&amp;#xf0cc;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1a4;</span>&nbsp;&nbsp;fa-stumbleupon&nbsp;&nbsp;[&amp;#xf1a4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1a3;</span>&nbsp;&nbsp;fa-stumbleupon-circle&nbsp;&nbsp;[&amp;#xf1a3;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf12c;</span>&nbsp;&nbsp;fa-subscript&nbsp;&nbsp;[&amp;#xf12c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf239;</span>&nbsp;&nbsp;fa-subway&nbsp;&nbsp;[&amp;#xf239;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f2;</span>&nbsp;&nbsp;fa-suitcase&nbsp;&nbsp;[&amp;#xf0f2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf185;</span>&nbsp;&nbsp;fa-sun-o&nbsp;&nbsp;[&amp;#xf185;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf12b;</span>&nbsp;&nbsp;fa-superscript&nbsp;&nbsp;[&amp;#xf12b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1cd;</span>&nbsp;&nbsp;fa-support&nbsp;&nbsp;[&amp;#xf1cd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ce;</span>&nbsp;&nbsp;fa-table&nbsp;&nbsp;[&amp;#xf0ce;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf10a;</span>&nbsp;&nbsp;fa-tablet&nbsp;&nbsp;[&amp;#xf10a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e4;</span>&nbsp;&nbsp;fa-tachometer&nbsp;&nbsp;[&amp;#xf0e4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf02b;</span>&nbsp;&nbsp;fa-tag&nbsp;&nbsp;[&amp;#xf02b;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf02c;</span>&nbsp;&nbsp;fa-tags&nbsp;&nbsp;[&amp;#xf02c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0ae;</span>&nbsp;&nbsp;fa-tasks&nbsp;&nbsp;[&amp;#xf0ae;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ba;</span>&nbsp;&nbsp;fa-taxi&nbsp;&nbsp;[&amp;#xf1ba;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf26c;</span>&nbsp;&nbsp;fa-television&nbsp;&nbsp;[&amp;#xf26c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d5;</span>&nbsp;&nbsp;fa-tencent-weibo&nbsp;&nbsp;[&amp;#xf1d5;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf120;</span>&nbsp;&nbsp;fa-terminal&nbsp;&nbsp;[&amp;#xf120;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf034;</span>&nbsp;&nbsp;fa-text-height&nbsp;&nbsp;[&amp;#xf034;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf035;</span>&nbsp;&nbsp;fa-text-width&nbsp;&nbsp;[&amp;#xf035;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf00a;</span>&nbsp;&nbsp;fa-th&nbsp;&nbsp;[&amp;#xf00a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf009;</span>&nbsp;&nbsp;fa-th-large&nbsp;&nbsp;[&amp;#xf009;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf00b;</span>&nbsp;&nbsp;fa-th-list&nbsp;&nbsp;[&amp;#xf00b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf08d;</span>&nbsp;&nbsp;fa-thumb-tack&nbsp;&nbsp;[&amp;#xf08d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf165;</span>&nbsp;&nbsp;fa-thumbs-down&nbsp;&nbsp;[&amp;#xf165;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf088;</span>&nbsp;&nbsp;fa-thumbs-o-down&nbsp;&nbsp;[&amp;#xf088;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf087;</span>&nbsp;&nbsp;fa-thumbs-o-up&nbsp;&nbsp;[&amp;#xf087;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf164;</span>&nbsp;&nbsp;fa-thumbs-up&nbsp;&nbsp;[&amp;#xf164;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf145;</span>&nbsp;&nbsp;fa-ticket&nbsp;&nbsp;[&amp;#xf145;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf00d;</span>&nbsp;&nbsp;fa-times&nbsp;&nbsp;[&amp;#xf00d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf057;</span>&nbsp;&nbsp;fa-times-circle&nbsp;&nbsp;[&amp;#xf057;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf05c;</span>&nbsp;&nbsp;fa-times-circle-o&nbsp;&nbsp;[&amp;#xf05c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf043;</span>&nbsp;&nbsp;fa-tint&nbsp;&nbsp;[&amp;#xf043;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf150;</span>&nbsp;&nbsp;fa-toggle-down&nbsp;&nbsp;[&amp;#xf150;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf191;</span>&nbsp;&nbsp;fa-toggle-left&nbsp;&nbsp;[&amp;#xf191;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf204;</span>&nbsp;&nbsp;fa-toggle-off&nbsp;&nbsp;[&amp;#xf204;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf205;</span>&nbsp;&nbsp;fa-toggle-on&nbsp;&nbsp;[&amp;#xf205;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf152;</span>&nbsp;&nbsp;fa-toggle-right&nbsp;&nbsp;[&amp;#xf152;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf151;</span>&nbsp;&nbsp;fa-toggle-up&nbsp;&nbsp;[&amp;#xf151;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf25c;</span>&nbsp;&nbsp;fa-trademark&nbsp;&nbsp;[&amp;#xf25c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf238;</span>&nbsp;&nbsp;fa-train&nbsp;&nbsp;[&amp;#xf238;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf224;</span>&nbsp;&nbsp;fa-transgender&nbsp;&nbsp;[&amp;#xf224;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf225;</span>&nbsp;&nbsp;fa-transgender-alt&nbsp;&nbsp;[&amp;#xf225;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1f8;</span>&nbsp;&nbsp;fa-trash&nbsp;&nbsp;[&amp;#xf1f8;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf014;</span>&nbsp;&nbsp;fa-trash-o&nbsp;&nbsp;[&amp;#xf014;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1bb;</span>&nbsp;&nbsp;fa-tree&nbsp;&nbsp;[&amp;#xf1bb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf181;</span>&nbsp;&nbsp;fa-trello&nbsp;&nbsp;[&amp;#xf181;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf262;</span>&nbsp;&nbsp;fa-tripadvisor&nbsp;&nbsp;[&amp;#xf262;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf091;</span>&nbsp;&nbsp;fa-trophy&nbsp;&nbsp;[&amp;#xf091;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0d1;</span>&nbsp;&nbsp;fa-truck&nbsp;&nbsp;[&amp;#xf0d1;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf195;</span>&nbsp;&nbsp;fa-try&nbsp;&nbsp;[&amp;#xf195;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf1e4;</span>&nbsp;&nbsp;fa-tty&nbsp;&nbsp;[&amp;#xf1e4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf173;</span>&nbsp;&nbsp;fa-tumblr&nbsp;&nbsp;[&amp;#xf173;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf174;</span>&nbsp;&nbsp;fa-tumblr-square&nbsp;&nbsp;[&amp;#xf174;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf195;</span>&nbsp;&nbsp;fa-turkish-lira&nbsp;&nbsp;[&amp;#xf195;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf26c;</span>&nbsp;&nbsp;fa-tv&nbsp;&nbsp;[&amp;#xf26c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e8;</span>&nbsp;&nbsp;fa-twitch&nbsp;&nbsp;[&amp;#xf1e8;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf099;</span>&nbsp;&nbsp;fa-twitter&nbsp;&nbsp;[&amp;#xf099;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf081;</span>&nbsp;&nbsp;fa-twitter-square&nbsp;&nbsp;[&amp;#xf081;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e9;</span>&nbsp;&nbsp;fa-umbrella&nbsp;&nbsp;[&amp;#xf0e9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0cd;</span>&nbsp;&nbsp;fa-underline&nbsp;&nbsp;[&amp;#xf0cd;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0e2;</span>&nbsp;&nbsp;fa-undo&nbsp;&nbsp;[&amp;#xf0e2;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf19c;</span>&nbsp;&nbsp;fa-university&nbsp;&nbsp;[&amp;#xf19c;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf127;</span>&nbsp;&nbsp;fa-unlink&nbsp;&nbsp;[&amp;#xf127;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf09c;</span>&nbsp;&nbsp;fa-unlock&nbsp;&nbsp;[&amp;#xf09c;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf13e;</span>&nbsp;&nbsp;fa-unlock-alt&nbsp;&nbsp;[&amp;#xf13e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0dc;</span>&nbsp;&nbsp;fa-unsorted&nbsp;&nbsp;[&amp;#xf0dc;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf093;</span>&nbsp;&nbsp;fa-upload&nbsp;&nbsp;[&amp;#xf093;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf287;</span>&nbsp;&nbsp;fa-usb&nbsp;&nbsp;[&amp;#xf287;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf155;</span>&nbsp;&nbsp;fa-usd&nbsp;&nbsp;[&amp;#xf155;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf007;</span>&nbsp;&nbsp;fa-user&nbsp;&nbsp;[&amp;#xf007;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf0f0;</span>&nbsp;&nbsp;fa-user-md&nbsp;&nbsp;[&amp;#xf0f0;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf234;</span>&nbsp;&nbsp;fa-user-plus&nbsp;&nbsp;[&amp;#xf234;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf21b;</span>&nbsp;&nbsp;fa-user-secret&nbsp;&nbsp;[&amp;#xf21b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf235;</span>&nbsp;&nbsp;fa-user-times&nbsp;&nbsp;[&amp;#xf235;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0c0;</span>&nbsp;&nbsp;fa-users&nbsp;&nbsp;[&amp;#xf0c0;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf221;</span>&nbsp;&nbsp;fa-venus&nbsp;&nbsp;[&amp;#xf221;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf226;</span>&nbsp;&nbsp;fa-venus-double&nbsp;&nbsp;[&amp;#xf226;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf228;</span>&nbsp;&nbsp;fa-venus-mars&nbsp;&nbsp;[&amp;#xf228;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf237;</span>&nbsp;&nbsp;fa-viacoin&nbsp;&nbsp;[&amp;#xf237;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf03d;</span>&nbsp;&nbsp;fa-video-camera&nbsp;&nbsp;[&amp;#xf03d;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf27d;</span>&nbsp;&nbsp;fa-vimeo&nbsp;&nbsp;[&amp;#xf27d;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf194;</span>&nbsp;&nbsp;fa-vimeo-square&nbsp;&nbsp;[&amp;#xf194;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1ca;</span>&nbsp;&nbsp;fa-vine&nbsp;&nbsp;[&amp;#xf1ca;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf189;</span>&nbsp;&nbsp;fa-vk&nbsp;&nbsp;[&amp;#xf189;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf027;</span>&nbsp;&nbsp;fa-volume-down&nbsp;&nbsp;[&amp;#xf027;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf026;</span>&nbsp;&nbsp;fa-volume-off&nbsp;&nbsp;[&amp;#xf026;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf028;</span>&nbsp;&nbsp;fa-volume-up&nbsp;&nbsp;[&amp;#xf028;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf071;</span>&nbsp;&nbsp;fa-warning&nbsp;&nbsp;[&amp;#xf071;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d7;</span>&nbsp;&nbsp;fa-wechat&nbsp;&nbsp;[&amp;#xf1d7;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf18a;</span>&nbsp;&nbsp;fa-weibo&nbsp;&nbsp;[&amp;#xf18a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d7;</span>&nbsp;&nbsp;fa-weixin&nbsp;&nbsp;[&amp;#xf1d7;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf232;</span>&nbsp;&nbsp;fa-whatsapp&nbsp;&nbsp;[&amp;#xf232;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf193;</span>&nbsp;&nbsp;fa-wheelchair&nbsp;&nbsp;[&amp;#xf193;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1eb;</span>&nbsp;&nbsp;fa-wifi&nbsp;&nbsp;[&amp;#xf1eb;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf266;</span>&nbsp;&nbsp;fa-wikipedia-w&nbsp;&nbsp;[&amp;#xf266;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf17a;</span>&nbsp;&nbsp;fa-windows&nbsp;&nbsp;[&amp;#xf17a;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf159;</span>&nbsp;&nbsp;fa-won&nbsp;&nbsp;[&amp;#xf159;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf19a;</span>&nbsp;&nbsp;fa-wordpress&nbsp;&nbsp;[&amp;#xf19a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf0ad;</span>&nbsp;&nbsp;fa-wrench&nbsp;&nbsp;[&amp;#xf0ad;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf168;</span>&nbsp;&nbsp;fa-xing&nbsp;&nbsp;[&amp;#xf168;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf169;</span>&nbsp;&nbsp;fa-xing-square&nbsp;&nbsp;[&amp;#xf169;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf23b;</span>&nbsp;&nbsp;fa-y-combinator&nbsp;&nbsp;[&amp;#xf23b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d4;</span>&nbsp;&nbsp;fa-y-combinator-square&nbsp;&nbsp;[&amp;#xf1d4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf19e;</span>&nbsp;&nbsp;fa-yahoo&nbsp;&nbsp;[&amp;#xf19e;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf23b;</span>&nbsp;&nbsp;fa-yc&nbsp;&nbsp;[&amp;#xf23b;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1d4;</span>&nbsp;&nbsp;fa-yc-square&nbsp;&nbsp;[&amp;#xf1d4;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf1e9;</span>&nbsp;&nbsp;fa-yelp&nbsp;&nbsp;[&amp;#xf1e9;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf157;</span>&nbsp;&nbsp;fa-yen&nbsp;&nbsp;[&amp;#xf157;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf167;</span>&nbsp;&nbsp;fa-youtube&nbsp;&nbsp;[&amp;#xf167;]</td>
+		<td><span  style="font-family: FontAwesome">&#xf16a;</span>&nbsp;&nbsp;fa-youtube-play&nbsp;&nbsp;[&amp;#xf16a;]</td>
+	</tr>
+	<tr>
+		<td><span  style="font-family: FontAwesome">&#xf166;</span>&nbsp;&nbsp;fa-youtube-square&nbsp;&nbsp;[&amp;#xf166;]</td>
+		<td>&nbsp;</td>		<td>&nbsp;</td>	</tr>
+</table>
+

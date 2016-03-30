@@ -406,6 +406,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n252" name="n252">252</a>
 <a href="#n253" name="n253">253</a>
 <a href="#n254" name="n254">254</a>
+<a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -432,7 +441,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">segments</span>:   Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()}),
                 <span class="key">lockscroll</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
                 <span class="key">autoexpand</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
-                <span class="key">change</span>:     Config({<span class="key">type</span>: Event})
+                <span class="key">change</span>: Config({<span class="key">type</span>: Event})
+        }
+
+        <span class="local-variable">this</span>.<span class="function">emitChange</span> = <span class="keyword">function</span> () {
+                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, {
+                        <span class="key">data</span>: <span class="local-variable">this</span>.data,
+                        <span class="key">start</span>: <span class="local-variable">this</span>.start,
+                        <span class="key">end</span>: <span class="local-variable">this</span>.end,
+                        <span class="key">rangeStart</span>: <span class="local-variable">this</span>.getRangeStart(),
+                        <span class="key">rangeEnd</span>: <span class="local-variable">this</span>.getRangeEnd(),
+                        <span class="key">zoom</span>: <span class="local-variable">this</span>.zoom,
+                        <span class="key">scroll</span>: <span class="local-variable">this</span>.scroll
+                })
         }
 
         <span class="local-variable">this</span>.<span class="function">onzoom</span> = <span class="keyword">function</span> () {
@@ -444,29 +465,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">dropEvent</span> = <span class="keyword">function</span> (eventdata, pointer) {
                 <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(pointer.position).x / <span class="local-variable">this</span>.layout.width
                 <span class="keyword">var</span> stardate = <span class="local-variable">this</span>.getRangeStart() + <span class="local-variable">this</span>.getRange() * pos
-                <span class="comment">// TODO(aki): implement zoom dependent snapping</span>
-                stardate = floor(stardate / <span class="integer">900000</span>) * <span class="integer">900000</span> <span class="comment">// snap to 15 min</span>
+                <span class="keyword">var</span> snap = eventdata.snap || <span class="integer">900000</span> <span class="comment">// snap to 15 min by default</span>
+                stardate = floor(stardate / snap) * snap
                 <span class="keyword">var</span> enddate = stardate + (eventdata.duration || <span class="integer">10800000</span>) <span class="comment">// 3 hrs default</span>
-                <span class="local-variable">this</span>.makeEvent({
-                        <span class="key">title</span>: eventdata.title,
-                        <span class="key">date</span>: stardate,
-                        <span class="key">enddate</span>: enddate,
-                        <span class="key">metadata</span>: {
-                                <span class="key">color</span>: eventdata.color,
-                                <span class="key">location</span>: {
-                                        <span class="key">title</span>: eventdata.title,
-                                        <span class="key">lattitude</span>: eventdata.lattitude,
-                                        <span class="key">longitude</span>: eventdata.longitude
-                                }
-                        }
-                })
+
+                eventdata.date = stardate
+                eventdata.enddate = enddate
+
+                <span class="local-variable">this</span>.makeEvent(eventdata)
         }
 
         <span class="local-variable">this</span>.<span class="function">makeEvent</span> = <span class="keyword">function</span> (eventdata) {
                 eventdata.id = eventdata.id || <span class="local-variable">this</span>.data.length + <span class="integer">1</span>
                 <span class="local-variable">this</span>.data.push(eventdata)
                 <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.data
-                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.data)
+                <span class="local-variable">this</span>.emitChange()
         }
 
         <span class="local-variable">this</span>.<span class="function">updateEvent</span> = <span class="keyword">function</span> (id, eventdata) {
@@ -476,7 +489,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>.data[i][key] = eventdata[key]
                                 }
                                 <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.data
-                                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.data)
+                                <span class="local-variable">this</span>.emitChange()
                                 <span class="keyword">break</span>
                         }
                 }
@@ -487,7 +500,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.data[i].id === id) {
                                 <span class="local-variable">this</span>.data.splice(i, <span class="integer">1</span>)
                                 <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.data
-                                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.data)
+                                <span class="local-variable">this</span>.emitChange()
                                 <span class="keyword">break</span>
                         }
                 }
@@ -521,23 +534,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> scrollend = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.getRangeEnd() + <span class="local-variable">this</span>.getRange())
                         <span class="keyword">var</span> expand = <span class="predefined-constant">false</span>
 
-                        <span class="keyword">if</span> (scrollend &gt; endtime) {
-                                endtime = scrollend
+                        <span class="keyword">if</span> (scrollend.getTime() &gt; endtime + <span class="integer">1000</span>) {
+                                endtime = scrollend.getTime()
                                 expand = <span class="predefined-constant">true</span>
                         }
-                        <span class="keyword">if</span> (scrollstart &lt; starttime) {
-                                starttime = scrollstart
+                        <span class="keyword">if</span> (scrollstart.getTime() &lt; starttime - <span class="integer">1000</span>) {
+                                starttime = scrollstart.getTime()
                                 expand = <span class="predefined-constant">true</span>
                         }
                         <span class="keyword">if</span> (expand) {
-                                window.clearTimeout(<span class="local-variable">this</span>.expandTimeout)
-                                <span class="local-variable">this</span>.expandTimeout = setTimeout(<span class="keyword">function</span>() {
+                                <span class="local-variable">this</span>.clearTimeout(<span class="local-variable">this</span>.expandTimeout)
+                                <span class="local-variable">this</span>.expandTimeout = <span class="local-variable">this</span>.setTimeout(<span class="keyword">function</span>() {
                                         <span class="local-variable">this</span>.start = <span class="keyword">new</span> Date(starttime).toString()
                                         <span class="local-variable">this</span>.end = <span class="keyword">new</span> Date(endtime).toString()
                                         <span class="local-variable">this</span>.scroll = vec2(<span class="local-variable">this</span>.scroll[<span class="integer">0</span>] + (oldstarttime - <span class="local-variable">this</span>.getStart()) / <span class="local-variable">this</span>.zoom / <span class="local-variable">this</span>.TIME_SCALE, <span class="integer">0</span>)
-                                }.bind(<span class="local-variable">this</span>), <span class="integer">100</span>)
+                                }.bind(<span class="local-variable">this</span>), <span class="integer">50</span>)
                         }
                 }
+
+                <span class="local-variable">this</span>.clearTimeout(<span class="local-variable">this</span>.emitChangeTimeout)
+                <span class="local-variable">this</span>.emitChangeTimeout = <span class="local-variable">this</span>.setTimeout(<span class="keyword">function</span>() {
+                        <span class="local-variable">this</span>.emitChange()
+                }.bind(<span class="local-variable">this</span>), <span class="integer">100</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {

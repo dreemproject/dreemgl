@@ -492,6 +492,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n338" name="n338">338</a>
 <a href="#n339" name="n339">339</a>
 <strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
+<a href="#n353" name="n353">353</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -827,6 +840,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">char_count</span>:<span class="integer">0</span>
                 };
                 jsformatter.walk(ast, buf, {}, <span class="keyword">function</span>(str){
+
+                        <span class="keyword">if</span>(str === <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){
+                                <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">true</span>;
+                                <span class="keyword">return</span>
+                        }
+                        <span class="keyword">if</span>(str === <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.last_is_newline){
+                                str = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>;
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.actual_indent;i++) {
+                                        str += <span class="string"><span class="delimiter">'</span><span class="content">  </span><span class="delimiter">'</span></span>
+                                }
+                        }
+                        <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">false</span>;
+
                         buf.char_count += str.length;
                         buf.out += str;
                 });

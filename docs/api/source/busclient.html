@@ -244,6 +244,93 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n90" name="n90">90</a></strong>
 <a href="#n91" name="n91">91</a>
 <a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -260,6 +347,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.backoff = <span class="integer">1</span>
                 <span class="local-variable">this</span>.reconnect()
         }
+
+        <span class="local-variable">this</span>.use_xhr_fallback_for_binary = <span class="predefined-constant">true</span>
+        <span class="local-variable">this</span>.socket_use_blob_send = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.<span class="function">disconnect</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.socket){
@@ -279,7 +369,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.socket = <span class="keyword">new</span> <span class="local-variable">this</span>.websocketclass(<span class="local-variable">this</span>.url)
 
-                <span class="local-variable">this</span>.socket.atConnect =
+                <span class="local-variable">this</span>.socket.binaryType = <span class="string"><span class="delimiter">'</span><span class="content">arraybuffer</span><span class="delimiter">'</span></span>
+
                 <span class="local-variable">this</span>.socket.<span class="function">onopen</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.backoff = <span class="integer">1</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.queue.length;i++){
@@ -288,12 +379,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.queue = <span class="predefined-constant">undefined</span>
                 }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.socket.atError =
                 <span class="local-variable">this</span>.socket.<span class="function">onerror</span> = <span class="keyword">function</span>(event){
                         <span class="local-variable">this</span>.backoff = <span class="integer">500</span>
                 }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.socket.atClose =
                 <span class="local-variable">this</span>.socket.<span class="function">onclose</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.backoff *= <span class="integer">2</span>
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.backoff &gt; <span class="integer">1000</span>) <span class="local-variable">this</span>.backoff = <span class="integer">1000</span>
@@ -301,39 +390,124 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.reconnect()
                         }.bind(<span class="local-variable">this</span>),<span class="local-variable">this</span>.backoff)
                 }.bind(<span class="local-variable">this</span>)
-
-                <span class="local-variable">this</span>.socket.<span class="function">atMessage</span> = <span class="keyword">function</span>(imsg){
-                        <span class="keyword">if</span>(<span class="keyword">typeof</span> imsg === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) console.log(<span class="keyword">new</span> Error().stack)
-                        <span class="keyword">var</span> msg = JSON.parse(imsg)
-                        <span class="local-variable">this</span>.atMessage(msg, <span class="local-variable">this</span>)
-                }.bind(<span class="local-variable">this</span>)
-
-                <span class="local-variable">this</span>.socket.<span class="function">onmessage</span> = <span class="keyword">function</span>(event){
-                        <span class="comment">// if its huuuge and value has escaped json, dont parse it</span>
-                        <span class="keyword">var</span> data = event.data
-                        <span class="keyword">var</span> msg = JSON.parse(event.data)
-                        <span class="local-variable">this</span>.atMessage(msg, <span class="local-variable">this</span>)
-                }.bind(<span class="local-variable">this</span>)
-        }
-
         
-        <span class="comment">// Send a message to the server</span>
-        <span class="local-variable">this</span>.<span class="function">send</span> = <span class="keyword">function</span>(msg){
-                msg = JSON.stringify(msg)
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.queue) <span class="local-variable">this</span>.queue.push(msg)
-                <span class="keyword">else</span> <span class="local-variable">this</span>.socket.send(msg)
-        }
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.use_xhr_fallback_for_binary){
+                        <span class="keyword">var</span> binary_xhr = []
 
-        <span class="comment">// Causes a console.color on the server</span>
-        <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(data){
-                <span class="local-variable">this</span>.send({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>, <span class="key">value</span>:data})
-        }
+                        <span class="local-variable">this</span>.socket.<span class="function">onmessage</span> = <span class="keyword">function</span>(event){
 
-        <span class="comment">// Causes a console.log on the server</span>
-        <span class="local-variable">this</span>.<span class="function">log</span> = <span class="keyword">function</span>(data){
-                <span class="local-variable">this</span>.send({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">log</span><span class="delimiter">'</span></span>, <span class="key">value</span>:data})
-        }
+                                <span class="comment">// if its huuuge and value has escaped json, dont parse it</span>
+                                <span class="keyword">var</span> data = event.data
+                                <span class="keyword">if</span>(data.charAt(<span class="integer">0</span>) === <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>){
+                                        binary_xhr.push(<span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
+                                                <span class="comment">// lets XHR download it</span>
+                                                <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest()
+                                                xhr.open(<span class="string"><span class="delimiter">'</span><span class="content">GET</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">/binrpc?</span><span class="delimiter">'</span></span>+data.slice(<span class="integer">1</span>), <span class="predefined-constant">true</span>);
+                                                xhr.responseType = <span class="string"><span class="delimiter">'</span><span class="content">arraybuffer</span><span class="delimiter">'</span></span>
+                                                xhr.<span class="function">onload</span> = <span class="keyword">function</span>(e) {
+                                                        resolve(xhr)
+                                                }
+                                                xhr.upload.<span class="function">onprogress</span> = <span class="keyword">function</span>(e){
+                                                }
+                                                xhr.send()
+                                        }))
+                                        <span class="keyword">return</span>
+                                }
+                                <span class="keyword">var</span> bin_xhr = binary_xhr
+                                binary_xhr = []
 
+                                <span class="keyword">var</span> msg = JSON.parse(data)
+                                <span class="keyword">if</span>(bin_xhr.length){
+                                        define.Promise.all(bin_xhr).then(<span class="keyword">function</span>(results){
+                                                <span class="keyword">var</span> out = []
+                                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; results.length; i++){
+                                                        out[i] = results[i].response
+                                                }
+                                                msg = define.structFromJSON(msg, out)
+                                                <span class="local-variable">this</span>.atMessage(msg, <span class="local-variable">this</span>)
+                                        }.bind(<span class="local-variable">this</span>))
+                                }
+                                <span class="keyword">else</span>{
+                                        <span class="comment">// lets retrieve the missing binary blobs via XHR</span>
+                                        msg = define.structFromJSON(msg)
+                                        <span class="local-variable">this</span>.atMessage(msg, <span class="local-variable">this</span>)
+                                }
+                        }.bind(<span class="local-variable">this</span>)
+
+                        <span class="keyword">function</span> <span class="function">rndhex4</span>(){ <span class="keyword">return</span> Math.floor((<span class="integer">1</span> + Math.random()) * <span class="hex">0x10000</span>).toString(<span class="integer">16</span>).substring(<span class="integer">1</span>) }
+
+                        <span class="local-variable">this</span>.<span class="function">send</span> = <span class="keyword">function</span>(msg){
+                                <span class="keyword">var</span> binary = []
+                                <span class="keyword">var</span> newmsg = define.makeJSONSafe(msg, binary)
+                                <span class="keyword">var</span> allbin = []
+
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; binary.length; i++){
+                                        <span class="keyword">var</span> data = binary[i].data
+                                        <span class="keyword">var</span> blobmsg = <span class="keyword">new</span> Blob([data.buffer], {<span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">application/octet-binary</span><span class="delimiter">'</span></span>})
+
+                                        <span class="keyword">var</span> rpcrandom = rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()+rndhex4()
+                                        allbin.push(<span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
+                                                <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest()
+                                                xhr.open(<span class="string"><span class="delimiter">'</span><span class="content">POST</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">/binrpc?</span><span class="delimiter">'</span></span>+rpcrandom, <span class="predefined-constant">true</span>);
+                                                xhr.<span class="function">onload</span> = <span class="keyword">function</span>(e) {
+                                                        resolve()
+                                                }
+                                                <span class="comment">//xhr.upload.onprogress = function(e){</span>
+                                                <span class="comment">//}</span>
+                                                xhr.send(blobmsg)
+                                        }))
+                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.queue) <span class="local-variable">this</span>.queue.push(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+rpcrandom)
+                                        <span class="keyword">else</span> <span class="local-variable">this</span>.socket.send(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+rpcrandom)
+                                }
+
+                                <span class="keyword">var</span> jsonmsg = JSON.stringify(newmsg)
+
+                                <span class="keyword">if</span>(<span class="local-variable">this</span>.queue) <span class="local-variable">this</span>.queue.push(jsonmsg)
+                                <span class="keyword">else</span> {
+                                        define.Promise.all(allbin).then(<span class="keyword">function</span>(){
+                                                <span class="local-variable">this</span>.socket.send(jsonmsg)
+                                        }.bind(<span class="local-variable">this</span>))
+                                }
+                        }
+
+                }
+                <span class="keyword">else</span>{
+                        <span class="keyword">var</span> binary_buf = []
+                        <span class="local-variable">this</span>.socket.<span class="function">onmessage</span> = <span class="keyword">function</span>(event){
+                                <span class="comment">// if its huuuge and value has escaped json, dont parse it</span>
+                                <span class="keyword">var</span> data = event.data
+                                <span class="keyword">if</span>(data <span class="keyword">instanceof</span> ArrayBuffer){
+                                        binary_buf.push(event.data)
+                                        <span class="keyword">return</span>
+                                }
+                                <span class="comment">// lets retrieve the missing binary blobs via XHR</span>
+                                <span class="keyword">var</span> msg = define.structFromJSON(JSON.parse(data), binary_buf)
+                                <span class="local-variable">this</span>.atMessage(msg, <span class="local-variable">this</span>)
+                        }.bind(<span class="local-variable">this</span>)
+
+                        <span class="local-variable">this</span>.<span class="function">send</span> = <span class="keyword">function</span>(msg){
+                                <span class="keyword">var</span> binary = []
+                                <span class="keyword">var</span> newmsg = define.makeJSONSafe(msg, binary)
+
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; binary.length; i++){
+                                        <span class="keyword">var</span> data = binary[i].data
+                                        <span class="keyword">var</span> datamsg = 
+                                                <span class="local-variable">this</span>.socket_use_blob_send?
+                                                        <span class="keyword">new</span> Blob([data.buffer], {<span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">application/octet-binary</span><span class="delimiter">'</span></span>}):
+                                                        data.buffer
+
+                                        <span class="comment">//var binmsg = binary[i+1]</span>
+                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.queue) <span class="local-variable">this</span>.queue.push(datamsg)
+                                        <span class="keyword">else</span> <span class="local-variable">this</span>.socket.send(datamsg)
+                                }
+
+                                <span class="keyword">var</span> jsonmsg = JSON.stringify(newmsg)
+                                <span class="keyword">if</span>(<span class="local-variable">this</span>.queue) <span class="local-variable">this</span>.queue.push(jsonmsg)
+                                <span class="keyword">else</span> <span class="local-variable">this</span>.socket.send(jsonmsg)
+                        }
+                }
+        }
+        
         <span class="comment">// Called when a message is received</span>
         <span class="local-variable">this</span>.<span class="function">atMessage</span> = <span class="keyword">function</span>(message){}
 })</pre></td>

@@ -289,17 +289,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n135" name="n135">135</a>
 <a href="#n136" name="n136">136</a>
 <a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
-<strong><a href="#n140" name="n140">140</a></strong>
-<a href="#n141" name="n141">141</a>
-<a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
-<a href="#n144" name="n144">144</a>
-<a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -310,7 +299,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports){
         <span class="keyword">var</span> RpcProxy = exports
-        
+
         <span class="comment">// disconnect all listeners to this rpc object</span>
         <span class="local-variable">this</span>.<span class="function">disconnectAll</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>._attributes){
@@ -336,18 +325,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         RpcProxy.<span class="function">defineMethod</span> = <span class="keyword">function</span>(obj, key){
                 obj[key] = <span class="keyword">function</span>(){
-                        <span class="keyword">var</span> args = []
-                        <span class="keyword">var</span> msg = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>, <span class="key">method</span>:key, <span class="key">args</span>:args}
-
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">arguments</span>.length; i++){
-                                <span class="keyword">var</span> arg = <span class="local-variable">arguments</span>[i]
-                                
-                                <span class="keyword">if</span>(<span class="keyword">typeof</span> arg == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> arg == <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; !define.isSafeJSON(arg)){
-                                        <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">RPC call </span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="content"> can only support JSON safe objects</span><span class="delimiter">'</span></span>)
-                                }
-
-                                args.push(arg)
-                        }
+                        <span class="keyword">var</span> msg = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>, <span class="key">method</span>:key, <span class="key">args</span>:Array.prototype.slice.apply(<span class="local-variable">arguments</span>)}
                         <span class="keyword">return</span> <span class="local-variable">this</span>.parent.methodRpc(<span class="local-variable">this</span>.name, msg)
                 }
         }
@@ -388,7 +366,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">var</span> props = proto.getAttributeConfig(key)
                                         <span class="keyword">var</span> value = object[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key]
                                         <span class="keyword">if</span>(!props) props = {}
-                                        <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; value.is_wired || 
+                                        <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; value.is_wired ||
                                                 <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> &amp;&amp; value.charAt(<span class="integer">0</span>) == <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> &amp;&amp; value.charAt(<span class="integer">1</span>) === <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> &amp;&amp; value.charAt(value.length - <span class="integer">1</span>) === <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>){
                                                 props.value = <span class="predefined-constant">undefined</span>
                                         }
@@ -414,7 +392,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets call set attribute</span>
                         <span class="keyword">if</span>(!(key <span class="keyword">in</span> proxy)) <span class="keyword">return</span>
                         <span class="keyword">var</span> msg = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">attribute</span><span class="delimiter">'</span></span>, <span class="key">attribute</span>:key, <span class="key">value</span>:value}
-                        proxy.parent.attributeRpc(proxy.name, msg)
+                        proxy.parent.attributeRpc(proxy.name, msg, <span class="predefined-constant">true</span>)
                 }
 
                 proxy.<span class="function">atAttributeSet</span> = <span class="keyword">function</span>(key, value){
@@ -448,7 +426,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">return</span> childset
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

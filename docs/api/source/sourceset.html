@@ -499,6 +499,33 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n345" name="n345">345</a>
 <a href="#n346" name="n346">346</a>
 <a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
+<a href="#n353" name="n353">353</a>
+<a href="#n354" name="n354">354</a>
+<a href="#n355" name="n355">355</a>
+<a href="#n356" name="n356">356</a>
+<a href="#n357" name="n357">357</a>
+<a href="#n358" name="n358">358</a>
+<a href="#n359" name="n359">359</a>
+<strong><a href="#n360" name="n360">360</a></strong>
+<a href="#n361" name="n361">361</a>
+<a href="#n362" name="n362">362</a>
+<a href="#n363" name="n363">363</a>
+<a href="#n364" name="n364">364</a>
+<a href="#n365" name="n365">365</a>
+<a href="#n366" name="n366">366</a>
+<a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
+<strong><a href="#n370" name="n370">370</a></strong>
+<a href="#n371" name="n371">371</a>
+<a href="#n372" name="n372">372</a>
+<a href="#n373" name="n373">373</a>
+<a href="#n374" name="n374">374</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -544,7 +571,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">fork</span> = <span class="keyword">function</span>(callback){
                 <span class="local-variable">this</span>.undo_stack.push(<span class="local-variable">this</span>.last_source)
                 <span class="local-variable">this</span>.redo_stack.length = <span class="integer">0</span>
-                callback()
+                callback(<span class="local-variable">this</span>)
                 <span class="comment">// lets reserialize</span>
                 <span class="local-variable">this</span>.last_source = <span class="local-variable">this</span>.stringify()
                 <span class="local-variable">this</span>.process()
@@ -562,29 +589,31 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         uname = classname + id
                 }
 
-                <span class="comment">// add it to the deplist.</span>
-                <span class="keyword">var</span> deps = <span class="local-variable">this</span>.ast.steps[<span class="integer">0</span>].params
-                <span class="keyword">var</span> <span class="predefined">$folder</span> = <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+folder.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>)+<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (folder) {
+                        <span class="comment">// add it to the deplist.</span>
+                        <span class="keyword">var</span> deps = <span class="local-variable">this</span>.ast.steps[<span class="integer">0</span>].params
+                        <span class="keyword">var</span> <span class="predefined">$folder</span> = <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+folder.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>)+<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>
 
-                <span class="keyword">var</span> dir = <span class="string"><span class="delimiter">'</span><span class="content">$$</span><span class="delimiter">'</span></span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; deps.length; i ++){
-                        <span class="keyword">var</span> name = deps[i].id.name
-                        <span class="keyword">if</span>(name === <span class="predefined">$folder</span>) <span class="keyword">break</span>
-                }
-                <span class="keyword">if</span>(i === deps.length){
-                        deps.push(
-                                {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Def</span><span class="delimiter">'</span></span>,<span class="key">id</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>, <span class="key">name</span>:<span class="predefined">$folder</span>}},
-                                {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Def</span><span class="delimiter">'</span></span>,<span class="key">id</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>, <span class="key">name</span>:classname}}
-                        )
-                }
-                <span class="keyword">else</span>{
-                        <span class="keyword">for</span>(<span class="keyword">var</span> j = i; j &lt; deps.length; j ++){
-                                <span class="keyword">if</span>(deps[j].id.name === classname) <span class="keyword">break</span>
+                        <span class="keyword">var</span> dir = <span class="string"><span class="delimiter">'</span><span class="content">$$</span><span class="delimiter">'</span></span>
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; deps.length; i ++){
+                                <span class="keyword">var</span> name = deps[i].id.name
+                                <span class="keyword">if</span>(name === <span class="predefined">$folder</span>) <span class="keyword">break</span>
                         }
-                        <span class="keyword">if</span>(j === deps.length){
-                                deps.splice(i,<span class="integer">0</span>,
+                        <span class="keyword">if</span>(i === deps.length){
+                                deps.push(
+                                        {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Def</span><span class="delimiter">'</span></span>,<span class="key">id</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>, <span class="key">name</span>:<span class="predefined">$folder</span>}},
                                         {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Def</span><span class="delimiter">'</span></span>,<span class="key">id</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>, <span class="key">name</span>:classname}}
                                 )
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="keyword">for</span>(<span class="keyword">var</span> j = i; j &lt; deps.length; j ++){
+                                        <span class="keyword">if</span>(deps[j].id.name === classname) <span class="keyword">break</span>
+                                }
+                                <span class="keyword">if</span>(j === deps.length){
+                                        deps.splice(i,<span class="integer">0</span>,
+                                                {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Def</span><span class="delimiter">'</span></span>,<span class="key">id</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>, <span class="key">name</span>:classname}}
+                                        )
+                                }
                         }
                 }
 
@@ -598,7 +627,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="key">key</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>},
                                                  <span class="key">value</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>,<span class="key">kind</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>,<span class="key">value</span>:uname}
                                         },
-                                        {<span class="key">key</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flowdata</span><span class="delimiter">&quot;</span></span>}, <span class="key">value</span>:genFlowDataObject({<span class="key">x</span>:<span class="integer">0</span>,<span class="key">y</span>:<span class="integer">0</span>})}
+                                        {<span class="key">key</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flowdata</span><span class="delimiter">&quot;</span></span>}, <span class="key">value</span>:genFlowDataObject({<span class="key">x</span>:<span class="integer">20</span>,<span class="key">y</span>:<span class="integer">420</span>})}
                                 ]
                         }]
                 })
@@ -787,27 +816,40 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="key">node</span>: item,
                                         <span class="key">children</span>:[],
                                         <span class="key">inputs</span>:[],
-                                        <span class="key">outputs</span>:[]
+                                        <span class="key">outputs</span>:[],
+                                        <span class="key">editables</span>:[]
                                 }
 
                                 <span class="comment">// we haz classname.</span>
                                 <span class="keyword">var</span> clazz = resolver[classname]
                                 <span class="keyword">var</span> attribs = clazz.prototype._attributes
                                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> attribs){
-                                        <span class="keyword">var</span> attrib = attribs[key]
+                                        <span class="keyword">if</span> (attribs.hasOwnProperty(key)) {
+                                                <span class="keyword">var</span> attrib = attribs[key]
 
-                                        <span class="keyword">if</span>(attrib.flow){
-                                                <span class="keyword">var</span> con = {
-                                                        <span class="key">name</span>: key,
-                                                        <span class="key">title</span>: key,
-                                                        <span class="key">type</span>: attrib.type,
-                                                        <span class="key">attrib</span>: attrib
-                                                }
-                                                <span class="keyword">if</span>(attrib.flow === <span class="string"><span class="delimiter">'</span><span class="content">in</span><span class="delimiter">'</span></span>){
-                                                        child.inputs.push(con)
-                                                }
-                                                <span class="keyword">else</span> <span class="keyword">if</span>(attrib.flow === <span class="string"><span class="delimiter">'</span><span class="content">out</span><span class="delimiter">'</span></span>){
-                                                        child.outputs.push(con)
+                                                <span class="keyword">if</span>(attrib.flow){
+                                                        <span class="keyword">var</span> con = {
+                                                                <span class="key">name</span>: key,
+                                                                <span class="key">title</span>: key,
+                                                                <span class="key">type</span>: attrib.type,
+                                                                <span class="key">attrib</span>: attrib
+                                                        };
+
+                                                        <span class="keyword">if</span> (attrib.flow === <span class="string"><span class="delimiter">'</span><span class="content">in</span><span class="delimiter">'</span></span>){
+                                                                child.inputs.push(con)
+                                                        } <span class="keyword">else</span> <span class="keyword">if</span>(attrib.flow === <span class="string"><span class="delimiter">'</span><span class="content">out</span><span class="delimiter">'</span></span>){
+                                                                child.outputs.push(con)
+                                                        } <span class="keyword">else</span> <span class="keyword">if</span>(attrib.flow === <span class="string"><span class="delimiter">'</span><span class="content">inout</span><span class="delimiter">'</span></span>){
+                                                                child.inputs.push(con);
+                                                                child.outputs.push({
+                                                                        <span class="key">name</span>:con.name,
+                                                                        <span class="key">title</span>:con.title,
+                                                                        <span class="key">type</span>:con.type,
+                                                                        <span class="key">attrib</span>:con.attrib
+                                                                })
+                                                        } <span class="keyword">else</span> <span class="keyword">if</span> (attrib.flow === <span class="string"><span class="delimiter">'</span><span class="content">edit</span><span class="delimiter">'</span></span>) {
+                                                                child.editables.push(con);
+                                                        }
                                                 }
                                         }
                                 }
@@ -837,13 +879,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">out</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
                         <span class="function">charCodeAt</span>: <span class="keyword">function</span>(i){<span class="keyword">return</span> <span class="local-variable">this</span>.out.charCodeAt(i)},
                         <span class="key">char_count</span>:<span class="integer">0</span>
-                }
+                };
+
                 jsformatter.walk(<span class="local-variable">this</span>.ast, buf, {}, <span class="keyword">function</span>(str){
-<span class="comment">//                        console.log(str)</span>
-                        buf.char_count += str.length
+
+                        <span class="keyword">if</span>(str === <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){
+                                <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">true</span>;
+                                <span class="keyword">return</span>
+                        }
+                        <span class="keyword">if</span>(str === <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.last_is_newline){
+                                str = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>;
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.actual_indent;i++) {
+                                        str += <span class="string"><span class="delimiter">'</span><span class="content">  </span><span class="delimiter">'</span></span>
+                                }
+                        }
+                        <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">false</span>;
+
+                        buf.char_count += str.length;
                         buf.out += str
-                })
-                console.log(buf.out)
+                });
                 <span class="keyword">return</span> buf.out
         }
 })

@@ -514,6 +514,81 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n360" name="n360">360</a></strong>
 <a href="#n361" name="n361">361</a>
 <a href="#n362" name="n362">362</a>
+<a href="#n363" name="n363">363</a>
+<a href="#n364" name="n364">364</a>
+<a href="#n365" name="n365">365</a>
+<a href="#n366" name="n366">366</a>
+<a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
+<strong><a href="#n370" name="n370">370</a></strong>
+<a href="#n371" name="n371">371</a>
+<a href="#n372" name="n372">372</a>
+<a href="#n373" name="n373">373</a>
+<a href="#n374" name="n374">374</a>
+<a href="#n375" name="n375">375</a>
+<a href="#n376" name="n376">376</a>
+<a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
+<a href="#n382" name="n382">382</a>
+<a href="#n383" name="n383">383</a>
+<a href="#n384" name="n384">384</a>
+<a href="#n385" name="n385">385</a>
+<a href="#n386" name="n386">386</a>
+<a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
+<a href="#n391" name="n391">391</a>
+<a href="#n392" name="n392">392</a>
+<a href="#n393" name="n393">393</a>
+<a href="#n394" name="n394">394</a>
+<a href="#n395" name="n395">395</a>
+<a href="#n396" name="n396">396</a>
+<a href="#n397" name="n397">397</a>
+<a href="#n398" name="n398">398</a>
+<a href="#n399" name="n399">399</a>
+<strong><a href="#n400" name="n400">400</a></strong>
+<a href="#n401" name="n401">401</a>
+<a href="#n402" name="n402">402</a>
+<a href="#n403" name="n403">403</a>
+<a href="#n404" name="n404">404</a>
+<a href="#n405" name="n405">405</a>
+<a href="#n406" name="n406">406</a>
+<a href="#n407" name="n407">407</a>
+<a href="#n408" name="n408">408</a>
+<a href="#n409" name="n409">409</a>
+<strong><a href="#n410" name="n410">410</a></strong>
+<a href="#n411" name="n411">411</a>
+<a href="#n412" name="n412">412</a>
+<a href="#n413" name="n413">413</a>
+<a href="#n414" name="n414">414</a>
+<a href="#n415" name="n415">415</a>
+<a href="#n416" name="n416">416</a>
+<a href="#n417" name="n417">417</a>
+<a href="#n418" name="n418">418</a>
+<a href="#n419" name="n419">419</a>
+<strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -521,7 +596,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton, renameblockdialog){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require,
+                                                                  <span class="predefined">$system$parse$</span>, astscanner,
+                                                                  <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, button, textbox,
+                                                                  <span class="predefined">$$</span>, ballbutton, renameblockdialog){
 
         <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>
@@ -532,124 +610,124 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#727272</span><span class="delimiter">&quot;</span></span>)
 
         <span class="keyword">function</span> <span class="function">uppercaseFirst</span> (inp) {
-                <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp;
-                <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>);
+                <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp
+                <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>)
         }
 
         <span class="comment">// the style classes</span>
 
-        <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+        <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
 
-        <span class="local-variable">this</span>.mainwidth = <span class="integer">250</span>;
+        <span class="local-variable">this</span>.mainwidth = <span class="integer">250</span>
 
         <span class="local-variable">this</span>.style = {
-                <span class="key">label_head</span>:{<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">margin</span>:vec4(<span class="integer">6</span>,<span class="integer">3</span>,<span class="integer">4</span>,<span class="integer">0</span>), <span class="key">bold</span>:<span class="predefined-constant">true</span>},
-                <span class="key">view_main</span>:{<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>:<span class="local-variable">this</span>.mainwidth, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">margin</span>:<span class="integer">1</span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
-                <span class="key">view_header</span>:{<span class="key">width</span>:<span class="local-variable">this</span>.mainwidth, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},
+                <span class="key">label_head</span>: {<span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>,<span class="key">margin</span>: vec4(<span class="integer">6</span>,<span class="integer">3</span>,<span class="integer">4</span>,<span class="integer">0</span>), <span class="key">bold</span>: <span class="predefined-constant">true</span>},
+                <span class="key">view_main</span>: {<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>: <span class="local-variable">this</span>.mainwidth, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">margin</span>: <span class="integer">1</span>,<span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
+                <span class="key">view_header</span>: {<span class="key">width</span>: <span class="local-variable">this</span>.mainwidth, <span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},
 
-                <span class="key">button_header</span>:{<span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>:<span class="integer">4</span>},
-                <span class="key">view_between1</span>:{<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">width</span>:<span class="local-variable">this</span>.mainwidth, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},
-                <span class="key">view_between2</span>:{<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>:<span class="integer">8</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
-                <span class="key">view_head</span>:{<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>:-<span class="integer">8</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
-                <span class="key">view_addbuttons</span>:{<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,<span class="key">width</span>:<span class="integer">140</span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>}
+                <span class="key">button_header</span>: {<span class="key">buttoncolor2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>, <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>: <span class="integer">4</span>},
+                <span class="key">view_between1</span>: {<span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">width</span>: <span class="local-variable">this</span>.mainwidth, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},
+                <span class="key">view_between2</span>: {<span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>: <span class="integer">8</span>,<span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
+                <span class="key">view_head</span>: {<span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>: -<span class="integer">8</span>,<span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
+                <span class="key">view_addbuttons</span>: {<span class="key">flexdirection</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,<span class="key">width</span>: <span class="integer">140</span>, <span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>}
         }
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">flowdata</span>:{},
+                <span class="key">flowdata</span>: {},
                 <span class="comment">//pos: Config({persist: true}),</span>
-                <span class="key">inputattributes</span>: Config({<span class="key">type</span>:Object, <span class="key">value</span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>]}),
-                <span class="key">outputattributes</span>: Config({<span class="key">type</span>:Object, <span class="key">value</span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">clicked</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">something</span><span class="delimiter">&quot;</span></span>]}),
-                <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Untitled</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">snap</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">1</span>}),
-                <span class="key">bordercolor</span>: Config({<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
-                <span class="key">borderselected</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
-                <span class="key">focusbordercolor</span>: Config({<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>, <span class="key">type</span>:vec4, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">hoverbordercolor</span>: Config({<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>, <span class="key">type</span>:vec4, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#e0e0e0</span><span class="delimiter">&quot;</span></span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">inselection</span> : Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
-                <span class="key">inputs</span>: [{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">a0</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">test input!</span><span class="delimiter">&quot;</span></span>, <span class="key">color</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>)}],
-                <span class="key">outputs</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">b1</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">output? </span><span class="delimiter">&quot;</span></span>, <span class="key">color</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>)}]
+                <span class="key">inputattributes</span>: Config({<span class="key">type</span>: Object, <span class="key">value</span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>]}),
+                <span class="key">outputattributes</span>: Config({<span class="key">type</span>: Object, <span class="key">value</span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">clicked</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">something</span><span class="delimiter">&quot;</span></span>]}),
+                <span class="key">title</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Untitled</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">snap</span>: Config({<span class="key">type</span>: <span class="reserved">int</span>, <span class="key">value</span>: <span class="integer">1</span>}),
+                <span class="key">bordercolor</span>: Config({<span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
+                <span class="key">borderselected</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">0</span>, <span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
+                <span class="key">focusbordercolor</span>: Config({<span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>, <span class="key">type</span>: vec4, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>, <span class="key">meta</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">hoverbordercolor</span>: Config({<span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>, <span class="key">type</span>: vec4, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#e0e0e0</span><span class="delimiter">&quot;</span></span>, <span class="key">meta</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">inselection</span> : Config({<span class="key">type</span>: <span class="reserved">boolean</span>, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
+                <span class="key">editables</span>: [],
+                <span class="key">nodeprops</span>:{},
+                <span class="key">inputs</span>: [{<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">a0</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">test input!</span><span class="delimiter">&quot;</span></span>, <span class="key">color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>)}],
+                <span class="key">outputs</span>: [{<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">b1</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">output? </span><span class="delimiter">&quot;</span></span>, <span class="key">color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>)}]
         }
 
         <span class="local-variable">this</span>.colormap = {
-                <span class="key">Number</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF7260</span><span class="delimiter">&quot;</span></span>),
-                <span class="reserved">int</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">int32</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">IntLike</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">float32</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
-                <span class="reserved">float</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">FloatLike</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">Array</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#0198E1</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">vec4</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4FD5D6</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">vec3</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#31C3E7</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">vec2</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#BF5FFF</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">String</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#6ADA7A</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">Object</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffee14</span><span class="delimiter">&quot;</span></span>)
+                <span class="key">Number</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FFA500</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">bool</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#EE8280</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">bool32</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#EE8280</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">Boolean</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#EE8280</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">BooleanLike</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#EE8280</span><span class="delimiter">&quot;</span></span>),
+                <span class="reserved">int</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">int32</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">IntLike</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">float32</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
+                <span class="reserved">float</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">FloatLike</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#D23641</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">Array</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#0198E1</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">vec4</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4FD5D6</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">vec3</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#31C3E7</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">vec2</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#BF5FFF</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">String</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#6ADA7A</span><span class="delimiter">&quot;</span></span>),
+                <span class="key">Object</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffee14</span><span class="delimiter">&quot;</span></span>)
         }
 
         <span class="local-variable">this</span>.tooltip = <span class="string"><span class="delimiter">'</span><span class="content">issablock</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.<span class="function">oninputs</span> = <span class="keyword">function</span>()
-        {
-                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.inputs.length;i++){
-                        <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i];
-
+        <span class="local-variable">this</span>.<span class="function">oninputs</span> = <span class="keyword">function</span>() {
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.inputs.length; i++){
+                        <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i]
                         <span class="keyword">if</span> (inp.type &amp;&amp; <span class="local-variable">this</span>.colormap[inp.type.name]){
-                                inp.color = <span class="local-variable">this</span>.colormap[inp.type.name];
-                        }
-                        <span class="keyword">else</span>{
-                                inp.color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>);
+                                inp.color = <span class="local-variable">this</span>.colormap[inp.type.name]
+                        } <span class="keyword">else</span> {
+                                inp.color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>)
                         }
                 }
         }
 
+
         <span class="local-variable">this</span>.<span class="function">onoutputs</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.outputs.length;i++){
-                        <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i];
-
+                        <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i]
                         <span class="keyword">if</span> (outp.type &amp;&amp; <span class="local-variable">this</span>.colormap[outp.type.name]){
-                                outp.color = <span class="local-variable">this</span>.colormap[outp.type.name];
-                        }
-                        <span class="keyword">else</span>{
-                                outp.color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>);
+                                outp.color = <span class="local-variable">this</span>.colormap[outp.type.name]
+                        } <span class="keyword">else</span> {
+                                outp.color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>)
                         }
                 }
         }
 
         <span class="local-variable">this</span>.<span class="function">bordercolorfn</span> = <span class="keyword">function</span>(pos){
-                <span class="keyword">var</span> check = (<span class="reserved">int</span>(mod(<span class="float">0.34</span>*( gl_FragCoord.x + gl_FragCoord.y ),<span class="integer">2</span>.)) == <span class="integer">1</span>)?<span class="float">1.0</span>:<span class="float">0.0</span>;
-                <span class="keyword">return</span> mix(bordercolor, mix(vec4(focusbordercolor.xyz*<span class="float">.8</span>,<span class="float">1.0</span>), focusbordercolor, check), borderselected);
-                <span class="keyword">return</span> vec4(check);
+                <span class="keyword">var</span> check = (<span class="reserved">int</span>(mod(<span class="float">0.34</span>*( gl_FragCoord.x + gl_FragCoord.y ),<span class="integer">2</span>.)) == <span class="integer">1</span>)?<span class="float">1.0</span>: <span class="float">0.0</span>
+                <span class="keyword">return</span> mix(bordercolor, mix(vec4(focusbordercolor.xyz*<span class="float">.8</span>,<span class="float">1.0</span>), focusbordercolor, check), borderselected)
+                <span class="keyword">return</span> vec4(check)
         }
 
         <span class="local-variable">this</span>.<span class="function">inselection</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.updatecolor();
+                <span class="local-variable">this</span>.updatecolor()
         }
 
         <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._inselection) {
-                        <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor;
-                        <span class="local-variable">this</span>.borderselected = <span class="integer">1</span>;
-                }
-                <span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.borderselected = <span class="integer">0</span>;
+                        <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor
+                        <span class="local-variable">this</span>.borderselected = <span class="integer">1</span>
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.borderselected = <span class="integer">0</span>
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.over){
-                                <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.hoverbordercolor;
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.neutralbordercolor;
+                                <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.hoverbordercolor
+                        } <span class="keyword">else</span> {
+                                <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.neutralbordercolor
                         }
                 }
         }
 
 
         <span class="local-variable">this</span>.<span class="function">move</span> = <span class="keyword">function</span>(x,y) {
-                <span class="keyword">var</span> nx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>] + x;
-                <span class="keyword">var</span> ny = <span class="local-variable">this</span>.pos[<span class="integer">1</span>] + y;
-                <span class="keyword">if</span> (nx&lt;<span class="integer">0</span>) nx = <span class="integer">0</span>;
-                <span class="keyword">if</span> (ny&lt;<span class="integer">0</span>) ny = <span class="integer">0</span>;
-                <span class="local-variable">this</span>.pos = vec2(Math.round(nx),Math.round(ny));
+                <span class="keyword">var</span> nx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>] + x
+                <span class="keyword">var</span> ny = <span class="local-variable">this</span>.pos[<span class="integer">1</span>] + y
+                <span class="keyword">if</span> (nx&lt;<span class="integer">0</span>) nx = <span class="integer">0</span>
+                <span class="keyword">if</span> (ny&lt;<span class="integer">0</span>) ny = <span class="integer">0</span>
+                <span class="local-variable">this</span>.pos = vec2(Math.round(nx),Math.round(ny))
                 <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
-                fg.setActiveBlock(<span class="local-variable">this</span>);
-                fg.updateConnections();
+                fg.setActiveBlock(<span class="local-variable">this</span>)
+                fg.updateConnections()
 
         }
 
@@ -664,72 +742,77 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">keydownDelete</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
-                fg.removeBlock(<span class="local-variable">this</span>);
+                fg.removeBlock(<span class="local-variable">this</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
-                <span class="local-variable">this</span>.defaultKeyboardHandler(v);
+                <span class="local-variable">this</span>.defaultKeyboardHandler(v)
         }
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.neutralbordercolor = <span class="local-variable">this</span>.bordercolor;
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).allblocks.push(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.neutralbordercolor = <span class="local-variable">this</span>.bordercolor
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).allblocks.push(<span class="local-variable">this</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">destroy</span> = <span class="keyword">function</span>(){
-                fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
+                fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (fg){
-                        <span class="keyword">var</span> index = fg.allblocks.indexOf(<span class="local-variable">this</span>);
-                        <span class="keyword">if</span> (index &gt; -<span class="integer">1</span>) fg.allblocks.splice(index, <span class="integer">1</span>);
+                        <span class="keyword">var</span> index = fg.allblocks.indexOf(<span class="local-variable">this</span>)
+                        <span class="keyword">if</span> (index &gt; -<span class="integer">1</span>) fg.allblocks.splice(index, <span class="integer">1</span>)
                 }
         }
 
         <span class="local-variable">this</span>.<span class="function">setupMove</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.startx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>];
-                <span class="local-variable">this</span>.starty = <span class="local-variable">this</span>.pos[<span class="integer">1</span>];
+                <span class="local-variable">this</span>.startx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>]
+                <span class="local-variable">this</span>.starty = <span class="local-variable">this</span>.pos[<span class="integer">1</span>]
                 <span class="comment">//console.log(this.pos)</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">updateMove</span> = <span class="keyword">function</span>(dx, dy, snap){
-                <span class="keyword">var</span> x = Math.floor((<span class="local-variable">this</span>.startx+dx)/snap)*<span class="local-variable">this</span>.snap;
-                <span class="keyword">var</span> y = Math.floor((<span class="local-variable">this</span>.starty+dy)/snap)*<span class="local-variable">this</span>.snap;
-                <span class="local-variable">this</span>.pos = vec2(x,y);
+                <span class="keyword">var</span> x = Math.floor((<span class="local-variable">this</span>.startx+dx)/snap)*<span class="local-variable">this</span>.snap
+                <span class="keyword">var</span> y = Math.floor((<span class="local-variable">this</span>.starty+dy)/snap)*<span class="local-variable">this</span>.snap
+                <span class="local-variable">this</span>.pos = vec2(x,y)
         }
 
         <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(event){
                 <span class="comment">//this.moveToFront()</span>
-                <span class="keyword">var</span> props = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>);
-                <span class="keyword">if</span> (props) props.target = <span class="local-variable">this</span>.name;
-                <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
+                <span class="keyword">var</span> props = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>)
+                <span class="keyword">if</span> (props) props.target = <span class="local-variable">this</span>.name
+                <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; !fg.inSelection(<span class="local-variable">this</span>)){
-                        fg.clearSelection();
+                        fg.clearSelection()
                 }
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; fg.inSelection(<span class="local-variable">this</span>)){
-                        fg.removeFromSelection(<span class="local-variable">this</span>);
-                        fg.updateSelectedItems();
-                        <span class="keyword">return</span>;
+                        fg.removeFromSelection(<span class="local-variable">this</span>)
+                        fg.updateSelectedItems()
+                        <span class="keyword">return</span>
                 }
-                fg.setActiveBlock(<span class="local-variable">this</span>);
-                fg.updateSelectedItems();
-                fg.setupSelectionMove();
+                fg.setActiveBlock(<span class="local-variable">this</span>)
+                fg.updateSelectedItems()
+                fg.setupSelectionMove()
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(event.delta[<span class="integer">0</span>], event.delta[<span class="integer">1</span>], <span class="predefined-constant">false</span>);
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(event.delta[<span class="integer">0</span>], event.delta[<span class="integer">1</span>], <span class="predefined-constant">false</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">var</span> x = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">0</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap;
-                <span class="keyword">var</span> y = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">1</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap;
-                <span class="local-variable">this</span>.pos = vec2(x,y);
-                <span class="local-variable">this</span>.redraw();
-                <span class="local-variable">this</span>.relayout();
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(event.delta[<span class="integer">0</span>], event.delta[<span class="integer">1</span>], <span class="predefined-constant">true</span>);
+                <span class="keyword">var</span> x = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">0</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap
+                <span class="keyword">var</span> y = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">1</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap
+                <span class="local-variable">this</span>.pos = vec2(x,y)
+                <span class="local-variable">this</span>.redraw()
+                <span class="local-variable">this</span>.relayout()
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(event.delta[<span class="integer">0</span>], event.delta[<span class="integer">1</span>], <span class="predefined-constant">true</span>)
         }
 
-        <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
+        <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>
 
         <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.over) {
+                        <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
+                        fg.inspect = <span class="local-variable">this</span>
+                }
+
                 <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext
                 <span class="local-variable">this</span>.updatecolor()
@@ -743,20 +826,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> ab = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">addbuttons</span><span class="delimiter">&quot;</span></span>);
+                <span class="keyword">var</span> ab = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">addbuttons</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (ab){
-                        ab.y = <span class="local-variable">this</span>._layout.height + <span class="integer">2</span>;
+                        ab.y = <span class="local-variable">this</span>._layout.height + <span class="integer">2</span>
                 }
         }
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">inputbutton</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>,  <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">inputbutton</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
                 <span class="comment">//this.drawtarget = 'pick'</span>
 
                 <span class="local-variable">this</span>.attributes = {
-                        <span class="key">color</span>:Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
-                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tadaa</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+                        <span class="key">color</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                        <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">tadaa</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
 
                 <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>
@@ -771,23 +854,29 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext
                 }
 
-                <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Input </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type):<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Input </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type): <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">return</span> [
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.color, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}),
-                                label({<span class="key">marginleft</span>:<span class="integer">5</span>, <span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.title), <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
+                                ballbutton({<span class="key">borderwidth</span>: <span class="integer">2</span>, <span class="key">bgcolor</span>: <span class="local-variable">this</span>.color, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}),
+                                label({<span class="key">marginleft</span>: <span class="integer">5</span>, <span class="key">text</span>: uppercaseFirst(<span class="local-variable">this</span>.title), <span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
         })
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">outputbutton</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>,  <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">outputbutton</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
                 <span class="comment">//this.drawtarget = 'pick'</span>
 
+                <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>
+                <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+                <span class="local-variable">this</span>.flex = <span class="integer">1</span>
+                <span class="local-variable">this</span>.width = <span class="integer">120</span>
+                <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>
+
                 <span class="local-variable">this</span>.attributes = {
-                        <span class="key">color</span>:Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
-                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+                        <span class="key">color</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                        <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
 
                 <span class="local-variable">this</span>.<span class="function">pointerover</span>  = <span class="keyword">function</span>(){
@@ -795,82 +884,143 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">tapped</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent;
-                        <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-                        fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name);
+                        <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent
+                        <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
+                        fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name)
                 }
 
-                <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>;
+                <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>
 
-                <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
-                                <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Output </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type):<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                                <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Output </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type): <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
 
                         <span class="keyword">return</span> [
-                                label({<span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.name), <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>: <span class="integer">5</span>}),
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>: <span class="local-variable">this</span>.color, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
+                                label({<span class="key">text</span>: uppercaseFirst(<span class="local-variable">this</span>.name), <span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">align</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>: <span class="integer">5</span>, <span class="key">flex</span>: <span class="integer">0</span>}),
+                                ballbutton({<span class="key">flex</span>:<span class="integer">0</span>, <span class="key">borderwidth</span>: <span class="integer">2</span>, <span class="key">bgcolor</span>: <span class="local-variable">this</span>.color, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
         })
 
         <span class="local-variable">this</span>.<span class="function">renderInputs</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> res = [];
+                <span class="keyword">var</span> res = []
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.inputs.length;i++){
-                        <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i];
-                        res.push(<span class="local-variable">this</span>.inputbutton({<span class="key">name</span>:inp.name, <span class="key">type</span>:inp.type.name, <span class="key">title</span>:inp.title, <span class="key">color</span>:inp.color}))
+                        <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i]
+                        res.push(<span class="local-variable">this</span>.inputbutton({<span class="key">name</span>: inp.name, <span class="key">type</span>: inp.type.name, <span class="key">title</span>: inp.title, <span class="key">color</span>: inp.color}))
                 }
-                <span class="keyword">return</span> res;
+                <span class="keyword">return</span> res
         }
 
         <span class="local-variable">this</span>.<span class="function">renderOutputs</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> res = [];
+                <span class="keyword">var</span> res = []
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.outputs.length;i++){
-                        <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i];
-                        res.push(<span class="local-variable">this</span>.outputbutton({<span class="key">name</span>:outp.name, <span class="key">type</span>:outp.type.name, <span class="key">title</span>:outp.title, <span class="key">color</span>:outp.color}))
+                        <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i]
+                        res.push(<span class="local-variable">this</span>.outputbutton({<span class="key">name</span>: outp.name, <span class="key">type</span>: outp.type.name, <span class="key">title</span>: outp.title, <span class="key">color</span>: outp.color}))
                 }
-                <span class="keyword">return</span> res;
+                <span class="keyword">return</span> res
         }
 
         <span class="local-variable">this</span>.<span class="function">renameBlock</span> = <span class="keyword">function</span>(e){
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> renameblockdialog({<span class="key">oldname</span>:<span class="local-variable">this</span>.name, <span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
+                        <span class="keyword">return</span> renameblockdialog({<span class="key">oldname</span>: <span class="local-variable">this</span>.name, <span class="key">width</span>: <span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>: <span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
+                                <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">x</span>: e.value.x,
                                 <span class="key">y</span>: e.value.y + <span class="integer">20</span>,
-                                <span class="function">blur</span>:<span class="keyword">function</span>(){
+                                <span class="function">blur</span>: <span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
 
-                        }} );
+                        }} )
 
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
 
                         <span class="keyword">if</span> (res){
-                                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).setBlockName(<span class="local-variable">this</span>, res);
+                                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).setBlockName(<span class="local-variable">this</span>, res)
                         }
-                }.bind(<span class="local-variable">this</span>));
+                }.bind(<span class="local-variable">this</span>))
 
         }
 
         <span class="local-variable">this</span>.<span class="function">removeBlock</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).removeBlock(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).removeBlock(<span class="local-variable">this</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+
+                <span class="keyword">var</span> editors = [];
+
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>._editables.length;i++) {
+                        <span class="keyword">var</span> editable = <span class="local-variable">this</span>._editables[i];
+
+                        <span class="keyword">var</span> ast = <span class="keyword">new</span> astscanner(<span class="local-variable">this</span>.nodeprops,[{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Property</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:editable.name}])
+                        <span class="keyword">var</span> value;
+                        <span class="keyword">if</span> (ast.atindex &gt; -<span class="integer">1</span> &amp;&amp; ast.atparent &amp;&amp; ast.atparent.keys) {
+                                <span class="keyword">var</span> found = ast.atparent.keys[ast.atindex]
+                                <span class="keyword">if</span> (found &amp;&amp; found.value) {
+                                        value = found.value.value
+                                }
+                        }
+
+                        editors.push(view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
+                                label({<span class="key">flex</span>:<span class="float">0.25</span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>,<span class="integer">5</span>,<span class="integer">10</span>,<span class="integer">5</span>), <span class="key">bold</span>:<span class="predefined-constant">true</span>, <span class="key">text</span>:editable.title + <span class="string"><span class="delimiter">&quot;</span><span class="content">:</span><span class="delimiter">&quot;</span></span>}),
+                                textbox({<span class="key">flex</span>:<span class="integer">3</span>,
+                                        <span class="key">multiline</span>:<span class="predefined-constant">false</span>,
+                                        <span class="key">fgcolor</span>:vec4(<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="integer">1</span>),
+                                        <span class="key">paddingleft</span>:<span class="integer">5</span>,
+                                        <span class="key">originalvalue</span>:value,
+                                        <span class="key">editablename</span>:editable.name,
+                                        <span class="key">value</span>:value,
+                                        <span class="function">onfocus</span>: <span class="keyword">function</span>(ev,v,o) {
+                                                <span class="keyword">if</span> (!v &amp;&amp; o._value &amp;&amp; o._value != o._originalvalue) {
+                                                        <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
+                                                        <span class="keyword">if</span> (fg &amp;&amp; fg.sourceset) {
+                                                                <span class="keyword">var</span> editablename = o._editablename;
+                                                                fg.sourceset.fork(<span class="keyword">function</span>(src) {
+                                                                        <span class="keyword">var</span> ast = <span class="keyword">new</span> astscanner(<span class="local-variable">this</span>.nodeprops,[{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Property</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:editablename}])
+                                                                        <span class="keyword">var</span> value;
+                                                                        <span class="keyword">if</span> (ast.atindex &gt; -<span class="integer">1</span> &amp;&amp; ast.atparent &amp;&amp; ast.atparent.keys) {
+                                                                                <span class="keyword">var</span> found = ast.atparent.keys[ast.atindex]
+                                                                                <span class="keyword">if</span> (found &amp;&amp; found.value) {
+                                                                                        value = found.value;
+                                                                                        value.raw = <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span> + o._value + <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>;
+                                                                                        value.value = o._value
+                                                                                }
+                                                                        } <span class="keyword">else</span> {
+                                                                                ast.at.keys.push({
+                                                                                        <span class="key">key</span>:{
+                                                                                                <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Property</span><span class="delimiter">&quot;</span></span>,
+                                                                                                <span class="key">name</span>:editablename
+                                                                                        },
+                                                                                        <span class="key">value</span>:{
+                                                                                                <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>,
+                                                                                                <span class="key">kind</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>,
+                                                                                                <span class="key">raw</span>:<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span> +  o._value + <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>,
+                                                                                                <span class="key">value</span>: o._value
+                                                                                        }})
+                                                                        }
+                                                                }.bind(<span class="local-variable">this</span>))
+                                                        }
+                                                }
+                                        }.bind(<span class="local-variable">this</span>)})));
+                }
+
                 <span class="keyword">return</span> [
-                        view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">header</span><span class="delimiter">'</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
-                                ,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
-                                        ,label({<span class="key">text</span>:<span class="local-variable">this</span>.title,<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>})
-                                        ,button({<span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">pencil</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(e){<span class="local-variable">this</span>.renameBlock(e);}.bind(<span class="local-variable">this</span>)})
+                        view({<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">header</span><span class="delimiter">'</span></span>,<span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
+                                ,view({<span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
+                                        ,label({<span class="key">text</span>: <span class="local-variable">this</span>.title,<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>})
+                                        ,button({
+                                                <span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">pencil</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="function">click</span>: <span class="keyword">function</span>(e){<span class="local-variable">this</span>.renameBlock(e);}.bind(<span class="local-variable">this</span>)})
                                 )
-                                ,button({<span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(e){<span class="local-variable">this</span>.removeBlock(e);}.bind(<span class="local-variable">this</span>)})
+                                ,button({<span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>: <span class="keyword">function</span>(e){<span class="local-variable">this</span>.removeBlock(e);}.bind(<span class="local-variable">this</span>)})
                         )
-                        ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>},
-                                view({<span class="key">bgimage</span>:require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./placeholder.png</span><span class="delimiter">&quot;</span></span>) })
+                        ,view({<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:vec4(<span class="float">0.2</span>,<span class="float">0.3</span>,<span class="float">0.3</span>,<span class="float">0.5</span>)},
+                                editors
                         )
-                        ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">between1</span><span class="delimiter">'</span></span>}
-                                ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>,<span class="function">render</span>: <span class="keyword">function</span>(){<span class="keyword">return</span> <span class="local-variable">this</span>.renderInputs()}.bind(<span class="local-variable">this</span>)}
+                        ,view({<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">between1</span><span class="delimiter">'</span></span>}
+                                ,view({<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>,<span class="function">render</span>: <span class="keyword">function</span>(){<span class="keyword">return</span> <span class="local-variable">this</span>.renderInputs()}.bind(<span class="local-variable">this</span>)}
 
                                 )
-                                ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">between2</span><span class="delimiter">'</span></span>,<span class="function">render</span>: <span class="keyword">function</span>(){<span class="keyword">return</span> <span class="local-variable">this</span>.renderOutputs()}.bind(<span class="local-variable">this</span>)}
+                                ,view({<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">between2</span><span class="delimiter">'</span></span>, <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="function">render</span>: <span class="keyword">function</span>(){<span class="keyword">return</span> <span class="local-variable">this</span>.renderOutputs()}.bind(<span class="local-variable">this</span>)}
 
                                 )
                         )

@@ -254,7 +254,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n100" name="n100">100</a></strong>
 <a href="#n101" name="n101">101</a>
 <a href="#n102" name="n102">102</a>
-<a href="#n103" name="n103">103</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -281,12 +280,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          *
          * Install the foursquare object via 'npm install node-foursquare'.
          */</span>
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>() {
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(clientid, secret) {
                 <span class="keyword">var</span> config = {
                         <span class="key">foursquare</span>: {},
                         <span class="key">secrets</span>: {
-                                <span class="key">clientId</span>: process.env.FOURSQUARE_CLIENT_ID,
-                                <span class="key">clientSecret</span>: process.env.FOURSQUARE_SECRET,
+                                <span class="key">clientId</span>: process.env.FOURSQUARE_CLIENT_ID || clientid,
+                                <span class="key">clientSecret</span>: process.env.FOURSQUARE_SECRET || secret,
                                 <span class="key">redirectUrl</span>: <span class="string"><span class="delimiter">'</span><span class="content">redirect</span><span class="delimiter">'</span></span>
                         }
                 }
@@ -341,7 +340,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="key">url</span>: photoUrl,
                                                 <span class="key">id</span>: venue.id,
                                                 <span class="key">title</span>: venue.name,
-                                                <span class="key">category</span>: venue.categories[<span class="integer">0</span>].name,
                                                 <span class="key">width</span>: <span class="integer">300</span>,
                                                 <span class="key">height</span>: <span class="integer">300</span>,
                                                 <span class="key">latitude</span>: venue.location.lat,

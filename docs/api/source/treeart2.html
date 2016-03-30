@@ -298,6 +298,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n144" name="n144">144</a>
 <a href="#n145" name="n145">145</a>
 <a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -319,6 +320,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 },
                                 <span class="key">hardrect</span>:{
                                         <span class="function">color</span>:<span class="keyword">function</span>(){
+                                                <span class="comment">//return 'red'</span>
                                                 <span class="keyword">if</span>(mesh.depth&gt;<span class="integer">13</span>.){
                                                         <span class="keyword">var</span> len = min(pow(<span class="float">1.5</span>-length(mesh.pos),<span class="integer">8</span>.),<span class="integer">1</span>.)
                                                         <span class="keyword">if</span>(mesh.isberry&gt;<span class="integer">0</span>.){
@@ -355,7 +357,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="comment">// the direction vector is rotated as we go</span>
                                                 <span class="keyword">var</span> dir = vec2(<span class="integer">0</span>,-<span class="float">0.8</span>)
                                                 <span class="comment">// the turbulence factor</span>
-                                                <span class="keyword">var</span> turbulence = <span class="integer">3</span>.
+                                                <span class="keyword">var</span> turbulence =<span class="integer">3</span>.
                                                 <span class="comment">// the depth of the rectangle we are processing</span>
                                                 <span class="keyword">var</span> depth = <span class="reserved">int</span>(mesh.depth)
 
@@ -391,12 +393,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">var</span> vcen = vec2(-<span class="float">.8</span>,-<span class="float">.4</span>)
                                                 <span class="comment">// we are a leaf or berry</span>
                                                 <span class="keyword">if</span>(depth &gt; <span class="integer">13</span>){
-                                                        <span class="keyword">var</span> noise = noise.noise3d(vec3(pos.x*<span class="float">.3</span>,pos.y*<span class="float">.3</span>,<span class="float">0.5</span>*view.time)) * turbulence
+                                                        <span class="keyword">var</span> noise = noise.noise3d(vec3(pos.x*<span class="float">.1</span>,pos.y*<span class="float">.1</span>,<span class="float">0.5</span>*view.time)) * turbulence
                                                         colornoise = noise
                                                         <span class="comment">// only rotate the leaves</span>
 
                                                         <span class="keyword">if</span>(mesh.isberry &gt; <span class="integer">0</span>.){
-                                                                mycolor = <span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>
+                                                                mycolor = <span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>
                                                                 scale *= vec2(<span class="float">0.5</span>,<span class="float">0.5</span>)
                                                         }
                                                         <span class="keyword">else</span>{

@@ -404,6 +404,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n250" name="n250">250</a></strong>
 <a href="#n251" name="n251">251</a>
 <a href="#n252" name="n252">252</a>
+<a href="#n253" name="n253">253</a>
+<a href="#n254" name="n254">254</a>
+<a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -476,7 +482,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 res.push(prom)
                                                 prom.origuid = msg.uid
                                                 msg.uid = prom.uid
-                                                screensock.send(msg)
+                                                screensock.sendJSON(msg)
                                         }
                                 }
                                 <span class="comment">// lets wait for all screens of this name</span>
@@ -517,13 +523,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         })
                                 }
                                 <span class="keyword">else</span>{
-                                        <span class="keyword">if</span>(!define.isSafeJSON(ret)){
-                                                rmsg.error = <span class="string"><span class="delimiter">'</span><span class="content">Result not json safe</span><span class="delimiter">'</span></span>
-                                                rmsg.ret = <span class="predefined-constant">undefined</span>
-                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Rpc result is not json safe </span><span class="delimiter">&quot;</span></span>+msg.rpcid+<span class="string"><span class="delimiter">&quot;</span><span class="content">.</span><span class="delimiter">&quot;</span></span>+msg.method)
-                                        }
+                                        <span class="comment">//if(!define.isSafeJSON(ret)){</span>
+                                        <span class="comment">//        rmsg.error = 'Result not json safe'</span>
+                                        <span class="comment">//        rmsg.ret = undefined</span>
+                                        <span class="comment">//        console.log(&quot;Rpc result is not json safe &quot;+msg.rpcid+&quot;.&quot;+msg.method)</span>
+                                        <span class="comment">//}</span>
                                         resolve(rmsg)
-                                        socket.send(rmsg)
+                                        <span class="comment">//socket.sendJSON(rmsg)</span>
                                 }
                         }
                 }.bind(<span class="local-variable">this</span>))
@@ -538,7 +544,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
 
-        <span class="local-variable">this</span>.<span class="function">setRpcAttribute</span> = <span class="keyword">function</span>(msg, socket){
+        <span class="local-variable">this</span>.<span class="function">setRpcAttribute</span> = <span class="keyword">function</span>(msg, socket, real){
                 <span class="keyword">var</span> parts = msg.rpcid.split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
                 <span class="comment">// keep it around for new joins</span>
                 <span class="local-variable">this</span>.server_attributes[msg.rpcid + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + msg.attribute] = msg
@@ -559,7 +565,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         obj[msg.attribute] = msg.value
                                 }
                         }
+                } <span class="keyword">else</span> <span class="keyword">if</span> (real) { <span class="comment">// write it on the rpc system for local loopback</span>
+                        <span class="keyword">var</span> obj = <span class="local-variable">this</span>.rpc[parts[<span class="integer">0</span>]]
+                        <span class="keyword">var</span> last_set = obj.atAttributeSet
+                        obj.atAttributeSet = <span class="predefined-constant">undefined</span>
+                        obj[msg.attribute] = msg.value
+                        obj.atAttributeSet = last_set
                 }
+                
                 <span class="comment">// lets send this attribute to everyone except socket</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> scrkey <span class="keyword">in</span> <span class="local-variable">this</span>.connected_screens){
                         <span class="keyword">var</span> array = <span class="local-variable">this</span>.connected_screens[scrkey]
@@ -569,7 +582,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">continue</span>
                                 }
                                 <span class="keyword">if</span>(sock.readyState === <span class="integer">1</span>){
-                                        sock.send(msg)
+                                        sock.sendJSON(msg)
                                 }
                         }
                 }
@@ -585,10 +598,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.connected_screens = previous &amp;&amp; previous.connected_screens || {}
                 <span class="local-variable">this</span>.server_attributes = previous &amp;&amp; previous.server_attributes || {}
 
-                bus.broadcast({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">sessionCheck</span><span class="delimiter">'</span></span>, <span class="key">session</span>:<span class="local-variable">this</span>.session})
-
                 bus.<span class="function">atConnect</span> = <span class="keyword">function</span>(socket){
-                        socket.send({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">sessionCheck</span><span class="delimiter">'</span></span>, <span class="key">session</span>:<span class="local-variable">this</span>.session})
+                        socket.sendJSON({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">sessionCheck</span><span class="delimiter">'</span></span>, <span class="key">session</span>:<span class="local-variable">this</span>.session})
                 }.bind(<span class="local-variable">this</span>)
 
                 bus.<span class="function">atClose</span> = <span class="keyword">function</span>(socket){
@@ -615,14 +626,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="comment">// lets let everyone know a new screen joined, for what its worth</span>
                                 <span class="local-variable">this</span>.bus.broadcast({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">connectScreen</span><span class="delimiter">'</span></span>, <span class="key">name</span>:msg.name, <span class="key">index</span>:index}, socket)
                                 <span class="comment">// and send the OK back to the screen</span>
-                                socket.send({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">connectScreenOK</span><span class="delimiter">'</span></span>, <span class="key">attributes</span>:<span class="local-variable">this</span>.server_attributes, <span class="key">index</span>:index})
+                                socket.sendJSON({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">connectScreenOK</span><span class="delimiter">'</span></span>, <span class="key">attributes</span>:<span class="local-variable">this</span>.server_attributes, <span class="key">index</span>:index})
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">attribute</span><span class="delimiter">'</span></span>){
                                 <span class="local-variable">this</span>.setRpcAttribute(msg, socket)
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>){
                                 <span class="local-variable">this</span>.handleRpcMethod(msg).then(<span class="keyword">function</span>(result){
-                                        socket.send(result)
+                                        socket.sendJSON(result)
                                 })
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">return</span><span class="delimiter">'</span></span>){
@@ -638,6 +649,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }.bind(<span class="local-variable">this</span>)
 
+                bus.broadcast({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">sessionCheck</span><span class="delimiter">'</span></span>, <span class="key">session</span>:<span class="local-variable">this</span>.session})
+
                 <span class="local-variable">this</span>.renderComposition()
 
                 <span class="comment">// call init on the classes which are in our environment</span>
@@ -650,7 +663,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(!child.environment || child.environment === define.<span class="predefined">$environment</span>){
                                 <span class="keyword">var</span> init = []
                                 child.connectWires(init)
-
                                 <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; init.length;j++) init[j]()
                                 child.emit(<span class="string"><span class="delimiter">'</span><span class="content">init</span><span class="delimiter">'</span></span>)
                         }

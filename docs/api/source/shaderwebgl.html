@@ -633,6 +633,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n479" name="n479">479</a>
 <strong><a href="#n480" name="n480">480</a></strong>
 <a href="#n481" name="n481">481</a>
+<a href="#n482" name="n482">482</a>
+<a href="#n483" name="n483">483</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -909,7 +911,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
                 gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
-                <span class="keyword">if</span>(TEXTURE_ID &gt; <span class="integer">0</span>)<span class="reserved">debugger</span>
                 TEXTURE_END
 
                 <span class="comment">// attributes</span>
@@ -922,11 +923,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         lastbuf = buf
                         <span class="keyword">if</span>(buf.length &gt; len) len = buf.length
                         <span class="keyword">if</span>(len === <span class="integer">0</span>) <span class="keyword">return</span> <span class="integer">0</span>
-                        <span class="keyword">if</span>(!buf.glvb) buf.glvb = gl.createBuffer()
+                        <span class="keyword">if</span>(!buf.glvb){
+                                buf.glvb = gl.createBuffer()
+                                buf.clean = <span class="predefined-constant">false</span>
+                        }
                         gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
                         <span class="keyword">if</span>(!buf.clean){
                                 <span class="keyword">var</span> dt = Date.now()
-                                gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STREAM_DRAW)
+                                gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
                                 buf.clean = <span class="predefined-constant">true</span>
                         }
                 }
