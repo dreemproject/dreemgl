@@ -1235,7 +1235,7 @@ define.class('$system/base/node', function(require){
 	this.relayout
 
 	this.translate =
-	this.scale =	
+	this.scale =
 	this.rotate = this.rematrix
 
 	// internal, called by the render engine
@@ -1441,7 +1441,13 @@ define.class('$system/base/node', function(require){
 				return view.bgcolor;
 			}
 			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
-			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
+			var cola = col.a;
+			if (cola < 1.0) {
+				col = mix(view.bgcolor, col, cola)
+				cola = 1.0
+			}
+
+			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], cola * view.opacity * view.colorfilter[3])
 		}
 	})
 
