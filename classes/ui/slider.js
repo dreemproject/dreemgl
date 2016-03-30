@@ -17,6 +17,9 @@ define.class("$ui/view", function($ui$, view, icon) {
 		// The current value, between 0.0 ~ 1.0
 		value:Config({value:0.5, persist:true}),
 
+		// The size of each step between 0 ~ 1, e.g. 0.01 would create 100 discrete steps.  The value of Infinity indicates a continuum.
+		step:Config({value:Infinity}),
+
 		// Minimum value allowed, for restricting slider range
 		minvalue:Config({value:0.0}),
 
@@ -50,7 +53,86 @@ define.class("$ui/view", function($ui$, view, icon) {
 		return bgcolor;
 	};
 
-	this.pointermove = this.pointerend = function(ev) {
+	this.keydown = function(ev, v, o) {
+		var value;
+		if (ev.name === "rightarrow") {
+			if (this.step !== Infinity) {
+				value = this._value + this._step
+			} else {
+				if (this._horizontal) {
+					value = this._value + 1.0 / this._layout.width;
+				} else {
+					value = this._value + 1.0 / this._layout.height;
+				}
+			}
+		} else if (ev.name === "leftarrow") {
+			if (this.step !== Infinity) {
+				value = this._value - this._step
+			} else {
+				if (this._horizontal) {
+					value = this._value - 1.0 / this.width;
+				} else {
+					value = this._value - 1.0 / this.height;
+				}
+			}
+		}
+
+		if (typeof(value) !== "undefined") {
+			value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+
+			value = this.stepValue(value)
+
+			this.setHandle(value)
+
+			if (this._value !== value) {
+				this.value = value
+			}
+		}
+
+
+	}
+
+	this.stepValue = function(value) {
+		if (this._step !== Infinity) {
+			var size = Math.round(value / this._step)
+			value = size * this._step
+		}
+		return value;
+	}
+
+	this.pointerstart = this.pointermove = function(ev) {
+		this.focus = true;
+		var pos = this.globalToLocal(ev.position);
+		var value;
+		if (this._horizontal) {
+			value = pos.x / this.width;
+		} else {
+			value = pos.y / this.height;
+		}
+
+		value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+
+		this.setHandle(value)
+
+		value = this.stepValue(value)
+
+		this.value = value
+	};
+
+	this.setHandle = function(value) {
+		for (var i=0;i<this.handlechildren.length;i++) {
+			var child = this.handlechildren[i];
+			if (this.horizontal) {
+				child.x = this.width * value - child.width * 0.5;
+				child.y = this.height * 0.5 - child.height * 0.5;
+			} else {
+				child.y = this.height * value - child.height * 0.5;
+				child.x = this.width * 0.5 - child.width * 0.5;
+			}
+		}
+	}
+
+	this.pointerend = function(ev) {
 		var pos = this.globalToLocal(ev.position);
 		var value;
 		if (this.horizontal) {
@@ -58,11 +140,19 @@ define.class("$ui/view", function($ui$, view, icon) {
 		} else {
 			value = pos.y / this.height;
 		}
-		this.value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+
+		value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+
+		value = this.stepValue(value)
+
+		this.setHandle(value)
+
+		this.value = value
 	};
 
 	this.onvalue = function(ev,v,o) {
 		var value = Math.max(this.minvalue, Math.min(this.maxvalue, v));
+
 		if (value != this.value) {
 			this.value = value;
 		} else {
@@ -73,22 +163,22 @@ define.class("$ui/view", function($ui$, view, icon) {
 	this.render = function() {
 		var views = [];
 
-		var cchildren = this.constructor_children;
+		this.handlechildren = this.constructor_children;
 
-		if (!cchildren.length
+		if (!this.handlechildren.length
 			&& ((this.horizontal && this.height <= this.minhandlethreshold)
 			|| (!this.horizontal && this.width <= this.minhandlethreshold))) {
-			cchildren = [this.handle()]
+			this.handlechildren = [this.handle()]
 		}
 
-		for (var i=0;i<cchildren.length;i++) {
-			var child = cchildren[i];
+		for (var i=0;i<this.handlechildren.length;i++) {
+			var child = this.handlechildren[i];
 			child.position = "absolute";
 			if (this.horizontal) {
-				child.x = this.width * this.value - child.width * 0.5;
+				child.x = this.width * this._value - child.width * 0.5;
 				child.y = this.height * 0.5 - child.height * 0.5;
 			} else {
-				child.y = this.height * this.value - child.height * 0.5;
+				child.y = this.height * this._value - child.height * 0.5;
 				child.x = this.width * 0.5 - child.width * 0.5;
 			}
 			views.push(child);

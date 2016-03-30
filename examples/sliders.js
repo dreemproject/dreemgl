@@ -29,7 +29,7 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 							}),
 							slider({
 								flex:0,
-								width:400,
+								width:300,
 								minhandlethreshold:26,
 								height:5,
 								value:0.1,
@@ -52,12 +52,39 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 						),
 						view({flexdirection:"column"},
 							label({
+								text:"Step Usage",
+								marginbottom:30
+							}),
+							slider({
+								flex:0,
+								width:300,
+								height:10,
+								value:0.2,
+								step:0.2,
+								bgcolor:"green",
+								fgcolor:"white",
+								onvalue:function(ev,v,o) {
+									var current = this.find("current");
+									if (current) {
+										current.text = "The current value is: " + this._value.toFixed(1)
+									}
+								}
+							}),
+							label({
+								name:"current",
+								margintop:30,
+								fontsize:12,
+								text:"The current value is: 0.2"
+							})
+						),
+						view({flexdirection:"column"},
+							label({
 								text:"Custom Handle w/Image",
 								marginbottom:30
 							}),
 							slider({
 								flex:0,
-								width: 400,
+								width: 300,
 								height: 5,
 								bgcolor: vec4(1,1,1,0.2),
 								fgcolor: "white",
