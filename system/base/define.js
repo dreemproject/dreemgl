@@ -1264,7 +1264,7 @@
 							define.showException(exception)
 						})
 					}
-					else if (old_module){
+					else {//if (old_module){
 						//alert('filechange!' + msg.file)
 						console.clear()
 						location.href = location.href  // reload on filechange
