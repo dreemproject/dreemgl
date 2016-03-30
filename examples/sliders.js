@@ -38,7 +38,7 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 								onvalue:function(ev,v,o) {
 									var current = this.find("current");
 									if (current) {
-										current.text = "The current value is: " + v
+										current.text = "The current value is: " + v.toFixed(4)
 									}
 									this.height = 5 + 30 * v
 								}
@@ -52,7 +52,7 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 						),
 						view({flexdirection:"column"},
 							label({
-								text:"Step Usage",
+								text:"Step Usage w/range bet 100 ~ 600",
 								marginbottom:30
 							}),
 							slider({
@@ -63,10 +63,17 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 								step:0.2,
 								bgcolor:"green",
 								fgcolor:"white",
+								range:vec2(100,600),
+								onrangevalue:function(ev,v,o) {
+									var current = this.find("currentrange");
+									if (current) {
+										current.text = "The current range value is: " + v.toFixed(0)
+									}
+								},
 								onvalue:function(ev,v,o) {
 									var current = this.find("current");
 									if (current) {
-										current.text = "The current value is: " + this._value.toFixed(1)
+										current.text = "The current value is: " + v.toFixed(1)
 									}
 								}
 							}),
@@ -75,6 +82,12 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 								margintop:30,
 								fontsize:12,
 								text:"The current value is: 0.2"
+							}),
+							label({
+								name:"currentrange",
+								margintop:5,
+								fontsize:12,
+								text:"The current range value is: 200"
 							})
 						),
 						view({flexdirection:"column"},
@@ -93,7 +106,7 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 								onvalue:function(ev,v,o) {
 									var current = this.find("current");
 									if (current) {
-										current.text = "The current value is: " + v
+										current.text = "The current value is: " + v.toFixed(3)
 									}
 									var handle = this.find("handle")
 									if (handle) {

@@ -26,6 +26,12 @@ define.class("$ui/view", function($ui$, view, icon) {
 		// Maximum value allowed, for restricting slider range
 		maxvalue:Config({value:1.0}),
 
+		// The interpolated range of the slider between min and max value
+		range:Config({value:vec2(0, 100)}),
+
+		// The current interpolated value, between range[0] and range[1]
+		rangevalue:Config({value:50, persist:true}),
+
 		// Horizontal or vertical arrangement
 		horizontal:true,
 
@@ -89,7 +95,6 @@ define.class("$ui/view", function($ui$, view, icon) {
 			}
 		}
 
-
 	}
 
 	this.stepValue = function(value) {
@@ -105,12 +110,12 @@ define.class("$ui/view", function($ui$, view, icon) {
 		var pos = this.globalToLocal(ev.position);
 		var value;
 		if (this._horizontal) {
-			value = pos.x / this.width;
+			value = pos.x / this._layout.width;
 		} else {
-			value = pos.y / this.height;
+			value = pos.y / this._layout.height;
 		}
 
-		value = Math.max(this.minvalue, Math.min(this._maxvalue, value));
+		value = Math.max(this._minvalue, Math.min(this._maxvalue, value));
 
 		this.setHandle(value)
 
@@ -123,11 +128,11 @@ define.class("$ui/view", function($ui$, view, icon) {
 		for (var i=0;i<this.handlechildren.length;i++) {
 			var child = this.handlechildren[i];
 			if (this.horizontal) {
-				child.x = this.width * value - child.width * 0.5;
-				child.y = this.height * 0.5 - child.height * 0.5;
+				child.x = this._layout.width * value - child.width * 0.5;
+				child.y = this._layout.height * 0.5 - child.height * 0.5;
 			} else {
-				child.y = this.height * value - child.height * 0.5;
-				child.x = this.width * 0.5 - child.width * 0.5;
+				child.y = this._layout.height * value - child.height * 0.5;
+				child.x = this._layout.width * 0.5 - child.width * 0.5;
 			}
 		}
 	}
@@ -135,13 +140,13 @@ define.class("$ui/view", function($ui$, view, icon) {
 	this.pointerend = function(ev) {
 		var pos = this.globalToLocal(ev.position);
 		var value;
-		if (this.horizontal) {
-			value = pos.x / this.width;
+		if (this._horizontal) {
+			value = pos.x / this._layout.width;
 		} else {
-			value = pos.y / this.height;
+			value = pos.y / this._layout.height;
 		}
 
-		value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+		value = Math.max(this._minvalue, Math.min(this._maxvalue, value));
 
 		value = this.stepValue(value)
 
@@ -151,7 +156,11 @@ define.class("$ui/view", function($ui$, view, icon) {
 	};
 
 	this.onvalue = function(ev,v,o) {
-		var value = Math.max(this.minvalue, Math.min(this.maxvalue, v));
+		var value = Math.max(this._minvalue, Math.min(this._maxvalue, v));
+
+		var range = this._range;
+		var distance = range[1] - range[0];
+		this.rangevalue = (distance * value) + range[0]
 
 		if (value != this.value) {
 			this.value = value;
@@ -166,8 +175,8 @@ define.class("$ui/view", function($ui$, view, icon) {
 		this.handlechildren = this.constructor_children;
 
 		if (!this.handlechildren.length
-			&& ((this.horizontal && this.height <= this.minhandlethreshold)
-			|| (!this.horizontal && this.width <= this.minhandlethreshold))) {
+			&& ((this._horizontal && this.height <= this.minhandlethreshold)
+			|| (!this._horizontal && this.width <= this._minhandlethreshold))) {
 			this.handlechildren = [this.handle()]
 		}
 
