@@ -73,6 +73,7 @@ function main(){
 		console.color('~bc~-path~~ [name]:~br~[directory]~~ add a path to the server under name $name\n')
 		console.color('~bc~-dali~~ run a composition in DALi\n')
 		console.color('~bc~-dalilib~~ can be used to point to the DALi node-addon installation folder on Ubuntu (only to be used in combination with the ~bc~-dali~~ flag)\n')
+		console.color('~bc~-writefile ~~ Allow server to write files to disk\n')
 		return process.exit(0)
 	}
 

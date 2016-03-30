@@ -35,8 +35,8 @@ define.class("$server/composition",function(require,$ui$,icon,button,checkbox,la
               rem.opacity=v?0:1.0
             }
           },
-          x:758,
-          y:73.0000228881836,
+          x:859,
+          y:38.000022888183594,
           width:300,
           height:774,
           visible:true
