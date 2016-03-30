@@ -56,6 +56,7 @@ define.class('$system/base/node', function(require){
 		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"stretch"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
+		bgimagealign: Config({group:"style", type:Enum("none", "center", "start", "end", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"none"}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: NaN, meta:"color"}),
@@ -1468,19 +1469,88 @@ define.class('$system/base/node', function(require){
 					aspect = this._layout.width / this._layout.height;
 				}
 				var ratio = imgw / imgh / aspect;
+				var rx, ry, fitsize, target, offset;
 				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
 					this.bgimageaspect = vec2(1.0,1.0);
 				} else if (this.bgimagemode === "aspect-fit") {
+					if (uselayout) {
+						rx = this._layout.width / imgw;
+						ry = this._layout.height / imgh;
+					} else {
+						rx = this._width / imgw;
+						ry = this._height / imgh;
+					}
+
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
 						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+
+						if (this._bgimagealign !== "none") {
+							fitsize = imgw * ry;
+							if (this._bgimagealign === "center" || this._bgimagealign === "top" || this._bgimagealign === "bottom") {
+								target = this._layout.width * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "right" || this._bgimagealign === "top-right" || this._bgimagealign === "bottom-right") {
+								target = this._layout.width - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "left" || this._bgimagealign === "top-left" || this._bgimagealign === "bottom-left") {
+								target = 0
+							}
+							offset = target / fitsize;
+							this.bgimageoffset = vec2(-offset, 0);
+						}
+
 					} else {
 						this.bgimageaspect = vec2(1.0, ratio);
+
+						if (this._bgimagealign !== "none") {
+							fitsize = imgh * rx;
+							if (this._bgimagealign === "center" || this._bgimagealign === "left" || this._bgimagealign === "right") {
+								target = this._layout.height * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "bottom" || this._bgimagealign === "bottom-right" || this._bgimagealign === "bottom-left") {
+								target = this._layout.height - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "top" || this._bgimagealign === "top-right" || this._bgimagealign === "top-left") {
+								target = 0
+							}
+							offset = target / fitsize;
+							this.bgimageoffset = vec2(0, -offset);
+						}
 					}
 				} else if (this.bgimagemode === "aspect-fill") {
+
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
 						this.bgimageaspect = vec2(1.0, ratio);
+
+
+						if (this._bgimagealign !== "none") {
+							fitsize = imgh * (this._layout.width / imgw);
+							if (this._bgimagealign === "center" || this._bgimagealign === "left" || this._bgimagealign === "right") {
+								target = this._layout.height * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "bottom" || this._bgimagealign === "bottom-left" || this._bgimagealign === "bottom-right") {
+								target = this._layout.height - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "top" || this._bgimagealign === "top-left" || this._bgimagealign === "top-right") {
+								target = 0;
+							}
+							if (target) {
+								offset = target / fitsize;
+								this.bgimageoffset = vec2(0, -offset);
+							}
+						}
+
 					} else {
 						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+
+						if (this._bgimagealign !== "none") {
+							fitsize = imgw * (this._layout.height / imgh);
+							if (this._bgimagealign === "center" || this._bgimagealign === "top" || this._bgimagealign === "bottom") {
+								target = this._layout.width * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "right" || this._bgimagealign === "bottom-right" || this._bgimagealign === "top-right") {
+								target = this._layout.width - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "left" || this._bgimagealign === "bottom-left" || this._bgimagealign === "top-left") {
+								target = 0;
+							}
+							if (target) {
+								offset = target / fitsize;
+								this.bgimageoffset = vec2(-offset, 0);
+							}
+						}
 					}
 				} else if (this.bgimagemode === "center"
 					|| this.bgimagemode === "left"
@@ -1492,7 +1562,6 @@ define.class('$system/base/node', function(require){
 					|| this.bgimagemode === "bottom-left"
 					|| this.bgimagemode === "bottom-right") {
 
-					var rx, ry;
 					if (uselayout) {
 						rx = this._layout.width / imgw;
 						ry = this._layout.height / imgh;
