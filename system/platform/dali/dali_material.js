@@ -65,6 +65,12 @@ define.class(function(require, exports){
 			console.log('DALICODE: var texid = ' + this.name() + '.addTexture(texture' + texture.id + ', \'' + name + '\', sampler' + this.id + ');');
 		}
 
+		// We currently have one texture per material. Delete existing textures
+		while (this.dalimaterial.getNumberOfTextures() > 0) {
+			// console.log('Removing texture', this.id);
+			this.removeTexture(0);
+		}
+
 		return this.dalimaterial.addTexture(texture.image, name, sampler);
 	}
 
