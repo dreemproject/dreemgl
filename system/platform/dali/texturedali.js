@@ -5,14 +5,6 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 
-// "Image"-like class for Dali. Dali expects to load the images so retain a
-// path to the file. Texture.Image is another name for this class.
-function DaliImage(path) 
-{
-	this.path = path;
-}
-
-
 define.class('$system/base/texture', function(require, exports){
 	// internal, DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
@@ -20,7 +12,11 @@ define.class('$system/base/texture', function(require, exports){
 	var Texture = exports
 
 	Texture.GlobalId = 0
-	Texture.Image = DaliImage;
+
+	Texture.Image = function(path) {
+		//console.log('setting path to ', path);
+		this.path = path;
+	}
 
 	// Map hash of texture to an existing texture
 	Texture.Cache = {};
@@ -53,6 +49,7 @@ define.class('$system/base/texture', function(require, exports){
 		var img = new dali.ResourceImage({url: path});
 
 		var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight())
+		tex.path = path;
 		tex.image = img
 
 		if (DaliApi.emitcode) {
@@ -64,10 +61,14 @@ define.class('$system/base/texture', function(require, exports){
 
 
 	// Load texture from a local file or remote url.
-	// imagedata is an instance of DaliImage.
+	// If imagedata is a texture, it is returned immediately.
 	// If the image is loaded remotely, the callback function is called when
 	// the texture is loaded.
 	Texture.fromImage = function(imagedata, callback){
+		// Return immediately if a texture was specified
+		if (imagedata.image || imagedata.array)
+			return imagedata;
+
 		var dali = DaliApi.dali;		
 
 		// With dali, the references should either be absolute, or relative
