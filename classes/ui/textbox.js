@@ -19,12 +19,36 @@ define.class("$ui/label", function(require){
 		value: Config({type:String, value:""}),
 		readonly:false,
 		focusselect:true,
-		multiline:true
+		multiline:true,
+		cursorrect:vec4(),
+		cursorscrollindent:30
 	}
 
 	this.bgcolor = "transparent";
 	this.pickalpha = -1;
 	this.markercolor = this.markerunfocus
+
+	this.oncursorrect = function(ev,v,o) {
+		if (this._overflow !== "hidden" && this._overflow !== "scroll") {
+			return
+		}
+
+		var px = v[0] - this.scroll[0]
+		var past = px - this.width
+		if (past > 0) {
+			setTimeout(function(){
+				o.scroll = vec2(o.scroll[0] + past + o.cursorscrollindent, o.scroll[1])
+				o.redraw()
+			},0)
+		} else if (px < 0) {
+			setTimeout(function(){
+				o.scroll = vec2(Math.max(0, o.scroll[0] + px - o.cursorscrollindent), o.scroll[1])
+				o.redraw()
+			},0)
+		}
+
+
+	}
 
 	define.class(this, 'cursors', require('$system/typeface/cursorshader.js'), function(){
 		this.updateorder = 5
@@ -38,7 +62,11 @@ define.class("$ui/label", function(require){
 			if(view.cursors.fusing) view.cursors.fuse()
 			for(var list = view.cursorset.list, i = 0; i < list.length; i++){
 				var cursor = list[i]
-				this.mesh.addCursor(view.textbuf, cursor.end)
+				var end = cursor.end
+				var texbuf = view.textbuf
+				var pos = texbuf.cursorRect(end)
+				view.cursorrect = vec4(pos.x, pos.y, pos.w, pos.h)
+				this.mesh.addCursor(texbuf, end)
 			}
 		}
 	})

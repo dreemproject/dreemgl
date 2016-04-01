@@ -1563,7 +1563,7 @@
 				if(ext !== '' && ext !== 'js'){
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
-						if(define.loadImage) return define.loadImage(name)
+						if(define.loadImage) return define.loadImage(full_name)
 						return undefined
 					}
 					else{

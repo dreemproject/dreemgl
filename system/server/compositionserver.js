@@ -169,7 +169,8 @@ define.class(function(require){
 			'		 require(modules[0])\n'+
 			'		 var Composition = require(modules[1])\n'+
 			'		 var serverattrs = ' + JSON.stringify(preloadattrs) + '\n'+
-			'        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs)\n'+
+			'		 var renderTarget;' + '\n'+
+			'        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs, renderTarget)\n'+
 			'      },\n'+
 			'	   atEnd:function(){\n'+
 			'         define.startLoader()\n'+

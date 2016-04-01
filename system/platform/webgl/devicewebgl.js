@@ -23,7 +23,7 @@ define.class(function(require, exports){
 	this.window =
 	this.document = typeof window !== 'undefined'?window : null
 
-	this.atConstructor = function(previous){
+	this.atConstructor = function(previous, canvas){
 
 		this.extensions = previous && previous.extensions || {}
 		this.shadercache = previous &&  previous.shadercache || {}
@@ -62,7 +62,7 @@ define.class(function(require, exports){
 			this.midi = new this.Midi(this)
 			this.drawtarget_pools = {}
 
-			this.createContext()
+			this.createContext(canvas)
 			this.createWakeupWatcher()
 		}
 
@@ -82,12 +82,20 @@ define.class(function(require, exports){
 		}.bind(this), 200)
 	}
 
-	this.createContext = function(){
+	this.createContext = function(canvas){
 		if(!this.parent) this.parent = document.body
 
-		this.canvas = document.createElement("canvas")
-		this.canvas.className = 'unselectable'
-		this.parent.appendChild(this.canvas)
+		if (canvas) {
+			if (typeof(canvas) === "string") {
+				canvas = document.getElementById(canvas)
+			}
+			this.canvas = canvas
+			this.canvas.className = 'unselectable'
+		} else {
+			this.canvas = document.createElement("canvas")
+			this.canvas.className = 'unselectable'
+			this.parent.appendChild(this.canvas)
+		}
 
 		var options = {
 			alpha: this.frame.type.indexOf('rgba') != -1,
