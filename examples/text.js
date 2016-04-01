@@ -40,7 +40,7 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 								paddingleft:10,
 								fgcolor:"black",
 								bgcolor:"white",
-								value:"Multuline\ntext\nfield",
+								value:"Multiline\ntext\nfield\nMultiline text\nfield\ntext\nMultiline field\ntext\nMultiline field text\nfield",
 								multiline:true
 							}),
 							textbox({

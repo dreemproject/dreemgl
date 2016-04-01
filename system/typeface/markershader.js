@@ -83,10 +83,11 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 					}
 
 					var prev = array[array.length -1]
-					if (abs(lasty-r.y) > 1e-4) {
+					if (lasty < r.y) {
 						var coords= textbuf.charCoords(last - 2)
 						if (prev) {
 							prev.w = coords.x
+							prev.x2 = prev.x + prev.w
 						}
 					}
 					lasty = r.y
