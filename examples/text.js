@@ -34,7 +34,7 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 								bordercolor:"white",
 								fgcolor:"black",
 								cursorcolor:"red",
-								value:"Text field"
+								value:"Text field without fixed size (expands)"
 							}),
 							textbox({
 								paddingleft:10,
@@ -43,6 +43,36 @@ define.class("$server/composition",function(require, $ui$, screen, cadgrid, view
 								value:"Multiline\ntext\nfield\nMultiline text\nfield\ntext\nMultiline field\ntext\nMultiline field text\nfield",
 								multiline:true
 							}),
+							view({
+								flexdirection:"column"
+							},
+								label({text:"With overflow='hidden':"}),
+								textbox({
+									borderwidth:1,
+									paddingleft:10,
+									bordercolor:"white",
+									fgcolor:"white",
+									flex:1,
+									width:100,
+									bgcolor:vec4(0.7,0.7,0.7,0.7),
+									overflow:"hidden",
+									cursorcolor:"red",
+									value:"Fixed size text field with overflow hidden",
+									marginbottom:10,
+									margintop:10
+								}),
+								textbox({
+									borderwidth:1,
+									paddingleft:10,
+									bordercolor:"white",
+									fgcolor:"white",
+									bgcolor:vec3(0.7,0.7,0.7),
+									flex:1,
+									width:100,
+									cursorcolor:"red",
+									value:"Fixed size without overflow:hidden"
+								})
+							),
 							textbox({
 								borderwidth:1,
 								paddingleft:10,
