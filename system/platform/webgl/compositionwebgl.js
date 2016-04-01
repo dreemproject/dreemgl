@@ -11,7 +11,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var WebRTC = require('$system/rpc/webrtc')
 	var BusClient = require('$system/rpc/busclient')
 
-	this.atConstructor = function(previous, parent, precached){
+	this.atConstructor = function(previous, parent, precached, canvas){
 		window.composition = this
 		if(previous){
 			this.reload = (previous.reload || 0) + 1
@@ -21,7 +21,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 		}
 		else{
 			// lets spawn up a webGL device
-			this.device = new Device()
+			this.device = new Device(undefined, canvas)
 		}
 
 		baseclass.atConstructor.call(this, previous, parent, precached)
