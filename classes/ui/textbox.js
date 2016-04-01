@@ -29,7 +29,7 @@ define.class("$ui/label", function(require){
 	this.markercolor = this.markerunfocus
 
 	this.oncursorrect = function(ev,v,o) {
-		if (this._overflow !== "hidden") {
+		if (this._overflow !== "hidden" && this._overflow !== "scroll") {
 			return
 		}
 
