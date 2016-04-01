@@ -86,7 +86,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 					if (lasty < r.y) {
 						var coords= textbuf.charCoords(last - 2)
 						if (prev) {
-							prev.w = coords.x
+							prev.w = (coords.x + coords.w) - prev.x
 							prev.x2 = prev.x + prev.w
 						}
 					}
