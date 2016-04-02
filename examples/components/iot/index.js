@@ -35,37 +35,20 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 							console.log("Base has lights:", things)
 
-							for (var uid in things) {
-								console('thing', things[uid])
+							for (var i = 0; i < things.length; i++) {
+								var thingie = things[i];
+								if (thingie) {
+								  console.log('thing', thingie);
+								}
 							}
 
-							lights.push(view({
-								visible:this.rpc.iot.linkalert,
-								position:"absolute",
-								x:200,
-								y:100,
-								width:300,
-								height:300,
-								borderradius:30,
-								bgcolor:"white",
-								flexdirection:"column",
-								justifycontent:"center",
-								alignitems:"center"
-							},
-								view({alignitems:"center"},icon({fontsize:40, marginright:20, fgcolor:"cornflowerblue", icon:"link"}),label({fontsize:30, fgcolor:"#888", text:"Missing Link!"})),
-								label({
-									padding:20,
-									marginleft:20,
-									fgcolor:"#888",
-						    		text:"Press the Link button on top\nof your base station and then\n quickly press this button:"
-								}),
+							lights.push(
 								button({
 									text:"Link To Basestation",
 									click:function() {
-										this.rpc.iot.linkalert = false;
 										this.rerender();
 									}.bind(this)
-								}))
+								})
 							);
 
 							return lights;

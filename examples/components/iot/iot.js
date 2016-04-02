@@ -6,17 +6,24 @@
 
 define.class("$server/service", function() {
 
+	this.attributes = {
+		things: Config({type: Array, flow: 'out'}),
+		thing: Config({type: Object, flow: 'out'})
+	}
+
 	this.things = [];
+	this.thing = null;
 
 	this.init = function() {
 		this.iotdb = require("iotdb");
 
 		if (this.iotdb) {
 			this.things = this.iotdb.connect();
+			// console.log(this.things);
 
-			this.things.on("thing", function(things) {
+			this.things.on("thing", function(thing) {
 				// these things should be rendered somehow
-				this.things = things;
+				this.thing = thing;
 			}.bind(this));
 		}
 
