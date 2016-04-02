@@ -3,9 +3,12 @@
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
+
 "use strict"
-define.class('$system/base/node', function(require){
+
 // Base UI view object
+
+define.class('$system/base/node', function(require){
 
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
@@ -308,7 +311,7 @@ define.class('$system/base/node', function(require){
 	// the normal matrix contains the transform without translate (for normals)
 	this.normalmatrix = mat4.identity()
 	// the remap matrix used to remap pointer vec2 to local space
-	this.remapmatrix = mat4();
+	this.remapmatrix = mat4()
 
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
@@ -464,26 +467,20 @@ define.class('$system/base/node', function(require){
 			if(!enable) continue
 			var shader = this[key]
 			if(shader){
-				//var shname = key + 'shader'
-				//console.log(shname)
-
 				var prevshader = prev && prev.shaders && prev.shaders[key]
 				var shobj
 				// ok so instead of comparing constructor, lets compare the computational result
-//				if(prevshader && prevshader.constructor !== shader) console.log(shader)
 				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
 					shobj = prevshader
 					Object.defineProperty(shobj, 'constructor',{value:shader, configurable:true})
-					//shobj.constructor = shader
+
 					shobj.view = this
 					shobj.outer = this
+
 					// ok now check if we need to dirty it
-
 					if(shobj._view_listeners) for(var shkey in shobj._view_listeners){
-
 						this.addListener(shkey, shobj.reupdate.bind(shobj))
 						var value = this[shkey]
-
 						if(!(value && value.struct && value.struct.equals(value, prev[shkey]) || value === prev[shkey])){
 							shobj.reupdate(shkey)
 						}
@@ -493,7 +490,6 @@ define.class('$system/base/node', function(require){
 				else{
 					shobj = new shader(this)
 				}
-				//this[shname] = shobj
 				shobj.shadername = key
 				this.shaders[key] = shobj
 				this.shader_list.push(shobj)
@@ -504,10 +500,6 @@ define.class('$system/base/node', function(require){
 			this.onbgimage()
 		}
 
-		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
-		//	console.log(this.shader_order)
-		//}
-
 		if(this._viewport){
 			for(var key in this.shaders){
 				var shader = this.shaders[key]
@@ -517,7 +509,6 @@ define.class('$system/base/node', function(require){
 			}
 			this.shaders.viewportblend = new this.viewportblend(this)
 		}
-
 		this.sortShaders()
 	}
 
@@ -585,7 +576,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-
 	// image can be an image, or a Texture (has array property).
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
@@ -594,10 +584,8 @@ define.class('$system/base/node', function(require){
 		// Callback method to update the bgimage. Some platforms support a
 		// second argument to Texture.fromImage for delayed loading
 		var update = function(img) {
-			if (!img)
-				return;
-
-			shader.texture = img;
+			if (!img) return
+			shader.texture = img
 			if(this.bgimagemode === "resize"){
 				this._size = img.size
 				this.relayout()
@@ -607,7 +595,7 @@ define.class('$system/base/node', function(require){
 			else this.redraw()
 		}.bind(this)
 
-		update((image.array) ? image : Shader.Texture.fromImage(image, update));
+		update((image.array) ? image : Shader.Texture.fromImage(image, update))
 	}
 
 	// internal, emit an event upward (to all parents) untill a listener is hit
@@ -643,30 +631,24 @@ define.class('$system/base/node', function(require){
 		this.shader_draw_list = this.shader_list.slice(0).sort(function(a, b){
 			return shaders[a.shadername].draworder > shaders[b.shadername].draworder
 		}.bind(this))
-
 		this.shader_update_list = this.shader_list.slice(0).sort(function(a, b){
 			return shaders[a.shadername].updateorder > shaders[b.shadername].updateorder
 		}.bind(this))
-		//console.log(this.shader_draw_list)
 	}
 
 	// internal, custom hook in the inner class assignment to handle nested shaders specifically
 	this.atInnerClassAssign = function(key, value){
-
 		if(!this.hasOwnProperty('shader_enable')) this.shader_enable = Object.create(this.shader_enable || {})
-
 		// set the shader order
 		if(!value || typeof value === 'number' || typeof value === 'boolean'){
 			this.shader_enable[key] = value? true: false
 			return
 		}
-
 		// its a class assignment
 		if(typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
 			this['_' + key] = value
 			return
 		}
-
 		// its inheritance
 		var cls = this['_' + key]
 		this['_' + key] = cls.extend(value, this)
@@ -797,10 +779,10 @@ define.class('$system/base/node', function(require){
 				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 				raystart = vec3.mul_mat4(raystart, transtemp2)
 
-				lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
-				lastprojection = P.colormatrices.perspectivematrix;
-				lastviewmatrix = P.colormatrices.lookatmatrix;
-				camerapos = P._camera;
+				lastrayafteradjust = vec3(raystart.x, raystart.y,-1)
+				lastprojection = P.colormatrices.perspectivematrix
+				lastviewmatrix = P.colormatrices.lookatmatrix
+				camerapos = P._camera
 
 			}
 
@@ -1076,7 +1058,7 @@ define.class('$system/base/node', function(require){
 		if (parentviewport === '3d'){
 			matrix_changed = true
 			if(this._scale && this._anchor && this._rotate && this._pos){
-				mat4.TSRT2(this._anchor, this._scale, this._rotate, this._pos, this.modelmatrix);
+				mat4.TSRT2(this._anchor, this._scale, this._rotate, this._pos, this.modelmatrix)
 			}
 			else mat4.identity(this.modelmatrix)
 		}
@@ -1108,7 +1090,7 @@ define.class('$system/base/node', function(require){
 				//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
 				var hw = layout.width / 2
 				var hh = layout.height / 2
-				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
+				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix)
 			}
 			else {
 				matrix_changed = true
@@ -1117,7 +1099,7 @@ define.class('$system/base/node', function(require){
 				var t = this._translate
 				var hw = this._size[0] / 2
 				var hh = this._size[1] / 2
-				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t[0] + hw * s[0], t[1] + hh * s[1], t[2], this.modelmatrix);
+				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t[0] + hw * s[0], t[1] + hh * s[1], t[2], this.modelmatrix)
 			}
 		}
 
@@ -1191,7 +1173,7 @@ define.class('$system/base/node', function(require){
 	this.relayoutRecur = function(source){
 		this.layout_dirty = true
 		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
-		for(var i = 0;i < this.child_viewport_list.length;i++){
+		for(var i = 0; i < this.child_viewport_list.length; i++){
 			var child = this.child_viewport_list[i]
 			//if(child._overflow) continue
 			if(child !== source){
@@ -1263,10 +1245,10 @@ define.class('$system/base/node', function(require){
 			var flex = this._flex
 			var size = this._size
 
-			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
-			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
+			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0]
+			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1]
 
-			//console.log(this._percentsize, presizex,presizey);
+			//console.log(this._percentsize, presizex,presizey)
 			//this._size = vec2(layout.width, layout.height)
 
 			var flexwrap = this._flexwrap
@@ -1279,7 +1261,6 @@ define.class('$system/base/node', function(require){
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
 
-			//this.sublayout = this.layout
 			this._flex = flex
 			this._size = size
 			this._flexwrap = flexwrap
@@ -1291,23 +1272,23 @@ define.class('$system/base/node', function(require){
 
 			//this._size = vec2(presizex, presizey)
 			var size = this._size
-			var pos = this._pos;
+			var pos = this._pos
 
-			var presizex = isNaN(this._percentsize[0])?size[0]:this.parent._layout.width * 0.01 * this._percentsize[0];
-			var presizey = isNaN(this._percentsize[1])?size[1]: this.parent._layout.height * 0.01 * this._percentsize[1];
-			var presizez = isNaN(this._percentsize[2])?size[2]: this.parent.depth * 0.01 * this._percentsize[2];
+			var presizex = isNaN(this._percentsize[0])?size[0]:this.parent._layout.width * 0.01 * this._percentsize[0]
+			var presizey = isNaN(this._percentsize[1])?size[1]: this.parent._layout.height * 0.01 * this._percentsize[1]
+			var presizez = isNaN(this._percentsize[2])?size[2]: this.parent.depth * 0.01 * this._percentsize[2]
 
-			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0];
-			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1];
+			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0]
+			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1]
 
 			// we have some kind of overflow, cause we are a viewport
 			// so if height is not given we have to take up the external height
 			//console.log(presizey, this.layout.height)
-			//console.log("This is where we get the percentage size", this._percentsize, presizex,presizey);
+			//console.log("This is where we get the percentage size", this._percentsize, presizex,presizey)
 
-			this._size = vec2(presizex, presizey);
-			this._pos = vec2(preposx, preposy);
-			//console.log(this._percentpos, this._pos ,pos);
+			this._size = vec2(presizex, presizey)
+			this._pos = vec2(preposx, preposy)
+			//console.log(this._percentpos, this._pos ,pos)
 			var preheight = this._layout.height
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
@@ -1317,11 +1298,9 @@ define.class('$system/base/node', function(require){
 			}
 
 			this._size = size
-			this._pos = pos;
+			this._pos = pos
 
 			emitPostLayout(copynodes)
-
-
 		}
 	}
 
@@ -1386,7 +1365,7 @@ define.class('$system/base/node', function(require){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			var res = vec4(pos, -0.004, 1) * view.totalmatrix * view.viewmatrix
-			return res;
+			return res
 		}
 		this.color = function(){
 			var col = view.bgcolorfn(mesh.xy)
@@ -1402,25 +1381,24 @@ define.class('$system/base/node', function(require){
 	define.class(this, 'hardborder', this.Shader, function(){
 		this.updateorder = 0
 		this.draworder = 1
-		this.mesh = vec2.array();
+		this.mesh = vec2.array()
 		this.dont_scroll_as_viewport = true
 
 		this.update = function(){
 			var view = this.view
 			var width = view.layout?view.layout.width:view.width
 			var height = view.layout?view.layout.height:view.height
-			var bw1 = view.borderwidth[0]/width;
-			var bw2 = view.borderwidth[1]/width;
-			var bw3 = view.borderwidth[2]/height;
-			var bw4 = view.borderwidth[3]/height;
+			var bw1 = view.borderwidth[0]/width
+			var bw2 = view.borderwidth[1]/width
+			var bw3 = view.borderwidth[2]/height
+			var bw4 = view.borderwidth[3]/height
 
-			var mesh = this.mesh = vec2.array();
-//			console.log(bw, height);
+			var mesh = this.mesh = vec2.array()
 
-			mesh.pushQuad(0,0, bw1,0,0,1,bw1,1);
-			mesh.pushQuad(1-bw2,0, 1,0,1-bw2,1,1,1);
-			mesh.pushQuad(0,0, 1,0,0,bw3,1,bw3);
-			mesh.pushQuad(0,1-bw4, 1,1-bw4,0,1,1,1);
+			mesh.pushQuad(0,0, bw1,0,0,1,bw1,1)
+			mesh.pushQuad(1-bw2,0, 1,0,1-bw2,1,1,1)
+			mesh.pushQuad(0,0, 1,0,0,bw3,1,bw3)
+			mesh.pushQuad(0,1-bw4, 1,1-bw4,0,1,1,1)
 		}
 
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
@@ -1435,7 +1413,7 @@ define.class('$system/base/node', function(require){
 		}
 		this.color = function(){
 			var col = view.bordercolorfn(uv.xy)
-			return vec4(col.rgb, col.a * view.opacity);
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
 
@@ -1454,9 +1432,9 @@ define.class('$system/base/node', function(require){
 				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
 				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
 				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
-				return view.bgcolor;
+				return view.bgcolor
 			}
-			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]))
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
@@ -1464,33 +1442,33 @@ define.class('$system/base/node', function(require){
 	this.onbgimagemode = function(ev, v, o) {
 
 		if (this.shaders) {
-			var shader = this.shaders.hardimage || this.shaders.roundedimage;
+			var shader = this.shaders.hardimage || this.shaders.roundedimage
 
 			if (shader && shader.texture) {
-				var size = shader.texture.size;
+				var size = shader.texture.size
 
-				var imgw = size[0];
-				var imgh = size[1];
-				var aspect = this._width / this._height;
-				var uselayout = false;
+				var imgw = size[0]
+				var imgh = size[1]
+				var aspect = this._width / this._height
+				var uselayout = false
 				if (isNaN(aspect)) {
-					uselayout = true;
-					aspect = this._layout.width / this._layout.height;
+					uselayout = true
+					aspect = this._layout.width / this._layout.height
 				}
-				var ratio = imgw / imgh / aspect;
+				var ratio = imgw / imgh / aspect
 				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
-					this.bgimageaspect = vec2(1.0,1.0);
+					this.bgimageaspect = vec2(1.0,1.0)
 				} else if (this.bgimagemode === "aspect-fit") {
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+						this.bgimageaspect = vec2(1.0/ratio, 1.0)
 					} else {
-						this.bgimageaspect = vec2(1.0, ratio);
+						this.bgimageaspect = vec2(1.0, ratio)
 					}
 				} else if (this.bgimagemode === "aspect-fill") {
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0, ratio);
+						this.bgimageaspect = vec2(1.0, ratio)
 					} else {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+						this.bgimageaspect = vec2(1.0/ratio, 1.0)
 					}
 				} else if (this.bgimagemode === "center"
 					|| this.bgimagemode === "left"
@@ -1502,43 +1480,43 @@ define.class('$system/base/node', function(require){
 					|| this.bgimagemode === "bottom-left"
 					|| this.bgimagemode === "bottom-right") {
 
-					var rx, ry;
+					var rx, ry
 					if (uselayout) {
-						rx = this._layout.width / imgw;
-						ry = this._layout.height / imgh;
+						rx = this._layout.width / imgw
+						ry = this._layout.height / imgh
 					} else {
-						rx = this._width / imgw;
-						ry = this._height / imgh;
+						rx = this._width / imgw
+						ry = this._height / imgh
 					}
 
-					this.bgimageaspect = vec2(rx, ry);
+					this.bgimageaspect = vec2(rx, ry)
 
 					if (this.bgimagemode === "center") {
-						this.bgimageoffset = vec2(0.5, 0.5);
+						this.bgimageoffset = vec2(0.5, 0.5)
 
 					} else if (this.bgimagemode === "left") {
 
-						this.bgimageoffset = vec2(0, 0.5);
+						this.bgimageoffset = vec2(0, 0.5)
 
 					} else if (this.bgimagemode === "right") {
 
-						this.bgimageoffset = vec2(1.0 - rx, 0.5);
+						this.bgimageoffset = vec2(1.0 - rx, 0.5)
 
 					} else if (this.bgimagemode === "top") {
 
-						this.bgimageoffset = vec2(0.5, 0);
+						this.bgimageoffset = vec2(0.5, 0)
 
 					} else if (this.bgimagemode === "top-left") {
 
-						this.bgimageoffset = vec2(0, 0);
+						this.bgimageoffset = vec2(0, 0)
 
 					} else if (this.bgimagemode === "top-right") {
 
-						this.bgimageoffset = vec2(1.0 - rx, 0);
+						this.bgimageoffset = vec2(1.0 - rx, 0)
 
 					} else if (this.bgimagemode === "bottom") {
 
-						this.bgimageoffset = vec2(0.5, 1.0 - ry);
+						this.bgimageoffset = vec2(0.5, 1.0 - ry)
 
 					} else if (this.bgimagemode === "bottom-left") {
 
@@ -1552,7 +1530,7 @@ define.class('$system/base/node', function(require){
 				}
 			}
 		}
-	};
+	}
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
@@ -1593,7 +1571,7 @@ define.class('$system/base/node', function(require){
 			}
 			else{
 
-				var divbase = 0.45;
+				var divbase = 0.45
 				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
 				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
 				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
@@ -1649,9 +1627,9 @@ define.class('$system/base/node', function(require){
 				|| view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x > 1.0
 				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y < 0.0
 				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y > 1.0) {
-				return view.bgcolor;
+				return view.bgcolor
 			}
-			var col = this.texture.sample(vec2(view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect[1]));
+			var col = this.texture.sample(vec2(view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect[1]))
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
@@ -1671,7 +1649,7 @@ define.class('$system/base/node', function(require){
 		this.mesh = this.vertexstruct.array()
 
 		this.depth_test = ""
-		this.draworder = -1;
+		this.draworder = -1
 
 		// matrix and viewmatrix should be referenced on view
 		this.opacity = 0.0
@@ -1681,11 +1659,8 @@ define.class('$system/base/node', function(require){
 			var view = this.view
 
 			var width = (view.layout?view.layout.width:view.width)
-			//console.log(view.dropshadowradius, width);
 			var height = (view.layout?view.layout.height:view.height)
-
-			var radius = vec4(Math.max(1, view.borderradius[0] + view.dropshadowradius),Math.max(1, view.borderradius[1]+ view.dropshadowradius),Math.max(1, view.borderradius[2]+ view.dropshadowradius),Math.max(1, view.borderradius[3]+ view.dropshadowradius));
-			//console.log(radius)
+			var radius = vec4(Math.max(1, view.borderradius[0] + view.dropshadowradius),Math.max(1, view.borderradius[1]+ view.dropshadowradius),Math.max(1, view.borderradius[2]+ view.dropshadowradius),Math.max(1, view.borderradius[3]+ view.dropshadowradius))
 			var mesh = this.mesh = this.vertexstruct.array()
 
 			if (vec4.equals(radius, vec4(0,0,0,0))) {
@@ -1698,7 +1673,7 @@ define.class('$system/base/node', function(require){
 			}
 			else{
 
-				var divbase = 0.45;
+				var divbase = 0.45
 				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
 				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
 				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
@@ -1734,16 +1709,13 @@ define.class('$system/base/node', function(require){
 				this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,0,radius)
 				this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,0,0,0), 0,0,radius)
 				this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,0,0), 0,0,radius)
-			//this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), 0*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,1,radius)
-
-//				this.mesh.push(vec2( radius[0]- view.dropshadowradius ,radius[0]- view.dropshadowradius), 0, vec4(1,0,0,0), 0,0, radius)
 			}
 		}
 
 		this.color = function(){
-			var col = view.dropshadowcolor;
-			col.a *= view.dropshadowopacity;
-			col.a *= 1.0- pow(mesh.uv.x,1. + view.dropshadowhardness*10.);
+			var col = view.dropshadowcolor
+			col.a *= view.dropshadowopacity
+			col.a *= 1.0- pow(mesh.uv.x,1. + view.dropshadowhardness*10.)
 
 			return vec4(col.rgb, col.a * view.opacity)
 		}
@@ -1760,20 +1732,19 @@ define.class('$system/base/node', function(require){
 			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
 			sized = vec2(pos.x, pos.y)
-			sized += view.dropshadowoffset;
+			sized += view.dropshadowoffset
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 	})
 
 	this.dropshadowopacity = function(){
 		if (this.dropshadowopacity> 0){
-			this.shadowrect = true;
+			this.shadowrect = true
 		}
 		else{
-			this.shadowrect =false;
+			this.shadowrect =false
 		}
 	}
-
 
 	this.moveToFront = function(){
 		if(!this.parent) return
@@ -1792,34 +1763,31 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.childrenInRect = function(rect, exclude) {
-		var hits = [];
-		for (var i = 0;i<this.children.length;i++) {
-			var child = this.children[i];
+		var hits = []
+		for (var i = 0; i<this.children.length; i++) {
+			var child = this.children[i]
 			if (exclude && exclude.indexOf(child) > -1) {
-				continue;
+				continue
 			}
 			if (child.boundsInsideRect(rect)) {
-				hits.push(child);
+				hits.push(child)
 			} else {
-				var sub = child.childrenInRect(rect, exclude);
+				var sub = child.childrenInRect(rect, exclude)
 				if (sub.length) {
 					hits = hits.concat(sub)
 				}
 			}
 		}
-
-		return hits;
-	};
+		return hits
+	}
 
 	this.boundsInsideRect = function(r) {
-
 		var inside = r[0] <= this._layout.absx
 			&& r[1] <= this._layout.absy
 			&& r[0] + r[2] >= this._layout.absx + this._layout.width
-			&& r[1] + r[3] >= this._layout.absy + this._layout.height;
-
-		return inside;
-	};
+			&& r[1] + r[3] >= this._layout.absy + this._layout.height
+		return inside
+	}
 
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
@@ -1883,24 +1851,24 @@ define.class('$system/base/node', function(require){
 			var pimul4 = (PI*0.5)/(pidiv4-1)
 
 			for(var p = 0; p < pidiv1; p ++){
-				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(1,0,0,0), 1,0);
-				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(scale0,0,0,0), 1,0);
+				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(1,0,0,0), 1,0)
+				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(scale0,0,0,0), 1,0)
 			}
 
 			for(var p = 0;p<pidiv2;p++){
-				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0);
-				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,scale1,0,0), 1,0);
+				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0)
+				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,scale1,0,0), 1,0)
 			}
 			for(var p = 0;p<pidiv3;p++){
-				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,1,0), 1,1);
-				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,scale2,0), 1,1);
+				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,1,0), 1,1)
+				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,scale2,0), 1,1)
 			}
 			for(var p = 0;p<pidiv4;p++){
-				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1);
-				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,scale3), 0,1);
+				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1)
+				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,scale3), 0,1)
 			}
-			this.mesh.push(vec2( borderradius[0] ,borderradius[0]), 0, vec4(1,0,0,0), 1,0);
-			this.mesh.push(vec2( borderradius[0] ,borderradius[0]), 0, vec4(scale0,0,0,0), 1,0);
+			this.mesh.push(vec2( borderradius[0] ,borderradius[0]), 0, vec4(1,0,0,0), 1,0)
+			this.mesh.push(vec2( borderradius[0] ,borderradius[0]), 0, vec4(scale0,0,0,0), 1,0)
 
 		}
 
@@ -1927,11 +1895,6 @@ define.class('$system/base/node', function(require){
 			sized = vec2(pos.x, pos.y)
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-
-	//	this.atExtend = function(){
-	//		console.log("EXTENDING", this.constructor.outer.bordercolorfn)
-			//Object.getPrototypeOf(this).atExtend.call(this)
-	//	}
 	})
 
 	// lets pull in the scrollbar on the view

@@ -34,9 +34,10 @@ define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,b
 									width:100,
 									height:150,
 									bgcolor:"black",
-									overflow:"vscroll",
+									overflow:"scroll",
 									flexdirection:"column"
 								},
+								label({text:"Some very, very long text"}),
 								label({text:"Some text"}),
 								label({text:"More text"}),
 								label({text:"Some text"}),
@@ -133,6 +134,7 @@ define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,b
 									overflow:"hidden",
 									flexdirection:"column"
 								},
+								label({text:"Some very, very long text"}),
 								label({text:"Some text"}),
 								label({text:"More text"}),
 								label({text:"Some text"}),
