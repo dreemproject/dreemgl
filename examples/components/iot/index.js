@@ -33,18 +33,11 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 							var things = this.rpc.iot.things;
 
-							console.log("Base has lights:", things)
-
-							for (var i = 0; i < things.length; i++) {
-								var thingie = things[i];
-								if (thingie) {
-								  console.log('thing', thingie);
-								}
-							}
+							console.log("Base has things:", things)
 
 							lights.push(
 								button({
-									text:"Link To Basestation",
+									text:"rerender",
 									click:function() {
 										this.rerender();
 									}.bind(this)

@@ -7,26 +7,40 @@
 define.class("$server/service", function() {
 
 	this.attributes = {
-		things: Config({type: Array, flow: 'out'}),
-		thing: Config({type: Object, flow: 'out'})
+		things: Config({type: Array, value: {}, flow: 'out'})
 	}
 
-	this.things = [];
-	this.thing = null;
+	var updateState = function(thing) {
+    var id = thing.thing_id();
+    var meta = thing.state("meta");
 
-	this.init = function() {
-		this.iotdb = require("iotdb");
+    // copy over fields
+    var index = meta['iot:thing-number'] - 1;
+		this.things[index] = {
+			state: thing.state("istate"),
+    	id: meta['iot:thing-id'],
+    	name: meta['schema:name'],
+    	reachable: meta['iot:reachable']
+		};
 
-		if (this.iotdb) {
-			this.things = this.iotdb.connect();
-			// console.log(this.things);
+		// shouldn't this be enough to update the attribute in the browser over RPC?
+		this.things = this.things;
+    // console.log("updated state\n", this.things);
+	}.bind(this);
 
-			this.things.on("thing", function(thing) {
-				// these things should be rendered somehow
-				this.thing = thing;
-			}.bind(this));
-		}
+	this.oninit = function() {
+		var iotdb = require("iotdb");
 
+		var things = iotdb.connect('HueLight', {poll: 1});
+		// console.log(things);
+
+		// listen for new things
+		things.on("thing", function(thing) {
+			updateState(thing);
+			// register for changes to each thing
+			thing.on("istate", function(thing_inner) {
+				updateState(thing_inner);
+			});
+		});
 	}
-
 });
