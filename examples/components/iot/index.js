@@ -12,41 +12,33 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 				iot({
 					name:"iot"
 				}),
-				screen({
-					name:"desktop",
-					clearcolor: '#888'
-				},
-					cadgrid({
+				screen(
+					view({
 						name:"main",
-						bgcolor: vec4(0.07999999821186066, 0.10000000149011612, 0.10000000149011612, 1),
-						toolselect: false,
-						toolmove: false,
-						gridsize: 5,
-						majorevery: 10,
-						majorline: vec4(0, 0.20000000298023224, 0.30000001192092896, 1),
-						minorline: vec4(0, 0.19792191684246063, 0.17214606702327728, 1),
 						flexdirection: "row",
 						justifycontent: "space-around",
 						alignitems: "center",
-						render:function() {
-							var lights = [];
-
+						things: wire('this.rpc.iot.things'),
+						render: function() {
+							// why is this.things 0? Why don't I render when things changes?
 							var things = this.rpc.iot.things;
 
-							console.log("Base has things:", things)
+							console.log("Things:", this.things, things)
 
+							var lights = [];
 							lights.push(
 								button({
 									text:"rerender",
 									click:function() {
-										this.rerender();
+										this.render();
 									}.bind(this)
 								})
 							);
 
 							return lights;
 						}
-					}))
+					})
+				)
 			]
 		}
 	}
