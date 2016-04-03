@@ -9,11 +9,26 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 		function componentToHex(c) {
 			c = Math.floor(c);
 			var hex = c.toString(16);
-			return hex.length == 1 ? "0" + hex : hex;
+			return hex.length === 1 ? "0" + hex : hex;
 		}
 
 		function rgbToHex(r, g, b) {
 			return "#" + componentToHex(r * 255) + componentToHex(g * 255) + componentToHex(b * 255);
+		}
+
+		function hexToRgb(hex) {
+			// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+			var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+			hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+			    return r + r + g + g + b + b;
+			});
+
+			var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+			return result ? vec4(
+				parseInt(result[1], 16) / 255,
+				parseInt(result[2], 16) / 255,
+				parseInt(result[3], 16) / 255
+			) : null;
 		}
 
 		this.render = function () {
@@ -40,12 +55,13 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 							for (var i = 0; i < things.length; i++) {
 								(function(i) {
+									var thing = this.rpc.iot.things[i];
+									var id = thing.id;
 									lights.push(
 										button({
 											text:"on",
 											click:function() {
-												console.log(i)
-												this.rpc.iot.update(this.rpc.iot.things[i].id, 'on', true)
+												this.rpc.iot.update(id, 'on', true)
 											}.bind(this)
 										})
 									)
@@ -54,16 +70,17 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 										button({
 											text:"off",
 											click:function() {
-												this.rpc.iot.update(this.rpc.iot.things[i].id, 'on', false)
+												this.rpc.iot.update(id, 'on', false)
 											}.bind(this)
 										})
 									)
 
 									lights.push(
 										colorpicker({
+											value: vec4(hexToRgb(thing.state.color)),
 											valuechange:function(color) {
 												var hex = rgbToHex(color[0], color[1], color[2]);
-												this.rpc.iot.update(this.rpc.iot.things[i].id, 'color', hex);
+												this.rpc.iot.update(id, 'color', hex);
 											}.bind(this)
 										})
 									)
