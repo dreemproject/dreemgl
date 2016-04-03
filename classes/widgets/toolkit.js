@@ -94,7 +94,7 @@ define.class("$ui/view", function(require,
 			//},
 			{
 				label:"Icon",
-				icon:"info-circle",
+				icon:"flag",
 				desc:"A Fontawesome icon",
 				classname:"icon",
 				classdir:"$ui$",
@@ -102,7 +102,7 @@ define.class("$ui/view", function(require,
 					fgcolor:'#e22',
 					bgcolor:'transparent',
 					pickalpha:-1,
-					icon:'heart',
+					icon:'flag',
 					fontsize:80
 				}
 			},
