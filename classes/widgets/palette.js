@@ -143,7 +143,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 				views.push(checkbox({
 					bgcolor:this.outer.bgcolor,
-					fgcolor:this.bordercolor,
+					textcolor:this.bordercolor,
+					textactivecolor:this.bordercolor,
 					borderwidth:0,
 					padding:0,
 					paddingright:7,
