@@ -11,15 +11,20 @@ define.class("$server/service", function() {
 	}
 
 	this.update = function(thingid, state, value) {
-		for (var i = 0; i < this.__things.length; i++) {
-			var candidate = this.__things[i];
-			// console.log('candidate', candidate)
-			var meta = candidate.state('meta');
-			var id = meta['iot:thing-id'];
-			if (id === thingid) {
-				// found the thing, set its state
-				candidate.set(':' + state, value);
-				// console.log('found id', thingid, state, value)
+		if (! thingid) {
+			// set all
+			this.__things.set(':' + state, value);
+		} else {
+			for (var i = 0; i < this.__things.length; i++) {
+				var candidate = this.__things[i];
+				// console.log('candidate', candidate)
+				var meta = candidate.state('meta');
+				var id = meta['iot:thing-id'];
+				if (id === thingid) {
+					// found the thing, set its state
+					candidate.set(':' + state, value);
+					// console.log('found id', thingid, state, value)
+				}
 			}
 		}
 	}
