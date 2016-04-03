@@ -10,6 +10,20 @@ define.class("$server/service", function() {
 		things: Config({type:Array, value:[], flow:"out"})
 	}
 
+	this.update = function(thingid, state, value) {
+		for (var i = 0; i < this.__things.length; i++) {
+			var candidate = this.__things[i];
+			// console.log('candidate', candidate)
+			var meta = candidate.state('meta');
+			var id = meta['iot:thing-id'];
+			if (id === thingid) {
+				// found the thing, set its state
+				candidate.set(':' + state, value);
+				// console.log('found id', thingid, state, value)
+			}
+		}
+	}
+
 	this.updateState = function(thing) {
     var id = thing.thing_id();
     var meta = thing.state("meta");
@@ -17,9 +31,6 @@ define.class("$server/service", function() {
 
     // copy over fields
     var index = meta['iot:thing-number'] - 1;
-    if (! this.things) {
-    	this.things = [];
-    }
 		this.things[index] = {
 			state: thing.state("istate"),
     	id: meta['iot:thing-id'],
@@ -37,11 +48,11 @@ define.class("$server/service", function() {
 	this.oninit = function() {
 		var iotdb = require("iotdb");
 
-		var things = iotdb.connect('HueLight', {poll: 1});
+		this.__things = iotdb.connect('HueLight', {poll: 1});
 		// console.log(things);
 
 		// listen for new things
-		things.on("thing", function(thing) {
+		this.__things.on("thing", function(thing) {
 			this.updateState(thing);
 			// register for changes to each thing
 			thing.on("istate", function(thing_inner) {

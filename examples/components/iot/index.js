@@ -6,6 +6,17 @@
 
 define.class("$server/composition", function (require, $ui$, icon, slider, button, checkbox, label, screen, view, cadgrid, $widgets$, colorpicker, $$, iot) {
 
+
+function componentToHex(c) {
+		c = Math.floor(c);
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r * 255) + componentToHex(g * 255) + componentToHex(b * 255);
+}
+
 		this.render = function () {
 
 			return [
@@ -16,9 +27,11 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 					view({
 						name:"main",
 						flexdirection: "row",
-						justifycontent: "space-around",
 						alignitems: "center",
 						things: wire('this.rpc.iot.things'),
+						onthings: function(things) {
+							console.log('onthings', things);
+						},
 						render: function() {
 							// why is this.things 0? Why don't I render when things changes?
 							var things = this.rpc.iot.things;
@@ -34,6 +47,34 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 									}.bind(this)
 								})
 							);
+
+							lights.push(
+								button({
+									text:"on",
+									click:function() {
+										this.rpc.iot.update(things[2].id, 'on', true)
+									}.bind(this)
+								})
+							)
+
+
+							lights.push(
+								button({
+									text:"off",
+									click:function() {
+										this.rpc.iot.update(things[2].id, 'on', false)
+									}.bind(this)
+								})
+							)
+
+							lights.push(
+								colorpicker({
+									valuechange:function(color) {
+										var hex = rgbToHex(color[0], color[1], color[2]);
+										this.rpc.iot.update(things[2].id, 'color', hex);
+									}
+								})
+							)
 
 							return lights;
 						}
