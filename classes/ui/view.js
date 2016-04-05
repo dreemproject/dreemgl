@@ -897,6 +897,8 @@ define.class('$system/base/node', function(require){
 				}
 			}
 
+
+
 			if(this._overflow === 'scroll' || this._overflow === 'vscroll') this.children.push(
 				this.vscrollbar = this.scrollbar({
 					position:'absolute',
@@ -1027,7 +1029,6 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
-
 		// allow pre-matrix gen hooking
 		if(this.atMatrix) this.atMatrix()
 
@@ -1050,8 +1051,14 @@ define.class('$system/base/node', function(require){
 			var width = layout.absx + layout.width
 			var height = layout.absy + layout.height
 		}
-		if(width > boundsobj.boundw) boundsobj.boundw = width
-		if(height > boundsobj.boundh) boundsobj.boundh = height
+
+		if(width > boundsobj.boundw) {
+			boundsobj.boundw = width
+		}
+		if(height > boundsobj.boundh) {
+			boundsobj.boundh = height
+		}
+
 		if(bailbound) return
 
 		var matrix_changed = parent_changed
@@ -1245,8 +1252,8 @@ define.class('$system/base/node', function(require){
 			var flex = this._flex
 			var size = this._size
 
-			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0]
-			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1]
+			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * this._percentsize[0]
+			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * this._percentsize[1]
 
 			//console.log(this._percentsize, presizex,presizey)
 			//this._size = vec2(layout.width, layout.height)
@@ -1265,6 +1272,7 @@ define.class('$system/base/node', function(require){
 			this._size = size
 			this._flexwrap = flexwrap
 			this._layout = layout
+
 			emitPostLayout(copynodes)
 		}
 		else{
@@ -1274,11 +1282,11 @@ define.class('$system/base/node', function(require){
 			var size = this._size
 			var pos = this._pos
 
-			var presizex = isNaN(this._percentsize[0])?size[0]:this.parent._layout.width * 0.01 * this._percentsize[0]
+			var presizex = isNaN(this._percentsize[0])?size[0]: this.parent._layout.width * 0.01 * this._percentsize[0]
 			var presizey = isNaN(this._percentsize[1])?size[1]: this.parent._layout.height * 0.01 * this._percentsize[1]
 			var presizez = isNaN(this._percentsize[2])?size[2]: this.parent.depth * 0.01 * this._percentsize[2]
 
-			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0]
+			var preposx = isNaN(this._percentpos[0])?pos[0]: this.parent._layout.width * 0.01 * this._percentpos[0]
 			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1]
 
 			// we have some kind of overflow, cause we are a viewport
@@ -1423,18 +1431,9 @@ define.class('$system/base/node', function(require){
 		this.updateorder = 0
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
-		//this.atDraw = function(draw){
-		//	console.log('in shader at:',draw === this.view, this.view.viewmatrix)
-		//}
+
 		this.color = function(){
-			//return mix('red','green',mesh.y)
-			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
-				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
-				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
-				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
-				return view.bgcolor
-			}
-			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]))
+			var col = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]))
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})

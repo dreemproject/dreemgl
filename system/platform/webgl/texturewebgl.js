@@ -203,13 +203,13 @@ define.class('$system/base/texture', function(exports){
 			// lets do a power of two
 			if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
 				if (!int.isPowerOfTwo(image.width) || !int.isPowerOfTwo(image.height)) {
-				    // Scale up the texture to the next highest power of two dimensions.
-				    var canvas = document.createElement("canvas")
-				    canvas.width = int.nextHighestPowerOfTwo(image.width)
-				    canvas.height = int.nextHighestPowerOfTwo(image.height)
-				    var ctx = canvas.getContext("2d")
-				    ctx.drawImage(image, 0, 0, image.width, image.height)
-				    image = canvas
+					// Scale up the texture to the next highest power of two dimensions.
+					var canvas = document.createElement("canvas")
+					canvas.width = int.nextHighestPowerOfTwo(image.width)
+					canvas.height = int.nextHighestPowerOfTwo(image.height)
+					var ctx = canvas.getContext("2d")
+					ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+					image = canvas
 				}
 			}
 
@@ -231,6 +231,7 @@ define.class('$system/base/texture', function(exports){
 		if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
 			gl.generateMipmap(gl.TEXTURE_2D)
 		}
+
 		this[samplerid] = gltex
 		return gltex
 	}
@@ -264,6 +265,7 @@ define.class('$system/base/texture', function(exports){
 			WRAP_T: 'CLAMP_TO_EDGE'
 		})
 	}
+
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {
