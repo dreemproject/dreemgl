@@ -4,7 +4,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$server/composition", function (require, $ui$, icon, slider, button, checkbox, label, screen, view, cadgrid, $widgets$, colorpicker, $$, iot) {
+define.class("$server/composition", function (require, $server$, service, $ui$, icon, slider, button, checkbox, label, screen, view, cadgrid, $widgets$, colorpicker) {
 
 		function componentToHex(c) {
 			c = Math.floor(c);
@@ -17,6 +17,7 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 		}
 
 		function hexToRgb(hex) {
+			hex += '';
 			// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 			var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
 			hex = hex.replace(shorthandRegex, function(m, r, g, b) {
@@ -33,58 +34,139 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 		this.render = function () {
 			return [
-				iot({
-					name:"iot"
+				service({
+					name:"iot",
+					things: {},
+					update: function(thingid, state, value) {
+						if (! thingid) {
+							// set all
+							this.__things.set(':' + state, value);
+						} else {
+							for (var i = 0; i < this.__things.length; i++) {
+								var candidate = this.__things[i];
+								// console.log('candidate', candidate)
+								var meta = candidate.state('meta');
+								var id = meta['iot:thing-id'];
+								if (id === thingid) {
+									// found the thing, set its state
+									candidate.set(':' + state, value);
+									// console.log('found id', thingid, state, value)
+								}
+							}
+						}
+					},
+					__updateModel: function(thing) {
+						var id = thing.thing_id();
+						var meta = thing.state("meta");
+						var facets = meta['iot:facet'];
+						if (facets && facets.map) {
+							facets = facets.map(function(facet) {
+								return facet.split(':')[1]
+							})
+						}
+						// console.log('thing metadata', id, meta, facets)
+
+						// copy over fields
+						this.things[id] = {
+							state: thing.state("istate"),
+							id: meta['iot:thing-id'],
+							name: meta['schema:name'],
+							reachable: meta['iot:reachable'],
+							manufacturer: meta['schema:manufacturer'],
+							model: meta['schema:model'] || meta['iot:model-id'],
+							facets: facets,
+							type: meta['iot:vendor.type']
+						};
+
+						// shouldn't this be enough to update the attribute in the browser over RPC?
+						this.things = JSON.parse(JSON.stringify(this.things))
+						// console.log("updated state\n", this.things);
+					},
+					init: function() {
+						var iotdb = require("iotdb");
+
+						this.__things = iotdb.connect('HueLight', {poll: 1}).connect();
+						// console.log('THINGS: ', this.__things);
+
+						// listen for new things
+						this.__things.on("thing", function(thing) {
+							// console.log('new THING: ', thing)
+							this.__updateModel(thing);
+							// register for changes to each thing
+							thing.on("istate", function(thing_inner) {
+								// console.log('new state on THING: ', thing)
+								// update to reflect changes
+								this.__updateModel(thing_inner);
+							}.bind(this));
+						}.bind(this));
+					}
 				}),
 				screen(
 					view({
 						name:"main",
 						flexdirection: "row",
 						alignitems: "center",
-						things: wire('this.rpc.iot.things'),
+						things: Config({type:Array, value:wire('this.rpc.iot.things')}),
 						onthings: function(things) {
-							console.log('onthings', things);
+							// console.log('onthings', things);
 						},
 						render: function() {
 							// why is this.things 0? Why don't I render when things changes?
-							var things = this.rpc.iot.things;
-
-							console.log("Things:", this.things, things)
+							// console.log("Things:", this.things)
 
 							var lights = [];
 
-							for (var i = 0; i < things.length; i++) {
-								(function(i) {
-									var thing = this.rpc.iot.things[i];
+							var keys = Object.keys(this.things).sort();
+
+							for (var i = 0; i < keys.length; i++) {
+								var key = keys[i];
+								// console.log('key', key, this.things[key])
+								(function(key) {
+									var thing = this.things[key];
 									var id = thing.id;
+									var type = thing.facets[thing.facets.length - 1];
+
+									// don't show these...
+									delete thing.state['@timestamp']
+
 									lights.push(
-										button({
-											text:"on",
-											click:function() {
-												this.rpc.iot.update(id, 'on', true)
-											}.bind(this)
+										label({
+											text: thing.name + ' ' + type + ' ' + JSON.stringify(thing.state)
 										})
 									)
 
-									lights.push(
-										button({
-											text:"off",
-											click:function() {
-												this.rpc.iot.update(id, 'on', false)
-											}.bind(this)
-										})
-									)
+									if ('on' in thing.state) {
+										lights.push(
+											button({
+												text:"on",
+												click:function() {
+													this.rpc.iot.update(id, 'on', true)
+												}.bind(this)
+											})
+										)
 
-									lights.push(
-										colorpicker({
-											value: vec4(hexToRgb(thing.state.color)),
-											valuechange:function(color) {
-												var hex = rgbToHex(color[0], color[1], color[2]);
-												this.rpc.iot.update(id, 'color', hex);
-											}.bind(this)
-										})
-									)
-								}.bind(this))(i);
+										lights.push(
+											button({
+												text:"off",
+												click:function() {
+													this.rpc.iot.update(id, 'on', false)
+												}.bind(this)
+											})
+										)
+									}
+
+									// if ('color' in thing.state) {
+									// 	lights.push(
+									// 		colorpicker({
+									// 			value: vec4(hexToRgb(thing.state.color)),
+									// 			valuechange:function(color) {
+									// 				var hex = rgbToHex(color[0], color[1], color[2]);
+									// 				this.rpc.iot.update(id, 'color', hex);
+									// 			}.bind(this)
+									// 		})
+									// 	)
+									// }
+								}.bind(this))(key);
 							}
 
 							lights.push(
