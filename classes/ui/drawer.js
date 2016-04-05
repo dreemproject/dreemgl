@@ -34,11 +34,15 @@ define.class("$ui/view", function(require, $ui$, view){
 		max:0.5
 	};
 
+	this.mainvalue = function(value) {
+		return value;
+	}
+
 	this.onvalue = function(ev,v,o) {
 
 		if (this._main) {
-			this._main.x = this.direction === "horizontal" ? v * this.width : 0;
-			this._main.y = this.direction === "vertical" ? v * this.height : 0;
+			this._main.x = this.direction === "horizontal" ? this.mainvalue(v) * this.width : 0;
+			this._main.y = this.direction === "vertical" ? this.mainvalue(v) * this.height : 0;
 		}
 
 		if (v > 0) {
