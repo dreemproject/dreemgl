@@ -28,7 +28,8 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 			return result ? vec4(
 				parseInt(result[1], 16) / 255,
 				parseInt(result[2], 16) / 255,
-				parseInt(result[3], 16) / 255
+				parseInt(result[3], 16) / 255,
+				1
 			) : null;
 		}
 
@@ -155,17 +156,17 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 										)
 									}
 
-									// if ('color' in thing.state) {
-									// 	lights.push(
-									// 		colorpicker({
-									// 			value: vec4(hexToRgb(thing.state.color)),
-									// 			valuechange:function(color) {
-									// 				var hex = rgbToHex(color[0], color[1], color[2]);
-									// 				this.rpc.iot.update(id, 'color', hex);
-									// 			}.bind(this)
-									// 		})
-									// 	)
-									// }
+									if ('color' in thing.state) {
+										lights.push(
+											colorpicker({
+												value: vec4(hexToRgb(thing.state.color)),
+												valuechange:function(color) {
+													var hex = rgbToHex(color[0], color[1], color[2]);
+													this.rpc.iot.update(id, 'color', hex);
+												}.bind(this)
+											})
+										)
+									}
 								}.bind(this))(key);
 							}
 
