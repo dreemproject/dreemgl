@@ -337,8 +337,7 @@ define.class('$system/base/node', function(require){
 	this.ondropshadowradius = function(){
 		if (this.dropshadowopacity > 0){
 			this.shadowrect = true
-		}
-		else {
+		} else {
 			this.shadowrect = false
 		}
 	}
@@ -361,24 +360,22 @@ define.class('$system/base/node', function(require){
 		//var value = event.value
 		var border_on = true
 		var width = this._borderwidth
-		if(width[0] === 0 && width[1] === 0 && width[2] === 0 && width[3] === 0){
+		if (width[0] === 0 && width[1] === 0 && width[2] === 0 && width[3] === 0){
 			border_on = false
-		}
-		else{
+		} else {
 			border_on = true
 		}
 
 		var bg_on = isNaN(this._bgcolor[0])? false: true
 
-		if(this._viewport === '3d') border_on = false, bg_on = false
+		if (this._viewport === '3d') border_on = false, bg_on = false
 
-		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
+		if (radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
 			// this switches the bg shader to the rounded one
-			if(this._bgimage){
+			if (this._bgimage){
 				this.roundedimage = true
 				this.roundedrect = false
-			}
-			else{
+			} else {
 				this.roundedrect = bg_on
 				this.roundedimage = false
 			}
@@ -386,13 +383,11 @@ define.class('$system/base/node', function(require){
 			this.hardimage = false
 			this.hardrect = false
 			this.hardborder = false
-		}
-		else {
-			if(this._bgimage){
+		} else {
+			if (this._bgimage){
 				this.hardimage = true
 				this.hardrect = false
-			}
-			else{
+			} else {
 				this.hardrect = bg_on
 				this.hardimage = false
 			}
@@ -411,25 +406,28 @@ define.class('$system/base/node', function(require){
 
 	// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
 	this.onoverflow = function(){
-		if(this._overflow){
-			if(!this._viewport) this._viewport = '2d'
+		if (this._overflow){
+			if (!this._viewport) this._viewport = '2d'
 		}
 	}
 
 	// internal, setting focus to true
 	this.onfocus = function(event){
-		if(!event.mark){ // someone set it to true that wasnt us
+		if (!event.mark){ // someone set it to true that wasnt us
 			this.screen.setFocus(this)
 		}
 	}
 
 	// internal, put a tablistener
 	this.ontabstop = function(event){
-		if(isNaN(event.old) && !isNaN(event.value)){
+		if (isNaN(event.old) && !isNaN(event.value)){
 			this.addListener('keydown', function(value){
-				if(value.name === 'tab'){
-					if(value.shift) this.screen.focusPrev(this)
-					else this.screen.focusNext(this)
+				if (value.name === 'tab'){
+					if (value.shift) {
+						this.screen.focusPrev(this)
+					} else {
+						this.screen.focusNext(this)
+					}
 				}
 			})
 		}
@@ -453,30 +451,32 @@ define.class('$system/base/node', function(require){
 
 		this.initialized = true
 
-		if(prev){
+		if (prev){
 			this.modelmatrix = prev.modelmatrix
 			this.totalmatrix = prev.totalmatrix
 			this.viewportmatrix = prev.viewportmatrix
 			this.layout = prev.layout
-		}
-		else{
+		} else {
 			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = mat4.identity()
-			else this.totalmatrix = mat4()
+			if (this._viewport) {
+				this.totalmatrix = mat4.identity()
+			} else {
+				this.totalmatrix = mat4()
+			}
 			this.viewportmatrix = mat4()
 		}
 
 		// create shaders
 		this.shaders = {}
-		for(var key in this.shader_enable){
+		for (var key in this.shader_enable){
 			var enable = this.shader_enable[key]
-			if(!enable) continue
+			if (!enable) continue
 			var shader = this[key]
-			if(shader){
+			if (shader){
 				var prevshader = prev && prev.shaders && prev.shaders[key]
 				var shobj
 				// ok so instead of comparing constructor, lets compare the computational result
-				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
+				if (prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
 					shobj = prevshader
 					Object.defineProperty(shobj, 'constructor',{value:shader, configurable:true})
 
@@ -484,16 +484,15 @@ define.class('$system/base/node', function(require){
 					shobj.outer = this
 
 					// ok now check if we need to dirty it
-					if(shobj._view_listeners) for(var shkey in shobj._view_listeners){
+					if (shobj._view_listeners) for (var shkey in shobj._view_listeners){
 						this.addListener(shkey, shobj.reupdate.bind(shobj))
 						var value = this[shkey]
-						if(!(value && value.struct && value.struct.equals(value, prev[shkey]) || value === prev[shkey])){
+						if (!(value && value.struct && value.struct.equals(value, prev[shkey]) || value === prev[shkey])){
 							shobj.reupdate(shkey)
 						}
 					}
 					prevshader.reused = true
-				}
-				else{
+				} else {
 					shobj = new shader(this)
 				}
 				shobj.shadername = key
@@ -502,14 +501,14 @@ define.class('$system/base/node', function(require){
 			}
 		}
 
-		if(this._bgimage){
+		if (this._bgimage){
 			this.onbgimage()
 		}
 
-		if(this._viewport){
-			for(var key in this.shaders){
+		if (this._viewport){
+			for (var key in this.shaders){
 				var shader = this.shaders[key]
-				if(shader.dont_scroll_as_viewport){
+				if (shader.dont_scroll_as_viewport){
 					this.shaders[key].noscroll = true
 				}
 			}
@@ -520,9 +519,9 @@ define.class('$system/base/node', function(require){
 
 	// lets destroy some shaders/vertexbuffers
 	this.atViewDestroy = function(){
-		for(var key in this.shaders){
+		for (var key in this.shaders){
 			var shader = this.shaders[key]
-			if(!shader.reused && shader.hasOwnProperty('mesh') && !shader.mesh.sticky){
+			if (!shader.reused && shader.hasOwnProperty('mesh') && !shader.mesh.sticky){
 				this.screen.device.gl.deleteBuffer(shader.mesh.glvb)
 				shader.mesh.glvb = undefined
 			}
@@ -538,25 +537,24 @@ define.class('$system/base/node', function(require){
 	})
 
 	this.onbgimage = function(){
-		if(this.initialized){
-			if(typeof this._bgimage === 'string'){
+		if (this.initialized){
+			if (typeof this._bgimage === 'string'){
 				// Path to image was specified
-				if(require.loaded(this._bgimage)){
+				if (require.loaded(this._bgimage)){
 					var img = require(this._bgimage)
 					this.setBgImage(img)
-				}
-				else{
+				} else {
 					// check if loaded already
 					require.async(this._bgimage, 'jpeg').then(function(result){
 						this.setBgImage(result)
 					}.bind(this))
 				}
-			}
-			else{
+			} else {
 				this.setBgImage(this._bgimage)
 			}
+		} else {
+			this.setBorderShaders()
 		}
-		else this.setBorderShaders()
 	}
 
 	this.defaultKeyboardHandler = function(v, prefix){
@@ -568,37 +566,34 @@ define.class('$system/base/node', function(require){
 		var name = prefix + 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
 		//this.undo_group++
 
-		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
-		if(keyboard.ctrl) name += 'Ctrl'
-		if(keyboard.alt) name += 'Alt'
-		if(keyboard.shift) name += 'Shift'
+		if (keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
+		if (keyboard.ctrl) name += 'Ctrl'
+		if (keyboard.alt) name += 'Alt'
+		if (keyboard.shift) name += 'Shift'
 
-		if(this[name]) {
+		if (this[name]) {
 			this[name](v)
-		}
-		else{
-			//console.log(name)
-			if (this.keydownHandler) this.keydownHandler(name)
+		} else if (this.keydownHandler) {
+			this.keydownHandler(name)
 		}
 	}
 
 	// image can be an image, or a Texture (has array property).
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
-		if(!shader) return
+		if (!shader) return
 
 		// Callback method to update the bgimage. Some platforms support a
 		// second argument to Texture.fromImage for delayed loading
 		var update = function(img) {
 			if (!img) return
 			shader.texture = img
-			if(this.bgimagemode === "resize"){
+			if (this.bgimagemode === "resize"){
 				this._size = img.size
 				this.relayout()
 			} else if (img) {
 				this.onbgimagemode()
-			}
-			else this.redraw()
+			} else this.redraw()
 		}.bind(this)
 
 		update((image.array) ? image : Shader.Texture.fromImage(image, update))
@@ -606,24 +601,28 @@ define.class('$system/base/node', function(require){
 
 	// internal, emit an event upward (to all parents) untill a listener is hit
 	this.emitUpward = function(key, msg){
-		if(this['_listen_'+key] || this['on'+key]){
+		if (this['_listen_'+key] || this['on'+key]){
 			this.emit(key, msg)
 			return this
 		}
-		if(this.parent) return this.parent.emitUpward(key, msg)
+		if (this.parent) {
+			return this.parent.emitUpward(key, msg)
+		}
 	}
 
 	this.findEmitUpward = function(key){
-		if(this['_listen_'+key] || this['on'+key]){
+		if (this['_listen_'+key] || this['on'+key]){
 			return this
 		}
-		if(this.parent) return this.parent.findEmitUpward(key)
+		if (this.parent) {
+			return this.parent.findEmitUpward(key)
+		}
 	}
 
 	this.computeCursor = function(){
 		var node = this
 		while(node){
-			if(node._cursor !== ''){
+			if (node._cursor !== ''){
 				this.screen.pointer.cursor = node._cursor
 				break
 			}
@@ -644,14 +643,14 @@ define.class('$system/base/node', function(require){
 
 	// internal, custom hook in the inner class assignment to handle nested shaders specifically
 	this.atInnerClassAssign = function(key, value){
-		if(!this.hasOwnProperty('shader_enable')) this.shader_enable = Object.create(this.shader_enable || {})
+		if (!this.hasOwnProperty('shader_enable')) this.shader_enable = Object.create(this.shader_enable || {})
 		// set the shader order
-		if(!value || typeof value === 'number' || typeof value === 'boolean'){
+		if (!value || typeof value === 'number' || typeof value === 'boolean'){
 			this.shader_enable[key] = value? true: false
 			return
 		}
 		// its a class assignment
-		if(typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
+		if (typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
 			this['_' + key] = value
 			return
 		}
@@ -662,24 +661,24 @@ define.class('$system/base/node', function(require){
 
 	// internal, redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
-		if(!this.parent_viewport){
+		if (!this.parent_viewport){
 			return
 		}
-		if(this.parent_viewport.draw_dirty === 3){
+		if (this.parent_viewport.draw_dirty === 3){
 			return
 		}
 		var parent = this
 		while(parent){
 			var viewport = parent.parent_viewport
-			if(!viewport) break
-			if(viewport.draw_dirty === 3){
+			if (!viewport) break
+			if (viewport.draw_dirty === 3){
 				return
 			}
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
 		this.draw_dirty = 3
-		if(this.screen.device && this.screen.device.redraw) {
+		if (this.screen.device && this.screen.device.redraw) {
 			this.screen.device.redraw()
 		}
 	}
@@ -687,19 +686,19 @@ define.class('$system/base/node', function(require){
 	// internal, updates all the shaders
 	this.reupdate = function(){
 		var shaders = this.shader_list
-		if(shaders) for(var i = 0; i < shaders.length; i++){
+		if (shaders) for (var i = 0; i < shaders.length; i++){
 			shaders[i].reupdate()
 		}
 	}
 
 	this.getViewGuid = function(){
-		if(this.viewguid) return this.viewguid
-		if(this.pickguid){
+		if (this.viewguid) return this.viewguid
+		if (this.pickguid){
 			this.viewguid = '' +this.pickguid
 		}
 		var node = this, id = ''
 		while(node){
-			if(node.parent) id += node.parent.children.indexOf(node)
+			if (node.parent) id += node.parent.children.indexOf(node)
 			node = node.parent
 		}
 		this.viewguid = id
@@ -749,7 +748,7 @@ define.class('$system/base/node', function(require){
 
 		this.remapmatrix = mat4.identity()
 
-		for(var i = parentlist.length - 1; i >= 0; i--) {
+		for (var i = parentlist.length - 1; i >= 0; i--) {
 			var P = parentlist[i]
 			var newmode = P.parent? P._viewport:"2d"
 
@@ -792,9 +791,8 @@ define.class('$system/base/node', function(require){
 
 			}
 
-			if(i == 0 && this.noscroll){
-				mat4.invert(P.colormatrices.noscrollmatrix, this.remapmatrix)
-			}	else {
+			if (i == 0 && this.noscroll){
+				mat4.invert(P.colormatrices.noscrollmatrix, this.remapmatrix) }	else {
 				mat4.invert(P.colormatrices.viewmatrix, this.remapmatrix)
 			}
 
@@ -813,16 +811,16 @@ define.class('$system/base/node', function(require){
 
 	// internal, this gets called by the render engine
 	this.updateShaders = function(){
-		if(!this.update_dirty) return
+		if (!this.update_dirty) return
 		this.update_dirty = false
 		// we can wire up the shader
-		if(!this._shaderswired){
+		if (!this._shaderswired){
 			this.atAttributeGet = function(attrname){
-				//if(this.constructor.name === 'label')
+				//if (this.constructor.name === 'label')
 				//console.log(this.constructor.name, attrname, this['_'+attrname])
 				// monitor attribute wires for geometry
 				// lets add a listener
-				if(!shader._view_listeners) shader._view_listeners = {}
+				if (!shader._view_listeners) shader._view_listeners = {}
 				shader._view_listeners[attrname] = 1
 
 				this.addListener(attrname,shader.reupdate.bind(shader, attrname))
@@ -832,15 +830,15 @@ define.class('$system/base/node', function(require){
 
 
 		var shaders = this.shader_update_list
-		for(var i = 0; i < shaders.length; i ++){
+		for (var i = 0; i < shaders.length; i ++){
 			var shader = shaders[i]
-			if(shader.update && shader.update_dirty){
+			if (shader.update && shader.update_dirty){
 				shader.update_dirty = false
 				shader.update()
 			}
 		}
 
-		if(!this._shaderswired) {
+		if (!this._shaderswired) {
 			this._shaderswired = true
 			this.atAttributeGet = undefined
 		}
@@ -850,7 +848,7 @@ define.class('$system/base/node', function(require){
 	this.startDrag = function(pointerevent, render){
 		var dragview = this.screen.openOverlay(render)
 
-		if(!dragview.atDragMove){
+		if (!dragview.atDragMove){
 			dragview.atDragMove = function(position){
 				this.x = position[0] - this.width*0.5
 				this.y = position[1] - this.height*0.5
@@ -867,19 +865,19 @@ define.class('$system/base/node', function(require){
 			// lets send dragenter/leave events
 			var newdrag = event.pick
 
-			if(!dragview.isDropTarget(newdrag,event)) newdrag = undefined
+			if (!dragview.isDropTarget(newdrag,event)) newdrag = undefined
 
-			if(lastdrag !== newdrag){
-				if(lastdrag) lastdrag.emitUpward('dragout',{})
-				if(newdrag) newdrag.emitUpward('dragover',{})
+			if (lastdrag !== newdrag){
+				if (lastdrag) lastdrag.emitUpward('dragout',{})
+				if (newdrag) newdrag.emitUpward('dragover',{})
 				lastdrag = newdrag
 			}
-			if(newdrag) newdrag.emitUpward('dragmove', event)
+			if (newdrag) newdrag.emitUpward('dragmove', event)
 		}
 		this.onpointerend = function(event){
 			this.onpointermove = undefined
 			dragview.closeOverlay()
-			if(lastdrag){
+			if (lastdrag){
 				lastdrag.emitUpward('dragout',{})
 			}
 			dragview.atDrop(lastdrag, event)
@@ -889,29 +887,28 @@ define.class('$system/base/node', function(require){
 
 	// internal, decide to inject scrollbars into our childarray
 	this.atRender = function(){
-		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow==='hscroll' || this._overflow === 'vscroll' || this._overflow === 'auto')){
-			if(this.vscrollbar) this.vscrollbar.value = 0
-			if(this.hscrollbar) this.hscrollbar.value = 0
+		if (this._viewport === '2d' && (this._overflow === 'auto' || this._overflow === 'scroll' || this._overflow === 'hscroll' || this._overflow === 'vscroll' || this._overflow === 'auto')){
+
+			if (this.vscrollbar) this.vscrollbar.value = 0
+			if (this.hscrollbar) this.hscrollbar.value = 0
 
 			this.scroll = function(event){
-				if(event.mark) return
-				if(this.vscrollbar){
+				if (event.mark) return
+				if (this.vscrollbar){
 					this.vscrollbar.value = Mark(event.value[1])
 				}
-				if(this.hscrollbar){
+				if (this.hscrollbar){
 					this.hscrollbar.value = Mark(event.value[0])
 				}
 			}
 
-
-
-			if(this._overflow === 'scroll' || this._overflow === 'vscroll') this.children.push(
+			if (this._overflow === 'auto' || this._overflow === 'scroll' || this._overflow === 'vscroll') this.children.push(
 				this.vscrollbar = this.scrollbar({
 					position:'absolute',
 					vertical:true,
 					noscroll:true,
 					value:function(event){
-						if(event.mark) return
+						if (event.mark) return
 						this.parent.scroll = Mark(vec2(this.parent._scroll[0],this._value))
 					},
 					layout:function(){
@@ -925,13 +922,13 @@ define.class('$system/base/node', function(require){
 				})
 			)
 
-			if(this._overflow === 'scroll' || this._overflow === 'hscroll') this.children.push(
+			if (this._overflow === 'auto' || this._overflow === 'scroll' || this._overflow === 'hscroll') this.children.push(
 				this.hscrollbar = this.scrollbar({
 					position: 'absolute',
 					vertical: false,
 					noscroll: true,
 					value: function(event){
-						if(event.mark) return
+						if (event.mark) return
 						this.parent.scroll = Mark(vec2(this._value,this.parent._scroll[1]))
 					},
 					layout: function(){
@@ -946,11 +943,10 @@ define.class('$system/base/node', function(require){
 			)
 
 
-			if(this.hscrollbar) this.hscrollbar.value = Mark(this._scroll[0])
-			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
+			if (this.hscrollbar) this.hscrollbar.value = Mark(this._scroll[0])
+			if (this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
 
 			this.pointerwheel = function(event){
-
 				// cumulative damped wheel value.
 				// Used to decide if enough horizontal/vertical movement is present.
 				this.dampedwheel = this.dampedwheel || vec2(0, 0, 0)
@@ -997,37 +993,35 @@ define.class('$system/base/node', function(require){
 	// internal, show/hide scrollbars
 	this.updateScrollbars = function(){
 
-		if(this.vscrollbar){
+		if (this.vscrollbar){
 			var scroll = this.vscrollbar
 			var totalsize = Math.floor(this.layout.boundh)
 			var viewsize = Math.floor(this.layout.height * this.zoom)
-			if(totalsize > viewsize+1){
+			if (totalsize > viewsize+1){
 				scroll._visible = true
 				scroll._total = totalsize
 				scroll._page = viewsize
 				var off = clamp(scroll._value,0, scroll._total - scroll._page)
-				if(off !== scroll._value) scroll.value = off
-			}
-			else{
-				if(0 !== scroll._offset){
+				if (off !== scroll._value) scroll.value = off
+			} else {
+				if (0 !== scroll._offset){
 					scroll.value = 0
 				}
 				scroll._visible = false
 			}
 		}
-		if(this.hscrollbar){
+		if (this.hscrollbar){
 			var scroll = this.hscrollbar
 			var totalsize = Math.floor(this._layout.boundw)
 			var viewsize = Math.floor(this._layout.width* this.zoom)
-			if(totalsize > viewsize + 1){
+			if (totalsize > viewsize + 1){
 				scroll._visible = true
 				scroll._total = totalsize
 				scroll._page = viewsize
 				var off = clamp(scroll._value,0, scroll._total - scroll._page)
-				if(off !== scroll._value) scroll.value = off
-			}
-			else{
-				if(0 !== scroll._value) scroll.value = 0
+				if (off !== scroll._value) scroll.value = off
+			} else {
+				if (0 !== scroll._value) scroll.value = 0
 				scroll._visible = false
 			}
 		}
@@ -1036,10 +1030,10 @@ define.class('$system/base/node', function(require){
 	// internal, called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
 		// allow pre-matrix gen hooking
-		if(this.atMatrix) this.atMatrix()
+		if (this.atMatrix) this.atMatrix()
 
 		var boundsobj = boundsinput
-		if(!boundsinput){
+		if (!boundsinput){
 			boundsobj = this._layout
 			boundsobj.absx = 0
 			boundsobj.absy = 0
@@ -1049,38 +1043,37 @@ define.class('$system/base/node', function(require){
 
 		var layout = this._layout
 
-		if(this.measured_width !== undefined || this.measured_height !== undefined){
+		if (this.measured_width !== undefined || this.measured_height !== undefined){
 			var width = layout.absx + max(layout.width ,this.measured_width)
 			var height = layout.absy + max(layout.height, this.measured_height)
-		}
-		else{
+		} else {
 			var width = layout.absx + layout.width
 			var height = layout.absy + layout.height
 		}
 
-		if(width > boundsobj.boundw) {
+		if (width > boundsobj.boundw) {
 			boundsobj.boundw = width
 		}
-		if(height > boundsobj.boundh) {
+		if (height > boundsobj.boundh) {
 			boundsobj.boundh = height
 		}
 
-		if(bailbound) return
+		if (bailbound) return
 
 		var matrix_changed = parent_changed
 		if (parentviewport === '3d'){
 			matrix_changed = true
-			if(this._scale && this._anchor && this._rotate && this._pos){
+			if (this._scale && this._anchor && this._rotate && this._pos){
 				mat4.TSRT2(this._anchor, this._scale, this._rotate, this._pos, this.modelmatrix)
+			} else {
+				mat4.identity(this.modelmatrix)
 			}
-			else mat4.identity(this.modelmatrix)
-		}
-		else {
+		} else {
 			// compute TSRT matrix
-			if(layout){
+			if (layout){
 				//console.log(this.matrix_dirty)
 				//var ml = this.matrix_layout
-				//if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
+				//if (!ml || ml.left !== layout.left || ml.top !== layout.top ||
 				//	ml.width !== layout.width || ml.height !== layout.height
 				 //   || ml.scale !== this._scale || ml.rotate !== this._rotate
 				//){
@@ -1098,14 +1091,13 @@ define.class('$system/base/node', function(require){
 				var r = this._rotate
 				var tr = this._translate
 				var t0 = layout.left + tr[0], t1 = layout.top+ tr[1], t2 = tr[2]
-				//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
+				//if (this.name === 'handle') console.log(this.constructor.name, layout.top)
 				//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
 				//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
 				var hw = layout.width / 2
 				var hh = layout.height / 2
 				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix)
-			}
-			else {
+			} else {
 				matrix_changed = true
 				var s = this._scale
 				var r = this._rotate
@@ -1117,36 +1109,32 @@ define.class('$system/base/node', function(require){
 		}
 
 		var parentmode = parentviewport
-		if(this._viewport){
-			if(parentmatrix) {
+		if (this._viewport){
+			if (parentmatrix) {
 				mat4.mat4_mul_mat4(this.modelmatrix, parentmatrix, this.viewportmatrix)
-			}
-			else{
+			} else {
 				this.viewportmatrix = this.modelmatrix
 			}
 			mat4.identity(this.totalmatrix)
 			parentmode = this._viewport
 			parentmatrix = mat4.global_identity
-		}
-		else{
-			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4( this.modelmatrix, parentmatrix, this.totalmatrix)
+		} else {
+			if (parentmatrix && matrix_changed) mat4.mat4_mul_mat4( this.modelmatrix, parentmatrix, this.totalmatrix)
 		}
 
 		var children = this.children
 		var len = children.length
 
-		if(children) for(var i = 0; i < len; i++){
+		if (children) for (var i = 0; i < len; i++){
 			var child = children[i]
-
 			var clayout = child.layout
-			if(!clayout) continue
+			if (!clayout) continue
 			clayout.absx = layout.absx + clayout.left
 			clayout.absy = layout.absy + clayout.top
-
 			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj, child._viewport)
 		}
 
-		if(!boundsinput){
+		if (!boundsinput){
 			this.updateScrollbars()
 		}
 
@@ -1159,9 +1147,9 @@ define.class('$system/base/node', function(require){
 		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout
 
-		if(!nochild){
+		if (!nochild){
 			var children = node.children
-			for(var i = 0; i < children.length; i++){
+			for (var i = 0; i < children.length; i++){
 				var child = children[i]
 				emitPostLayout(child, child.ref._viewport)
 			}
@@ -1169,14 +1157,14 @@ define.class('$system/base/node', function(require){
 		}
 
 		var oldlayout = ref.oldlayout || {}
-		if((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+		if ((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
 		ref.matrix_dirty = true
 
-		if(ref._bgimage){
+		if (ref._bgimage){
 			ref.onbgimagemode()
 		}
 	}
@@ -1186,15 +1174,15 @@ define.class('$system/base/node', function(require){
 	this.relayoutRecur = function(source){
 		this.layout_dirty = true
 		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
-		for(var i = 0; i < this.child_viewport_list.length; i++){
+		for (var i = 0; i < this.child_viewport_list.length; i++){
 			var child = this.child_viewport_list[i]
-			//if(child._overflow) continue
-			if(child !== source){
+			//if (child._overflow) continue
+			if (child !== source){
 				child.relayoutRecur()
 			}
 		}
-		if(this.parent_viewport !== this){
-			if(this.parent_viewport._overflow) return
+		if (this.parent_viewport !== this){
+			if (this.parent_viewport._overflow) return
 			this.parent_viewport.relayoutRecur(this)
 		}
 	}
@@ -1204,15 +1192,15 @@ define.class('$system/base/node', function(require){
 	// scan down and skip overflow something.
 
 	this.relayout = function(shallow){
-		if(this.layout_dirty) return
+		if (this.layout_dirty) return
 		this.layout_dirty = true
 		this.redraw()
-		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
+		if (this.parent_viewport) this.parent_viewport.relayoutRecur()
 	}
 
 	this.rematrix = function(){
 		this.matrix_dirty = true
-		if(this.parent_viewport){
+		if (this.parent_viewport){
 			this.parent_viewport.matrix_dirty = true
 			this.redraw()
 		}
@@ -1220,12 +1208,11 @@ define.class('$system/base/node', function(require){
 
 	// internal, moving a position in absolute should only trigger a matrix reload
 	this.pos = function(){
-		if(this._position === 'absolute'){
+		if (this._position === 'absolute'){
 			this._layout.left = this._pos[0]
 			this._layout.top = this._pos[1]
 			this.rematrix()
-		}
-		else{
+		} else {
 			this.relayout()
 		}
 	}
@@ -1252,7 +1239,7 @@ define.class('$system/base/node', function(require){
 	// internal, called by the render engine
 	this.doLayout = function(){
 
-		if(this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
+		if (this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
 
 			var layout = this._layout
 			var flex = this._flex
@@ -1269,7 +1256,7 @@ define.class('$system/base/node', function(require){
 			this._size = vec2(presizex, presizey)
 			this._flexwrap = false
 
-			if(this.measure) this.measure() // otherwise it doesnt get called
+			if (this.measure) this.measure() // otherwise it doesnt get called
 
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
@@ -1280,8 +1267,7 @@ define.class('$system/base/node', function(require){
 			this._layout = layout
 
 			emitPostLayout(copynodes)
-		}
-		else{
+		} else {
 			var layout = this._layout
 
 			//this._size = vec2(presizex, presizey)
@@ -1302,12 +1288,11 @@ define.class('$system/base/node', function(require){
 
 			this._size = vec2(presizex, presizey)
 			this._pos = vec2(preposx, preposy)
-			//console.log(this._percentpos, this._pos ,pos)
 			var preheight = this._layout.height
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
 
-			if(isNaN(presizey)){
+			if (isNaN(presizey)){
 				this._layout.height = preheight
 			}
 
@@ -1331,8 +1316,9 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by animation setters
 	this.startAnimation = function(attribute, value, track, resolve){
-		if(this.initialized) return this.screen.startAnimationRoot(this, attribute, value, track, resolve)
-		else{
+		if (this.initialized) {
+			return this.screen.startAnimationRoot(this, attribute, value, track, resolve)
+		} else {
 			return false
 		}
 	}
@@ -1340,7 +1326,7 @@ define.class('$system/base/node', function(require){
 	// Stops a running animation for an attribute
 	// <attribute> {String} The name of the attribute to stop animating on this view.
 	this.stopAnimation = function(attribute){
-		if(this.initialized) this.screen.stopAnimationRoot(this, attribute)
+		if (this.initialized) this.screen.stopAnimationRoot(this, attribute)
 	}
 
 	// Determines the background color that should be drawn at a given position.
@@ -1362,7 +1348,7 @@ define.class('$system/base/node', function(require){
 		Render.process(vroot, undefined, undefined, true)
 		// move the children over
 		this.children.push.apply(this.children, vroot.children)
-		for(var i = 0; i < vroot.children.length; i++){
+		for (var i = 0; i < vroot.children.length; i++){
 			vroot.children[i].parent = this
 		}
 		// lets cause a relayout
@@ -1649,8 +1635,7 @@ define.class('$system/base/node', function(require){
 				mesh.push([width,height], 0, [1,0,0,0], 1,1)
 				mesh.push([0,height], 0, [1,0,0,0], 0,1)
 				mesh.push([0,0], 0, [1,0,0,0], 0,0)
-			}
-			else{
+			} else {
 
 				var divbase = 0.45
 				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
@@ -1665,10 +1650,10 @@ define.class('$system/base/node', function(require){
 
 				this.mesh.push([width/2,height/2], 0, [0,0,0,0], 0.5,0.5)
 
-				for(var p = 0;p<pidiv1;p++) this.mesh.push(vec2(radius[0] ,radius[0]), p*pimul1, vec4(1,0,0,0), 1,0)
-				for(var p = 0;p<pidiv2;p++) this.mesh.push(vec2(width - radius[1]-1, radius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0)
-				for(var p = 0;p<pidiv3;p++) this.mesh.push(vec2(width - radius[2]-1, height - radius[2]-1), p*pimul3+ PI, vec4(0,0,1,0), 1,1)
-				for(var p = 0;p<pidiv4;p++) this.mesh.push(vec2(radius[3], height - radius[3]-1), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1)
+				for (var p = 0;p<pidiv1;p++) this.mesh.push(vec2(radius[0] ,radius[0]), p*pimul1, vec4(1,0,0,0), 1,0)
+				for (var p = 0;p<pidiv2;p++) this.mesh.push(vec2(width - radius[1]-1, radius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0)
+				for (var p = 0;p<pidiv3;p++) this.mesh.push(vec2(width - radius[2]-1, height - radius[2]-1), p*pimul3+ PI, vec4(0,0,1,0), 1,1)
+				for (var p = 0;p<pidiv4;p++) this.mesh.push(vec2(radius[3], height - radius[3]-1), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1)
 
 				this.mesh.push(vec2( radius[0] ,radius[0]), 0, vec4(1,0,0,0), 1,0)
 			}
@@ -1751,8 +1736,7 @@ define.class('$system/base/node', function(require){
 				mesh.push([width,height], 0, [1,0,0,0], 1,1)
 				mesh.push([0,height], 0, [1,0,0,0], 0,1)
 				mesh.push([0,0], 0, [1,0,0,0], 0,0)
-			}
-			else{
+			} else {
 
 				var divbase = 0.45
 				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
@@ -1766,20 +1750,20 @@ define.class('$system/base/node', function(require){
 				var pimul4 = (PI*0.5)/(pidiv4-1)
 
 
-				for(var p = 0;p<pidiv1;p++){
+				for (var p = 0;p<pidiv1;p++){
 					this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), p*pimul1, vec4(0,0,0,0), 0,0,radius)
 					this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), p*pimul1, vec4(1,0,0,0), 1,0,radius)
 				}
-				for(var p = 0;p<pidiv2;p++)
+				for (var p = 0;p<pidiv2;p++)
 				{
 					this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,0,0,0), 0,0,radius)
 					this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0,radius)
 				}
-				for(var p = 0;p<pidiv3;p++) {
+				for (var p = 0;p<pidiv3;p++) {
 					this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,0,0), 0,0,radius)
 					this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,1,0), 1,0,radius)
 				}
-				for(var p = 0;p<pidiv4;p++){
+				for (var p = 0;p<pidiv4;p++){
 					this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,0,radius)
 					this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 1,0,radius)
 				}
@@ -1821,14 +1805,13 @@ define.class('$system/base/node', function(require){
 	this.dropshadowopacity = function(){
 		if (this.dropshadowopacity> 0){
 			this.shadowrect = true
-		}
-		else{
+		} else {
 			this.shadowrect =false
 		}
 	}
 
 	this.moveToFront = function(){
-		if(!this.parent) return
+		if (!this.parent) return
 		var idx = this.parent.children.indexOf(this)
 		this.parent.children.splice(idx, 1)
 		this.parent.children.push(this)
@@ -1836,7 +1819,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.moveToBack = function(){
-		if(!this.parent) return
+		if (!this.parent) return
 		var idx = this.parent.children.indexOf(this)
 		this.parent.children.splice(idx, 1)
 		this.parent.children.unshift(this)
@@ -1931,20 +1914,20 @@ define.class('$system/base/node', function(require){
 			var pimul3 = (PI*0.5)/(pidiv3-1)
 			var pimul4 = (PI*0.5)/(pidiv4-1)
 
-			for(var p = 0; p < pidiv1; p ++){
+			for (var p = 0; p < pidiv1; p ++){
 				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(1,0,0,0), 1,0)
 				this.mesh.push(vec2( borderradius[0] ,borderradius[0]), p*pimul1, vec4(scale0,0,0,0), 1,0)
 			}
 
-			for(var p = 0;p<pidiv2;p++){
+			for (var p = 0;p<pidiv2;p++){
 				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0)
 				this.mesh.push(vec2(width-borderradius[1],borderradius[1]), p*pimul2 + PI/2, vec4(0,scale1,0,0), 1,0)
 			}
-			for(var p = 0;p<pidiv3;p++){
+			for (var p = 0;p<pidiv3;p++){
 				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,1,0), 1,1)
 				this.mesh.push(vec2(width-borderradius[2],height-borderradius[2]), p*pimul3 + PI, vec4(0,0,scale2,0), 1,1)
 			}
-			for(var p = 0;p<pidiv4;p++){
+			for (var p = 0;p<pidiv4;p++){
 				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 0,1)
 				this.mesh.push(vec2(borderradius[3],height-borderradius[3]), p*pimul4 + PI + PI/2, vec4(0,0,0,scale3), 0,1)
 			}
