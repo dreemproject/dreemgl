@@ -20,11 +20,11 @@ define.class('$ui/textbox', function(require){
 		init_anim: Config({value:0.0, duration:1, motion:'outexpo'}),
 		line_anim: Config({value:1.0, duration:0.25, motion:'outexpo'}),
 	}
-	this.linespacing = 1.3	
+	this.linespacing = 1.3
 	this.tab_size = 1
 	this.line_start = 0
 	this.line_end = 0
-	this.boldness = 0.6
+	this.boldness = 0.2
 
 	this.format_options = {
 		force_newlines_array:false,
@@ -210,7 +210,7 @@ define.class('$ui/textbox', function(require){
 			textbuf.font = view.font
 			var cycle = Date.now()
 			var ast = view.ast ? view.ast : (view.sourceset ? view.sourceset.ast: Parser.parse(view.source))
-			
+
 			textbuf.linespacing = view.linespacing
 			textbuf.fontsize = view.fontsize
 			textbuf.add_y = textbuf.line_height
