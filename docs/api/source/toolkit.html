@@ -2302,7 +2302,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,
                                                                   <span class="predefined">$ui$</span>, view, label, textbox, icon, checkbox, treeview, button, tabbar,
-                                                                  <span class="predefined">$widgets$</span>, palette, propviewer, jseditor, jsviewer,
+                                                                  <span class="predefined">$widgets$</span>, palette, propviewer, jseditor,
                                                                   <span class="predefined">$server$</span>, astio){
 
 <span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running composition</span>
@@ -3412,7 +3412,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.__movepanel) {
                         <span class="local-variable">this</span>.__movepanel.flex = <span class="integer">0</span>;
                         <span class="local-variable">this</span>.__movepanel.height = <span class="local-variable">this</span>.__movepanel._layout.height + ev.movement.y;
-                        <span class="local-variable">this</span>.height = <span class="local-variable">this</span>._layout.height + ev.movement.y;
+<span class="comment">//                        this.height = this._layout.height + ev.movement.y;</span>
                 }
         };
 

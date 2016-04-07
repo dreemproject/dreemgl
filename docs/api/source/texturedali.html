@@ -539,6 +539,42 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n385" name="n385">385</a>
 <a href="#n386" name="n386">386</a>
 <a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
+<a href="#n391" name="n391">391</a>
+<a href="#n392" name="n392">392</a>
+<a href="#n393" name="n393">393</a>
+<a href="#n394" name="n394">394</a>
+<a href="#n395" name="n395">395</a>
+<a href="#n396" name="n396">396</a>
+<a href="#n397" name="n397">397</a>
+<a href="#n398" name="n398">398</a>
+<a href="#n399" name="n399">399</a>
+<strong><a href="#n400" name="n400">400</a></strong>
+<a href="#n401" name="n401">401</a>
+<a href="#n402" name="n402">402</a>
+<a href="#n403" name="n403">403</a>
+<a href="#n404" name="n404">404</a>
+<a href="#n405" name="n405">405</a>
+<a href="#n406" name="n406">406</a>
+<a href="#n407" name="n407">407</a>
+<a href="#n408" name="n408">408</a>
+<a href="#n409" name="n409">409</a>
+<strong><a href="#n410" name="n410">410</a></strong>
+<a href="#n411" name="n411">411</a>
+<a href="#n412" name="n412">412</a>
+<a href="#n413" name="n413">413</a>
+<a href="#n414" name="n414">414</a>
+<a href="#n415" name="n415">415</a>
+<a href="#n416" name="n416">416</a>
+<a href="#n417" name="n417">417</a>
+<a href="#n418" name="n418">418</a>
+<a href="#n419" name="n419">419</a>
+<strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -555,7 +591,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 }
 
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(exports, require){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports){
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
+        DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
+
         <span class="keyword">var</span> Texture = exports
 
         Texture.GlobalId = <span class="integer">0</span>
@@ -564,7 +603,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Map hash of texture to an existing texture</span>
         Texture.Cache = {};
 
-        DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
         fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(type, w, h, device){
@@ -586,8 +624,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> <span class="keyword">new</span> Texture(type,<span class="integer">0</span>,<span class="integer">0</span>)
         }
 
-        <span class="comment">// imagedata is an instance of DaliImage</span>
-        Texture.<span class="function">fromImage</span> = <span class="keyword">function</span>(imagedata){
+        <span class="comment">// Load from a local image file. Returns the Texture</span>
+        Texture.<span class="function">fromLocalImage</span> = <span class="keyword">function</span>(path){
+                <span class="keyword">var</span> dali = DaliApi.dali;
+
+                <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: path});
+
+                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.getWidth(), img.getHeight())
+                tex.image = img
+
+                <span class="keyword">if</span> (DaliApi.emitcode) {
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texture</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.ResourceImage({url: </span><span class="char">\'</span><span class="delimiter">'</span></span> + path + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">});</span><span class="delimiter">'</span></span>);
+                }
+
+                <span class="keyword">return</span> tex
+        }
+
+
+        <span class="comment">// Load texture from a local file or remote url.</span>
+        <span class="comment">// imagedata is an instance of DaliImage.</span>
+        <span class="comment">// If the image is loaded remotely, the callback function is called when</span>
+        <span class="comment">// the texture is loaded.</span>
+        Texture.<span class="function">fromImage</span> = <span class="keyword">function</span>(imagedata, callback){
                 <span class="keyword">var</span> dali = DaliApi.dali;                
 
                 <span class="comment">// With dali, the references should either be absolute, or relative</span>
@@ -600,17 +658,31 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span> (imagedata.path[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) fullpath = define.<span class="predefined">$example</span> + fullpath;
 
-                <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: fullpath});
+                <span class="keyword">if</span> (fullpath.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span>) {
+                        <span class="comment">// Local assets</span>
+                        <span class="keyword">return</span> Texture.fromLocalImage(fullpath);
+                }
 
-                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.getWidth(), img.getHeight())
-                <span class="comment">//console.log('********** fromImage', img.getWidth(), img.getHeight());</span>
-                tex.image = img
+                <span class="comment">// Remote assets are loaded into the cache</span>
+                <span class="keyword">var</span> localpath = define.mapToCacheDir(fullpath);
+                <span class="keyword">try</span> {
+                        <span class="keyword">if</span> (fs.statSync(localpath).isFile()) {
+                                <span class="comment">// File is already in the cache</span>
+                                <span class="keyword">return</span> Texture.fromLocalImage(localpath);
+                        }
+                }
+                <span class="keyword">catch</span> (e) {
+                }
 
-                <span class="keyword">if</span> (DaliApi.emitcode) {
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texture</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.ResourceImage({url: </span><span class="char">\'</span><span class="delimiter">'</span></span> + fullpath + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">});</span><span class="delimiter">'</span></span>);
-                }                
+                <span class="comment">// Load the image into the cache.</span>
+                define.httpGetCached(fullpath).then(<span class="keyword">function</span>(result){
+                        <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: result.path});
+                        <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.getWidth(), img.getHeight());
+                        tex.image = img;
 
-                <span class="keyword">return</span> tex
+                        <span class="keyword">if</span> (callback)
+                                callback(tex);
+                });
         }
 
         Texture.<span class="function">fromArray</span> = <span class="keyword">function</span>(array, w, h){

@@ -914,17 +914,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n760" name="n760">760</a></strong>
 <a href="#n761" name="n761">761</a>
 <a href="#n762" name="n762">762</a>
-<a href="#n763" name="n763">763</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the 'License'); You may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   software distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
 
-        <span class="keyword">var</span> earcut = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/earcut-port.js</span><span class="delimiter">'</span></span>)().earcut;
+        <span class="keyword">var</span> earcut = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/earcut-port.js</span><span class="delimiter">'</span></span>)().earcut
+        <span class="keyword">var</span> styleset = require(<span class="string"><span class="delimiter">'</span><span class="content">$widgets/map/mapstyle.js</span><span class="delimiter">'</span></span>)()
 
         <span class="local-variable">this</span>.TileSize = <span class="float">256.0</span>;
 
@@ -932,43 +932,43 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> UnhandledKindSet = <span class="local-variable">this</span>.UnhandledKindSet = {};
 
         <span class="keyword">var</span> roadwidths = {
-                        <span class="key">water</span>:<span class="integer">20</span>, 
-                        <span class="key">ferry</span>:<span class="integer">6</span>,
-                        <span class="key">Ferry</span>:<span class="integer">6</span>,
+                        <span class="key">water</span>: <span class="integer">20</span>,
+                        <span class="key">ferry</span>: <span class="integer">6</span>,
+                        <span class="key">Ferry</span>: <span class="integer">6</span>,
                         <span class="key">rail</span>: <span class="integer">6</span>,
-                        <span class="key">railway</span>: <span class="integer">6</span>,        
-                        <span class="key">racetrack</span>:<span class="integer">6</span>,                        
+                        <span class="key">railway</span>: <span class="integer">6</span>,
+                        <span class="key">racetrack</span>:<span class="integer">6</span>,
                         <span class="key">minor_road</span>: <span class="integer">4</span>,
-                        <span class="key">major_road</span>: <span class="integer">6</span>, 
+                        <span class="key">major_road</span>: <span class="integer">6</span>,
                         <span class="key">path</span>: <span class="integer">4</span>, <span class="key">highway</span>:<span class="integer">15</span>,
-                        <span class="key">Road</span>:<span class="integer">200</span>
+                        <span class="key">Road</span>: <span class="integer">200</span>
         }
-        
+
         <span class="keyword">var</span> roadcolors = {
-                <span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, 
-                <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>, 
-                <span class="key">ferry</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>, 
-                <span class="key">rail</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>),
-                <span class="key">minor_road</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>), 
-                <span class="key">major_road</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), 
-                <span class="key">highway</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>)
+                <span class="key">water</span>:<span class="string"><span class="delimiter">'</span><span class="content">#30a0ff</span><span class="delimiter">'</span></span>,
+                <span class="key">path</span>:<span class="string"><span class="delimiter">'</span><span class="content">#d0d0d0</span><span class="delimiter">'</span></span>,
+                <span class="key">ferry</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightblue</span><span class="delimiter">'</span></span>,
+                <span class="key">rail</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>),
+                <span class="key">minor_road</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>),
+                <span class="key">major_road</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">#404040</span><span class="delimiter">'</span></span>),
+                <span class="key">highway</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">#303030</span><span class="delimiter">'</span></span>)
         }
-        
+
         <span class="keyword">var</span> roadmarkcolors = {
-                <span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, 
-                <span class="key">major_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                 <span class="key">minor_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a0a0a0</span><span class="delimiter">&quot;</span></span>
+                <span class="key">water</span>:<span class="string"><span class="delimiter">'</span><span class="content">#30a0ff</span><span class="delimiter">'</span></span>,
+                <span class="key">major_road</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>,
+                 <span class="key">minor_road</span>:<span class="string"><span class="delimiter">'</span><span class="content">#a0a0a0</span><span class="delimiter">'</span></span>
         }
 
         <span class="comment">//this.ignoreuse = {}</span>
         <span class="comment">//this.displaykinds = {}</span>
         <span class="local-variable">this</span>.displaykinds ={
-                <span class="key">water</span>: <span class="predefined-constant">true</span>, 
-                <span class="key">meadow</span>:<span class="predefined-constant">true</span>, 
-                <span class="key">playa</span>:<span class="predefined-constant">true</span>, 
+                <span class="key">water</span>: <span class="predefined-constant">true</span>,
+                <span class="key">meadow</span>:<span class="predefined-constant">true</span>,
+                <span class="key">playa</span>:<span class="predefined-constant">true</span>,
                 <span class="key">forest</span>: <span class="predefined-constant">true</span>,
                 <span class="key">pedestrian</span>: <span class="predefined-constant">true</span>,
-                <span class="key">earth</span>:<span class="predefined-constant">true</span>, 
+                <span class="key">earth</span>:<span class="predefined-constant">true</span>,
                 <span class="key">river</span>:<span class="predefined-constant">true</span>,
                 <span class="key">beach</span>: <span class="predefined-constant">true</span>,
                 <span class="key">grass</span>: <span class="predefined-constant">true</span>,
@@ -990,7 +990,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">farmyard</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>,
                 <span class="key">forest</span>:<span class="predefined-constant">true</span>,<span class="key">nature_reserve</span>:<span class="predefined-constant">false</span>,<span class="key">riverbank</span>:<span class="predefined-constant">true</span>, <span class="key">railway</span>:<span class="predefined-constant">true</span>, <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">farmland</span>:<span class="predefined-constant">true</span>
         }
-        
+
         <span class="local-variable">this</span>.noignoreuse = {
                 <span class="key">allotments</span>:<span class="predefined-constant">true</span>,
                 <span class="key">apron</span>:<span class="predefined-constant">true</span>,
@@ -1013,38 +1013,36 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">national_park</span>:<span class="predefined-constant">true</span>,
                 <span class="key">place_of_worship</span>:<span class="predefined-constant">true</span>, <span class="key">playground</span>:<span class="predefined-constant">true</span>, <span class="key">quarry</span>:<span class="predefined-constant">true</span>, <span class="key">railway</span>:<span class="predefined-constant">true</span>, <span class="key">recreation_ground</span>:<span class="predefined-constant">false</span>, <span class="key">residential</span>:<span class="predefined-constant">false</span>, <span class="key">retail</span>:<span class="predefined-constant">true</span>,
                 <span class="key">riverbank</span>:<span class="predefined-constant">true</span>,<span class="key">reservoir</span>:<span class="predefined-constant">true</span>,
-                <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">school</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>, <span class="key">sports_centre</span>:<span class="predefined-constant">true</span>, <span class="key">stadium</span>:<span class="predefined-constant">true</span>, <span class="key">taxiway</span>:<span class="predefined-constant">true</span>, <span class="key">theatre</span>:<span class="predefined-constant">true</span>, <span class="key">university</span>:<span class="predefined-constant">true</span>, <span class="key">village_green</span>:<span class="predefined-constant">true</span>, <span class="key">wetland</span>:<span class="predefined-constant">true</span>, <span class="key">wood</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">urban area</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">park</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">protected land</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">protected_area</span>:<span class="predefined-constant">true</span>
+                <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">school</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>, <span class="key">sports_centre</span>:<span class="predefined-constant">true</span>, <span class="key">stadium</span>:<span class="predefined-constant">true</span>, <span class="key">taxiway</span>:<span class="predefined-constant">true</span>, <span class="key">theatre</span>:<span class="predefined-constant">true</span>, <span class="key">university</span>:<span class="predefined-constant">true</span>, <span class="key">village_green</span>:<span class="predefined-constant">true</span>, <span class="key">wetland</span>:<span class="predefined-constant">true</span>, <span class="key">wood</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">'</span><span class="content">urban area</span><span class="delimiter">'</span></span>:<span class="predefined-constant">true</span>, <span class="key">park</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">'</span><span class="content">protected land</span><span class="delimiter">'</span></span>:<span class="predefined-constant">true</span>, <span class="key">protected_area</span>:<span class="predefined-constant">true</span>
         };
-        
-        <span class="keyword">var</span> styleset = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./mapstyle.js</span><span class="delimiter">&quot;</span></span>)();
-        
+
         <span class="keyword">var</span> mapstyle = <span class="local-variable">this</span>.mapstyle =         styleset.mapstyle;
-        
+
         <span class="keyword">if</span> (<span class="predefined-constant">true</span>){
 
                 <span class="keyword">for</span> (<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.mapstyle){
                         <span class="keyword">var</span> st = <span class="local-variable">this</span>.mapstyle[a];
                 <span class="comment">//        if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);</span>
                 <span class="comment">//        if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);</span>
-                
+
                 }
         }
 
         <span class="local-variable">this</span>.<span class="function">dumpkindset</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> mapstylestring = <span class="string"><span class="delimiter">&quot;</span><span class="content">var mapstyle = {</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>;
+                <span class="keyword">var</span> mapstylestring = <span class="string"><span class="delimiter">'</span><span class="content">var mapstyle = {</span><span class="content">\n</span><span class="delimiter">'</span></span>;
                 <span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> KindSet){
-                        mapstylestring += <span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="delimiter">&quot;</span></span> + i + <span class="string"><span class="delimiter">&quot;</span><span class="content">:{</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">if</span> (landoffsets[i]) mapstylestring += <span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="char">\t</span><span class="content">offset:</span><span class="delimiter">&quot;</span></span> + landoffsets[i]+ <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="char">\n</span><span class="content"> </span><span class="delimiter">&quot;</span></span>
-                        <span class="keyword">if</span> (landcolor1[i]) mapstylestring += <span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="char">\t</span><span class="content">color1: vec4(</span><span class="delimiter">&quot;</span></span> + vec4(landcolor1[i])+ <span class="string"><span class="delimiter">&quot;</span><span class="content">),</span><span class="char">\n</span><span class="content"> </span><span class="delimiter">&quot;</span></span>
-                        <span class="keyword">if</span> (landcolor2[i]) mapstylestring += <span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="char">\t</span><span class="content">color2: vec4(</span><span class="delimiter">&quot;</span></span> + vec4(landcolor2[i])+ <span class="string"><span class="delimiter">&quot;</span><span class="content">),</span><span class="char">\n</span><span class="content"> </span><span class="delimiter">&quot;</span></span>
-                        <span class="keyword">if</span> (roadcolors[i]) mapstylestring += <span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="char">\t</span><span class="content">roadcolor: vec4(</span><span class="delimiter">&quot;</span></span> + vec4(roadcolors[i])+ <span class="string"><span class="delimiter">&quot;</span><span class="content">),</span><span class="char">\n</span><span class="content"> </span><span class="delimiter">&quot;</span></span>
-                        mapstylestring +=<span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="content">},</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>;
-                        <span class="comment">// console.log(&quot;Handled:&quot;, i);</span>
+                        mapstylestring += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span> + i + <span class="string"><span class="delimiter">'</span><span class="content">:{</span><span class="content">\n</span><span class="delimiter">'</span></span>;
+                        <span class="keyword">if</span> (landoffsets[i]) mapstylestring += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">offset:</span><span class="delimiter">'</span></span> + landoffsets[i]+ <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="content">\n</span><span class="content"> </span><span class="delimiter">'</span></span>
+                        <span class="keyword">if</span> (landcolor1[i]) mapstylestring += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">color1: vec4(</span><span class="delimiter">'</span></span> + vec4(landcolor1[i])+ <span class="string"><span class="delimiter">'</span><span class="content">),</span><span class="content">\n</span><span class="content"> </span><span class="delimiter">'</span></span>
+                        <span class="keyword">if</span> (landcolor2[i]) mapstylestring += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">color2: vec4(</span><span class="delimiter">'</span></span> + vec4(landcolor2[i])+ <span class="string"><span class="delimiter">'</span><span class="content">),</span><span class="content">\n</span><span class="content"> </span><span class="delimiter">'</span></span>
+                        <span class="keyword">if</span> (roadcolors[i]) mapstylestring += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">roadcolor: vec4(</span><span class="delimiter">'</span></span> + vec4(roadcolors[i])+ <span class="string"><span class="delimiter">'</span><span class="content">),</span><span class="content">\n</span><span class="content"> </span><span class="delimiter">'</span></span>
+                        mapstylestring +=<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">},</span><span class="content">\n</span><span class="delimiter">'</span></span>;
+                        <span class="comment">// console.log('Handled:', i);</span>
                 }
                 <span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> UnhandledKindSet){
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Unhandled:</span><span class="delimiter">&quot;</span></span> , i, UnhandledKindSet[i]);
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Unhandled:</span><span class="delimiter">'</span></span> , i, UnhandledKindSet[i]);
                 }
-                mapstylestring += <span class="string"><span class="delimiter">&quot;</span><span class="char">\t</span><span class="content">default:</span><span class="char">\n</span><span class="char">\t</span><span class="content">{</span><span class="char">\n</span><span class="char">\t</span><span class="char">\t</span><span class="content">color1:vec4('red')</span><span class="char">\n</span><span class="char">\t</span><span class="content">}</span><span class="char">\n</span><span class="content">}</span><span class="delimiter">&quot;</span></span>;
+                mapstylestring += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">default:</span><span class="content">\n</span><span class="content">\t</span><span class="content">{</span><span class="content">\n</span><span class="content">\t</span><span class="content">\t</span><span class="content">color1:vec4(&quot;red&quot;)</span><span class="content">\n</span><span class="content">\t</span><span class="content">}</span><span class="content">\n</span><span class="content">}</span><span class="delimiter">'</span></span>;
                 console.log(mapstylestring);
         }
 
@@ -1137,7 +1135,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> c0 = buildingcolor[<span class="integer">0</span>];
                 <span class="keyword">var</span> c1 = buildingcolor[<span class="integer">1</span>];
                 <span class="keyword">var</span> c2 = buildingcolor[<span class="integer">2</span>];
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;buildings.length;i++){
                         <span class="keyword">var</span> building = buildings[i];
 
@@ -1220,16 +1218,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//var color2 = ;</span>
                         <span class="keyword">var</span> t = mapstyle[land.kind];
                         <span class="keyword">if</span> (!t) {
-                                t = mapstyle[<span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>];
-                        <span class="comment">//        console.log(&quot;defaulting for:&quot;, land.kind);</span>
+                                t = mapstyle[<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>];
+                        <span class="comment">//        console.log('defaulting for:', land.kind);</span>
                         };
-                        
+
                         <span class="keyword">if</span> (t.color1) color1 = t.color1;<span class="keyword">else</span> {
-                                UnhandledKindSet[land.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">land - no color1</span><span class="delimiter">&quot;</span></span>;
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">no color for: </span><span class="delimiter">&quot;</span></span>, land.kind);
+                                UnhandledKindSet[land.kind] = <span class="string"><span class="delimiter">'</span><span class="content">land - no color1</span><span class="delimiter">'</span></span>;
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">no color for: </span><span class="delimiter">'</span></span>, land.kind);
                         }
-                        <span class="comment">//if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = &quot;land - no color2 &quot;;</span>
-                        <span class="comment">//if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = &quot;land - no offset&quot;</span>
+                        <span class="comment">//if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = 'land - no color2 ';</span>
+                        <span class="comment">//if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = 'land - no offset'</span>
 
                         <span class="keyword">if</span> (land.arcs){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;land.arcs.length;j++){
@@ -1253,7 +1251,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 array[o + <span class="integer">1</span>] = tris[a + <span class="integer">1</span>]
                                                 array[o + <span class="integer">2</span>] = i
                                                 array[o + <span class="integer">3</span>] = <span class="integer">0</span>
-                                                
+
                                                 <span class="comment">//array[o + 2] = off</span>
                                                 array[o + <span class="integer">4</span>] = color1[<span class="integer">0</span>]
                                                 array[o + <span class="integer">5</span>] = color1[<span class="integer">1</span>]
@@ -1282,25 +1280,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         <span class="keyword">var</span> R = roads[i];
                         <span class="keyword">var</span> linewidth = <span class="integer">3</span>;
-                        <span class="keyword">var</span> color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>) ;
+                        <span class="keyword">var</span> color = vec4(<span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>) ;
 
                         <span class="keyword">var</span> st = mapstyle[R.kind];
-                        <span class="keyword">if</span> (!st) st = mapstyle[<span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">if</span> (!st) st = mapstyle[<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>];
                         <span class="keyword">if</span> (roadwidths[R.kind]) linewidth = roadwidths[R.kind];<span class="keyword">else</span>
                         {
-                                <span class="comment">//console.log(&quot;no width:&quot;, R.kind);</span>
-                                UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
+                                <span class="comment">//console.log('no width:', R.kind);</span>
+                                UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">'</span><span class="content">road</span><span class="delimiter">'</span></span> ;
                         }
-                        
+
                         linewidth *= Math.pow(<span class="float">2.0</span>, zoomlevel - <span class="integer">13</span>);
                         <span class="keyword">if</span> (st.roadcolor){
                                 color = st.roadcolor
                         }<span class="keyword">else</span> {
-                                UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
-                                <span class="comment">//console.log(&quot;roadkind with no color&quot;, R.kind);</span>
+                                UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">'</span><span class="content">road</span><span class="delimiter">'</span></span> ;
+                                <span class="comment">//console.log('roadkind with no color', R.kind);</span>
                         }
-                        
-                
+
+
                         <span class="keyword">var</span> colorid = i;
                         <span class="comment">//var markcolor = color;</span>
                         <span class="comment">//if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);</span>
@@ -1309,10 +1307,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> showcaps = <span class="predefined-constant">false</span>;
                         <span class="keyword">var</span> showfill = <span class="predefined-constant">true</span>;
                         <span class="keyword">var</span> showcorner = <span class="predefined-constant">true</span>;
-                        
+
                         <span class="keyword">for</span>(<span class="keyword">var</span> rr = <span class="integer">0</span>;rr&lt;R.arcs.length;rr++){
-                
-                                
+
+
                                 <span class="keyword">var</span> currentarc = R.arcs[rr]
                                 <span class="keyword">if</span> (currentarc.length == <span class="integer">1</span>){
                                         <span class="keyword">continue</span>
@@ -1334,97 +1332,97 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> dist = <span class="integer">0</span>;
                                 <span class="keyword">var</span> dist2 = <span class="integer">0</span>;
                                 <span class="keyword">var</span> lastsdelta = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-                                
+
                                 <span class="keyword">if</span> (showcaps){
                                         mesh.push(
                                                 nx,
                                                 ny,
-                                                pre_side_delta[<span class="integer">0</span>], 
-                                                pre_side_delta[<span class="integer">1</span>], 
-                                                <span class="integer">1</span>, 
-                                                dist, 
-                                                linewidth, 
-                                                colorid, 
-                                                color[<span class="integer">0</span>], 
-                                                color[<span class="integer">1</span>], 
+                                                pre_side_delta[<span class="integer">0</span>],
+                                                pre_side_delta[<span class="integer">1</span>],
+                                                <span class="integer">1</span>,
+                                                dist,
+                                                linewidth,
+                                                colorid,
+                                                color[<span class="integer">0</span>],
+                                                color[<span class="integer">1</span>],
                                                 color[<span class="integer">2</span>],
                                                 color[<span class="integer">3</span>]
                                         )
                                         mesh.push(
                                                 nx,
                                                 ny,
-                                                pre_side_delta[<span class="integer">0</span>], 
-                                                pre_side_delta[<span class="integer">1</span>], 
-                                                -<span class="integer">1</span>, 
-                                                dist, 
-                                                linewidth, 
-                                                colorid, 
-                                                color[<span class="integer">0</span>], 
-                                                color[<span class="integer">1</span>], 
-                                                color[<span class="integer">2</span>], 
-                                                color[<span class="integer">3</span>]
-                                        );
-                                        mesh.push(
-                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
-                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, 
-                                                pre_side_delta[<span class="integer">0</span>], 
-                                                pre_side_delta[<span class="integer">1</span>], 
-                                                <span class="float">0.5</span>, 
-                                                -linewidth,
+                                                pre_side_delta[<span class="integer">0</span>],
+                                                pre_side_delta[<span class="integer">1</span>],
+                                                -<span class="integer">1</span>,
+                                                dist,
                                                 linewidth,
-                                                colorid, 
-                                                color[<span class="integer">0</span>], 
-                                                color[<span class="integer">1</span>], 
-                                                color[<span class="integer">2</span>], 
-                                                color[<span class="integer">3</span>]
-                                        );
-
-                                        mesh.push(
-                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
-                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, 
-                                                pre_side_delta[<span class="integer">0</span>], 
-                                                pre_side_delta[<span class="integer">1</span>], 
-                                                <span class="float">0.5</span>, 
-                                                -linewidth,
-                                                linewidth,
-                                                colorid, 
-                                                color[<span class="integer">0</span>], 
-                                                color[<span class="integer">1</span>], 
-                                                color[<span class="integer">2</span>], 
+                                                colorid,
+                                                color[<span class="integer">0</span>],
+                                                color[<span class="integer">1</span>],
+                                                color[<span class="integer">2</span>],
                                                 color[<span class="integer">3</span>]
                                         );
                                         mesh.push(
                                                 nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
                                                 ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>,
-                                                pre_side_delta[<span class="integer">0</span>], 
-                                                pre_side_delta[<span class="integer">1</span>], 
-                                                -<span class="float">0.5</span>, 
+                                                pre_side_delta[<span class="integer">0</span>],
+                                                pre_side_delta[<span class="integer">1</span>],
+                                                <span class="float">0.5</span>,
                                                 -linewidth,
                                                 linewidth,
-                                                colorid, 
-                                                color[<span class="integer">0</span>], 
-                                                color[<span class="integer">1</span>], 
-                                                color[<span class="integer">2</span>], 
+                                                colorid,
+                                                color[<span class="integer">0</span>],
+                                                color[<span class="integer">1</span>],
+                                                color[<span class="integer">2</span>],
+                                                color[<span class="integer">3</span>]
+                                        );
+
+                                        mesh.push(
+                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
+                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>,
+                                                pre_side_delta[<span class="integer">0</span>],
+                                                pre_side_delta[<span class="integer">1</span>],
+                                                <span class="float">0.5</span>,
+                                                -linewidth,
+                                                linewidth,
+                                                colorid,
+                                                color[<span class="integer">0</span>],
+                                                color[<span class="integer">1</span>],
+                                                color[<span class="integer">2</span>],
+                                                color[<span class="integer">3</span>]
+                                        );
+                                        mesh.push(
+                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
+                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>,
+                                                pre_side_delta[<span class="integer">0</span>],
+                                                pre_side_delta[<span class="integer">1</span>],
+                                                -<span class="float">0.5</span>,
+                                                -linewidth,
+                                                linewidth,
+                                                colorid,
+                                                color[<span class="integer">0</span>],
+                                                color[<span class="integer">1</span>],
+                                                color[<span class="integer">2</span>],
                                                 color[<span class="integer">3</span>]
                                         );
                                         mesh.push(
                                                 nx,
-                                                ny, 
-                                                pre_side_delta[<span class="integer">0</span>], 
-                                                pre_side_delta[<span class="integer">1</span>], 
-                                                -<span class="integer">1</span>, 
+                                                ny,
+                                                pre_side_delta[<span class="integer">0</span>],
+                                                pre_side_delta[<span class="integer">1</span>],
+                                                -<span class="integer">1</span>,
                                                 dist,
                                                 linewidth,
-                                                colorid, 
-                                                color[<span class="integer">0</span>], 
-                                                color[<span class="integer">1</span>], 
-                                                color[<span class="integer">2</span>], 
+                                                colorid,
+                                                color[<span class="integer">0</span>],
+                                                color[<span class="integer">1</span>],
+                                                color[<span class="integer">2</span>],
                                                 color[<span class="integer">3</span>]
                                         );
                                 }
 
                                 <span class="keyword">var</span> lastdelta = vec2(<span class="integer">0</span>);
-                                
+
                                 <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">1</span>;a&lt;currentarc.length;a++){
                                         <span class="keyword">var</span> A =currentarc[a];
 
@@ -1434,7 +1432,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> delta = vec2.normalize(predelt);
                                         <span class="keyword">var</span> sdelta = vec2.rotate(delta, PI/<span class="integer">2</span>);
 
-                                        
+
                                         <span class="keyword">var</span> dist2 = dist +  vec2.len(predelt);
                                         <span class="keyword">if</span> (a&gt;<span class="integer">1</span> &amp;&amp; showcorner){
                                                 mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
@@ -1462,7 +1460,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         ny = tny;
                                         lastdelta = delta;
                                 }
-                                <span class="comment">//color = vec4(&quot;red&quot;);</span>
+                                <span class="comment">//color = vec4('red');</span>
                                 <span class="keyword">if</span> (showcaps){
                                         mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
                                         mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
@@ -1486,7 +1484,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> Tarcs = B.arcs;
                 <span class="keyword">var</span> Tpolies = B.polygons;
 
-                <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">MultiLineString</span><span class="delimiter">&quot;</span></span>){
+                <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">'</span><span class="content">MultiLineString</span><span class="delimiter">'</span></span>){
                         <span class="keyword">var</span> arc = [];
                         <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>;k&lt;Barcs.length;k++){
                                 <span class="keyword">var</span> sourcearc = SourceArcs[Barcs[k]];
@@ -1503,7 +1501,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         Tarcs.push(arc);
                 }
                 <span class="keyword">else</span>{
-                        <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">MultiPolygon</span><span class="delimiter">&quot;</span></span>){
+                        <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">'</span><span class="content">MultiPolygon</span><span class="delimiter">'</span></span>){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>; k &lt; Bb.arcs.length;k++){
                                         <span class="keyword">var</span> L  = Bb.arcs[k].length;
                                         <span class="keyword">var</span> outlinearc = SourceArcs[Bb.arcs[k][<span class="integer">0</span>]];
@@ -1516,7 +1514,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }
                         }
                         <span class="keyword">else</span>{
-                                <span class="keyword">if</span> ( Bb.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">Polygon</span><span class="delimiter">&quot;</span></span>){
+                                <span class="keyword">if</span> ( Bb.type == <span class="string"><span class="delimiter">'</span><span class="content">Polygon</span><span class="delimiter">'</span></span>){
 
                                         <span class="keyword">var</span> outlinearc = SourceArcs[Bb.arcs[<span class="integer">0</span>][<span class="integer">0</span>]];
                                         <span class="keyword">var</span> holes = [];
@@ -1528,7 +1526,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         Tpolies.push({<span class="key">outline</span>: outlinearc, <span class="key">holes</span>: holes});
                                 }
                                 <span class="keyword">else</span>{
-                                        <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">LineString</span><span class="delimiter">&quot;</span></span>){
+                                        <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">'</span><span class="content">LineString</span><span class="delimiter">'</span></span>){
                                                 <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>; k &lt; Bb.arcs.length;k++){
                                                         Tarcs.push(SourceArcs[Bb.arcs[k]]);
                                                 }
@@ -1536,14 +1534,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }
                         }
                 }
-                <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">LineString</span><span class="delimiter">&quot;</span></span> ){
+                <span class="keyword">if</span> (Bb.type == <span class="string"><span class="delimiter">'</span><span class="content">LineString</span><span class="delimiter">'</span></span> ){
                         <span class="comment">// ignore linestrings stuck in things expected to be polygons.</span>
                 }
                 <span class="keyword">else</span>{
                         TargetSet.push(B);
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">getRoadSortKey</span> = <span class="keyword">function</span>(kind){
                 <span class="keyword">if</span> (!kind) <span class="keyword">return</span> <span class="integer">0</span>;
                 <span class="keyword">var</span> s = mapstyle[kind];
@@ -1551,11 +1549,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span> (s.sortkey) <span class="keyword">return</span> s.sortkey;
                 <span class="keyword">return</span> <span class="integer">0</span>;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">sortroads</span> = <span class="keyword">function</span>(a, b) {
                 <span class="keyword">return</span> a.sortkey - b.sortkey;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">build</span> = <span class="keyword">function</span>(target, sourcedata){
                 <span class="keyword">var</span> dt = Date.now()
                 <span class="keyword">var</span> Bset = [];
@@ -1575,7 +1573,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> Bb = BuildingGeoms[i];
                         <span class="keyword">var</span> Barcs = Bb.arcs;
                         <span class="keyword">if</span> (Barcs){
-                                <span class="keyword">var</span> B = {<span class="key">id</span>:Bb.properties.id,<span class="key">h</span>:Bb.properties.height?Bb.properties.height:<span class="float">30.0</span>,<span class="key">kind</span>:Bb.properties.kind, <span class="key">name</span>:Bb.properties.name, <span class="key">street</span>: Bb.properties[<span class="string"><span class="delimiter">&quot;</span><span class="content">addr_street</span><span class="delimiter">&quot;</span></span>], <span class="key">housenumber</span>: Bb.properties.addr_housenumber, <span class="key">arcs</span>:[]};
+                                <span class="keyword">var</span> B = {<span class="key">id</span>:Bb.properties.id,<span class="key">h</span>:Bb.properties.height?Bb.properties.height:<span class="float">30.0</span>,<span class="key">kind</span>:Bb.properties.kind, <span class="key">name</span>:Bb.properties.name, <span class="key">street</span>: Bb.properties[<span class="string"><span class="delimiter">'</span><span class="content">addr_street</span><span class="delimiter">'</span></span>], <span class="key">housenumber</span>: Bb.properties.addr_housenumber, <span class="key">arcs</span>:[]};
                                 <span class="keyword">var</span> Tarcs = B.arcs;
                                 <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>;k&lt;Bb.arcs.length;k++){
                                         Tarcs.push(Sarcs[Barcs[k]]);
@@ -1587,7 +1585,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> PlacesGeoms = objects.places.geometries;
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;PlacesGeoms.length;i++){
                         <span class="keyword">var</span> Bb = PlacesGeoms[i];
-                        <span class="keyword">if</span> (Bb.type ==<span class="string"><span class="delimiter">&quot;</span><span class="content">Point</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">if</span> (Bb.type ==<span class="string"><span class="delimiter">'</span><span class="content">Point</span><span class="delimiter">'</span></span>)
                         {
                                 <span class="keyword">var</span> x = Bb.coordinates[<span class="integer">0</span>];;
                                 <span class="keyword">var</span> y = Bb.coordinates[<span class="integer">1</span>];;
@@ -1605,22 +1603,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> WaterGeoms = objects.water.geometries;
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;WaterGeoms.length;i++){
                         <span class="keyword">var</span> Bb = WaterGeoms[i];
-                        DecodeAndAdd(Bb, Wset, Sarcs, <span class="string"><span class="delimiter">&quot;</span><span class="content">water</span><span class="delimiter">&quot;</span></span>);
+                        DecodeAndAdd(Bb, Wset, Sarcs, <span class="string"><span class="delimiter">'</span><span class="content">water</span><span class="delimiter">'</span></span>);
                 }
                 <span class="keyword">var</span> EarthGeoms = objects.earth.geometries;
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;EarthGeoms.length;i++){
                         <span class="keyword">var</span> Bb = EarthGeoms[i];
-                        DecodeAndAdd(Bb, Eset, Sarcs, <span class="string"><span class="delimiter">&quot;</span><span class="content">earth</span><span class="delimiter">&quot;</span></span> );
+                        DecodeAndAdd(Bb, Eset, Sarcs, <span class="string"><span class="delimiter">'</span><span class="content">earth</span><span class="delimiter">'</span></span> );
                 }
 
                 <span class="keyword">var</span> LandUseGeoms = objects.landuse.geometries
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;LandUseGeoms.length;i++){
                         <span class="keyword">var</span> Bb = LandUseGeoms[i];
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.displaykinds[Bb.properties.kind]){
-                                DecodeAndAdd(Bb, Lset, Sarcs, <span class="string"><span class="delimiter">&quot;</span><span class="content">landuse</span><span class="delimiter">&quot;</span></span> );
+                                DecodeAndAdd(Bb, Lset, Sarcs, <span class="string"><span class="delimiter">'</span><span class="content">landuse</span><span class="delimiter">'</span></span> );
                         }
                         <span class="keyword">else</span>{
-                                <span class="comment">//console.log(&quot;ignoring&quot;, Bb.properties.kind);</span>
+                                <span class="comment">//console.log('ignoring', Bb.properties.kind);</span>
                         }
                 }
 
@@ -1634,9 +1632,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         Rset.push(B);
                         KindSet[B.kind] = <span class="predefined-constant">true</span>;
                 }
-                
+
                 Rset.sort(<span class="local-variable">this</span>.sortroads);
-                
+
                 <span class="comment">/*  Skip transits for now..
                 for (var i = 0;i&lt;objects.transit.geometries.length;i++){
                         var Bb = objects.transit.geometries[i];

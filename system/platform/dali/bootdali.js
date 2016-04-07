@@ -39,7 +39,7 @@ define.class(function(require){
 		// Called from define.noderequirewrapper to load a texture
 		define.loadImage = function(name){
 			//console.log('loadImage', name);
-			return new Texture.Image(name)
+			return Texture.fromImage({path:name});
 		}
 
 		// Dali stage settings (from command-line), or defaults

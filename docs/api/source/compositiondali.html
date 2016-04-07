@@ -234,6 +234,36 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n80" name="n80">80</a></strong>
 <a href="#n81" name="n81">81</a>
 <a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -244,17 +274,37 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/compositionclient</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, baseclass){
 
         <span class="keyword">var</span> Device = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/device$platform</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> WebRTC = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/webrtc</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> BusClient = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/busclient</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> NodeWebSocket = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodewebsocket</span><span class="delimiter">'</span></span>)
 
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent){
+        <span class="comment">// Override from compositionclient. Returns the screen name from the url.</span>
+        <span class="comment">// compositionclient assumes a browser (ie. the location object exists)</span>
+        <span class="local-variable">this</span>.<span class="function">screenForClient</span> = <span class="keyword">function</span>() {
+                <span class="comment">// console.log('screenForClient', this.query);</span>
+                <span class="keyword">return</span> <span class="local-variable">this</span>.query;
+        };
+
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent, baseurl){
+                <span class="comment">//console.log('compositiondali', previous, parent, baseurl);</span>
+
+                <span class="comment">// baseurl can contain a screen name (if remote).</span>
+                <span class="comment">// Remove query parameters and store as this.query</span>
+                <span class="local-variable">this</span>.baseurl = baseurl;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.baseurl) {
+                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>.baseurl.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">if</span> (pos &gt;= <span class="integer">0</span>) {
+                                <span class="local-variable">this</span>.query = <span class="local-variable">this</span>.baseurl.substring(pos+<span class="integer">1</span>);
+                                <span class="local-variable">this</span>.baseurl = <span class="local-variable">this</span>.baseurl.substring(<span class="integer">0</span>, pos);
+                        }
+                }
                 <span class="comment">//TODO</span>
-                previous = <span class="predefined-constant">null</span>
-                parent = <span class="predefined-constant">null</span>
+                <span class="comment">//previous = null</span>
+                <span class="comment">//parent = null</span>
 
                 <span class="keyword">if</span>(previous){
                         <span class="local-variable">this</span>.reload = (previous.reload || <span class="integer">0</span>) + <span class="integer">1</span>
-                        <span class="local-variable">this</span>.device = previous.device<span class="comment">// new Device(previous.device) //previous.device</span>
+                        <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device(previous.device) <span class="comment">//previous.device</span>
+<span class="comment">//                        this.device = previous.device// new Device(previous.device) //previous.device</span>
                         <span class="local-variable">this</span>.device.reload = <span class="local-variable">this</span>.reload
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Reload </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.reload)
                 }
@@ -263,17 +313,27 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device()
                 }
 
-                baseclass.atConstructor.call(<span class="local-variable">this</span>, previous, parent)
+                <span class="comment">//baseclass.atConstructor.call(this, previous, parent)</span>
+                baseclass.atConstructor.call(<span class="local-variable">this</span>)
+                <span class="local-variable">this</span>.screen._size = <span class="local-variable">this</span>.device.size
 
             <span class="comment">//Render the display</span>
             <span class="local-variable">this</span>.doRender();
         }
 
         <span class="local-variable">this</span>.<span class="function">createBus</span> = <span class="keyword">function</span>(){
-                console.log(<span class="string"><span class="delimiter">'</span><span class="content">compositiondali.createBus is NOT implemented</span><span class="delimiter">'</span></span>);
-                <span class="local-variable">this</span>.bus = {
-                        <span class="function">send</span>: <span class="keyword">function</span>() {}
-                };
+                <span class="comment">// Only create the bus if baseurl defined (ie. running from remote server)</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.baseurl) {
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">createBus</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.baseurl);
+                        <span class="local-variable">this</span>.bus = <span class="keyword">new</span> BusClient(<span class="local-variable">this</span>.baseurl, NodeWebSocket)
+                }
+                <span class="keyword">else</span> {
+                        <span class="comment">// Stub out rpc when running locally</span>
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">compositiondali.createBus is NOT supported when running locally</span><span class="delimiter">'</span></span>);
+                        <span class="local-variable">this</span>.bus = {
+                                <span class="function">send</span>: <span class="keyword">function</span>() {}
+                        };
+                }
         }
 
 

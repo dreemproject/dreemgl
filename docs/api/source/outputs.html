@@ -180,6 +180,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -190,7 +191,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/screen</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>,screen, cadgrid){
 
     <span class="local-variable">this</span>.attributes = {
-        <span class="key">number</span>: Config({<span class="key">type</span>:Number, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="integer">100</span>}),
+                <span class="key">number</span>: Config({<span class="key">type</span>:Number, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="integer">100</span>}),
+                <span class="reserved">boolean</span>: Config({<span class="key">type</span>:Boolean, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="predefined-constant">true</span>}),
         <span class="reserved">float</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="float">3.1415</span>}),
         <span class="reserved">int</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="integer">42</span>}),
         <span class="key">vec2</span>: Config({<span class="key">type</span>:vec2, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:vec2(<span class="integer">1</span>,<span class="integer">2</span>)}),

@@ -228,6 +228,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n74" name="n74">74</a>
 <a href="#n75" name="n75">75</a>
 <a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -255,14 +256,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Session started</span><span class="delimiter">&quot;</span></span>);
         }
 
-        <span class="local-variable">this</span>.<span class="function">grabmap</span> = <span class="keyword">function</span>(x,y,z){
+        <span class="local-variable">this</span>.cachemap = define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span>
 
+        <span class="local-variable">this</span>.<span class="function">grabmap</span> = <span class="keyword">function</span>(x,y,z){
                 <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>);
                 <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
                 <span class="keyword">try</span>{
-                        fs.mkdirSync(define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span>));
+                        fs.mkdirSync(define.expandVariables(<span class="local-variable">this</span>.cachemap))
                 }<span class="keyword">catch</span>(e){}
-                <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
+                <span class="keyword">var</span> cachedname = define.expandVariables(<span class="local-variable">this</span>.cachemap + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
                 
                 <span class="comment">//var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;</span>
 
@@ -303,7 +305,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 })
 
                 <span class="keyword">return</span> P;
-        }.bind(<span class="local-variable">this</span>)
+        }
 })
 </pre></td>
 </tr></table>

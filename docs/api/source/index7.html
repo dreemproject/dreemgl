@@ -277,138 +277,132 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n123" name="n123">123</a>
 <a href="#n124" name="n124">124</a>
 <a href="#n125" name="n125">125</a>
-<a href="#n126" name="n126">126</a>
-<a href="#n127" name="n127">127</a>
-<a href="#n128" name="n128">128</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/**
+ * Helpers.
+ */</span>
 
-<span class="comment">//Pure JS based composition</span>
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$server$</span>, fileio, dataset, <span class="predefined">$ui$</span>, screen, view, splitcontainer, treeview, label, <span class="predefined">$widgets$</span>, docviewer, jsviewer){
-<span class="comment">// internal, Inline documentation and example code viewer</span>
+<span class="keyword">var</span> s = <span class="integer">1000</span>;
+<span class="keyword">var</span> m = s * <span class="integer">60</span>;
+<span class="keyword">var</span> h = m * <span class="integer">60</span>;
+<span class="keyword">var</span> d = h * <span class="integer">24</span>;
+<span class="keyword">var</span> y = d * <span class="float">365.25</span>;
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>,fileio){
-                <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
-                <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-                <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>
+<span class="comment">/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} options
+ * @return {String|Number}
+ * @api public
+ */</span>
 
-                <span class="keyword">function</span> <span class="function">readRecurDir</span>(base, inname, ignoreset){
-                        <span class="keyword">var</span> local = path.join(base, inname)
-                        <span class="keyword">var</span> dir = fs.readdirSync(local)
-                        <span class="keyword">var</span> out = {<span class="key">name</span>:inname, <span class="key">collapsed</span>:<span class="integer">1</span>, <span class="key">children</span>:[]}
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; dir.length;i++){
-                                <span class="keyword">var</span> name = dir[i]
-                                <span class="keyword">var</span> mypath = path.join(local, name)
-                                <span class="keyword">if</span>(ignoreset){
-                                        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; ignoreset.length; j++){
-                                                <span class="keyword">var</span> item = ignoreset[j]
-                                                <span class="keyword">if</span>(<span class="keyword">typeof</span> item === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
-                                                        <span class="keyword">if</span>(mypath.indexOf(item) !== -<span class="integer">1</span>)  <span class="keyword">break</span>
-                                                }
-                                                <span class="keyword">else</span>{
-                                                        <span class="keyword">if</span>(mypath.match(item)) <span class="keyword">break</span>
-                                                }
-                                        }
-                                        <span class="keyword">if</span>(j &lt; ignoreset.length) <span class="keyword">continue</span>
-                                }
-                                <span class="keyword">var</span> stat = fs.statSync(mypath)
-                                <span class="keyword">if</span>(stat.isDirectory()){
-                                        out.children.push(readRecurDir(local, name, ignoreset))
-                                }
-                                <span class="keyword">else</span>{
-                                        out.children.push({<span class="key">name</span>:name, <span class="key">size</span>:stat.size})
-                                }
-                        }
-                        <span class="keyword">return</span> out
-                }
+module.<span class="function">exports</span> = <span class="keyword">function</span>(val, options){
+  options = options || {};
+  <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> == <span class="keyword">typeof</span> val) <span class="keyword">return</span> parse(val);
+  <span class="keyword">return</span> options.<span class="reserved">long</span>
+    ? <span class="reserved">long</span>(val)
+    : <span class="reserved">short</span>(val);
+};
 
-                <span class="comment">// recursively read all directories starting from a base path</span>
-                <span class="local-variable">this</span>.<span class="function">readAllPaths</span> = <span class="keyword">function</span>(ignoreset                 <span class="comment">// files and directories to ignore while recursively expanding</span>
+<span class="comment">/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */</span>
 
-                ){
-                        <span class="comment">// lets read all paths.</span>
-                        <span class="comment">// lets read the directory and return it</span>
-                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+<span class="keyword">function</span> <span class="function">parse</span>(str) {
+  str = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> + str;
+  <span class="keyword">if</span> (str.length &gt; <span class="integer">10000</span>) <span class="keyword">return</span>;
+  <span class="keyword">var</span> match = <span class="regexp"><span class="delimiter">/</span><span class="content">^((?:</span><span class="char">\d</span><span class="content">+)?</span><span class="content">\.</span><span class="content">?</span><span class="char">\d</span><span class="content">+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$</span><span class="delimiter">/</span><span class="modifier">i</span></span>.exec(str);
+  <span class="keyword">if</span> (!match) <span class="keyword">return</span>;
+  <span class="keyword">var</span> n = parseFloat(match[<span class="integer">1</span>]);
+  <span class="keyword">var</span> type = (match[<span class="integer">2</span>] || <span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>).toLowerCase();
+  <span class="keyword">switch</span> (type) {
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">years</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">year</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">yrs</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">yr</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">y</span><span class="delimiter">'</span></span>:
+      <span class="keyword">return</span> n * y;
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">days</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">day</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>:
+      <span class="keyword">return</span> n * d;
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hours</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hour</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hrs</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hr</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">h</span><span class="delimiter">'</span></span>:
+      <span class="keyword">return</span> n * h;
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">minutes</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">minute</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">mins</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">min</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>:
+      <span class="keyword">return</span> n * m;
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">seconds</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">second</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">secs</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">sec</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>:
+      <span class="keyword">return</span> n * s;
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">milliseconds</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">millisecond</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">msecs</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">msec</span><span class="delimiter">'</span></span>:
+    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>:
+      <span class="keyword">return</span> n;
+  }
+}
 
-                        <span class="keyword">if</span>(ignoreset) ignoreset = ignoreset.map(<span class="keyword">function</span>(value){
-                                <span class="keyword">if</span>(value.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">@</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) <span class="keyword">return</span> <span class="keyword">new</span> RegExp(value.slice(<span class="integer">1</span>))
-                                <span class="keyword">return</span> value
-                        })
+<span class="comment">/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */</span>
 
-                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
-                                <span class="keyword">if</span>(ignoreset.indexOf(key) !== -<span class="integer">1</span>) <span class="keyword">continue</span>
-                                <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, ignoreset)
-                                ret.name = key
-                                root.children.push(ret)
-                        }
-                        <span class="keyword">return</span> root
-                }
-        })
+<span class="keyword">function</span> <span class="reserved">short</span>(ms) {
+  <span class="keyword">if</span> (ms &gt;= d) <span class="keyword">return</span> Math.round(ms / d) + <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>;
+  <span class="keyword">if</span> (ms &gt;= h) <span class="keyword">return</span> Math.round(ms / h) + <span class="string"><span class="delimiter">'</span><span class="content">h</span><span class="delimiter">'</span></span>;
+  <span class="keyword">if</span> (ms &gt;= m) <span class="keyword">return</span> Math.round(ms / m) + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>;
+  <span class="keyword">if</span> (ms &gt;= s) <span class="keyword">return</span> Math.round(ms / s) + <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>;
+  <span class="keyword">return</span> ms + <span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>;
+}
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                <span class="keyword">return</span> [
-                <span class="local-variable">this</span>.fileio(),
-                screen({
-                        <span class="function">init</span>:<span class="keyword">function</span>(){
-                                <span class="comment">// lets load the entire directory structure</span>
-                                <span class="local-variable">this</span>.rpc.fileio.readAllPaths([<span class="string"><span class="delimiter">'</span><span class="content">resources</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">server.js</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">resources</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">cache</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">@/</span><span class="char">\\</span><span class="content">.</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">.git</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">.gitignore</span><span class="delimiter">'</span></span>]).then(<span class="keyword">function</span>(result){
-                                        <span class="keyword">var</span> filetree = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">filetree</span><span class="delimiter">'</span></span>)
-                                        <span class="keyword">var</span> tree = result.value
-                                        tree.name = <span class="string"><span class="delimiter">'</span><span class="content">Documentation</span><span class="delimiter">'</span></span>
-                                        tree.collapsed = <span class="predefined-constant">false</span>
-                                        <span class="comment">// lets make a dataset</span>
-                                        <span class="local-variable">this</span>.model = filetree.dataset = dataset(tree)
-                                }.bind(<span class="local-variable">this</span>))
+<span class="comment">/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */</span>
 
-                        }},
-                        splitcontainer({<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>}
-                                ,view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: <span class="integer">0</span>,<span class="key">flex</span>: <span class="float">0.2</span>}
-                                        ,view({<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#343434</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> ,<span class="key">padding</span>: <span class="integer">14</span>},
-                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DreemGL</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fontsize</span>: <span class="integer">35</span> })
-                                        )
-                                        ,treeview({
-                                                <span class="function">postLayout</span>:<span class="keyword">function</span>(){
-                                                },
-                                                <span class="function">init</span>:<span class="keyword">function</span>(){
-                                                        <span class="keyword">var</span> dataset = <span class="local-variable">this</span>.screen.model
-                                                        <span class="keyword">if</span>(dataset) <span class="local-variable">this</span>.dataset = dataset
-                                                },
-                                                <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">filetree</span><span class="delimiter">'</span></span>,
-                                                <span class="key">flex</span>: <span class="integer">1</span>,
-                                                <span class="function">select</span>: <span class="keyword">function</span>(sel){
-                                                        <span class="keyword">if</span>(sel.type === <span class="string"><span class="delimiter">'</span><span class="content">setter</span><span class="delimiter">'</span></span>) <span class="reserved">debugger</span>
-                                                        <span class="comment">// we have to grab the last path set and concatenate a path</span>
-                                                        <span class="keyword">var</span> path = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = sel.path.length - <span class="integer">1</span>; i &gt;= <span class="integer">1</span>; i--){
-                                                                path = sel.path[i].name + (path !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>? <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + path: <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                                                        }
-                                                        <span class="local-variable">this</span>.screen.locationhash = {<span class="key">path</span>:<span class="string"><span class="delimiter">'</span><span class="content">$root/</span><span class="delimiter">'</span></span> + path};
-                                                }
-                                        })
-                                )
-                                ,docviewer({<span class="key">flex</span>:<span class="integer">1</span>,
-                                        <span class="key">classconstr</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>}),
-                                        <span class="function">init</span>:<span class="keyword">function</span>(){
-                                                <span class="local-variable">this</span>.screen.<span class="function">locationhash</span> = <span class="keyword">function</span>(event){
-                                                <span class="comment">//        debugger</span>
-                                                        <span class="keyword">if</span>(event.value.path) require.async(event.value.path).then(<span class="keyword">function</span>(module){
-                                                                <span class="local-variable">this</span>.classconstr = module
-                                                        }.bind(<span class="local-variable">this</span>))
-                                                }.bind(<span class="local-variable">this</span>)
-                                                <span class="comment">//this.screen.locationhash = this.screen.locationhash</span>
-                                        },
-                                        <span class="key">minsize</span>:vec2(<span class="integer">400</span>,<span class="integer">400</span>),
-                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
-                                <span class="comment">//        overflow:'scroll'</span>
-                                })
-                        )
-                )
-        ]}
-})
+<span class="keyword">function</span> <span class="reserved">long</span>(ms) {
+  <span class="keyword">return</span> plural(ms, d, <span class="string"><span class="delimiter">'</span><span class="content">day</span><span class="delimiter">'</span></span>)
+    || plural(ms, h, <span class="string"><span class="delimiter">'</span><span class="content">hour</span><span class="delimiter">'</span></span>)
+    || plural(ms, m, <span class="string"><span class="delimiter">'</span><span class="content">minute</span><span class="delimiter">'</span></span>)
+    || plural(ms, s, <span class="string"><span class="delimiter">'</span><span class="content">second</span><span class="delimiter">'</span></span>)
+    || ms + <span class="string"><span class="delimiter">'</span><span class="content"> ms</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Pluralization helper.
+ */</span>
+
+<span class="keyword">function</span> <span class="function">plural</span>(ms, n, name) {
+  <span class="keyword">if</span> (ms &lt; n) <span class="keyword">return</span>;
+  <span class="keyword">if</span> (ms &lt; n * <span class="float">1.5</span>) <span class="keyword">return</span> Math.floor(ms / n) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + name;
+  <span class="keyword">return</span> Math.ceil(ms / n) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>;
+}
 </pre></td>
 </tr></table>
 

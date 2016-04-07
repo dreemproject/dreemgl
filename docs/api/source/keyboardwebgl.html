@@ -402,6 +402,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n248" name="n248">248</a>
 <a href="#n249" name="n249">249</a>
 <strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -449,6 +451,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="integer">59</span>:<span class="integer">186</span> <span class="comment">// semicolon</span>
         }
 
+        <span class="local-variable">this</span>.<span class="function">textAreaRespondToMouse</span> = <span class="keyword">function</span>(pos){
+                <span class="local-variable">this</span>.textarea.focus()
+                <span class="comment">//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5</span>
+                <span class="comment">//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5</span>
+        }
+
+        <span class="local-variable">this</span>.<span class="function">textareaFocus</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.textarea.focus()
+        }
+
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
 
                 <span class="keyword">var</span> special_key_hack = <span class="predefined-constant">false</span>
@@ -488,10 +500,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
 
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">down</span><span class="delimiter">'</span></span>, msg)
-
                         <span class="keyword">if</span>( (<span class="local-variable">this</span>._ctrl  || <span class="local-variable">this</span>._meta) &amp;&amp; <span class="local-variable">this</span>._y ||
-                                <span class="comment">//(this._ctrl  || this._meta) &amp;&amp; this._c ||</span>
-                                <span class="comment">//(this._ctrl  || this._meta) &amp;&amp; this._v ||</span>
                                 <span class="local-variable">this</span>._tab ||
                                 <span class="local-variable">this</span>._leftarrow ||
                                 <span class="local-variable">this</span>._rightarrow ||
@@ -549,12 +558,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">// lets output a css</span>
 
-                <span class="local-variable">this</span>.<span class="function">textAreaRespondToMouse</span> = <span class="keyword">function</span>(pos){
-                        <span class="local-variable">this</span>.textarea.focus()
-                        <span class="comment">//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5</span>
-                        <span class="comment">//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5</span>
-                }
-
+                
                 <span class="local-variable">this</span>.textarea = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">textarea</span><span class="delimiter">'</span></span>)
                 <span class="local-variable">this</span>.textarea.style.width = <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.textarea.style.height = <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>

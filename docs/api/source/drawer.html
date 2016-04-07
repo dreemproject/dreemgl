@@ -341,6 +341,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n187" name="n187">187</a>
 <a href="#n188" name="n188">188</a>
 <a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -449,9 +453,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="keyword">if</span> (value !== <span class="local-variable">this</span>.value) {
-                        <span class="local-variable">this</span>.value = value;
+                        <span class="local-variable">this</span>.value = <span class="local-variable">this</span>.endvalue(value)
                 }
         };
+
+        <span class="local-variable">this</span>.<span class="function">endvalue</span> = <span class="keyword">function</span>(value) {
+                <span class="keyword">return</span> value;
+        }
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>() {
                 <span class="local-variable">this</span>.mainview = <span class="local-variable">this</span>.constructor_children[<span class="integer">0</span>];

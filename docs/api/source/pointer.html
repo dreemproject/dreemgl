@@ -500,6 +500,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n346" name="n346">346</a>
 <a href="#n347" name="n347">347</a>
 <a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
+<a href="#n353" name="n353">353</a>
+<a href="#n354" name="n354">354</a>
+<a href="#n355" name="n355">355</a>
+<a href="#n356" name="n356">356</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -725,6 +733,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._wheel.length = <span class="integer">0</span>
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
                         <span class="keyword">var</span> previous = <span class="local-variable">this</span>._move.getClosest(pointerlist[i])
+                        <span class="keyword">if</span>(!previous){
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">pointer lost!</span><span class="delimiter">'</span></span>)
+                                <span class="keyword">continue</span>
+                        }
                         <span class="keyword">var</span> start = <span class="local-variable">this</span>._start.getById(previous.id)
                         <span class="keyword">var</span> first = <span class="local-variable">this</span>._first.getById(previous.id)
 
@@ -764,9 +776,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._end.length = <span class="integer">0</span>
                 <span class="local-variable">this</span>._tap.length = <span class="integer">0</span>
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
-
+                        <span class="keyword">var</span> closest = <span class="local-variable">this</span>._move.getClosest(pointerlist[i])
+                        <span class="keyword">if</span>(!closest){
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">pointer lost!</span><span class="delimiter">'</span></span>)
+                                <span class="keyword">continue</span>
+                        }
                         <span class="comment">// emit event hooks</span>
-                        <span class="keyword">var</span> start = <span class="local-variable">this</span>._start.getById(<span class="local-variable">this</span>._move.getClosest(pointerlist[i]).id)
+                        <span class="keyword">var</span> start = <span class="local-variable">this</span>._start.getById(closest.id)
                         <span class="keyword">if</span> (start){
                                 <span class="keyword">if</span> (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
                         }

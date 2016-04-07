@@ -483,6 +483,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n329" name="n329">329</a>
 <strong><a href="#n330" name="n330">330</a></strong>
 <a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -498,6 +500,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
         <span class="local-variable">this</span>.height = ROW_HEIGHT
         <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>
+
+        <span class="keyword">var</span> ubuntufont = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_medium_256_baked.glf</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
@@ -688,7 +692,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
                                 <span class="local-variable">this</span>.fontsize = <span class="integer">13</span>
-                                <span class="local-variable">this</span>.bold = <span class="predefined-constant">true</span>
                                 <span class="local-variable">this</span>.opacity = <span class="local-variable">this</span>.xwidth &lt; <span class="local-variable">this</span>.layout.width * <span class="float">0.6</span> ? <span class="integer">0</span> : <span class="integer">1</span>
                         }
 
@@ -703,7 +706,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> [
                                 <span class="local-variable">this</span>.eventlabel({
                                         <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">eventlabel</span><span class="delimiter">'</span></span>,
-                                        <span class="key">text</span>: <span class="local-variable">this</span>.title
+                                        <span class="key">text</span>: <span class="local-variable">this</span>.title,
+                                        <span class="key">font</span>: ubuntufont
                                 })
                         ]
                 }
@@ -713,7 +717,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> rows = [[],[],[],[],[],[]]
                 <span class="local-variable">this</span>.rows = <span class="integer">1</span>
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; data.length; i++) {
-                        <span class="keyword">var</span> color = (data[i].metadata &amp;&amp; data[i].metadata.color) ? data[i].metadata.color : <span class="predefined-constant">null</span>
+                        <span class="keyword">var</span> color = data[i].color || <span class="predefined-constant">null</span>
                         <span class="keyword">var</span> event = <span class="local-variable">this</span>.event({
                                 <span class="key">title</span>: data[i].title,
                                 <span class="key">id</span>: data[i].id,

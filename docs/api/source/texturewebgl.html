@@ -467,8 +467,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n313" name="n313">313</a>
 <a href="#n314" name="n314">314</a>
 <a href="#n315" name="n315">315</a>
-<a href="#n316" name="n316">316</a>
-<a href="#n317" name="n317">317</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -480,7 +478,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(exports){
         <span class="keyword">var</span> Texture = exports
         Texture.Image = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>? window.<span class="function">Image</span>: <span class="keyword">function</span>(){}
-        
+
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(type, w, h, device){
                 <span class="local-variable">this</span>.device = device
                 <span class="local-variable">this</span>.type = type
@@ -491,7 +489,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.frame_buf = <span class="predefined-constant">null</span>
 
         Texture.<span class="function">fromStub</span> = <span class="keyword">function</span>(stub){
-                console.log(stub.type)
                 <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(stub.type || Texture.RGBA, stub.size[<span class="integer">0</span>], stub.size[<span class="integer">1</span>])
                 tex.array = stub.array
                 tex.image = stub.image
@@ -579,7 +576,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">initAsRendertarget</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> gl = <span class="local-variable">this</span>.device.gl
-                
+
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.type) <span class="local-variable">this</span>.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
 
                 <span class="local-variable">this</span>.glframe_buf = gl.createFramebuffer()
@@ -598,17 +595,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 gl.bindFramebuffer(gl.FRAMEBUFFER, <span class="local-variable">this</span>.glframe_buf)
                 gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, <span class="local-variable">this</span>.gltex, <span class="integer">0</span>)
 
-                <span class="keyword">if</span>(type &amp; Texture.DEPTH || type &amp; Texture.STENCIL){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.type &amp; Texture.DEPTH || <span class="local-variable">this</span>.type &amp; Texture.STENCIL){
                         <span class="local-variable">this</span>.gldepth_buf = gl.createRenderbuffer()
-        
+
                         <span class="local-variable">this</span>.gldepth_type = gl.DEPTH_COMPONENT16
                         <span class="local-variable">this</span>.glattach_type = gl.DEPTH_ATTACHMENT
 
-                        <span class="keyword">if</span>(type &amp; Texture.DEPTH &amp;&amp; type &amp; Texture.STENCIL){
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.type &amp; Texture.DEPTH &amp;&amp; <span class="local-variable">this</span>.type &amp; Texture.STENCIL){
                                 <span class="local-variable">this</span>.gldepth_type = gl.DEPTH_STENCIL
                                 <span class="local-variable">this</span>.glattach_type = gl.DEPTH_STENCIL_ATTACHMENT
                         }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(type &amp; Texture.STENCIL){
+                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.type &amp; Texture.STENCIL){
                                 <span class="local-variable">this</span>.gldepth_type = gl.STENCIL_INDEX
                                 <span class="local-variable">this</span>.glattach_type = gl.STENCIL_ATTACHMENT
                         }
@@ -621,7 +618,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 gl.bindTexture(gl.TEXTURE_2D, <span class="predefined-constant">null</span>)
                 gl.bindFramebuffer(gl.FRAMEBUFFER, <span class="predefined-constant">null</span>)
         }
-        
+
         <span class="local-variable">this</span>.<span class="keyword">delete</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.device) <span class="keyword">return</span>
                 <span class="keyword">var</span> gl = <span class="local-variable">this</span>.device.gl
@@ -645,7 +642,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.size = vec2(<span class="integer">0</span>, <span class="integer">0</span>)
-        
+
         <span class="local-variable">this</span>.<span class="function">createGLTexture</span> = <span class="keyword">function</span>(gl, texid, texinfo){
                 <span class="keyword">var</span> samplerid = texinfo.samplerid
 
@@ -685,14 +682,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                     image = canvas
                                 }
                         }
-        
+
                         gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
                         <span class="local-variable">this</span>.image[samplerid] = gltex
                 }
                 <span class="keyword">else</span>{
                         <span class="keyword">return</span> <span class="predefined-constant">undefined</span>
                 }
-                
+
                 gltex.updateid = <span class="local-variable">this</span>.updateid
                 <span class="comment">// set up sampler parameters</span>
                 gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[samplerdef.MIN_FILTER])
@@ -710,10 +707,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">updateGLTexture</span> = <span class="keyword">function</span>(gl, gltex){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.array){
-                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, gl.RGBA, gl.UNSIGNED_BYTE, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.data)) 
+                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, gl.RGBA, gl.UNSIGNED_BYTE, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.data))
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.image){
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">UPDATING!</span><span class="delimiter">&quot;</span></span>)
                         gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, <span class="local-variable">this</span>.image)
                 }
                 gltex.updateid = <span class="local-variable">this</span>.updateid
@@ -786,7 +782,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

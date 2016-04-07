@@ -91,7 +91,11 @@ define.class(function(require){
 			for(var key in define.paths){
 				var match = define.expandVariables(define['$'+key])
 				if(file.indexOf(match) === 0){
-					file = '/'+key+'/'+file.slice(match.length)
+					var sliced = file.slice(match.length)
+					if (sliced[0] !== '/') {
+						sliced = '/' + sliced
+					}
+					file = '/'+key+sliced
 					break
 				}
 			}
@@ -183,7 +187,7 @@ define.class(function(require){
 				// alright lets store this somewhere
 				var buf = new Uint8Array(req.headers['content-length'])
 				var off = 0
-				
+
 				req.on('data', function(data){
 					for(var i = 0; i < data.length; i ++, off++){
 						buf[off] = data[i]

@@ -173,6 +173,125 @@ the class. Base classes get their listeners called first as you can
 see in the implementation of
 [node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js).
 
+## Styles
+DreemGL does not implement CSS for styling components but instead relies on JavaScript notation for styling views and UI widgets. Each visual object in DreemGL has a *style* attribute, which can be set inside the class or on an instance. There are 3 different ways how styles can be set in DreemGL:
+
+1. Add style to composition using ```this.style = {...}``` inside the composition class body. Styles in compositions apply to all screens, views, and UI widgets on all screens.
+2. Add style to class using ```this.style = {...}```.
+3. Add style to instance inside a render function of a screen or view (or subclass of one of these).
+
+A code example will make things clearer. Let's take a look at the style1.js composition. There are two style sheets in this composition: One on the composition itself, then a class style in the embedded *redview* class.
+
+<a href="/docs/examples/devguide/style1" target="_blank" data-example="DreemGL Style Example|436|128">http://localhost:2000/docs/examples/devguide/style1</a>
+
+```javascript
+define.class('$server/composition', function ($ui$, screen, view, label){
+	this.style = {
+		view: {
+			bgcolor: 'orange',
+			margin: 10
+		},
+		label: {
+			fgcolor: 'blue'
+		}
+	}
+
+	// simple view subclass for testing styles inside a class
+	define.class(this, "redview", "$ui/view", function() {
+		this.bgcolor = "red";
+		this.style = {
+			view: {
+				w: 70,
+				h: 70,
+				bgcolor: 'green'
+			}
+		}
+		this.render = function() {
+			return [ view() ];
+		}
+	})
+
+	this.render = function(){
+		return [
+			screen({
+					name:"default",
+					clearcolor: 'white',
+					flexdirection: 'row'
+				},
+
+				// styles get applied to these views
+				view({ name: 'v1', w: 50, h: 50, bgcolor: 'gray' })
+				,this.redview({ name: 'redview1', w: 100, h: 100 })
+				,label({ name: 'l1', text: 'label1', fgcolor: 'black'})
+				,view({ name: 'v2', h: 50 }
+					,label({ name: 'l2', text: 'label2'})
+				)
+			)
+		];
+	}
+})
+```
+
+*Screenshot: /docs/examples/devguide/style1 compostion running*
+
+<img src="https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/devguide-style1-screenshot.png" width="436" height="128"/>
+
+Let's analyse this composition:
+
+* There is a style for the view class defined in the composition stylesheet, which sets attributes x, y, and bgcolor.
+* The embedded class *redview* - a subclass of view - has a class stylesheet, which will be applied to all children of *redview* instances.
+* The compositions render function generates a screen, with four views as direct children: view with name ```v1```, redview with name ```redview1```, label with name ```l1```, view with name ```v2```. The last view has a child label with name ```l2```.
+
+Explanation of styles applied to each visual object:
+
+**screen.name='default':** No style applied.
+
+**view.name='v1':**
+   
+   - ```margin: 10``` from composition stylesheet
+   - ```bgcolor: 'orange'``` from composition stylesheet is overwritten by inline bgcolor attribute value.
+
+**this.redview.name='redview1':**
+   
+   - ```bgcolor``` is set in class body without style. No other style is applied.
+
+**this.redview.name='redview1 - inner child view'**
+
+   - ```margin: 10``` from composition stylesheet
+   - ```w: 70, h:70``` from class stylesheet of *redview* class.
+
+**label.name='l1'**: No style applied.
+
+**view.name='v2':**
+
+   - ```bgcolor: 'orange', margin: 10``` from composition stylesheet
+ 
+**label.name='l2'**:
+
+   - ```fgcolor: 'blue'``` from composition stylesheet
+
+DreemGL supports a mechanism to assign stylesheet values to class instances using a limited number of selectors, which are described in the next section.
+
+### Style Selectors
+
+DreemGL supports the following selectors for applying styles to objects:
+
+| Selector | Example | Description |
+| -------- | ------- | ----------- |
+| ```$``` | ```style = { $: { bgcolor: 'red' } }``` | **Global Selector:** Applied to all visual objects which are children or descendants of the component |
+| ```{class}``` | ```style = { label{ fgcolor: 'red' }``` will be applied to ```label({})``` | **Class name:** Applies to all instances of that class. |
+| ```class_style``` | ```style = { label_largeLabel{ fgcolor: 'red' }``` will be applied to ```label({class:'largeLabel'})``` | **C**lass name with attribute class='value'**  Applied to all instances of that class with the attribute ```class``` set to the same value. |
+| ```style = {}``` | ```button: { label: {margin:[11,1,1,1]} }``` will be applied to the view structure ```button({}, label({}))``` | **Class and view child with class:** Applied to all instances of that class with the attribute ```class``` set to the same value. |
+
+Selecting objects through ID values is not not supported in DreemGL.
+
+### Style Best Practices
+ 
+ * Composition wide styles should be put unto the composition directly.
+ * For classes or UI widgets, add a style inside the class definition. Developers using those classes or widgets can override the stylesheet feels in their own compositions.
+ * If you want to style views inside complex UI widgets, you can select whole structures of views in a style, e.g. ```button: { label: {margin:[11,1,1,1]} }```.
+ * Be careful with style definitions on screens: These are a special case, since the values will only get applied to classes or instances which contain a render function.
+
 ## Shaders
 Each view contains several shaders (such as `bg`, `border`) which can be assigned
 to a specific shader class. Views may turn on shaders when certain
@@ -268,4 +387,4 @@ color:function(){
  * [DreemGL Visual Toolkit](/docs/api/index.html#!/guide/toolkit)
  * [DreemGL Appendix](/docs/api/index.html#!/guide/appendix)
 
-
+<iframe name='docrunner' style="width:1px; height:1px; border:0" src="/docs/examples/docexamplerunner"></iframe>

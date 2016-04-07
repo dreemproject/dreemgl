@@ -253,9 +253,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="local-variable">this</span>.__host.callRpcMethod(msg)
         }
 
-        <span class="local-variable">this</span>.<span class="function">attributeRpc</span> = <span class="keyword">function</span>(name, msg){
+        <span class="local-variable">this</span>.<span class="function">attributeRpc</span> = <span class="keyword">function</span>(name, msg, real){
                 msg.rpcid = name
-                <span class="keyword">return</span> <span class="local-variable">this</span>.__host.setRpcAttribute(msg, <span class="predefined-constant">null</span> )
+                <span class="keyword">return</span> <span class="local-variable">this</span>.__host.setRpcAttribute(msg, <span class="predefined-constant">null</span>, real)
         }
 
         <span class="comment">// lets disconnect all listeners</span>
@@ -283,7 +283,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         exports.allocPromise = <span class="local-variable">this</span>.<span class="function">allocPromise</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> uid 
+                <span class="keyword">var</span> uid
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.__uid === <span class="predefined-constant">undefined</span>) <span class="local-variable">this</span>.__uid = <span class="integer">0</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.__promises) <span class="local-variable">this</span>.__promises = {}
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.__uid_free) <span class="local-variable">this</span>.__uid_free = []
@@ -310,7 +310,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> prom
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

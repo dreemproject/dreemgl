@@ -1174,6 +1174,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n1020" name="n1020">1020</a></strong>
 <a href="#n1021" name="n1021">1021</a>
 <a href="#n1022" name="n1022">1022</a>
+<a href="#n1023" name="n1023">1023</a>
+<a href="#n1024" name="n1024">1024</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -1208,9 +1210,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">setInterval</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.interval_ids) <span class="local-variable">this</span>.interval_ids = []
-                
+
                 <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
-                
+
                 <span class="keyword">var</span> id = platform.setInterval(<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.interval_ids.splice(<span class="local-variable">this</span>.interval_ids.indexOf(id), <span class="integer">1</span>)
                         fn.call(<span class="local-variable">this</span>)
@@ -1220,11 +1222,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">clearInterval</span> = <span class="keyword">function</span>(id){
+                <span class="keyword">if</span> (id === <span class="predefined-constant">undefined</span>) <span class="keyword">return</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.interval_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.interval_ids.splice(idx, <span class="integer">1</span>)
                         <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
-                
+
                          platform.clearInterval(id)
                 }
         }
@@ -1232,7 +1235,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">setTimeout</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.timeout_ids) <span class="local-variable">this</span>.timeout_ids = []
                 <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
-                
+
                 <span class="keyword">var</span> id = platform.setTimeout(<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.timeout_ids.splice(<span class="local-variable">this</span>.timeout_ids.indexOf(id), <span class="integer">1</span>)
                         fn.call(<span class="local-variable">this</span>)
@@ -1242,11 +1245,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">clearTimeout</span> = <span class="keyword">function</span>(id){
+                <span class="keyword">if</span> (id === <span class="predefined-constant">undefined</span>) <span class="keyword">return</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.timeout_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.timeout_ids.splice(idx, <span class="integer">1</span>)
                         <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
-                
+
                          platform.clearInterval(id)
                 }
         }
@@ -1423,7 +1427,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> fast_key = <span class="string"><span class="delimiter">'</span><span class="content">_fast_</span><span class="delimiter">'</span></span> + key
 
                 <span class="comment">// FAST OUT</span>
-                <span class="keyword">var</span> callfn = <span class="local-variable">this</span>[fast_key] 
+                <span class="keyword">var</span> callfn = <span class="local-variable">this</span>[fast_key]
                 <span class="keyword">if</span>(<span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span>+key] == callfn){
                         <span class="keyword">if</span>(callfn === <span class="predefined-constant">null</span>) <span class="keyword">return</span>
                         <span class="keyword">if</span>(callfn){

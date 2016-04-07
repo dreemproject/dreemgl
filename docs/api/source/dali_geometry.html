@@ -596,6 +596,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n442" name="n442">442</a>
 <a href="#n443" name="n443">443</a>
 <a href="#n444" name="n444">444</a>
+<a href="#n445" name="n445">445</a>
+<a href="#n446" name="n446">446</a>
+<a href="#n447" name="n447">447</a>
+<a href="#n448" name="n448">448</a>
+<a href="#n449" name="n449">449</a>
+<strong><a href="#n450" name="n450">450</a></strong>
+<a href="#n451" name="n451">451</a>
+<a href="#n452" name="n452">452</a>
+<a href="#n453" name="n453">453</a>
+<a href="#n454" name="n454">454</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -662,6 +672,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 drawtype = drawtype || gltypes.gl.TRIANGLES;
                 <span class="keyword">var</span> dali_drawtype = drawmap[drawtype];
 
+                <span class="comment">// console.log('drawtype', drawtype, dali_drawtype);</span>
                 <span class="local-variable">this</span>.daligeometry.setGeometryType(dali_drawtype);
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
@@ -863,6 +874,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">addAttributeGeometry</span> = <span class="keyword">function</span>(shader_dali, attrlocs) {
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
+                <span class="keyword">var</span> object_id = <span class="string"><span class="delimiter">'</span><span class="content">attribgeom_</span><span class="delimiter">'</span></span> + shader_dali.view.name;
+
                 <span class="keyword">if</span> (Object.keys(attrlocs) == <span class="integer">0</span>)
                         <span class="keyword">return</span>;
 
@@ -944,7 +957,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">// Add or update a vertex buffer</span>
                 <span class="keyword">if</span> (data.length &gt; <span class="integer">0</span>)
-                        <span class="local-variable">this</span>.updateVertexBuffer(<span class="string"><span class="delimiter">'</span><span class="content">attribgeom</span><span class="delimiter">'</span></span>, data, format, nslots);
+                        <span class="local-variable">this</span>.updateVertexBuffer(object_id, data, format, nslots);
         }
 
 
@@ -965,11 +978,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> buffer;
                 <span class="keyword">var</span> bufferindex;
 
+                <span class="comment">// Cache [hash of format, hash of data, dali buffer index, dali.PropertyBuffer, our buffer id, length of data, number of items per data point ]</span>
                 <span class="keyword">var</span> cache = <span class="local-variable">this</span>.vertex_buffers[name];
                 <span class="keyword">if</span> (cache) {
                         <span class="keyword">var</span> oformathash = cache[<span class="integer">0</span>];
                         <span class="keyword">var</span> odatahash = cache[<span class="integer">1</span>];
-                        <span class="keyword">if</span> (format_hash == oformathash) {
+            <span class="keyword">var</span> data_length = cache[<span class="integer">5</span>];
+                        <span class="keyword">var</span> item_length = cache[<span class="integer">6</span>];
+                        <span class="keyword">if</span> ((format_hash == oformathash) &amp;&amp; (data.length == data_length) &amp;&amp; (nitems == item_length)) {
                                 <span class="keyword">if</span> (data_hash == odatahash) {
                                         <span class="comment">// No change to the value</span>
                                         <span class="keyword">return</span>;
@@ -985,8 +1001,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">addGeometry: vertex buffer already exists: </span><span class="delimiter">'</span></span>, name, index, <span class="string"><span class="delimiter">'</span><span class="content">. Removing</span><span class="delimiter">'</span></span>);
 
                                 <span class="comment">//TODO daliwrite</span>
-                                <span class="local-variable">this</span>.daligeometry.removeVertexBuffer(index);
+                                <span class="keyword">if</span> (index) {
+                                        <span class="local-variable">this</span>.daligeometry.removeVertexBuffer(index);
+                                }
                                 <span class="keyword">delete</span> <span class="local-variable">this</span>.vertex_buffers[name];
+                                buffer = <span class="predefined-constant">null</span>;
                         }
                 }
 
@@ -1002,11 +1021,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
 
                         <span class="comment">// Store the index so it can be removed later</span>
-                        <span class="local-variable">this</span>.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex];
+                        <span class="local-variable">this</span>.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex, data.length, nitems];
                 }
                 <span class="keyword">else</span> {
                         <span class="comment">// Update an existing buffer using setData</span>
                         DaliApi.writeDaliBuffer(buffer, bufferindex, data)
+                        <span class="local-variable">this</span>.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex, data.length, nitems];
                 }
 
 

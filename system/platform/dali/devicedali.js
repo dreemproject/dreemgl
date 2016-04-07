@@ -34,6 +34,7 @@ define.class(function(require, exports){
 	,getShaderInfoLog: function() {return ''}
 	,useProgram: function() {}
 	,createBuffer: function() {return 0;}
+	,deleteBuffer: function() {}
 	,bindBuffer: function() {}
 	,bufferData: function() {}
 	,enable: function() {}

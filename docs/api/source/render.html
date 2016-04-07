@@ -371,6 +371,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n217" name="n217">217</a>
 <a href="#n218" name="n218">218</a>
 <a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -515,7 +516,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span>(!nochild &amp;&amp; new_children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; new_children.length; i++){
                         <span class="keyword">var</span> new_child = new_children[i]
-
                         <span class="keyword">if</span>(Array.isArray(new_child)){ <span class="comment">// splice in the children</span>
                                 <span class="keyword">var</span> args = Array.prototype.slice.call(new_child)
                                 args.unshift(<span class="integer">1</span>)
@@ -542,6 +542,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         new_child.rpc = new_version.rpc
                         new_child.parent_viewport = new_version.parent_viewport
                         new_children[i] = render(new_child, old_child, state, childreuse)
+                        <span class="keyword">if</span>(new_version.atChildRendered) new_version.atChildRendered(new_child)
                 }
 
                 <span class="keyword">if</span>(new_version.atChildrenRendered) new_version.atChildrenRendered()
@@ -549,6 +550,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(old_children) <span class="keyword">for</span>(;i &lt; old_children.length;i++){
                         <span class="keyword">var</span> child = old_children[i]
                         child.destroyed = <span class="predefined-constant">true</span>
+                        child.atViewDestroy()
                         child.emit(<span class="string"><span class="delimiter">'</span><span class="content">destroy</span><span class="delimiter">'</span></span>)
                 }
 
@@ -559,12 +561,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> id = old_version.screen.device.animate_hooks.indexOf(old_version)
                                 <span class="keyword">if</span>(id !== -<span class="integer">1</span>) old_version.screen.device.animate_hooks.splice(id, <span class="integer">1</span>)
                         }
-
+                        old_version.atViewDestroy()
                         old_version.emit(<span class="string"><span class="delimiter">'</span><span class="content">destroy</span><span class="delimiter">'</span></span>)
                 }
 
                 <span class="keyword">if</span>(is_root){
-                        
+
 
                         <span class="comment">// signal to our device we have a newly rendered node</span>
                         <span class="keyword">if</span>(new_version.screen){

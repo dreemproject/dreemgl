@@ -11,7 +11,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 	this.position = function(){
 		return mesh.pos * view.totalmatrix  * view.viewmatrix
 	}
-	
+
 	this.color = function(){
 		return view.cursorcolor
 		//var rel = mesh.edge//cursor_pos
@@ -34,17 +34,17 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		this.addCursor = function(textbuf, start){
 			var pos = textbuf.cursorRect(start)
 
-			pos.w = textbuf.fontsize*0.1 
+			pos.w = textbuf.fontsize*0.1
 
 			this.pushQuad(
-				pos.x, pos.y, 0, 0, 
+				pos.x, pos.y, 0, 0,
 				pos.x + pos.w, pos.y, 1, 0,
 				pos.x, pos.y + pos.h, 0, 1,
 				pos.x + pos.w, pos.y + pos.h, 1, 1
 			)
 
 		}
-	}) 
+	})
 
 	this.mesh = this.vertexstruct.array()
 })

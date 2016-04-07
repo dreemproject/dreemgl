@@ -65,6 +65,10 @@
  * Second gradient color for the button background in pressed state
  */
 /**
+ * @attribute {boolean} [enabled="true"]
+ * bold: true,
+ */
+/**
  * @method bgcolorfn
  * Set the background
  * @param {vec2} pos

@@ -582,8 +582,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n428" name="n428">428</a>
 <a href="#n429" name="n429">429</a>
 <strong><a href="#n430" name="n430">430</a></strong>
-<a href="#n431" name="n431">431</a>
-<a href="#n432" name="n432">432</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -610,8 +608,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">viewmatrix</span>: mat4.identity(),
                         <span class="key">noscrollmatrix</span>: mat4.identity()
                 }
-
-                <span class="local-variable">this</span>.debugrect = <span class="keyword">new</span> DebugRect()
         }
 
         <span class="local-variable">this</span>.<span class="function">atDestroy</span> = <span class="keyword">function</span>(){
@@ -1001,21 +997,21 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">return</span> hastime
         }
+<span class="comment">/*
+        var DebugRect = define.class(Shader, function(){
+                this.view = {totalmatrix:mat4(), viewmatrix:mat4(), layout:{width:0, height:0}}
 
-        <span class="keyword">var</span> DebugRect = define.<span class="reserved">class</span>(Shader, <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.view = {<span class="key">totalmatrix</span>:mat4(), <span class="key">viewmatrix</span>:mat4(), <span class="key">layout</span>:{<span class="key">width</span>:<span class="integer">0</span>, <span class="key">height</span>:<span class="integer">0</span>}}
+                this.mesh = vec2.array()
+                this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 
-                <span class="local-variable">this</span>.mesh = vec2.array()
-                <span class="local-variable">this</span>.mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
-
-                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> vec4(vec2(mesh.x * view.layout.width, mesh.y * view.layout.height), <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                this.position = function(){
+                        return vec4(vec2(mesh.x * view.layout.width, mesh.y * view.layout.height), 0, 1) * view.totalmatrix * view.viewmatrix
                 }
-                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">0.5</span>)
+                this.color = function(){
+                        return vec4(1,0,0,0.5)
                 }
         })
-
+*/</span>
 })
 </pre></td>
 </tr></table>

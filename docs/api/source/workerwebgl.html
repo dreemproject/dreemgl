@@ -332,6 +332,42 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n178" name="n178">178</a>
 <a href="#n179" name="n179">179</a>
 <strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -345,15 +381,31 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>._allocPromise = rpchub.allocPromise
         <span class="local-variable">this</span>._resolveReturn = rpchub.resolveReturn
 
-        <span class="local-variable">this</span>.<span class="function">_atConstructor</span> = <span class="keyword">function</span>(cores){
-                <span class="keyword">if</span>(cores === <span class="predefined-constant">undefined</span>) cores = <span class="integer">1</span>
-                <span class="keyword">else</span> <span class="keyword">if</span>(cores &lt; <span class="integer">1</span>){
-                        <span class="keyword">if</span>(define.cputhreads === <span class="integer">2</span>) cores = <span class="integer">1</span>
-                        <span class="keyword">else</span> cores = define.cputhreads - <span class="integer">2</span>
+        <span class="local-variable">this</span>.<span class="function">_startWorkers</span> = <span class="keyword">function</span>(head, tail, count){
+                <span class="keyword">if</span>(!count) count = <span class="integer">1</span>
+                <span class="keyword">var</span> source = head + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">\n</span><span class="content">\n</span><span class="content">;// Worker includes </span><span class="content">\n</span><span class="content">self.define = {packaged:true,$platform:&quot;webgl&quot;};(</span><span class="delimiter">'</span></span> + define.inner.toString() + <span class="string"><span class="delimiter">'</span><span class="content">)();</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                source += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + define.getModule(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/math.js</span><span class="delimiter">'</span></span>).factory.toString() + <span class="string"><span class="delimiter">'</span><span class="content">)();</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
+                        source += <span class="string"><span class="delimiter">'</span><span class="content">define.$</span><span class="delimiter">'</span></span>+key + <span class="string"><span class="delimiter">'</span><span class="content"> = &quot;</span><span class="delimiter">'</span></span>+define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key]+<span class="string"><span class="delimiter">'</span><span class="content">&quot;;</span><span class="content">\n</span><span class="delimiter">'</span></span>
                 }
+                source += tail
+                <span class="keyword">var</span> blob = <span class="keyword">new</span> Blob([source], { <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span> })
+                <span class="keyword">var</span> worker_url = URL.createObjectURL(blob)
+                <span class="keyword">var</span> workers = []
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; count; i ++){
+                        <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(worker_url)
+                        worker.postMessage({<span class="key">initid</span>:<span class="predefined-constant">true</span>, <span class="key">workerid</span>:i})
+                        worker.source = source
+                        worker.stack = <span class="integer">0</span>
+                        workers.push(worker)
+                }
+                <span class="keyword">return</span> workers
+        }
+
+        <span class="local-variable">this</span>.<span class="function">_collectDeps</span> = <span class="keyword">function</span>(factory, extradeps){
 
                 <span class="comment">// lets serialize our module system into a worker</span>
-                <span class="keyword">var</span> out = {}
+                <span class="keyword">var</span> outdeps = {}
 
                 <span class="keyword">function</span> <span class="function">collectBodyDeps</span>(body){
                         <span class="keyword">var</span> intreq = define.findRequiresInFactory(body)
@@ -367,17 +419,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(!deps) <span class="keyword">return</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; deps.length; i++){
                                 <span class="keyword">var</span> dep = deps[i]
-                                <span class="keyword">if</span>(out[dep]) <span class="keyword">continue</span>
-                                <span class="keyword">var</span> module = define.module[dep]
-                                <span class="keyword">if</span>(!module) module = define.module[dep+<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>], dep += <span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>
+                                <span class="keyword">if</span>(outdeps[dep] || outdeps[dep+<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>]) <span class="keyword">continue</span>
+                                <span class="keyword">var</span> module = define.getModule(dep)<span class="comment">//module[dep]</span>
+                                <span class="keyword">if</span>(!module) module = define.getModule(dep+<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>), dep += <span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>
                                 <span class="keyword">if</span>(!module || !module.factory || <span class="keyword">typeof</span> module.factory !== <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) <span class="keyword">continue</span>
 
                                 <span class="comment">// alright so lets recur on deps</span>
-                                out[dep] = <span class="integer">1</span>
+                                outdeps[dep] = <span class="integer">1</span>
 
                                 <span class="keyword">if</span>(module.factory.body){
                                         collectBodyDeps(module.factory.body)
                                 }
+                                <span class="comment">//console.log(&quot;COLLECTING&quot;, module.factory.deps)</span>
+
                                 collectDeps(module.factory.deps)
 
                                 <span class="comment">// and now add our module</span>
@@ -385,23 +439,71 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">var</span> str = <span class="string"><span class="delimiter">'</span><span class="content">define.packagedClass(&quot;</span><span class="delimiter">'</span></span>+dep+<span class="string"><span class="delimiter">'</span><span class="content">&quot;,[</span><span class="delimiter">'</span></span>
                                         <span class="keyword">if</span>(module.factory.baseclass) str +=  <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>+module.factory.baseclass+<span class="string"><span class="delimiter">'</span><span class="content">&quot;,</span><span class="delimiter">'</span></span>
                                         str += module.factory.body.toString() + <span class="string"><span class="delimiter">'</span><span class="content">]);</span><span class="content">\n</span><span class="delimiter">'</span></span>
-                                        out[dep] = str
+                                        outdeps[dep] = str
                                 }
                                 <span class="keyword">else</span>{
-                                        out[dep] = <span class="string"><span class="delimiter">'</span><span class="content">define(</span><span class="delimiter">'</span></span> + module.factory.toString() + <span class="string"><span class="delimiter">'</span><span class="content">,&quot;</span><span class="delimiter">'</span></span>+dep+<span class="string"><span class="delimiter">'</span><span class="content">&quot;);</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                                        outdeps[dep] = <span class="string"><span class="delimiter">'</span><span class="content">define(</span><span class="delimiter">'</span></span> + module.factory.toString() + <span class="string"><span class="delimiter">'</span><span class="content">,&quot;</span><span class="delimiter">'</span></span>+dep+<span class="string"><span class="delimiter">'</span><span class="content">&quot;);</span><span class="content">\n</span><span class="delimiter">'</span></span>
                                 }
                         }
                 }
-                
-                collectDeps(<span class="local-variable">this</span>.constructor.module.factory.deps)
-                collectBodyDeps(<span class="local-variable">this</span>.constructor.module.factory.body)
+                collectDeps(factory.deps)
+                collectDeps(extradeps)
+                collectBodyDeps(factory.body)
 
-                <span class="keyword">var</span> head = <span class="string"><span class="delimiter">'</span><span class="content">var _myworker = </span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.constructor.body.toString()+<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="content">\n</span><span class="delimiter">'</span></span>
-                <span class="keyword">var</span> tail = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> out){
-                        <span class="comment">//console.log(key)</span>
-                        tail += out[key]
+                <span class="keyword">return</span> outdeps
+        }
+
+        <span class="local-variable">this</span>.<span class="function">_transformThisToRPC</span> = <span class="keyword">function</span>(){
+                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>){
+                        <span class="keyword">var</span> prop = <span class="local-variable">this</span>[key]
+                        <span class="keyword">if</span>(key === <span class="string"><span class="delimiter">'</span><span class="content">onmessage</span><span class="delimiter">'</span></span>){
+
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span>(key === <span class="string"><span class="delimiter">'</span><span class="content">atConstructor</span><span class="delimiter">'</span></span>){
+                                <span class="local-variable">this</span>[key] = <span class="predefined-constant">undefined</span>
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> prop === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; key[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>){
+                                <span class="local-variable">this</span>[key] = <span class="keyword">function</span>(key){
+                                        <span class="comment">// alright lets pick the lowest-queue worker from the set</span>
+                                        <span class="keyword">var</span> min = <span class="predefined-constant">Infinity</span>, tgtid = <span class="integer">0</span>
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>._workers.length; i++){
+                                                <span class="keyword">var</span> stack = <span class="local-variable">this</span>._workers[i].stack
+                                                <span class="keyword">if</span>(stack &lt; min) min = stack, tgtid = i
+                                        }
+                                        <span class="keyword">var</span> msg = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">call</span><span class="delimiter">'</span></span>, <span class="key">name</span>:key, <span class="key">args</span>:[], <span class="key">workerid</span>:tgtid}
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; <span class="local-variable">arguments</span>.length; i++){
+                                                msg.args[i - <span class="integer">1</span>] = <span class="local-variable">arguments</span>[i]
+                                                <span class="comment">//!TODO add typed array transfer feature</span>
+                                        }
+                                        <span class="keyword">var</span> worker = <span class="local-variable">this</span>._workers[tgtid]
+                                        <span class="keyword">if</span>(!worker) <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){resolve()})
+
+                                        <span class="keyword">var</span> prom = <span class="local-variable">this</span>._allocPromise()
+                                        msg.uid = prom.uid
+                                        <span class="local-variable">this</span>._workers[tgtid].stack++
+                                        <span class="local-variable">this</span>._workers[tgtid].postMessage(msg)
+                                        <span class="keyword">return</span> prom
+                                }.bind(<span class="local-variable">this</span>,key)
+                        }
                 }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">_atConstructor</span> = <span class="keyword">function</span>(cores){
+                <span class="keyword">if</span>(cores === <span class="predefined-constant">undefined</span>) cores = <span class="integer">1</span>
+                <span class="keyword">else</span> <span class="keyword">if</span>(cores &lt; <span class="integer">1</span>){
+                        <span class="keyword">if</span>(define.cputhreads === <span class="integer">2</span>) cores = <span class="integer">1</span>
+                        <span class="keyword">else</span> cores = define.cputhreads - <span class="integer">2</span>
+                }
+                
+                <span class="keyword">var</span> deps = <span class="local-variable">this</span>._collectDeps(<span class="local-variable">this</span>.constructor.module.factory)
+
+                <span class="keyword">var</span> head = <span class="string"><span class="delimiter">'</span><span class="content">var _myworker = </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.constructor.body.toString() + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> tail = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> deps){
+                        <span class="comment">//console.log(key)</span>
+                        tail += deps[key]
+                }
+
                 tail += <span class="string"><span class="delimiter">'</span><span class="content">define.packagedClass(&quot;/myworker.js&quot;,[&quot;$system/base/worker&quot;,_myworker]);</span><span class="content">\n</span><span class="delimiter">'</span></span>
                 <span class="comment">// lets start with requiring /myworker</span>
 
@@ -453,7 +555,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> <span class="function">onmessage</span> = <span class="keyword">function</span>(event){
                         <span class="comment">// lets plug the struct arrays</span>
-                        <span class="keyword">var</span> dt =Date.now()
+                        <span class="keyword">var</span> dt = Date.now()
                         <span class="keyword">var</span> data = event.data
                         <span class="keyword">if</span>(data.message){
                                 <span class="keyword">return</span> <span class="local-variable">this</span>.onmessage(data.message)
@@ -468,43 +570,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>._workers = define.workers(head, tail, cores)
+                <span class="local-variable">this</span>._workers = <span class="local-variable">this</span>._startWorkers(head, tail, cores)
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>._workers.length; i++){
                         <span class="local-variable">this</span>._workers[i].onmessage = onmessage
                 }
 
-                <span class="comment">// lets make the interface</span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>){
-                        <span class="keyword">var</span> prop = <span class="local-variable">this</span>[key]
-                        <span class="keyword">if</span>(key === <span class="string"><span class="delimiter">'</span><span class="content">onmessage</span><span class="delimiter">'</span></span>){
-
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(key === <span class="string"><span class="delimiter">'</span><span class="content">atConstructor</span><span class="delimiter">'</span></span>){
-                                <span class="local-variable">this</span>[key] = <span class="predefined-constant">undefined</span>
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> prop === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; key[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>){
-                                <span class="local-variable">this</span>[key] = <span class="keyword">function</span>(key){
-                                        <span class="comment">// alright lets pick the lowest-queue worker from the set</span>
-                                        <span class="keyword">var</span> min = <span class="predefined-constant">Infinity</span>, tgtid = <span class="integer">0</span>
-                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>._workers.length; i++){
-                                                <span class="keyword">var</span> stack = <span class="local-variable">this</span>._workers[i].stack
-                                                <span class="keyword">if</span>(stack &lt; min) min = stack, tgtid = i
-                                        }
-                                        <span class="keyword">var</span> msg = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">call</span><span class="delimiter">'</span></span>, <span class="key">name</span>:key, <span class="key">args</span>:[], <span class="key">workerid</span>:tgtid}
-                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; <span class="local-variable">arguments</span>.length; i++){
-                                                msg.args[i - <span class="integer">1</span>] = <span class="local-variable">arguments</span>[i]
-                                                <span class="comment">//!TODO add typed array transfer feature</span>
-                                        }
-
-                                        <span class="keyword">var</span> prom = <span class="local-variable">this</span>._allocPromise()
-                                        msg.uid = prom.uid
-                                        <span class="local-variable">this</span>._workers[tgtid].stack++
-                                        <span class="local-variable">this</span>._workers[tgtid].postMessage(msg)
-                                        <span class="keyword">return</span> prom
-                                }.bind(<span class="local-variable">this</span>,key)
-                        }
-                }
+                <span class="local-variable">this</span>._transformThisToRPC()
 
                 <span class="local-variable">this</span>.<span class="function">postMessage</span> = <span class="keyword">function</span>(msg, transfer, tgtid){
                         <span class="comment">// post to a worker</span>

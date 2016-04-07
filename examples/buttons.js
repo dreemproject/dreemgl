@@ -165,6 +165,33 @@ define.class("$server/composition",function(require, $ui$, button, radiobutton, 
 									group:"b",
 									text:"third"
 								})
+							),
+							view({flexdirection:"column"},
+								label({text:"Radio Buttons - Group C (unselect callback)", marginbottom:20}),
+								radiobutton({
+									group:"c",
+									selected:true,
+									marginbottom:10,
+									text:"first",
+									onselected:function(ev,v,o) {
+										o.text = v ? "I am selected" : "I have lost selection!"
+									}
+								}),
+								radiobutton({
+									group:"c",
+									marginbottom:10,
+									text:"second",
+									onselected:function(ev,v,o) {
+										o.text = v ? "Now I am selected" : "I have lost selection!"
+									}
+								}),
+								radiobutton({
+									group:"c",
+									text:"third",
+									onselected:function(ev,v,o) {
+										o.text = v ? "Now I am selected" : "I have also lost selection!"
+									}
+								})
 							)
 						)
 					)

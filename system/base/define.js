@@ -1264,7 +1264,7 @@
 							define.showException(exception)
 						})
 					}
-					else{
+					else {//if (old_module){
 						//alert('filechange!' + msg.file)
 						console.clear()
 						location.href = location.href  // reload on filechange
@@ -1459,7 +1459,7 @@
 								define['$'+key] = '$root/'+key
 							}
 
-							define.paths.root = 
+							define.paths.root =
 							define.$root = 'http://'+parsedmodurl.hostname+':'+parsedmodurl.port+'/'
 							var math2 = define.mapToCacheDir('$system/base/math.js')
 							define.module[math2] = mathmodule
@@ -1563,7 +1563,7 @@
 				if(ext !== '' && ext !== 'js'){
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
-						if(define.loadImage) return define.loadImage(name)
+						if(define.loadImage) return define.loadImage(full_name)
 						return undefined
 					}
 					else{

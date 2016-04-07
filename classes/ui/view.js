@@ -55,10 +55,16 @@ define.class('$system/base/node', function(require){
 		opacity: Config({group:"style", value: 1.0, type:float}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
-		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"resize"}),
+
+		// Image mode alters how/where the background image is scaled, streched, fit and drawn within the view's bounds.
+		bgimagemode: Config({group:"style", type:Enum("resize", "custom", "stretch", "aspect-fit", "aspect-fill", "center", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"stretch"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
+
+		// Offets the image within the view.  This value is in texture coordinates.
 		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
+
+		// When using `aspect-fit`, or `apsect-fill` this property will automatically adjust the image's location within the view.
+		bgimagealign: Config({group:"style", type:Enum("none", "center", "start", "end", "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"), value:"none"}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: NaN, meta:"color"}),
@@ -1433,8 +1439,19 @@ define.class('$system/base/node', function(require){
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
 		this.color = function(){
-			var col = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]))
-			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
+			// if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
+			// 	|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
+			// 	|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
+			// 	|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
+			// 	return view.bgcolor;
+			// }
+			var col = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+			var cola = col.a;
+			if (cola < 1.0) {
+				col = mix(view.bgcolor, col, cola)
+				cola = 1.0
+			}
+			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], cola * view.opacity * view.colorfilter[3])
 		}
 	})
 
@@ -1455,19 +1472,83 @@ define.class('$system/base/node', function(require){
 					aspect = this._layout.width / this._layout.height
 				}
 				var ratio = imgw / imgh / aspect
+				var rx, ry, fitsize, target, offset
+
 				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
 					this.bgimageaspect = vec2(1.0,1.0)
 				} else if (this.bgimagemode === "aspect-fit") {
+					if (uselayout) {
+						rx = this._layout.width / imgw;
+						ry = this._layout.height / imgh;
+					} else {
+						rx = this._width / imgw;
+						ry = this._height / imgh;
+					}
+
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0)
+						this.bgimageaspect = vec2(1.0 / ratio, 1.0)
+						if (this._bgimagealign !== "none") {
+							fitsize = imgw * ry;
+							if (this._bgimagealign === "center" || this._bgimagealign === "top" || this._bgimagealign === "bottom") {
+								target = this._layout.width * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "right" || this._bgimagealign === "top-right" || this._bgimagealign === "bottom-right") {
+								target = this._layout.width - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "left" || this._bgimagealign === "top-left" || this._bgimagealign === "bottom-left") {
+								target = 0
+							}
+							offset = target / fitsize;
+							this.bgimageoffset = vec2(-offset, 0);
+						}
 					} else {
 						this.bgimageaspect = vec2(1.0, ratio)
+						if (this._bgimagealign !== "none") {
+							fitsize = imgh * rx;
+							if (this._bgimagealign === "center" || this._bgimagealign === "left" || this._bgimagealign === "right") {
+								target = this._layout.height * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "bottom" || this._bgimagealign === "bottom-right" || this._bgimagealign === "bottom-left") {
+								target = this._layout.height - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "top" || this._bgimagealign === "top-right" || this._bgimagealign === "top-left") {
+								target = 0
+							}
+							offset = target / fitsize;
+							this.bgimageoffset = vec2(0, -offset);
+						}
 					}
 				} else if (this.bgimagemode === "aspect-fill") {
+
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
 						this.bgimageaspect = vec2(1.0, ratio)
+
+						if (this._bgimagealign !== "none") {
+							fitsize = imgh * (this._layout.width / imgw);
+							if (this._bgimagealign === "center" || this._bgimagealign === "left" || this._bgimagealign === "right") {
+								target = this._layout.height * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "bottom" || this._bgimagealign === "bottom-left" || this._bgimagealign === "bottom-right") {
+								target = this._layout.height - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "top" || this._bgimagealign === "top-left" || this._bgimagealign === "top-right") {
+								target = 0;
+							}
+							if (target) {
+								offset = target / fitsize;
+								this.bgimageoffset = vec2(0, -offset);
+							}
+						}
 					} else {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0)
+						this.bgimageaspect = vec2(1.0 / ratio, 1.0)
+						if (this._bgimagealign !== "none") {
+							fitsize = imgw * (this._layout.height / imgh);
+							if (this._bgimagealign === "center" || this._bgimagealign === "top" || this._bgimagealign === "bottom") {
+								target = this._layout.width * 0.5 - (fitsize * 0.5);
+							} else if (this._bgimagealign === "end" || this._bgimagealign === "right" || this._bgimagealign === "bottom-right" || this._bgimagealign === "top-right") {
+								target = this._layout.width - fitsize;
+							} else if (this._bgimagealign === "start" || this._bgimagealign === "left" || this._bgimagealign === "bottom-left" || this._bgimagealign === "top-left") {
+								target = 0;
+							}
+							if (target) {
+								offset = target / fitsize;
+								this.bgimageoffset = vec2(-offset, 0);
+							}
+						}
 					}
 				} else if (this.bgimagemode === "center"
 					|| this.bgimagemode === "left"
@@ -1480,6 +1561,7 @@ define.class('$system/base/node', function(require){
 					|| this.bgimagemode === "bottom-right") {
 
 					var rx, ry
+
 					if (uselayout) {
 						rx = this._layout.width / imgw
 						ry = this._layout.height / imgh
