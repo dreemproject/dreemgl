@@ -38,27 +38,29 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 				service({
 					name:"iot",
 					things: {},
+					__thingmodel: {},
 					update: function(thingid, state, value) {
-						if (! thingid) {
-							// set all
-							this.__things.set(':' + state, value);
-						} else {
-							for (var i = 0; i < this.__things.length; i++) {
-								var candidate = this.__things[i];
-								// console.log('candidate', candidate)
-								var meta = candidate.state('meta');
-								var id = meta['iot:thing-id'];
-								if (id === thingid) {
-									// found the thing, set its state
-									candidate.set(':' + state, value);
-									// console.log('found id', thingid, state, value)
-								}
+						for (var i = 0; i < this.__things.length; i++) {
+							var thing = this.__things[i];
+							// console.log('thing', thing)
+							var meta = thing.state('meta');
+							var id = meta['iot:thing-id'];
+							if (id === thingid) {
+								// found the thing, set its state
+								thing.set(':' + state, value);
+								// console.log('found id', thingid, state, value)
 							}
 						}
+						if (! thing) console.warn('missing thing', thingid);
+					},
+					updateAll: function(state, value) {
+						// set on all things
+						this.__things.set(':' + state, value);
 					},
 					__updateModel: function(thing) {
 						var id = thing.thing_id();
 						var meta = thing.state("meta");
+						var states = thing.state("istate")
 						var facets = meta['iot:facet'];
 						if (facets && facets.map) {
 							facets = facets.map(function(facet) {
@@ -68,20 +70,26 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 						// console.log('thing metadata', id, meta, facets)
 
 						// copy over fields
-						this.things[id] = {
-							state: thing.state("istate"),
+						this.__thingmodel[id] = {
+							state: states,
 							id: meta['iot:thing-id'],
 							name: meta['schema:name'],
 							reachable: meta['iot:reachable'],
 							manufacturer: meta['schema:manufacturer'],
 							model: meta['schema:model'] || meta['iot:model-id'],
-							facets: facets,
-							type: meta['iot:vendor.type']
+							facets: facets
 						};
 
+						var keys = Object.keys(this.__thingmodel).sort();
+						var things = [];
+						for (var i = 0; i < keys.length; i++) {
+							var key = keys[i];
+							things[i] = this.__thingmodel[key];
+						}
+
 						// shouldn't this be enough to update the attribute in the browser over RPC?
-						this.things = JSON.parse(JSON.stringify(this.things))
-						// console.log("updated state\n", this.things);
+						this.things = things;
+						// console.log("updated state\n", JSON.stringify(things));
 					},
 					init: function() {
 						var iotdb = require("iotdb");
@@ -108,22 +116,14 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 						flexdirection: "row",
 						alignitems: "center",
 						things: Config({type:Array, value:wire('this.rpc.iot.things')}),
-						onthings: function(things) {
-							// console.log('onthings', things);
-						},
 						render: function() {
-							// why is this.things 0? Why don't I render when things changes?
 							// console.log("Things:", this.things)
 
 							var lights = [];
 
-							var keys = Object.keys(this.things).sort();
-
-							for (var i = 0; i < keys.length; i++) {
-								var key = keys[i];
-								// console.log('key', key, this.things[key])
-								(function(key) {
-									var thing = this.things[key];
+							for (var i = 0; i < this.things.length; i++) {
+								(function(i) {
+									var thing = this.things[i];
 									var id = thing.id;
 									var type = thing.facets[thing.facets.length - 1];
 
@@ -141,7 +141,7 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 											button({
 												text:"on",
 												click:function() {
-													this.rpc.iot.update(id, 'on', true)
+													this.rpc.iot.update(id, 'on', true);
 												}.bind(this)
 											})
 										)
@@ -150,7 +150,7 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 											button({
 												text:"off",
 												click:function() {
-													this.rpc.iot.update(id, 'on', false)
+													this.rpc.iot.update(id, 'on', false);
 												}.bind(this)
 											})
 										)
@@ -167,14 +167,14 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 											})
 										)
 									}
-								}.bind(this))(key);
+								}.bind(this))(i);
 							}
 
 							lights.push(
 								button({
 									text:"all on",
 									click:function() {
-										this.rpc.iot.update(null, 'on', true)
+										this.rpc.iot.updateAll('on', true)
 									}.bind(this)
 								})
 							);
@@ -183,16 +183,7 @@ define.class("$server/composition", function (require, $server$, service, $ui$, 
 								button({
 									text:"all off",
 									click:function() {
-										this.rpc.iot.update(null, 'on', false)
-									}.bind(this)
-								})
-							);
-
-							lights.push(
-								button({
-									text:"rerender",
-									click:function() {
-										this.render();
+										this.rpc.iot.updateAll('on', false)
 									}.bind(this)
 								})
 							);
