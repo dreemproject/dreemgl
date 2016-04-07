@@ -391,6 +391,15 @@ define.class('$system/base/texture', function(require, exports){
 		})
 	}
 
+	this.samplemip = function(v){
+		return texture2D(this, v, {
+			MIN_FILTER: 'LINEAR_MIPMAP_NEAREST',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {
@@ -414,6 +423,24 @@ define.class('$system/base/texture', function(require, exports){
 	this.point_flipped2 = function(x, y){ return point_flipped(vec2(x, y)) }
 	this.point_flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
+	this.array1d = function(index){
+		return texture2D(this, vec2(mod(index, this.size.x), floor(index / this.size.x)), {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
+	this.array2d = function(v){
+		return texture2D(this, vec2(v.x * this.size.x, v.y * this.size.y), {
 			MIN_FILTER: 'NEAREST',
 			MAG_FILTER: 'NEAREST',
 			WRAP_S: 'CLAMP_TO_EDGE',
