@@ -70,7 +70,7 @@ define.class("$server/service", function (require) {
 
 		// listen for new things
 		this.__things.on("thing", function(thing) {
-			// console.log('new THING: ', thing)
+			//console.log('new THING: ', thing)
 			this.__updateModel(thing);
 			// register for changes to each thing
 			thing.on("istate", function(thing_inner) {
