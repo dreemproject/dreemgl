@@ -1,11 +1,9 @@
 define.class("$server/service", function (require) {
-
-	this.name = "iot";
-
 	this.__thingmodel = {}
 
 	this.attributes = {
-		things: {}
+		things: Config({type: Array, value: []}),
+		connected: Config({type: Boolean, value: false, persist: true})
 	}
 
 	this.update = function(thingid, state, value) {
@@ -17,9 +15,11 @@ define.class("$server/service", function (require) {
 			if (id === thingid) {
 				// found the thing, set its state
 				thing.set(':' + state, value);
+				return;
 				// console.log('found id', thingid, state, value)
 			}
 		}
+		// we should have returned above
 		if (! thing) console.warn('missing thing', thingid);
 	}
 
@@ -64,9 +64,8 @@ define.class("$server/service", function (require) {
 	}
 
 	this.init = function() {
-		var iotdb = require("iotdb");
-
-		this.__things = iotdb.connect('HueLight', {poll: 1}).connect();
+		// allow connection logic to be overridden
+		this.__things = this.connect(require("iotdb"));
 		// console.log('THINGS: ', this.__things);
 
 		// listen for new things
@@ -82,4 +81,10 @@ define.class("$server/service", function (require) {
 		}.bind(this));
 	}
 
+	// override to change connection
+	this.connect = function(iotdb) {
+		if (this.connected) return;
+		this.connected = true;
+		return iotdb.connect('HueLight', {poll: 1}).connect();
+	}
 });

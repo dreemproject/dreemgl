@@ -1,17 +1,17 @@
 define.class("$ui/screen", function ($ui$, icon, slider, button, checkbox, label, screen, view, cadgrid,
 									 $widgets$, colorpicker) {
 
-	function componentToHex(c) {
+	var componentToHex = function (c) {
 		c = Math.floor(c);
 		var hex = c.toString(16);
 		return hex.length === 1 ? "0" + hex : hex;
 	}
 
-	function rgbToHex(r, g, b) {
+	var rgbToHex = function (r, g, b) {
 		return "#" + componentToHex(r * 255) + componentToHex(g * 255) + componentToHex(b * 255);
 	}
 
-	function hexToRgb(hex) {
+	var hexToRgb = function (hex) {
 		hex += '';
 		// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 		var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
