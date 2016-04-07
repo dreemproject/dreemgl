@@ -1,7 +1,7 @@
 define.class("$ui/screen", function ($ui$, icon, slider, button, checkbox, label, screen, view, cadgrid,
 									 $$, smartlight) {
 	this.attributes = {
-		things: Config({type:Array, value:wire('this.rpc.iot.things')})
+		things: Config({type:Array, flow:"in"})
 	}
 
 

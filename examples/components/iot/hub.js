@@ -2,8 +2,8 @@ define.class("$server/service", function (require) {
 	this.__thingmodel = {}
 
 	this.attributes = {
-		things: Config({type: Array, value: []}),
-		connected: Config({type: Boolean, value: false, persist: true})
+		things: Config({type: Array, value: [], flow:"out"}),
+		connected: Config({type: Boolean, value: false, persist: true, flow:"out"})
 	}
 
 	this.update = function(thingid, state, value) {
