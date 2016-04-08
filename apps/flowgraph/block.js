@@ -416,7 +416,7 @@ define.class('$ui/view', function(require,
 			screenbutton = [
 				button({
 					class: "header",
-					icon: "file-code",
+					icon: "code",
 					click: function(e){
 						var comp = this.screen.locationhash.composition;
 						if (comp) {
