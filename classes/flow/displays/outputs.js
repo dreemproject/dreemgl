@@ -4,7 +4,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/screen', function(require, $ui$,screen, cadgrid){
+define.class('$ui/screen', function(require, $ui$,screen, cadgrid, textbox){
 
     this.attributes = {
 		number: Config({type:Number, flow:"out", value:100}),
@@ -23,7 +23,7 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid){
     };
 
     this.render = function(){
-        return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" });
+        return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" }, textbox({value:this.number, onvalue:function(ev,v,o){ this.number = v }.bind(this)}));
     }
 
 });
