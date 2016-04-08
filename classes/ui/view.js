@@ -7,7 +7,8 @@
 "use strict"
 
 define.class('$system/base/node', function(require){
-	// Base UI view object
+// Base UI view object
+
 
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')

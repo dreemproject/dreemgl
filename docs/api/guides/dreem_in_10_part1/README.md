@@ -494,7 +494,7 @@ init calls allows DreemGL to create nested json and assign them to
 classes all at once: `{attributes:{}}`
 
 ## Service Class and the RPC System
-DreemGL has a powerful WebSocket based RPC system, which makes it extremely easy to share data across multiple screens using and between server and client. To write code running on the Node.js server, you can simple extend the `<a href='http://localhost:2000/docs/api/index.html#!/api/service' target='_blank'>service`</a> class.
+DreemGL has a powerful WebSocket based RPC system, which makes it extremely easy to share data across multiple screens using and between server and client. To write code running on the Node.js server, you can simple extend the `<a href='http://localhost:2000/docs/api/index.html#!/api/service' target='_blank'>service</a>` class.
 
 ### Binding to server-side attributes
 The `service` class can be treated like any other class in DreemGL, where you can add attributes and methods to the class. This RPC system then exposes the service and all the attributes to all screens in your composition. Let's start with a small example:

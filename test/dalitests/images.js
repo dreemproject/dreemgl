@@ -6,6 +6,7 @@
 
 //Pure JS based composition
 define.class(function($server$, composition, $ui$, screen, view, label, require){
+// internal
 
 	// internal
 	// pre-load the images

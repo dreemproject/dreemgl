@@ -2973,7 +2973,7 @@ define(<span class="keyword">function</span>(require, exports, module){
         <span class="comment">// of constructs (for example, the fact that `!x[1]` means `!(x[1])`</span>
         <span class="comment">// instead of `(!x)[1]` is handled by the fact that the parser</span>
         <span class="comment">// function that parses unary prefix operators is called first, and</span>
-        <span class="comment">// in turn calls the function that parses `[]` subscripts ��� that</span>
+        <span class="comment">// in turn calls the function that parses `[]` subscripts — that</span>
         <span class="comment">// way, it'll receive the node for `x[1]` already parsed, and wraps</span>
         <span class="comment">// *that* in the unary operator node.</span>
         <span class="comment">//</span>
@@ -3111,7 +3111,7 @@ define(<span class="keyword">function</span>(require, exports, module){
                 raise(tokStart, <span class="string"><span class="delimiter">&quot;</span><span class="content">Unexpected token</span><span class="delimiter">&quot;</span></span>);
         }
 
-        <span class="comment">// Verify that a node is an lval ��� something that can be assigned</span>
+        <span class="comment">// Verify that a node is an lval — something that can be assigned</span>
         <span class="comment">// to.</span>
 
         <span class="keyword">function</span> <span class="function">checkLVal</span>(expr) {
@@ -3581,7 +3581,7 @@ define(<span class="keyword">function</span>(require, exports, module){
                 } <span class="keyword">else</span> <span class="keyword">return</span> base;
         }
 
-        <span class="comment">// Parse an atomic expression ��� either a single token that is an</span>
+        <span class="comment">// Parse an atomic expression — either a single token that is an</span>
         <span class="comment">// expression, an expression started by a keyword like `function` or</span>
         <span class="comment">// `new`, or an expression wrapped in punctuation like `()`, `[]`,</span>
         <span class="comment">// or `{}`.</span>
@@ -3652,7 +3652,7 @@ define(<span class="keyword">function</span>(require, exports, module){
         }
 
         <span class="comment">// New's precedence is slightly tricky. It must allow its argument</span>
-        <span class="comment">// to be a `[]` or dot subscript expression, but not a call ��� at</span>
+        <span class="comment">// to be a `[]` or dot subscript expression, but not a call — at</span>
         <span class="comment">// least, not without wrapping it in parentheses. Thus, it uses the </span>
 
         <span class="keyword">function</span> <span class="function">parseNew</span>() {
@@ -3689,8 +3689,8 @@ define(<span class="keyword">function</span>(require, exports, module){
                                 prop.value = parseFunction(startNode(), <span class="predefined-constant">false</span>);
                         } <span class="keyword">else</span> unexpected();
 
-                        <span class="comment">// getters and setters are not allowed to clash ��� either with</span>
-                        <span class="comment">// each other or with an init property ��� and in strict mode,</span>
+                        <span class="comment">// getters and setters are not allowed to clash — either with</span>
+                        <span class="comment">// each other or with an init property — and in strict mode,</span>
                         <span class="comment">// init properties are also not allowed to be repeated.</span>
 
                         <span class="keyword">if</span> (prop.key.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Identifier</span><span class="delimiter">&quot;</span></span> &amp;&amp; (strict || sawGetSet)) {

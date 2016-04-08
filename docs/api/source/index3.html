@@ -161,52 +161,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n7" name="n7">7</a>
 <a href="#n8" name="n8">8</a>
 <a href="#n9" name="n9">9</a>
-<strong><a href="#n10" name="n10">10</a></strong>
-<a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">// Copyright 2011 Mark Cavage &lt;mcavage@gmail.com&gt; All rights reserved.</span>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$iot$</span>, hub, <span class="predefined">$$</span>, controller){
 
-<span class="keyword">var</span> errors = require(<span class="string"><span class="delimiter">'</span><span class="content">./errors</span><span class="delimiter">'</span></span>);
-<span class="keyword">var</span> types = require(<span class="string"><span class="delimiter">'</span><span class="content">./types</span><span class="delimiter">'</span></span>);
-
-<span class="keyword">var</span> Reader = require(<span class="string"><span class="delimiter">'</span><span class="content">./reader</span><span class="delimiter">'</span></span>);
-<span class="keyword">var</span> Writer = require(<span class="string"><span class="delimiter">'</span><span class="content">./writer</span><span class="delimiter">'</span></span>);
-
-
-<span class="comment">///--- Exports</span>
-
-module.exports = {
-
-  <span class="key">Reader</span>: Reader,
-
-  <span class="key">Writer</span>: Writer
-
-};
-
-<span class="keyword">for</span> (<span class="keyword">var</span> t <span class="keyword">in</span> types) {
-  <span class="keyword">if</span> (types.hasOwnProperty(t))
-    module.exports[t] = types[t];
-}
-<span class="keyword">for</span> (<span class="keyword">var</span> e <span class="keyword">in</span> errors) {
-  <span class="keyword">if</span> (errors.hasOwnProperty(e))
-    module.exports[e] = errors[e];
-}
+  <span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
+    <span class="keyword">return</span> [
+      hub({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">iot</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">46</span>,<span class="key">y</span>:<span class="integer">57</span>}}),
+                        controller({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">desktop</span><span class="delimiter">&quot;</span></span>,<span class="key">things</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.iot.things</span><span class="delimiter">'</span></span>),<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">522</span>,<span class="key">y</span>:<span class="integer">116</span>}})
+    ]
+  }
+})
 </pre></td>
 </tr></table>
 
