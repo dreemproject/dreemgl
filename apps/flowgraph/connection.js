@@ -54,7 +54,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.oninselection = function(){
 		if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;
 		this.redraw();
-		this.updatecolor ();
+		this.updatecolor(false);
 	}
 
 	this.destroy = function(){
@@ -88,31 +88,26 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.screen.defaultKeyboardHandler.call(this, v);
 	}
 
-	this.over = false;
+	this.updatecolor = function(over){
 
-	this.updatecolor = function(){
 		if (this.inselection) {
 			this.color1 = this.focussedcolor;
 			this.color2 = this.focussedcolor;
 			this.linewidth = this.focussedwidth;
-		}
-		else{
-			if (this.over){
-				this.color1 = this.hoveredcolor;
-				this.color2 = this.hoveredcolor;
+		} else if (over) {
+			this.color1 = this.hoveredcolor;
+			this.color2 = this.hoveredcolor;
 
-				this.linewidth = this.hoveredwidth;
-			}
-			else{
-				this.color1 = this.neutralcolor1;
-				this.color2 = this.neutralcolor2;
-				this.linewidth = this.neutrallinewidth;
-			}
+			this.linewidth = this.hoveredwidth;
+		} else {
+			this.color1 = this.neutralcolor1;
+			this.color2 = this.neutralcolor2;
+			this.linewidth = this.neutrallinewidth;
 		}
 
 		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);
-				var H = this.findChild("handle");
-
+		
+		var H = this.findChild("handle");
 		if (H){
 			H.bordercolor = this.centralcolor;
 		}
@@ -144,14 +139,23 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.find("flowgraph").moveSelected(event.delta[0], event.delta[0]);
 	}
 
-	this.pointerover = function(){
-		this.over = true
-		this.updatecolor()
+	this.pointerover = function() {
+		var fg = this.find("flowgraph");
+		if (fg){
+			var hilighted = fg.allconnections;
+			for (var i=0;i<hilighted.length;i++) {
+				var con = hilighted[i];
+				if (con !== this) {
+					con.updatecolor(false)
+				}
+			}
+		}
+
+		this.updatecolor(true)
 	}
 
 	this.pointerout = function(){
-		this.over = false
-		this.updatecolor()
+		this.updatecolor(false)
 	}
 
 	this.updateMove = function(){
