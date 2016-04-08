@@ -22,7 +22,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
 		stripe:false,
-		stripecolor: Config({type:vec4, value:vec4("#303"), meta:"color" }),
+		stripecolor: Config({type:vec4, value:vec4("#333"), meta:"color" }),
 		hasball: true
 
 	}
