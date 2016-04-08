@@ -1,0 +1,31 @@
+{
+  "name": "dreemgl",
+  "version": "1.0.0",
+  "description": "DreemGL is an open source JS webGL and DALi (Dynamic Animation Library; a cross-platform 3D UI Toolkit) prototyping framework with shader styling and render functions. ![Architecture Image] (https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png)",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {
+    "homestar": "^0.3.6",
+    "homestar-hue": "^0.1.22",
+    "homestar-smartthings": "^0.1.25"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teem2/dreemgl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teem2/dreemgl/issues"
+  },
+  "homepage": "https://github.com/teem2/dreemgl#readme"
+}
