@@ -679,7 +679,8 @@ define.class('$ui/view', function(require,
 						nodeprops:node.propobj,
 						editables:node.editables,
 						inputs:node.inputs,
-						outputs:node.outputs
+						outputs:node.outputs,
+						showscreenbutton:!!(fd.screen)
 					})
 				)
 			}
