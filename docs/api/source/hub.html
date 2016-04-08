@@ -267,6 +267,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n113" name="n113">113</a>
 <a href="#n114" name="n114">114</a>
 <a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/service</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require) {
         <span class="comment">// The hub class makes it very easy to connect to a wide variety of devices including</span>
@@ -277,7 +282,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// A list of things connected to the hub, automatically updated as new devices are discovered and their state changes.</span>
-                <span class="comment">// Each thing consists of an object containing an id, name, and a state object representing its current state's value type and if it's readonly or not.</span>
+                <span class="comment">// Each thing consists of an object containing an id, name, and a state object representing its current state's value type, unit and if it's readonly or not where available.</span>
                 <span class="key">things</span>: Config({<span class="key">type</span>: Array, <span class="key">value</span>: [], <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// If true, we are connected</span>
                 <span class="key">connected</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>, <span class="key">persist</span>: <span class="predefined-constant">true</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>})
@@ -329,10 +334,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; attributemeta.length; i++) {
                         <span class="keyword">var</span> attrmodel = attributemeta[i];
                         <span class="keyword">var</span> key  = attrmodel[<span class="string"><span class="delimiter">'</span><span class="content">schema:name</span><span class="delimiter">'</span></span>];
+                        <span class="keyword">var</span> units = attrmodel[<span class="string"><span class="delimiter">'</span><span class="content">iot:unit</span><span class="delimiter">'</span></span>];
+                        <span class="keyword">if</span> (units) {
+                                units = units.split(<span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>)[<span class="integer">1</span>];
+                        }
                         states[key] = {
                                 <span class="key">value</span>: states[key],
                                 <span class="key">type</span>: attrmodel[<span class="string"><span class="delimiter">'</span><span class="content">iot:type</span><span class="delimiter">'</span></span>].split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)[<span class="integer">1</span>],
-                                <span class="key">readonly</span>: ! attrmodel[<span class="string"><span class="delimiter">'</span><span class="content">iot:write</span><span class="delimiter">'</span></span>]
+                                <span class="key">readonly</span>: ! attrmodel[<span class="string"><span class="delimiter">'</span><span class="content">iot:write</span><span class="delimiter">'</span></span>],
+                                <span class="key">units</span>: units
                         }
                 }
 

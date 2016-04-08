@@ -9,7 +9,7 @@
 /**
  * @attribute {Array} [things=""]
  * A list of things connected to the hub, automatically updated as new devices are discovered and their state changes.
- * Each thing consists of an object containing an id, name, and a state object representing its current state's value type and if it's readonly or not.
+ * Each thing consists of an object containing an id, name, and a state object representing its current state's value type, unit and if it's readonly or not where available.
  */
 /**
  * @attribute {Boolean} [connected="undefined"]

@@ -182,6 +182,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (<span class="predefined">$ui$</span>, view, label) {
 
@@ -192,11 +202,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">var</span> name = <span class="local-variable">this</span>.config.name;
                 <span class="keyword">var</span> states = [];
+                <span class="comment">// get the last, most meaningful facet</span>
                 <span class="keyword">var</span> type = <span class="local-variable">this</span>.config.facets[<span class="local-variable">this</span>.config.facets.length - <span class="integer">1</span>];
                 states.push(label({<span class="key">text</span>: <span class="string"><span class="delimiter">'</span><span class="content">type: </span><span class="delimiter">'</span></span> + type}))
                 <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.config.state) {
+                        <span class="comment">// skip timestamps</span>
                         <span class="keyword">if</span> (key === <span class="string"><span class="delimiter">'</span><span class="content">@timestamp</span><span class="delimiter">'</span></span>) <span class="keyword">continue</span>;
-                        <span class="keyword">var</span> val = JSON.stringify(<span class="local-variable">this</span>.config.state[key].value);
+
+                        <span class="keyword">var</span> state = <span class="local-variable">this</span>.config.state[key];
+                        <span class="comment">// format type</span>
+                        <span class="keyword">var</span> val = JSON.stringify(state.value);
+                        <span class="keyword">if</span> (state.units) {
+                                <span class="comment">// append units after formatting, e.g. temperature.imperial.fahrenheit -&gt; fahrenheit</span>
+                                <span class="keyword">var</span> units = state.units.split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>);
+                                val += <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + units[units.length - <span class="integer">1</span>];
+                        }
                         states.push(label({<span class="key">text</span>: key + <span class="string"><span class="delimiter">'</span><span class="content">: </span><span class="delimiter">'</span></span> + val}))
                 }
 
