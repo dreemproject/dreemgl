@@ -21,6 +21,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		color2: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
+		stripe:false,
 		hasball: true
 
 	}
@@ -205,10 +206,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 
 		this.color = function(){
-			//return 'blue'
 			var a= 1.0 - pow(abs(mesh.y*2.0), 2.5);
+			if (view.stripe && mesh.x < 0.6 && int(mod(0.03 * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), 2.0)) == 1) {
+				return vec4(mix(mix(vec3(1,1,1), view.color1.xyz, mesh.x * 0.5), view.color2.xyz, mesh.x),a)
+			}
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
-			return vec4(view.bgcolor.xyz,a);
 		}
 	})
 
@@ -259,7 +261,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//return 'red'
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
-			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);
 		}
 	})
 	// turn on the shaders

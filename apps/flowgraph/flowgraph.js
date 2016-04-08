@@ -639,7 +639,8 @@ define.class('$ui/view', function(require,
 							from:w.from,
 							fromoutput:w.output,
 							to:node.name,
-							toinput:w.input
+							toinput:w.input,
+							stripe:!!(w.multi)
 						}))
 					} else {
 						// console.log("Not rendering", w, "for", node.name)

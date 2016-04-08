@@ -23,7 +23,7 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid, textbox){
     };
 
     this.render = function(){
-        return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" }, textbox({value:this.number, onvalue:function(ev,v,o){ this.number = v }.bind(this)}));
+        return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030", flexdirection:"column", alignitems:"center", justifycontent:"space-around" });
     }
 
 });

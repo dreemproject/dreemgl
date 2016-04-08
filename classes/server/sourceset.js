@@ -269,7 +269,8 @@ define.class(function(require, $server$, dataset){
 										output.wires.push({
 											from:m[1],
 											output:m[2],
-											input:name
+											input:name,
+											multi:true
 										})
 									}
 								}
