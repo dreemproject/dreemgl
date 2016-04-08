@@ -8,6 +8,7 @@ define.class(function(require, $server$, dataset){
 	// internal, Sourceset is a dataset-api on source
 	var jsparser = require('$system/parse/onejsparser')
 	var jsformatter = require('$system/parse/jsformatter')
+	var astscanner = require('$system/parse/astscanner')
 
 	this.attributes = {
 		change: Config({type:Event})
@@ -149,6 +150,30 @@ define.class(function(require, $server$, dataset){
 				break
 			}
 		}
+	}
+
+	this.insertWire = function(sblock, soutput, tblock, tinput) {
+		var target = this.data.childnames[tblock]
+		if (target) {
+			var props = target.propobj.keys
+			for (var i = 0; i < props.length; i++) {
+				if(props[i].key.name == tinput){
+					var ast = props[i];
+					var scanner = new astscanner(ast.value, [{type:"Call", fn:{type:"Id", name:"wire"}}, {type:"Value", kind:"string"}])
+					var at = scanner.at;
+					if (at && at.type && at.type === "Value") {
+						var value = at.value;
+						if (value && value[0] === '[' && value[value.length - 1] === ']') {
+							at.value = "[this.rpc." + sblock + "." + soutput + "," + value.substring(1)
+							at.raw = JSON.stringify(at.value)
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+
 	}
 
 	this.createWire = function(sblock, soutput, tblock, tinput){

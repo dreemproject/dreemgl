@@ -477,22 +477,31 @@ define.class('$ui/view', function(require,
 	}
 
 	this.makeNewConnection = function() {
-		// DO CONNECTION HERE!
-		console.log("making connection...")
-		this.sourceset.fork(function() {
-			this.sourceset.deleteWire(
-				this.newconnection.sourceblock,
-				this.newconnection.sourceoutput,
-				this.newconnection.targetblock,
-				this.newconnection.targetinput
-			)
 
-			this.sourceset.createWire(
-				this.newconnection.sourceblock,
+		this.sourceset.fork(function(src) {
+
+			var inserted = src.insertWire(this.newconnection.sourceblock,
 				this.newconnection.sourceoutput,
 				this.newconnection.targetblock,
-				this.newconnection.targetinput
-			)
+				this.newconnection.targetinput);
+
+			if (!inserted) {
+
+				src.deleteWire(
+					this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+
+				src.createWire(
+					this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+
+			}
 		}.bind(this))
 
 		this.cancelConnection()
