@@ -497,6 +497,13 @@ define.class('$ui/view', function(require,
 			}
 
 			if (!inserted) {
+				src.deleteWire(
+					null,
+					null,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+
 				src.createWire(
 					this.newconnection.sourceblock,
 					this.newconnection.sourceoutput,

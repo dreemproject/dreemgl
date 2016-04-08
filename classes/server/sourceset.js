@@ -165,25 +165,31 @@ define.class(function(require, $server$, dataset){
 		var props = target.propobj.keys
 		for(var i = 0; i < props.length; i++){
 			var ast = props[i]
-			if(ast.key.name == tinput) {
-				var scanner = new astscanner(ast.value, [{type:"Call", fn:{type:"Id", name:"wire"}}, {type:"Value", kind:"string"}])
-				var at = scanner.at;
-				if (at && at.type && at.type === "Value") {
-					var rpcstr = "this.rpc." + sblock + "." + soutput;
-					var connections = this.extractRPCCalls(at.value)
-					var index = connections.indexOf(rpcstr)
-					if (index >= 0) {
-						connections.splice(index, 1)
+			if (ast.key.name == tinput) {
+
+				if (sblock && soutput) {
+					var scanner = new astscanner(ast.value, [{type:"Call", fn:{type:"Id", name:"wire"}}, {type:"Value", kind:"string"}])
+					var at = scanner.at;
+					if (at && at.type && at.type === "Value") {
+						var rpcstr = "this.rpc." + sblock + "." + soutput;
+						var connections = this.extractRPCCalls(at.value)
+						var index = connections.indexOf(rpcstr)
+						if (index >= 0) {
+							connections.splice(index, 1)
+						}
+						if (connections.length === 1) {
+							at.value = connections[0]
+							at.raw = JSON.stringify(at.value)
+						} else if (connections.length) {
+							at.value = "[" + connections.join(",") + "]"
+							at.raw = JSON.stringify(at.value)
+						} else {
+							props.splice(i,1)
+						}
 					}
-					if (connections.length === 1) {
-						at.value = connections[0]
-						at.raw = JSON.stringify(at.value)
-					} else if (connections.length) {
-						at.value = "[" + connections.join(",") + "]"
-						at.raw = JSON.stringify(at.value)
-					} else {
-						props.splice(i,1)
-					}
+
+				} else {
+					props.splice(i,1)
 				}
 
 				break
