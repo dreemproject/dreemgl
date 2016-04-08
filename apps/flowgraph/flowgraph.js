@@ -354,7 +354,7 @@ define.class('$ui/view', function(require,
 						for (var i=0;i<defs.length;i++) {
 							var def = defs[i];
 							var name = def.id.name;
-							if (name[0] === '$' && name[name.length - 1] === '$') {
+							if (name[name.length - 1] === '$') {
 								category = {
 									name:name,//.substring(1, name.length).replace(/\$/g, "/"),
 									children:[]
