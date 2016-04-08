@@ -54,17 +54,20 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
         return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" },
             view({bgcolor:NaN, flexdirection:"column", flex:1, justifycontent:"center" },
                 view({bgcolor:NaN, flexdirection:"row", flex:1, justifycontent:"center" },
-                    view({width:800, bgcolor:vec4(1,1,1,0.15),padding:40,borderradius:50,  flexdirection:"column", alignitems:"center", justifycontent:"center" },
-                        view({flexdirection:"row", flex:1}, label({text:'number', paddingright:15}), label({text:this.number, fgcolor:'#FF7260'})),
-						view({flexdirection:"row", flex:1}, label({text:'boolean', paddingright:15}), label({text:this.boolean, fgcolor:'#FF7260'})),
-                        view({flexdirection:"row", flex:1}, label({text:'float',  paddingright:15}), label({text:this.float,  fgcolor:'#D23641'})),
-                        view({flexdirection:"row", flex:1}, label({text:'int',    paddingright:15}), label({text:this.int,    fgcolor:'#FF0080'})),
-                        view({flexdirection:"row", flex:1}, label({text:'vec2',   paddingright:15}), label({text:this.vec2,   fgcolor:'#129492'})),
-                        view({flexdirection:"row", flex:1}, label({text:'vec3',   paddingright:15}), label({text:this.vec3,   fgcolor:'#31C3E7'})),
-                        view({flexdirection:"row", flex:1}, label({text:'vec4',   paddingright:15}), label({text:this.vec4,   fgcolor:'#4FD5D6'})),
-                        view({flexdirection:"row", flex:1}, label({text:'array',  paddingright:15}), label({text:arr,  fgcolor:'#0198E1'})),
-                        view({flexdirection:"row", flex:1}, label({text:'string', paddingright:15}), label({text:str, fgcolor:'#6ADA7A'})),
-                        view({flexdirection:"row", flex:1}, label({text:'object', paddingright:15}), label({text:obj, fgcolor:'#ffee14'}))
+                    view({width:800, bgcolor:vec4(1,1,1,0.15),padding:30, borderradius:50,  flexdirection:"column", alignitems:"center", justifycontent:"space-between" },
+                        view({flex:1}, label({text:'number', paddingright:15}), label({text:this.number, fgcolor:'#FF7260'})),
+						view({flex:1}, label({text:'boolean', paddingright:15}), label({text:this.boolean, fgcolor:'#FF7260'})),
+                        view({flex:1}, label({text:'float',  paddingright:15}), label({text:this.float,  fgcolor:'#D23641'})),
+                        view({flex:1}, label({text:'int',    paddingright:15}), label({text:this.int,    fgcolor:'#FF0080'})),
+                        view({flex:1}, label({text:'vec2',   paddingright:15}), label({text:this.vec2,   fgcolor:'#129492'})),
+                        view({flex:1}, label({text:'vec3',   paddingright:15}), label({text:this.vec3,   fgcolor:'#31C3E7'})),
+                        view({flex:1}, label({text:'vec4',   paddingright:15}), label({text:this.vec4,   fgcolor:'#4FD5D6'})),
+                        view({flex:1}, label({text:'array',  paddingright:15}), label({text:arr,  fgcolor:'#0198E1'})),
+						view({flex:1, width:300, overflow:"scroll"}, label({text:JSON.stringify(this.array).split(",").join(",\n")})),
+                        view({flex:1}, label({text:'string', paddingright:15}), label({text:str, fgcolor:'#6ADA7A'})),
+						view({flex:1, width:300, overflow:"scroll"}, label({text:JSON.stringify(this.string)})),
+                        view({flex:1}, label({text:'object', paddingright:15}), label({text:obj, fgcolor:'#ffee14'})),
+						view({flex:1, width:300, overflow:"scroll"}, label({text:JSON.stringify(this.object)}))
                     )
                 )
             )
