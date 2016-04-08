@@ -153,6 +153,24 @@ define.class(function(require, $server$, dataset){
 		}
 	}
 
+	this.extractRPCCalls = function(str) {
+		var found = []
+		var mast = jsparser.parse(str)
+		if (mast) {
+			var wiredwalker = new WiredWalker()
+			var state = wiredwalker.newState()
+			wiredwalker.expand(mast, null, state)
+			var refs = state.references;
+			for (var k = 0;k < refs.length;k++) {
+				var con = refs[k].join('.')
+				if (found.indexOf(con) < 0) {
+					found.push(con)
+				}
+			}
+		}
+		return found;
+	}
+
 	this.insertWire = function(sblock, soutput, tblock, tinput) {
 		var target = this.data.childnames[tblock]
 		if (target) {
@@ -165,27 +183,12 @@ define.class(function(require, $server$, dataset){
 					if (at && at.type && at.type === "Value") {
 						var value = at.value;
 						var rpcstr = "this.rpc." + sblock + "." + soutput;
-						if (value && value[0] === '[' && value[value.length - 1] === ']') {
-							var mast = jsparser.parse(value)
-
-							if (mast) {
-								var wiredwalker = new WiredWalker()
-								var state = wiredwalker.newState()
-								wiredwalker.expand(mast, null, state)
-								var found = state.references;
-								var connections = [rpcstr]
-								for (var k = 0;k < found.length;k++) {
-									var con = found[k].join('.')
-									if (connections.indexOf(con) < 0) {
-										connections.push(con)
-									}
-								}
-								at.value = "[" + connections.join(",") + "]"
-								at.raw = JSON.stringify(at.value)
-								return true;
+						if (value) {
+							var connections = this.extractRPCCalls(value)
+							if (connections.indexOf(rpcstr) < 0) {
+								connections.push(rpcstr)
 							}
-						} else if (value && value.indexOf && value.indexOf('this.rpc.') === 0 && value !== rpcstr) {
-							at.value = "[" + rpcstr + "," + value + "]"
+							at.value = "[" + connections.join(",") + "]"
 							at.raw = JSON.stringify(at.value)
 							return true;
 						}

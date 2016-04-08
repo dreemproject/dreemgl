@@ -106,7 +106,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 
 		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);
-		
+
 		var H = this.findChild("handle");
 		if (H){
 			H.bordercolor = this.centralcolor;

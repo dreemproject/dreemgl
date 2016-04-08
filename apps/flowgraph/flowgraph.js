@@ -480,6 +480,13 @@ define.class('$ui/view', function(require,
 
 		this.sourceset.fork(function(src) {
 
+			//src.deleteWire(
+			//	this.newconnection.sourceblock,
+			//	this.newconnection.sourceoutput,
+			//	this.newconnection.targetblock,
+			//	this.newconnection.targetinput
+			//)
+
 			var inserted;
 
 			if (this.newconnection.targettype === "Array") {
