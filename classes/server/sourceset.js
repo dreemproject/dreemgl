@@ -249,16 +249,31 @@ define.class(function(require, $server$, dataset){
 							var wire = key.value
 							var str = wire.args[0].value
 
-							if(str.indexOf('this.rpc') !== 0) continue
+							var containsrpc = str.indexOf('this.rpc')
 
-							var parts = str.slice(9).split('.')
-							if(parts.length !== 2) continue
-							if(!output.wires) output.wires = []
-							output.wires.push({
-								from:parts[0],
-								output:parts[1],
-								input:name
-							})
+							if (containsrpc > -1) {
+								if(!output.wires) output.wires = []
+
+								var parts = str.slice(9).split('.')
+								if (parts.length === 2) {
+									output.wires.push({
+										from:parts[0],
+										output:parts[1],
+										input:name
+									})
+								} else {
+									var r = /this\.rpc\.([a-zA-Z0-9]+)\.([a-zA-Z0-9]+)/g
+									var m;
+									while (m = r.exec(str)) {
+										if(!output.wires) output.wires = []
+										output.wires.push({
+											from:m[1],
+											output:m[2],
+											input:name
+										})
+									}
+								}
+							}
 						}
 					}
 					continue
