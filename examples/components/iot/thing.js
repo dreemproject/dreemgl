@@ -11,7 +11,7 @@ define.class("$ui/view", function ($ui$, view, label) {
 		states.push(label({text: 'type: ' + type}))
 		for (var key in this.config.state) {
 			if (key === '@timestamp') continue;
-			var val = JSON.stringify(this.config.state[key]);
+			var val = JSON.stringify(this.config.state[key].value);
 			states.push(label({text: key + ': ' + val}))
 		}
 

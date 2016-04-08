@@ -60,7 +60,7 @@ define.class("$ui/view", function ($ui$, view, label, button, $widgets$, colorpi
 					colorwheel:true,
 					colorsliders:false,
 					colorbox:false,
-					value: vec4(hexToRgb(this._config.state.color)),
+					value: vec4(hexToRgb(this._config.state.color.value)),
 					valuechange:function(color) {
 						var hex = rgbToHex(color[0], color[1], color[2]);
 						this.rpc.iot.update(id, 'color', hex);

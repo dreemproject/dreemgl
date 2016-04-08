@@ -31,6 +31,7 @@ define.class("$server/service", function (require) {
 	this.__updateModel = function(thing) {
 		var id = thing.thing_id();
 		var meta = thing.state("meta");
+		var model = thing.state("model");
 		var states = thing.state("istate")
 		var facets = meta['iot:facet'];
 		if (facets && facets.map) {
@@ -38,7 +39,21 @@ define.class("$server/service", function (require) {
 				return facet.split(':')[1]
 			})
 		}
+
+		var attributemeta = model['iot:attribute']
 		// console.log('thing metadata', id, meta, facets)
+		// console.log('thing model', attributemeta);
+
+		// rewrite state to include metadata about type, readonly
+		for (var i = 0; i < attributemeta.length; i++) {
+			var attrmodel = attributemeta[i];
+			var key  = attrmodel['schema:name'];
+			states[key] = {
+				value: states[key],
+				type: attrmodel['iot:type'].split('.')[1],
+				readonly: ! attrmodel['iot:write']
+			}
+		}
 
 		// copy over fields
 		this.__thingmodel[id] = {
