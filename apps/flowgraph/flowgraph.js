@@ -480,20 +480,26 @@ define.class('$ui/view', function(require,
 
 		this.sourceset.fork(function(src) {
 
-			src.deleteWire(
-				this.newconnection.sourceblock,
-				this.newconnection.sourceoutput,
-				this.newconnection.targetblock,
-				this.newconnection.targetinput
-			)
 
 			var inserted;
 
 			if (this.newconnection.targettype === "Array") {
+				src.deleteWire(
+					this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+
 				inserted = src.insertWire(this.newconnection.sourceblock,
 					this.newconnection.sourceoutput,
 					this.newconnection.targetblock,
 					this.newconnection.targetinput);
+			} else if (this.newconnection.targettype === "Object") {
+				inserted = src.mergeWire(this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput)
 			}
 
 			if (!inserted) {

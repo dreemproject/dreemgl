@@ -17,22 +17,25 @@ define.class("$system/parse/onejsserialize", function(require){
 	this.Index = function(node, parent, state){
 		if(!state.expr || node.index.type !== 'Value') throw new Error("Cannot property bind to dynamic index")
 		state.expr.unshift(node.index.value)
-	
+
 		return this.expand(node.object, node, state) + '[' + node.index.value + ']'
 	}
 
 	this.Key = function(node, parent, state){
 		// ok we are a member expression
-		
-		if(state.expr) state.expr.unshift(node.key.name)
+		var name = node.key.name
+		if (!name) {
+			name = node.key.value
+		}
+		if(state.expr) state.expr.unshift(name)
 		else {
 			state = Object.create(state)
-			state.expr = [node.key.name]
+			state.expr = [name]
 			if(parent.type !== 'Call' || parent.fn !== node){
 				state.references.push(state.expr)
 			}
 		}
-		return this.expand(node.object, node, state) + '.' + node.key.name
+		return this.expand(node.object, node, state) + '.' + name
 	}
 	this.This = function(node, parent, state){
 		if(state.expr) state.expr.unshift('this')
@@ -43,8 +46,8 @@ define.class("$system/parse/onejsserialize", function(require){
 		if(state.expr) state.expr.unshift(node.name)
 		return node.name
 	}
-	
+
 	this.Value = function(node, parent, state){
 		return node.raw
-	}	
+	}
 })

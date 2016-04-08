@@ -197,6 +197,20 @@ define.class(function(require, $server$, dataset){
 		}
 	}
 
+	this.generateRPCKV = function(key, block, port) {
+		return {
+			kind:"init",
+			key:{type:"Value", kind:"string", value:key, multi:false, raw:JSON.stringify(key)},
+			value:{type:"Key",key:{type:"Property", name:port},
+				object:{type:"Key",key:{type:"Property", name:block},
+					object:{type:"Key",key:{type:"Property", name:"rpc"},
+						object:{type:"This"}
+					}
+				}
+			}
+		}
+	}
+
 	this.insertWire = function(sblock, soutput, tblock, tinput) {
 		var target = this.data.childnames[tblock]
 		if (target) {
@@ -223,8 +237,61 @@ define.class(function(require, $server$, dataset){
 			}
 		}
 		return false;
-
 	}
+
+	this.mergeWire = function(sblock, soutput, tblock, tinput) {
+		var target = this.data.childnames[tblock]
+		if (target) {
+			var props = target.propobj.keys
+			for (var i = 0; i < props.length; i++) {
+				if(props[i].key.name == tinput){
+					var ast = props[i];
+					var scanner = new astscanner(ast.value, [{type:"Call", fn:{type:"Id", name:"wire"}}, {type:"Value", kind:"string"}])
+					var at = scanner.at;
+					if (at && at.type && at.type === "Value") {
+						var value = at.value;
+						var objname = sblock + "." + soutput;
+
+						if (value) {
+							var mast = jsparser.parse(value)
+							var obj = new astscanner(mast, [{type:"Object"}])
+							obj.scan([{type:"Value", value:objname}])
+
+							if (obj.at && obj.at.type === "Value") {
+								obj.atparent.keys.splice(obj.atindex, 1, this.generateRPCKV(objname, sblock, soutput))
+							} else if (obj.at && obj.at.type === "Object") {
+								if (!obj.at.keys) {
+									obj.at.keys = []
+								}
+								var newkey = this.generateRPCKV(objname, sblock, soutput)
+								obj.at.keys.push(newkey)
+								at.value = obj.toSource()
+								at.raw = JSON.stringify(at.value)
+							} else {
+								var connections = this.extractRPCCalls(value)
+								var newobj = {type:"Object", keys:[]}
+								newobj.keys.push(this.generateRPCKV(objname, sblock, soutput))
+								for (var z=0;z<connections.length;z++) {
+									var con = connections[z]
+									var parts = con.split(".")
+									var block = parts[parts.length - 2]
+									var port = parts[parts.length - 1]
+									var conname = block + "." + port
+									newobj.keys.push(this.generateRPCKV(conname, block, port))
+								}
+
+								at.value = obj.toSource(newobj)
+								at.raw = JSON.stringify(at.value)
+							}
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 
 	this.createWire = function(sblock, soutput, tblock, tinput){
 		var target = this.data.childnames[tblock]

@@ -13,11 +13,22 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 			char_count:0
 		};
 
-		jsformatter.walk(ast, buf, function(str){
-			if (str) {
-				buf.char_count += str.length;
-				buf.out += str
+		jsformatter.walk(ast, buf, {}, function(str){
+
+			if(str === '\n'){
+				this.last_is_newline = true;
+				return
 			}
+			if(str === '\t' && this.last_is_newline){
+				str = '\n';
+				for (var i = 0; i < this.actual_indent;i++) {
+					str += '  '
+				}
+			}
+			this.last_is_newline = false;
+
+			buf.char_count += str.length;
+			buf.out += str
 		});
 
 		return buf.out;
