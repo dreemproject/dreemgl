@@ -159,6 +159,9 @@ define.class(function(require, $server$, dataset){
 	}
 
 	this.deleteWire = function(sblock, soutput, tblock, tinput){
+		if (!tblock) {
+			return
+		}
 		var target = this.data.childnames[tblock]
 		if(!target) return console.error("cannot find target " + tblock)
 		// ok we need to do keys
@@ -171,7 +174,8 @@ define.class(function(require, $server$, dataset){
 					var scanner = new astscanner(ast.value, [{type:"Call", fn:{type:"Id", name:"wire"}}, {type:"Value", kind:"string"}])
 					var at = scanner.at;
 					if (at && at.type && at.type === "Value") {
-						var rpcstr = "this.rpc." + sblock + "." + soutput;
+						var objname = sblock + "." + soutput;
+						var rpcstr = "this.rpc." + objname;
 						var connections = this.extractRPCCalls(at.value)
 						var index = connections.indexOf(rpcstr)
 						if (index >= 0) {
@@ -181,8 +185,20 @@ define.class(function(require, $server$, dataset){
 							at.value = connections[0]
 							at.raw = JSON.stringify(at.value)
 						} else if (connections.length) {
-							at.value = "[" + connections.join(",") + "]"
-							at.raw = JSON.stringify(at.value)
+							if (at.value[0] === '{') {
+								var mast = jsparser.parse(at.value)
+								var obj = new astscanner(mast, [{type:"Object"}])
+								obj.scan([{type:"Value", value:objname}])
+								if (typeof(obj.atindex) !== "undefined") {
+									obj.atparent.keys.splice(obj.atindex, 1)
+								}
+								at.value = obj.toSource(obj.atparent)
+								at.raw = JSON.stringify(at.value)
+							} else {
+								at.value = "[" + connections.join(",") + "]"
+								at.raw = JSON.stringify(at.value)
+							}
+
 						} else {
 							props.splice(i,1)
 						}

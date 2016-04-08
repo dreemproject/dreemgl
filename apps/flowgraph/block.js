@@ -416,16 +416,6 @@ define.class('$ui/view', function(require,
 			screenbutton = [
 				button({
 					class: "header",
-					icon: "code",
-					click: function(e){
-						var comp = this.screen.locationhash.composition;
-						if (comp) {
-							var location = define.expandVariables(comp)
-							window.open(location,'_blank');
-						}
-					}.bind(this)}),
-				button({
-					class: "header",
 					icon: "desktop",
 					click: function(e){
 						var comp = this.screen.locationhash.composition;
