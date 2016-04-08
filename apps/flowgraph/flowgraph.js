@@ -480,12 +480,12 @@ define.class('$ui/view', function(require,
 
 		this.sourceset.fork(function(src) {
 
-			//src.deleteWire(
-			//	this.newconnection.sourceblock,
-			//	this.newconnection.sourceoutput,
-			//	this.newconnection.targetblock,
-			//	this.newconnection.targetinput
-			//)
+			src.deleteWire(
+				this.newconnection.sourceblock,
+				this.newconnection.sourceoutput,
+				this.newconnection.targetblock,
+				this.newconnection.targetinput
+			)
 
 			var inserted;
 
@@ -497,21 +497,12 @@ define.class('$ui/view', function(require,
 			}
 
 			if (!inserted) {
-
-				src.deleteWire(
-					this.newconnection.sourceblock,
-					this.newconnection.sourceoutput,
-					this.newconnection.targetblock,
-					this.newconnection.targetinput
-				)
-
 				src.createWire(
 					this.newconnection.sourceblock,
 					this.newconnection.sourceoutput,
 					this.newconnection.targetblock,
 					this.newconnection.targetinput
 				)
-
 			}
 		}.bind(this))
 

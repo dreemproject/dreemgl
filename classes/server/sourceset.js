@@ -140,19 +140,6 @@ define.class(function(require, $server$, dataset){
 		fdn.value = genFlowDataObject(data)
 	}
 
-	this.deleteWire = function(sblock, soutput, tblock, tinput){
-		var target = this.data.childnames[tblock]
-		if(!target) return console.error("cannot find target " + tblock)
-		// ok we need to do keys
-		var props = target.propobj.keys
-		for(var i = 0; i < props.length; i++){
-			if(props[i].key.name == tinput){
-				props.splice(i,1)
-				break
-			}
-		}
-	}
-
 	this.extractRPCCalls = function(str) {
 		var found = []
 		var mast = jsparser.parse(str)
@@ -169,6 +156,39 @@ define.class(function(require, $server$, dataset){
 			}
 		}
 		return found;
+	}
+
+	this.deleteWire = function(sblock, soutput, tblock, tinput){
+		var target = this.data.childnames[tblock]
+		if(!target) return console.error("cannot find target " + tblock)
+		// ok we need to do keys
+		var props = target.propobj.keys
+		for(var i = 0; i < props.length; i++){
+			var ast = props[i]
+			if(ast.key.name == tinput) {
+				var scanner = new astscanner(ast.value, [{type:"Call", fn:{type:"Id", name:"wire"}}, {type:"Value", kind:"string"}])
+				var at = scanner.at;
+				if (at && at.type && at.type === "Value") {
+					var rpcstr = "this.rpc." + sblock + "." + soutput;
+					var connections = this.extractRPCCalls(at.value)
+					var index = connections.indexOf(rpcstr)
+					if (index >= 0) {
+						connections.splice(index, 1)
+					}
+					if (connections.length === 1) {
+						at.value = connections[0]
+						at.raw = JSON.stringify(at.value)
+					} else if (connections.length) {
+						at.value = "[" + connections.join(",") + "]"
+						at.raw = JSON.stringify(at.value)
+					} else {
+						props.splice(i,1)
+					}
+				}
+
+				break
+			}
+		}
 	}
 
 	this.insertWire = function(sblock, soutput, tblock, tinput) {
