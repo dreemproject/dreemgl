@@ -63,11 +63,11 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
                         view({flex:1}, label({text:'vec3',   paddingright:15}), label({text:this.vec3,   fgcolor:'#31C3E7'})),
                         view({flex:1}, label({text:'vec4',   paddingright:15}), label({text:this.vec4,   fgcolor:'#4FD5D6'})),
                         view({flex:1}, label({text:'array',  paddingright:15}), label({text:arr,  fgcolor:'#0198E1'})),
-						view({flex:1, width:300, overflow:"scroll"}, label({text:JSON.stringify(this.array).split(",").join(",\n")})),
+						view({flex:1, alignself:"stretch", overflow:"scroll"}, label({text:JSON.stringify(this.array)})),
                         view({flex:1}, label({text:'string', paddingright:15}), label({text:str, fgcolor:'#6ADA7A'})),
-						view({flex:1, width:300, overflow:"scroll"}, label({text:JSON.stringify(this.string)})),
+						view({flex:1, alignself:"stretch", overflow:"scroll"}, label({text:JSON.stringify(this.string)})),
                         view({flex:1}, label({text:'object', paddingright:15}), label({text:obj, fgcolor:'#ffee14'})),
-						view({flex:1, width:300, overflow:"scroll"}, label({text:JSON.stringify(this.object)}))
+						view({flex:1, alignself:"stretch", overflow:"scroll"}, label({text:JSON.stringify(this.object)}))
                     )
                 )
             )

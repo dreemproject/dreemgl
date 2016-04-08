@@ -9,6 +9,7 @@ define.class(function(require, $server$, dataset){
 	var jsparser = require('$system/parse/onejsparser')
 	var jsformatter = require('$system/parse/jsformatter')
 	var astscanner = require('$system/parse/astscanner')
+	var WiredWalker = require('$system/parse/wiredwalker')
 
 	this.attributes = {
 		change: Config({type:Event})
@@ -163,12 +164,28 @@ define.class(function(require, $server$, dataset){
 					var at = scanner.at;
 					if (at && at.type && at.type === "Value") {
 						var value = at.value;
+						var rpcstr = "this.rpc." + sblock + "." + soutput;
 						if (value && value[0] === '[' && value[value.length - 1] === ']') {
-							at.value = "[this.rpc." + sblock + "." + soutput + "," + value.substring(1)
-							at.raw = JSON.stringify(at.value)
-							return true;
-						} else if (value && value.indexOf && value.indexOf('this.rpc') === 0) {
-							at.value = "[this.rpc." + sblock + "." + soutput + "," + value + "]"
+							var mast = jsparser.parse(value)
+
+							if (mast) {
+								var wiredwalker = new WiredWalker()
+								var state = wiredwalker.newState()
+								wiredwalker.expand(mast, null, state)
+								var found = state.references;
+								var connections = [rpcstr]
+								for (var k = 0;k < found.length;k++) {
+									var con = found[k].join('.')
+									if (connections.indexOf(con) < 0) {
+										connections.push(con)
+									}
+								}
+								at.value = "[" + connections.join(",") + "]"
+								at.raw = JSON.stringify(at.value)
+								return true;
+							}
+						} else if (value && value.indexOf && value.indexOf('this.rpc.') === 0 && value !== rpcstr) {
+							at.value = "[" + rpcstr + "," + value + "]"
 							at.raw = JSON.stringify(at.value)
 							return true;
 						}
