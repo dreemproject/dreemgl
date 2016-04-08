@@ -11,9 +11,6 @@ define.class("$ui/view", function ($ui$, view, label) {
 		var type = this.config.facets[this.config.facets.length - 1];
 		states.push(label({text: 'type: ' + type}))
 		for (var key in this.config.state) {
-			// skip timestamps
-			if (key === '@timestamp') continue;
-
 			var state = this.config.state[key];
 			// format type
 			var val = JSON.stringify(state.value);

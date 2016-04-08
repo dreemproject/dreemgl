@@ -51,6 +51,9 @@ define.class("$server/service", function (require) {
 			})
 		}
 
+		// ignore timestamps
+		delete states['@timestamp'];
+
 		var attributemeta = model['iot:attribute']
 		// console.log('thing metadata', id, meta, facets)
 		// console.log('thing model', attributemeta);
@@ -71,8 +74,7 @@ define.class("$server/service", function (require) {
 			}
 		}
 
-		// copy over fields
-		this.__thingmodel[id] = {
+		var newdata = {
 			state: states,
 			id: meta['iot:thing-id'],
 			name: meta['schema:name'],
@@ -81,6 +83,10 @@ define.class("$server/service", function (require) {
 			model: meta['schema:model'] || meta['iot:model-id'],
 			facets: facets
 		};
+
+		// copy over fields
+		if (JSON.stringify(this.__thingmodel[id]) === newdata) return;
+		this.__thingmodel[id] = newdata
 
 		var keys = Object.keys(this.__thingmodel).sort();
 		var things = [];
@@ -111,7 +117,7 @@ define.class("$server/service", function (require) {
 		}.bind(this));
 	}
 
-	// Override to change what gets connected. Currently attemts to connect everything.
+	// Override to change what gets connected. Currently attempts to connect all devices.
 	this.connect = function(iotdb) {
 		if (this.connected) return;
 		return iotdb.connect('HueLight', {poll: 1}).connect();
