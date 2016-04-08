@@ -1,11 +1,19 @@
 define.class("$server/service", function (require) {
+	// The hub class makes it very easy to connect to a wide variety of devices including
+	// SmartThings, Philips Hue and many more.
+	//
+	// IMPORTANT: see /examples/components/iot/README.md for setup instructions.
 	this.__thingmodel = {}
 
 	this.attributes = {
+		// A list of things connected to the hub, automatically updated as new devices are discovered and their state changes.
+		// Each thing consists of an object containing an id, name, and a state object representing its current state's value type and if it's readonly or not.
 		things: Config({type: Array, value: [], flow:"out"}),
+		// If true, we are connected
 		connected: Config({type: Boolean, value: false, persist: true, flow:"out"})
 	}
 
+	// Updates a specific thing's state to a new value
 	this.update = function(thingid, state, value) {
 		for (var i = 0; i < this.__things.length; i++) {
 			var thing = this.__things[i];
@@ -20,9 +28,12 @@ define.class("$server/service", function (require) {
 			}
 		}
 		// we should have returned above
-		if (! thing) console.warn('missing thing', thingid);
+		if (! thing) {
+			console.warn('missing thing', thingid);
+		}
 	}
 
+	// Updates all things to a new value
 	this.updateAll = function(state, value) {
 		// set on all things
 		this.__things.set(':' + state, value);
@@ -73,7 +84,6 @@ define.class("$server/service", function (require) {
 			things[i] = this.__thingmodel[key];
 		}
 
-		// shouldn't this be enough to update the attribute in the browser over RPC?
 		this.things = things;
 		// console.log("updated state\n", JSON.stringify(things));
 	}
@@ -96,10 +106,10 @@ define.class("$server/service", function (require) {
 		}.bind(this));
 	}
 
-	// override to change connection
+	// Override to change what gets connected. Currently attemts to connect everything.
 	this.connect = function(iotdb) {
 		if (this.connected) return;
-		this.connected = true;
 		return iotdb.connect('HueLight', {poll: 1}).connect();
+		this.connected = true;
 	}
 });
