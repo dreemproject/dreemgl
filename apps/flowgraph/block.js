@@ -256,7 +256,7 @@ define.class('$ui/view', function(require,
 		this.tapped = function(){
 			var	bl = this.parent.parent.parent
 			var	fg = this.find("flowgraph")
-			fg.setConnectionEndpoint(bl.name, this.name)
+			fg.setConnectionEndpoint(bl.name, this.name, this.type)
 		}
 
 		this.pointerover  = function(){

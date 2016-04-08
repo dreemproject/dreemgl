@@ -480,10 +480,14 @@ define.class('$ui/view', function(require,
 
 		this.sourceset.fork(function(src) {
 
-			var inserted = src.insertWire(this.newconnection.sourceblock,
-				this.newconnection.sourceoutput,
-				this.newconnection.targetblock,
-				this.newconnection.targetinput);
+			var inserted;
+
+			if (this.newconnection.targettype === "Array") {
+				inserted = src.insertWire(this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput);
+			}
 
 			if (!inserted) {
 
@@ -599,10 +603,11 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.setConnectionEndpoint = function(targetblockname, inputname) {
+	this.setConnectionEndpoint = function(targetblockname, inputname, targettype) {
 		//console.log(targetblockname, inputname)
 		this.newconnection.targetblock = targetblockname
 		this.newconnection.targetinput = inputname
+		this.newconnection.targettype = targettype
 		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ) {
 			this.makeNewConnection()
 		} else {

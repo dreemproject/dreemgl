@@ -167,6 +167,10 @@ define.class(function(require, $server$, dataset){
 							at.value = "[this.rpc." + sblock + "." + soutput + "," + value.substring(1)
 							at.raw = JSON.stringify(at.value)
 							return true;
+						} else if (value && value.indexOf && value.indexOf('this.rpc') === 0) {
+							at.value = "[this.rpc." + sblock + "." + soutput + "," + value + "]"
+							at.raw = JSON.stringify(at.value)
+							return true;
 						}
 					}
 				}
