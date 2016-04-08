@@ -894,7 +894,13 @@ define.class('$ui/view', function(require,
 			//,
 			splitcontainer({}
 				,splitcontainer({flex: 0.2, flexdirection: "column", direction: "horizontal"}
-					,dockpanel({title: "Composition" , flex: 0.2}
+					,dockpanel({title: "Composition", icon:"code", flex: 0.2, click:function(e){
+						var comp = this.screen.locationhash.composition;
+						if (comp) {
+							var location = define.expandVariables(comp)
+							window.open(location,'_blank');
+						}
+					}.bind(this)}
 						//,searchbox()
 
 						,treeview({flex: 1, dataset: this.sourceset})
