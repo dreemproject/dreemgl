@@ -1,5 +1,5 @@
 define.class("$server/service", function (require) {
-	// The hub class makes it very easy to connect to a wide variety of devices including
+	// The iot class makes it very easy to connect to a wide variety of devices including
 	// SmartThings, Philips Hue and many more.
 	//
 	// IMPORTANT: see /examples/components/iot/README.md for setup instructions.
