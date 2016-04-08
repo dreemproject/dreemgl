@@ -22,6 +22,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
 		stripe:false,
+		stripecolor: Config({type:vec4, value:vec4("#F0F0F0"), meta:"color" }),
 		hasball: true
 
 	}
@@ -208,7 +209,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.color = function(){
 			var a= 1.0 - pow(abs(mesh.y*2.0), 2.5);
 			if (view.stripe && mesh.x < 0.6 && int(mod(0.03 * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), 2.0)) == 1) {
-				return vec4(mix(mix(vec3(1,1,1), view.color1.xyz, mesh.x * 0.5), view.color2.xyz, mesh.x),a)
+				return vec4(mix(mix(view.stripecolor.xyz, view.color1.xyz, mesh.x * 0.5), view.color2.xyz, mesh.x),a)
 			}
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 		}

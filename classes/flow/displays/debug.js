@@ -52,8 +52,8 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
 
 
         return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" },
-            view({bg:false, flexdirection:"column", flex:1, justifycontent:"center" },
-                view({bg:false, flexdirection:"row", flex:1, justifycontent:"center" },
+            view({bgcolor:NaN, flexdirection:"column", flex:1, justifycontent:"center" },
+                view({bgcolor:NaN, flexdirection:"row", flex:1, justifycontent:"center" },
                     view({width:800, bgcolor:vec4(1,1,1,0.15),padding:40,borderradius:50,  flexdirection:"column", alignitems:"center", justifycontent:"center" },
                         view({flexdirection:"row", flex:1}, label({text:'number', paddingright:15}), label({text:this.number, fgcolor:'#FF7260'})),
 						view({flexdirection:"row", flex:1}, label({text:'boolean', paddingright:15}), label({text:this.boolean, fgcolor:'#FF7260'})),
