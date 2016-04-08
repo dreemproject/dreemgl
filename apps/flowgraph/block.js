@@ -413,24 +413,36 @@ define.class('$ui/view', function(require,
 
 		var screenbutton;
 		if (this.showscreenbutton) {
-			screenbutton = button({
-				class: "header",
-				icon: "tv",
-				click: function(e){
-					var comp = this.screen.locationhash.composition;
-					if (comp) {
-						var ext = ".js"
-						var location = define.expandVariables(comp)
-						if (location.lastIndexOf(ext) === location.length - ext.length) {
-							location = location.substring(0, location.length - ext.length)
-							if (this.name) {
-								location = location + "?" + this.name
-							}
+			screenbutton = [
+				button({
+					class: "header",
+					icon: "file-code",
+					click: function(e){
+						var comp = this.screen.locationhash.composition;
+						if (comp) {
+							var location = define.expandVariables(comp)
 							window.open(location,'_blank');
 						}
+					}.bind(this)}),
+				button({
+					class: "header",
+					icon: "desktop",
+					click: function(e){
+						var comp = this.screen.locationhash.composition;
+						if (comp) {
+							var ext = ".js"
+							var location = define.expandVariables(comp)
+							if (location.lastIndexOf(ext) === location.length - ext.length) {
+								location = location.substring(0, location.length - ext.length)
+								if (this.name) {
+									location = location + "?" + this.name
+								}
+								window.open(location,'_blank');
+							}
 
-					}
-				}.bind(this)})
+						}
+					}.bind(this)}),
+			]
 		}
 
 		return [
