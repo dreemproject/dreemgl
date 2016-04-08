@@ -7,11 +7,21 @@ define.class("$ui/view", function ($ui$, view, label) {
 	this.render = function() {
 		var name = this.config.name;
 		var states = [];
+		// get the last, most meaningful facet
 		var type = this.config.facets[this.config.facets.length - 1];
 		states.push(label({text: 'type: ' + type}))
 		for (var key in this.config.state) {
+			// skip timestamps
 			if (key === '@timestamp') continue;
-			var val = JSON.stringify(this.config.state[key].value);
+
+			var state = this.config.state[key];
+			// format type
+			var val = JSON.stringify(state.value);
+			if (state.units) {
+				// append units after formatting, e.g. temperature.imperial.fahrenheit -> fahrenheit
+				var units = state.units.split('.');
+				val += ' ' + units[units.length - 1];
+			}
 			states.push(label({text: key + ': ' + val}))
 		}
 

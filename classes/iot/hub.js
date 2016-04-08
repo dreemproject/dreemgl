@@ -7,7 +7,7 @@ define.class("$server/service", function (require) {
 
 	this.attributes = {
 		// A list of things connected to the hub, automatically updated as new devices are discovered and their state changes.
-		// Each thing consists of an object containing an id, name, and a state object representing its current state's value type and if it's readonly or not.
+		// Each thing consists of an object containing an id, name, and a state object representing its current state's value type, unit and if it's readonly or not where available.
 		things: Config({type: Array, value: [], flow:"out"}),
 		// If true, we are connected
 		connected: Config({type: Boolean, value: false, persist: true, flow:"out"})
@@ -59,10 +59,15 @@ define.class("$server/service", function (require) {
 		for (var i = 0; i < attributemeta.length; i++) {
 			var attrmodel = attributemeta[i];
 			var key  = attrmodel['schema:name'];
+			var units = attrmodel['iot:unit'];
+			if (units) {
+				units = units.split(':')[1];
+			}
 			states[key] = {
 				value: states[key],
 				type: attrmodel['iot:type'].split('.')[1],
-				readonly: ! attrmodel['iot:write']
+				readonly: ! attrmodel['iot:write'],
+				units: units
 			}
 		}
 
