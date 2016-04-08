@@ -183,6 +183,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
 <a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseClone = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseClone</span><span class="delimiter">'</span></span>);
 
@@ -199,6 +200,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Lang
  * @param {*} value The value to clone.
  * @returns {*} Returns the cloned value.
@@ -211,7 +213,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; true
  */</span>
 <span class="keyword">function</span> <span class="function">clone</span>(value) {
-  <span class="keyword">return</span> baseClone(value);
+  <span class="keyword">return</span> baseClone(value, <span class="predefined-constant">false</span>, <span class="predefined-constant">true</span>);
 }
 
 module.exports = clone;

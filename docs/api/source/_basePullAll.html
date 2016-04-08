@@ -167,19 +167,83 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n13" name="n13">13</a>
 <a href="#n14" name="n14">14</a>
 <a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> basePullAllBy = require(<span class="string"><span class="delimiter">'</span><span class="content">./_basePullAllBy</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
+    baseIndexOf = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIndexOf</span><span class="delimiter">'</span></span>),
+    baseIndexOfWith = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIndexOfWith</span><span class="delimiter">'</span></span>),
+    baseUnary = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseUnary</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/** Used for built-in method references. */</span>
+<span class="keyword">var</span> arrayProto = Array.prototype;
+
+<span class="comment">/** Built-in value references. */</span>
+<span class="keyword">var</span> splice = arrayProto.splice;
 
 <span class="comment">/**
- * The base implementation of `_.pullAll`.
+ * The base implementation of `_.pullAllBy` without support for iteratee
+ * shorthands.
  *
  * @private
  * @param {Array} array The array to modify.
  * @param {Array} values The values to remove.
+ * @param {Function} [iteratee] The iteratee invoked per element.
+ * @param {Function} [comparator] The comparator invoked per element.
  * @returns {Array} Returns `array`.
  */</span>
-<span class="keyword">function</span> <span class="function">basePullAll</span>(array, values) {
-  <span class="keyword">return</span> basePullAllBy(array, values);
+<span class="keyword">function</span> <span class="function">basePullAll</span>(array, values, iteratee, comparator) {
+  <span class="keyword">var</span> indexOf = comparator ? baseIndexOfWith : baseIndexOf,
+      index = -<span class="integer">1</span>,
+      length = values.length,
+      seen = array;
+
+  <span class="keyword">if</span> (iteratee) {
+    seen = arrayMap(array, baseUnary(iteratee));
+  }
+  <span class="keyword">while</span> (++index &lt; length) {
+    <span class="keyword">var</span> fromIndex = <span class="integer">0</span>,
+        value = values[index],
+        computed = iteratee ? iteratee(value) : value;
+
+    <span class="keyword">while</span> ((fromIndex = indexOf(seen, computed, fromIndex, comparator)) &gt; -<span class="integer">1</span>) {
+      <span class="keyword">if</span> (seen !== array) {
+        splice.call(seen, fromIndex, <span class="integer">1</span>);
+      }
+      splice.call(array, fromIndex, <span class="integer">1</span>);
+    }
+  }
+  <span class="keyword">return</span> array;
 }
 
 module.exports = basePullAll;

@@ -180,6 +180,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> capitalize = require(<span class="string"><span class="delimiter">'</span><span class="content">./capitalize</span><span class="delimiter">'</span></span>),
     createCompounder = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createCompounder</span><span class="delimiter">'</span></span>);
@@ -189,6 +190,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category String
  * @param {string} [string=''] The string to convert.
  * @returns {string} Returns the camel cased string.
@@ -197,10 +199,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.camelCase('Foo Bar');
  * // =&gt; 'fooBar'
  *
- * _.camelCase('--foo-bar');
+ * _.camelCase('--foo-bar--');
  * // =&gt; 'fooBar'
  *
- * _.camelCase('__foo_bar__');
+ * _.camelCase('__FOO_BAR__');
  * // =&gt; 'fooBar'
  */</span>
 <span class="keyword">var</span> camelCase = createCompounder(<span class="keyword">function</span>(result, word, index) {

@@ -206,12 +206,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n52" name="n52">52</a>
 <a href="#n53" name="n53">53</a>
 <a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> isArguments = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArguments</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> getTag = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getTag</span><span class="delimiter">'</span></span>),
+    isArguments = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArguments</span><span class="delimiter">'</span></span>),
     isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>),
     isArrayLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArrayLike</span><span class="delimiter">'</span></span>),
+    isBuffer = require(<span class="string"><span class="delimiter">'</span><span class="content">./isBuffer</span><span class="delimiter">'</span></span>),
     isFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./isFunction</span><span class="delimiter">'</span></span>),
-    isString = require(<span class="string"><span class="delimiter">'</span><span class="content">./isString</span><span class="delimiter">'</span></span>);
+    isObjectLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObjectLike</span><span class="delimiter">'</span></span>),
+    isString = require(<span class="string"><span class="delimiter">'</span><span class="content">./isString</span><span class="delimiter">'</span></span>),
+    keys = require(<span class="string"><span class="delimiter">'</span><span class="content">./keys</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/** `Object#toString` result references. */</span>
+<span class="keyword">var</span> mapTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Map]</span><span class="delimiter">'</span></span>,
+    setTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Set]</span><span class="delimiter">'</span></span>;
 
 <span class="comment">/** Used for built-in method references. */</span>
 <span class="keyword">var</span> objectProto = Object.prototype;
@@ -219,15 +253,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/** Used to check objects for own properties. */</span>
 <span class="keyword">var</span> hasOwnProperty = objectProto.hasOwnProperty;
 
+<span class="comment">/** Built-in value references. */</span>
+<span class="keyword">var</span> propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+<span class="comment">/** Detect if properties shadowing those on `Object.prototype` are non-enumerable. */</span>
+<span class="keyword">var</span> nonEnumShadows = !propertyIsEnumerable.call({ <span class="key"><span class="delimiter">'</span><span class="content">valueOf</span><span class="delimiter">'</span></span>: <span class="integer">1</span> }, <span class="string"><span class="delimiter">'</span><span class="content">valueOf</span><span class="delimiter">'</span></span>);
+
 <span class="comment">/**
- * Checks if `value` is empty. A value is considered empty unless it's an
- * `arguments` object, array, string, or jQuery-like collection with a length
- * greater than `0` or an object with own enumerable properties.
+ * Checks if `value` is an empty object, collection, map, or set.
+ *
+ * Objects are considered empty if they have no own enumerable string keyed
+ * properties.
+ *
+ * Array-like values such as `arguments` objects, arrays, buffers, strings, or
+ * jQuery-like collections are considered empty if they have a `length` of `0`.
+ * Similarly, maps and sets are considered empty if they have a `size` of `0`.
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Lang
- * @param {Array|Object|string} value The value to inspect.
+ * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is empty, else `false`.
  * @example
  *
@@ -248,16 +294,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">isEmpty</span>(value) {
   <span class="keyword">if</span> (isArrayLike(value) &amp;&amp;
-      (isArray(value) || isString(value) ||
-        isFunction(value.splice) || isArguments(value))) {
+      (isArray(value) || isString(value) || isFunction(value.splice) ||
+        isArguments(value) || isBuffer(value))) {
     <span class="keyword">return</span> !value.length;
+  }
+  <span class="keyword">if</span> (isObjectLike(value)) {
+    <span class="keyword">var</span> tag = getTag(value);
+    <span class="keyword">if</span> (tag == mapTag || tag == setTag) {
+      <span class="keyword">return</span> !value.size;
+    }
   }
   <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> value) {
     <span class="keyword">if</span> (hasOwnProperty.call(value, key)) {
       <span class="keyword">return</span> <span class="predefined-constant">false</span>;
     }
   }
-  <span class="keyword">return</span> <span class="predefined-constant">true</span>;
+  <span class="keyword">return</span> !(nonEnumShadows &amp;&amp; keys(value).length);
 }
 
 module.exports = isEmpty;

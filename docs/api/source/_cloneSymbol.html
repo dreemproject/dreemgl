@@ -175,7 +175,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="comment">/** Used to convert symbols to primitives and strings. */</span>
 <span class="keyword">var</span> symbolProto = Symbol ? Symbol.prototype : <span class="predefined-constant">undefined</span>,
-    symbolValueOf = Symbol ? symbolProto.valueOf : <span class="predefined-constant">undefined</span>;
+    symbolValueOf = symbolProto ? symbolProto.valueOf : <span class="predefined-constant">undefined</span>;
 
 <span class="comment">/**
  * Creates a clone of the `symbol` object.
@@ -185,7 +185,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Object} Returns the cloned symbol object.
  */</span>
 <span class="keyword">function</span> <span class="function">cloneSymbol</span>(symbol) {
-  <span class="keyword">return</span> Symbol ? Object(symbolValueOf.call(symbol)) : {};
+  <span class="keyword">return</span> symbolValueOf ? Object(symbolValueOf.call(symbol)) : {};
 }
 
 module.exports = cloneSymbol;

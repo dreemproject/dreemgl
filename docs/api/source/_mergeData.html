@@ -242,11 +242,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n88" name="n88">88</a>
 <a href="#n89" name="n89">89</a>
 <strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> composeArgs = require(<span class="string"><span class="delimiter">'</span><span class="content">./_composeArgs</span><span class="delimiter">'</span></span>),
     composeArgsRight = require(<span class="string"><span class="delimiter">'</span><span class="content">./_composeArgsRight</span><span class="delimiter">'</span></span>),
     copyArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyArray</span><span class="delimiter">'</span></span>),
     replaceHolders = require(<span class="string"><span class="delimiter">'</span><span class="content">./_replaceHolders</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/** Used as the internal argument placeholder. */</span>
+<span class="keyword">var</span> PLACEHOLDER = <span class="string"><span class="delimiter">'</span><span class="content">__lodash_placeholder__</span><span class="delimiter">'</span></span>;
 
 <span class="comment">/** Used to compose bitmasks for wrapper metadata. */</span>
 <span class="keyword">var</span> BIND_FLAG = <span class="integer">1</span>,
@@ -256,9 +260,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     ARY_FLAG = <span class="integer">128</span>,
     REARG_FLAG = <span class="integer">256</span>;
 
-<span class="comment">/** Used as the internal argument placeholder. */</span>
-<span class="keyword">var</span> PLACEHOLDER = <span class="string"><span class="delimiter">'</span><span class="content">__lodash_placeholder__</span><span class="delimiter">'</span></span>;
-
 <span class="comment">/* Built-in method references for those with the same name as other `lodash` methods. */</span>
 <span class="keyword">var</span> nativeMin = Math.min;
 
@@ -267,10 +268,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * Merging metadata reduces the number of wrappers used to invoke a function.
  * This is possible because methods like `_.bind`, `_.curry`, and `_.partial`
- * may be applied regardless of execution order. Methods like `_.ary` and `_.rearg`
- * modify function arguments, making the order in which they are executed important,
- * preventing the merging of metadata. However, we make an exception for a safe
- * combined case where curried functions have `_.ary` and or `_.rearg` applied.
+ * may be applied regardless of execution order. Methods like `_.ary` and
+ * `_.rearg` modify function arguments, making the order in which they are
+ * executed important, preventing the merging of metadata. However, we make
+ * an exception for a safe combined case where curried functions have `_.ary`
+ * and or `_.rearg` applied.
  *
  * @private
  * @param {Array} data The destination metadata.

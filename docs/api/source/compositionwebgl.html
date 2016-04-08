@@ -238,7 +238,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> WebRTC = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/webrtc</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> BusClient = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/busclient</span><span class="delimiter">'</span></span>)
 
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent, precached){
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent, precached, canvas){
                 window.composition = <span class="local-variable">this</span>
                 <span class="keyword">if</span>(previous){
                         <span class="local-variable">this</span>.reload = (previous.reload || <span class="integer">0</span>) + <span class="integer">1</span>
@@ -248,7 +248,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">else</span>{
                         <span class="comment">// lets spawn up a webGL device</span>
-                        <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device()
+                        <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device(<span class="predefined-constant">undefined</span>, canvas)
                 }
 
                 baseclass.atConstructor.call(<span class="local-variable">this</span>, previous, parent, precached)

@@ -166,6 +166,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n12" name="n12">12</a>
 <a href="#n13" name="n13">13</a>
 <a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Adds the key-value `pair` to `map`.
@@ -176,6 +177,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Object} Returns `map`.
  */</span>
 <span class="keyword">function</span> <span class="function">addMapEntry</span>(map, pair) {
+  <span class="comment">// Don't return `Map#set` because it doesn't return the map instance in IE 11.</span>
   map.set(pair[<span class="integer">0</span>], pair[<span class="integer">1</span>]);
   <span class="keyword">return</span> map;
 }

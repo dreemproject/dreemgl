@@ -169,6 +169,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n15" name="n15">15</a>
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> addSetEntry = require(<span class="string"><span class="delimiter">'</span><span class="content">./_addSetEntry</span><span class="delimiter">'</span></span>),
     arrayReduce = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayReduce</span><span class="delimiter">'</span></span>),
@@ -179,11 +181,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @private
  * @param {Object} set The set to clone.
+ * @param {Function} cloneFunc The function to clone values.
+ * @param {boolean} [isDeep] Specify a deep clone.
  * @returns {Object} Returns the cloned set.
  */</span>
-<span class="keyword">function</span> <span class="function">cloneSet</span>(set) {
-  <span class="keyword">var</span> Ctor = set.constructor;
-  <span class="keyword">return</span> arrayReduce(setToArray(set), addSetEntry, <span class="keyword">new</span> Ctor);
+<span class="keyword">function</span> <span class="function">cloneSet</span>(set, isDeep, cloneFunc) {
+  <span class="keyword">var</span> array = isDeep ? cloneFunc(setToArray(set), <span class="predefined-constant">true</span>) : setToArray(set);
+  <span class="keyword">return</span> arrayReduce(array, addSetEntry, <span class="keyword">new</span> set.constructor);
 }
 
 module.exports = cloneSet;

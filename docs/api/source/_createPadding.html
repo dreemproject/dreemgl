@@ -194,16 +194,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n40" name="n40">40</a></strong>
 <a href="#n41" name="n41">41</a>
 <a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> repeat = require(<span class="string"><span class="delimiter">'</span><span class="content">./repeat</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> baseRepeat = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseRepeat</span><span class="delimiter">'</span></span>),
     stringSize = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringSize</span><span class="delimiter">'</span></span>),
-    stringToArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringToArray</span><span class="delimiter">'</span></span>),
-    toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>);
+    stringToArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringToArray</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/** Used to compose unicode character classes. */</span>
 <span class="keyword">var</span> rsAstralRange = <span class="string"><span class="delimiter">'</span><span class="char">\\</span><span class="content">ud800-</span><span class="char">\\</span><span class="content">udfff</span><span class="delimiter">'</span></span>,
@@ -225,25 +219,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * is truncated if the number of characters exceeds `length`.
  *
  * @private
- * @param {string} string The string to create padding for.
- * @param {number} [length=0] The padding length.
+ * @param {number} length The padding length.
  * @param {string} [chars=' '] The string used as padding.
  * @returns {string} Returns the padding for `string`.
  */</span>
-<span class="keyword">function</span> <span class="function">createPadding</span>(string, length, chars) {
-  length = toInteger(length);
-
-  <span class="keyword">var</span> strLength = stringSize(string);
-  <span class="keyword">if</span> (!length || strLength &gt;= length) {
-    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
-  }
-  <span class="keyword">var</span> padLength = length - strLength;
+<span class="keyword">function</span> <span class="function">createPadding</span>(length, chars) {
   chars = chars === <span class="predefined-constant">undefined</span> ? <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> : (chars + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
 
-  <span class="keyword">var</span> result = repeat(chars, nativeCeil(padLength / stringSize(chars)));
+  <span class="keyword">var</span> charsLength = chars.length;
+  <span class="keyword">if</span> (charsLength &lt; <span class="integer">2</span>) {
+    <span class="keyword">return</span> charsLength ? baseRepeat(chars, length) : chars;
+  }
+  <span class="keyword">var</span> result = baseRepeat(chars, nativeCeil(length / stringSize(chars)));
   <span class="keyword">return</span> reHasComplexSymbol.test(chars)
-    ? stringToArray(result).slice(<span class="integer">0</span>, padLength).join(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-    : result.slice(<span class="integer">0</span>, padLength);
+    ? stringToArray(result).slice(<span class="integer">0</span>, length).join(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
+    : result.slice(<span class="integer">0</span>, length);
 }
 
 module.exports = createPadding;

@@ -177,6 +177,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseDelay = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseDelay</span><span class="delimiter">'</span></span>),
     rest = require(<span class="string"><span class="delimiter">'</span><span class="content">./rest</span><span class="delimiter">'</span></span>);
@@ -187,6 +188,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Function
  * @param {Function} func The function to defer.
  * @param {...*} [args] The arguments to invoke `func` with.
@@ -196,7 +198,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.defer(function(text) {
  *   console.log(text);
  * }, 'deferred');
- * // =&gt; logs 'deferred' after one or more milliseconds
+ * // =&gt; Logs 'deferred' after one or more milliseconds.
  */</span>
 <span class="keyword">var</span> defer = rest(<span class="keyword">function</span>(func, args) {
   <span class="keyword">return</span> baseDelay(func, <span class="integer">1</span>, args);

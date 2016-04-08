@@ -193,6 +193,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n39" name="n39">39</a>
 <strong><a href="#n40" name="n40">40</a></strong>
 <a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>);
 
@@ -205,6 +206,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Function
  * @param {number} n The number of calls before `func` is invoked.
  * @param {Function} func The function to restrict.
@@ -220,7 +222,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.forEach(saves, function(type) {
  *   asyncSave({ 'type': type, 'complete': done });
  * });
- * // =&gt; logs 'done saving!' after the two async saves have completed
+ * // =&gt; Logs 'done saving!' after the two async saves have completed.
  */</span>
 <span class="keyword">function</span> <span class="function">after</span>(n, func) {
   <span class="keyword">if</span> (<span class="keyword">typeof</span> func != <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {

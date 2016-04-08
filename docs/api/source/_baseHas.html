@@ -177,16 +177,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/** Used for built-in method references. */</span>
+  <td class="code"><pre><span class="keyword">var</span> getPrototype = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getPrototype</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/** Used for built-in method references. */</span>
 <span class="keyword">var</span> objectProto = Object.prototype;
 
 <span class="comment">/** Used to check objects for own properties. */</span>
 <span class="keyword">var</span> hasOwnProperty = objectProto.hasOwnProperty;
-
-<span class="comment">/** Built-in value references. */</span>
-<span class="keyword">var</span> getPrototypeOf = Object.getPrototypeOf;
 
 <span class="comment">/**
  * The base implementation of `_.has` without support for deep paths.
@@ -201,7 +199,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="comment">// that are composed entirely of index properties, return `false` for</span>
   <span class="comment">// `hasOwnProperty` checks of them.</span>
   <span class="keyword">return</span> hasOwnProperty.call(object, key) ||
-    (<span class="keyword">typeof</span> object == <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; key <span class="keyword">in</span> object &amp;&amp; getPrototypeOf(object) === <span class="predefined-constant">null</span>);
+    (<span class="keyword">typeof</span> object == <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; key <span class="keyword">in</span> object &amp;&amp; getPrototype(object) === <span class="predefined-constant">null</span>);
 }
 
 module.exports = baseHas;

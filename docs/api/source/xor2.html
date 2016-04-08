@@ -176,6 +176,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n22" name="n22">22</a>
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayFilter = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayFilter</span><span class="delimiter">'</span></span>),
     baseXor = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseXor</span><span class="delimiter">'</span></span>),
@@ -183,11 +186,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     rest = require(<span class="string"><span class="delimiter">'</span><span class="content">./rest</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Creates an array of unique values that is the [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference)
- * of the given arrays.
+ * Creates an array of unique values that is the
+ * [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference)
+ * of the given arrays. The order of result values is determined by the order
+ * they occur in the arrays.
  *
  * @static
  * @memberOf _
+ * @since 2.4.0
  * @category Array
  * @param {...Array} [arrays] The arrays to inspect.
  * @returns {Array} Returns the new array of values.

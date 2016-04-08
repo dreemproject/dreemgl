@@ -179,6 +179,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> LazyWrapper = require(<span class="string"><span class="delimiter">'</span><span class="content">./_LazyWrapper</span><span class="delimiter">'</span></span>),
     getData = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getData</span><span class="delimiter">'</span></span>),
@@ -190,7 +191,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @private
  * @param {Function} func The function to check.
- * @returns {boolean} Returns `true` if `func` has a lazy counterpart, else `false`.
+ * @returns {boolean} Returns `true` if `func` has a lazy counterpart,
+ *  else `false`.
  */</span>
 <span class="keyword">function</span> <span class="function">isLaziable</span>(func) {
   <span class="keyword">var</span> funcName = getFuncName(func),

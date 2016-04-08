@@ -186,24 +186,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
+    baseCastKey = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastKey</span><span class="delimiter">'</span></span>),
     baseDifference = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseDifference</span><span class="delimiter">'</span></span>),
     baseFlatten = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseFlatten</span><span class="delimiter">'</span></span>),
     basePick = require(<span class="string"><span class="delimiter">'</span><span class="content">./_basePick</span><span class="delimiter">'</span></span>),
-    keysIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./keysIn</span><span class="delimiter">'</span></span>),
+    getAllKeysIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getAllKeysIn</span><span class="delimiter">'</span></span>),
     rest = require(<span class="string"><span class="delimiter">'</span><span class="content">./rest</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * The opposite of `_.pick`; this method creates an object composed of the
- * own and inherited enumerable properties of `object` that are not omitted.
+ * own and inherited enumerable string keyed properties of `object` that are
+ * not omitted.
  *
  * @static
+ * @since 0.1.0
  * @memberOf _
  * @category Object
  * @param {Object} object The source object.
- * @param {...(string|string[])} [props] The property names to omit, specified
- *  individually or in arrays.
+ * @param {...(string|string[])} [props] The property identifiers to omit,
+ *  specified individually or in arrays.
  * @returns {Object} Returns the new object.
  * @example
  *
@@ -216,8 +222,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="keyword">if</span> (object == <span class="predefined-constant">null</span>) {
     <span class="keyword">return</span> {};
   }
-  props = arrayMap(baseFlatten(props, <span class="integer">1</span>), String);
-  <span class="keyword">return</span> basePick(object, baseDifference(keysIn(object), props));
+  props = arrayMap(baseFlatten(props, <span class="integer">1</span>), baseCastKey);
+  <span class="keyword">return</span> basePick(object, baseDifference(getAllKeysIn(object), props));
 });
 
 module.exports = omit;

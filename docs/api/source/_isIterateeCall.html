@@ -180,6 +180,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> eq = require(<span class="string"><span class="delimiter">'</span><span class="content">./eq</span><span class="delimiter">'</span></span>),
     isArrayLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArrayLike</span><span class="delimiter">'</span></span>),
@@ -193,7 +195,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @param {*} value The potential iteratee value argument.
  * @param {*} index The potential iteratee index or key argument.
  * @param {*} object The potential iteratee object argument.
- * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+ *  else `false`.
  */</span>
 <span class="keyword">function</span> <span class="function">isIterateeCall</span>(value, index, object) {
   <span class="keyword">if</span> (!isObject(object)) {
@@ -201,8 +204,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   }
   <span class="keyword">var</span> type = <span class="keyword">typeof</span> index;
   <span class="keyword">if</span> (type == <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>
-      ? (isArrayLike(object) &amp;&amp; isIndex(index, object.length))
-      : (type == <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> &amp;&amp; index <span class="keyword">in</span> object)) {
+        ? (isArrayLike(object) &amp;&amp; isIndex(index, object.length))
+        : (type == <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> &amp;&amp; index <span class="keyword">in</span> object)
+      ) {
     <span class="keyword">return</span> eq(object[index], value);
   }
   <span class="keyword">return</span> <span class="predefined-constant">false</span>;

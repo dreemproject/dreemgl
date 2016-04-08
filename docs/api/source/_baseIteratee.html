@@ -182,6 +182,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseMatches = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseMatches</span><span class="delimiter">'</span></span>),
     baseMatchesProperty = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseMatchesProperty</span><span class="delimiter">'</span></span>),
@@ -197,14 +198,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Function} Returns the iteratee.
  */</span>
 <span class="keyword">function</span> <span class="function">baseIteratee</span>(value) {
-  <span class="keyword">var</span> type = <span class="keyword">typeof</span> value;
-  <span class="keyword">if</span> (type == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
+  <span class="comment">// Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.</span>
+  <span class="comment">// See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.</span>
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> value == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
     <span class="keyword">return</span> value;
   }
   <span class="keyword">if</span> (value == <span class="predefined-constant">null</span>) {
     <span class="keyword">return</span> identity;
   }
-  <span class="keyword">if</span> (type == <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> value == <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
     <span class="keyword">return</span> isArray(value)
       ? baseMatchesProperty(value[<span class="integer">0</span>], value[<span class="integer">1</span>])
       : baseMatches(value);

@@ -185,6 +185,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n31" name="n31">31</a>
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseClone = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseClone</span><span class="delimiter">'</span></span>);
 
@@ -193,6 +194,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Lang
  * @param {*} value The value to recursively clone.
  * @param {Function} [customizer] The function to customize cloning.
@@ -215,7 +217,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; 20
  */</span>
 <span class="keyword">function</span> <span class="function">cloneDeepWith</span>(value, customizer) {
-  <span class="keyword">return</span> baseClone(value, <span class="predefined-constant">true</span>, customizer);
+  <span class="keyword">return</span> baseClone(value, <span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>, customizer);
 }
 
 module.exports = cloneDeepWith;

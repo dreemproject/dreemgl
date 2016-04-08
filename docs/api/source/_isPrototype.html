@@ -170,12 +170,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
 <a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> isFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./isFunction</span><span class="delimiter">'</span></span>);
-
-<span class="comment">/** Used for built-in method references. */</span>
+  <td class="code"><pre><span class="comment">/** Used for built-in method references. */</span>
 <span class="keyword">var</span> objectProto = Object.prototype;
 
 <span class="comment">/**
@@ -187,7 +183,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">isPrototype</span>(value) {
   <span class="keyword">var</span> Ctor = value &amp;&amp; value.constructor,
-      proto = (isFunction(Ctor) &amp;&amp; Ctor.prototype) || objectProto;
+      proto = (<span class="keyword">typeof</span> Ctor == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; Ctor.prototype) || objectProto;
 
   <span class="keyword">return</span> value === proto;
 }

@@ -211,6 +211,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n57" name="n57">57</a>
 <a href="#n58" name="n58">58</a>
 <a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> apply = require(<span class="string"><span class="delimiter">'</span><span class="content">./_apply</span><span class="delimiter">'</span></span>),
     arrayPush = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayPush</span><span class="delimiter">'</span></span>),
@@ -224,13 +227,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="keyword">var</span> nativeMax = Math.max;
 
 <span class="comment">/**
- * Creates a function that invokes `func` with the `this` binding of the created
- * function and an array of arguments much like [`Function#apply`](https://es5.github.io/#x15.3.4.3).
+ * Creates a function that invokes `func` with the `this` binding of the
+ * create function and an array of arguments much like
+ * [`Function#apply`](https://es5.github.io/#x15.3.4.3).
  *
- * **Note:** This method is based on the [spread operator](https://mdn.io/spread_operator).
+ * **Note:** This method is based on the
+ * [spread operator](https://mdn.io/spread_operator).
  *
  * @static
  * @memberOf _
+ * @since 3.2.0
  * @category Function
  * @param {Function} func The function to spread arguments over.
  * @param {number} [start=0] The start position of the spread.

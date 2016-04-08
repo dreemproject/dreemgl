@@ -184,9 +184,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n30" name="n30">30</a></strong>
 <a href="#n31" name="n31">31</a>
 <a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> baseCastFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastFunction</span><span class="delimiter">'</span></span>),
-    baseForOwnRight = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForOwnRight</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> baseForOwnRight = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForOwnRight</span><span class="delimiter">'</span></span>),
+    baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * This method is like `_.forOwn` except that it iterates over properties of
@@ -194,6 +195,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 2.0.0
  * @category Object
  * @param {Object} object The object to iterate over.
  * @param {Function} [iteratee=_.identity] The function invoked per iteration.
@@ -210,10 +212,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.forOwnRight(new Foo, function(value, key) {
  *   console.log(key);
  * });
- * // =&gt; logs 'b' then 'a' assuming `_.forOwn` logs 'a' then 'b'
+ * // =&gt; Logs 'b' then 'a' assuming `_.forOwn` logs 'a' then 'b'.
  */</span>
 <span class="keyword">function</span> <span class="function">forOwnRight</span>(object, iteratee) {
-  <span class="keyword">return</span> object &amp;&amp; baseForOwnRight(object, baseCastFunction(iteratee));
+  <span class="keyword">return</span> object &amp;&amp; baseForOwnRight(object, baseIteratee(iteratee));
 }
 
 module.exports = forOwnRight;

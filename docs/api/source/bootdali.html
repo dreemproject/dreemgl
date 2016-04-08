@@ -406,7 +406,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// Called from define.noderequirewrapper to load a texture</span>
                 define.<span class="function">loadImage</span> = <span class="keyword">function</span>(name){
                         <span class="comment">//console.log('loadImage', name);</span>
-                        <span class="keyword">return</span> <span class="keyword">new</span> Texture.Image(name)
+                        <span class="keyword">return</span> Texture.fromImage({<span class="key">path</span>:name});
                 }
 
                 <span class="comment">// Dali stage settings (from command-line), or defaults</span>

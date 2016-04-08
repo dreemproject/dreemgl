@@ -154,9 +154,87 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <table class="CodeRay"><tr>
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
 <a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> convert = require(<span class="string"><span class="delimiter">'</span><span class="content">./convert</span><span class="delimiter">'</span></span>);
-module.exports = convert(<span class="string"><span class="delimiter">'</span><span class="content">forEach</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">../forEach</span><span class="delimiter">'</span></span>));
+  <td class="code"><pre><span class="keyword">var</span> arrayEach = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayEach</span><span class="delimiter">'</span></span>),
+    baseEach = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseEach</span><span class="delimiter">'</span></span>),
+    baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>),
+    isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/**
+ * Iterates over elements of `collection` invoking `iteratee` for each element.
+ * The iteratee is invoked with three arguments: (value, index|key, collection).
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * **Note:** As with other &quot;Collections&quot; methods, objects with a &quot;length&quot;
+ * property are iterated like arrays. To avoid this behavior use `_.forIn`
+ * or `_.forOwn` for object iteration.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @alias each
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ * @example
+ *
+ * _([1, 2]).forEach(function(value) {
+ *   console.log(value);
+ * });
+ * // =&gt; Logs `1` then `2`.
+ *
+ * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+ *   console.log(key);
+ * });
+ * // =&gt; Logs 'a' then 'b' (iteration order is not guaranteed).
+ */</span>
+<span class="keyword">function</span> <span class="function">forEach</span>(collection, iteratee) {
+  <span class="keyword">return</span> (<span class="keyword">typeof</span> iteratee == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; isArray(collection))
+    ? arrayEach(collection, iteratee)
+    : baseEach(collection, baseIteratee(iteratee));
+}
+
+module.exports = forEach;
 </pre></td>
 </tr></table>
 

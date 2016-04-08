@@ -153,8 +153,48 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <table class="CodeRay"><tr>
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
 </pre></td>
-  <td class="code"><pre>module.exports = require(<span class="string"><span class="delimiter">'</span><span class="content">../once</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> wrappy = require(<span class="string"><span class="delimiter">'</span><span class="content">wrappy</span><span class="delimiter">'</span></span>)
+module.exports = wrappy(once)
+
+once.proto = once(<span class="keyword">function</span> () {
+  Object.defineProperty(Function.prototype, <span class="string"><span class="delimiter">'</span><span class="content">once</span><span class="delimiter">'</span></span>, {
+    <span class="function">value</span>: <span class="keyword">function</span> () {
+      <span class="keyword">return</span> once(<span class="local-variable">this</span>)
+    },
+    <span class="key">configurable</span>: <span class="predefined-constant">true</span>
+  })
+})
+
+<span class="keyword">function</span> <span class="function">once</span> (fn) {
+  <span class="keyword">var</span> <span class="function">f</span> = <span class="keyword">function</span> () {
+    <span class="keyword">if</span> (f.called) <span class="keyword">return</span> f.value
+    f.called = <span class="predefined-constant">true</span>
+    <span class="keyword">return</span> f.value = fn.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>)
+  }
+  f.called = <span class="predefined-constant">false</span>
+  <span class="keyword">return</span> f
+}
 </pre></td>
 </tr></table>
 

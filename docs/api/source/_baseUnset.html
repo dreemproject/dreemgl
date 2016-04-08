@@ -190,7 +190,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {boolean} Returns `true` if the property is deleted, else `false`.
  */</span>
 <span class="keyword">function</span> <span class="function">baseUnset</span>(object, path) {
-  path = isKey(path, object) ? [path + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>] : baseCastPath(path);
+  path = isKey(path, object) ? [path] : baseCastPath(path);
   object = parent(object, path);
   <span class="keyword">var</span> key = last(path);
   <span class="keyword">return</span> (object != <span class="predefined-constant">null</span> &amp;&amp; has(object, key)) ? <span class="keyword">delete</span> object[key] : <span class="predefined-constant">true</span>;

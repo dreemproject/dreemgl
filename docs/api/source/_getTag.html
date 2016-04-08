@@ -211,16 +211,33 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n57" name="n57">57</a>
 <a href="#n58" name="n58">58</a>
 <a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> Map = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Map</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> DataView = require(<span class="string"><span class="delimiter">'</span><span class="content">./_DataView</span><span class="delimiter">'</span></span>),
+    Map = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Map</span><span class="delimiter">'</span></span>),
+    Promise = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Promise</span><span class="delimiter">'</span></span>),
     Set = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Set</span><span class="delimiter">'</span></span>),
     WeakMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_WeakMap</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/** `Object#toString` result references. */</span>
 <span class="keyword">var</span> mapTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Map]</span><span class="delimiter">'</span></span>,
     objectTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Object]</span><span class="delimiter">'</span></span>,
+    promiseTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Promise]</span><span class="delimiter">'</span></span>,
     setTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Set]</span><span class="delimiter">'</span></span>,
     weakMapTag = <span class="string"><span class="delimiter">'</span><span class="content">[object WeakMap]</span><span class="delimiter">'</span></span>;
+
+<span class="keyword">var</span> dataViewTag = <span class="string"><span class="delimiter">'</span><span class="content">[object DataView]</span><span class="delimiter">'</span></span>;
 
 <span class="comment">/** Used for built-in method references. */</span>
 <span class="keyword">var</span> objectProto = Object.prototype;
@@ -235,7 +252,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="keyword">var</span> objectToString = objectProto.toString;
 
 <span class="comment">/** Used to detect maps, sets, and weakmaps. */</span>
-<span class="keyword">var</span> mapCtorString = Map ? funcToString.call(Map) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
+<span class="keyword">var</span> dataViewCtorString = DataView ? (DataView + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
+    mapCtorString = Map ? funcToString.call(Map) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
+    promiseCtorString = Promise ? funcToString.call(Promise) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
     setCtorString = Set ? funcToString.call(Set) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
     weakMapCtorString = WeakMap ? funcToString.call(WeakMap) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
 
@@ -250,8 +269,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="keyword">return</span> objectToString.call(value);
 }
 
-<span class="comment">// Fallback for IE 11 providing `toStringTag` values for maps, sets, and weakmaps.</span>
-<span class="keyword">if</span> ((Map &amp;&amp; getTag(<span class="keyword">new</span> Map) != mapTag) ||
+<span class="comment">// Fallback for data views, maps, sets, and weak maps in IE 11,</span>
+<span class="comment">// for data views in Edge, and promises in Node.js.</span>
+<span class="keyword">if</span> ((DataView &amp;&amp; getTag(<span class="keyword">new</span> DataView(<span class="keyword">new</span> ArrayBuffer(<span class="integer">1</span>))) != dataViewTag) ||
+    (Map &amp;&amp; getTag(<span class="keyword">new</span> Map) != mapTag) ||
+    (Promise &amp;&amp; getTag(Promise.resolve()) != promiseTag) ||
     (Set &amp;&amp; getTag(<span class="keyword">new</span> Set) != setTag) ||
     (WeakMap &amp;&amp; getTag(<span class="keyword">new</span> WeakMap) != weakMapTag)) {
   <span class="function">getTag</span> = <span class="keyword">function</span>(value) {
@@ -261,7 +283,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
     <span class="keyword">if</span> (ctorString) {
       <span class="keyword">switch</span> (ctorString) {
+        <span class="keyword">case</span> dataViewCtorString: <span class="keyword">return</span> dataViewTag;
         <span class="keyword">case</span> mapCtorString: <span class="keyword">return</span> mapTag;
+        <span class="keyword">case</span> promiseCtorString: <span class="keyword">return</span> promiseTag;
         <span class="keyword">case</span> setCtorString: <span class="keyword">return</span> setTag;
         <span class="keyword">case</span> weakMapCtorString: <span class="keyword">return</span> weakMapTag;
       }

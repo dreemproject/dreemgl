@@ -283,224 +283,138 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
 <a href="#n131" name="n131">131</a>
-<a href="#n132" name="n132">132</a>
-<a href="#n133" name="n133">133</a>
-<a href="#n134" name="n134">134</a>
-<a href="#n135" name="n135">135</a>
-<a href="#n136" name="n136">136</a>
-<a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
-<strong><a href="#n140" name="n140">140</a></strong>
-<a href="#n141" name="n141">141</a>
-<a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
-<a href="#n144" name="n144">144</a>
-<a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
-<a href="#n149" name="n149">149</a>
-<strong><a href="#n150" name="n150">150</a></strong>
-<a href="#n151" name="n151">151</a>
-<a href="#n152" name="n152">152</a>
-<a href="#n153" name="n153">153</a>
-<a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
-<a href="#n158" name="n158">158</a>
-<a href="#n159" name="n159">159</a>
-<strong><a href="#n160" name="n160">160</a></strong>
-<a href="#n161" name="n161">161</a>
-<a href="#n162" name="n162">162</a>
-<a href="#n163" name="n163">163</a>
-<a href="#n164" name="n164">164</a>
-<a href="#n165" name="n165">165</a>
-<a href="#n166" name="n166">166</a>
-<a href="#n167" name="n167">167</a>
-<a href="#n168" name="n168">168</a>
-<a href="#n169" name="n169">169</a>
-<strong><a href="#n170" name="n170">170</a></strong>
-<a href="#n171" name="n171">171</a>
-<a href="#n172" name="n172">172</a>
-<a href="#n173" name="n173">173</a>
-<a href="#n174" name="n174">174</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>;
+<span class="keyword">var</span> colorConvert = require(<span class="string"><span class="delimiter">'</span><span class="content">color-convert</span><span class="delimiter">'</span></span>);
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, icon, slider, button, checkbox, label, screen, view, cadgrid, <span class="predefined">$widgets$</span>, colorpicker, <span class="predefined">$$</span>, basestation, bulb) {
+<span class="keyword">function</span> <span class="function">wrapAnsi16</span>(fn, offset) {
+        <span class="keyword">return</span> <span class="keyword">function</span> () {
+                <span class="keyword">var</span> code = fn.apply(colorConvert, <span class="local-variable">arguments</span>);
+                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[</span><span class="delimiter">'</span></span> + (code + offset) + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>;
+        };
+}
 
-                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span> () {
+<span class="keyword">function</span> <span class="function">wrapAnsi256</span>(fn, offset) {
+        <span class="keyword">return</span> <span class="keyword">function</span> () {
+                <span class="keyword">var</span> code = fn.apply(colorConvert, <span class="local-variable">arguments</span>);
+                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[</span><span class="delimiter">'</span></span> + (<span class="integer">38</span> + offset) + <span class="string"><span class="delimiter">'</span><span class="content">;5;</span><span class="delimiter">'</span></span> + code + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>;
+        };
+}
 
-                        <span class="keyword">return</span> [
-                                basestation(
-                                        {<span class="key">username</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">6ba5c7d32222e31f779722a818296a09</span><span class="delimiter">&quot;</span></span>}
-                                ),
-                                screen({
-                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">desktop</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">clearcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#888</span><span class="delimiter">'</span></span>
-                                },
-                                        cadgrid({
-                                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">main</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">bgcolor</span>: vec4(<span class="float">0.07999999821186066</span>, <span class="float">0.10000000149011612</span>, <span class="float">0.10000000149011612</span>, <span class="integer">1</span>),
-                                                <span class="key">toolselect</span>: <span class="predefined-constant">false</span>,
-                                                <span class="key">toolmove</span>: <span class="predefined-constant">false</span>,
-                                                <span class="key">gridsize</span>: <span class="integer">5</span>,
-                                                <span class="key">majorevery</span>: <span class="integer">10</span>,
-                                                <span class="key">majorline</span>: vec4(<span class="integer">0</span>, <span class="float">0.20000000298023224</span>, <span class="float">0.30000001192092896</span>, <span class="integer">1</span>),
-                                                <span class="key">minorline</span>: vec4(<span class="integer">0</span>, <span class="float">0.19792191684246063</span>, <span class="float">0.17214606702327728</span>, <span class="integer">1</span>),
-                                                <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">space-around</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="function">render</span>:<span class="keyword">function</span>() {
-                                                        <span class="keyword">var</span> lights = [];
+<span class="keyword">function</span> <span class="function">wrapAnsi16m</span>(fn, offset) {
+        <span class="keyword">return</span> <span class="keyword">function</span> () {
+                <span class="keyword">var</span> rgb = fn.apply(colorConvert, <span class="local-variable">arguments</span>);
+                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[</span><span class="delimiter">'</span></span> + (<span class="integer">38</span> + offset) + <span class="string"><span class="delimiter">'</span><span class="content">;2;</span><span class="delimiter">'</span></span> +
+                        rgb[<span class="integer">0</span>] + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span> + rgb[<span class="integer">1</span>] + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span> + rgb[<span class="integer">2</span>] + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>;
+        };
+}
 
-                                                        <span class="keyword">var</span> baselights = <span class="local-variable">this</span>.rpc.basestation.lights;
+<span class="keyword">function</span> <span class="function">assembleStyles</span>() {
+        <span class="keyword">var</span> styles = {
+                <span class="key">modifier</span>: {
+                        <span class="key">reset</span>: [<span class="integer">0</span>, <span class="integer">0</span>],
+                        <span class="comment">// 21 isn't widely supported and 22 does the same thing</span>
+                        <span class="key">bold</span>: [<span class="integer">1</span>, <span class="integer">22</span>],
+                        <span class="key">dim</span>: [<span class="integer">2</span>, <span class="integer">22</span>],
+                        <span class="key">italic</span>: [<span class="integer">3</span>, <span class="integer">23</span>],
+                        <span class="key">underline</span>: [<span class="integer">4</span>, <span class="integer">24</span>],
+                        <span class="key">inverse</span>: [<span class="integer">7</span>, <span class="integer">27</span>],
+                        <span class="key">hidden</span>: [<span class="integer">8</span>, <span class="integer">28</span>],
+                        <span class="key">strikethrough</span>: [<span class="integer">9</span>, <span class="integer">29</span>]
+                },
+                <span class="key">color</span>: {
+                        <span class="key">black</span>: [<span class="integer">30</span>, <span class="integer">39</span>],
+                        <span class="key">red</span>: [<span class="integer">31</span>, <span class="integer">39</span>],
+                        <span class="key">green</span>: [<span class="integer">32</span>, <span class="integer">39</span>],
+                        <span class="key">yellow</span>: [<span class="integer">33</span>, <span class="integer">39</span>],
+                        <span class="key">blue</span>: [<span class="integer">34</span>, <span class="integer">39</span>],
+                        <span class="key">magenta</span>: [<span class="integer">35</span>, <span class="integer">39</span>],
+                        <span class="key">cyan</span>: [<span class="integer">36</span>, <span class="integer">39</span>],
+                        <span class="key">white</span>: [<span class="integer">37</span>, <span class="integer">39</span>],
+                        <span class="key">gray</span>: [<span class="integer">90</span>, <span class="integer">39</span>]
+                },
+                <span class="key">bgColor</span>: {
+                        <span class="key">bgBlack</span>: [<span class="integer">40</span>, <span class="integer">49</span>],
+                        <span class="key">bgRed</span>: [<span class="integer">41</span>, <span class="integer">49</span>],
+                        <span class="key">bgGreen</span>: [<span class="integer">42</span>, <span class="integer">49</span>],
+                        <span class="key">bgYellow</span>: [<span class="integer">43</span>, <span class="integer">49</span>],
+                        <span class="key">bgBlue</span>: [<span class="integer">44</span>, <span class="integer">49</span>],
+                        <span class="key">bgMagenta</span>: [<span class="integer">45</span>, <span class="integer">49</span>],
+                        <span class="key">bgCyan</span>: [<span class="integer">46</span>, <span class="integer">49</span>],
+                        <span class="key">bgWhite</span>: [<span class="integer">47</span>, <span class="integer">49</span>]
+                }
+        };
 
-                                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Base has lights:</span><span class="delimiter">&quot;</span></span>, baselights)
+        <span class="comment">// fix humans</span>
+        styles.color.grey = styles.color.gray;
 
-                                                        <span class="keyword">for</span> (<span class="keyword">var</span> uid <span class="keyword">in</span> baselights) {
-                                                                <span class="keyword">if</span> (baselights.hasOwnProperty(uid)) {
-                                                                        <span class="keyword">var</span> light = baselights[uid];
+        Object.keys(styles).forEach(<span class="keyword">function</span> (groupName) {
+                <span class="keyword">var</span> group = styles[groupName];
 
-                                                                        <span class="keyword">var</span> huebulb = bulb(light);
-                                                                        huebulb.<span class="function">click</span> = <span class="keyword">function</span>(ev,v,o){
-                                                                                o.on = !o.on;
-                                                                                <span class="local-variable">this</span>.rpc
-                                                                                        .basestation
-                                                                                        .setLightState(o.id, {<span class="key">on</span>: o.on });
-                                                                        }.bind(<span class="local-variable">this</span>);
+                Object.keys(group).forEach(<span class="keyword">function</span> (styleName) {
+                        <span class="keyword">var</span> style = group[styleName];
 
-                                                                        lights.push(
-                                                                                view({
-                                                                                                <span class="key">flex</span>:<span class="integer">0</span>,
-                                                                                                <span class="key">padding</span>:<span class="integer">10</span>,
-                                                                                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>,
-                                                                                            <span class="key">aligncontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
-                                                                                                <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
-                                                                                                <span class="key">bgcolor</span>:vec4(<span class="float">0.4</span>)
-                                                                                        },
-                                                                                        huebulb,
-                                                                                        slider({
-                                                                                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                                                                                <span class="key">height</span>:<span class="integer">10</span>,
-                                                                                                <span class="key">margin</span>:<span class="integer">40</span>,
-                                                                                                <span class="key">width</span>:<span class="integer">250</span>,
-                                                                                                <span class="key">value</span>:light.bri / <span class="float">255.0</span>,
-                                                                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,
-                                                                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                                                                                                <span class="key">smooth</span>:<span class="predefined-constant">false</span>,
-                                                                                                <span class="key">bulb</span>:huebulb,
-                                                                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
-                                                                                                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.__lock) {
-                                                                                                                <span class="local-variable">this</span>.__lock = <span class="predefined-constant">true</span>;
+                        styles[styleName] = group[styleName] = {
+                                <span class="key">open</span>: <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[</span><span class="delimiter">'</span></span> + style[<span class="integer">0</span>] + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>,
+                                <span class="key">close</span>: <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[</span><span class="delimiter">'</span></span> + style[<span class="integer">1</span>] + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>
+                        };
+                });
 
-                                                                                                                o.bulb.bri = v * <span class="integer">255</span>;
-                                                                                                                o.bulb.reset();
+                Object.defineProperty(styles, groupName, {
+                        <span class="key">value</span>: group,
+                        <span class="key">enumerable</span>: <span class="predefined-constant">false</span>
+                });
+        });
 
-                                                                                                                <span class="local-variable">this</span>.rpc
-                                                                                                                        .basestation
-                                                                                                                        .setLightState(o.bulb.id, {<span class="key">transitiontime</span>:<span class="integer">0</span>, <span class="key">bri</span>: o.bulb.bri})
-                                                                                                                        .then(<span class="keyword">function</span>(){
-                                                                                                                                <span class="local-variable">this</span>.__lock = <span class="predefined-constant">false</span>;
-                                                                                                                        }.bind(<span class="local-variable">this</span>), <span class="keyword">function</span>(){
-                                                                                                                                <span class="local-variable">this</span>.__lock = <span class="predefined-constant">false</span>;
-                                                                                                                        }.bind(<span class="local-variable">this</span>))
-                                                                                                                ;
-                                                                                                        }
-                                                                                                }.bind(<span class="local-variable">this</span>)
-                                                                                        }),
-                                                                                        colorpicker({
-                                                                                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                                                                                <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
-                                                                                                <span class="key">colorwheel</span>:<span class="predefined-constant">true</span>,
-                                                                                                <span class="key">colorsliders</span>:<span class="predefined-constant">false</span>,
-                                                                                                <span class="key">colorbox</span>:<span class="predefined-constant">false</span>,
-                                                                                                <span class="key">value</span>:huebulb.textcolor,
-                                                                                                <span class="key">bulb</span>:huebulb,
-                                                                                                <span class="function">valuechange</span>:<span class="keyword">function</span>(ev, v, o) {
+        <span class="keyword">function</span> <span class="function">rgb2rgb</span>(r, g, b) {
+                <span class="keyword">return</span> [r, g, b];
+        }
 
-                                                                                                        <span class="keyword">var</span> red = o._value[<span class="integer">0</span>];
-                                                                                                        <span class="keyword">var</span> green = o._value[<span class="integer">1</span>];
-                                                                                                        <span class="keyword">var</span> blue = o._value[<span class="integer">2</span>];
+        styles.color.close = <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[39m</span><span class="delimiter">'</span></span>;
+        styles.bgColor.close = <span class="string"><span class="delimiter">'</span><span class="content">\u001b</span><span class="content">[49m</span><span class="delimiter">'</span></span>;
 
-                                                                                                        <span class="comment">// This magic is how to get the right color on a hue bulb</span>
-                                                                                                        <span class="comment">// http://www.developers.meethue.com/documentation/color-conversions-rgb-xy</span>
+        styles.color.ansi = {};
+        styles.color.ansi256 = {};
+        styles.color.ansi16m = {
+                <span class="key">rgb</span>: wrapAnsi16m(rgb2rgb, <span class="integer">0</span>)
+        };
 
-                                                                                                        red = (red &gt; <span class="float">0.04045</span>) ? Math.pow((red + <span class="float">0.055</span>) / (<span class="float">1.0</span> + <span class="float">0.055</span>), <span class="float">2.4</span>) : (red / <span class="float">12.92</span>);
-                                                                                                        green = (green &gt; <span class="float">0.04045</span>) ? Math.pow((green + <span class="float">0.055</span>) / (<span class="float">1.0</span> + <span class="float">0.055</span>), <span class="float">2.4</span>) : (green / <span class="float">12.92</span>);
-                                                                                                        blue = (blue &gt; <span class="float">0.04045</span>) ? Math.pow((blue + <span class="float">0.055</span>) / (<span class="float">1.0</span> + <span class="float">0.055</span>), <span class="float">2.4</span>) : (blue / <span class="float">12.92</span>);
+        styles.bgColor.ansi = {};
+        styles.bgColor.ansi256 = {};
+        styles.bgColor.ansi16m = {
+                <span class="key">rgb</span>: wrapAnsi16m(rgb2rgb, <span class="integer">10</span>)
+        };
 
-                                                                                                        <span class="keyword">var</span> xx = red * <span class="float">0.664511</span> + green * <span class="float">0.154324</span> + blue * <span class="float">0.162028</span>;
-                                                                                                        <span class="keyword">var</span> yy = red * <span class="float">0.283881</span> + green * <span class="float">0.668433</span> + blue * <span class="float">0.047685</span>;
-                                                                                                        <span class="keyword">var</span> zz = red * <span class="float">0.000088</span> + green * <span class="float">0.072310</span> + blue * <span class="float">0.986039</span>;
+        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> colorConvert) {
+                <span class="keyword">if</span> (!colorConvert.hasOwnProperty(key) || <span class="keyword">typeof</span> colorConvert[key] !== <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
+                        <span class="keyword">continue</span>;
+                }
 
-                                                                                                        <span class="keyword">var</span> x = xx / (xx + yy + zz);
-                                                                                                        <span class="keyword">var</span> y = yy / (xx + yy + zz);
+                <span class="keyword">var</span> suite = colorConvert[key];
 
-                                                                                                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.__lock) {
-                                                                                                                <span class="local-variable">this</span>.__lock = <span class="predefined-constant">true</span>;
+                <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">ansi16</span><span class="delimiter">'</span></span> <span class="keyword">in</span> suite) {
+                        styles.color.ansi[key] = wrapAnsi16(suite.ansi16, <span class="integer">0</span>);
+                        styles.bgColor.ansi[key] = wrapAnsi16(suite.ansi16, <span class="integer">10</span>);
+                }
 
-                                                                                                                o.bulb.rgb = [red * <span class="integer">255</span>, green * <span class="integer">255</span>, blue * <span class="integer">255</span>];
-                                                                                                                o.bulb.reset();
+                <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">ansi256</span><span class="delimiter">'</span></span> <span class="keyword">in</span> suite) {
+                        styles.color.ansi256[key] = wrapAnsi256(suite.ansi256, <span class="integer">0</span>);
+                        styles.bgColor.ansi256[key] = wrapAnsi256(suite.ansi256, <span class="integer">10</span>);
+                }
 
-                                                                                                                <span class="local-variable">this</span>.rpc
-                                                                                                                        .basestation
-                                                                                                                        .setLightState(o.bulb.id, { <span class="key">transitiontime</span>:<span class="integer">0</span>, <span class="key">xy</span>:[x,y] })
-                                                                                                                        .then(<span class="keyword">function</span>(){
-                                                                                                                                <span class="local-variable">this</span>.__lock = <span class="predefined-constant">false</span>;
-                                                                                                                        }.bind(<span class="local-variable">this</span>), <span class="keyword">function</span>(){
-                                                                                                                                <span class="local-variable">this</span>.__lock = <span class="predefined-constant">false</span>;
-                                                                                                                        }.bind(<span class="local-variable">this</span>))
-                                                                                                        }
-                                                                                                }.bind(<span class="local-variable">this</span>)
-                                                                                        })
-                                                                                )
-                                                                        )
-                                                                }
-                                                        }
-
-                                                        lights.push(view({
-                                                                <span class="key">visible</span>:<span class="local-variable">this</span>.rpc.basestation.linkalert,
-                                                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">x</span>:<span class="integer">200</span>,
-                                                                <span class="key">y</span>:<span class="integer">100</span>,
-                                                                <span class="key">width</span>:<span class="integer">300</span>,
-                                                                <span class="key">height</span>:<span class="integer">300</span>,
-                                                                <span class="key">borderradius</span>:<span class="integer">30</span>,
-                                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>
-                                                        },
-                                                                view({<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},icon({<span class="key">fontsize</span>:<span class="integer">40</span>, <span class="key">marginright</span>:<span class="integer">20</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cornflowerblue</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">link</span><span class="delimiter">&quot;</span></span>}),label({<span class="key">fontsize</span>:<span class="integer">30</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#888</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Missing Link!</span><span class="delimiter">&quot;</span></span>})),
-                                                                label({
-                                                                        <span class="key">padding</span>:<span class="integer">20</span>,
-                                                                        <span class="key">marginleft</span>:<span class="integer">20</span>,
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#888</span><span class="delimiter">&quot;</span></span>,
-                                                                    <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Press the Link button on top</span><span class="char">\n</span><span class="content">of your base station and then</span><span class="char">\n</span><span class="content"> quickly press this button:</span><span class="delimiter">&quot;</span></span>
-                                                                }),
-                                                                button({
-                                                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Link To Basestation</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="function">click</span>:<span class="keyword">function</span>() {
-                                                                                <span class="local-variable">this</span>.rpc.basestation.linkalert = <span class="predefined-constant">false</span>;
-                                                                                <span class="local-variable">this</span>.rerender();
-                                                                        }.bind(<span class="local-variable">this</span>)
-                                                                }))
-                                                        );
-
-                                                        <span class="keyword">return</span> lights;
-                                                }
-                                        }))
-                        ]
+                <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">rgb</span><span class="delimiter">'</span></span> <span class="keyword">in</span> suite) {
+                        styles.color.ansi16m[key] = wrapAnsi16m(suite.rgb, <span class="integer">0</span>);
+                        styles.bgColor.ansi16m[key] = wrapAnsi16m(suite.rgb, <span class="integer">10</span>);
                 }
         }
-)
+
+        <span class="keyword">return</span> styles;
+}
+
+Object.defineProperty(module, <span class="string"><span class="delimiter">'</span><span class="content">exports</span><span class="delimiter">'</span></span>, {
+        <span class="key">enumerable</span>: <span class="predefined-constant">true</span>,
+        <span class="key">get</span>: assembleStyles
+});
 </pre></td>
 </tr></table>
 

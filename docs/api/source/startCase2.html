@@ -179,31 +179,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> capitalize = require(<span class="string"><span class="delimiter">'</span><span class="content">./capitalize</span><span class="delimiter">'</span></span>),
-    createCompounder = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createCompounder</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> createCompounder = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createCompounder</span><span class="delimiter">'</span></span>),
+    upperFirst = require(<span class="string"><span class="delimiter">'</span><span class="content">./upperFirst</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Converts `string` to [start case](https://en.wikipedia.org/wiki/Letter_case#Stylistic_or_specialised_usage).
+ * Converts `string` to
+ * [start case](https://en.wikipedia.org/wiki/Letter_case#Stylistic_or_specialised_usage).
  *
  * @static
  * @memberOf _
+ * @since 3.1.0
  * @category String
  * @param {string} [string=''] The string to convert.
  * @returns {string} Returns the start cased string.
  * @example
  *
- * _.startCase('--foo-bar');
+ * _.startCase('--foo-bar--');
  * // =&gt; 'Foo Bar'
  *
  * _.startCase('fooBar');
  * // =&gt; 'Foo Bar'
  *
- * _.startCase('__foo_bar__');
- * // =&gt; 'Foo Bar'
+ * _.startCase('__FOO_BAR__');
+ * // =&gt; 'FOO BAR'
  */</span>
 <span class="keyword">var</span> startCase = createCompounder(<span class="keyword">function</span>(result, word, index) {
-  <span class="keyword">return</span> result + (index ? <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + capitalize(word);
+  <span class="keyword">return</span> result + (index ? <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + upperFirst(word);
 });
 
 module.exports = startCase;

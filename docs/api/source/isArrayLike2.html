@@ -198,6 +198,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Lang
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
@@ -216,8 +217,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; false
  */</span>
 <span class="keyword">function</span> <span class="function">isArrayLike</span>(value) {
-  <span class="keyword">return</span> value != <span class="predefined-constant">null</span> &amp;&amp;
-    !(<span class="keyword">typeof</span> value == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; isFunction(value)) &amp;&amp; isLength(getLength(value));
+  <span class="keyword">return</span> value != <span class="predefined-constant">null</span> &amp;&amp; isLength(getLength(value)) &amp;&amp; !isFunction(value);
 }
 
 module.exports = isArrayLike;

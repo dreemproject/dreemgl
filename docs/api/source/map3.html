@@ -154,9 +154,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <table class="CodeRay"><tr>
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
 <a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> convert = require(<span class="string"><span class="delimiter">'</span><span class="content">./convert</span><span class="delimiter">'</span></span>);
-module.exports = convert(<span class="string"><span class="delimiter">'</span><span class="content">map</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">../map</span><span class="delimiter">'</span></span>));
+  <td class="code"><pre><span class="keyword">var</span> concatMap = require(<span class="string"><span class="delimiter">'</span><span class="content">../</span><span class="delimiter">'</span></span>);
+<span class="keyword">var</span> xs = [ <span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span> ];
+<span class="keyword">var</span> ys = concatMap(xs, <span class="keyword">function</span> (x) {
+    <span class="keyword">return</span> x % <span class="integer">2</span> ? [ x - <span class="float">0.1</span>, x, x + <span class="float">0.1</span> ] : [];
+});
+console.dir(ys);
 </pre></td>
 </tr></table>
 

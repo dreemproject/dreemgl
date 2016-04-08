@@ -635,6 +635,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n481" name="n481">481</a>
 <a href="#n482" name="n482">482</a>
 <a href="#n483" name="n483">483</a>
+<a href="#n484" name="n484">484</a>
+<a href="#n485" name="n485">485</a>
+<a href="#n486" name="n486">486</a>
+<a href="#n487" name="n487">487</a>
+<a href="#n488" name="n488">488</a>
+<a href="#n489" name="n489">489</a>
+<strong><a href="#n490" name="n490">490</a></strong>
+<a href="#n491" name="n491">491</a>
+<a href="#n492" name="n492">492</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -675,7 +684,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span>
                         <span class="comment">//throw new Error(err)</span>
                 }
-                
+
                 <span class="comment">// compile the shader</span>
                 <span class="keyword">var</span> pix_color_shader = gl.createShader(gl.FRAGMENT_SHADER)
                 gl.shaderSource(pix_color_shader, pix_color)
@@ -749,7 +758,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.compile_use) <span class="local-variable">this</span>.compileUse(shader.pick)
                 }
 
-                <span class="keyword">return</span> shader                
+                <span class="keyword">return</span> shader
         }
 
         <span class="local-variable">this</span>.<span class="function">useShader</span> = <span class="keyword">function</span>(gl, shader){
@@ -878,7 +887,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">else</span>{
                         gl.disable(gl.DEPTH_TEST)
                 }
-                
+
                 <span class="keyword">return</span> len
         }
 
@@ -962,7 +971,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">else</span>{
                         gl.disable(gl.BLEND)
                 }
-                
+
                 <span class="comment">// set up depth test</span>
                 <span class="keyword">if</span>(root.depth_test_eq.func &gt; <span class="integer">1</span>){
                         <span class="comment">//console.log(root.depth_test_eq)</span>
@@ -972,12 +981,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">else</span>{
                         gl.disable(gl.DEPTH_TEST)
                 }
-                
+
+                <span class="comment">// set up depth mask</span>
+                <span class="keyword">if</span>(root.depth_mask === <span class="predefined-constant">false</span>){
+                        gl.depthMask(<span class="predefined-constant">false</span>)
+                }
+                <span class="keyword">else</span>{
+                        gl.depthMask(<span class="predefined-constant">true</span>)
+                }
+
+
                 <span class="keyword">return</span> len
         }
 
         <span class="local-variable">this</span>.<span class="function">compileUse</span> = <span class="keyword">function</span>(shader){
-                <span class="comment">// alright lets compile our useShader from </span>
+                <span class="comment">// alright lets compile our useShader from</span>
                 <span class="keyword">var</span> tpl = <span class="local-variable">this</span>.useShaderTemplate.toString()
                 tpl = tpl.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">^function</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">function useshader_</span><span class="delimiter">&quot;</span></span> + (<span class="local-variable">this</span>.view?<span class="local-variable">this</span>.view.constructor.name:<span class="string"><span class="delimiter">'</span><span class="content">anonymous</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">_shader_</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.constructor.name)
                 <span class="comment">// ok lets replace shit.</span>
@@ -1002,8 +1020,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 out += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">uni = root.</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
                         }
                         <span class="keyword">else</span>{
-                                out += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">uni = root.</span><span class="delimiter">'</span></span> 
-                                <span class="keyword">if</span>(isattr) out += <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> 
+                                out += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">uni = root.</span><span class="delimiter">'</span></span>
+                                <span class="keyword">if</span>(isattr) out += <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>
                                 out += key + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
                         }
                         out += <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="content">\t</span><span class="content">loc = shader.unilocs.</span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
@@ -1063,30 +1081,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> attrloc = attrlocs[key]
                                 <span class="keyword">var</span> ATTRLOC_BUF
                                 <span class="keyword">if</span>(attrloc.name){
-                                        ATTRLOC_BUF = <span class="string"><span class="delimiter">'</span><span class="content">root.</span><span class="delimiter">'</span></span> + attrloc.name 
+                                        ATTRLOC_BUF = <span class="string"><span class="delimiter">'</span><span class="content">root.</span><span class="delimiter">'</span></span> + attrloc.name
                                         <span class="keyword">var</span> buf = <span class="local-variable">this</span>[attrloc.name]
                                 }
                                 <span class="keyword">else</span>{
-                                        ATTRLOC_BUF = <span class="string"><span class="delimiter">'</span><span class="content">root.</span><span class="delimiter">'</span></span> + key 
+                                        ATTRLOC_BUF = <span class="string"><span class="delimiter">'</span><span class="content">root.</span><span class="delimiter">'</span></span> + key
                                 }
                                 <span class="keyword">var</span> ATTRLOC_LOC = <span class="string"><span class="delimiter">'</span><span class="content">shader.attrlocs.</span><span class="delimiter">'</span></span> + key +<span class="string"><span class="delimiter">'</span><span class="content">.loc</span><span class="delimiter">'</span></span>
 
                                 <span class="keyword">if</span>(attrloc.name){
-                                        ATTRLOC_ATTRIBPTR = 
+                                        ATTRLOC_ATTRIBPTR =
                                                 <span class="string"><span class="delimiter">'</span><span class="content">gl.vertexAttribPointer(loc, </span><span class="delimiter">'</span></span>+attrloc.slots+<span class="string"><span class="delimiter">'</span><span class="content">, gl.FLOAT, false, buf.stride, </span><span class="delimiter">'</span></span>+attrloc.offset+<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
                                 }
                                 <span class="keyword">else</span>{
-                                        ATTRLOC_ATTRIBPTR = 
+                                        ATTRLOC_ATTRIBPTR =
                                                 <span class="string"><span class="delimiter">'</span><span class="content">if(buf.slots&gt;4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)</span><span class="delimiter">'</span></span>
                                 }
-                                out += body                
+                                out += body
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">ATTRLOC_BUF</span><span class="delimiter">/</span></span>, ATTRLOC_BUF)
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">ATTRLOC_LOC</span><span class="delimiter">/</span></span>, ATTRLOC_LOC)
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">ATTRLOC_ATTRIBPTR</span><span class="delimiter">/</span></span>, ATTRLOC_ATTRIBPTR)
                         }
                         <span class="keyword">return</span> out
                 })
-                
+
                 tpl = tpl.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">gl.[A-Z][A-Z0-9_]+</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="keyword">function</span>(m){
                         <span class="keyword">return</span> gltypes.gl[m.slice(<span class="integer">3</span>)]
                 })
@@ -1118,7 +1136,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> len
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

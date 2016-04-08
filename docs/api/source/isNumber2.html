@@ -197,6 +197,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n43" name="n43">43</a>
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isObjectLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObjectLike</span><span class="delimiter">'</span></span>);
 
@@ -215,14 +217,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/**
  * Checks if `value` is classified as a `Number` primitive or object.
  *
- * **Note:** To exclude `Infinity`, `-Infinity`, and `NaN`, which are classified
- * as numbers, use the `_.isFinite` method.
+ * **Note:** To exclude `Infinity`, `-Infinity`, and `NaN`, which are
+ * classified as numbers, use the `_.isFinite` method.
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Lang
  * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @returns {boolean} Returns `true` if `value` is correctly classified,
+ *  else `false`.
  * @example
  *
  * _.isNumber(3);

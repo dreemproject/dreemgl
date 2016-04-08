@@ -589,6 +589,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n435" name="n435">435</a>
 <a href="#n436" name="n436">436</a>
 <a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
+<a href="#n444" name="n444">444</a>
+<a href="#n445" name="n445">445</a>
+<a href="#n446" name="n446">446</a>
+<a href="#n447" name="n447">447</a>
+<a href="#n448" name="n448">448</a>
+<a href="#n449" name="n449">449</a>
+<strong><a href="#n450" name="n450">450</a></strong>
+<a href="#n451" name="n451">451</a>
+<a href="#n452" name="n452">452</a>
+<a href="#n453" name="n453">453</a>
+<a href="#n454" name="n454">454</a>
+<a href="#n455" name="n455">455</a>
+<a href="#n456" name="n456">456</a>
+<a href="#n457" name="n457">457</a>
+<a href="#n458" name="n458">458</a>
+<a href="#n459" name="n459">459</a>
+<strong><a href="#n460" name="n460">460</a></strong>
+<a href="#n461" name="n461">461</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -646,6 +670,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">inselection</span> : Config({<span class="key">type</span>: <span class="reserved">boolean</span>, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
                 <span class="key">editables</span>: [],
                 <span class="key">nodeprops</span>:{},
+                <span class="key">showscreenbutton</span>:<span class="predefined-constant">false</span>,
                 <span class="key">inputs</span>: [{<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">a0</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">test input!</span><span class="delimiter">&quot;</span></span>, <span class="key">color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>)}],
                 <span class="key">outputs</span>: [{<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">b1</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">output? </span><span class="delimiter">&quot;</span></span>, <span class="key">color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>)}]
         }
@@ -1002,6 +1027,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         }.bind(<span class="local-variable">this</span>)})));
                 }
 
+                <span class="keyword">var</span> screenbutton;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.showscreenbutton) {
+                        screenbutton = button({
+                                <span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">tv</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">click</span>: <span class="keyword">function</span>(e){
+                                        <span class="keyword">var</span> comp = <span class="local-variable">this</span>.screen.locationhash.composition;
+                                        <span class="keyword">if</span> (comp) {
+                                                <span class="keyword">var</span> ext = <span class="string"><span class="delimiter">&quot;</span><span class="content">.js</span><span class="delimiter">&quot;</span></span>
+                                                <span class="keyword">var</span> location = define.expandVariables(comp)
+                                                <span class="keyword">if</span> (location.lastIndexOf(ext) === location.length - ext.length) {
+                                                        location = location.substring(<span class="integer">0</span>, location.length - ext.length)
+                                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.name) {
+                                                                location = location + <span class="string"><span class="delimiter">&quot;</span><span class="content">?</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.name
+                                                        }
+                                                        window.open(location,<span class="string"><span class="delimiter">'</span><span class="content">_blank</span><span class="delimiter">'</span></span>);
+                                                }
+
+                                        }
+                                }.bind(<span class="local-variable">this</span>)})
+                }
+
                 <span class="keyword">return</span> [
                         view({<span class="reserved">class</span>: <span class="string"><span class="delimiter">'</span><span class="content">header</span><span class="delimiter">'</span></span>,<span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
                                 ,view({<span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
@@ -1009,7 +1056,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         ,button({
                                                 <span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">pencil</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="function">click</span>: <span class="keyword">function</span>(e){<span class="local-variable">this</span>.renameBlock(e);}.bind(<span class="local-variable">this</span>)})
+                                                <span class="function">click</span>: <span class="keyword">function</span>(e){<span class="local-variable">this</span>.renameBlock(e);}.bind(<span class="local-variable">this</span>)}),
+                                        screenbutton
                                 )
                                 ,button({<span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>: <span class="keyword">function</span>(e){<span class="local-variable">this</span>.removeBlock(e);}.bind(<span class="local-variable">this</span>)})
                         )

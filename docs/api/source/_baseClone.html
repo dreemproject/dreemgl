@@ -281,15 +281,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n127" name="n127">127</a>
 <a href="#n128" name="n128">128</a>
 <a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> Stack = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Stack</span><span class="delimiter">'</span></span>),
     arrayEach = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayEach</span><span class="delimiter">'</span></span>),
     assignValue = require(<span class="string"><span class="delimiter">'</span><span class="content">./_assignValue</span><span class="delimiter">'</span></span>),
     baseAssign = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseAssign</span><span class="delimiter">'</span></span>),
-    baseForOwn = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForOwn</span><span class="delimiter">'</span></span>),
     cloneBuffer = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cloneBuffer</span><span class="delimiter">'</span></span>),
     copyArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyArray</span><span class="delimiter">'</span></span>),
     copySymbols = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copySymbols</span><span class="delimiter">'</span></span>),
+    getAllKeys = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getAllKeys</span><span class="delimiter">'</span></span>),
     getTag = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getTag</span><span class="delimiter">'</span></span>),
     initCloneArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_initCloneArray</span><span class="delimiter">'</span></span>),
     initCloneByTag = require(<span class="string"><span class="delimiter">'</span><span class="content">./_initCloneByTag</span><span class="delimiter">'</span></span>),
@@ -297,7 +307,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>),
     isBuffer = require(<span class="string"><span class="delimiter">'</span><span class="content">./isBuffer</span><span class="delimiter">'</span></span>),
     isHostObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isHostObject</span><span class="delimiter">'</span></span>),
-    isObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObject</span><span class="delimiter">'</span></span>);
+    isObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObject</span><span class="delimiter">'</span></span>),
+    keys = require(<span class="string"><span class="delimiter">'</span><span class="content">./keys</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/** `Object#toString` result references. */</span>
 <span class="keyword">var</span> argsTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Arguments]</span><span class="delimiter">'</span></span>,
@@ -317,6 +328,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     weakMapTag = <span class="string"><span class="delimiter">'</span><span class="content">[object WeakMap]</span><span class="delimiter">'</span></span>;
 
 <span class="keyword">var</span> arrayBufferTag = <span class="string"><span class="delimiter">'</span><span class="content">[object ArrayBuffer]</span><span class="delimiter">'</span></span>,
+    dataViewTag = <span class="string"><span class="delimiter">'</span><span class="content">[object DataView]</span><span class="delimiter">'</span></span>,
     float32Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Float32Array]</span><span class="delimiter">'</span></span>,
     float64Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Float64Array]</span><span class="delimiter">'</span></span>,
     int8Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Int8Array]</span><span class="delimiter">'</span></span>,
@@ -330,16 +342,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/** Used to identify `toStringTag` values supported by `_.clone`. */</span>
 <span class="keyword">var</span> cloneableTags = {};
 cloneableTags[argsTag] = cloneableTags[arrayTag] =
-cloneableTags[arrayBufferTag] = cloneableTags[boolTag] =
-cloneableTags[dateTag] = cloneableTags[float32Tag] =
-cloneableTags[float64Tag] = cloneableTags[int8Tag] =
-cloneableTags[int16Tag] = cloneableTags[int32Tag] =
-cloneableTags[mapTag] = cloneableTags[numberTag] =
-cloneableTags[objectTag] = cloneableTags[regexpTag] =
-cloneableTags[setTag] = cloneableTags[stringTag] =
-cloneableTags[symbolTag] = cloneableTags[uint8Tag] =
-cloneableTags[uint8ClampedTag] = cloneableTags[uint16Tag] =
-cloneableTags[uint32Tag] = <span class="predefined-constant">true</span>;
+cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
+cloneableTags[boolTag] = cloneableTags[dateTag] =
+cloneableTags[float32Tag] = cloneableTags[float64Tag] =
+cloneableTags[int8Tag] = cloneableTags[int16Tag] =
+cloneableTags[int32Tag] = cloneableTags[mapTag] =
+cloneableTags[numberTag] = cloneableTags[objectTag] =
+cloneableTags[regexpTag] = cloneableTags[setTag] =
+cloneableTags[stringTag] = cloneableTags[symbolTag] =
+cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = <span class="predefined-constant">true</span>;
 cloneableTags[errorTag] = cloneableTags[funcTag] =
 cloneableTags[weakMapTag] = <span class="predefined-constant">false</span>;
 
@@ -350,13 +362,14 @@ cloneableTags[weakMapTag] = <span class="predefined-constant">false</span>;
  * @private
  * @param {*} value The value to clone.
  * @param {boolean} [isDeep] Specify a deep clone.
+ * @param {boolean} [isFull] Specify a clone including symbols.
  * @param {Function} [customizer] The function to customize cloning.
  * @param {string} [key] The key of `value`.
  * @param {Object} [object] The parent object of `value`.
  * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
  * @returns {*} Returns the cloned value.
  */</span>
-<span class="keyword">function</span> <span class="function">baseClone</span>(value, isDeep, customizer, key, object, stack) {
+<span class="keyword">function</span> <span class="function">baseClone</span>(value, isDeep, isFull, customizer, key, object, stack) {
   <span class="keyword">var</span> result;
   <span class="keyword">if</span> (customizer) {
     result = object ? customizer(value, key, object, stack) : customizer(value);
@@ -392,7 +405,7 @@ cloneableTags[weakMapTag] = <span class="predefined-constant">false</span>;
       <span class="keyword">if</span> (!cloneableTags[tag]) {
         <span class="keyword">return</span> object ? value : {};
       }
-      result = initCloneByTag(value, tag, isDeep);
+      result = initCloneByTag(value, tag, baseClone, isDeep);
     }
   }
   <span class="comment">// Check for circular references and return its corresponding clone.</span>
@@ -403,11 +416,18 @@ cloneableTags[weakMapTag] = <span class="predefined-constant">false</span>;
   }
   stack.set(value, result);
 
+  <span class="keyword">if</span> (!isArr) {
+    <span class="keyword">var</span> props = isFull ? getAllKeys(value) : keys(value);
+  }
   <span class="comment">// Recursively populate clone (susceptible to call stack limits).</span>
-  (isArr ? arrayEach : baseForOwn)(value, <span class="keyword">function</span>(subValue, key) {
-    assignValue(result, key, baseClone(subValue, isDeep, customizer, key, value, stack));
+  arrayEach(props || value, <span class="keyword">function</span>(subValue, key) {
+    <span class="keyword">if</span> (props) {
+      key = subValue;
+      subValue = value[key];
+    }
+    assignValue(result, key, baseClone(subValue, isDeep, isFull, customizer, key, value, stack));
   });
-  <span class="keyword">return</span> isArr ? result : copySymbols(value, result);
+  <span class="keyword">return</span> result;
 }
 
 module.exports = baseClone;

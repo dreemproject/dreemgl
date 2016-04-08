@@ -180,7 +180,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {*} Returns the function if it's native, else `undefined`.
  */</span>
 <span class="keyword">function</span> <span class="function">getNative</span>(object, key) {
-  <span class="keyword">var</span> value = object == <span class="predefined-constant">null</span> ? <span class="predefined-constant">undefined</span> : object[key];
+  <span class="keyword">var</span> value = object[key];
   <span class="keyword">return</span> isNative(value) ? value : <span class="predefined-constant">undefined</span>;
 }
 

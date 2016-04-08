@@ -208,6 +208,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n54" name="n54">54</a>
 <a href="#n55" name="n55">55</a>
 <a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/** Used as references for the maximum length and index of an array. */</span>
 <span class="keyword">var</span> MAX_ARRAY_LENGTH = <span class="integer">4294967295</span>,
@@ -227,7 +228,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @param {*} value The value to evaluate.
  * @param {Function} iteratee The iteratee invoked per element.
  * @param {boolean} [retHighest] Specify returning the highest qualified index.
- * @returns {number} Returns the index at which `value` should be inserted into `array`.
+ * @returns {number} Returns the index at which `value` should be inserted
+ *  into `array`.
  */</span>
 <span class="keyword">function</span> <span class="function">baseSortedIndexBy</span>(array, value, iteratee, retHighest) {
   value = iteratee(value);

@@ -188,15 +188,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> lodash = require(<span class="string"><span class="delimiter">'</span><span class="content">./wrapperLodash</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Creates a `lodash` object that wraps `value` with explicit method chaining enabled.
- * The result of such method chaining must be unwrapped with `_#value`.
+ * Creates a `lodash` wrapper instance that wraps `value` with explicit method
+ * chain sequences enabled. The result of such sequences must be unwrapped
+ * with `_#value`.
  *
  * @static
  * @memberOf _
+ * @since 1.3.0
  * @category Seq
  * @param {*} value The value to wrap.
  * @returns {Object} Returns the new `lodash` wrapper instance.

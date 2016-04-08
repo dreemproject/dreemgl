@@ -169,8 +169,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n15" name="n15">15</a>
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/** Used to match `RegExp` flags from their coerced string values. */</span>
 <span class="keyword">var</span> reFlags = <span class="regexp"><span class="delimiter">/</span><span class="char">\w</span><span class="content">*$</span><span class="delimiter">/</span></span>;
@@ -183,9 +181,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Object} Returns the cloned regexp.
  */</span>
 <span class="keyword">function</span> <span class="function">cloneRegExp</span>(regexp) {
-  <span class="keyword">var</span> Ctor = regexp.constructor,
-      result = <span class="keyword">new</span> Ctor(regexp.source, reFlags.exec(regexp));
-
+  <span class="keyword">var</span> result = <span class="keyword">new</span> regexp.constructor(regexp.source, reFlags.exec(regexp));
   result.lastIndex = regexp.lastIndex;
   <span class="keyword">return</span> result;
 }

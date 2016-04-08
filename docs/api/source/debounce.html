@@ -329,6 +329,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n175" name="n175">175</a>
 <a href="#n176" name="n176">176</a>
 <a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObject</span><span class="delimiter">'</span></span>),
     now = require(<span class="string"><span class="delimiter">'</span><span class="content">./now</span><span class="delimiter">'</span></span>),
@@ -338,7 +340,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="keyword">var</span> FUNC_ERROR_TEXT = <span class="string"><span class="delimiter">'</span><span class="content">Expected a function</span><span class="delimiter">'</span></span>;
 
 <span class="comment">/* Built-in method references for those with the same name as other `lodash` methods. */</span>
-<span class="keyword">var</span> nativeMax = Math.max;
+<span class="keyword">var</span> nativeMax = Math.max,
+    nativeMin = Math.min;
 
 <span class="comment">/**
  * Creates a debounced function that delays invoking `func` until after `wait`
@@ -359,16 +362,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Function
  * @param {Function} func The function to debounce.
  * @param {number} [wait=0] The number of milliseconds to delay.
- * @param {Object} [options] The options object.
- * @param {boolean} [options.leading=false] Specify invoking on the leading
- *  edge of the timeout.
- * @param {number} [options.maxWait] The maximum time `func` is allowed to be
- *  delayed before it's invoked.
- * @param {boolean} [options.trailing=true] Specify invoking on the trailing
- *  edge of the timeout.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
  * @returns {Function} Returns the new debounced function.
  * @example
  *
@@ -390,14 +394,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * jQuery(window).on('popstate', debounced.cancel);
  */</span>
 <span class="keyword">function</span> <span class="function">debounce</span>(func, wait, options) {
-  <span class="keyword">var</span> args,
-      maxTimeoutId,
+  <span class="keyword">var</span> lastArgs,
+      lastThis,
       result,
-      stamp,
-      thisArg,
-      timeoutId,
-      trailingCall,
-      lastCalled = <span class="integer">0</span>,
+      timerId,
+      lastCallTime = <span class="integer">0</span>,
+      lastInvokeTime = <span class="integer">0</span>,
       leading = <span class="predefined-constant">false</span>,
       maxWait = <span class="predefined-constant">false</span>,
       trailing = <span class="predefined-constant">true</span>;
@@ -412,92 +414,94 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     trailing = <span class="string"><span class="delimiter">'</span><span class="content">trailing</span><span class="delimiter">'</span></span> <span class="keyword">in</span> options ? !!options.trailing : trailing;
   }
 
-  <span class="keyword">function</span> <span class="function">cancel</span>() {
-    <span class="keyword">if</span> (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    <span class="keyword">if</span> (maxTimeoutId) {
-      clearTimeout(maxTimeoutId);
-    }
-    lastCalled = <span class="integer">0</span>;
-    args = maxTimeoutId = thisArg = timeoutId = trailingCall = <span class="predefined-constant">undefined</span>;
-  }
+  <span class="keyword">function</span> <span class="function">invokeFunc</span>(time) {
+    <span class="keyword">var</span> args = lastArgs,
+        thisArg = lastThis;
 
-  <span class="keyword">function</span> <span class="function">complete</span>(isCalled, id) {
-    <span class="keyword">if</span> (id) {
-      clearTimeout(id);
-    }
-    maxTimeoutId = timeoutId = trailingCall = <span class="predefined-constant">undefined</span>;
-    <span class="keyword">if</span> (isCalled) {
-      lastCalled = now();
-      result = func.apply(thisArg, args);
-      <span class="keyword">if</span> (!timeoutId &amp;&amp; !maxTimeoutId) {
-        args = thisArg = <span class="predefined-constant">undefined</span>;
-      }
-    }
-  }
-
-  <span class="keyword">function</span> <span class="function">delayed</span>() {
-    <span class="keyword">var</span> remaining = wait - (now() - stamp);
-    <span class="keyword">if</span> (remaining &lt;= <span class="integer">0</span> || remaining &gt; wait) {
-      complete(trailingCall, maxTimeoutId);
-    } <span class="keyword">else</span> {
-      timeoutId = setTimeout(delayed, remaining);
-    }
-  }
-
-  <span class="keyword">function</span> <span class="function">flush</span>() {
-    <span class="keyword">if</span> ((timeoutId &amp;&amp; trailingCall) || (maxTimeoutId &amp;&amp; trailing)) {
-      result = func.apply(thisArg, args);
-    }
-    cancel();
+    lastArgs = lastThis = <span class="predefined-constant">undefined</span>;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
     <span class="keyword">return</span> result;
   }
 
-  <span class="keyword">function</span> <span class="function">maxDelayed</span>() {
-    complete(trailing, timeoutId);
+  <span class="keyword">function</span> <span class="function">leadingEdge</span>(time) {
+    <span class="comment">// Reset any `maxWait` timer.</span>
+    lastInvokeTime = time;
+    <span class="comment">// Start the timer for the trailing edge.</span>
+    timerId = setTimeout(timerExpired, wait);
+    <span class="comment">// Invoke the leading edge.</span>
+    <span class="keyword">return</span> leading ? invokeFunc(time) : result;
+  }
+
+  <span class="keyword">function</span> <span class="function">remainingWait</span>(time) {
+    <span class="keyword">var</span> timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        result = wait - timeSinceLastCall;
+
+    <span class="keyword">return</span> maxWait === <span class="predefined-constant">false</span> ? result : nativeMin(result, maxWait - timeSinceLastInvoke);
+  }
+
+  <span class="keyword">function</span> <span class="function">shouldInvoke</span>(time) {
+    <span class="keyword">var</span> timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    <span class="comment">// Either this is the first call, activity has stopped and we're at the</span>
+    <span class="comment">// trailing edge, the system time has gone backwards and we're treating</span>
+    <span class="comment">// it as the trailing edge, or we've hit the `maxWait` limit.</span>
+    <span class="keyword">return</span> (!lastCallTime || (timeSinceLastCall &gt;= wait) ||
+      (timeSinceLastCall &lt; <span class="integer">0</span>) || (maxWait !== <span class="predefined-constant">false</span> &amp;&amp; timeSinceLastInvoke &gt;= maxWait));
+  }
+
+  <span class="keyword">function</span> <span class="function">timerExpired</span>() {
+    <span class="keyword">var</span> time = now();
+    <span class="keyword">if</span> (shouldInvoke(time)) {
+      <span class="keyword">return</span> trailingEdge(time);
+    }
+    <span class="comment">// Restart the timer.</span>
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  <span class="keyword">function</span> <span class="function">trailingEdge</span>(time) {
+    clearTimeout(timerId);
+    timerId = <span class="predefined-constant">undefined</span>;
+
+    <span class="comment">// Only invoke if we have `lastArgs` which means `func` has been</span>
+    <span class="comment">// debounced at least once.</span>
+    <span class="keyword">if</span> (trailing &amp;&amp; lastArgs) {
+      <span class="keyword">return</span> invokeFunc(time);
+    }
+    lastArgs = lastThis = <span class="predefined-constant">undefined</span>;
+    <span class="keyword">return</span> result;
+  }
+
+  <span class="keyword">function</span> <span class="function">cancel</span>() {
+    <span class="keyword">if</span> (timerId !== <span class="predefined-constant">undefined</span>) {
+      clearTimeout(timerId);
+    }
+    lastCallTime = lastInvokeTime = <span class="integer">0</span>;
+    lastArgs = lastThis = timerId = <span class="predefined-constant">undefined</span>;
+  }
+
+  <span class="keyword">function</span> <span class="function">flush</span>() {
+    <span class="keyword">return</span> timerId === <span class="predefined-constant">undefined</span> ? result : trailingEdge(now());
   }
 
   <span class="keyword">function</span> <span class="function">debounced</span>() {
-    args = <span class="local-variable">arguments</span>;
-    stamp = now();
-    thisArg = <span class="local-variable">this</span>;
-    trailingCall = trailing &amp;&amp; (timeoutId || !leading);
+    <span class="keyword">var</span> time = now(),
+        isInvoking = shouldInvoke(time);
 
-    <span class="keyword">if</span> (maxWait === <span class="predefined-constant">false</span>) {
-      <span class="keyword">var</span> leadingCall = leading &amp;&amp; !timeoutId;
-    } <span class="keyword">else</span> {
-      <span class="keyword">if</span> (!lastCalled &amp;&amp; !maxTimeoutId &amp;&amp; !leading) {
-        lastCalled = stamp;
-      }
-      <span class="keyword">var</span> remaining = maxWait - (stamp - lastCalled);
+    lastArgs = <span class="local-variable">arguments</span>;
+    lastThis = <span class="local-variable">this</span>;
+    lastCallTime = time;
 
-      <span class="keyword">var</span> isCalled = (remaining &lt;= <span class="integer">0</span> || remaining &gt; maxWait) &amp;&amp;
-        (leading || maxTimeoutId);
-
-      <span class="keyword">if</span> (isCalled) {
-        <span class="keyword">if</span> (maxTimeoutId) {
-          maxTimeoutId = clearTimeout(maxTimeoutId);
-        }
-        lastCalled = stamp;
-        result = func.apply(thisArg, args);
+    <span class="keyword">if</span> (isInvoking) {
+      <span class="keyword">if</span> (timerId === <span class="predefined-constant">undefined</span>) {
+        <span class="keyword">return</span> leadingEdge(lastCallTime);
       }
-      <span class="keyword">else</span> <span class="keyword">if</span> (!maxTimeoutId) {
-        maxTimeoutId = setTimeout(maxDelayed, remaining);
-      }
-    }
-    <span class="keyword">if</span> (isCalled &amp;&amp; timeoutId) {
-      timeoutId = clearTimeout(timeoutId);
-    }
-    <span class="keyword">else</span> <span class="keyword">if</span> (!timeoutId &amp;&amp; wait !== maxWait) {
-      timeoutId = setTimeout(delayed, wait);
-    }
-    <span class="keyword">if</span> (leadingCall) {
-      isCalled = <span class="predefined-constant">true</span>;
-      result = func.apply(thisArg, args);
-    }
-    <span class="keyword">if</span> (isCalled &amp;&amp; !timeoutId &amp;&amp; !maxTimeoutId) {
-      args = thisArg = <span class="predefined-constant">undefined</span>;
+      <span class="comment">// Handle invocations in a tight loop.</span>
+      clearTimeout(timerId);
+      timerId = setTimeout(timerExpired, wait);
+      <span class="keyword">return</span> invokeFunc(lastCallTime);
     }
     <span class="keyword">return</span> result;
   }

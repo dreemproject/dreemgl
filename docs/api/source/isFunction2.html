@@ -192,6 +192,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
 <strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObject</span><span class="delimiter">'</span></span>);
 
@@ -213,9 +215,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Lang
  * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @returns {boolean} Returns `true` if `value` is correctly classified,
+ *  else `false`.
  * @example
  *
  * _.isFunction(_);
@@ -226,8 +230,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">isFunction</span>(value) {
   <span class="comment">// The use of `Object#toString` avoids issues with the `typeof` operator</span>
-  <span class="comment">// in Safari 8 which returns 'object' for typed array constructors, and</span>
-  <span class="comment">// PhantomJS 1.9 which returns 'function' for `NodeList` instances.</span>
+  <span class="comment">// in Safari 8 which returns 'object' for typed array and weak map constructors,</span>
+  <span class="comment">// and PhantomJS 1.9 which returns 'function' for `NodeList` instances.</span>
   <span class="keyword">var</span> tag = isObject(value) ? objectToString.call(value) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
   <span class="keyword">return</span> tag == funcTag || tag == genTag;
 }

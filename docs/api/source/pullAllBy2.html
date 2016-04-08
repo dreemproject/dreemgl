@@ -184,23 +184,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n30" name="n30">30</a></strong>
 <a href="#n31" name="n31">31</a>
 <a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>),
-    basePullAllBy = require(<span class="string"><span class="delimiter">'</span><span class="content">./_basePullAllBy</span><span class="delimiter">'</span></span>);
+    basePullAll = require(<span class="string"><span class="delimiter">'</span><span class="content">./_basePullAll</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * This method is like `_.pullAll` except that it accepts `iteratee` which is
  * invoked for each element of `array` and `values` to generate the criterion
- * by which uniqueness is computed. The iteratee is invoked with one argument: (value).
+ * by which they're compared. The iteratee is invoked with one argument: (value).
  *
  * **Note:** Unlike `_.differenceBy`, this method mutates `array`.
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Array
  * @param {Array} array The array to modify.
  * @param {Array} values The values to remove.
- * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+ * @param {Array|Function|Object|string} [iteratee=_.identity]
+ *  The iteratee invoked per element.
  * @returns {Array} Returns `array`.
  * @example
  *
@@ -212,7 +216,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">pullAllBy</span>(array, values, iteratee) {
   <span class="keyword">return</span> (array &amp;&amp; array.length &amp;&amp; values &amp;&amp; values.length)
-    ? basePullAllBy(array, values, baseIteratee(iteratee))
+    ? basePullAll(array, values, baseIteratee(iteratee))
     : array;
 }
 

@@ -2138,7 +2138,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.dotwice = <span class="integer">0</span>
-                <span class="local-variable">this</span>.rerender()
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.rerender) <span class="local-variable">this</span>.rerender()
         }
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
@@ -2268,7 +2268,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }))
                 <span class="local-variable">this</span>.framessincerender = <span class="integer">0</span>
 
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.dotwice) <span class="local-variable">this</span>.dotwice++, <span class="local-variable">this</span>.rerender()
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.dotwice &amp;&amp; <span class="local-variable">this</span>.rerender) <span class="local-variable">this</span>.dotwice++, <span class="local-variable">this</span>.rerender()
 
                 <span class="keyword">return</span> res
         }

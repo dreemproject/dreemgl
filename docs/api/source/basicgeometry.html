@@ -682,19 +682,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n528" name="n528">528</a>
 <a href="#n529" name="n529">529</a>
 <strong><a href="#n530" name="n530">530</a></strong>
-<a href="#n531" name="n531">531</a>
-<a href="#n532" name="n532">532</a>
-<a href="#n533" name="n533">533</a>
-<a href="#n534" name="n534">534</a>
-<a href="#n535" name="n535">535</a>
-<a href="#n536" name="n536">536</a>
-<a href="#n537" name="n537">537</a>
-<a href="#n538" name="n538">538</a>
-<a href="#n539" name="n539">539</a>
-<strong><a href="#n540" name="n540">540</a></strong>
-<a href="#n541" name="n541">541</a>
-<a href="#n542" name="n542">542</a>
-<a href="#n543" name="n543">543</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -703,115 +690,119 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define(<span class="keyword">function</span>(require, exports){                
-        <span class="keyword">var</span> v1 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> v2 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> v3 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> n1 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> n2 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> n3 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> t1 = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> t2 = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-        <span class="keyword">var</span> t3 = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-        
+define(<span class="keyword">function</span>(require, exports){
+        <span class="keyword">var</span> v1 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> v2 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> v3 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> n1 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> n2 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> n3 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> t1 = vec2(<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> t2 = vec2(<span class="integer">0</span>,<span class="integer">0</span>)
+        <span class="keyword">var</span> t3 = vec2(<span class="integer">0</span>,<span class="integer">0</span>)
+
         <span class="keyword">var</span> <span class="function">v1n1t1</span> = <span class="keyword">function</span>(x,y,z,nx,ny,nz,tx,ty){
-                v1[<span class="integer">0</span>] = x;
-                v1[<span class="integer">1</span>] = y;
-                v1[<span class="integer">2</span>] = z;
-                n1[<span class="integer">0</span>] = nx;
-                n1[<span class="integer">1</span>] = ny;
-                n1[<span class="integer">2</span>] = nz;
-                t1[<span class="integer">0</span>] = tx;
-                t1[<span class="integer">1</span>] = ty;
+                v1[<span class="integer">0</span>] = x
+                v1[<span class="integer">1</span>] = y
+                v1[<span class="integer">2</span>] = z
+                n1[<span class="integer">0</span>] = nx
+                n1[<span class="integer">1</span>] = ny
+                n1[<span class="integer">2</span>] = nz
+                t1[<span class="integer">0</span>] = tx
+                t1[<span class="integer">1</span>] = ty
         }
 
         <span class="keyword">var</span> <span class="function">v2n2t2</span> = <span class="keyword">function</span>(x,y,z,nx,ny,nz,tx,ty){
-                v2[<span class="integer">0</span>] = x;
-                v2[<span class="integer">1</span>] = y;
-                v2[<span class="integer">2</span>] = z;
-                n2[<span class="integer">0</span>] = nx;
-                n2[<span class="integer">1</span>] = ny;
-                n2[<span class="integer">2</span>] = nz;
-                t2[<span class="integer">0</span>] = tx;
-                t2[<span class="integer">1</span>] = ty;
+                v2[<span class="integer">0</span>] = x
+                v2[<span class="integer">1</span>] = y
+                v2[<span class="integer">2</span>] = z
+                n2[<span class="integer">0</span>] = nx
+                n2[<span class="integer">1</span>] = ny
+                n2[<span class="integer">2</span>] = nz
+                t2[<span class="integer">0</span>] = tx
+                t2[<span class="integer">1</span>] = ty
         }
 
         <span class="keyword">var</span> <span class="function">v3n3t3</span> = <span class="keyword">function</span>(x,y,z,nx,ny,nz,tx,ty){
-                v3[<span class="integer">0</span>] = x;
-                v3[<span class="integer">1</span>] = y;
-                v3[<span class="integer">2</span>] = z;
-                n3[<span class="integer">0</span>] = nx;
-                n3[<span class="integer">1</span>] = ny;
-                n3[<span class="integer">2</span>] = nz;
-                t3[<span class="integer">0</span>] = tx;
-                t3[<span class="integer">1</span>] = ty;
+                v3[<span class="integer">0</span>] = x
+                v3[<span class="integer">1</span>] = y
+                v3[<span class="integer">2</span>] = z
+                n3[<span class="integer">0</span>] = nx
+                n3[<span class="integer">1</span>] = ny
+                n3[<span class="integer">2</span>] = nz
+                t3[<span class="integer">0</span>] = tx
+                t3[<span class="integer">1</span>] = ty
         }
-        
+
         exports.<span class="function">createModel</span> = <span class="keyword">function</span>(data, cb) {
-                <span class="keyword">var</span> lines = data.split(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>);
-                <span class="keyword">var</span> vertices = [vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)];
-                <span class="keyword">var</span> normals = [vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)];
+                <span class="keyword">var</span> lines = data.split(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>)
+                <span class="keyword">var</span> vertices = [vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)]
+                <span class="keyword">var</span> normals = [vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)]
                 <span class="keyword">var</span> texcoords = [vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)]
                 <span class="keyword">var</span> multicoords = [vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)]
-                <span class="keyword">var</span> faceidx = <span class="integer">0</span>;
+                <span class="keyword">var</span> faceidx = <span class="integer">0</span>
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; lines.length; i++) {
-                        <span class="keyword">var</span> line = lines[i].trim();
+                        <span class="keyword">var</span> line = lines[i].trim()
                         <span class="keyword">if</span> (line.length &gt; <span class="integer">0</span>) {
-                                line = line.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span>);
-                                <span class="keyword">var</span> parts = line.split(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>);
-                                <span class="keyword">var</span> linetype = parts[<span class="integer">0</span>];
+                                line = line.replace(<span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span>)
+                                <span class="keyword">var</span> parts = line.split(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)
+                                <span class="keyword">var</span> linetype = parts[<span class="integer">0</span>]
                                 <span class="keyword">if</span> (linetype == <span class="string"><span class="delimiter">'</span><span class="content">f</span><span class="delimiter">'</span></span>) {
 
-                                        <span class="keyword">if</span> (parts[<span class="integer">1</span>].indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>)&gt;-<span class="integer">1</span>) splitter = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>; <span class="keyword">else</span> splitter = <span class="string"><span class="delimiter">'</span><span class="char">\\</span><span class="delimiter">'</span></span>;
-                                
+                                        <span class="keyword">if</span> (parts[<span class="integer">1</span>].indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>) {
+                                                splitter = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>
+                                        } <span class="keyword">else</span> {
+                                                splitter = <span class="string"><span class="delimiter">'</span><span class="char">\\</span><span class="delimiter">'</span></span>
+                                        }
+
                                         <span class="keyword">var</span> triangles = [[<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>]]
-                                        
-                                        <span class="keyword">if</span> (parts.length &gt; <span class="integer">4</span>) {  <span class="comment">// dirty triangle fan implementation for Ngons.. </span>
-                                                <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">1</span>;j&lt;parts.length-<span class="integer">3</span>;j++){                                                        
-                                                        triangles.push([<span class="integer">1</span>,j+<span class="integer">2</span>, j+<span class="integer">3</span>]);                                                
+
+                                        <span class="keyword">if</span> (parts.length &gt; <span class="integer">4</span>) {  <span class="comment">// dirty triangle fan implementation for Ngons..</span>
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">1</span>; j &lt; parts.length-<span class="integer">3</span>; j++){
+                                                        triangles.push([<span class="integer">1</span>,j+<span class="integer">2</span>, j+<span class="integer">3</span>])
                                                 }
                                         }
-                                        
-                                        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; triangles.length; j++) {                                                
-                                                <span class="keyword">var</span> t = triangles[j];
-                                                
-                                                <span class="keyword">var</span> ia = t[<span class="integer">0</span>];
-                                                <span class="keyword">var</span> ib = t[<span class="integer">1</span>];
-                                                <span class="keyword">var</span> ic = t[<span class="integer">2</span>];                                                
-                                        
-                                                <span class="keyword">var</span> i1 = parts[ia].split(splitter).map(<span class="keyword">function</span>(a){<span class="keyword">return</span> Math.floor(a);});
-                                                <span class="keyword">var</span> i2 = parts[ib].split(splitter).map(<span class="keyword">function</span>(a){<span class="keyword">return</span> Math.floor(a);});
-                                                <span class="keyword">var</span> i3 = parts[ic].split(splitter).map(<span class="keyword">function</span>(a){<span class="keyword">return</span> Math.floor(a);});
-                                                
-                                                <span class="keyword">var</span> n1,n2,n3,t1,t2,t3;                                                
-                                                <span class="keyword">var</span> v1 = vertices[i1[<span class="integer">0</span>]];
-                                                <span class="keyword">var</span> v2 = vertices[i2[<span class="integer">0</span>]];
-                                                <span class="keyword">var</span> v3 = vertices[i3[<span class="integer">0</span>]];
-                                                
+
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; triangles.length; j++) {
+                                                <span class="keyword">var</span> t = triangles[j]
+
+                                                <span class="keyword">var</span> ia = t[<span class="integer">0</span>]
+                                                <span class="keyword">var</span> ib = t[<span class="integer">1</span>]
+                                                <span class="keyword">var</span> ic = t[<span class="integer">2</span>]
+
+                                                <span class="keyword">var</span> i1 = parts[ia].split(splitter).map(<span class="keyword">function</span>(a){<span class="keyword">return</span> Math.floor(a);})
+                                                <span class="keyword">var</span> i2 = parts[ib].split(splitter).map(<span class="keyword">function</span>(a){<span class="keyword">return</span> Math.floor(a);})
+                                                <span class="keyword">var</span> i3 = parts[ic].split(splitter).map(<span class="keyword">function</span>(a){<span class="keyword">return</span> Math.floor(a);})
+
+                                                <span class="keyword">var</span> n1,n2,n3,t1,t2,t3
+                                                <span class="keyword">var</span> v1 = vertices[i1[<span class="integer">0</span>]]
+                                                <span class="keyword">var</span> v2 = vertices[i2[<span class="integer">0</span>]]
+                                                <span class="keyword">var</span> v3 = vertices[i3[<span class="integer">0</span>]]
+
                                                 <span class="keyword">if</span> (i1.length == <span class="integer">1</span> || i1[<span class="integer">1</span>].length == <span class="integer">0</span>) {
-                                                        t1 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-                                                        t2 = vec3(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-                                                        t3 = vec3(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>);                                                        
+                                                        t1 = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+                                                        t2 = vec3(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>)
+                                                        t3 = vec3(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>)
                                                 } <span class="keyword">else</span> {
-                                                        t1 = texcoords[i1[<span class="integer">1</span>]];
-                                                        t2 = texcoords[i2[<span class="integer">1</span>]];
-                                                        t3 = texcoords[i3[<span class="integer">1</span>]];
+                                                        t1 = texcoords[i1[<span class="integer">1</span>]]
+                                                        t2 = texcoords[i2[<span class="integer">1</span>]]
+                                                        t3 = texcoords[i3[<span class="integer">1</span>]]
                                                 }
-                                                
-                                                <span class="keyword">if</span> (i1.length  &lt; <span class="integer">3</span>) {<span class="comment">// generate normals;</span>
-                                                        <span class="keyword">var</span> ab = vec3.sub(v2,v1);
-                                                        <span class="keyword">var</span> bc = vec3.sub(v3,v1);                                                
-                                                        n3 = n2 =n1 = vec3.normalize(vec3.cross(ab,bc));                                                        
-                                                } 
+
+                                                <span class="keyword">if</span> (i1.length  &lt; <span class="integer">3</span>) {<span class="comment">// generate normals</span>
+                                                        <span class="keyword">var</span> ab = vec3.sub(v2,v1)
+                                                        <span class="keyword">var</span> bc = vec3.sub(v3,v1)
+                                                        n3 = n2 =n1 = vec3.normalize(vec3.cross(ab,bc))
+                                                }
                                                 <span class="keyword">else</span> {
-                                                        n1 = normals[i1[<span class="integer">2</span>]];
-                                                        n2 = normals[i2[<span class="integer">2</span>]];
-                                                        n3 = normals[i3[<span class="integer">2</span>]];
+                                                        n1 = normals[i1[<span class="integer">2</span>]]
+                                                        n2 = normals[i2[<span class="integer">2</span>]]
+                                                        n3 = normals[i3[<span class="integer">2</span>]]
                                                 }
-                                                
-                                                cb(faceidx, v1,v2,v3, n1,n2,n3,t1,t2,t3,faceidx);
-                                                faceidx++;
+
+                                                cb(faceidx, v1,v2,v3, n1,n2,n3,t1,t2,t3,faceidx)
+                                                faceidx++
                                         }
                                 }
                                 <span class="keyword">else</span> <span class="keyword">if</span> (linetype == <span class="string"><span class="delimiter">'</span><span class="content">v</span><span class="delimiter">'</span></span>)  {vertices.push(vec3(parseFloat(parts[<span class="integer">1</span>]), parseFloat(parts[<span class="integer">2</span>]), parseFloat(parts[<span class="integer">3</span>])))}
@@ -820,26 +811,26 @@ define(<span class="keyword">function</span>(require, exports){
                                 <span class="keyword">else</span> <span class="keyword">if</span> (linetype == <span class="string"><span class="delimiter">'</span><span class="content">vp</span><span class="delimiter">'</span></span>) {multicoords.push(vec3(parseFloat(parts[<span class="integer">1</span>]), parseFloat(parts[<span class="integer">2</span>]), parseFloat(parts[<span class="integer">3</span>])))}
                         }
                 }
-                
-                <span class="comment">//console.log(&quot;loaded &quot; + (vertices.length -1) + &quot; vertices and &quot; + faceidx + &quot; triangles&quot;);</span>
-        };                
+
+                <span class="comment">//console.log(&quot;loaded &quot; + (vertices.length -1) + &quot; vertices and &quot; + faceidx + &quot; triangles&quot;)</span>
+        }
 
         exports.<span class="function">createCube</span> = <span class="keyword">function</span>(width, height, depth, cb) {
-                
+
                 <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length === <span class="integer">2</span>) cb = height, height = depth = width
                 <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length === <span class="integer">3</span>) cb = depth, depth = height, height = width
-        
-                <span class="keyword">var</span> hw = width  / <span class="integer">2</span>;
-                <span class="keyword">var</span> hh = height / <span class="integer">2</span>;
-                <span class="keyword">var</span> hd = depth  / <span class="integer">2</span>;
 
-<span class="comment">// vertices:                </span>
+                <span class="keyword">var</span> hw = width  / <span class="integer">2</span>
+                <span class="keyword">var</span> hh = height / <span class="integer">2</span>
+                <span class="keyword">var</span> hd = depth  / <span class="integer">2</span>
+
+<span class="comment">// vertices:</span>
 <span class="comment">//</span>
 <span class="comment">//   d --- c</span>
 <span class="comment">//  /|    /|</span>
 <span class="comment">// a --- b |</span>
 <span class="comment">// | h - |-g</span>
-<span class="comment">// |/    |/                </span>
+<span class="comment">// |/    |/</span>
 <span class="comment">// e --- f</span>
 <span class="comment">//</span>
 <span class="comment">// faces:</span>
@@ -851,185 +842,177 @@ define(<span class="keyword">function</span>(require, exports){
 <span class="comment">// cghd -&gt; cgh, chd -&gt;  0, 1, 0</span>
 <span class="comment">// ehgf -&gt; ehg, egf -&gt;  0, 0, 1</span>
 
-                <span class="keyword">var</span> ax = -hw, ay = -hh, az = -hd;
-                <span class="keyword">var</span> bx = hw, by = -hh, bz = -hd;
-                <span class="keyword">var</span> cx = hw, cy = hh, cz = -hd;
-                <span class="keyword">var</span> dx = -hw, dy = hh, dz = -hd;
-                <span class="keyword">var</span> ex = -hw, ey = -hh, ez = hd;
-                <span class="keyword">var</span> fx  = hw, fy = -hh, fz = hd;
-                <span class="keyword">var</span> gx = hw, gy = hh, gz = hd;
-                <span class="keyword">var</span> hx = -hw, hy = hh, hz = hd;                        
-                
-                v1n1t1(ax,ay,az,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>); v2n2t2(bx,by,bz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>); v3n3t3(cx,cy,cz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                v1n1t1(ax,ay,az,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>); v2n2t2(cx,cy,cz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>); v3n3t3(dx,dy,dz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>);
-                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-        
-                v1n1t1(ax,ay,az,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(ex,ey,ez,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(fx,fy,fz,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">2</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">1</span>);
-                v1n1t1(ax,ay,az,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(fx,fy,fz,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(bx,by,bz,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">3</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">1</span>);
+                <span class="keyword">var</span> ax = -hw, ay = -hh, az = -hd
+                <span class="keyword">var</span> bx = hw, by = -hh, bz = -hd
+                <span class="keyword">var</span> cx = hw, cy = hh, cz = -hd
+                <span class="keyword">var</span> dx = -hw, dy = hh, dz = -hd
+                <span class="keyword">var</span> ex = -hw, ey = -hh, ez = hd
+                <span class="keyword">var</span> fx = hw, fy = -hh, fz = hd
+                <span class="keyword">var</span> gx = hw, gy = hh, gz = hd
+                <span class="keyword">var</span> hx = -hw, hy = hh, hz = hd
 
-                v1n1t1(ax,ay,az,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(dx,dy,dz,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(hx,hy,hz,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">4</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">2</span>);
-                v1n1t1(ax,ay,az,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(hx,hy,hz,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(ex,ey,ez,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">5</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">2</span>);
+                v1n1t1(ax,ay,az,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>); v2n2t2(bx,by,bz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>); v3n3t3(cx,cy,cz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                v1n1t1(ax,ay,az,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>); v2n2t2(cx,cy,cz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>); v3n3t3(dx,dy,dz,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>)
+                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
 
-                v1n1t1(bx,by,bz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(fx,fy,fz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(gx,gy,gz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">6</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">3</span>);
-                v1n1t1(bx,by,bz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(gx,gy,gz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(cx,cy,cz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">7</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">3</span>);
+                v1n1t1(ax,ay,az,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(ex,ey,ez,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(fx,fy,fz,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                cb(<span class="integer">2</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">1</span>)
+                v1n1t1(ax,ay,az,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(fx,fy,fz,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(bx,by,bz,<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>)
+                cb(<span class="integer">3</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">1</span>)
 
-                v1n1t1(cx,cy,cz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(gx,gy,gz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(hx,hy,hz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">8</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">4</span>);
-                v1n1t1(cx,cy,cz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(hx,hy,hz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(dx,dy,dz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">9</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">4</span>);
+                v1n1t1(ax,ay,az,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(dx,dy,dz,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(hx,hy,hz,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                cb(<span class="integer">4</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">2</span>)
+                v1n1t1(ax,ay,az,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(hx,hy,hz,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(ex,ey,ez,-<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>)
+                cb(<span class="integer">5</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">2</span>)
 
-                v1n1t1(ex,ey,ez,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(hx,hy,hz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(gx,gy,gz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">10</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">5</span>);
-                v1n1t1(ex,ey,ez,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(gx,gy,gz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(fx,fy,fz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>);                
-                cb(<span class="integer">11</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">5</span>);                
+                v1n1t1(bx,by,bz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(fx,fy,fz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(gx,gy,gz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                cb(<span class="integer">6</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">3</span>)
+                v1n1t1(bx,by,bz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(gx,gy,gz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(cx,cy,cz,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>)
+                cb(<span class="integer">7</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">3</span>)
+
+                v1n1t1(cx,cy,cz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(gx,gy,gz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(hx,hy,hz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                cb(<span class="integer">8</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">4</span>)
+                v1n1t1(cx,cy,cz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(hx,hy,hz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(dx,dy,dz,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>)
+                cb(<span class="integer">9</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">4</span>)
+
+                v1n1t1(ex,ey,ez,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(hx,hy,hz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>);v3n3t3(gx,gy,gz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                cb(<span class="integer">10</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">5</span>)
+                v1n1t1(ex,ey,ez,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>);v2n2t2(gx,gy,gz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>);v3n3t3(fx,fy,fz,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>)
+                cb(<span class="integer">11</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">5</span>)
         }
-        
+
         exports.<span class="function">createCylinder</span> = <span class="keyword">function</span>(R,h, xdetail,cap, cb){
-                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail ; p+=<span class="integer">1</span>) {
-                        <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail;
-                        <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail;
+                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail; p+=<span class="integer">1</span>) {
+                        <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail
+                        <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail
                         <span class="keyword">var</span> ax = Math.sin(angle1)
                         <span class="keyword">var</span> bx = Math.sin(angle2)
                         <span class="keyword">var</span> ay = Math.cos(angle1)
                         <span class="keyword">var</span> by = Math.cos(angle2)
-                        
+
                         <span class="keyword">var</span> nx = Math.sin((angle1 + angle2)/<span class="integer">2</span>)
                         <span class="keyword">var</span> ny = Math.cos((angle1 + angle2)/<span class="integer">2</span>)
-                
-                        <span class="keyword">var</span> tx1 = p / xdetail;
-                        <span class="keyword">var</span> tx2 = (p + <span class="integer">1</span>) / xdetail;
-                        
-                        <span class="keyword">var</span> az = <span class="integer">0</span>;
-                        <span class="keyword">var</span> az2 = h;
-                        <span class="keyword">if</span> (h&lt; <span class="integer">0</span>)
-                        {
-                                az = h;
-                                az2 =<span class="integer">0</span>;
+
+                        <span class="keyword">var</span> tx1 = p / xdetail
+                        <span class="keyword">var</span> tx2 = (p + <span class="integer">1</span>) / xdetail
+
+                        <span class="keyword">var</span> az = <span class="integer">0</span>
+                        <span class="keyword">var</span> az2 = h
+                        <span class="keyword">if</span> (h&lt; <span class="integer">0</span>) {
+                                az = h
+                                az2 = <span class="integer">0</span>
                         }
                         <span class="keyword">if</span> (cap){
-                        v1n1t1(ax*R,az,  ay*R, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R,az,  by*R, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
-                        v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
+                                v1n1t1(ax*R,az,  ay*R, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>)
+                                v2n2t2(bx*R,az,  by*R, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
+                                v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
 
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        v1n1t1(ax*R,az2,  ay*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R,az2,  by*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
-                        v3n3t3(   <span class="integer">0</span>,az2,    <span class="integer">0</span>, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
+                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                                v1n1t1(ax*R,az2,  ay*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>)
+                                v2n2t2(bx*R,az2,  by*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
+                                v3n3t3(   <span class="integer">0</span>,az2,    <span class="integer">0</span>, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
 
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
-                        
+                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                         }
-                        v1n1t1(ax*R,az,  ay*R, nx,<span class="integer">0</span>,ny,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R,az,  by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
-                        v3n3t3(ax*R,az2, ay*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);                
+                        v1n1t1(ax*R,az,  ay*R, nx,<span class="integer">0</span>,ny,tx1,<span class="integer">0</span>)
+                        v2n2t2(bx*R,az,  by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+                        v3n3t3(ax*R,az2, ay*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
 
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
-                        v1n1t1(bx*R,az,  by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
-                        v2n2t2(ax*R,az2, ay*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);                
-                        v3n3t3(bx*R,az2, by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
-                
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
-                        
-                        
+                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+
+                        v1n1t1(bx*R,az,  by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+                        v2n2t2(ax*R,az2, ay*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+                        v3n3t3(bx*R,az2, by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+
+                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                 }
         }
-        
+
         exports.<span class="function">createCone</span> = <span class="keyword">function</span>(R1,R2,h, xdetail, cap, cb){
-                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail ; p+=<span class="integer">1</span>) {
-                        <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail;
-                        <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail;
-                        
+                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail; p+=<span class="integer">1</span>) {
+                        <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail
+                        <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail
+
                         <span class="keyword">var</span> ax = Math.sin(angle1)
                         <span class="keyword">var</span> bx = Math.sin(angle2)
                         <span class="keyword">var</span> ay = Math.cos(angle1)
                         <span class="keyword">var</span> by = Math.cos(angle2)
-                        
+
                         <span class="keyword">var</span> nx = Math.sin((angle1 + angle2)/<span class="integer">2</span>)
                         <span class="keyword">var</span> ny = Math.cos((angle1 + angle2)/<span class="integer">2</span>)
-                
-                        <span class="keyword">var</span> tx1 = p / xdetail;
-                        <span class="keyword">var</span> tx2 = (p + <span class="integer">1</span>) / xdetail;
-                        
-                        <span class="keyword">var</span> az = <span class="integer">0</span>;
-                        <span class="keyword">var</span> az2 = h;
+
+                        <span class="keyword">var</span> tx1 = p / xdetail
+                        <span class="keyword">var</span> tx2 = (p + <span class="integer">1</span>) / xdetail
+
+                        <span class="keyword">var</span> az = <span class="integer">0</span>
+                        <span class="keyword">var</span> az2 = h
                         <span class="keyword">if</span> (h&lt; <span class="integer">0</span>)
                         {
-                                az = h;
-                                az2 =<span class="integer">0</span>;
+                                az = h
+                                az2 = <span class="integer">0</span>
                         }
                         <span class="keyword">if</span> (cap){
-                                v1n1t1(ax*R1,az,  ay*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
-                                v2n2t2(bx*R1,az,  by*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
-                                v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
+                                v1n1t1(ax*R1,az,  ay*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>)
+                                v2n2t2(bx*R1,az,  by*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
+                                v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
 
-                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                         }
-                        v1n1t1(ax*R1,az,  ay*R1, nx,<span class="integer">0</span>,ny,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R1,az,  by*R1, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
-                        v3n3t3(ax*R2,az2, ay*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);                
+                        v1n1t1(ax*R1,az,  ay*R1, nx,<span class="integer">0</span>,ny,tx1,<span class="integer">0</span>)
+                        v2n2t2(bx*R1,az,  by*R1, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+                        v3n3t3(ax*R2,az2, ay*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
 
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
-                        v1n1t1(bx*R1,az,  by*R1, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
-                        v2n2t2(ax*R2,az2, ay*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);                
-                        v3n3t3(bx*R2,az2, by*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
-                
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
-                        
-                        v1n1t1(ax*R2,az2,  ay*R2, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R2,az2,  by*R2, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
-                        v3n3t3(   <span class="integer">0</span>,az2,    <span class="integer">0</span>, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
+                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
 
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
+                        v1n1t1(bx*R1,az,  by*R1, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+                        v2n2t2(ax*R2,az2, ay*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+                        v3n3t3(bx*R2,az2, by*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>)
+
+                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+
+                        v1n1t1(ax*R2,az2,  ay*R2, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>)
+                        v2n2t2(bx*R2,az2,  by*R2, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
+                        v3n3t3(   <span class="integer">0</span>,az2,    <span class="integer">0</span>, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>)
+
+                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                 }
         }
-        
-        exports.<span class="function">createSphere</span> = <span class="keyword">function</span>(R, xdetail,ydetail, cb) {                
-                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail ; p+=<span class="integer">1</span>) {
-                        <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail;
-                        <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail;
+
+        exports.<span class="function">createSphere</span> = <span class="keyword">function</span>(R, xdetail,ydetail, cb) {
+                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail; p+=<span class="integer">1</span>) {
+                        <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail
+                        <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail
                         <span class="keyword">var</span> ax1 = Math.sin(angle1)
                         <span class="keyword">var</span> ax2 = Math.sin(angle2)
                         <span class="keyword">var</span> ay1 = Math.cos(angle1)
                         <span class="keyword">var</span> ay2 = Math.cos(angle2)
-                        <span class="keyword">var</span> tx1 = p / xdetail;
-                        <span class="keyword">var</span> tx2 = (p + <span class="integer">1</span>) / xdetail;
-                        
-                        <span class="keyword">for</span> (<span class="keyword">var</span> q = <span class="integer">0</span>;q &lt; ydetail;q += <span class="integer">1</span>) {
-                                <span class="keyword">var</span> ty1 = q / ydetail;
-                                <span class="keyword">var</span> ty2 = (q + <span class="integer">1</span>) / ydetail;
-                                
+                        <span class="keyword">var</span> tx1 = p / xdetail
+                        <span class="keyword">var</span> tx2 = (p + <span class="integer">1</span>) / xdetail
+
+                        <span class="keyword">for</span> (<span class="keyword">var</span> q = <span class="integer">0</span>; q &lt; ydetail; q += <span class="integer">1</span>) {
+                                <span class="keyword">var</span> ty1 = q / ydetail
+                                <span class="keyword">var</span> ty2 = (q + <span class="integer">1</span>) / ydetail
+
                                 <span class="keyword">var</span> angle3 = q * <span class="float">3.14159265359</span> / ydetail
                                 <span class="keyword">var</span> angle4 = (q + <span class="integer">1</span>) * <span class="float">3.14159265359</span> / ydetail
-                                <span class="keyword">var</span> r1 = Math.sin(angle3);
-                                <span class="keyword">var</span> r2 = Math.sin(angle4);
-                                <span class="keyword">var</span> h1 = Math.cos(angle3);
-                                <span class="keyword">var</span> h2 = Math.cos(angle4);
-                                
-                                <span class="comment">// a   b  -&gt; ax1 * r1, ay1 * r1, h1   -&gt; ax2 * r1, ay2 * r1, h1 </span>
-                                <span class="comment">// d   c  -&gt; ax1 * r2, ay1 * r2, h2   -&gt; ax2 * r2, ay2 * r2, h2 </span>
-                                <span class="keyword">var</span> ax = ax1 * r1, ay = ay1 * r1, az = h1;
-                                <span class="keyword">var</span> bx = ax2 * r1, by = ay2 * r1, bz = h1;
-                                <span class="keyword">var</span> dx = ax1 * r2, dy = ay1 * r2, dz = h2;
-                                <span class="keyword">var</span> cx = ax2 * r2, cy = ay2 * r2, cz = h2;
-                                
-                                v1n1t1(ax*R,ay*R,az*R,ax,ay,az,tx1,ty1); v2n2t2(bx*R,by*R,bz*R,bx,by,bz,tx2,ty1); v3n3t3(cx*R,cy*R,cz*R,cx,cy,cz,tx2,ty2);                
-                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                                
-                                v1n1t1(ax*R,ay*R,az*R,ax,ay,az,tx1,ty1); v2n2t2(cx*R,cy*R,cz*R,cx,cy,cz,tx2,ty2); v3n3t3(dx*R,dy*R,dz*R,dx,dy,dz,tx1,ty2);
-                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                                <span class="keyword">var</span> r1 = Math.sin(angle3)
+                                <span class="keyword">var</span> r2 = Math.sin(angle4)
+                                <span class="keyword">var</span> h1 = Math.cos(angle3)
+                                <span class="keyword">var</span> h2 = Math.cos(angle4)
+
+                                <span class="comment">// a   b  -&gt; ax1 * r1, ay1 * r1, h1   -&gt; ax2 * r1, ay2 * r1, h1</span>
+                                <span class="comment">// d   c  -&gt; ax1 * r2, ay1 * r2, h2   -&gt; ax2 * r2, ay2 * r2, h2</span>
+                                <span class="keyword">var</span> ax = ax1 * r1, ay = ay1 * r1, az = h1
+                                <span class="keyword">var</span> bx = ax2 * r1, by = ay2 * r1, bz = h1
+                                <span class="keyword">var</span> dx = ax1 * r2, dy = ay1 * r2, dz = h2
+                                <span class="keyword">var</span> cx = ax2 * r2, cy = ay2 * r2, cz = h2
+
+                                v1n1t1(ax*R,ay*R,az*R,ax,ay,az,tx1,ty1); v2n2t2(bx*R,by*R,bz*R,bx,by,bz,tx2,ty1); v3n3t3(cx*R,cy*R,cz*R,cx,cy,cz,tx2,ty2)
+                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+
+                                v1n1t1(ax*R,ay*R,az*R,ax,ay,az,tx1,ty1); v2n2t2(cx*R,cy*R,cz*R,cx,cy,cz,tx2,ty2); v3n3t3(dx*R,dy*R,dz*R,dx,dy,dz,tx1,ty2)
+                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                         }
                 }
         }
@@ -1039,56 +1022,53 @@ define(<span class="keyword">function</span>(require, exports){
         <span class="keyword">function</span> <span class="function">B3</span>(t) { <span class="keyword">return</span> <span class="integer">3</span> * t * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
         <span class="keyword">function</span> <span class="function">B4</span>(t) { <span class="keyword">return</span> (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
 
-        <span class="keyword">function</span> <span class="function">getBezier</span>(percent,C1,C2,C3,C4) {                
-                <span class="keyword">var</span> pos = vec3();
-                
-                <span class="keyword">var</span> b1 = B1(percent);
-                <span class="keyword">var</span> b2 = B2(percent);
-                <span class="keyword">var</span> b3 = B3(percent);
-                <span class="keyword">var</span> b4 = B4(percent);
-                
-                pos[<span class="integer">0</span>] = C1[<span class="integer">0</span>] * b1 + C2[<span class="integer">0</span>] * b2 + C3[<span class="integer">0</span>] * b3 + C4[<span class="integer">0</span>] * b4;
-                pos[<span class="integer">1</span>] = C1[<span class="integer">1</span>] * b1 + C2[<span class="integer">1</span>] * b2 + C3[<span class="integer">1</span>] * b3 + C4[<span class="integer">1</span>] * b4;
-                pos[<span class="integer">2</span>] = C1[<span class="integer">2</span>] * b1 + C2[<span class="integer">2</span>] * b2 + C3[<span class="integer">2</span>] * b3 + C4[<span class="integer">2</span>] * b4;
+        <span class="keyword">function</span> <span class="function">getBezier</span>(percent,C1,C2,C3,C4) {
+                <span class="keyword">var</span> pos = vec3()
 
-                <span class="keyword">return</span> pos;
+                <span class="keyword">var</span> b1 = B1(percent)
+                <span class="keyword">var</span> b2 = B2(percent)
+                <span class="keyword">var</span> b3 = B3(percent)
+                <span class="keyword">var</span> b4 = B4(percent)
+
+                pos[<span class="integer">0</span>] = C1[<span class="integer">0</span>] * b1 + C2[<span class="integer">0</span>] * b2 + C3[<span class="integer">0</span>] * b3 + C4[<span class="integer">0</span>] * b4
+                pos[<span class="integer">1</span>] = C1[<span class="integer">1</span>] * b1 + C2[<span class="integer">1</span>] * b2 + C3[<span class="integer">1</span>] * b3 + C4[<span class="integer">1</span>] * b4
+                pos[<span class="integer">2</span>] = C1[<span class="integer">2</span>] * b1 + C2[<span class="integer">2</span>] * b2 + C3[<span class="integer">2</span>] * b3 + C4[<span class="integer">2</span>] * b4
+
+                <span class="keyword">return</span> pos
         }
-        
+
         exports.<span class="function">createPlane</span> = <span class="keyword">function</span>(width, height, xdiv, ydiv, cb){
-                
-                <span class="keyword">var</span> ox = -width/<span class="integer">2</span>;
-                <span class="keyword">var</span> oy = -height/<span class="integer">2</span>;
-                <span class="keyword">var</span> ix = width / xdiv;
-                <span class="keyword">var</span> iy = height / ydiv;
-                <span class="keyword">var</span> tx = <span class="integer">1</span>/xdiv;
-                <span class="keyword">var</span> ty = <span class="integer">1</span>/ydiv;
-                <span class="keyword">for</span> (<span class="keyword">var</span> x = <span class="integer">0</span>;x&lt;xdiv;x++){
+
+                <span class="keyword">var</span> ox = -width/<span class="integer">2</span>
+                <span class="keyword">var</span> oy = -height/<span class="integer">2</span>
+                <span class="keyword">var</span> ix = width / xdiv
+                <span class="keyword">var</span> iy = height / ydiv
+                <span class="keyword">var</span> tx = <span class="integer">1</span>/xdiv
+                <span class="keyword">var</span> ty = <span class="integer">1</span>/ydiv
+                <span class="keyword">for</span> (<span class="keyword">var</span> x = <span class="integer">0</span>; x&lt;xdiv; x++){
                         <span class="keyword">for</span> (<span class="keyword">var</span> y = <span class="integer">0</span>; y &lt; ydiv; y++){
-                                
-                                <span class="keyword">var</span> ax = ox + (x + <span class="integer">0</span>) * ix;<span class="keyword">var</span> ay = oy + (y + <span class="integer">0</span>) * iy;
-                                <span class="keyword">var</span> bx = ox + (x + <span class="integer">1</span>) * ix;<span class="keyword">var</span> by = oy + (y + <span class="integer">0</span>) * iy;
-                                <span class="keyword">var</span> cx = ox + (x + <span class="integer">1</span>) * ix;<span class="keyword">var</span> cy = oy + (y + <span class="integer">1</span>) * iy;
-                                <span class="keyword">var</span> dx = ox + (x + <span class="integer">0</span>) * ix;<span class="keyword">var</span> dy = oy + (y + <span class="integer">1</span>) * iy;
-                                
-                                <span class="keyword">var</span> atx = tx * x; <span class="keyword">var</span> aty = ty * y;
-                                <span class="keyword">var</span> btx = tx * (x+<span class="integer">1</span>); <span class="keyword">var</span> bty = ty * y;
-                                <span class="keyword">var</span> ctx = tx * (x+<span class="integer">1</span>); <span class="keyword">var</span> cty = ty * (y+<span class="integer">1</span>);
-                                <span class="keyword">var</span> dtx = tx * x; <span class="keyword">var</span> dty = ty * (y+<span class="integer">1</span>);
-                                
-                                v1n1t1(ax,ay,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,atx,aty); v2n2t2(bx,by,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,btx,bty); v3n3t3(cx,cy,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,ctx,cty);                
-                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                                v1n1t1(ax,ay,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,atx,aty); v2n2t2(cx,cy,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,ctx,cty); v3n3t3(dx,dy,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,dtx,dty);
-                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                
-                
+
+                                <span class="keyword">var</span> ax = ox + (x + <span class="integer">0</span>) * ix;<span class="keyword">var</span> ay = oy + (y + <span class="integer">0</span>) * iy
+                                <span class="keyword">var</span> bx = ox + (x + <span class="integer">1</span>) * ix;<span class="keyword">var</span> by = oy + (y + <span class="integer">0</span>) * iy
+                                <span class="keyword">var</span> cx = ox + (x + <span class="integer">1</span>) * ix;<span class="keyword">var</span> cy = oy + (y + <span class="integer">1</span>) * iy
+                                <span class="keyword">var</span> dx = ox + (x + <span class="integer">0</span>) * ix;<span class="keyword">var</span> dy = oy + (y + <span class="integer">1</span>) * iy
+
+                                <span class="keyword">var</span> atx = tx * x; <span class="keyword">var</span> aty = ty * y
+                                <span class="keyword">var</span> btx = tx * (x+<span class="integer">1</span>); <span class="keyword">var</span> bty = ty * y
+                                <span class="keyword">var</span> ctx = tx * (x+<span class="integer">1</span>); <span class="keyword">var</span> cty = ty * (y+<span class="integer">1</span>)
+                                <span class="keyword">var</span> dtx = tx * x; <span class="keyword">var</span> dty = ty * (y+<span class="integer">1</span>)
+
+                                v1n1t1(ax,ay,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,atx,aty); v2n2t2(bx,by,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,btx,bty); v3n3t3(cx,cy,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,ctx,cty)
+                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                                v1n1t1(ax,ay,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,atx,aty); v2n2t2(cx,cy,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,ctx,cty); v3n3t3(dx,dy,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>,dtx,dty)
+                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                         }
                 }
-                
+
         }
 
-        
-        exports.<span class="function">createTeapot</span> = <span class="keyword">function</span> (radius, detail, cb){
 
+        exports.<span class="function">createTeapot</span> = <span class="keyword">function</span> (radius, detail, cb){
                 <span class="keyword">var</span> patchdata = [
     <span class="comment">/* rim */</span>          [<span class="integer">102</span>, <span class="integer">103</span>, <span class="integer">104</span>, <span class="integer">105</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>, <span class="integer">7</span>, <span class="integer">8</span>, <span class="integer">9</span>, <span class="integer">10</span>, <span class="integer">11</span>, <span class="integer">12</span>, <span class="integer">13</span>, <span class="integer">14</span>, <span class="integer">15</span>],
     <span class="comment">/* body */</span>         [<span class="integer">12</span>, <span class="integer">13</span>, <span class="integer">14</span>, <span class="integer">15</span>, <span class="integer">16</span>, <span class="integer">17</span>, <span class="integer">18</span>, <span class="integer">19</span>, <span class="integer">20</span>, <span class="integer">21</span>, <span class="integer">22</span>, <span class="integer">23</span>, <span class="integer">24</span>, <span class="integer">25</span>, <span class="integer">26</span>, <span class="integer">27</span>],
@@ -1100,24 +1080,23 @@ define(<span class="keyword">function</span>(require, exports){
                                 [<span class="integer">53</span>, <span class="integer">54</span>, <span class="integer">55</span>, <span class="integer">56</span>, <span class="integer">57</span>, <span class="integer">58</span>, <span class="integer">59</span>, <span class="integer">60</span>, <span class="integer">61</span>, <span class="integer">62</span>, <span class="integer">63</span>, <span class="integer">64</span>, <span class="integer">28</span>, <span class="integer">65</span>, <span class="integer">66</span>, <span class="integer">67</span>],
     <span class="comment">/* spout */</span> [<span class="integer">68</span>, <span class="integer">69</span>, <span class="integer">70</span>, <span class="integer">71</span>, <span class="integer">72</span>, <span class="integer">73</span>, <span class="integer">74</span>, <span class="integer">75</span>, <span class="integer">76</span>, <span class="integer">77</span>, <span class="integer">78</span>, <span class="integer">79</span>, <span class="integer">80</span>, <span class="integer">81</span>, <span class="integer">82</span>, <span class="integer">83</span>],
                                 [<span class="integer">80</span>, <span class="integer">81</span>, <span class="integer">82</span>, <span class="integer">83</span>, <span class="integer">84</span>, <span class="integer">85</span>, <span class="integer">86</span>, <span class="integer">87</span>, <span class="integer">88</span>, <span class="integer">89</span>, <span class="integer">90</span>, <span class="integer">91</span>, <span class="integer">92</span>, <span class="integer">93</span>, <span class="integer">94</span>, <span class="integer">95</span>]
-                        ];                        
+                        ]
 
-                <span class="keyword">var</span> controlpoints  =
-                [
-                        [<span class="float">0.2</span>, <span class="integer">0</span>, <span class="float">2.7</span>], 
-                        [<span class="float">0.2</span>, -<span class="float">0.112</span>, <span class="float">2.7</span>],         
-                        [<span class="float">0.112</span>, -<span class="float">0.2</span>, <span class="float">2.7</span>], 
-                        [<span class="integer">0</span>, -<span class="float">0.2</span>, <span class="float">2.7</span>], 
-                        [<span class="float">1.3375</span>, <span class="integer">0</span>, <span class="float">2.53125</span>], 
+                <span class="keyword">var</span> controlpoints = [
+                        [<span class="float">0.2</span>, <span class="integer">0</span>, <span class="float">2.7</span>],
+                        [<span class="float">0.2</span>, -<span class="float">0.112</span>, <span class="float">2.7</span>],
+                        [<span class="float">0.112</span>, -<span class="float">0.2</span>, <span class="float">2.7</span>],
+                        [<span class="integer">0</span>, -<span class="float">0.2</span>, <span class="float">2.7</span>],
+                        [<span class="float">1.3375</span>, <span class="integer">0</span>, <span class="float">2.53125</span>],
                         [<span class="float">1.3375</span>, -<span class="float">0.749</span>, <span class="float">2.53125</span>],
-                        [<span class="float">0.749</span>, -<span class="float">1.3375</span>, <span class="float">2.53125</span>], 
-                        [<span class="integer">0</span>, -<span class="float">1.3375</span>, <span class="float">2.53125</span>], 
-                        [<span class="float">1.4375</span>,  <span class="integer">0</span>, <span class="float">2.53125</span>], 
-                        [<span class="float">1.4375</span>, -<span class="float">0.805</span>, <span class="float">2.53125</span>], 
-                        [<span class="float">0.805</span>, -<span class="float">1.4375</span>, <span class="float">2.53125</span>], 
-                        [<span class="integer">0</span>, -<span class="float">1.4375</span>, <span class="float">2.53125</span>], 
-                        [<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">2.4</span>], 
-                        [<span class="float">1.5</span>, -<span class="float">0.84</span>, <span class="float">2.4</span>], 
+                        [<span class="float">0.749</span>, -<span class="float">1.3375</span>, <span class="float">2.53125</span>],
+                        [<span class="integer">0</span>, -<span class="float">1.3375</span>, <span class="float">2.53125</span>],
+                        [<span class="float">1.4375</span>,  <span class="integer">0</span>, <span class="float">2.53125</span>],
+                        [<span class="float">1.4375</span>, -<span class="float">0.805</span>, <span class="float">2.53125</span>],
+                        [<span class="float">0.805</span>, -<span class="float">1.4375</span>, <span class="float">2.53125</span>],
+                        [<span class="integer">0</span>, -<span class="float">1.4375</span>, <span class="float">2.53125</span>],
+                        [<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">2.4</span>],
+                        [<span class="float">1.5</span>, -<span class="float">0.84</span>, <span class="float">2.4</span>],
                         [<span class="float">0.84</span>, -<span class="float">1.5</span>, <span class="float">2.4</span>], [<span class="integer">0</span>, -<span class="float">1.5</span>, <span class="float">2.4</span>], [<span class="float">1.75</span>, <span class="integer">0</span>, <span class="float">1.875</span>],
                         [<span class="float">1.75</span>, -<span class="float">0.98</span>, <span class="float">1.875</span>], [<span class="float">0.98</span>, -<span class="float">1.75</span>, <span class="float">1.875</span>], [<span class="integer">0</span>, -<span class="float">1.75</span>, <span class="float">1.875</span>], [<span class="integer">2</span>, <span class="integer">0</span>, <span class="float">1.35</span>], [<span class="integer">2</span>, -<span class="float">1.12</span>, <span class="float">1.35</span>], [<span class="float">1.12</span>, -<span class="integer">2</span>, <span class="float">1.35</span>], [<span class="integer">0</span>, -<span class="integer">2</span>, <span class="float">1.35</span>], [<span class="integer">2</span>, <span class="integer">0</span>, <span class="float">0.9</span>], [<span class="integer">2</span>, -<span class="float">1.12</span>, <span class="float">0.9</span>], [<span class="float">1.12</span>, -<span class="integer">2</span>, <span class="float">0.9</span>], [<span class="integer">0</span>, -<span class="integer">2</span>, <span class="float">0.9</span>], [-<span class="integer">2</span>, <span class="integer">0</span>, <span class="float">0.9</span>], [<span class="integer">2</span>, <span class="integer">0</span>, <span class="float">0.45</span>], [<span class="integer">2</span>, -<span class="float">1.12</span>, <span class="float">0.45</span>], [<span class="float">1.12</span>, -<span class="integer">2</span>, <span class="float">0.45</span>], [<span class="integer">0</span>, -<span class="integer">2</span>, <span class="float">0.45</span>], [<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">0.225</span>], [<span class="float">1.5</span>, -<span class="float">0.84</span>, <span class="float">0.225</span>], [<span class="float">0.84</span>, -<span class="float">1.5</span>, <span class="float">0.225</span>], [<span class="integer">0</span>, -<span class="float">1.5</span>, <span class="float">0.225</span>], [<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">0.15</span>], [<span class="float">1.5</span>, -<span class="float">0.84</span>, <span class="float">0.15</span>], [<span class="float">0.84</span>, -<span class="float">1.5</span>, <span class="float">0.15</span>], [<span class="integer">0</span>,
     -<span class="float">1.5</span>, <span class="float">0.15</span>], [-<span class="float">1.6</span>, <span class="integer">0</span>, <span class="float">2.025</span>], [-<span class="float">1.6</span>, -<span class="float">0.3</span>, <span class="float">2.025</span>], [-<span class="float">1.5</span>,-<span class="float">0.3</span>, <span class="float">2.25</span>], [-<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">2.25</span>], [-<span class="float">2.3</span>, <span class="integer">0</span>, <span class="float">2.025</span>], [-<span class="float">2.3</span>, -<span class="float">0.3</span>, <span class="float">2.025</span>], [-<span class="float">2.5</span>, -<span class="float">0.3</span>, <span class="float">2.25</span>], [-<span class="float">2.5</span>, <span class="integer">0</span>, <span class="float">2.25</span>], [-<span class="float">2.7</span>, <span class="integer">0</span>, <span class="float">2.025</span>], [-<span class="float">2.7</span>, -<span class="float">0.3</span>, <span class="float">2.025</span>], [-<span class="integer">3</span>, -<span class="float">0.3</span>, <span class="float">2.25</span>], [-<span class="integer">3</span>, <span class="integer">0</span>, <span class="float">2.25</span>], [-<span class="float">2.7</span>, <span class="integer">0</span>, <span class="float">1.8</span>], [-<span class="float">2.7</span>, -<span class="float">0.3</span>, <span class="float">1.8</span>], [-<span class="integer">3</span>, -<span class="float">0.3</span>, <span class="float">1.8</span>],
@@ -1133,112 +1112,108 @@ define(<span class="keyword">function</span>(require, exports){
     -<span class="float">0.784</span>, <span class="float">2.4</span>], [<span class="float">0.784</span>, -<span class="float">1.4</span>, <span class="float">2.4</span>], [<span class="integer">0</span>, -<span class="float">1.4</span>, <span class="float">2.4</span>], [<span class="float">0.4</span>, <span class="integer">0</span>,
     <span class="float">2.55</span>], [<span class="float">0.4</span>, -<span class="float">0.224</span>, <span class="float">2.55</span>], [<span class="float">0.224</span>, -<span class="float">0.4</span>, <span class="float">2.55</span>], [<span class="integer">0</span>, -<span class="float">0.4</span>,
     <span class="float">2.55</span>], [<span class="float">1.3</span>, <span class="integer">0</span>, <span class="float">2.55</span>], [<span class="float">1.3</span>, -<span class="float">0.728</span>, <span class="float">2.55</span>], [<span class="float">0.728</span>, -<span class="float">1.3</span>,
-    <span class="float">2.55</span>], [<span class="integer">0</span>, -<span class="float">1.3</span>, <span class="float">2.55</span>], [<span class="float">1.3</span>, <span class="integer">0</span>, <span class="float">2.4</span>], [<span class="float">1.3</span>, -<span class="float">0.728</span>, <span class="float">2.4</span>],[<span class="float">0.728</span>, -<span class="float">1.3</span>, <span class="float">2.4</span>], [<span class="integer">0</span>, -<span class="float">1.3</span>, <span class="float">2.4</span>], [<span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">0</span>], [<span class="float">1.425</span>,-<span class="float">0.798</span>, <span class="integer">0</span>], [<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">0.075</span>], [<span class="float">1.425</span>, <span class="integer">0</span>, <span class="integer">0</span>], [<span class="float">0.798</span>, -<span class="float">1.425</span>,<span class="integer">0</span>], [<span class="integer">0</span>, -<span class="float">1.5</span>, <span class="float">0.075</span>], [<span class="integer">0</span>, -<span class="float">1.425</span>, <span class="integer">0</span>], [<span class="float">1.5</span>, -<span class="float">0.84</span>, <span class="float">0.075</span>],[<span class="float">0.84</span>, -<span class="float">1.5</span>, <span class="float">0.075</span>]];
-                
-                <span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="integer">0</span>;i&lt;<span class="integer">10</span>;i++){
-                        <span class="keyword">var</span> patch = patchdata[i];
+    <span class="float">2.55</span>], [<span class="integer">0</span>, -<span class="float">1.3</span>, <span class="float">2.55</span>], [<span class="float">1.3</span>, <span class="integer">0</span>, <span class="float">2.4</span>], [<span class="float">1.3</span>, -<span class="float">0.728</span>, <span class="float">2.4</span>],[<span class="float">0.728</span>, -<span class="float">1.3</span>, <span class="float">2.4</span>], [<span class="integer">0</span>, -<span class="float">1.3</span>, <span class="float">2.4</span>], [<span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">0</span>], [<span class="float">1.425</span>,-<span class="float">0.798</span>, <span class="integer">0</span>], [<span class="float">1.5</span>, <span class="integer">0</span>, <span class="float">0.075</span>], [<span class="float">1.425</span>, <span class="integer">0</span>, <span class="integer">0</span>], [<span class="float">0.798</span>, -<span class="float">1.425</span>,<span class="integer">0</span>], [<span class="integer">0</span>, -<span class="float">1.5</span>, <span class="float">0.075</span>], [<span class="integer">0</span>, -<span class="float">1.425</span>, <span class="integer">0</span>], [<span class="float">1.5</span>, -<span class="float">0.84</span>, <span class="float">0.075</span>],[<span class="float">0.84</span>, -<span class="float">1.5</span>, <span class="float">0.075</span>]]
+
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="integer">10</span>; i++){
+                        <span class="keyword">var</span> patch = patchdata[i]
                         <span class="keyword">var</span> pcontrol = []
-                        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;<span class="integer">16</span>;j++) {
-                                <span class="keyword">var</span> cp = controlpoints[patch[j]];
-                                pcontrol.push(vec3.mulfloat(vec3(cp[<span class="integer">0</span>], cp[<span class="integer">1</span>], cp[<span class="integer">2</span>]), radius));
+                        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; <span class="integer">16</span>; j++) {
+                                <span class="keyword">var</span> cp = controlpoints[patch[j]]
+                                pcontrol.push(vec3.mulfloat(vec3(cp[<span class="integer">0</span>], cp[<span class="integer">1</span>], cp[<span class="integer">2</span>]), radius))
                         }
-                        
-                        <span class="comment">//var detail = 10;</span>
-                        <span class="keyword">var</span> ndetail = -<span class="float">0.01</span>/detail;
-                        
-                        <span class="keyword">for</span> (<span class="keyword">var</span> j =<span class="integer">0</span> ;j&lt;detail;j++) {
-                                <span class="keyword">var</span> p1 = j/detail;
-                                <span class="keyword">var</span> p2 = (j+<span class="integer">1</span>)/detail;
+
+                        <span class="comment">//var detail = 10</span>
+                        <span class="keyword">var</span> ndetail = -<span class="float">0.01</span> / detail
+
+                        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; detail; j++) {
+                                <span class="keyword">var</span> p1 = j / detail
+                                <span class="keyword">var</span> p2 = (j + <span class="integer">1</span>) / detail
                                 <span class="keyword">var</span> p1n = p1 + ndetail
                                 <span class="keyword">var</span> p2n = p2 + ndetail
-                                
-                                <span class="keyword">var</span> P1a = getBezier(p1, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>]);
-                                <span class="keyword">var</span> P2a = getBezier(p1, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>]);
-                                <span class="keyword">var</span> P3a = getBezier(p1, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>]);
-                                <span class="keyword">var</span> P4a = getBezier(p1, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>]);
 
-                                <span class="keyword">var</span> P1an = getBezier(p1n, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>]);
-                                <span class="keyword">var</span> P2an = getBezier(p1n, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>]);
-                                <span class="keyword">var</span> P3an = getBezier(p1n, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>]);
-                                <span class="keyword">var</span> P4an = getBezier(p1n, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>]);
+                                <span class="keyword">var</span> P1a = getBezier(p1, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>])
+                                <span class="keyword">var</span> P2a = getBezier(p1, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>])
+                                <span class="keyword">var</span> P3a = getBezier(p1, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>])
+                                <span class="keyword">var</span> P4a = getBezier(p1, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>])
 
-                                <span class="keyword">var</span> P1b = getBezier(p2, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>]);
-                                <span class="keyword">var</span> P2b = getBezier(p2, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>]);
-                                <span class="keyword">var</span> P3b = getBezier(p2, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>]);
-                                <span class="keyword">var</span> P4b = getBezier(p2, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>]);
-                
-                                <span class="keyword">var</span> P1bn = getBezier(p2n, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>]);
-                                <span class="keyword">var</span> P2bn = getBezier(p2n, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>]);
-                                <span class="keyword">var</span> P3bn = getBezier(p2n, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>]);
-                                <span class="keyword">var</span> P4bn = getBezier(p2n, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>]);
+                                <span class="keyword">var</span> P1an = getBezier(p1n, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>])
+                                <span class="keyword">var</span> P2an = getBezier(p1n, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>])
+                                <span class="keyword">var</span> P3an = getBezier(p1n, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>])
+                                <span class="keyword">var</span> P4an = getBezier(p1n, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>])
 
-                                <span class="keyword">for</span> (<span class="keyword">var</span> k =<span class="integer">0</span> ;k&lt;detail;k++)
-                                {
-                                        <span class="keyword">var</span> q1 = k/detail;
-                                        <span class="keyword">var</span> q2 = (k+<span class="integer">1</span>)/detail;
+                                <span class="keyword">var</span> P1b = getBezier(p2, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>])
+                                <span class="keyword">var</span> P2b = getBezier(p2, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>])
+                                <span class="keyword">var</span> P3b = getBezier(p2, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>])
+                                <span class="keyword">var</span> P4b = getBezier(p2, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>])
+
+                                <span class="keyword">var</span> P1bn = getBezier(p2n, pcontrol[<span class="integer">0</span>], pcontrol[<span class="integer">1</span>], pcontrol[<span class="integer">2</span>], pcontrol[<span class="integer">3</span>])
+                                <span class="keyword">var</span> P2bn = getBezier(p2n, pcontrol[<span class="integer">4</span>], pcontrol[<span class="integer">5</span>], pcontrol[<span class="integer">6</span>], pcontrol[<span class="integer">7</span>])
+                                <span class="keyword">var</span> P3bn = getBezier(p2n, pcontrol[<span class="integer">8</span>], pcontrol[<span class="integer">9</span>], pcontrol[<span class="integer">10</span>], pcontrol[<span class="integer">11</span>])
+                                <span class="keyword">var</span> P4bn = getBezier(p2n, pcontrol[<span class="integer">12</span>], pcontrol[<span class="integer">13</span>], pcontrol[<span class="integer">14</span>], pcontrol[<span class="integer">15</span>])
+
+                                <span class="keyword">for</span> (<span class="keyword">var</span> k = <span class="integer">0</span>; k &lt; detail; k++) {
+
+                                        <span class="keyword">var</span> q1 = k / detail
+                                        <span class="keyword">var</span> q2 = (k + <span class="integer">1</span>) / detail
                                         <span class="keyword">var</span> q1n = q1 + ndetail
                                         <span class="keyword">var</span> q2n = q2 + ndetail
-                                        
-                                        <span class="keyword">var</span> AA = getBezier(q1, P1a, P2a, P3a, P4a);
-                                        <span class="keyword">var</span> AAn1 = getBezier(q1n, P1a, P2a, P3a, P4a);
-                                        <span class="keyword">var</span> AAn2 = getBezier(q1, P1an, P2an, P3an, P4an);
 
-                                        <span class="keyword">var</span> BB = getBezier(q2, P1a, P2a, P3a, P4a);
-                                        <span class="keyword">var</span> BBn1 = getBezier(q2n, P1a, P2a, P3a, P4a);
-                                        <span class="keyword">var</span> BBn2 = getBezier(q2, P1an, P2an, P3an, P4an);
+                                        <span class="keyword">var</span> AA = getBezier(q1, P1a, P2a, P3a, P4a)
+                                        <span class="keyword">var</span> AAn1 = getBezier(q1n, P1a, P2a, P3a, P4a)
+                                        <span class="keyword">var</span> AAn2 = getBezier(q1, P1an, P2an, P3an, P4an)
 
-                                        <span class="keyword">var</span> CC = getBezier(q2, P1b, P2b, P3b, P4b);
-                                        <span class="keyword">var</span> CCn1 = getBezier(q2n, P1b, P2b, P3b, P4b);
-                                        <span class="keyword">var</span> CCn2 = getBezier(q2, P1bn, P2bn, P3bn, P4bn);
+                                        <span class="keyword">var</span> BB = getBezier(q2, P1a, P2a, P3a, P4a)
+                                        <span class="keyword">var</span> BBn1 = getBezier(q2n, P1a, P2a, P3a, P4a)
+                                        <span class="keyword">var</span> BBn2 = getBezier(q2, P1an, P2an, P3an, P4an)
 
-                                        <span class="keyword">var</span> DD = getBezier(q1, P1b, P2b, P3b, P4b);
-                                        <span class="keyword">var</span> DDn1 = getBezier(q1n, P1b, P2b, P3b, P4b);
-                                        <span class="keyword">var</span> DDn2 = getBezier(q1, P1bn, P2bn, P3bn, P4bn);
+                                        <span class="keyword">var</span> CC = getBezier(q2, P1b, P2b, P3b, P4b)
+                                        <span class="keyword">var</span> CCn1 = getBezier(q2n, P1b, P2b, P3b, P4b)
+                                        <span class="keyword">var</span> CCn2 = getBezier(q2, P1bn, P2bn, P3bn, P4bn)
+
+                                        <span class="keyword">var</span> DD = getBezier(q1, P1b, P2b, P3b, P4b)
+                                        <span class="keyword">var</span> DDn1 = getBezier(q1n, P1b, P2b, P3b, P4b)
+                                        <span class="keyword">var</span> DDn2 = getBezier(q1, P1bn, P2bn, P3bn, P4bn)
 
                                         <span class="keyword">function</span> <span class="function">calcnormal</span>(a,b,c){
-                                                <span class="keyword">var</span> _ab = vec3.sub(a,b);
-                                                <span class="keyword">var</span> _cb = vec3.sub(c,b);
-                                                <span class="keyword">return</span> vec3.normalize(vec3.cross(_ab,_cb));
+                                                <span class="keyword">var</span> _ab = vec3.sub(a,b)
+                                                <span class="keyword">var</span> _cb = vec3.sub(c,b)
+                                                <span class="keyword">return</span> vec3.normalize(vec3.cross(_ab,_cb))
                                         }
-                                        
+
                                         <span class="keyword">var</span> normA = calcnormal(AA,AAn1, AAn2)
                                         <span class="keyword">var</span> normB = calcnormal(BB,BBn1, BBn2)
                                         <span class="keyword">var</span> normC = calcnormal(CC,CCn1, CCn2)
                                         <span class="keyword">var</span> normD = calcnormal(DD,DDn1, DDn2)
-                                        
-                                        
-                                        v1n1t1(AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(BB[<span class="integer">0</span>],BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],normB[<span class="integer">0</span>],normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(CC[<span class="integer">0</span>],CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2);                
-                                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                                        v1n1t1(AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(CC[<span class="integer">0</span>],CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(DD[<span class="integer">0</span>],DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],normD[<span class="integer">0</span>],normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2);
-                                        cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
 
+                                        v1n1t1(AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(BB[<span class="integer">0</span>],BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],normB[<span class="integer">0</span>],normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(CC[<span class="integer">0</span>],CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2)
+                                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                                        v1n1t1(AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(CC[<span class="integer">0</span>],CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(DD[<span class="integer">0</span>],DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],normD[<span class="integer">0</span>],normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2)
+                                        cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
 
-                                        v1n1t1(AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(BB[<span class="integer">0</span>],-BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],normB[<span class="integer">0</span>],-normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2);                
-                                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                                        v1n1t1(AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(DD[<span class="integer">0</span>],-DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],normD[<span class="integer">0</span>],-normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2);
-                                        cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                                        v1n1t1(AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(BB[<span class="integer">0</span>],-BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],normB[<span class="integer">0</span>],-normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2)
+                                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                                        v1n1t1(AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(DD[<span class="integer">0</span>],-DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],normD[<span class="integer">0</span>],-normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2)
+                                        cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
 
-                                        <span class="keyword">if</span> (i&lt;<span class="integer">6</span>){
-                                                
-                                                v1n1t1(-AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-BB[<span class="integer">0</span>],BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],-normB[<span class="integer">0</span>],normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(-CC[<span class="integer">0</span>],CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2);                
-                                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                                                v1n1t1(-AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-CC[<span class="integer">0</span>],CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(-DD[<span class="integer">0</span>],DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],-normD[<span class="integer">0</span>],normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2);
-                                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                                        <span class="keyword">if</span> (i &lt; <span class="integer">6</span>){
+                                                v1n1t1(-AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-BB[<span class="integer">0</span>],BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],-normB[<span class="integer">0</span>],normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(-CC[<span class="integer">0</span>],CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2)
+                                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                                                v1n1t1(-AA[<span class="integer">0</span>],AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-CC[<span class="integer">0</span>],CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(-DD[<span class="integer">0</span>],DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],-normD[<span class="integer">0</span>],normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2)
+                                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
 
-
-                                                v1n1t1(-AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-BB[<span class="integer">0</span>],-BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],-normB[<span class="integer">0</span>],-normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(-CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2);                
-                                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                                                v1n1t1(-AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(-DD[<span class="integer">0</span>],-DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],-normD[<span class="integer">0</span>],-normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2);
-                                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                                                v1n1t1(-AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-BB[<span class="integer">0</span>],-BB[<span class="integer">1</span>],BB[<span class="integer">2</span>],-normB[<span class="integer">0</span>],-normB[<span class="integer">1</span>],normB[<span class="integer">2</span>],q2,p1); v3n3t3(-CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>], CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2)
+                                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
+                                                v1n1t1(-AA[<span class="integer">0</span>],-AA[<span class="integer">1</span>],AA[<span class="integer">2</span>],-normA[<span class="integer">0</span>],-normA[<span class="integer">1</span>],normA[<span class="integer">2</span>],q1,p1); v2n2t2(-CC[<span class="integer">0</span>],-CC[<span class="integer">1</span>],CC[<span class="integer">2</span>],-normC[<span class="integer">0</span>],-normC[<span class="integer">1</span>],normC[<span class="integer">2</span>],q2,p2); v3n3t3(-DD[<span class="integer">0</span>],-DD[<span class="integer">1</span>],DD[<span class="integer">2</span>],-normD[<span class="integer">0</span>],-normD[<span class="integer">1</span>],normD[<span class="integer">2</span>],q1,p2)
+                                                cb(<span class="integer">1</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>)
                                         }
-                                        
-                                        }
+                                }
                         }
-                        
-                        
+
+
                 }
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -201,6 +201,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n47" name="n47">47</a>
 <a href="#n48" name="n48">48</a>
 <a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayEvery = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayEvery</span><span class="delimiter">'</span></span>),
     baseEvery = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseEvery</span><span class="delimiter">'</span></span>),
@@ -215,19 +218,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Collection
  * @param {Array|Object} collection The collection to iterate over.
- * @param {Function|Object|string} [predicate=_.identity] The function invoked per iteration.
- * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
- * @returns {boolean} Returns `true` if all elements pass the predicate check, else `false`.
+ * @param {Array|Function|Object|string} [predicate=_.identity]
+ *  The function invoked per iteration.
+ * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+ * @returns {boolean} Returns `true` if all elements pass the predicate check,
+ *  else `false`.
  * @example
  *
  * _.every([true, 1, null, 'yes'], Boolean);
  * // =&gt; false
  *
  * var users = [
- *   { 'user': 'barney', 'active': false },
- *   { 'user': 'fred',   'active': false }
+ *   { 'user': 'barney', 'age': 36, 'active': false },
+ *   { 'user': 'fred',   'age': 40, 'active': false }
  * ];
  *
  * // The `_.matches` iteratee shorthand.

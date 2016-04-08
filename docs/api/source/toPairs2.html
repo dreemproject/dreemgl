@@ -181,16 +181,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseToPairs = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseToPairs</span><span class="delimiter">'</span></span>),
     keys = require(<span class="string"><span class="delimiter">'</span><span class="content">./keys</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Creates an array of own enumerable key-value pairs for `object` which
- * can be consumed by `_.fromPairs`.
+ * Creates an array of own enumerable string keyed-value pairs for `object`
+ * which can be consumed by `_.fromPairs`.
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
+ * @alias entries
  * @category Object
  * @param {Object} object The object to query.
  * @returns {Array} Returns the new array of key-value pairs.

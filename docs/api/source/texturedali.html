@@ -575,20 +575,40 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n421" name="n421">421</a>
 <a href="#n422" name="n422">422</a>
 <a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
+<a href="#n444" name="n444">444</a>
+<a href="#n445" name="n445">445</a>
+<a href="#n446" name="n446">446</a>
+<a href="#n447" name="n447">447</a>
+<a href="#n448" name="n448">448</a>
+<a href="#n449" name="n449">449</a>
+<strong><a href="#n450" name="n450">450</a></strong>
+<a href="#n451" name="n451">451</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
-
-
-<span class="comment">// &quot;Image&quot;-like class for Dali. Dali expects to load the images so retain a</span>
-<span class="comment">// path to the file. Texture.Image is another name for this class.</span>
-<span class="keyword">function</span> <span class="function">DaliImage</span>(path) 
-{
-        <span class="local-variable">this</span>.path = path;
-}
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports){
@@ -598,7 +618,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> Texture = exports
 
         Texture.GlobalId = <span class="integer">0</span>
-        Texture.Image = DaliImage;
+
+        Texture.<span class="function">Image</span> = <span class="keyword">function</span>(path) {
+                <span class="comment">//console.log('setting path to ', path);</span>
+                <span class="local-variable">this</span>.path = path;
+        }
 
         <span class="comment">// Map hash of texture to an existing texture</span>
         Texture.Cache = {};
@@ -631,6 +655,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: path});
 
                 <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.getWidth(), img.getHeight())
+                tex.path = path;
                 tex.image = img
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
@@ -642,10 +667,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
 
         <span class="comment">// Load texture from a local file or remote url.</span>
-        <span class="comment">// imagedata is an instance of DaliImage.</span>
+        <span class="comment">// If imagedata is a texture, it is returned immediately.</span>
         <span class="comment">// If the image is loaded remotely, the callback function is called when</span>
         <span class="comment">// the texture is loaded.</span>
         Texture.<span class="function">fromImage</span> = <span class="keyword">function</span>(imagedata, callback){
+                <span class="comment">// Return immediately if a texture was specified</span>
+                <span class="keyword">if</span> (imagedata.image || imagedata.array)
+                        <span class="keyword">return</span> imagedata;
+
                 <span class="keyword">var</span> dali = DaliApi.dali;                
 
                 <span class="comment">// With dali, the references should either be absolute, or relative</span>
@@ -968,6 +997,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
+        <span class="local-variable">this</span>.<span class="function">samplemip</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, v, {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
         <span class="local-variable">this</span>.<span class="function">flipped2</span> = <span class="keyword">function</span>(x,y){ <span class="keyword">return</span> flipped(vec2(x,y)) }
         <span class="local-variable">this</span>.<span class="function">flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {
@@ -991,6 +1029,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">point_flipped2</span> = <span class="keyword">function</span>(x, y){ <span class="keyword">return</span> point_flipped(vec2(x, y)) }
         <span class="local-variable">this</span>.<span class="function">point_flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
+        <span class="local-variable">this</span>.<span class="function">array1d</span> = <span class="keyword">function</span>(index){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(mod(index, <span class="local-variable">this</span>.size.x), floor(index / <span class="local-variable">this</span>.size.x)), {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
+        <span class="local-variable">this</span>.<span class="function">array2d</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x * <span class="local-variable">this</span>.size.x, v.y * <span class="local-variable">this</span>.size.y), {
                         <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,

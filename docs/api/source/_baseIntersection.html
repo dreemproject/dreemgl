@@ -220,6 +220,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n66" name="n66">66</a>
 <a href="#n67" name="n67">67</a>
 <a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> SetCache = require(<span class="string"><span class="delimiter">'</span><span class="content">./_SetCache</span><span class="delimiter">'</span></span>),
     arrayIncludes = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayIncludes</span><span class="delimiter">'</span></span>),
@@ -227,6 +232,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
     baseUnary = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseUnary</span><span class="delimiter">'</span></span>),
     cacheHas = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cacheHas</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/* Built-in method references for those with the same name as other `lodash` methods. */</span>
+<span class="keyword">var</span> nativeMin = Math.min;
 
 <span class="comment">/**
  * The base implementation of methods like `_.intersection`, without support
@@ -240,9 +248,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">baseIntersection</span>(arrays, iteratee, comparator) {
   <span class="keyword">var</span> includes = comparator ? arrayIncludesWith : arrayIncludes,
+      length = arrays[<span class="integer">0</span>].length,
       othLength = arrays.length,
       othIndex = othLength,
       caches = Array(othLength),
+      maxLength = <span class="predefined-constant">Infinity</span>,
       result = [];
 
   <span class="keyword">while</span> (othIndex--) {
@@ -250,18 +260,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     <span class="keyword">if</span> (othIndex &amp;&amp; iteratee) {
       array = arrayMap(array, baseUnary(iteratee));
     }
-    caches[othIndex] = !comparator &amp;&amp; (iteratee || array.length &gt;= <span class="integer">120</span>)
+    maxLength = nativeMin(array.length, maxLength);
+    caches[othIndex] = !comparator &amp;&amp; (iteratee || (length &gt;= <span class="integer">120</span> &amp;&amp; array.length &gt;= <span class="integer">120</span>))
       ? <span class="keyword">new</span> SetCache(othIndex &amp;&amp; array)
       : <span class="predefined-constant">undefined</span>;
   }
   array = arrays[<span class="integer">0</span>];
 
   <span class="keyword">var</span> index = -<span class="integer">1</span>,
-      length = array.length,
       seen = caches[<span class="integer">0</span>];
 
   outer:
-  <span class="keyword">while</span> (++index &lt; length) {
+  <span class="keyword">while</span> (++index &lt; length &amp;&amp; result.length &lt; maxLength) {
     <span class="keyword">var</span> value = array[index],
         computed = iteratee ? iteratee(value) : value;
 
@@ -269,7 +279,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
           ? cacheHas(seen, computed)
           : includes(result, computed, comparator)
         )) {
-      <span class="keyword">var</span> othIndex = othLength;
+      othIndex = othLength;
       <span class="keyword">while</span> (--othIndex) {
         <span class="keyword">var</span> cache = caches[othIndex];
         <span class="keyword">if</span> (!(cache

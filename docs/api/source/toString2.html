@@ -198,6 +198,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
 <a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> Symbol = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Symbol</span><span class="delimiter">'</span></span>),
     isSymbol = require(<span class="string"><span class="delimiter">'</span><span class="content">./isSymbol</span><span class="delimiter">'</span></span>);
@@ -207,7 +208,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="comment">/** Used to convert symbols to primitives and strings. */</span>
 <span class="keyword">var</span> symbolProto = Symbol ? Symbol.prototype : <span class="predefined-constant">undefined</span>,
-    symbolToString = Symbol ? symbolProto.toString : <span class="predefined-constant">undefined</span>;
+    symbolToString = symbolProto ? symbolProto.toString : <span class="predefined-constant">undefined</span>;
 
 <span class="comment">/**
  * Converts `value` to a string if it's not one. An empty string is returned
@@ -215,6 +216,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Lang
  * @param {*} value The value to process.
  * @returns {string} Returns the string.
@@ -238,7 +240,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
   }
   <span class="keyword">if</span> (isSymbol(value)) {
-    <span class="keyword">return</span> Symbol ? symbolToString.call(value) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
+    <span class="keyword">return</span> symbolToString ? symbolToString.call(value) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
   }
   <span class="keyword">var</span> result = (value + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
   <span class="keyword">return</span> (result == <span class="string"><span class="delimiter">'</span><span class="content">0</span><span class="delimiter">'</span></span> &amp;&amp; (<span class="integer">1</span> / value) == -INFINITY) ? <span class="string"><span class="delimiter">'</span><span class="content">-0</span><span class="delimiter">'</span></span> : result;

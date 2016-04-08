@@ -235,6 +235,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n81" name="n81">81</a>
 <a href="#n82" name="n82">82</a>
 <a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> LodashWrapper = require(<span class="string"><span class="delimiter">'</span><span class="content">./_LodashWrapper</span><span class="delimiter">'</span></span>),
     baseFlatten = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseFlatten</span><span class="delimiter">'</span></span>),
@@ -244,17 +246,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     isLaziable = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isLaziable</span><span class="delimiter">'</span></span>),
     rest = require(<span class="string"><span class="delimiter">'</span><span class="content">./rest</span><span class="delimiter">'</span></span>);
 
-<span class="comment">/** Used to compose bitmasks for wrapper metadata. */</span>
-<span class="keyword">var</span> CURRY_FLAG = <span class="integer">8</span>,
-    PARTIAL_FLAG = <span class="integer">32</span>,
-    ARY_FLAG = <span class="integer">128</span>,
-    REARG_FLAG = <span class="integer">256</span>;
-
 <span class="comment">/** Used as the size to enable large array optimizations. */</span>
 <span class="keyword">var</span> LARGE_ARRAY_SIZE = <span class="integer">200</span>;
 
 <span class="comment">/** Used as the `TypeError` message for &quot;Functions&quot; methods. */</span>
 <span class="keyword">var</span> FUNC_ERROR_TEXT = <span class="string"><span class="delimiter">'</span><span class="content">Expected a function</span><span class="delimiter">'</span></span>;
+
+<span class="comment">/** Used to compose bitmasks for wrapper metadata. */</span>
+<span class="keyword">var</span> CURRY_FLAG = <span class="integer">8</span>,
+    PARTIAL_FLAG = <span class="integer">32</span>,
+    ARY_FLAG = <span class="integer">128</span>,
+    REARG_FLAG = <span class="integer">256</span>;
 
 <span class="comment">/**
  * Creates a `_.flow` or `_.flowRight` function.
@@ -296,7 +298,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
           ) {
         wrapper = wrapper[getFuncName(data[<span class="integer">0</span>])].apply(wrapper, data[<span class="integer">3</span>]);
       } <span class="keyword">else</span> {
-        wrapper = (func.length == <span class="integer">1</span> &amp;&amp; isLaziable(func)) ? wrapper[funcName]() : wrapper.thru(func);
+        wrapper = (func.length == <span class="integer">1</span> &amp;&amp; isLaziable(func))
+          ? wrapper[funcName]()
+          : wrapper.thru(func);
       }
     }
     <span class="keyword">return</span> <span class="keyword">function</span>() {

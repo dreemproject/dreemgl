@@ -1126,6 +1126,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n972" name="n972">972</a>
 <a href="#n973" name="n973">973</a>
 <a href="#n974" name="n974">974</a>
+<a href="#n975" name="n975">975</a>
+<a href="#n976" name="n976">976</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -1768,7 +1770,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="key">from</span>:w.from,
                                                         <span class="key">fromoutput</span>:w.output,
                                                         <span class="key">to</span>:node.name,
-                                                        <span class="key">toinput</span>:w.input
+                                                        <span class="key">toinput</span>:w.input,
+                                                        <span class="key">stripe</span>:!!(w.multi)
                                                 }))
                                         } <span class="keyword">else</span> {
                                                 <span class="comment">// console.log(&quot;Not rendering&quot;, w, &quot;for&quot;, node.name)</span>
@@ -1808,7 +1811,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="key">nodeprops</span>:node.propobj,
                                                 <span class="key">editables</span>:node.editables,
                                                 <span class="key">inputs</span>:node.inputs,
-                                                <span class="key">outputs</span>:node.outputs
+                                                <span class="key">outputs</span>:node.outputs,
+                                                <span class="key">showscreenbutton</span>:!!(fd.screen)
                                         })
                                 )
                         }

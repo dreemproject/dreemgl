@@ -178,21 +178,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> toString = require(<span class="string"><span class="delimiter">'</span><span class="content">./toString</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Converts `string`, as a whole, to lower case.
+ * Converts `string`, as a whole, to lower case just like
+ * [String#toLowerCase](https://mdn.io/toLowerCase).
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category String
  * @param {string} [string=''] The string to convert.
  * @returns {string} Returns the lower cased string.
  * @example
  *
- * _.toLower('--Foo-Bar');
- * // =&gt; '--foo-bar'
+ * _.toLower('--Foo-Bar--');
+ * // =&gt; '--foo-bar--'
  *
  * _.toLower('fooBar');
  * // =&gt; 'foobar'

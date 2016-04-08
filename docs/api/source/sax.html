@@ -1723,6 +1723,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1569" name="n1569">1569</a>
 <strong><a href="#n1570" name="n1570">1570</a></strong>
 <a href="#n1571" name="n1571">1571</a>
+<a href="#n1572" name="n1572">1572</a>
+<a href="#n1573" name="n1573">1573</a>
+<a href="#n1574" name="n1574">1574</a>
+<a href="#n1575" name="n1575">1575</a>
+<a href="#n1576" name="n1576">1576</a>
 </pre></td>
   <td class="code"><pre>;(<span class="keyword">function</span> (sax) { <span class="comment">// wrapper for non-node envs</span>
   sax.<span class="function">parser</span> = <span class="keyword">function</span> (strict, opt) { <span class="keyword">return</span> <span class="keyword">new</span> SAXParser(strict, opt) }
@@ -1753,6 +1758,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     <span class="string"><span class="delimiter">'</span><span class="content">sgmldeclaration</span><span class="delimiter">'</span></span>,
     <span class="string"><span class="delimiter">'</span><span class="content">doctype</span><span class="delimiter">'</span></span>,
     <span class="string"><span class="delimiter">'</span><span class="content">comment</span><span class="delimiter">'</span></span>,
+    <span class="string"><span class="delimiter">'</span><span class="content">opentagstart</span><span class="delimiter">'</span></span>,
     <span class="string"><span class="delimiter">'</span><span class="content">attribute</span><span class="delimiter">'</span></span>,
     <span class="string"><span class="delimiter">'</span><span class="content">opentag</span><span class="delimiter">'</span></span>,
     <span class="string"><span class="delimiter">'</span><span class="content">closetag</span><span class="delimiter">'</span></span>,
@@ -2429,6 +2435,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
       tag.ns = parent.ns
     }
     parser.attribList.length = <span class="integer">0</span>
+    emitNode(parser, <span class="string"><span class="delimiter">'</span><span class="content">onopentagstart</span><span class="delimiter">'</span></span>, tag)
   }
 
   <span class="keyword">function</span> <span class="function">qname</span> (name, attribute) {
@@ -2713,6 +2720,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     }
     <span class="keyword">if</span> (chunk === <span class="predefined-constant">null</span>) {
       <span class="keyword">return</span> end(parser)
+    }
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> chunk === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
+      chunk = chunk.toString()
     }
     <span class="keyword">var</span> i = <span class="integer">0</span>
     <span class="keyword">var</span> c = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>

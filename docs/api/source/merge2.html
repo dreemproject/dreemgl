@@ -189,15 +189,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseMerge = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseMerge</span><span class="delimiter">'</span></span>),
     createAssigner = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createAssigner</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Recursively merges own and inherited enumerable properties of source objects
- * into the destination object. Source properties that resolve to `undefined`
- * are skipped if a destination value exists. Array and plain object properties
- * are merged recursively. Other objects and value types are overridden by
+ * This method is like `_.assign` except that it recursively merges own and
+ * inherited enumerable string keyed properties of source objects into the
+ * destination object. Source properties that resolve to `undefined` are
+ * skipped if a destination value exists. Array and plain object properties
+ * are merged recursively.Other objects and value types are overridden by
  * assignment. Source objects are applied from left to right. Subsequent
  * sources overwrite property assignments of previous sources.
  *
@@ -205,6 +208,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.5.0
  * @category Object
  * @param {Object} object The destination object.
  * @param {...Object} [sources] The source objects.

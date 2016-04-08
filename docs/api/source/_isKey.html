@@ -176,8 +176,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n22" name="n22">22</a>
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>),
+    isSymbol = require(<span class="string"><span class="delimiter">'</span><span class="content">./isSymbol</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/** Used to match property names within property paths. */</span>
 <span class="keyword">var</span> reIsDeepProp = <span class="regexp"><span class="delimiter">/</span><span class="content">\.</span><span class="content">|</span><span class="content">\[</span><span class="content">(?:[^[</span><span class="content">\]</span><span class="content">]*|([&quot;'])(?:(?!</span><span class="char">\1</span><span class="content">)[^</span><span class="char">\\</span><span class="content">]|</span><span class="char">\\</span><span class="content">.)*?</span><span class="char">\1</span><span class="content">)</span><span class="content">\]</span><span class="delimiter">/</span></span>,
@@ -192,11 +195,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
  */</span>
 <span class="keyword">function</span> <span class="function">isKey</span>(value, object) {
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> value == <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>) {
+  <span class="keyword">var</span> type = <span class="keyword">typeof</span> value;
+  <span class="keyword">if</span> (type == <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> || type == <span class="string"><span class="delimiter">'</span><span class="content">symbol</span><span class="delimiter">'</span></span>) {
     <span class="keyword">return</span> <span class="predefined-constant">true</span>;
   }
   <span class="keyword">return</span> !isArray(value) &amp;&amp;
-    (reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+    (isSymbol(value) || reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
       (object != <span class="predefined-constant">null</span> &amp;&amp; value <span class="keyword">in</span> Object(object)));
 }
 

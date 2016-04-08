@@ -4597,7 +4597,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }
                                 <span class="keyword">if</span> (full_name <span class="keyword">instanceof</span> Array) full_name = full_name[<span class="integer">0</span>]
 
-                                <span class="keyword">if</span>(define.atRequire &amp;&amp; full_name.charAt(<span class="integer">0</span>) == <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>){
+                                <span class="keyword">if</span>(define.atRequire &amp;&amp; ((full_name.charAt(<span class="integer">0</span>) == <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) || (full_name.indexOf(<span class="string"><span class="delimiter">'</span><span class="char">\\</span><span class="delimiter">'</span></span>) &gt;= <span class="integer">0</span>)) ){
                                         define.atRequire(full_name)
                                 }
 
@@ -4606,7 +4606,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">if</span>(ext !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> &amp;&amp; ext !== <span class="string"><span class="delimiter">'</span><span class="content">js</span><span class="delimiter">'</span></span>){
                                         <span class="keyword">if</span>(ext === <span class="string"><span class="delimiter">'</span><span class="content">jpg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">jpeg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">gif</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">png</span><span class="delimiter">'</span></span>){
                                                 <span class="comment">// Construct a Texture.Image object given its path</span>
-                                                <span class="keyword">if</span>(define.loadImage) <span class="keyword">return</span> define.loadImage(name)
+                                                <span class="keyword">if</span>(define.loadImage) <span class="keyword">return</span> define.loadImage(full_name)
                                                 <span class="keyword">return</span> <span class="predefined-constant">undefined</span>
                                         }
                                         <span class="keyword">else</span>{

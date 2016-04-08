@@ -526,6 +526,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n372" name="n372">372</a>
 <a href="#n373" name="n373">373</a>
 <a href="#n374" name="n374">374</a>
+<a href="#n375" name="n375">375</a>
+<a href="#n376" name="n376">376</a>
+<a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
+<a href="#n382" name="n382">382</a>
+<a href="#n383" name="n383">383</a>
+<a href="#n384" name="n384">384</a>
+<a href="#n385" name="n385">385</a>
+<a href="#n386" name="n386">386</a>
+<a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -778,16 +794,32 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                         <span class="keyword">var</span> wire = key.value
                                                         <span class="keyword">var</span> str = wire.args[<span class="integer">0</span>].value
 
-                                                        <span class="keyword">if</span>(str.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc</span><span class="delimiter">'</span></span>) !== <span class="integer">0</span>) <span class="keyword">continue</span>
+                                                        <span class="keyword">var</span> containsrpc = str.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc</span><span class="delimiter">'</span></span>)
 
-                                                        <span class="keyword">var</span> parts = str.slice(<span class="integer">9</span>).split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
-                                                        <span class="keyword">if</span>(parts.length !== <span class="integer">2</span>) <span class="keyword">continue</span>
-                                                        <span class="keyword">if</span>(!output.wires) output.wires = []
-                                                        output.wires.push({
-                                                                <span class="key">from</span>:parts[<span class="integer">0</span>],
-                                                                <span class="key">output</span>:parts[<span class="integer">1</span>],
-                                                                <span class="key">input</span>:name
-                                                        })
+                                                        <span class="keyword">if</span> (containsrpc &gt; -<span class="integer">1</span>) {
+                                                                <span class="keyword">if</span>(!output.wires) output.wires = []
+
+                                                                <span class="keyword">var</span> parts = str.slice(<span class="integer">9</span>).split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
+                                                                <span class="keyword">if</span> (parts.length === <span class="integer">2</span>) {
+                                                                        output.wires.push({
+                                                                                <span class="key">from</span>:parts[<span class="integer">0</span>],
+                                                                                <span class="key">output</span>:parts[<span class="integer">1</span>],
+                                                                                <span class="key">input</span>:name
+                                                                        })
+                                                                } <span class="keyword">else</span> {
+                                                                        <span class="keyword">var</span> r = <span class="regexp"><span class="delimiter">/</span><span class="content">this</span><span class="content">\.</span><span class="content">rpc</span><span class="content">\.</span><span class="content">([a-zA-Z0-9]+)</span><span class="content">\.</span><span class="content">([a-zA-Z0-9]+)</span><span class="delimiter">/</span><span class="modifier">g</span></span>
+                                                                        <span class="keyword">var</span> m;
+                                                                        <span class="keyword">while</span> (m = r.exec(str)) {
+                                                                                <span class="keyword">if</span>(!output.wires) output.wires = []
+                                                                                output.wires.push({
+                                                                                        <span class="key">from</span>:m[<span class="integer">1</span>],
+                                                                                        <span class="key">output</span>:m[<span class="integer">2</span>],
+                                                                                        <span class="key">input</span>:name,
+                                                                                        <span class="key">multi</span>:<span class="predefined-constant">true</span>
+                                                                                })
+                                                                        }
+                                                                }
+                                                        }
                                                 }
                                         }
                                         <span class="keyword">continue</span>

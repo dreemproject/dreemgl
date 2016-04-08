@@ -190,18 +190,31 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseClone = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseClone</span><span class="delimiter">'</span></span>),
     baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * Creates a function that invokes `func` with the arguments of the created
- * function. If `func` is a property name the created callback returns the
- * property value for a given element. If `func` is an object the created
- * callback returns `true` for elements that contain the equivalent object
- * properties, otherwise it returns `false`.
+ * function. If `func` is a property name the created function returns the
+ * property value for a given element. If `func` is an array or object the
+ * created function returns `true` for elements that contain the equivalent
+ * source properties, otherwise it returns `false`.
  *
  * @static
+ * @since 4.0.0
  * @memberOf _
  * @category Util
  * @param {*} [func=_.identity] The value to convert to a callback.
@@ -209,20 +222,31 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @example
  *
  * var users = [
- *   { 'user': 'barney', 'age': 36 },
- *   { 'user': 'fred',   'age': 40 }
+ *   { 'user': 'barney', 'age': 36, 'active': true },
+ *   { 'user': 'fred',   'age': 40, 'active': false }
  * ];
  *
+ * // The `_.matches` iteratee shorthand.
+ * _.filter(users, _.iteratee({ 'user': 'barney', 'active': true }));
+ * // =&gt; [{ 'user': 'barney', 'age': 36, 'active': true }]
+ *
+ * // The `_.matchesProperty` iteratee shorthand.
+ * _.filter(users, _.iteratee(['user', 'fred']));
+ * // =&gt; [{ 'user': 'fred', 'age': 40 }]
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.map(users, _.iteratee('user'));
+ * // =&gt; ['barney', 'fred']
+ *
  * // Create custom iteratee shorthands.
- * _.iteratee = _.wrap(_.iteratee, function(callback, func) {
- *   var p = /^(\S+)\s*([&lt;&gt;])\s*(\S+)$/.exec(func);
- *   return !p ? callback(func) : function(object) {
- *     return (p[2] == '&gt;' ? object[p[1]] &gt; p[3] : object[p[1]] &lt; p[3]);
+ * _.iteratee = _.wrap(_.iteratee, function(iteratee, func) {
+ *   return !_.isRegExp(func) ? iteratee(func) : function(string) {
+ *     return func.test(string);
  *   };
  * });
  *
- * _.filter(users, 'age &gt; 36');
- * // =&gt; [{ 'user': 'fred', 'age': 40 }]
+ * _.filter(['abc', 'def'], /ef/);
+ * // =&gt; ['def']
  */</span>
 <span class="keyword">function</span> <span class="function">iteratee</span>(func) {
   <span class="keyword">return</span> baseIteratee(<span class="keyword">typeof</span> func == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? func : baseClone(func, <span class="predefined-constant">true</span>));

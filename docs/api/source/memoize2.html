@@ -223,6 +223,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
 <a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> MapCache = require(<span class="string"><span class="delimiter">'</span><span class="content">./_MapCache</span><span class="delimiter">'</span></span>);
 
@@ -238,11 +240,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * **Note:** The cache is exposed as the `cache` property on the memoized
  * function. Its creation may be customized by replacing the `_.memoize.Cache`
- * constructor with one whose instances implement the [`Map`](http://ecma-international.org/ecma-262/6.0/#sec-properties-of-the-map-prototype-object)
+ * constructor with one whose instances implement the
+ * [`Map`](http://ecma-international.org/ecma-262/6.0/#sec-properties-of-the-map-prototype-object)
  * method interface of `delete`, `get`, `has`, and `set`.
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Function
  * @param {Function} func The function to have its output memoized.
  * @param {Function} [resolver] The function to resolve the cache key.
@@ -287,7 +291,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     memoized.cache = cache.set(key, result);
     <span class="keyword">return</span> result;
   };
-  memoized.cache = <span class="keyword">new</span> memoize.Cache;
+  memoized.cache = <span class="keyword">new</span> (memoize.Cache || MapCache);
   <span class="keyword">return</span> memoized;
 }
 

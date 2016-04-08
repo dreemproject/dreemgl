@@ -187,11 +187,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayConcat = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayConcat</span><span class="delimiter">'</span></span>),
     baseFlatten = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseFlatten</span><span class="delimiter">'</span></span>),
-    isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>),
-    rest = require(<span class="string"><span class="delimiter">'</span><span class="content">./rest</span><span class="delimiter">'</span></span>);
+    castArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./castArray</span><span class="delimiter">'</span></span>),
+    copyArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyArray</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * Creates a new array concatenating `array` with any additional arrays
@@ -199,6 +206,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Array
  * @param {Array} array The array to concatenate.
  * @param {...*} [values] The values to concatenate.
@@ -214,13 +222,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * console.log(array);
  * // =&gt; [1]
  */</span>
-<span class="keyword">var</span> concat = rest(<span class="keyword">function</span>(array, values) {
-  <span class="keyword">if</span> (!isArray(array)) {
-    array = array == <span class="predefined-constant">null</span> ? [] : [Object(array)];
+<span class="keyword">function</span> <span class="function">concat</span>() {
+  <span class="keyword">var</span> length = <span class="local-variable">arguments</span>.length,
+      array = castArray(<span class="local-variable">arguments</span>[<span class="integer">0</span>]);
+
+  <span class="keyword">if</span> (length &lt; <span class="integer">2</span>) {
+    <span class="keyword">return</span> length ? copyArray(array) : [];
   }
-  values = baseFlatten(values, <span class="integer">1</span>);
-  <span class="keyword">return</span> arrayConcat(array, values);
-});
+  <span class="keyword">var</span> args = Array(length - <span class="integer">1</span>);
+  <span class="keyword">while</span> (length--) {
+    args[length - <span class="integer">1</span>] = <span class="local-variable">arguments</span>[length];
+  }
+  <span class="keyword">return</span> arrayConcat(array, baseFlatten(args, <span class="integer">1</span>));
+}
 
 module.exports = concat;
 </pre></td>

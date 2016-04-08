@@ -213,6 +213,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n59" name="n59">59</a>
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> apply = require(<span class="string"><span class="delimiter">'</span><span class="content">./_apply</span><span class="delimiter">'</span></span>),
     toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>);
@@ -225,12 +228,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="comment">/**
  * Creates a function that invokes `func` with the `this` binding of the
- * created function and arguments from `start` and beyond provided as an array.
+ * created function and arguments from `start` and beyond provided as
+ * an array.
  *
- * **Note:** This method is based on the [rest parameter](https://mdn.io/rest_parameters).
+ * **Note:** This method is based on the
+ * [rest parameter](https://mdn.io/rest_parameters).
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Function
  * @param {Function} func The function to apply a rest parameter to.
  * @param {number} [start=func.length-1] The start position of the rest parameter.

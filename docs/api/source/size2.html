@@ -189,18 +189,38 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> isArrayLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArrayLike</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> getTag = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getTag</span><span class="delimiter">'</span></span>),
+    isArrayLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArrayLike</span><span class="delimiter">'</span></span>),
+    isObjectLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObjectLike</span><span class="delimiter">'</span></span>),
     isString = require(<span class="string"><span class="delimiter">'</span><span class="content">./isString</span><span class="delimiter">'</span></span>),
     keys = require(<span class="string"><span class="delimiter">'</span><span class="content">./keys</span><span class="delimiter">'</span></span>),
     stringSize = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringSize</span><span class="delimiter">'</span></span>);
 
+<span class="comment">/** `Object#toString` result references. */</span>
+<span class="keyword">var</span> mapTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Map]</span><span class="delimiter">'</span></span>,
+    setTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Set]</span><span class="delimiter">'</span></span>;
+
 <span class="comment">/**
  * Gets the size of `collection` by returning its length for array-like
- * values or the number of own enumerable properties for objects.
+ * values or the number of own enumerable string keyed properties for objects.
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Collection
  * @param {Array|Object} collection The collection to inspect.
  * @returns {number} Returns the collection size.
@@ -222,6 +242,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="keyword">if</span> (isArrayLike(collection)) {
     <span class="keyword">var</span> result = collection.length;
     <span class="keyword">return</span> (result &amp;&amp; isString(collection)) ? stringSize(collection) : result;
+  }
+  <span class="keyword">if</span> (isObjectLike(collection)) {
+    <span class="keyword">var</span> tag = getTag(collection);
+    <span class="keyword">if</span> (tag == mapTag || tag == setTag) {
+      <span class="keyword">return</span> collection.size;
+    }
   }
   <span class="keyword">return</span> keys(collection).length;
 }

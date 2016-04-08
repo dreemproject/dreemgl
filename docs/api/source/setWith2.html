@@ -181,6 +181,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseSet = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseSet</span><span class="delimiter">'</span></span>);
 
@@ -194,6 +197,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Object
  * @param {Object} object The object to modify.
  * @param {Array|string} path The path of the property to set.
@@ -202,8 +206,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Object} Returns `object`.
  * @example
  *
- * _.setWith({ '0': { 'length': 2 } }, '[0][1][2]', 3, Object);
- * // =&gt; { '0': { '1': { '2': 3 }, 'length': 2 } }
+ * var object = {};
+ *
+ * _.setWith(object, '[0][1]', 'a', Object);
+ * // =&gt; { '0': { '1': 'a' } }
  */</span>
 <span class="keyword">function</span> <span class="function">setWith</span>(object, path, value, customizer) {
   customizer = <span class="keyword">typeof</span> customizer == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? customizer : <span class="predefined-constant">undefined</span>;

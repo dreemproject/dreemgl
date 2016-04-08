@@ -185,6 +185,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n31" name="n31">31</a>
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> toString = require(<span class="string"><span class="delimiter">'</span><span class="content">./toString</span><span class="delimiter">'</span></span>),
     unescapeHtmlChar = require(<span class="string"><span class="delimiter">'</span><span class="content">./_unescapeHtmlChar</span><span class="delimiter">'</span></span>);
@@ -195,14 +196,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="comment">/**
  * The inverse of `_.escape`; this method converts the HTML entities
- * `&amp;amp;`, `&amp;lt;`, `&amp;gt;`, `&amp;quot;`, `&amp;#39;`, and `&amp;#96;` in `string` to their
- * corresponding characters.
+ * `&amp;amp;`, `&amp;lt;`, `&amp;gt;`, `&amp;quot;`, `&amp;#39;`, and `&amp;#96;` in `string` to
+ * their corresponding characters.
  *
- * **Note:** No other HTML entities are unescaped. To unescape additional HTML
- * entities use a third-party library like [_he_](https://mths.be/he).
+ * **Note:** No other HTML entities are unescaped. To unescape additional
+ * HTML entities use a third-party library like [_he_](https://mths.be/he).
  *
  * @static
  * @memberOf _
+ * @since 0.6.0
  * @category String
  * @param {string} [string=''] The string to unescape.
  * @returns {string} Returns the unescaped string.

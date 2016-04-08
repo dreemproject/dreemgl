@@ -175,18 +175,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n21" name="n21">21</a>
 <a href="#n22" name="n22">22</a>
 <a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> assignValue = require(<span class="string"><span class="delimiter">'</span><span class="content">./_assignValue</span><span class="delimiter">'</span></span>),
     baseZipObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseZipObject</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * This method is like `_.fromPairs` except that it accepts two arrays,
- * one of property names and one of corresponding values.
+ * one of property identifiers and one of corresponding values.
  *
  * @static
  * @memberOf _
+ * @since 0.4.0
  * @category Array
- * @param {Array} [props=[]] The property names.
+ * @param {Array} [props=[]] The property identifiers.
  * @param {Array} [values=[]] The property values.
  * @returns {Object} Returns the new object.
  * @example

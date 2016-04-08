@@ -193,6 +193,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n39" name="n39">39</a>
 <strong><a href="#n40" name="n40">40</a></strong>
 <a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseSetData = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseSetData</span><span class="delimiter">'</span></span>),
     now = require(<span class="string"><span class="delimiter">'</span><span class="content">./now</span><span class="delimiter">'</span></span>);
@@ -205,8 +206,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * Sets metadata for `func`.
  *
  * **Note:** If this function becomes hot, i.e. is invoked a lot in a short
- * period of time, it will trip its breaker and transition to an identity function
- * to avoid garbage collection pauses in V8. See [V8 issue 2070](https://code.google.com/p/v8/issues/detail?id=2070)
+ * period of time, it will trip its breaker and transition to an identity
+ * function to avoid garbage collection pauses in V8. See
+ * [V8 issue 2070](https://bugs.chromium.org/p/v8/issues/detail?id=2070)
  * for more details.
  *
  * @private

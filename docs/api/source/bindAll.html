@@ -191,6 +191,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayEach = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayEach</span><span class="delimiter">'</span></span>),
     baseFlatten = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseFlatten</span><span class="delimiter">'</span></span>),
@@ -204,6 +205,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * **Note:** This method doesn't set the &quot;length&quot; property of bound functions.
  *
  * @static
+ * @since 0.1.0
  * @memberOf _
  * @category Util
  * @param {Object} object The object to bind and assign the bound methods to.
@@ -221,7 +223,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * _.bindAll(view, 'onClick');
  * jQuery(element).on('click', view.onClick);
- * // =&gt; logs 'clicked docs' when clicked
+ * // =&gt; Logs 'clicked docs' when clicked.
  */</span>
 <span class="keyword">var</span> bindAll = rest(<span class="keyword">function</span>(object, methodNames) {
   arrayEach(baseFlatten(methodNames, <span class="integer">1</span>), <span class="keyword">function</span>(key) {

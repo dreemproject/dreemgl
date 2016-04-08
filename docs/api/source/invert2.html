@@ -178,6 +178,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> constant = require(<span class="string"><span class="delimiter">'</span><span class="content">./constant</span><span class="delimiter">'</span></span>),
     createInverter = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createInverter</span><span class="delimiter">'</span></span>),
@@ -185,11 +186,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="comment">/**
  * Creates an object composed of the inverted keys and values of `object`.
- * If `object` contains duplicate values, subsequent values overwrite property
- * assignments of previous values.
+ * If `object` contains duplicate values, subsequent values overwrite
+ * property assignments of previous values.
  *
  * @static
  * @memberOf _
+ * @since 0.7.0
  * @category Object
  * @param {Object} object The object to invert.
  * @returns {Object} Returns the new inverted object.

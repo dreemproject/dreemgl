@@ -378,6 +378,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n224" name="n224">224</a>
 <a href="#n225" name="n225">225</a>
 <a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> assignInDefaults = require(<span class="string"><span class="delimiter">'</span><span class="content">./_assignInDefaults</span><span class="delimiter">'</span></span>),
     assignInWith = require(<span class="string"><span class="delimiter">'</span><span class="content">./assignInWith</span><span class="delimiter">'</span></span>),
@@ -423,17 +431,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * [Chrome's extensions documentation](https://developer.chrome.com/extensions/sandboxingEval).
  *
  * @static
+ * @since 0.1.0
  * @memberOf _
  * @category String
  * @param {string} [string=''] The template string.
- * @param {Object} [options] The options object.
- * @param {RegExp} [options.escape] The HTML &quot;escape&quot; delimiter.
- * @param {RegExp} [options.evaluate] The &quot;evaluate&quot; delimiter.
- * @param {Object} [options.imports] An object to import into the template as free variables.
- * @param {RegExp} [options.interpolate] The &quot;interpolate&quot; delimiter.
- * @param {string} [options.sourceURL] The sourceURL of the template's compiled source.
- * @param {string} [options.variable] The data object variable name.
- * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
+ * @param {Object} [options={}] The options object.
+ * @param {RegExp} [options.escape=_.templateSettings.escape]
+ *  The HTML &quot;escape&quot; delimiter.
+ * @param {RegExp} [options.evaluate=_.templateSettings.evaluate]
+ *  The &quot;evaluate&quot; delimiter.
+ * @param {Object} [options.imports=_.templateSettings.imports]
+ *  An object to import into the template as free variables.
+ * @param {RegExp} [options.interpolate=_.templateSettings.interpolate]
+ *  The &quot;interpolate&quot; delimiter.
+ * @param {string} [options.sourceURL='templateSources[n]']
+ *  The sourceURL of the compiled template.
+ * @param {string} [options.variable='obj']
+ *  The data object variable name.
+ * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
  * @returns {Function} Returns the compiled template function.
  * @example
  *
@@ -482,7 +497,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // Use the `sourceURL` option to specify a custom sourceURL for the template.
  * var compiled = _.template('hello &lt;%= user %&gt;!', { 'sourceURL': '/basic/greeting.jst' });
  * compiled(data);
- * // =&gt; find the source of &quot;greeting.jst&quot; under the Sources tab or Resources panel of the web inspector
+ * // =&gt; Find the source of &quot;greeting.jst&quot; under the Sources tab or Resources panel of the web inspector.
  *
  * // Use the `variable` option to ensure a with-statement isn't used in the compiled template.
  * var compiled = _.template('hi &lt;%= data.user %&gt;!', { 'variable': 'data' });
@@ -502,7 +517,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * ');
  */</span>
 <span class="keyword">function</span> <span class="function">template</span>(string, options, guard) {
-  <span class="comment">// Based on John Resig's `tmpl` implementation (http://ejohn.org/blog/javascript-micro-templating/)</span>
+  <span class="comment">// Based on John Resig's `tmpl` implementation</span>
+  <span class="comment">// (http://ejohn.org/blog/javascript-micro-templating/)</span>
   <span class="comment">// and Laura Doktorova's doT.js (https://github.com/olado/doT).</span>
   <span class="keyword">var</span> settings = templateSettings.imports._.templateSettings || templateSettings;
 

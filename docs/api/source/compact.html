@@ -182,6 +182,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Creates an array with all falsey values removed. The values `false`, `null`,
@@ -189,6 +190,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Array
  * @param {Array} array The array to compact.
  * @returns {Array} Returns the new array of filtered values.
@@ -200,13 +202,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="keyword">function</span> <span class="function">compact</span>(array) {
   <span class="keyword">var</span> index = -<span class="integer">1</span>,
       length = array ? array.length : <span class="integer">0</span>,
-      resIndex = -<span class="integer">1</span>,
+      resIndex = <span class="integer">0</span>,
       result = [];
 
   <span class="keyword">while</span> (++index &lt; length) {
     <span class="keyword">var</span> value = array[index];
     <span class="keyword">if</span> (value) {
-      result[++resIndex] = value;
+      result[resIndex++] = value;
     }
   }
   <span class="keyword">return</span> result;

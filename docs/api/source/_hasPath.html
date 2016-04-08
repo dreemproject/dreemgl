@@ -192,6 +192,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
 <strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseCastPath = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastPath</span><span class="delimiter">'</span></span>),
     isArguments = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArguments</span><span class="delimiter">'</span></span>),
@@ -199,9 +203,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     isIndex = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isIndex</span><span class="delimiter">'</span></span>),
     isKey = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isKey</span><span class="delimiter">'</span></span>),
     isLength = require(<span class="string"><span class="delimiter">'</span><span class="content">./isLength</span><span class="delimiter">'</span></span>),
-    isString = require(<span class="string"><span class="delimiter">'</span><span class="content">./isString</span><span class="delimiter">'</span></span>),
-    last = require(<span class="string"><span class="delimiter">'</span><span class="content">./last</span><span class="delimiter">'</span></span>),
-    parent = require(<span class="string"><span class="delimiter">'</span><span class="content">./_parent</span><span class="delimiter">'</span></span>);
+    isString = require(<span class="string"><span class="delimiter">'</span><span class="content">./isString</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * Checks if `path` exists on `object`.
@@ -219,10 +221,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="keyword">var</span> result = hasFunc(object, path);
   <span class="keyword">if</span> (!result &amp;&amp; !isKey(path)) {
     path = baseCastPath(path);
-    object = parent(object, path);
-    <span class="keyword">if</span> (object != <span class="predefined-constant">null</span>) {
-      path = last(path);
-      result = hasFunc(object, path);
+
+    <span class="keyword">var</span> index = -<span class="integer">1</span>,
+        length = path.length;
+
+    <span class="keyword">while</span> (object != <span class="predefined-constant">null</span> &amp;&amp; ++index &lt; length) {
+      <span class="keyword">var</span> key = path[index];
+      <span class="keyword">if</span> (!(result = hasFunc(object, key))) {
+        <span class="keyword">break</span>;
+      }
+      object = object[key];
     }
   }
   <span class="keyword">var</span> length = object ? object.length : <span class="predefined-constant">undefined</span>;

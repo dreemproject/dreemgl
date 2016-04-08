@@ -169,8 +169,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n15" name="n15">15</a>
 <a href="#n16" name="n16">16</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> baseSlice = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseSlice</span><span class="delimiter">'</span></span>),
-    get = require(<span class="string"><span class="delimiter">'</span><span class="content">./get</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> baseGet = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseGet</span><span class="delimiter">'</span></span>),
+    baseSlice = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseSlice</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * Gets the parent value at `path` of `object`.
@@ -181,7 +181,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {*} Returns the parent value.
  */</span>
 <span class="keyword">function</span> <span class="function">parent</span>(object, path) {
-  <span class="keyword">return</span> path.length == <span class="integer">1</span> ? object : get(object, baseSlice(path, <span class="integer">0</span>, -<span class="integer">1</span>));
+  <span class="keyword">return</span> path.length == <span class="integer">1</span> ? object : baseGet(object, baseSlice(path, <span class="integer">0</span>, -<span class="integer">1</span>));
 }
 
 module.exports = parent;

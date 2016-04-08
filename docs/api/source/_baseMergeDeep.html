@@ -233,6 +233,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n79" name="n79">79</a>
 <strong><a href="#n80" name="n80">80</a></strong>
 <a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> assignMergeValue = require(<span class="string"><span class="delimiter">'</span><span class="content">./_assignMergeValue</span><span class="delimiter">'</span></span>),
     baseClone = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseClone</span><span class="delimiter">'</span></span>),
@@ -258,7 +260,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @param {number} srcIndex The index of `source`.
  * @param {Function} mergeFunc The function to merge values.
  * @param {Function} [customizer] The function to customize assigned values.
- * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
+ * @param {Object} [stack] Tracks traversed source values and their merged
+ *  counterparts.
  */</span>
 <span class="keyword">function</span> <span class="function">baseMergeDeep</span>(object, source, key, srcIndex, mergeFunc, customizer, stack) {
   <span class="keyword">var</span> objValue = object[key],
@@ -311,6 +314,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     <span class="comment">// Recursively merge objects and arrays (susceptible to call stack limits).</span>
     mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
   }
+  stack[<span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>](srcValue);
   assignMergeValue(object, key, newValue);
 }
 

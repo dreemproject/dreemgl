@@ -186,9 +186,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
+    baseCastKey = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastKey</span><span class="delimiter">'</span></span>),
+    copyArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyArray</span><span class="delimiter">'</span></span>),
     isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>),
+    isSymbol = require(<span class="string"><span class="delimiter">'</span><span class="content">./isSymbol</span><span class="delimiter">'</span></span>),
     stringToPath = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringToPath</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
@@ -196,6 +206,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Util
  * @param {*} value The value to convert.
  * @returns {Array} Returns the new property path array.
@@ -217,7 +228,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; false
  */</span>
 <span class="keyword">function</span> <span class="function">toPath</span>(value) {
-  <span class="keyword">return</span> isArray(value) ? arrayMap(value, String) : stringToPath(value);
+  <span class="keyword">if</span> (isArray(value)) {
+    <span class="keyword">return</span> arrayMap(value, baseCastKey);
+  }
+  <span class="keyword">return</span> isSymbol(value) ? [value] : copyArray(stringToPath(value));
 }
 
 module.exports = toPath;

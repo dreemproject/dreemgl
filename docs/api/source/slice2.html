@@ -187,6 +187,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseSlice = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseSlice</span><span class="delimiter">'</span></span>),
     isIterateeCall = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isIterateeCall</span><span class="delimiter">'</span></span>),
@@ -195,11 +197,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/**
  * Creates a slice of `array` from `start` up to, but not including, `end`.
  *
- * **Note:** This method is used instead of [`Array#slice`](https://mdn.io/Array/slice)
- * to ensure dense arrays are returned.
+ * **Note:** This method is used instead of
+ * [`Array#slice`](https://mdn.io/Array/slice) to ensure dense arrays are
+ * returned.
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category Array
  * @param {Array} array The array to slice.
  * @param {number} [start=0] The start position.

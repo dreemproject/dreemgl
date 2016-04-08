@@ -191,6 +191,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseDifference = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseDifference</span><span class="delimiter">'</span></span>),
     baseFlatten = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseFlatten</span><span class="delimiter">'</span></span>),
@@ -202,14 +205,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/**
  * This method is like `_.difference` except that it accepts `iteratee` which
  * is invoked for each element of `array` and `values` to generate the criterion
- * by which uniqueness is computed. The iteratee is invoked with one argument: (value).
+ * by which they're compared. Result values are chosen from the first array.
+ * The iteratee is invoked with one argument: (value).
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Array
  * @param {Array} array The array to inspect.
  * @param {...Array} [values] The values to exclude.
- * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+ * @param {Array|Function|Object|string} [iteratee=_.identity]
+ *  The iteratee invoked per element.
  * @returns {Array} Returns the new array of filtered values.
  * @example
  *

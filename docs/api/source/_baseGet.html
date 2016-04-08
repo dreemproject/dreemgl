@@ -189,7 +189,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {*} Returns the resolved value.
  */</span>
 <span class="keyword">function</span> <span class="function">baseGet</span>(object, path) {
-  path = isKey(path, object) ? [path + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>] : baseCastPath(path);
+  path = isKey(path, object) ? [path] : baseCastPath(path);
 
   <span class="keyword">var</span> index = <span class="integer">0</span>,
       length = path.length;

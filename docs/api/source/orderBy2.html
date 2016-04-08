@@ -197,6 +197,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n43" name="n43">43</a>
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseOrderBy = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseOrderBy</span><span class="delimiter">'</span></span>),
     isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>);
@@ -209,24 +211,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Collection
  * @param {Array|Object} collection The collection to iterate over.
- * @param {Function[]|Object[]|string[]} [iteratees=[_.identity]] The iteratees to sort by.
+ * @param {Array[]|Function[]|Object[]|string[]} [iteratees=[_.identity]]
+ *  The iteratees to sort by.
  * @param {string[]} [orders] The sort orders of `iteratees`.
- * @param- {Object} [guard] Enables use as an iteratee for functions like `_.reduce`.
+ * @param- {Object} [guard] Enables use as an iteratee for methods like `_.reduce`.
  * @returns {Array} Returns the new sorted array.
  * @example
  *
  * var users = [
  *   { 'user': 'fred',   'age': 48 },
  *   { 'user': 'barney', 'age': 34 },
- *   { 'user': 'fred',   'age': 42 },
+ *   { 'user': 'fred',   'age': 40 },
  *   { 'user': 'barney', 'age': 36 }
  * ];
  *
  * // Sort by `user` in ascending order and by `age` in descending order.
  * _.orderBy(users, ['user', 'age'], ['asc', 'desc']);
- * // =&gt; objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 42]]
+ * // =&gt; objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
  */</span>
 <span class="keyword">function</span> <span class="function">orderBy</span>(collection, iteratees, orders, guard) {
   <span class="keyword">if</span> (collection == <span class="predefined-constant">null</span>) {

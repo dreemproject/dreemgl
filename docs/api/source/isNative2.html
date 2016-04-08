@@ -205,6 +205,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n51" name="n51">51</a>
 <a href="#n52" name="n52">52</a>
 <a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./isFunction</span><span class="delimiter">'</span></span>),
     isHostObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isHostObject</span><span class="delimiter">'</span></span>),
@@ -213,7 +215,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */</span>
 <span class="keyword">var</span> reRegExpChar = <span class="regexp"><span class="delimiter">/</span><span class="content">[</span><span class="char">\\</span><span class="content">^$.*+?()[</span><span class="content">\]</span><span class="content">{}|]</span><span class="delimiter">/</span><span class="modifier">g</span></span>;
 
-<span class="comment">/** Used to detect host constructors (Safari &gt; 5). */</span>
+<span class="comment">/** Used to detect host constructors (Safari). */</span>
 <span class="keyword">var</span> reIsHostCtor = <span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="content">\[</span><span class="content">object .+?Constructor</span><span class="content">\]</span><span class="content">$</span><span class="delimiter">/</span></span>;
 
 <span class="comment">/** Used for built-in method references. */</span>
@@ -236,9 +238,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category Lang
  * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+ * @returns {boolean} Returns `true` if `value` is a native function,
+ *  else `false`.
  * @example
  *
  * _.isNative(Array.prototype.push);

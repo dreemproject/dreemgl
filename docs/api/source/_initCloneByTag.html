@@ -226,8 +226,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n72" name="n72">72</a>
 <a href="#n73" name="n73">73</a>
 <a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> cloneArrayBuffer = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cloneArrayBuffer</span><span class="delimiter">'</span></span>),
+    cloneDataView = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cloneDataView</span><span class="delimiter">'</span></span>),
     cloneMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cloneMap</span><span class="delimiter">'</span></span>),
     cloneRegExp = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cloneRegExp</span><span class="delimiter">'</span></span>),
     cloneSet = require(<span class="string"><span class="delimiter">'</span><span class="content">./_cloneSet</span><span class="delimiter">'</span></span>),
@@ -245,6 +252,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     symbolTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Symbol]</span><span class="delimiter">'</span></span>;
 
 <span class="keyword">var</span> arrayBufferTag = <span class="string"><span class="delimiter">'</span><span class="content">[object ArrayBuffer]</span><span class="delimiter">'</span></span>,
+    dataViewTag = <span class="string"><span class="delimiter">'</span><span class="content">[object DataView]</span><span class="delimiter">'</span></span>,
     float32Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Float32Array]</span><span class="delimiter">'</span></span>,
     float64Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Float64Array]</span><span class="delimiter">'</span></span>,
     int8Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Int8Array]</span><span class="delimiter">'</span></span>,
@@ -264,10 +272,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @private
  * @param {Object} object The object to clone.
  * @param {string} tag The `toStringTag` of the object to clone.
+ * @param {Function} cloneFunc The function to clone values.
  * @param {boolean} [isDeep] Specify a deep clone.
  * @returns {Object} Returns the initialized clone.
  */</span>
-<span class="keyword">function</span> <span class="function">initCloneByTag</span>(object, tag, isDeep) {
+<span class="keyword">function</span> <span class="function">initCloneByTag</span>(object, tag, cloneFunc, isDeep) {
   <span class="keyword">var</span> Ctor = object.constructor;
   <span class="keyword">switch</span> (tag) {
     <span class="keyword">case</span> arrayBufferTag:
@@ -277,13 +286,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     <span class="keyword">case</span> dateTag:
       <span class="keyword">return</span> <span class="keyword">new</span> Ctor(+object);
 
+    <span class="keyword">case</span> dataViewTag:
+      <span class="keyword">return</span> cloneDataView(object, isDeep);
+
     <span class="keyword">case</span> float32Tag: <span class="keyword">case</span> float64Tag:
     <span class="keyword">case</span> int8Tag: <span class="keyword">case</span> int16Tag: <span class="keyword">case</span> int32Tag:
     <span class="keyword">case</span> uint8Tag: <span class="keyword">case</span> uint8ClampedTag: <span class="keyword">case</span> uint16Tag: <span class="keyword">case</span> uint32Tag:
       <span class="keyword">return</span> cloneTypedArray(object, isDeep);
 
     <span class="keyword">case</span> mapTag:
-      <span class="keyword">return</span> cloneMap(object);
+      <span class="keyword">return</span> cloneMap(object, isDeep, cloneFunc);
 
     <span class="keyword">case</span> numberTag:
     <span class="keyword">case</span> stringTag:
@@ -293,7 +305,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
       <span class="keyword">return</span> cloneRegExp(object);
 
     <span class="keyword">case</span> setTag:
-      <span class="keyword">return</span> cloneSet(object);
+      <span class="keyword">return</span> cloneSet(object, isDeep, cloneFunc);
 
     <span class="keyword">case</span> symbolTag:
       <span class="keyword">return</span> cloneSymbol(object);

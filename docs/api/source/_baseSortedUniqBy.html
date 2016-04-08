@@ -203,7 +203,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
       value = array[<span class="integer">0</span>],
       computed = iteratee ? iteratee(value) : value,
       seen = computed,
-      resIndex = <span class="integer">0</span>,
+      resIndex = <span class="integer">1</span>,
       result = [value];
 
   <span class="keyword">while</span> (++index &lt; length) {
@@ -212,7 +212,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
     <span class="keyword">if</span> (!eq(computed, seen)) {
       seen = computed;
-      result[++resIndex] = value;
+      result[resIndex++] = value;
     }
   }
   <span class="keyword">return</span> result;

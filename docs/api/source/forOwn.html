@@ -186,18 +186,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> baseCastFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastFunction</span><span class="delimiter">'</span></span>),
-    baseForOwn = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForOwn</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> baseForOwn = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForOwn</span><span class="delimiter">'</span></span>),
+    baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Iterates over own enumerable properties of an object invoking `iteratee`
- * for each property. The iteratee is invoked with three arguments:
+ * Iterates over own enumerable string keyed properties of an object invoking
+ * `iteratee` for each property. The iteratee is invoked with three arguments:
  * (value, key, object). Iteratee functions may exit iteration early by
  * explicitly returning `false`.
  *
  * @static
  * @memberOf _
+ * @since 0.3.0
  * @category Object
  * @param {Object} object The object to iterate over.
  * @param {Function} [iteratee=_.identity] The function invoked per iteration.
@@ -214,10 +216,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.forOwn(new Foo, function(value, key) {
  *   console.log(key);
  * });
- * // =&gt; logs 'a' then 'b' (iteration order is not guaranteed)
+ * // =&gt; Logs 'a' then 'b' (iteration order is not guaranteed).
  */</span>
 <span class="keyword">function</span> <span class="function">forOwn</span>(object, iteratee) {
-  <span class="keyword">return</span> object &amp;&amp; baseForOwn(object, baseCastFunction(iteratee));
+  <span class="keyword">return</span> object &amp;&amp; baseForOwn(object, baseIteratee(iteratee));
 }
 
 module.exports = forOwn;

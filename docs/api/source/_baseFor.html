@@ -168,15 +168,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n14" name="n14">14</a>
 <a href="#n15" name="n15">15</a>
 <a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> createBaseFor = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createBaseFor</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * The base implementation of `baseForIn` and `baseForOwn` which iterates
- * over `object` properties returned by `keysFunc` invoking `iteratee` for
- * each property. Iteratee functions may exit iteration early by explicitly
- * returning `false`.
+ * The base implementation of `baseForOwn` which iterates over `object`
+ * properties returned by `keysFunc` invoking `iteratee` for each property.
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
  *
  * @private
  * @param {Object} object The object to iterate over.

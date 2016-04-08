@@ -277,6 +277,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n123" name="n123">123</a>
 <a href="#n124" name="n124">124</a>
 <a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -284,7 +298,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, slider, screen, label, view, icon, cadgrid) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, slider, screen, label, view, icon, cadgrid, button) {
 
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                         <span class="keyword">return</span> [
@@ -318,7 +332,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
                                                                         <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>);
                                                                         <span class="keyword">if</span> (current) {
-                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">4</span>)
                                                                         }
                                                                         <span class="local-variable">this</span>.height = <span class="integer">5</span> + <span class="integer">30</span> * v
                                                                 }
@@ -332,7 +346,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 ),
                                                 view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                                                         label({
-                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Step Usage</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Step Usage w/range bet 100 ~ 600</span><span class="delimiter">&quot;</span></span>,
                                                                 <span class="key">marginbottom</span>:<span class="integer">30</span>
                                                         }),
                                                         slider({
@@ -342,11 +356,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="key">value</span>:<span class="float">0.2</span>,
                                                                 <span class="key">step</span>:<span class="float">0.2</span>,
                                                                 <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">palegreen</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">smooth</span>:<span class="predefined-constant">false</span>,
+                                                                <span class="key">range</span>:vec2(<span class="integer">100</span>,<span class="integer">600</span>),
+                                                                <span class="function">onrangevalue</span>:<span class="keyword">function</span>(ev,v,o) {
+                                                                        <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">currentrange</span><span class="delimiter">&quot;</span></span>);
+                                                                        <span class="keyword">if</span> (current) {
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current range value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">0</span>)
+                                                                        }
+                                                                },
                                                                 <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
                                                                         <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>);
                                                                         <span class="keyword">if</span> (current) {
-                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>._value.toFixed(<span class="integer">1</span>)
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">1</span>)
                                                                         }
                                                                 }
                                                         }),
@@ -355,6 +377,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="key">margintop</span>:<span class="integer">30</span>,
                                                                 <span class="key">fontsize</span>:<span class="integer">12</span>,
                                                                 <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: 0.2</span><span class="delimiter">&quot;</span></span>
+                                                        }),
+                                                        label({
+                                                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">currentrange</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">margintop</span>:<span class="integer">5</span>,
+                                                                <span class="key">fontsize</span>:<span class="integer">12</span>,
+                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The current range value is: 200</span><span class="delimiter">&quot;</span></span>
                                                         })
                                                 ),
                                                 view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
@@ -373,7 +401,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
                                                                         <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>);
                                                                         <span class="keyword">if</span> (current) {
-                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">3</span>)
                                                                         }
                                                                         <span class="keyword">var</span> handle = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>)
                                                                         <span class="keyword">if</span> (handle) {

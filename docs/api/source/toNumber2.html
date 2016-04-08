@@ -211,9 +211,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n57" name="n57">57</a>
 <a href="#n58" name="n58">58</a>
 <a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./isFunction</span><span class="delimiter">'</span></span>),
-    isObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObject</span><span class="delimiter">'</span></span>);
+    isObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObject</span><span class="delimiter">'</span></span>),
+    isSymbol = require(<span class="string"><span class="delimiter">'</span><span class="content">./isSymbol</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/** Used as references for various `Number` constants. */</span>
 <span class="keyword">var</span> NAN = <span class="integer">0</span> / <span class="integer">0</span>;
@@ -238,6 +247,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Lang
  * @param {*} value The value to process.
  * @returns {number} Returns the number.
@@ -256,12 +266,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; 3
  */</span>
 <span class="keyword">function</span> <span class="function">toNumber</span>(value) {
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> value == <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>) {
+    <span class="keyword">return</span> value;
+  }
+  <span class="keyword">if</span> (isSymbol(value)) {
+    <span class="keyword">return</span> NAN;
+  }
   <span class="keyword">if</span> (isObject(value)) {
     <span class="keyword">var</span> other = isFunction(value.valueOf) ? value.valueOf() : value;
     value = isObject(other) ? (other + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) : other;
   }
   <span class="keyword">if</span> (<span class="keyword">typeof</span> value != <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-    <span class="keyword">return</span> value === <span class="integer">0</span> ? value : +value;
+    <span class="keyword">return</span> value === <span class="integer">0</span> ?  value : +value;
   }
   value = value.replace(reTrim, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
   <span class="keyword">var</span> isBinary = reIsBinary.test(value);

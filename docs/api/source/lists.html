@@ -294,179 +294,149 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n140" name="n140">140</a></strong>
 <a href="#n141" name="n141">141</a>
 <a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
-<a href="#n144" name="n144">144</a>
-<a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
-<a href="#n149" name="n149">149</a>
-<strong><a href="#n150" name="n150">150</a></strong>
-<a href="#n151" name="n151">151</a>
-<a href="#n152" name="n152">152</a>
-<a href="#n153" name="n153">153</a>
-<a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre>
+<span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>),
+    util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>);
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require,<span class="predefined">$ui$</span>,textbox,checkbox,icon,button,label,view,screen,cadgrid,<span class="predefined">$widgets$</span>,toolkit){
+<span class="comment">/**
+ * A module for retrieving information about Photos from Foursquare.
+ * @param {Object} config A valid configuration.
+ * @module node-foursquare/Photos
+ */</span>
+module.<span class="function">exports</span> = <span class="keyword">function</span>(config) {
+  <span class="keyword">var</span> core = require(<span class="string"><span class="delimiter">'</span><span class="content">./core</span><span class="delimiter">'</span></span>)(config),
+    logger = core.getLogger(<span class="string"><span class="delimiter">'</span><span class="content">events</span><span class="delimiter">'</span></span>);
 
-                <span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
+  <span class="comment">/**
+   * Retrieve a list from Foursquare.
+   * @memberof module:node-foursquare/Lists
+   * @param {String} listId The id of the List to retrieve; accepts IDs such as 'self/tips' or 'USER_ID/todos'.
+   * @param {String} [accessToken] The access token provided by Foursquare for the current user.
+   * @param {Function} callback The function to call with results, function({Error} error, {Object} results).
+   * @see https://developer.foursquare.com/docs/lists/lists.html
+   */</span>
+  <span class="keyword">function</span> <span class="function">getList</span>(listId, accessToken, callback) {
+    logger.enter(<span class="string"><span class="delimiter">'</span><span class="content">getList</span><span class="delimiter">'</span></span>);
 
-                        <span class="keyword">return</span> [
-                                screen(
-                                        {
-                                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>
-                                        },
-                                        cadgrid({
-                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">flex</span>:<span class="integer">3</span>,
-                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">bgcolor</span>:vec4(<span class="float">0.08853328227996826</span>,<span class="float">0.11556218564510345</span>,<span class="float">0.16508188843727112</span>,<span class="integer">1</span>),
-                                                        <span class="key">gridsize</span>:<span class="integer">8</span>,
-                                                        <span class="key">majorevery</span>:<span class="integer">5</span>,
-                                                        <span class="key">majorline</span>:vec4(<span class="float">0.0</span>,<span class="float">0.26</span>,<span class="float">0.34</span>,<span class="integer">1</span>),
-                                                        <span class="key">minorline</span>:vec4(<span class="float">0.15</span>,<span class="float">0.15</span>,<span class="float">0.12</span>,<span class="integer">1</span>),
-                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>,
-                                                        <span class="key">alignitems</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,
-                                                        <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">space-around</span><span class="delimiter">'</span></span>
-                                        },
-                                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
-                                                        label({ <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Vertical List</span><span class="delimiter">&quot;</span></span>,  <span class="key">marginbottom</span>:<span class="integer">20</span> }),
-                                                        view({
-                                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">simple</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">flex</span>:<span class="integer">0</span>,
-                                                                        <span class="key">width</span>:<span class="integer">100</span>,
-                                                                        <span class="key">height</span>:<span class="integer">150</span>,
-                                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">vscroll</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">MORE TEXT</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">MORE TEXT</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Even more text!</span><span class="delimiter">&quot;</span></span>})
-                                                        )
-                                                ),
-                                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
-                                                        label({ <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Horizontal List</span><span class="delimiter">&quot;</span></span>,  <span class="key">marginbottom</span>:<span class="integer">20</span> }),
-                                                        view({
-                                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">simple</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">flex</span>:<span class="integer">0</span>,
-                                                                        <span class="key">width</span>:<span class="integer">100</span>,
-                                                                        <span class="key">height</span>:<span class="integer">50</span>,
-                                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hscroll</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">star-o</span><span class="delimiter">&quot;</span></span>}),
-                                                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">times</span><span class="delimiter">&quot;</span></span>})
-                                                        )
-                                                ),
-                                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
-                                                        label({
-                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Adjust scroll position programatically</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">marginbottom</span>:<span class="integer">20</span>
-                                                        }),
+    <span class="keyword">if</span>(!listId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getList: listId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getList: listId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
 
-                                                        view({<span class="key">marginbottom</span>:<span class="integer">20</span>},
-                                                                button({
-                                                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Up</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="function">click</span>:<span class="keyword">function</span>() {
-                                                                                <span class="keyword">var</span> box = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">smallbox</span><span class="delimiter">&quot;</span></span>);
-                                                                                box.scroll = vec2(box.scroll[<span class="integer">0</span>], box.scroll[<span class="integer">1</span>] + <span class="integer">10</span>);
-                                                                                box.redraw()
-                                                                        }
-                                                                }),
-                                                                button({
-                                                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Down</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">marginleft</span>:<span class="integer">5</span>,
-                                                                        <span class="function">click</span>:<span class="keyword">function</span>() {
-                                                                                <span class="keyword">var</span> box = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">smallbox</span><span class="delimiter">&quot;</span></span>);
-                                                                                box.scroll = vec2(box.scroll[<span class="integer">0</span>], box.scroll[<span class="integer">1</span>] - <span class="integer">10</span>);
-                                                                                box.redraw()
-                                                                        }
-                                                                }),
-                                                                button({
-                                                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Left</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">marginleft</span>:<span class="integer">5</span>,
-                                                                        <span class="function">click</span>:<span class="keyword">function</span>() {
-                                                                                <span class="keyword">var</span> box = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">smallbox</span><span class="delimiter">&quot;</span></span>);
-                                                                                box.scroll = vec2(box.scroll[<span class="integer">0</span>] + <span class="integer">10</span>, box.scroll[<span class="integer">1</span>]);
-                                                                                box.redraw()
-                                                                        }
-                                                                }),
-                                                                button({
-                                                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Right</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">marginleft</span>:<span class="integer">5</span>,
-                                                                        <span class="function">click</span>:<span class="keyword">function</span>() {
-                                                                                <span class="keyword">var</span> box = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">smallbox</span><span class="delimiter">&quot;</span></span>);
-                                                                                box.scroll = vec2(box.scroll[<span class="integer">0</span>] - <span class="integer">10</span>, box.scroll[<span class="integer">1</span>]);
-                                                                                box.redraw()
-                                                                        }
-                                                                })
-                                                        ),
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:listId: </span><span class="delimiter">'</span></span> + listId);
+    core.callApi(path.join(<span class="string"><span class="delimiter">'</span><span class="content">/lists</span><span class="delimiter">'</span></span>, listId), accessToken, <span class="predefined-constant">null</span>, callback);
+  }
 
-                                                        view({
-                                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">smallbox</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">flex</span>:<span class="integer">0</span>,
-                                                                        <span class="key">width</span>:<span class="integer">100</span>,
-                                                                        <span class="key">height</span>:<span class="integer">150</span>,
-                                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">MORE TEXT</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">MORE TEXT</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Some text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">More text</span><span class="delimiter">&quot;</span></span>}),
-                                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Even more text!</span><span class="delimiter">&quot;</span></span>})
-                                                        )
-                                                )
-                                        )
-                                )
-                        ]
-                }
-        }
-);
+  <span class="comment">/**
+   * Retrieve followers of a List from Foursquare.
+   * @memberof module:node-foursquare/Lists
+   * @param {String} listId The id of the List; accepts IDs such as 'self/tips' or 'USER_ID/todos'.
+   * @param {String} accessToken The access token provided by Foursquare for the current user.
+   * @param {Function} callback The function to call with results, function({Error} error, {Object} results).
+   * @see https://developer.foursquare.com/docs/lists/followers.html
+   */</span>
+  <span class="keyword">function</span> <span class="function">getFollowers</span>(listId, accessToken, callback) {
+    logger.enter(<span class="string"><span class="delimiter">'</span><span class="content">getFollowers</span><span class="delimiter">'</span></span>);
+
+    <span class="keyword">if</span>(!listId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getFollowers: listId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getFollowers: listId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
+
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:listId: </span><span class="delimiter">'</span></span> + listId);
+    core.callApi(path.join(<span class="string"><span class="delimiter">'</span><span class="content">/lists</span><span class="delimiter">'</span></span>, listId, <span class="string"><span class="delimiter">'</span><span class="content">followers</span><span class="delimiter">'</span></span>), accessToken, <span class="predefined-constant">null</span>, callback);
+  }
+
+  <span class="comment">/**
+   * Retrieve venues suggested for a List from Foursquare.
+   * @memberof module:node-foursquare/Lists
+   * @param {String} listId The id of the List; accepts IDs such as 'self/tips' or 'USER_ID/todos'.
+   * @param {String} accessToken The access token provided by Foursquare for the current user.
+   * @param {Function} callback The function to call with results, function({Error} error, {Object} results).
+   * @see https://developer.foursquare.com/docs/lists/followers.html
+   */</span>
+  <span class="keyword">function</span> <span class="function">getSuggestedVenues</span>(listId, accessToken, callback) {
+    logger.enter(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedVenues</span><span class="delimiter">'</span></span>);
+
+    <span class="keyword">if</span>(!listId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedVenues: listId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getSuggestedVenues: listId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
+
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:listId: </span><span class="delimiter">'</span></span> + listId);
+    core.callApi(path.join(<span class="string"><span class="delimiter">'</span><span class="content">/lists</span><span class="delimiter">'</span></span>, listId, <span class="string"><span class="delimiter">'</span><span class="content">suggestvenues</span><span class="delimiter">'</span></span>), accessToken, <span class="predefined-constant">null</span>, callback);
+  }
+
+  <span class="comment">/**
+   * Retrieve venues suggested for an item in a List from Foursquare.
+   * @memberof module:node-foursquare/Lists
+   * @param {String} listId The id of the List; accepts IDs such as 'self/tips' or 'USER_ID/todos'.
+   * @param {String} itemId The id of an item in the List.
+   * @param {String} accessToken The access token provided by Foursquare for the current user.
+   * @param {Function} callback The function to call with results, function({Error} error, {Object} results).
+   * @see https://developer.foursquare.com/docs/lists/followers.html
+   */</span>
+  <span class="keyword">function</span> <span class="function">getSuggestedPhotos</span>(listId, itemId, accessToken, callback) {
+    logger.enter(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedPhotos</span><span class="delimiter">'</span></span>);
+
+    <span class="keyword">if</span>(!listId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedPhotos: listId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getSuggestedPhotos: listId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
+
+    <span class="keyword">if</span>(!itemId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedPhotos: itemId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getSuggestedPhotos: itemId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
+
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:listId: </span><span class="delimiter">'</span></span> + listId);
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:itemId: </span><span class="delimiter">'</span></span> + itemId);
+    core.callApi(path.join(<span class="string"><span class="delimiter">'</span><span class="content">/lists</span><span class="delimiter">'</span></span>, listId, <span class="string"><span class="delimiter">'</span><span class="content">suggestphoto</span><span class="delimiter">'</span></span>), accessToken, { <span class="key"><span class="delimiter">'</span><span class="content">itemId</span><span class="delimiter">'</span></span> : itemId }, callback);
+  }
+
+  <span class="comment">/**
+   * Retrieve tips suggested for an item in a List from Foursquare.
+   * @memberof module:node-foursquare/Lists
+   * @param {String} listId The id of the List; accepts IDs such as 'self/tips' or 'USER_ID/todos'.
+   * @param {String} itemId The id of an item in the List.
+   * @param {String} accessToken The access token provided by Foursquare for the current user.
+   * @param {Function} callback The function to call with results, function({Error} error, {Object} results).
+   * @see https://developer.foursquare.com/docs/lists/followers.html
+   */</span>
+  <span class="keyword">function</span> <span class="function">getSuggestedTips</span>(listId, itemId, accessToken, callback) {
+    logger.enter(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedTips</span><span class="delimiter">'</span></span>);
+
+    <span class="keyword">if</span>(!listId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedTips: listId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getSuggestedTips: listId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
+
+    <span class="keyword">if</span>(!itemId) {
+      logger.error(<span class="string"><span class="delimiter">'</span><span class="content">getSuggestedTips: itemId is required.</span><span class="delimiter">'</span></span>);
+      callback(<span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Lists.getSuggestedTips: itemId is required.</span><span class="delimiter">'</span></span>));
+      <span class="keyword">return</span>;
+    }
+
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:listId: </span><span class="delimiter">'</span></span> + listId);
+    logger.debug(<span class="string"><span class="delimiter">'</span><span class="content">getList:itemId: </span><span class="delimiter">'</span></span> + itemId);
+    core.callApi(path.join(<span class="string"><span class="delimiter">'</span><span class="content">/lists</span><span class="delimiter">'</span></span>, listId, <span class="string"><span class="delimiter">'</span><span class="content">suggesttip</span><span class="delimiter">'</span></span>), accessToken, { <span class="key"><span class="delimiter">'</span><span class="content">itemId</span><span class="delimiter">'</span></span> : itemId }, callback);
+  }
+
+  <span class="keyword">return</span> {
+    <span class="key"><span class="delimiter">'</span><span class="content">getList</span><span class="delimiter">'</span></span> : getList,
+    <span class="key"><span class="delimiter">'</span><span class="content">getFollowers</span><span class="delimiter">'</span></span> : getFollowers,
+    <span class="key"><span class="delimiter">'</span><span class="content">getSuggestedPhotos</span><span class="delimiter">'</span></span> : getSuggestedPhotos,
+    <span class="key"><span class="delimiter">'</span><span class="content">getSuggestedTips</span><span class="delimiter">'</span></span> : getSuggestedTips,
+    <span class="key"><span class="delimiter">'</span><span class="content">getSuggestedVenues</span><span class="delimiter">'</span></span> : getSuggestedVenues
+  }
+};
 </pre></td>
 </tr></table>
 

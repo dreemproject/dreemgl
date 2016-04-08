@@ -183,16 +183,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
 <a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> copyObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyObject</span><span class="delimiter">'</span></span>),
     keysIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./keysIn</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * Converts `value` to a plain object flattening inherited enumerable
- * properties of `value` to own properties of the plain object.
+ * Converts `value` to a plain object flattening inherited enumerable string
+ * keyed properties of `value` to own properties of the plain object.
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category Lang
  * @param {*} value The value to convert.
  * @returns {Object} Returns the converted plain object.

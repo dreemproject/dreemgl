@@ -191,74 +191,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
-<a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
-<strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
 </pre></td>
-  <td class="code"><pre><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>;
+  <td class="code"><pre><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
 
-<span class="keyword">var</span> utils = require(<span class="string"><span class="delimiter">'</span><span class="content">./../utils</span><span class="delimiter">'</span></span>);
+<span class="keyword">var</span> tough = require(<span class="string"><span class="delimiter">'</span><span class="content">tough-cookie</span><span class="delimiter">'</span></span>)
 
-module.exports = (
-  utils.isStandardBrowserEnv() ?
+<span class="keyword">var</span> Cookie = tough.Cookie
+  , CookieJar = tough.CookieJar
 
-  <span class="comment">// Standard browser envs support document.cookie</span>
-  (<span class="keyword">function</span> <span class="function">standardBrowserEnv</span>() {
-    <span class="keyword">return</span> {
-      <span class="function">write</span>: <span class="keyword">function</span> <span class="function">write</span>(name, value, expires, path, domain, secure) {
-        <span class="keyword">var</span> cookie = [];
-        cookie.push(name + <span class="string"><span class="delimiter">'</span><span class="content">=</span><span class="delimiter">'</span></span> + encodeURIComponent(value));
 
-        <span class="keyword">if</span> (utils.isNumber(expires)) {
-          cookie.push(<span class="string"><span class="delimiter">'</span><span class="content">expires=</span><span class="delimiter">'</span></span> + <span class="keyword">new</span> Date(expires).toGMTString());
-        }
+exports.<span class="function">parse</span> = <span class="keyword">function</span>(str) {
+  <span class="keyword">if</span> (str &amp;&amp; str.uri) {
+    str = str.uri
+  }
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> str !== <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">The cookie function only accepts STRING as param</span><span class="delimiter">'</span></span>)
+  }
+  <span class="keyword">return</span> Cookie.parse(str, {<span class="key">loose</span>: <span class="predefined-constant">true</span>})
+}
 
-        <span class="keyword">if</span> (utils.isString(path)) {
-          cookie.push(<span class="string"><span class="delimiter">'</span><span class="content">path=</span><span class="delimiter">'</span></span> + path);
-        }
+<span class="comment">// Adapt the sometimes-Async api of tough.CookieJar to our requirements</span>
+<span class="keyword">function</span> <span class="function">RequestJar</span>(store) {
+  <span class="keyword">var</span> self = <span class="local-variable">this</span>
+  self._jar = <span class="keyword">new</span> CookieJar(store, {<span class="key">looseMode</span>: <span class="predefined-constant">true</span>})
+}
+RequestJar.prototype.<span class="function">setCookie</span> = <span class="keyword">function</span>(cookieOrStr, uri, options) {
+  <span class="keyword">var</span> self = <span class="local-variable">this</span>
+  <span class="keyword">return</span> self._jar.setCookieSync(cookieOrStr, uri, options || {})
+}
+RequestJar.prototype.<span class="function">getCookieString</span> = <span class="keyword">function</span>(uri) {
+  <span class="keyword">var</span> self = <span class="local-variable">this</span>
+  <span class="keyword">return</span> self._jar.getCookieStringSync(uri)
+}
+RequestJar.prototype.<span class="function">getCookies</span> = <span class="keyword">function</span>(uri) {
+  <span class="keyword">var</span> self = <span class="local-variable">this</span>
+  <span class="keyword">return</span> self._jar.getCookiesSync(uri)
+}
 
-        <span class="keyword">if</span> (utils.isString(domain)) {
-          cookie.push(<span class="string"><span class="delimiter">'</span><span class="content">domain=</span><span class="delimiter">'</span></span> + domain);
-        }
-
-        <span class="keyword">if</span> (secure === <span class="predefined-constant">true</span>) {
-          cookie.push(<span class="string"><span class="delimiter">'</span><span class="content">secure</span><span class="delimiter">'</span></span>);
-        }
-
-        document.cookie = cookie.join(<span class="string"><span class="delimiter">'</span><span class="content">; </span><span class="delimiter">'</span></span>);
-      },
-
-      <span class="function">read</span>: <span class="keyword">function</span> <span class="function">read</span>(name) {
-        <span class="keyword">var</span> match = document.cookie.match(<span class="keyword">new</span> RegExp(<span class="string"><span class="delimiter">'</span><span class="content">(^|;</span><span class="char">\\</span><span class="content">s*)(</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">)=([^;]*)</span><span class="delimiter">'</span></span>));
-        <span class="keyword">return</span> (match ? decodeURIComponent(match[<span class="integer">3</span>]) : <span class="predefined-constant">null</span>);
-      },
-
-      <span class="function">remove</span>: <span class="keyword">function</span> <span class="function">remove</span>(name) {
-        <span class="local-variable">this</span>.write(name, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, Date.now() - <span class="integer">86400000</span>);
-      }
-    };
-  })() :
-
-  <span class="comment">// Non standard browser env (web workers, react-native) lack needed support.</span>
-  (<span class="keyword">function</span> <span class="function">nonStandardBrowserEnv</span>() {
-    <span class="keyword">return</span> {
-      <span class="function">write</span>: <span class="keyword">function</span> <span class="function">write</span>() {},
-      <span class="function">read</span>: <span class="keyword">function</span> <span class="function">read</span>() { <span class="keyword">return</span> <span class="predefined-constant">null</span>; },
-      <span class="function">remove</span>: <span class="keyword">function</span> <span class="function">remove</span>() {}
-    };
-  })()
-);
+exports.<span class="function">jar</span> = <span class="keyword">function</span>(store) {
+  <span class="keyword">return</span> <span class="keyword">new</span> RequestJar(store)
+}
 </pre></td>
 </tr></table>
 

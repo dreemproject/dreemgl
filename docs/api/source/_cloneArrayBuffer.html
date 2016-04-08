@@ -168,9 +168,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n14" name="n14">14</a>
 <a href="#n15" name="n15">15</a>
 <a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> Uint8Array = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Uint8Array</span><span class="delimiter">'</span></span>);
 
@@ -182,11 +179,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {ArrayBuffer} Returns the cloned array buffer.
  */</span>
 <span class="keyword">function</span> <span class="function">cloneArrayBuffer</span>(arrayBuffer) {
-  <span class="keyword">var</span> Ctor = arrayBuffer.constructor,
-      result = <span class="keyword">new</span> Ctor(arrayBuffer.byteLength),
-      view = <span class="keyword">new</span> Uint8Array(result);
-
-  view.set(<span class="keyword">new</span> Uint8Array(arrayBuffer));
+  <span class="keyword">var</span> result = <span class="keyword">new</span> arrayBuffer.constructor(arrayBuffer.byteLength);
+  <span class="keyword">new</span> Uint8Array(result).set(<span class="keyword">new</span> Uint8Array(arrayBuffer));
   <span class="keyword">return</span> result;
 }
 

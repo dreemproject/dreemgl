@@ -180,6 +180,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
     baseCastArrayLikeObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastArrayLikeObject</span><span class="delimiter">'</span></span>),
@@ -189,13 +191,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">/**
  * Creates an array of unique values that are included in all given arrays
  * using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
- * for equality comparisons.
+ * for equality comparisons. The order of result values is determined by the
+ * order they occur in the first array.
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Array
  * @param {...Array} [arrays] The arrays to inspect.
- * @returns {Array} Returns the new array of shared values.
+ * @returns {Array} Returns the new array of intersecting values.
  * @example
  *
  * _.intersection([2, 1], [4, 2], [1, 2]);

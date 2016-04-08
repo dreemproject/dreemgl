@@ -190,10 +190,41 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> copyObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyObject</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> assignValue = require(<span class="string"><span class="delimiter">'</span><span class="content">./_assignValue</span><span class="delimiter">'</span></span>),
+    copyObject = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyObject</span><span class="delimiter">'</span></span>),
     createAssigner = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createAssigner</span><span class="delimiter">'</span></span>),
+    isArrayLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArrayLike</span><span class="delimiter">'</span></span>),
+    isPrototype = require(<span class="string"><span class="delimiter">'</span><span class="content">./_isPrototype</span><span class="delimiter">'</span></span>),
     keysIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./keysIn</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/** Used for built-in method references. */</span>
+<span class="keyword">var</span> objectProto = Object.prototype;
+
+<span class="comment">/** Built-in value references. */</span>
+<span class="keyword">var</span> propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+<span class="comment">/** Detect if properties shadowing those on `Object.prototype` are non-enumerable. */</span>
+<span class="keyword">var</span> nonEnumShadows = !propertyIsEnumerable.call({ <span class="key"><span class="delimiter">'</span><span class="content">valueOf</span><span class="delimiter">'</span></span>: <span class="integer">1</span> }, <span class="string"><span class="delimiter">'</span><span class="content">valueOf</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * This method is like `_.assign` except that it iterates over own and
@@ -203,6 +234,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @alias extend
  * @category Object
  * @param {Object} object The destination object.
@@ -225,7 +257,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; { 'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5 }
  */</span>
 <span class="keyword">var</span> assignIn = createAssigner(<span class="keyword">function</span>(object, source) {
-  copyObject(source, keysIn(source), object);
+  <span class="keyword">if</span> (nonEnumShadows || isPrototype(source) || isArrayLike(source)) {
+    copyObject(source, keysIn(source), object);
+    <span class="keyword">return</span>;
+  }
+  <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> source) {
+    assignValue(object, key, source[key]);
+  }
 });
 
 module.exports = assignIn;

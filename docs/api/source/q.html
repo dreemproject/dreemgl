@@ -2454,11 +2454,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// modifications.</span>
 <span class="comment">// There is no situation where this is necessary.</span>
 <span class="comment">// If you need a security guarantee, these primordials need to be</span>
-<span class="comment">// deeply frozen anyway, and if you don’t need a security guarantee,</span>
+<span class="comment">// deeply frozen anyway, and if you don���t need a security guarantee,</span>
 <span class="comment">// this is just plain paranoid.</span>
 <span class="comment">// However, this **might** have the nice side-effect of reducing the size of</span>
 <span class="comment">// the minified code by reducing x.call() to merely x()</span>
-<span class="comment">// See Mark Miller’s explanation of what this does.</span>
+<span class="comment">// See Mark Miller���s explanation of what this does.</span>
 <span class="comment">// http://wiki.ecmascript.org/doku.php?id=conventions:safe_meta_programming</span>
 <span class="keyword">var</span> call = Function.call;
 <span class="keyword">function</span> <span class="function">uncurryThis</span>(f) {
@@ -3161,8 +3161,8 @@ Q.<span class="function">thenReject</span> = <span class="keyword">function</spa
 <span class="comment">/**
  * If an object is not a promise, it is as &quot;near&quot; as possible.
  * If a promise is rejected, it is as &quot;near&quot; as possible too.
- * If it’s a fulfilled promise, the fulfillment value is nearer.
- * If it’s a deferred promise and the deferred has been resolved, the
+ * If it���s a fulfilled promise, the fulfillment value is nearer.
+ * If it���s a deferred promise and the deferred has been resolved, the
  * resolution is &quot;nearer&quot;.
  * @param object
  * @returns most resolved (nearest) form of the object

@@ -185,15 +185,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n31" name="n31">31</a>
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
-<a href="#n36" name="n36">36</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
     baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>),
     baseMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseMap</span><span class="delimiter">'</span></span>),
     baseSortBy = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseSortBy</span><span class="delimiter">'</span></span>),
-    compareMultiple = require(<span class="string"><span class="delimiter">'</span><span class="content">./_compareMultiple</span><span class="delimiter">'</span></span>);
+    compareMultiple = require(<span class="string"><span class="delimiter">'</span><span class="content">./_compareMultiple</span><span class="delimiter">'</span></span>),
+    identity = require(<span class="string"><span class="delimiter">'</span><span class="content">./identity</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * The base implementation of `_.orderBy` without param guards.
@@ -205,12 +203,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Array} Returns the new sorted array.
  */</span>
 <span class="keyword">function</span> <span class="function">baseOrderBy</span>(collection, iteratees, orders) {
-  <span class="keyword">var</span> index = -<span class="integer">1</span>,
-      toIteratee = baseIteratee;
-
-  iteratees = arrayMap(iteratees.length ? iteratees : Array(<span class="integer">1</span>), <span class="keyword">function</span>(iteratee) {
-    <span class="keyword">return</span> toIteratee(iteratee);
-  });
+  <span class="keyword">var</span> index = -<span class="integer">1</span>;
+  iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseIteratee);
 
   <span class="keyword">var</span> result = baseMap(collection, <span class="keyword">function</span>(value, key, collection) {
     <span class="keyword">var</span> criteria = arrayMap(iteratees, <span class="keyword">function</span>(iteratee) {

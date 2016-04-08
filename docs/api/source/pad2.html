@@ -199,6 +199,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n45" name="n45">45</a>
 <a href="#n46" name="n46">46</a>
 <a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> createPadding = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createPadding</span><span class="delimiter">'</span></span>),
     stringSize = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringSize</span><span class="delimiter">'</span></span>),
@@ -215,6 +217,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category String
  * @param {string} [string=''] The string to pad.
  * @param {number} [length=0] The padding length.
@@ -235,15 +238,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   string = toString(string);
   length = toInteger(length);
 
-  <span class="keyword">var</span> strLength = stringSize(string);
+  <span class="keyword">var</span> strLength = length ? stringSize(string) : <span class="integer">0</span>;
   <span class="keyword">if</span> (!length || strLength &gt;= length) {
     <span class="keyword">return</span> string;
   }
-  <span class="keyword">var</span> mid = (length - strLength) / <span class="integer">2</span>,
-      leftLength = nativeFloor(mid),
-      rightLength = nativeCeil(mid);
-
-  <span class="keyword">return</span> createPadding(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, leftLength, chars) + string + createPadding(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, rightLength, chars);
+  <span class="keyword">var</span> mid = (length - strLength) / <span class="integer">2</span>;
+  <span class="keyword">return</span> (
+    createPadding(nativeFloor(mid), chars) +
+    string +
+    createPadding(nativeCeil(mid), chars)
+  );
 }
 
 module.exports = pad;

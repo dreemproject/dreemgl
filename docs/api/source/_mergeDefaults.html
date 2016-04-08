@@ -189,13 +189,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @param {string} key The key of the property to merge.
  * @param {Object} object The parent object of `objValue`.
  * @param {Object} source The parent object of `srcValue`.
- * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
+ * @param {Object} [stack] Tracks traversed source values and their merged
+ *  counterparts.
  * @returns {*} Returns the value to assign.
  */</span>
 <span class="keyword">function</span> <span class="function">mergeDefaults</span>(objValue, srcValue, key, object, source, stack) {
   <span class="keyword">if</span> (isObject(objValue) &amp;&amp; isObject(srcValue)) {
-    stack.set(srcValue, objValue);
-    baseMerge(objValue, srcValue, <span class="predefined-constant">undefined</span>, mergeDefaults, stack);
+    baseMerge(objValue, srcValue, <span class="predefined-constant">undefined</span>, mergeDefaults, stack.set(srcValue, objValue));
   }
   <span class="keyword">return</span> objValue;
 }

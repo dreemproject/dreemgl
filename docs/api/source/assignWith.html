@@ -187,21 +187,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> copyObjectWith = require(<span class="string"><span class="delimiter">'</span><span class="content">./_copyObjectWith</span><span class="delimiter">'</span></span>),
     createAssigner = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createAssigner</span><span class="delimiter">'</span></span>),
     keys = require(<span class="string"><span class="delimiter">'</span><span class="content">./keys</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
- * This method is like `_.assign` except that it accepts `customizer` which
- * is invoked to produce the assigned values. If `customizer` returns `undefined`
- * assignment is handled by the method instead. The `customizer` is invoked
- * with five arguments: (objValue, srcValue, key, object, source).
+ * This method is like `_.assign` except that it accepts `customizer`
+ * which is invoked to produce the assigned values. If `customizer` returns
+ * `undefined` assignment is handled by the method instead. The `customizer`
+ * is invoked with five arguments: (objValue, srcValue, key, object, source).
  *
  * **Note:** This method mutates `object`.
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category Object
  * @param {Object} object The destination object.
  * @param {...Object} sources The source objects.

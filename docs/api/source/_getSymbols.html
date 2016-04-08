@@ -167,20 +167,38 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n13" name="n13">13</a>
 <a href="#n14" name="n14">14</a>
 <a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/** Built-in value references. */</span>
 <span class="keyword">var</span> getOwnPropertySymbols = Object.getOwnPropertySymbols;
 
 <span class="comment">/**
- * Creates an array of the own symbol properties of `object`.
+ * Creates an array of the own enumerable symbol properties of `object`.
  *
  * @private
  * @param {Object} object The object to query.
  * @returns {Array} Returns the array of symbols.
  */</span>
-<span class="keyword">var</span> getSymbols = getOwnPropertySymbols || <span class="keyword">function</span>() {
-  <span class="keyword">return</span> [];
-};
+<span class="keyword">function</span> <span class="function">getSymbols</span>(object) {
+  <span class="comment">// Coerce `object` to an object to avoid non-object errors in V8.</span>
+  <span class="comment">// See https://bugs.chromium.org/p/v8/issues/detail?id=3443 for more details.</span>
+  <span class="keyword">return</span> getOwnPropertySymbols(Object(object));
+}
+
+<span class="comment">// Fallback for IE &lt; 11.</span>
+<span class="keyword">if</span> (!getOwnPropertySymbols) {
+  <span class="function">getSymbols</span> = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> [];
+  };
+}
 
 module.exports = getSymbols;
 </pre></td>

@@ -529,6 +529,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n375" name="n375">375</a>
 <a href="#n376" name="n376">376</a>
 <a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -623,7 +627,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
                                 <span class="keyword">var</span> match = define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key])
                                 <span class="keyword">if</span>(file.indexOf(match) === <span class="integer">0</span>){
-                                        file = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+file.slice(match.length)
+                                        <span class="keyword">var</span> sliced = file.slice(match.length)
+                                        <span class="keyword">if</span> (sliced[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) {
+                                                sliced = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + sliced
+                                        }
+                                        file = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+key+sliced
                                         <span class="keyword">break</span>
                                 }
                         }
@@ -715,7 +723,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="comment">// alright lets store this somewhere</span>
                                 <span class="keyword">var</span> buf = <span class="keyword">new</span> Uint8Array(req.headers[<span class="string"><span class="delimiter">'</span><span class="content">content-length</span><span class="delimiter">'</span></span>])
                                 <span class="keyword">var</span> off = <span class="integer">0</span>
-                                
+
                                 req.on(<span class="string"><span class="delimiter">'</span><span class="content">data</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(data){
                                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; data.length; i ++, off++){
                                                 buf[off] = data[i]

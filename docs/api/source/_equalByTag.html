@@ -240,9 +240,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n86" name="n86">86</a>
 <a href="#n87" name="n87">87</a>
 <a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> Symbol = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Symbol</span><span class="delimiter">'</span></span>),
     Uint8Array = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Uint8Array</span><span class="delimiter">'</span></span>),
+    equalArrays = require(<span class="string"><span class="delimiter">'</span><span class="content">./_equalArrays</span><span class="delimiter">'</span></span>),
     mapToArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_mapToArray</span><span class="delimiter">'</span></span>),
     setToArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./_setToArray</span><span class="delimiter">'</span></span>);
 
@@ -261,11 +287,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     stringTag = <span class="string"><span class="delimiter">'</span><span class="content">[object String]</span><span class="delimiter">'</span></span>,
     symbolTag = <span class="string"><span class="delimiter">'</span><span class="content">[object Symbol]</span><span class="delimiter">'</span></span>;
 
-<span class="keyword">var</span> arrayBufferTag = <span class="string"><span class="delimiter">'</span><span class="content">[object ArrayBuffer]</span><span class="delimiter">'</span></span>;
+<span class="keyword">var</span> arrayBufferTag = <span class="string"><span class="delimiter">'</span><span class="content">[object ArrayBuffer]</span><span class="delimiter">'</span></span>,
+    dataViewTag = <span class="string"><span class="delimiter">'</span><span class="content">[object DataView]</span><span class="delimiter">'</span></span>;
 
 <span class="comment">/** Used to convert symbols to primitives and strings. */</span>
 <span class="keyword">var</span> symbolProto = Symbol ? Symbol.prototype : <span class="predefined-constant">undefined</span>,
-    symbolValueOf = Symbol ? symbolProto.valueOf : <span class="predefined-constant">undefined</span>;
+    symbolValueOf = symbolProto ? symbolProto.valueOf : <span class="predefined-constant">undefined</span>;
 
 <span class="comment">/**
  * A specialized version of `baseIsEqualDeep` for comparing objects of
@@ -279,12 +306,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @param {Object} other The other object to compare.
  * @param {string} tag The `toStringTag` of the objects to compare.
  * @param {Function} equalFunc The function to determine equivalents of values.
- * @param {Function} [customizer] The function to customize comparisons.
- * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
+ *  for more details.
+ * @param {Object} stack Tracks traversed `object` and `other` objects.
  * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
  */</span>
-<span class="keyword">function</span> <span class="function">equalByTag</span>(object, other, tag, equalFunc, customizer, bitmask) {
+<span class="keyword">function</span> <span class="function">equalByTag</span>(object, other, tag, equalFunc, customizer, bitmask, stack) {
   <span class="keyword">switch</span> (tag) {
+    <span class="keyword">case</span> dataViewTag:
+      <span class="keyword">if</span> ((object.byteLength != other.byteLength) ||
+          (object.byteOffset != other.byteOffset)) {
+        <span class="keyword">return</span> <span class="predefined-constant">false</span>;
+      }
+      object = object.buffer;
+      other = other.buffer;
+
     <span class="keyword">case</span> arrayBufferTag:
       <span class="keyword">if</span> ((object.byteLength != other.byteLength) ||
           !equalFunc(<span class="keyword">new</span> Uint8Array(object), <span class="keyword">new</span> Uint8Array(other))) {
@@ -294,8 +331,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
     <span class="keyword">case</span> boolTag:
     <span class="keyword">case</span> dateTag:
-      <span class="comment">// Coerce dates and booleans to numbers, dates to milliseconds and booleans</span>
-      <span class="comment">// to `1` or `0` treating invalid dates coerced to `NaN` as not equal.</span>
+      <span class="comment">// Coerce dates and booleans to numbers, dates to milliseconds and</span>
+      <span class="comment">// booleans to `1` or `0` treating invalid dates coerced to `NaN` as</span>
+      <span class="comment">// not equal.</span>
       <span class="keyword">return</span> +object == +other;
 
     <span class="keyword">case</span> errorTag:
@@ -307,8 +345,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
     <span class="keyword">case</span> regexpTag:
     <span class="keyword">case</span> stringTag:
-      <span class="comment">// Coerce regexes to strings and treat strings primitives and string</span>
-      <span class="comment">// objects as equal. See https://es5.github.io/#x15.10.6.4 for more details.</span>
+      <span class="comment">// Coerce regexes to strings and treat strings, primitives and objects,</span>
+      <span class="comment">// as equal. See https://es5.github.io/#x15.10.6.4 for more details.</span>
       <span class="keyword">return</span> object == (other + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
 
     <span class="keyword">case</span> mapTag:
@@ -318,12 +356,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
       <span class="keyword">var</span> isPartial = bitmask &amp; PARTIAL_COMPARE_FLAG;
       convert || (convert = setToArray);
 
+      <span class="keyword">if</span> (object.size != other.size &amp;&amp; !isPartial) {
+        <span class="keyword">return</span> <span class="predefined-constant">false</span>;
+      }
+      <span class="comment">// Assume cyclic values are equal.</span>
+      <span class="keyword">var</span> stacked = stack.get(object);
+      <span class="keyword">if</span> (stacked) {
+        <span class="keyword">return</span> stacked == other;
+      }
+      bitmask |= UNORDERED_COMPARE_FLAG;
+      stack.set(object, other);
+
       <span class="comment">// Recursively compare objects (susceptible to call stack limits).</span>
-      <span class="keyword">return</span> (isPartial || object.size == other.size) &amp;&amp;
-        equalFunc(convert(object), convert(other), customizer, bitmask | UNORDERED_COMPARE_FLAG);
+      <span class="keyword">return</span> equalArrays(convert(object), convert(other), equalFunc, customizer, bitmask, stack);
 
     <span class="keyword">case</span> symbolTag:
-      <span class="keyword">return</span> !!Symbol &amp;&amp; (symbolValueOf.call(object) == symbolValueOf.call(other));
+      <span class="keyword">if</span> (symbolValueOf) {
+        <span class="keyword">return</span> symbolValueOf.call(object) == symbolValueOf.call(other);
+      }
   }
   <span class="keyword">return</span> <span class="predefined-constant">false</span>;
 }

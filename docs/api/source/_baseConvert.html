@@ -470,10 +470,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n316" name="n316">316</a>
 <a href="#n317" name="n317">317</a>
 <a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
+<a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
+<a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
+<strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
+<a href="#n336" name="n336">336</a>
+<a href="#n337" name="n337">337</a>
+<a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> mapping = require(<span class="string"><span class="delimiter">'</span><span class="content">./_mapping</span><span class="delimiter">'</span></span>),
     mutateMap = mapping.mutate,
-    placeholder = {};
+    fallbackHolder = {};
 
 <span class="comment">/**
  * The base implementation of `convert` which accepts a `util` object of methods
@@ -513,10 +538,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     <span class="key"><span class="delimiter">'</span><span class="content">rearg</span><span class="delimiter">'</span></span>: <span class="string"><span class="delimiter">'</span><span class="content">rearg</span><span class="delimiter">'</span></span> <span class="keyword">in</span> options ? options.rearg : <span class="predefined-constant">true</span>
   };
 
-  <span class="keyword">var</span> forceRearg = (<span class="string"><span class="delimiter">'</span><span class="content">rearg</span><span class="delimiter">'</span></span> <span class="keyword">in</span> options) &amp;&amp; options.rearg;
+  <span class="keyword">var</span> forceRearg = (<span class="string"><span class="delimiter">'</span><span class="content">rearg</span><span class="delimiter">'</span></span> <span class="keyword">in</span> options) &amp;&amp; options.rearg,
+      placeholder = isLib ? func : fallbackHolder,
+      pristine = isLib ? func.runInContext() : <span class="predefined-constant">undefined</span>;
 
   <span class="keyword">var</span> helpers = isLib ? func : {
     <span class="key"><span class="delimiter">'</span><span class="content">ary</span><span class="delimiter">'</span></span>: util.ary,
+    <span class="key"><span class="delimiter">'</span><span class="content">assign</span><span class="delimiter">'</span></span>: util.assign,
     <span class="key"><span class="delimiter">'</span><span class="content">clone</span><span class="delimiter">'</span></span>: util.clone,
     <span class="key"><span class="delimiter">'</span><span class="content">curry</span><span class="delimiter">'</span></span>: util.curry,
     <span class="key"><span class="delimiter">'</span><span class="content">forEach</span><span class="delimiter">'</span></span>: util.forEach,
@@ -530,6 +558,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   };
 
   <span class="keyword">var</span> ary = helpers.ary,
+      assign = helpers.assign,
       clone = helpers.clone,
       curry = helpers.curry,
       each = helpers.forEach,
@@ -582,6 +611,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
       nested = nested[key];
     }
     <span class="keyword">return</span> result;
+  };
+
+  <span class="keyword">var</span> <span class="function">convertLib</span> = <span class="keyword">function</span>(options) {
+    <span class="keyword">return</span> _.runInContext.convert(options)();
   };
 
   <span class="keyword">var</span> <span class="function">createCloner</span> = <span class="keyword">function</span>(func) {
@@ -698,8 +731,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="keyword">var</span> <span class="function">wrap</span> = <span class="keyword">function</span>(name, func) {
     name = mapping.aliasToReal[name] || name;
     <span class="keyword">var</span> wrapper = wrappers[name];
+
+    <span class="keyword">var</span> <span class="function">convertMethod</span> = <span class="keyword">function</span>(options) {
+      <span class="keyword">var</span> newUtil = isLib ? pristine : helpers,
+          newFunc = isLib ? pristine[name] : func,
+          newOptions = assign(assign({}, config), options);
+
+      <span class="keyword">return</span> baseConvert(newUtil, name, newFunc, newOptions);
+    };
+
     <span class="keyword">if</span> (wrapper) {
-      <span class="keyword">return</span> wrapper(func);
+      <span class="keyword">var</span> result = wrapper(func);
+      result.convert = convertMethod;
+      <span class="keyword">return</span> result;
     }
     <span class="keyword">var</span> wrapped = func;
     <span class="keyword">if</span> (config.immutable) {
@@ -713,7 +757,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         wrapped = immutWrap(func, cloneByPath);
       }
     }
-    <span class="keyword">var</span> result;
     each(aryMethodKeys, <span class="keyword">function</span>(aryKey) {
       each(mapping.aryMethod[aryKey], <span class="keyword">function</span>(otherName) {
         <span class="keyword">if</span> (name == otherName) {
@@ -747,9 +790,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     });
 
     result || (result = wrapped);
+    <span class="keyword">if</span> (result == func) {
+      <span class="function">result</span> = <span class="keyword">function</span>() {
+        <span class="keyword">return</span> func.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>);
+      };
+    }
+    result.convert = convertMethod;
     <span class="keyword">if</span> (mapping.placeholder[name]) {
       setPlaceholder = <span class="predefined-constant">true</span>;
-      func.placeholder = result.placeholder = placeholder;
+      result.placeholder = func.placeholder = placeholder;
     }
     <span class="keyword">return</span> result;
   };
@@ -775,10 +824,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     _[pair[<span class="integer">0</span>]] = pair[<span class="integer">1</span>];
   });
 
+  _.convert = convertLib;
   <span class="keyword">if</span> (setPlaceholder) {
     _.placeholder = placeholder;
   }
-  <span class="comment">// Wrap the lodash method and its aliases.</span>
+  <span class="comment">// Reassign aliases.</span>
   each(keys(_), <span class="keyword">function</span>(key) {
     each(mapping.realToAlias[key] || [], <span class="keyword">function</span>(alias) {
       _[alias] = _[key];

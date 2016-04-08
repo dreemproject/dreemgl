@@ -460,6 +460,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n306" name="n306">306</a>
 <a href="#n307" name="n307">307</a>
 <a href="#n308" name="n308">308</a>
+<a href="#n309" name="n309">309</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -632,7 +633,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="string"><span class="delimiter">'</span><span class="content">                 require(modules[0])</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">                 var Composition = require(modules[1])</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">                 var serverattrs = </span><span class="delimiter">'</span></span> + JSON.stringify(preloadattrs) + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>+
-                        <span class="string"><span class="delimiter">'</span><span class="content">        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs)</span><span class="content">\n</span><span class="delimiter">'</span></span>+
+                        <span class="string"><span class="delimiter">'</span><span class="content">                 var renderTarget;</span><span class="delimiter">'</span></span> + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>+
+                        <span class="string"><span class="delimiter">'</span><span class="content">        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs, renderTarget)</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">      },</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">           atEnd:function(){</span><span class="content">\n</span><span class="delimiter">'</span></span>+
                         <span class="string"><span class="delimiter">'</span><span class="content">         define.startLoader()</span><span class="content">\n</span><span class="delimiter">'</span></span>+

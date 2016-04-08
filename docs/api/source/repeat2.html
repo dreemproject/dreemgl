@@ -182,42 +182,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
-<a href="#n36" name="n36">36</a>
-<a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
-<a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
-<a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
-<strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> baseRepeat = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseRepeat</span><span class="delimiter">'</span></span>),
+    toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>),
     toString = require(<span class="string"><span class="delimiter">'</span><span class="content">./toString</span><span class="delimiter">'</span></span>);
-
-<span class="comment">/** Used as references for various `Number` constants. */</span>
-<span class="keyword">var</span> MAX_SAFE_INTEGER = <span class="integer">9007199254740991</span>;
-
-<span class="comment">/* Built-in method references for those with the same name as other `lodash` methods. */</span>
-<span class="keyword">var</span> nativeFloor = Math.floor;
 
 <span class="comment">/**
  * Repeats the given string `n` times.
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category String
  * @param {string} [string=''] The string to repeat.
  * @param {number} [n=0] The number of times to repeat the string.
@@ -234,24 +209,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * // =&gt; ''
  */</span>
 <span class="keyword">function</span> <span class="function">repeat</span>(string, n) {
-  string = toString(string);
-  n = toInteger(n);
-
-  <span class="keyword">var</span> result = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
-  <span class="keyword">if</span> (!string || n &lt; <span class="integer">1</span> || n &gt; MAX_SAFE_INTEGER) {
-    <span class="keyword">return</span> result;
-  }
-  <span class="comment">// Leverage the exponentiation by squaring algorithm for a faster repeat.</span>
-  <span class="comment">// See https://en.wikipedia.org/wiki/Exponentiation_by_squaring for more details.</span>
-  <span class="keyword">do</span> {
-    <span class="keyword">if</span> (n % <span class="integer">2</span>) {
-      result += string;
-    }
-    n = nativeFloor(n / <span class="integer">2</span>);
-    string += string;
-  } <span class="keyword">while</span> (n);
-
-  <span class="keyword">return</span> result;
+  <span class="keyword">return</span> baseRepeat(toString(string), toInteger(n));
 }
 
 module.exports = repeat;

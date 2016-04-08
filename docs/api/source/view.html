@@ -2132,52 +2132,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1978" name="n1978">1978</a>
 <a href="#n1979" name="n1979">1979</a>
 <strong><a href="#n1980" name="n1980">1980</a></strong>
-<a href="#n1981" name="n1981">1981</a>
-<a href="#n1982" name="n1982">1982</a>
-<a href="#n1983" name="n1983">1983</a>
-<a href="#n1984" name="n1984">1984</a>
-<a href="#n1985" name="n1985">1985</a>
-<a href="#n1986" name="n1986">1986</a>
-<a href="#n1987" name="n1987">1987</a>
-<a href="#n1988" name="n1988">1988</a>
-<a href="#n1989" name="n1989">1989</a>
-<strong><a href="#n1990" name="n1990">1990</a></strong>
-<a href="#n1991" name="n1991">1991</a>
-<a href="#n1992" name="n1992">1992</a>
-<a href="#n1993" name="n1993">1993</a>
-<a href="#n1994" name="n1994">1994</a>
-<a href="#n1995" name="n1995">1995</a>
-<a href="#n1996" name="n1996">1996</a>
-<a href="#n1997" name="n1997">1997</a>
-<a href="#n1998" name="n1998">1998</a>
-<a href="#n1999" name="n1999">1999</a>
-<strong><a href="#n2000" name="n2000">2000</a></strong>
-<a href="#n2001" name="n2001">2001</a>
-<a href="#n2002" name="n2002">2002</a>
-<a href="#n2003" name="n2003">2003</a>
-<a href="#n2004" name="n2004">2004</a>
-<a href="#n2005" name="n2005">2005</a>
-<a href="#n2006" name="n2006">2006</a>
-<a href="#n2007" name="n2007">2007</a>
-<a href="#n2008" name="n2008">2008</a>
-<a href="#n2009" name="n2009">2009</a>
-<strong><a href="#n2010" name="n2010">2010</a></strong>
-<a href="#n2011" name="n2011">2011</a>
-<a href="#n2012" name="n2012">2012</a>
-<a href="#n2013" name="n2013">2013</a>
-<a href="#n2014" name="n2014">2014</a>
-<a href="#n2015" name="n2015">2015</a>
-<a href="#n2016" name="n2016">2016</a>
-<a href="#n2017" name="n2017">2017</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
+
 <span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
+
 <span class="comment">// Base UI view object</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
 
         <span class="keyword">var</span> FlexLayout = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/layout</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/render</span><span class="delimiter">'</span></span>)
@@ -2486,7 +2452,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// the normal matrix contains the transform without translate (for normals)</span>
         <span class="local-variable">this</span>.normalmatrix = mat4.identity()
         <span class="comment">// the remap matrix used to remap pointer vec2 to local space</span>
-        <span class="local-variable">this</span>.remapmatrix = mat4();
+        <span class="local-variable">this</span>.remapmatrix = mat4()
 
         <span class="comment">// forward references for shaders</span>
         <span class="local-variable">this</span>.layout = {<span class="key">width</span>:<span class="integer">0</span>, <span class="key">height</span>:<span class="integer">0</span>, <span class="key">left</span>:-<span class="integer">1</span>, <span class="key">top</span>:-<span class="integer">1</span>, <span class="key">right</span>:<span class="integer">0</span>, <span class="key">bottom</span>:<span class="integer">0</span>}
@@ -2506,8 +2472,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">ondropshadowradius</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.dropshadowopacity &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>
-                }
-                <span class="keyword">else</span> {
+                } <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">false</span>
                 }
         }
@@ -2530,24 +2495,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">//var value = event.value</span>
                 <span class="keyword">var</span> border_on = <span class="predefined-constant">true</span>
                 <span class="keyword">var</span> width = <span class="local-variable">this</span>._borderwidth
-                <span class="keyword">if</span>(width[<span class="integer">0</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">1</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">2</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">3</span>] === <span class="integer">0</span>){
+                <span class="keyword">if</span> (width[<span class="integer">0</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">1</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">2</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">3</span>] === <span class="integer">0</span>){
                         border_on = <span class="predefined-constant">false</span>
-                }
-                <span class="keyword">else</span>{
+                } <span class="keyword">else</span> {
                         border_on = <span class="predefined-constant">true</span>
                 }
 
                 <span class="keyword">var</span> bg_on = isNaN(<span class="local-variable">this</span>._bgcolor[<span class="integer">0</span>])? <span class="predefined-constant">false</span>: <span class="predefined-constant">true</span>
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>) border_on = <span class="predefined-constant">false</span>, bg_on = <span class="predefined-constant">false</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>) border_on = <span class="predefined-constant">false</span>, bg_on = <span class="predefined-constant">false</span>
 
-                <span class="keyword">if</span>(radius[<span class="integer">0</span>] !== <span class="integer">0</span> || radius[<span class="integer">1</span>] !== <span class="integer">0</span> || radius[<span class="integer">2</span>] !== <span class="integer">0</span> || radius[<span class="integer">3</span>] !== <span class="integer">0</span>){
+                <span class="keyword">if</span> (radius[<span class="integer">0</span>] !== <span class="integer">0</span> || radius[<span class="integer">1</span>] !== <span class="integer">0</span> || radius[<span class="integer">2</span>] !== <span class="integer">0</span> || radius[<span class="integer">3</span>] !== <span class="integer">0</span>){
                         <span class="comment">// this switches the bg shader to the rounded one</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage){
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimage){
                                 <span class="local-variable">this</span>.roundedimage = <span class="predefined-constant">true</span>
                                 <span class="local-variable">this</span>.roundedrect = <span class="predefined-constant">false</span>
-                        }
-                        <span class="keyword">else</span>{
+                        } <span class="keyword">else</span> {
                                 <span class="local-variable">this</span>.roundedrect = bg_on
                                 <span class="local-variable">this</span>.roundedimage = <span class="predefined-constant">false</span>
                         }
@@ -2555,13 +2518,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.hardborder = <span class="predefined-constant">false</span>
-                }
-                <span class="keyword">else</span> {
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage){
+                } <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimage){
                                 <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">true</span>
                                 <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
-                        }
-                        <span class="keyword">else</span>{
+                        } <span class="keyword">else</span> {
                                 <span class="local-variable">this</span>.hardrect = bg_on
                                 <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">false</span>
                         }
@@ -2580,25 +2541,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set</span>
         <span class="local-variable">this</span>.<span class="function">onoverflow</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._overflow){
-                        <span class="keyword">if</span>(!<span class="local-variable">this</span>._viewport) <span class="local-variable">this</span>._viewport = <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._overflow){
+                        <span class="keyword">if</span> (!<span class="local-variable">this</span>._viewport) <span class="local-variable">this</span>._viewport = <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>
                 }
         }
 
         <span class="comment">// internal, setting focus to true</span>
         <span class="local-variable">this</span>.<span class="function">onfocus</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">if</span>(!event.mark){ <span class="comment">// someone set it to true that wasnt us</span>
+                <span class="keyword">if</span> (!event.mark){ <span class="comment">// someone set it to true that wasnt us</span>
                         <span class="local-variable">this</span>.screen.setFocus(<span class="local-variable">this</span>)
                 }
         }
 
         <span class="comment">// internal, put a tablistener</span>
         <span class="local-variable">this</span>.<span class="function">ontabstop</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">if</span>(isNaN(event.old) &amp;&amp; !isNaN(event.value)){
+                <span class="keyword">if</span> (isNaN(event.old) &amp;&amp; !isNaN(event.value)){
                         <span class="local-variable">this</span>.addListener(<span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(value){
-                                <span class="keyword">if</span>(value.name === <span class="string"><span class="delimiter">'</span><span class="content">tab</span><span class="delimiter">'</span></span>){
-                                        <span class="keyword">if</span>(value.shift) <span class="local-variable">this</span>.screen.focusPrev(<span class="local-variable">this</span>)
-                                        <span class="keyword">else</span> <span class="local-variable">this</span>.screen.focusNext(<span class="local-variable">this</span>)
+                                <span class="keyword">if</span> (value.name === <span class="string"><span class="delimiter">'</span><span class="content">tab</span><span class="delimiter">'</span></span>){
+                                        <span class="keyword">if</span> (value.shift) {
+                                                <span class="local-variable">this</span>.screen.focusPrev(<span class="local-variable">this</span>)
+                                        } <span class="keyword">else</span> {
+                                                <span class="local-variable">this</span>.screen.focusNext(<span class="local-variable">this</span>)
+                                        }
                                 }
                         })
                 }
@@ -2622,88 +2586,77 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.initialized = <span class="predefined-constant">true</span>
 
-                <span class="keyword">if</span>(prev){
+                <span class="keyword">if</span> (prev){
                         <span class="local-variable">this</span>.modelmatrix = prev.modelmatrix
                         <span class="local-variable">this</span>.totalmatrix = prev.totalmatrix
                         <span class="local-variable">this</span>.viewportmatrix = prev.viewportmatrix
                         <span class="local-variable">this</span>.layout = prev.layout
-                }
-                <span class="keyword">else</span>{
+                } <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.modelmatrix = mat4()
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport) <span class="local-variable">this</span>.totalmatrix = mat4.identity()
-                        <span class="keyword">else</span> <span class="local-variable">this</span>.totalmatrix = mat4()
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._viewport) {
+                                <span class="local-variable">this</span>.totalmatrix = mat4.identity()
+                        } <span class="keyword">else</span> {
+                                <span class="local-variable">this</span>.totalmatrix = mat4()
+                        }
                         <span class="local-variable">this</span>.viewportmatrix = mat4()
                 }
 
                 <span class="comment">// create shaders</span>
                 <span class="local-variable">this</span>.shaders = {}
-                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shader_enable){
+                <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shader_enable){
                         <span class="keyword">var</span> enable = <span class="local-variable">this</span>.shader_enable[key]
-                        <span class="keyword">if</span>(!enable) <span class="keyword">continue</span>
+                        <span class="keyword">if</span> (!enable) <span class="keyword">continue</span>
                         <span class="keyword">var</span> shader = <span class="local-variable">this</span>[key]
-                        <span class="keyword">if</span>(shader){
-                                <span class="comment">//var shname = key + 'shader'</span>
-                                <span class="comment">//console.log(shname)</span>
-
+                        <span class="keyword">if</span> (shader){
                                 <span class="keyword">var</span> prevshader = prev &amp;&amp; prev.shaders &amp;&amp; prev.shaders[key]
                                 <span class="keyword">var</span> shobj
                                 <span class="comment">// ok so instead of comparing constructor, lets compare the computational result</span>
-<span class="comment">//                                if(prevshader &amp;&amp; prevshader.constructor !== shader) console.log(shader)</span>
-                                <span class="keyword">if</span>(prevshader &amp;&amp; (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, <span class="local-variable">this</span>, prev))){
+                                <span class="keyword">if</span> (prevshader &amp;&amp; (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, <span class="local-variable">this</span>, prev))){
                                         shobj = prevshader
                                         Object.defineProperty(shobj, <span class="string"><span class="delimiter">'</span><span class="content">constructor</span><span class="delimiter">'</span></span>,{<span class="key">value</span>:shader, <span class="key">configurable</span>:<span class="predefined-constant">true</span>})
-                                        <span class="comment">//shobj.constructor = shader</span>
+
                                         shobj.view = <span class="local-variable">this</span>
                                         shobj.outer = <span class="local-variable">this</span>
+
                                         <span class="comment">// ok now check if we need to dirty it</span>
-
-                                        <span class="keyword">if</span>(shobj._view_listeners) <span class="keyword">for</span>(<span class="keyword">var</span> shkey <span class="keyword">in</span> shobj._view_listeners){
-
+                                        <span class="keyword">if</span> (shobj._view_listeners) <span class="keyword">for</span> (<span class="keyword">var</span> shkey <span class="keyword">in</span> shobj._view_listeners){
                                                 <span class="local-variable">this</span>.addListener(shkey, shobj.reupdate.bind(shobj))
                                                 <span class="keyword">var</span> value = <span class="local-variable">this</span>[shkey]
-
-                                                <span class="keyword">if</span>(!(value &amp;&amp; value.struct &amp;&amp; value.struct.equals(value, prev[shkey]) || value === prev[shkey])){
+                                                <span class="keyword">if</span> (!(value &amp;&amp; value.struct &amp;&amp; value.struct.equals(value, prev[shkey]) || value === prev[shkey])){
                                                         shobj.reupdate(shkey)
                                                 }
                                         }
                                         prevshader.reused = <span class="predefined-constant">true</span>
-                                }
-                                <span class="keyword">else</span>{
+                                } <span class="keyword">else</span> {
                                         shobj = <span class="keyword">new</span> shader(<span class="local-variable">this</span>)
                                 }
-                                <span class="comment">//this[shname] = shobj</span>
                                 shobj.shadername = key
                                 <span class="local-variable">this</span>.shaders[key] = shobj
                                 <span class="local-variable">this</span>.shader_list.push(shobj)
                         }
                 }
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimage){
                         <span class="local-variable">this</span>.onbgimage()
                 }
 
-                <span class="comment">//if(this.debug !== undefined &amp;&amp; this.debug.indexOf('shaderlist') !== -1){</span>
-                <span class="comment">//        console.log(this.shader_order)</span>
-                <span class="comment">//}</span>
-
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport){
-                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shaders){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._viewport){
+                        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shaders){
                                 <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders[key]
-                                <span class="keyword">if</span>(shader.dont_scroll_as_viewport){
+                                <span class="keyword">if</span> (shader.dont_scroll_as_viewport){
                                         <span class="local-variable">this</span>.shaders[key].noscroll = <span class="predefined-constant">true</span>
                                 }
                         }
                         <span class="local-variable">this</span>.shaders.viewportblend = <span class="keyword">new</span> <span class="local-variable">this</span>.viewportblend(<span class="local-variable">this</span>)
                 }
-
                 <span class="local-variable">this</span>.sortShaders()
         }
 
         <span class="comment">// lets destroy some shaders/vertexbuffers</span>
         <span class="local-variable">this</span>.<span class="function">atViewDestroy</span> = <span class="keyword">function</span>(){
-                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shaders){
+                <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shaders){
                         <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders[key]
-                        <span class="keyword">if</span>(!shader.reused &amp;&amp; shader.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">mesh</span><span class="delimiter">'</span></span>) &amp;&amp; !shader.mesh.sticky){
+                        <span class="keyword">if</span> (!shader.reused &amp;&amp; shader.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">mesh</span><span class="delimiter">'</span></span>) &amp;&amp; !shader.mesh.sticky){
                                 <span class="local-variable">this</span>.screen.device.gl.deleteBuffer(shader.mesh.glvb)
                                 shader.mesh.glvb = <span class="predefined-constant">undefined</span>
                         }
@@ -2719,25 +2672,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         })
 
         <span class="local-variable">this</span>.<span class="function">onbgimage</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized){
-                        <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="local-variable">this</span>._bgimage === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.initialized){
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="local-variable">this</span>._bgimage === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
                                 <span class="comment">// Path to image was specified</span>
-                                <span class="keyword">if</span>(require.loaded(<span class="local-variable">this</span>._bgimage)){
+                                <span class="keyword">if</span> (require.loaded(<span class="local-variable">this</span>._bgimage)){
                                         <span class="keyword">var</span> img = require(<span class="local-variable">this</span>._bgimage)
                                         <span class="local-variable">this</span>.setBgImage(img)
-                                }
-                                <span class="keyword">else</span>{
+                                } <span class="keyword">else</span> {
                                         <span class="comment">// check if loaded already</span>
                                         require.async(<span class="local-variable">this</span>._bgimage, <span class="string"><span class="delimiter">'</span><span class="content">jpeg</span><span class="delimiter">'</span></span>).then(<span class="keyword">function</span>(result){
                                                 <span class="local-variable">this</span>.setBgImage(result)
                                         }.bind(<span class="local-variable">this</span>))
                                 }
-                        }
-                        <span class="keyword">else</span>{
+                        } <span class="keyword">else</span> {
                                 <span class="local-variable">this</span>.setBgImage(<span class="local-variable">this</span>._bgimage)
                         }
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.setBorderShaders()
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.setBorderShaders()
         }
 
         <span class="local-variable">this</span>.<span class="function">defaultKeyboardHandler</span> = <span class="keyword">function</span>(v, prefix){
@@ -2749,65 +2701,63 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> name = prefix + <span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span> + v.name[<span class="integer">0</span>].toUpperCase() + v.name.slice(<span class="integer">1</span>)
                 <span class="comment">//this.undo_group++</span>
 
-                <span class="keyword">if</span>(keyboard.leftmeta || keyboard.rightmeta) name += <span class="string"><span class="delimiter">'</span><span class="content">Cmd</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.ctrl) name += <span class="string"><span class="delimiter">'</span><span class="content">Ctrl</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.alt) name += <span class="string"><span class="delimiter">'</span><span class="content">Alt</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.shift) name += <span class="string"><span class="delimiter">'</span><span class="content">Shift</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (keyboard.leftmeta || keyboard.rightmeta) name += <span class="string"><span class="delimiter">'</span><span class="content">Cmd</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (keyboard.ctrl) name += <span class="string"><span class="delimiter">'</span><span class="content">Ctrl</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (keyboard.alt) name += <span class="string"><span class="delimiter">'</span><span class="content">Alt</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (keyboard.shift) name += <span class="string"><span class="delimiter">'</span><span class="content">Shift</span><span class="delimiter">'</span></span>
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>[name]) {
+                <span class="keyword">if</span> (<span class="local-variable">this</span>[name]) {
                         <span class="local-variable">this</span>[name](v)
-                }
-                <span class="keyword">else</span>{
-                        <span class="comment">//console.log(name)</span>
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.keydownHandler) <span class="local-variable">this</span>.keydownHandler(name)
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.keydownHandler) {
+                        <span class="local-variable">this</span>.keydownHandler(name)
                 }
         }
-
 
         <span class="comment">// image can be an image, or a Texture (has array property).</span>
         <span class="local-variable">this</span>.<span class="function">setBgImage</span> = <span class="keyword">function</span>(image){
                 <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.hardimage || <span class="local-variable">this</span>.shaders.roundedimage
-                <span class="keyword">if</span>(!shader) <span class="keyword">return</span>
+                <span class="keyword">if</span> (!shader) <span class="keyword">return</span>
 
                 <span class="comment">// Callback method to update the bgimage. Some platforms support a</span>
                 <span class="comment">// second argument to Texture.fromImage for delayed loading</span>
                 <span class="keyword">var</span> <span class="function">update</span> = <span class="keyword">function</span>(img) {
-                        <span class="keyword">if</span> (!img)
-                                <span class="keyword">return</span>;
-
-                        shader.texture = img;
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">resize</span><span class="delimiter">&quot;</span></span>){
+                        <span class="keyword">if</span> (!img) <span class="keyword">return</span>
+                        shader.texture = img
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">resize</span><span class="delimiter">&quot;</span></span>){
                                 <span class="local-variable">this</span>._size = img.size
                                 <span class="local-variable">this</span>.relayout()
                         } <span class="keyword">else</span> <span class="keyword">if</span> (img) {
                                 <span class="local-variable">this</span>.onbgimagemode()
-                        }
-                        <span class="keyword">else</span> <span class="local-variable">this</span>.redraw()
+                        } <span class="keyword">else</span> <span class="local-variable">this</span>.redraw()
                 }.bind(<span class="local-variable">this</span>)
 
-                update((image.array) ? image : Shader.Texture.fromImage(image, update));
+                update((image.array) ? image : Shader.Texture.fromImage(image, update))
         }
 
         <span class="comment">// internal, emit an event upward (to all parents) untill a listener is hit</span>
         <span class="local-variable">this</span>.<span class="function">emitUpward</span> = <span class="keyword">function</span>(key, msg){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span>+key] || <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span>+key]){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span>+key] || <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span>+key]){
                         <span class="local-variable">this</span>.emit(key, msg)
                         <span class="keyword">return</span> <span class="local-variable">this</span>
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent) <span class="keyword">return</span> <span class="local-variable">this</span>.parent.emitUpward(key, msg)
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent) {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.parent.emitUpward(key, msg)
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">findEmitUpward</span> = <span class="keyword">function</span>(key){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span>+key] || <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span>+key]){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span>+key] || <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span>+key]){
                         <span class="keyword">return</span> <span class="local-variable">this</span>
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent) <span class="keyword">return</span> <span class="local-variable">this</span>.parent.findEmitUpward(key)
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent) {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.parent.findEmitUpward(key)
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">computeCursor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(node){
-                        <span class="keyword">if</span>(node._cursor !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>){
+                        <span class="keyword">if</span> (node._cursor !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>){
                                 <span class="local-variable">this</span>.screen.pointer.cursor = node._cursor
                                 <span class="keyword">break</span>
                         }
@@ -2821,30 +2771,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.shader_draw_list = <span class="local-variable">this</span>.shader_list.slice(<span class="integer">0</span>).sort(<span class="keyword">function</span>(a, b){
                         <span class="keyword">return</span> shaders[a.shadername].draworder &gt; shaders[b.shadername].draworder
                 }.bind(<span class="local-variable">this</span>))
-
                 <span class="local-variable">this</span>.shader_update_list = <span class="local-variable">this</span>.shader_list.slice(<span class="integer">0</span>).sort(<span class="keyword">function</span>(a, b){
                         <span class="keyword">return</span> shaders[a.shadername].updateorder &gt; shaders[b.shadername].updateorder
                 }.bind(<span class="local-variable">this</span>))
-                <span class="comment">//console.log(this.shader_draw_list)</span>
         }
 
         <span class="comment">// internal, custom hook in the inner class assignment to handle nested shaders specifically</span>
         <span class="local-variable">this</span>.<span class="function">atInnerClassAssign</span> = <span class="keyword">function</span>(key, value){
-
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">shader_enable</span><span class="delimiter">'</span></span>)) <span class="local-variable">this</span>.shader_enable = Object.create(<span class="local-variable">this</span>.shader_enable || {})
-
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">shader_enable</span><span class="delimiter">'</span></span>)) <span class="local-variable">this</span>.shader_enable = Object.create(<span class="local-variable">this</span>.shader_enable || {})
                 <span class="comment">// set the shader order</span>
-                <span class="keyword">if</span>(!value || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
+                <span class="keyword">if</span> (!value || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
                         <span class="local-variable">this</span>.shader_enable[key] = value? <span class="predefined-constant">true</span>: <span class="predefined-constant">false</span>
                         <span class="keyword">return</span>
                 }
-
                 <span class="comment">// its a class assignment</span>
-                <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; Object.getPrototypeOf(value.prototype) !== Object.prototype){
+                <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; Object.getPrototypeOf(value.prototype) !== Object.prototype){
                         <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key] = value
                         <span class="keyword">return</span>
                 }
-
                 <span class="comment">// its inheritance</span>
                 <span class="keyword">var</span> cls = <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key]
                 <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key] = cls.extend(value, <span class="local-variable">this</span>)
@@ -2852,24 +2796,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, redraw our view and bubble up the viewport dirtiness to the root</span>
         <span class="local-variable">this</span>.<span class="function">redraw</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.parent_viewport){
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.parent_viewport){
                         <span class="keyword">return</span>
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport.draw_dirty === <span class="integer">3</span>){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport.draw_dirty === <span class="integer">3</span>){
                         <span class="keyword">return</span>
                 }
                 <span class="keyword">var</span> parent = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(parent){
                         <span class="keyword">var</span> viewport = parent.parent_viewport
-                        <span class="keyword">if</span>(!viewport) <span class="keyword">break</span>
-                        <span class="keyword">if</span>(viewport.draw_dirty === <span class="integer">3</span>){
+                        <span class="keyword">if</span> (!viewport) <span class="keyword">break</span>
+                        <span class="keyword">if</span> (viewport.draw_dirty === <span class="integer">3</span>){
                                 <span class="keyword">return</span>
                         }
                         viewport.draw_dirty = <span class="integer">3</span>
                         parent = viewport.parent
                 }
                 <span class="local-variable">this</span>.draw_dirty = <span class="integer">3</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.screen.device &amp;&amp; <span class="local-variable">this</span>.screen.device.redraw) {
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.screen.device &amp;&amp; <span class="local-variable">this</span>.screen.device.redraw) {
                         <span class="local-variable">this</span>.screen.device.redraw()
                 }
         }
@@ -2877,19 +2821,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// internal, updates all the shaders</span>
         <span class="local-variable">this</span>.<span class="function">reupdate</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> shaders = <span class="local-variable">this</span>.shader_list
-                <span class="keyword">if</span>(shaders) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; shaders.length; i++){
+                <span class="keyword">if</span> (shaders) <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; shaders.length; i++){
                         shaders[i].reupdate()
                 }
         }
 
         <span class="local-variable">this</span>.<span class="function">getViewGuid</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.viewguid) <span class="keyword">return</span> <span class="local-variable">this</span>.viewguid
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.pickguid){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.viewguid) <span class="keyword">return</span> <span class="local-variable">this</span>.viewguid
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.pickguid){
                         <span class="local-variable">this</span>.viewguid = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> +<span class="local-variable">this</span>.pickguid
                 }
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>, id = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                 <span class="keyword">while</span>(node){
-                        <span class="keyword">if</span>(node.parent) id += node.parent.children.indexOf(node)
+                        <span class="keyword">if</span> (node.parent) id += node.parent.children.indexOf(node)
                         node = node.parent
                 }
                 <span class="local-variable">this</span>.viewguid = id
@@ -2939,7 +2883,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.remapmatrix = mat4.identity()
 
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = parentlist.length - <span class="integer">1</span>; i &gt;= <span class="integer">0</span>; i--) {
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = parentlist.length - <span class="integer">1</span>; i &gt;= <span class="integer">0</span>; i--) {
                         <span class="keyword">var</span> P = parentlist[i]
                         <span class="keyword">var</span> newmode = P.parent? P._viewport:<span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>
 
@@ -2975,16 +2919,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 raystart = vec3.mul_mat4(raystart, <span class="local-variable">this</span>.remapmatrix)
                                 raystart = vec3.mul_mat4(raystart, transtemp2)
 
-                                lastrayafteradjust = vec3(raystart.x, raystart.y,-<span class="integer">1</span>);
-                                lastprojection = P.colormatrices.perspectivematrix;
-                                lastviewmatrix = P.colormatrices.lookatmatrix;
-                                camerapos = P._camera;
+                                lastrayafteradjust = vec3(raystart.x, raystart.y,-<span class="integer">1</span>)
+                                lastprojection = P.colormatrices.perspectivematrix
+                                lastviewmatrix = P.colormatrices.lookatmatrix
+                                camerapos = P._camera
 
                         }
 
-                        <span class="keyword">if</span>(i == <span class="integer">0</span> &amp;&amp; <span class="local-variable">this</span>.noscroll){
-                                mat4.invert(P.colormatrices.noscrollmatrix, <span class="local-variable">this</span>.remapmatrix)
-                        }        <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (i == <span class="integer">0</span> &amp;&amp; <span class="local-variable">this</span>.noscroll){
+                                mat4.invert(P.colormatrices.noscrollmatrix, <span class="local-variable">this</span>.remapmatrix) }        <span class="keyword">else</span> {
                                 mat4.invert(P.colormatrices.viewmatrix, <span class="local-variable">this</span>.remapmatrix)
                         }
 
@@ -3003,16 +2946,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, this gets called by the render engine</span>
         <span class="local-variable">this</span>.<span class="function">updateShaders</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.update_dirty) <span class="keyword">return</span>
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.update_dirty) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.update_dirty = <span class="predefined-constant">false</span>
                 <span class="comment">// we can wire up the shader</span>
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>._shaderswired){
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>._shaderswired){
                         <span class="local-variable">this</span>.<span class="function">atAttributeGet</span> = <span class="keyword">function</span>(attrname){
-                                <span class="comment">//if(this.constructor.name === 'label')</span>
+                                <span class="comment">//if (this.constructor.name === 'label')</span>
                                 <span class="comment">//console.log(this.constructor.name, attrname, this['_'+attrname])</span>
                                 <span class="comment">// monitor attribute wires for geometry</span>
                                 <span class="comment">// lets add a listener</span>
-                                <span class="keyword">if</span>(!shader._view_listeners) shader._view_listeners = {}
+                                <span class="keyword">if</span> (!shader._view_listeners) shader._view_listeners = {}
                                 shader._view_listeners[attrname] = <span class="integer">1</span>
 
                                 <span class="local-variable">this</span>.addListener(attrname,shader.reupdate.bind(shader, attrname))
@@ -3022,15 +2965,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
 
                 <span class="keyword">var</span> shaders = <span class="local-variable">this</span>.shader_update_list
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; shaders.length; i ++){
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; shaders.length; i ++){
                         <span class="keyword">var</span> shader = shaders[i]
-                        <span class="keyword">if</span>(shader.update &amp;&amp; shader.update_dirty){
+                        <span class="keyword">if</span> (shader.update &amp;&amp; shader.update_dirty){
                                 shader.update_dirty = <span class="predefined-constant">false</span>
                                 shader.update()
                         }
                 }
 
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>._shaderswired) {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>._shaderswired) {
                         <span class="local-variable">this</span>._shaderswired = <span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.atAttributeGet = <span class="predefined-constant">undefined</span>
                 }
@@ -3040,7 +2983,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">startDrag</span> = <span class="keyword">function</span>(pointerevent, render){
                 <span class="keyword">var</span> dragview = <span class="local-variable">this</span>.screen.openOverlay(render)
 
-                <span class="keyword">if</span>(!dragview.atDragMove){
+                <span class="keyword">if</span> (!dragview.atDragMove){
                         dragview.<span class="function">atDragMove</span> = <span class="keyword">function</span>(position){
                                 <span class="local-variable">this</span>.x = position[<span class="integer">0</span>] - <span class="local-variable">this</span>.width*<span class="float">0.5</span>
                                 <span class="local-variable">this</span>.y = position[<span class="integer">1</span>] - <span class="local-variable">this</span>.height*<span class="float">0.5</span>
@@ -3057,19 +3000,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets send dragenter/leave events</span>
                         <span class="keyword">var</span> newdrag = event.pick
 
-                        <span class="keyword">if</span>(!dragview.isDropTarget(newdrag,event)) newdrag = <span class="predefined-constant">undefined</span>
+                        <span class="keyword">if</span> (!dragview.isDropTarget(newdrag,event)) newdrag = <span class="predefined-constant">undefined</span>
 
-                        <span class="keyword">if</span>(lastdrag !== newdrag){
-                                <span class="keyword">if</span>(lastdrag) lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
-                                <span class="keyword">if</span>(newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragover</span><span class="delimiter">'</span></span>,{})
+                        <span class="keyword">if</span> (lastdrag !== newdrag){
+                                <span class="keyword">if</span> (lastdrag) lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
+                                <span class="keyword">if</span> (newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragover</span><span class="delimiter">'</span></span>,{})
                                 lastdrag = newdrag
                         }
-                        <span class="keyword">if</span>(newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragmove</span><span class="delimiter">'</span></span>, event)
+                        <span class="keyword">if</span> (newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragmove</span><span class="delimiter">'</span></span>, event)
                 }
                 <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(event){
                         <span class="local-variable">this</span>.onpointermove = <span class="predefined-constant">undefined</span>
                         dragview.closeOverlay()
-                        <span class="keyword">if</span>(lastdrag){
+                        <span class="keyword">if</span> (lastdrag){
                                 lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
                         }
                         dragview.atDrop(lastdrag, event)
@@ -3079,27 +3022,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, decide to inject scrollbars into our childarray</span>
         <span class="local-variable">this</span>.<span class="function">atRender</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; (<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>|| <span class="local-variable">this</span>._overflow===<span class="string"><span class="delimiter">'</span><span class="content">hscroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">vscroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">auto</span><span class="delimiter">'</span></span>)){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar) <span class="local-variable">this</span>.vscrollbar.value = <span class="integer">0</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.hscrollbar) <span class="local-variable">this</span>.hscrollbar.value = <span class="integer">0</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; (<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">auto</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">hscroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">vscroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">auto</span><span class="delimiter">'</span></span>)){
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.vscrollbar) <span class="local-variable">this</span>.vscrollbar.value = <span class="integer">0</span>
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar) <span class="local-variable">this</span>.hscrollbar.value = <span class="integer">0</span>
 
                         <span class="local-variable">this</span>.<span class="function">scroll</span> = <span class="keyword">function</span>(event){
-                                <span class="keyword">if</span>(event.mark) <span class="keyword">return</span>
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar){
+                                <span class="keyword">if</span> (event.mark) <span class="keyword">return</span>
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.vscrollbar){
                                         <span class="local-variable">this</span>.vscrollbar.value = Mark(event.value[<span class="integer">1</span>])
                                 }
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.hscrollbar){
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar){
                                         <span class="local-variable">this</span>.hscrollbar.value = Mark(event.value[<span class="integer">0</span>])
                                 }
                         }
 
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">vscroll</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.children.push(
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">auto</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">vscroll</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.children.push(
                                 <span class="local-variable">this</span>.vscrollbar = <span class="local-variable">this</span>.scrollbar({
                                         <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
                                         <span class="key">vertical</span>:<span class="predefined-constant">true</span>,
                                         <span class="key">noscroll</span>:<span class="predefined-constant">true</span>,
                                         <span class="function">value</span>:<span class="keyword">function</span>(event){
-                                                <span class="keyword">if</span>(event.mark) <span class="keyword">return</span>
+                                                <span class="keyword">if</span> (event.mark) <span class="keyword">return</span>
                                                 <span class="local-variable">this</span>.parent.scroll = Mark(vec2(<span class="local-variable">this</span>.parent._scroll[<span class="integer">0</span>],<span class="local-variable">this</span>._value))
                                         },
                                         <span class="function">layout</span>:<span class="keyword">function</span>(){
@@ -3113,13 +3057,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 })
                         )
 
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">hscroll</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.children.push(
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">auto</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span> || <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">hscroll</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.children.push(
                                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.scrollbar({
                                         <span class="key">position</span>: <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
                                         <span class="key">vertical</span>: <span class="predefined-constant">false</span>,
                                         <span class="key">noscroll</span>: <span class="predefined-constant">true</span>,
                                         <span class="function">value</span>: <span class="keyword">function</span>(event){
-                                                <span class="keyword">if</span>(event.mark) <span class="keyword">return</span>
+                                                <span class="keyword">if</span> (event.mark) <span class="keyword">return</span>
                                                 <span class="local-variable">this</span>.parent.scroll = Mark(vec2(<span class="local-variable">this</span>._value,<span class="local-variable">this</span>.parent._scroll[<span class="integer">1</span>]))
                                         },
                                         <span class="function">layout</span>: <span class="keyword">function</span>(){
@@ -3133,14 +3077,29 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 })
                         )
 
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.hscrollbar) <span class="local-variable">this</span>.hscrollbar.value = Mark(<span class="local-variable">this</span>._scroll[<span class="integer">0</span>])
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar) <span class="local-variable">this</span>.vscrollbar.value = Mark(<span class="local-variable">this</span>._scroll[<span class="integer">1</span>])
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar) <span class="local-variable">this</span>.hscrollbar.value = Mark(<span class="local-variable">this</span>._scroll[<span class="integer">0</span>])
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.vscrollbar) <span class="local-variable">this</span>.vscrollbar.value = Mark(<span class="local-variable">this</span>._scroll[<span class="integer">1</span>])
 
                         <span class="local-variable">this</span>.<span class="function">pointerwheel</span> = <span class="keyword">function</span>(event){
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar &amp;&amp; <span class="local-variable">this</span>.vscrollbar._visible){
+                                <span class="comment">// cumulative damped wheel value.</span>
+                                <span class="comment">// Used to decide if enough horizontal/vertical movement is present.</span>
+                                <span class="local-variable">this</span>.dampedwheel = <span class="local-variable">this</span>.dampedwheel || vec2(<span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">0</span>)
+                                <span class="local-variable">this</span>.dampedwheel = vec2(
+                                        (<span class="local-variable">this</span>.dampedwheel[<span class="integer">0</span>] * <span class="integer">9</span> + event.wheel[<span class="integer">0</span>]) / <span class="integer">10</span>,
+                                        (<span class="local-variable">this</span>.dampedwheel[<span class="integer">1</span>] * <span class="integer">9</span> + event.wheel[<span class="integer">1</span>]) / <span class="integer">10</span>
+                                )
+
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.vscrollbar &amp;&amp; <span class="local-variable">this</span>.vscrollbar._visible){
+                                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.hscrollbar || !<span class="local-variable">this</span>.hscrollbar._visible) {
+                                                <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedwheel[<span class="integer">0</span>]) &gt; abs(<span class="local-variable">this</span>.dampedwheel[<span class="integer">1</span>]) * <span class="integer">2</span>) <span class="keyword">return</span>
+                                        }
                                         <span class="local-variable">this</span>.vscrollbar.value = clamp(<span class="local-variable">this</span>.vscrollbar._value + event.wheel[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.vscrollbar._total - <span class="local-variable">this</span>.vscrollbar._page)
                                 }
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.hscrollbar &amp;&amp; <span class="local-variable">this</span>.hscrollbar._visible){
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar &amp;&amp; <span class="local-variable">this</span>.hscrollbar._visible){
+                                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.vscrollbar || !<span class="local-variable">this</span>.vscrollbar._visible) {
+                                                <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedwheel[<span class="integer">1</span>]) &gt; abs(<span class="local-variable">this</span>.dampedwheel[<span class="integer">0</span>]) / <span class="integer">2</span>) <span class="keyword">return</span>
+                                        }
                                         <span class="local-variable">this</span>.hscrollbar.value = clamp(<span class="local-variable">this</span>.hscrollbar._value + event.wheel[<span class="integer">0</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
                                 }
                         }
@@ -3169,37 +3128,35 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// internal, show/hide scrollbars</span>
         <span class="local-variable">this</span>.<span class="function">updateScrollbars</span> = <span class="keyword">function</span>(){
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.vscrollbar){
                         <span class="keyword">var</span> scroll = <span class="local-variable">this</span>.vscrollbar
                         <span class="keyword">var</span> totalsize = Math.floor(<span class="local-variable">this</span>.layout.boundh)
                         <span class="keyword">var</span> viewsize = Math.floor(<span class="local-variable">this</span>.layout.height * <span class="local-variable">this</span>.zoom)
-                        <span class="keyword">if</span>(totalsize &gt; viewsize+<span class="integer">1</span>){
+                        <span class="keyword">if</span> (totalsize &gt; viewsize+<span class="integer">1</span>){
                                 scroll._visible = <span class="predefined-constant">true</span>
                                 scroll._total = totalsize
                                 scroll._page = viewsize
                                 <span class="keyword">var</span> off = clamp(scroll._value,<span class="integer">0</span>, scroll._total - scroll._page)
-                                <span class="keyword">if</span>(off !== scroll._value) scroll.value = off
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="keyword">if</span>(<span class="integer">0</span> !== scroll._offset){
+                                <span class="keyword">if</span> (off !== scroll._value) scroll.value = off
+                        } <span class="keyword">else</span> {
+                                <span class="keyword">if</span> (<span class="integer">0</span> !== scroll._offset){
                                         scroll.value = <span class="integer">0</span>
                                 }
                                 scroll._visible = <span class="predefined-constant">false</span>
                         }
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.hscrollbar){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar){
                         <span class="keyword">var</span> scroll = <span class="local-variable">this</span>.hscrollbar
                         <span class="keyword">var</span> totalsize = Math.floor(<span class="local-variable">this</span>._layout.boundw)
                         <span class="keyword">var</span> viewsize = Math.floor(<span class="local-variable">this</span>._layout.width* <span class="local-variable">this</span>.zoom)
-                        <span class="keyword">if</span>(totalsize &gt; viewsize + <span class="integer">1</span>){
+                        <span class="keyword">if</span> (totalsize &gt; viewsize + <span class="integer">1</span>){
                                 scroll._visible = <span class="predefined-constant">true</span>
                                 scroll._total = totalsize
                                 scroll._page = viewsize
                                 <span class="keyword">var</span> off = clamp(scroll._value,<span class="integer">0</span>, scroll._total - scroll._page)
-                                <span class="keyword">if</span>(off !== scroll._value) scroll.value = off
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="keyword">if</span>(<span class="integer">0</span> !== scroll._value) scroll.value = <span class="integer">0</span>
+                                <span class="keyword">if</span> (off !== scroll._value) scroll.value = off
+                        } <span class="keyword">else</span> {
+                                <span class="keyword">if</span> (<span class="integer">0</span> !== scroll._value) scroll.value = <span class="integer">0</span>
                                 scroll._visible = <span class="predefined-constant">false</span>
                         }
                 }
@@ -3207,12 +3164,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, called by doLayout, to update the matrices to layout and parent matrix</span>
         <span class="local-variable">this</span>.<span class="function">updateMatrices</span> = <span class="keyword">function</span>(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
-
                 <span class="comment">// allow pre-matrix gen hooking</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.atMatrix) <span class="local-variable">this</span>.atMatrix()
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.atMatrix) <span class="local-variable">this</span>.atMatrix()
 
                 <span class="keyword">var</span> boundsobj = boundsinput
-                <span class="keyword">if</span>(!boundsinput){
+                <span class="keyword">if</span> (!boundsinput){
                         boundsobj = <span class="local-variable">this</span>._layout
                         boundsobj.absx = <span class="integer">0</span>
                         boundsobj.absy = <span class="integer">0</span>
@@ -3222,32 +3178,37 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.measured_width !== <span class="predefined-constant">undefined</span> || <span class="local-variable">this</span>.measured_height !== <span class="predefined-constant">undefined</span>){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.measured_width !== <span class="predefined-constant">undefined</span> || <span class="local-variable">this</span>.measured_height !== <span class="predefined-constant">undefined</span>){
                         <span class="keyword">var</span> width = layout.absx + max(layout.width ,<span class="local-variable">this</span>.measured_width)
                         <span class="keyword">var</span> height = layout.absy + max(layout.height, <span class="local-variable">this</span>.measured_height)
-                }
-                <span class="keyword">else</span>{
+                } <span class="keyword">else</span> {
                         <span class="keyword">var</span> width = layout.absx + layout.width
                         <span class="keyword">var</span> height = layout.absy + layout.height
                 }
-                <span class="keyword">if</span>(width &gt; boundsobj.boundw) boundsobj.boundw = width
-                <span class="keyword">if</span>(height &gt; boundsobj.boundh) boundsobj.boundh = height
-                <span class="keyword">if</span>(bailbound) <span class="keyword">return</span>
+
+                <span class="keyword">if</span> (width &gt; boundsobj.boundw) {
+                        boundsobj.boundw = width
+                }
+                <span class="keyword">if</span> (height &gt; boundsobj.boundh) {
+                        boundsobj.boundh = height
+                }
+
+                <span class="keyword">if</span> (bailbound) <span class="keyword">return</span>
 
                 <span class="keyword">var</span> matrix_changed = parent_changed
                 <span class="keyword">if</span> (parentviewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                         matrix_changed = <span class="predefined-constant">true</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>._scale &amp;&amp; <span class="local-variable">this</span>._anchor &amp;&amp; <span class="local-variable">this</span>._rotate &amp;&amp; <span class="local-variable">this</span>._pos){
-                                mat4.TSRT2(<span class="local-variable">this</span>._anchor, <span class="local-variable">this</span>._scale, <span class="local-variable">this</span>._rotate, <span class="local-variable">this</span>._pos, <span class="local-variable">this</span>.modelmatrix);
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._scale &amp;&amp; <span class="local-variable">this</span>._anchor &amp;&amp; <span class="local-variable">this</span>._rotate &amp;&amp; <span class="local-variable">this</span>._pos){
+                                mat4.TSRT2(<span class="local-variable">this</span>._anchor, <span class="local-variable">this</span>._scale, <span class="local-variable">this</span>._rotate, <span class="local-variable">this</span>._pos, <span class="local-variable">this</span>.modelmatrix)
+                        } <span class="keyword">else</span> {
+                                mat4.identity(<span class="local-variable">this</span>.modelmatrix)
                         }
-                        <span class="keyword">else</span> mat4.identity(<span class="local-variable">this</span>.modelmatrix)
-                }
-                <span class="keyword">else</span> {
+                } <span class="keyword">else</span> {
                         <span class="comment">// compute TSRT matrix</span>
-                        <span class="keyword">if</span>(layout){
+                        <span class="keyword">if</span> (layout){
                                 <span class="comment">//console.log(this.matrix_dirty)</span>
                                 <span class="comment">//var ml = this.matrix_layout</span>
-                                <span class="comment">//if(!ml || ml.left !== layout.left || ml.top !== layout.top ||</span>
+                                <span class="comment">//if (!ml || ml.left !== layout.left || ml.top !== layout.top ||</span>
                                 <span class="comment">//        ml.width !== layout.width || ml.height !== layout.height</span>
                                  <span class="comment">//   || ml.scale !== this._scale || ml.rotate !== this._rotate</span>
                                 <span class="comment">//){</span>
@@ -3265,55 +3226,50 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> r = <span class="local-variable">this</span>._rotate
                                 <span class="keyword">var</span> tr = <span class="local-variable">this</span>._translate
                                 <span class="keyword">var</span> t0 = layout.left + tr[<span class="integer">0</span>], t1 = layout.top+ tr[<span class="integer">1</span>], t2 = tr[<span class="integer">2</span>]
-                                <span class="comment">//if(this.name === 'handle') console.log(this.constructor.name, layout.top)</span>
+                                <span class="comment">//if (this.name === 'handle') console.log(this.constructor.name, layout.top)</span>
                                 <span class="comment">//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2</span>
                                 <span class="comment">//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2</span>
                                 <span class="keyword">var</span> hw = layout.width / <span class="integer">2</span>
                                 <span class="keyword">var</span> hh = layout.height / <span class="integer">2</span>
-                                mat4.TSRT(-hw, -hh, <span class="integer">0</span>, s[<span class="integer">0</span>], s[<span class="integer">1</span>], s[<span class="integer">2</span>], r[<span class="integer">0</span>], r[<span class="integer">1</span>], r[<span class="integer">2</span>], t0 + hw * s[<span class="integer">0</span>], t1 + hh * s[<span class="integer">1</span>], t2, <span class="local-variable">this</span>.modelmatrix);
-                        }
-                        <span class="keyword">else</span> {
+                                mat4.TSRT(-hw, -hh, <span class="integer">0</span>, s[<span class="integer">0</span>], s[<span class="integer">1</span>], s[<span class="integer">2</span>], r[<span class="integer">0</span>], r[<span class="integer">1</span>], r[<span class="integer">2</span>], t0 + hw * s[<span class="integer">0</span>], t1 + hh * s[<span class="integer">1</span>], t2, <span class="local-variable">this</span>.modelmatrix)
+                        } <span class="keyword">else</span> {
                                 matrix_changed = <span class="predefined-constant">true</span>
                                 <span class="keyword">var</span> s = <span class="local-variable">this</span>._scale
                                 <span class="keyword">var</span> r = <span class="local-variable">this</span>._rotate
                                 <span class="keyword">var</span> t = <span class="local-variable">this</span>._translate
                                 <span class="keyword">var</span> hw = <span class="local-variable">this</span>._size[<span class="integer">0</span>] / <span class="integer">2</span>
                                 <span class="keyword">var</span> hh = <span class="local-variable">this</span>._size[<span class="integer">1</span>] / <span class="integer">2</span>
-                                mat4.TSRT(-hw, -hh, <span class="integer">0</span>, s[<span class="integer">0</span>], s[<span class="integer">1</span>], s[<span class="integer">2</span>], <span class="integer">0</span>, <span class="integer">0</span>, r[<span class="integer">2</span>], t[<span class="integer">0</span>] + hw * s[<span class="integer">0</span>], t[<span class="integer">1</span>] + hh * s[<span class="integer">1</span>], t[<span class="integer">2</span>], <span class="local-variable">this</span>.modelmatrix);
+                                mat4.TSRT(-hw, -hh, <span class="integer">0</span>, s[<span class="integer">0</span>], s[<span class="integer">1</span>], s[<span class="integer">2</span>], <span class="integer">0</span>, <span class="integer">0</span>, r[<span class="integer">2</span>], t[<span class="integer">0</span>] + hw * s[<span class="integer">0</span>], t[<span class="integer">1</span>] + hh * s[<span class="integer">1</span>], t[<span class="integer">2</span>], <span class="local-variable">this</span>.modelmatrix)
                         }
                 }
 
                 <span class="keyword">var</span> parentmode = parentviewport
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport){
-                        <span class="keyword">if</span>(parentmatrix) {
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._viewport){
+                        <span class="keyword">if</span> (parentmatrix) {
                                 mat4.mat4_mul_mat4(<span class="local-variable">this</span>.modelmatrix, parentmatrix, <span class="local-variable">this</span>.viewportmatrix)
-                        }
-                        <span class="keyword">else</span>{
+                        } <span class="keyword">else</span> {
                                 <span class="local-variable">this</span>.viewportmatrix = <span class="local-variable">this</span>.modelmatrix
                         }
                         mat4.identity(<span class="local-variable">this</span>.totalmatrix)
                         parentmode = <span class="local-variable">this</span>._viewport
                         parentmatrix = mat4.global_identity
-                }
-                <span class="keyword">else</span>{
-                        <span class="keyword">if</span>(parentmatrix &amp;&amp; matrix_changed) mat4.mat4_mul_mat4( <span class="local-variable">this</span>.modelmatrix, parentmatrix, <span class="local-variable">this</span>.totalmatrix)
+                } <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (parentmatrix &amp;&amp; matrix_changed) mat4.mat4_mul_mat4( <span class="local-variable">this</span>.modelmatrix, parentmatrix, <span class="local-variable">this</span>.totalmatrix)
                 }
 
                 <span class="keyword">var</span> children = <span class="local-variable">this</span>.children
                 <span class="keyword">var</span> len = children.length
 
-                <span class="keyword">if</span>(children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
+                <span class="keyword">if</span> (children) <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
                         <span class="keyword">var</span> child = children[i]
-
                         <span class="keyword">var</span> clayout = child.layout
-                        <span class="keyword">if</span>(!clayout) <span class="keyword">continue</span>
+                        <span class="keyword">if</span> (!clayout) <span class="keyword">continue</span>
                         clayout.absx = layout.absx + clayout.left
                         clayout.absy = layout.absy + clayout.top
-
                         child.updateMatrices(<span class="local-variable">this</span>.totalmatrix, parentmode, matrix_changed, boundsobj, child._viewport)
                 }
 
-                <span class="keyword">if</span>(!boundsinput){
+                <span class="keyword">if</span> (!boundsinput){
                         <span class="local-variable">this</span>.updateScrollbars()
                 }
 
@@ -3326,9 +3282,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> oldlayout = ref.oldlayout || {}
                 <span class="keyword">var</span> layout = ref._layout
 
-                <span class="keyword">if</span>(!nochild){
+                <span class="keyword">if</span> (!nochild){
                         <span class="keyword">var</span> children = node.children
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; children.length; i++){
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; children.length; i++){
                                 <span class="keyword">var</span> child = children[i]
                                 emitPostLayout(child, child.ref._viewport)
                         }
@@ -3336,14 +3292,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="keyword">var</span> oldlayout = ref.oldlayout || {}
-                <span class="keyword">if</span>((ref._listen_layout || ref.onlayout) &amp;&amp; (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+                <span class="keyword">if</span> ((ref._listen_layout || ref.onlayout) &amp;&amp; (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
                          layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
                         ref.emit(<span class="string"><span class="delimiter">'</span><span class="content">layout</span><span class="delimiter">'</span></span>, {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">setter</span><span class="delimiter">'</span></span>, <span class="key">owner</span>:ref, <span class="key">key</span>:<span class="string"><span class="delimiter">'</span><span class="content">layout</span><span class="delimiter">'</span></span>, <span class="key">value</span>:layout})
                 }
                 ref.oldlayout = layout
                 ref.matrix_dirty = <span class="predefined-constant">true</span>
 
-                <span class="keyword">if</span>(ref._bgimage){
+                <span class="keyword">if</span> (ref._bgimage){
                         ref.onbgimagemode()
                 }
         }
@@ -3353,15 +3309,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">relayoutRecur</span> = <span class="keyword">function</span>(source){
                 <span class="local-variable">this</span>.layout_dirty = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.draw_dirty = <span class="integer">3</span> <span class="comment">// bitmask, 2 = pick, 1= color</span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="local-variable">this</span>.child_viewport_list.length;i++){
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.child_viewport_list.length; i++){
                         <span class="keyword">var</span> child = <span class="local-variable">this</span>.child_viewport_list[i]
-                        <span class="comment">//if(child._overflow) continue</span>
-                        <span class="keyword">if</span>(child !== source){
+                        <span class="comment">//if (child._overflow) continue</span>
+                        <span class="keyword">if</span> (child !== source){
                                 child.relayoutRecur()
                         }
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport !== <span class="local-variable">this</span>){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport._overflow) <span class="keyword">return</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport !== <span class="local-variable">this</span>){
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport._overflow) <span class="keyword">return</span>
                         <span class="local-variable">this</span>.parent_viewport.relayoutRecur(<span class="local-variable">this</span>)
                 }
         }
@@ -3371,15 +3327,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// scan down and skip overflow something.</span>
 
         <span class="local-variable">this</span>.<span class="function">relayout</span> = <span class="keyword">function</span>(shallow){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.layout_dirty) <span class="keyword">return</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.layout_dirty) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.layout_dirty = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.redraw()
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport) <span class="local-variable">this</span>.parent_viewport.relayoutRecur()
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport) <span class="local-variable">this</span>.parent_viewport.relayoutRecur()
         }
 
         <span class="local-variable">this</span>.<span class="function">rematrix</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.matrix_dirty = <span class="predefined-constant">true</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport){
                         <span class="local-variable">this</span>.parent_viewport.matrix_dirty = <span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.redraw()
                 }
@@ -3387,12 +3343,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, moving a position in absolute should only trigger a matrix reload</span>
         <span class="local-variable">this</span>.<span class="function">pos</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._position === <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._position === <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>){
                         <span class="local-variable">this</span>._layout.left = <span class="local-variable">this</span>._pos[<span class="integer">0</span>]
                         <span class="local-variable">this</span>._layout.top = <span class="local-variable">this</span>._pos[<span class="integer">1</span>]
                         <span class="local-variable">this</span>.rematrix()
-                }
-                <span class="keyword">else</span>{
+                } <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.relayout()
                 }
         }
@@ -3419,16 +3374,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// internal, called by the render engine</span>
         <span class="local-variable">this</span>.<span class="function">doLayout</span> = <span class="keyword">function</span>(){
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent &amp;&amp; !isNaN(<span class="local-variable">this</span>._flex)){ <span class="comment">// means our layout has been externally defined</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent &amp;&amp; !isNaN(<span class="local-variable">this</span>._flex)){ <span class="comment">// means our layout has been externally defined</span>
 
                         <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
                         <span class="keyword">var</span> flex = <span class="local-variable">this</span>._flex
                         <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
 
-                        <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?layout.width:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>];
-                        <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?layout.height: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>];
+                        <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?layout.width:<span class="local-variable">this</span>.parent._layout.width * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>]
+                        <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?layout.height: <span class="local-variable">this</span>.parent._layout.height * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>]
 
-                        <span class="comment">//console.log(this._percentsize, presizex,presizey);</span>
+                        <span class="comment">//console.log(this._percentsize, presizex,presizey)</span>
                         <span class="comment">//this._size = vec2(layout.width, layout.height)</span>
 
                         <span class="keyword">var</span> flexwrap = <span class="local-variable">this</span>._flexwrap
@@ -3436,54 +3391,50 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>._size = vec2(presizex, presizey)
                         <span class="local-variable">this</span>._flexwrap = <span class="predefined-constant">false</span>
 
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.measure) <span class="local-variable">this</span>.measure() <span class="comment">// otherwise it doesnt get called</span>
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.measure) <span class="local-variable">this</span>.measure() <span class="comment">// otherwise it doesnt get called</span>
 
                         <span class="keyword">var</span> copynodes = FlexLayout.fillNodes(<span class="local-variable">this</span>)
                         FlexLayout.computeLayout(copynodes)
 
-                        <span class="comment">//this.sublayout = this.layout</span>
                         <span class="local-variable">this</span>._flex = flex
                         <span class="local-variable">this</span>._size = size
                         <span class="local-variable">this</span>._flexwrap = flexwrap
                         <span class="local-variable">this</span>._layout = layout
+
                         emitPostLayout(copynodes)
-                }
-                <span class="keyword">else</span>{
+                } <span class="keyword">else</span> {
                         <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
 
                         <span class="comment">//this._size = vec2(presizex, presizey)</span>
                         <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
-                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>._pos;
+                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>._pos
 
-                        <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?size[<span class="integer">0</span>]:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>];
-                        <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?size[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>];
-                        <span class="keyword">var</span> presizez = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">2</span>])?size[<span class="integer">2</span>]: <span class="local-variable">this</span>.parent.depth * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">2</span>];
+                        <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?size[<span class="integer">0</span>]: <span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>]
+                        <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?size[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>]
+                        <span class="keyword">var</span> presizez = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">2</span>])?size[<span class="integer">2</span>]: <span class="local-variable">this</span>.parent.depth * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">2</span>]
 
-                        <span class="keyword">var</span> preposx = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">0</span>])?pos[<span class="integer">0</span>]:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">0</span>];
-                        <span class="keyword">var</span> preposy = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">1</span>])?pos[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">1</span>];
+                        <span class="keyword">var</span> preposx = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">0</span>])?pos[<span class="integer">0</span>]: <span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">0</span>]
+                        <span class="keyword">var</span> preposy = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">1</span>])?pos[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">1</span>]
 
                         <span class="comment">// we have some kind of overflow, cause we are a viewport</span>
                         <span class="comment">// so if height is not given we have to take up the external height</span>
                         <span class="comment">//console.log(presizey, this.layout.height)</span>
-                        <span class="comment">//console.log(&quot;This is where we get the percentage size&quot;, this._percentsize, presizex,presizey);</span>
+                        <span class="comment">//console.log(&quot;This is where we get the percentage size&quot;, this._percentsize, presizex,presizey)</span>
 
-                        <span class="local-variable">this</span>._size = vec2(presizex, presizey);
-                        <span class="local-variable">this</span>._pos = vec2(preposx, preposy);
-                        <span class="comment">//console.log(this._percentpos, this._pos ,pos);</span>
+                        <span class="local-variable">this</span>._size = vec2(presizex, presizey)
+                        <span class="local-variable">this</span>._pos = vec2(preposx, preposy)
                         <span class="keyword">var</span> preheight = <span class="local-variable">this</span>._layout.height
                         <span class="keyword">var</span> copynodes = FlexLayout.fillNodes(<span class="local-variable">this</span>)
                         FlexLayout.computeLayout(copynodes)
 
-                        <span class="keyword">if</span>(isNaN(presizey)){
+                        <span class="keyword">if</span> (isNaN(presizey)){
                                 <span class="local-variable">this</span>._layout.height = preheight
                         }
 
                         <span class="local-variable">this</span>._size = size
-                        <span class="local-variable">this</span>._pos = pos;
+                        <span class="local-variable">this</span>._pos = pos
 
                         emitPostLayout(copynodes)
-
-
                 }
         }
 
@@ -3500,8 +3451,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, called by animation setters</span>
         <span class="local-variable">this</span>.<span class="function">startAnimation</span> = <span class="keyword">function</span>(attribute, value, track, resolve){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startAnimationRoot(<span class="local-variable">this</span>, attribute, value, track, resolve)
-                <span class="keyword">else</span>{
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.initialized) {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startAnimationRoot(<span class="local-variable">this</span>, attribute, value, track, resolve)
+                } <span class="keyword">else</span> {
                         <span class="keyword">return</span> <span class="predefined-constant">false</span>
                 }
         }
@@ -3509,7 +3461,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Stops a running animation for an attribute</span>
         <span class="comment">// &lt;attribute&gt; {String} The name of the attribute to stop animating on this view.</span>
         <span class="local-variable">this</span>.<span class="function">stopAnimation</span> = <span class="keyword">function</span>(attribute){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.stopAnimationRoot(<span class="local-variable">this</span>, attribute)
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.initialized) <span class="local-variable">this</span>.screen.stopAnimationRoot(<span class="local-variable">this</span>, attribute)
         }
 
         <span class="comment">// Determines the background color that should be drawn at a given position.</span>
@@ -3531,7 +3483,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 Render.process(vroot, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
                 <span class="comment">// move the children over</span>
                 <span class="local-variable">this</span>.children.push.apply(<span class="local-variable">this</span>.children, vroot.children)
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; vroot.children.length; i++){
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; vroot.children.length; i++){
                         vroot.children[i].parent = <span class="local-variable">this</span>
                 }
                 <span class="comment">// lets cause a relayout</span>
@@ -3548,7 +3500,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         uv = mesh.xy
                         pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
                         <span class="keyword">var</span> res = vec4(pos, -<span class="float">0.004</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
-                        <span class="keyword">return</span> res;
+                        <span class="keyword">return</span> res
                 }
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> col = view.bgcolorfn(mesh.xy)
@@ -3564,25 +3516,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">hardborder</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">1</span>
-                <span class="local-variable">this</span>.mesh = vec2.array();
+                <span class="local-variable">this</span>.mesh = vec2.array()
                 <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
 
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                         <span class="keyword">var</span> width = view.layout?view.layout.width:view.width
                         <span class="keyword">var</span> height = view.layout?view.layout.height:view.height
-                        <span class="keyword">var</span> bw1 = view.borderwidth[<span class="integer">0</span>]/width;
-                        <span class="keyword">var</span> bw2 = view.borderwidth[<span class="integer">1</span>]/width;
-                        <span class="keyword">var</span> bw3 = view.borderwidth[<span class="integer">2</span>]/height;
-                        <span class="keyword">var</span> bw4 = view.borderwidth[<span class="integer">3</span>]/height;
+                        <span class="keyword">var</span> bw1 = view.borderwidth[<span class="integer">0</span>]/width
+                        <span class="keyword">var</span> bw2 = view.borderwidth[<span class="integer">1</span>]/width
+                        <span class="keyword">var</span> bw3 = view.borderwidth[<span class="integer">2</span>]/height
+                        <span class="keyword">var</span> bw4 = view.borderwidth[<span class="integer">3</span>]/height
 
-                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vec2.array();
-<span class="comment">//                        console.log(bw, height);</span>
+                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vec2.array()
 
-                        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>, bw1,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,bw1,<span class="integer">1</span>);
-                        mesh.pushQuad(<span class="integer">1</span>-bw2,<span class="integer">0</span>, <span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>-bw2,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>);
-                        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>, <span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,bw3,<span class="integer">1</span>,bw3);
-                        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">1</span>-bw4, <span class="integer">1</span>,<span class="integer">1</span>-bw4,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>);
+                        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>, bw1,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,bw1,<span class="integer">1</span>)
+                        mesh.pushQuad(<span class="integer">1</span>-bw2,<span class="integer">0</span>, <span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>-bw2,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>, <span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,bw3,<span class="integer">1</span>,bw3)
+                        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">1</span>-bw4, <span class="integer">1</span>,<span class="integer">1</span>-bw4,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
                 }
 
                 <span class="local-variable">this</span>.mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
@@ -3597,7 +3548,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> col = view.bordercolorfn(uv.xy)
-                        <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity);
+                        <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
                 }
         })
 
@@ -3607,24 +3558,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
-                <span class="comment">//this.atDraw = function(draw){</span>
-                <span class="comment">//        console.log('in shader at:',draw === this.view, this.view.viewmatrix)</span>
-                <span class="comment">//}</span>
-                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="comment">//return mix('red','green',mesh.y)</span>
-                        <span class="keyword">if</span> (view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect.x &lt; <span class="float">0.0</span>
-                                || view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect.x &gt; <span class="float">1.0</span>
-                                || view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect.y &lt; <span class="float">0.0</span>
-                                || view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect.y &gt; <span class="float">1.0</span>) {
-                                <span class="keyword">return</span> view.bgcolor;
-                        }
-                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.texture.sample(vec2(view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
-                        <span class="keyword">var</span> cola = col.a;
-                        <span class="keyword">if</span> (cola &lt; <span class="float">1.0</span>) {
-                                col = mix(view.bgcolor, col, cola)
-                                cola = <span class="float">1.0</span>
-                        }
 
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="comment">// if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x &lt; 0.0</span>
+                        <span class="comment">//         || view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x &gt; 1.0</span>
+                        <span class="comment">//         || view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y &lt; 0.0</span>
+                        <span class="comment">//         || view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y &gt; 1.0) {</span>
+                        <span class="comment">//         return view.bgcolor;</span>
+                        <span class="comment">// }</span>
+                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.texture.samplemip(vec2(view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
+                        <span class="keyword">var</span> cola = col.a;
+                        <span class="comment">// if (cola &lt; 1.0) {</span>
+                        <span class="comment">//         col = mix(view.bgcolor, col, cola)</span>
+                        <span class="comment">//         cola = 1.0</span>
+                        <span class="comment">// }</span>
                         <span class="keyword">return</span> vec4(col.r * view.colorfilter[<span class="integer">0</span>], col.g * view.colorfilter[<span class="integer">1</span>], col.b * view.colorfilter[<span class="integer">2</span>], cola * view.opacity * view.colorfilter[<span class="integer">3</span>])
                 }
         })
@@ -3632,23 +3579,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">onbgimagemode</span> = <span class="keyword">function</span>(ev, v, o) {
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.shaders) {
-                        <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.hardimage || <span class="local-variable">this</span>.shaders.roundedimage;
+                        <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.hardimage || <span class="local-variable">this</span>.shaders.roundedimage
 
                         <span class="keyword">if</span> (shader &amp;&amp; shader.texture) {
-                                <span class="keyword">var</span> size = shader.texture.size;
+                                <span class="keyword">var</span> size = shader.texture.size
 
-                                <span class="keyword">var</span> imgw = size[<span class="integer">0</span>];
-                                <span class="keyword">var</span> imgh = size[<span class="integer">1</span>];
-                                <span class="keyword">var</span> aspect = <span class="local-variable">this</span>._width / <span class="local-variable">this</span>._height;
-                                <span class="keyword">var</span> uselayout = <span class="predefined-constant">false</span>;
+                                <span class="keyword">var</span> imgw = size[<span class="integer">0</span>]
+                                <span class="keyword">var</span> imgh = size[<span class="integer">1</span>]
+                                <span class="keyword">var</span> aspect = <span class="local-variable">this</span>._width / <span class="local-variable">this</span>._height
+                                <span class="keyword">var</span> uselayout = <span class="predefined-constant">false</span>
                                 <span class="keyword">if</span> (isNaN(aspect)) {
-                                        uselayout = <span class="predefined-constant">true</span>;
-                                        aspect = <span class="local-variable">this</span>._layout.width / <span class="local-variable">this</span>._layout.height;
+                                        uselayout = <span class="predefined-constant">true</span>
+                                        aspect = <span class="local-variable">this</span>._layout.width / <span class="local-variable">this</span>._layout.height
                                 }
-                                <span class="keyword">var</span> ratio = imgw / imgh / aspect;
-                                <span class="keyword">var</span> rx, ry, fitsize, target, offset;
+                                <span class="keyword">var</span> ratio = imgw / imgh / aspect
+                                <span class="keyword">var</span> rx, ry, fitsize, target, offset
+
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">resize</span><span class="delimiter">&quot;</span></span>) {
-                                        <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>,<span class="float">1.0</span>);
+                                        <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>,<span class="float">1.0</span>)
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">aspect-fit</span><span class="delimiter">&quot;</span></span>) {
                                         <span class="keyword">if</span> (uselayout) {
                                                 rx = <span class="local-variable">this</span>._layout.width / imgw;
@@ -3659,8 +3607,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         }
 
                                         <span class="keyword">if</span> ((uselayout &amp;&amp; <span class="local-variable">this</span>._layout.width &gt; <span class="local-variable">this</span>._layout.height) || (!uselayout &amp;&amp; <span class="local-variable">this</span>._width &gt; <span class="local-variable">this</span>._height)) {
-                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>/ratio, <span class="float">1.0</span>);
-
+                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span> / ratio, <span class="float">1.0</span>)
                                                 <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign !== <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>) {
                                                         fitsize = imgw * ry;
                                                         <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>) {
@@ -3673,10 +3620,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         offset = target / fitsize;
                                                         <span class="local-variable">this</span>.bgimageoffset = vec2(-offset, <span class="integer">0</span>);
                                                 }
-
                                         } <span class="keyword">else</span> {
-                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>, ratio);
-
+                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>, ratio)
                                                 <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign !== <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>) {
                                                         fitsize = imgh * rx;
                                                         <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>) {
@@ -3693,8 +3638,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">aspect-fill</span><span class="delimiter">&quot;</span></span>) {
 
                                         <span class="keyword">if</span> ((uselayout &amp;&amp; <span class="local-variable">this</span>._layout.width &gt; <span class="local-variable">this</span>._layout.height) || (!uselayout &amp;&amp; <span class="local-variable">this</span>._width &gt; <span class="local-variable">this</span>._height)) {
-                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>, ratio);
-
+                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>, ratio)
 
                                                 <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign !== <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>) {
                                                         fitsize = imgh * (<span class="local-variable">this</span>._layout.width / imgw);
@@ -3710,10 +3654,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="integer">0</span>, -offset);
                                                         }
                                                 }
-
                                         } <span class="keyword">else</span> {
-                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span>/ratio, <span class="float">1.0</span>);
-
+                                                <span class="local-variable">this</span>.bgimageaspect = vec2(<span class="float">1.0</span> / ratio, <span class="float">1.0</span>)
                                                 <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign !== <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>) {
                                                         fitsize = imgw * (<span class="local-variable">this</span>._layout.height / imgh);
                                                         <span class="keyword">if</span> (<span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span> || <span class="local-variable">this</span>._bgimagealign === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>) {
@@ -3739,42 +3681,44 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         || <span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>
                                         || <span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-right</span><span class="delimiter">&quot;</span></span>) {
 
+                                        <span class="keyword">var</span> rx, ry
+
                                         <span class="keyword">if</span> (uselayout) {
-                                                rx = <span class="local-variable">this</span>._layout.width / imgw;
-                                                ry = <span class="local-variable">this</span>._layout.height / imgh;
+                                                rx = <span class="local-variable">this</span>._layout.width / imgw
+                                                ry = <span class="local-variable">this</span>._layout.height / imgh
                                         } <span class="keyword">else</span> {
-                                                rx = <span class="local-variable">this</span>._width / imgw;
-                                                ry = <span class="local-variable">this</span>._height / imgh;
+                                                rx = <span class="local-variable">this</span>._width / imgw
+                                                ry = <span class="local-variable">this</span>._height / imgh
                                         }
 
-                                        <span class="local-variable">this</span>.bgimageaspect = vec2(rx, ry);
+                                        <span class="local-variable">this</span>.bgimageaspect = vec2(rx, ry)
 
                                         <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>) {
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">0.5</span>, <span class="float">0.5</span>);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">0.5</span>, <span class="float">0.5</span>)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>) {
 
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="integer">0</span>, <span class="float">0.5</span>);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="integer">0</span>, <span class="float">0.5</span>)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>) {
 
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">1.0</span> - rx, <span class="float">0.5</span>);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">1.0</span> - rx, <span class="float">0.5</span>)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>) {
 
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">0.5</span>, <span class="integer">0</span>);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">0.5</span>, <span class="integer">0</span>)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-left</span><span class="delimiter">&quot;</span></span>) {
 
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="integer">0</span>, <span class="integer">0</span>);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="integer">0</span>, <span class="integer">0</span>)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-right</span><span class="delimiter">&quot;</span></span>) {
 
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">1.0</span> - rx, <span class="integer">0</span>);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">1.0</span> - rx, <span class="integer">0</span>)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>) {
 
-                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">0.5</span>, <span class="float">1.0</span> - ry);
+                                                <span class="local-variable">this</span>.bgimageoffset = vec2(<span class="float">0.5</span>, <span class="float">1.0</span> - ry)
 
                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimagemode === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>) {
 
@@ -3788,7 +3732,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                         }
                 }
-        };
+        }
 
         <span class="comment">// rounded rect shader class</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
@@ -3826,10 +3770,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 mesh.push([width,height], <span class="integer">0</span>, [<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">1</span>,<span class="integer">1</span>)
                                 mesh.push([<span class="integer">0</span>,height], <span class="integer">0</span>, [<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">0</span>,<span class="integer">1</span>)
                                 mesh.push([<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">0</span>, [<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">0</span>,<span class="integer">0</span>)
-                        }
-                        <span class="keyword">else</span>{
+                        } <span class="keyword">else</span> {
 
-                                <span class="keyword">var</span> divbase = <span class="float">0.45</span>;
+                                <span class="keyword">var</span> divbase = <span class="float">0.45</span>
                                 <span class="keyword">var</span> pidiv1 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * radius[<span class="integer">0</span>]))
                                 <span class="keyword">var</span> pidiv2 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * radius[<span class="integer">1</span>]))
                                 <span class="keyword">var</span> pidiv3 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * radius[<span class="integer">2</span>]))
@@ -3842,10 +3785,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                 <span class="local-variable">this</span>.mesh.push([width/<span class="integer">2</span>,height/<span class="integer">2</span>], <span class="integer">0</span>, [<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="float">0.5</span>,<span class="float">0.5</span>)
 
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv1;p++) <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">0</span>] ,radius[<span class="integer">0</span>]), p*pimul1, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv2;p++) <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">1</span>]-<span class="integer">1</span>, radius[<span class="integer">1</span>]), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv3;p++) <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">2</span>]-<span class="integer">1</span>, height - radius[<span class="integer">2</span>]-<span class="integer">1</span>), p*pimul3+ PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">1</span>)
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv4;p++) <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">3</span>], height - radius[<span class="integer">3</span>]-<span class="integer">1</span>), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="integer">0</span>,<span class="integer">1</span>)
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv1;p++) <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">0</span>] ,radius[<span class="integer">0</span>]), p*pimul1, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv2;p++) <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">1</span>]-<span class="integer">1</span>, radius[<span class="integer">1</span>]), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv3;p++) <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">2</span>]-<span class="integer">1</span>, height - radius[<span class="integer">2</span>]-<span class="integer">1</span>), p*pimul3+ PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">1</span>)
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv4;p++) <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">3</span>], height - radius[<span class="integer">3</span>]-<span class="integer">1</span>), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="integer">0</span>,<span class="integer">1</span>)
 
                                 <span class="local-variable">this</span>.mesh.push(vec2( radius[<span class="integer">0</span>] ,radius[<span class="integer">0</span>]), <span class="integer">0</span>, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
                         }
@@ -3885,9 +3828,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 || view.bgimageoffset[<span class="integer">0</span>] + uv.xy.x * view.bgimageaspect.x &gt; <span class="float">1.0</span>
                                 || view.bgimageoffset[<span class="integer">1</span>] + uv.xy.y * view.bgimageaspect.y &lt; <span class="float">0.0</span>
                                 || view.bgimageoffset[<span class="integer">1</span>] + uv.xy.y * view.bgimageaspect.y &gt; <span class="float">1.0</span>) {
-                                <span class="keyword">return</span> view.bgcolor;
+                                <span class="keyword">return</span> view.bgcolor
                         }
-                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.texture.sample(vec2(view.bgimageoffset[<span class="integer">0</span>] + uv.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + uv.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
+                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.texture.sample(vec2(view.bgimageoffset[<span class="integer">0</span>] + uv.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + uv.xy.y * view.bgimageaspect[<span class="integer">1</span>]))
                         <span class="keyword">return</span> vec4(col.r * view.colorfilter[<span class="integer">0</span>], col.g * view.colorfilter[<span class="integer">1</span>], col.b * view.colorfilter[<span class="integer">2</span>], col.a * view.opacity * view.colorfilter[<span class="integer">3</span>])
                 }
         })
@@ -3907,7 +3850,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array()
 
                 <span class="local-variable">this</span>.depth_test = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.draworder = -<span class="integer">1</span>;
+                <span class="local-variable">this</span>.draworder = -<span class="integer">1</span>
 
                 <span class="comment">// matrix and viewmatrix should be referenced on view</span>
                 <span class="local-variable">this</span>.opacity = <span class="float">0.0</span>
@@ -3917,11 +3860,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
 
                         <span class="keyword">var</span> width = (view.layout?view.layout.width:view.width)
-                        <span class="comment">//console.log(view.dropshadowradius, width);</span>
                         <span class="keyword">var</span> height = (view.layout?view.layout.height:view.height)
-
-                        <span class="keyword">var</span> radius = vec4(Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">0</span>] + view.dropshadowradius),Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">1</span>]+ view.dropshadowradius),Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">2</span>]+ view.dropshadowradius),Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">3</span>]+ view.dropshadowradius));
-                        <span class="comment">//console.log(radius)</span>
+                        <span class="keyword">var</span> radius = vec4(Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">0</span>] + view.dropshadowradius),Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">1</span>]+ view.dropshadowradius),Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">2</span>]+ view.dropshadowradius),Math.max(<span class="integer">1</span>, view.borderradius[<span class="integer">3</span>]+ view.dropshadowradius))
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array()
 
                         <span class="keyword">if</span> (vec4.equals(radius, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>))) {
@@ -3931,10 +3871,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 mesh.push([width,height], <span class="integer">0</span>, [<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">1</span>,<span class="integer">1</span>)
                                 mesh.push([<span class="integer">0</span>,height], <span class="integer">0</span>, [<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">0</span>,<span class="integer">1</span>)
                                 mesh.push([<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">0</span>, [<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>], <span class="integer">0</span>,<span class="integer">0</span>)
-                        }
-                        <span class="keyword">else</span>{
+                        } <span class="keyword">else</span> {
 
-                                <span class="keyword">var</span> divbase = <span class="float">0.45</span>;
+                                <span class="keyword">var</span> divbase = <span class="float">0.45</span>
                                 <span class="keyword">var</span> pidiv1 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * radius[<span class="integer">0</span>]))
                                 <span class="keyword">var</span> pidiv2 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * radius[<span class="integer">1</span>]))
                                 <span class="keyword">var</span> pidiv3 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * radius[<span class="integer">2</span>]))
@@ -3946,20 +3885,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> pimul4 = (PI*<span class="float">0.5</span>)/(pidiv4-<span class="integer">1</span>)
 
 
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv1;p++){
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv1;p++){
                                         <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">0</span>] - view.dropshadowradius,radius[<span class="integer">0</span>]- view.dropshadowradius), p*pimul1, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
                                         <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">0</span>] - view.dropshadowradius,radius[<span class="integer">0</span>]- view.dropshadowradius), p*pimul1, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>,radius)
                                 }
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv2;p++)
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv2;p++)
                                 {
                                         <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">1</span>]-<span class="integer">1</span> + view.dropshadowradius, radius[<span class="integer">1</span>]- view.dropshadowradius), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
                                         <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">1</span>]-<span class="integer">1</span> + view.dropshadowradius, radius[<span class="integer">1</span>]- view.dropshadowradius), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>,radius)
                                 }
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv3;p++) {
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv3;p++) {
                                         <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">2</span>]-<span class="integer">1</span> + view.dropshadowradius, height - radius[<span class="integer">2</span>]-<span class="integer">1</span>+ view.dropshadowradius), p*pimul3+ PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
                                         <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">2</span>]-<span class="integer">1</span> + view.dropshadowradius, height - radius[<span class="integer">2</span>]-<span class="integer">1</span>+ view.dropshadowradius), p*pimul3+ PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>,radius)
                                 }
-                                <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv4;p++){
+                                <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv4;p++){
                                         <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">3</span>]- view.dropshadowradius, height - radius[<span class="integer">3</span>]-<span class="integer">1</span>+ view.dropshadowradius), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
                                         <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">3</span>]- view.dropshadowradius, height - radius[<span class="integer">3</span>]-<span class="integer">1</span>+ view.dropshadowradius), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="integer">1</span>,<span class="integer">0</span>,radius)
                                 }
@@ -3970,16 +3909,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.mesh.push(vec2(radius[<span class="integer">3</span>]- view.dropshadowradius, height - radius[<span class="integer">3</span>]-<span class="integer">1</span>+ view.dropshadowradius), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
                                 <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">1</span>]-<span class="integer">1</span> + view.dropshadowradius, radius[<span class="integer">1</span>]- view.dropshadowradius), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
                                 <span class="local-variable">this</span>.mesh.push(vec2(width - radius[<span class="integer">2</span>]-<span class="integer">1</span> + view.dropshadowradius, height - radius[<span class="integer">2</span>]-<span class="integer">1</span>+ view.dropshadowradius), p*pimul3+ PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">0</span>,<span class="integer">0</span>,radius)
-                        <span class="comment">//this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), 0*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,1,radius)</span>
-
-<span class="comment">//                                this.mesh.push(vec2( radius[0]- view.dropshadowradius ,radius[0]- view.dropshadowradius), 0, vec4(1,0,0,0), 0,0, radius)</span>
                         }
                 }
 
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">var</span> col = view.dropshadowcolor;
-                        col.a *= view.dropshadowopacity;
-                        col.a *= <span class="float">1.0</span>- pow(mesh.uv.x,<span class="integer">1</span>. + view.dropshadowhardness*<span class="integer">10</span>.);
+                        <span class="keyword">var</span> col = view.dropshadowcolor
+                        col.a *= view.dropshadowopacity
+                        col.a *= <span class="float">1.0</span>- pow(mesh.uv.x,<span class="integer">1</span>. + view.dropshadowhardness*<span class="integer">10</span>.)
 
                         <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
                 }
@@ -3996,23 +3932,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
 
                         sized = vec2(pos.x, pos.y)
-                        sized += view.dropshadowoffset;
+                        sized += view.dropshadowoffset
                         <span class="keyword">return</span> vec4(sized.x, sized.y, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                 }
         })
 
         <span class="local-variable">this</span>.<span class="function">dropshadowopacity</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.dropshadowopacity&gt; <span class="integer">0</span>){
-                        <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>;
-                }
-                <span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.shadowrect =<span class="predefined-constant">false</span>;
+                        <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.shadowrect =<span class="predefined-constant">false</span>
                 }
         }
 
-
         <span class="local-variable">this</span>.<span class="function">moveToFront</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.parent) <span class="keyword">return</span>
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.parent) <span class="keyword">return</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.parent.children.indexOf(<span class="local-variable">this</span>)
                 <span class="local-variable">this</span>.parent.children.splice(idx, <span class="integer">1</span>)
                 <span class="local-variable">this</span>.parent.children.push(<span class="local-variable">this</span>)
@@ -4020,7 +3954,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">moveToBack</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.parent) <span class="keyword">return</span>
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.parent) <span class="keyword">return</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.parent.children.indexOf(<span class="local-variable">this</span>)
                 <span class="local-variable">this</span>.parent.children.splice(idx, <span class="integer">1</span>)
                 <span class="local-variable">this</span>.parent.children.unshift(<span class="local-variable">this</span>)
@@ -4028,34 +3962,31 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">childrenInRect</span> = <span class="keyword">function</span>(rect, exclude) {
-                <span class="keyword">var</span> hits = [];
-                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.children.length;i++) {
-                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i];
+                <span class="keyword">var</span> hits = []
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;<span class="local-variable">this</span>.children.length; i++) {
+                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
                         <span class="keyword">if</span> (exclude &amp;&amp; exclude.indexOf(child) &gt; -<span class="integer">1</span>) {
-                                <span class="keyword">continue</span>;
+                                <span class="keyword">continue</span>
                         }
                         <span class="keyword">if</span> (child.boundsInsideRect(rect)) {
-                                hits.push(child);
+                                hits.push(child)
                         } <span class="keyword">else</span> {
-                                <span class="keyword">var</span> sub = child.childrenInRect(rect, exclude);
+                                <span class="keyword">var</span> sub = child.childrenInRect(rect, exclude)
                                 <span class="keyword">if</span> (sub.length) {
                                         hits = hits.concat(sub)
                                 }
                         }
                 }
-
-                <span class="keyword">return</span> hits;
-        };
+                <span class="keyword">return</span> hits
+        }
 
         <span class="local-variable">this</span>.<span class="function">boundsInsideRect</span> = <span class="keyword">function</span>(r) {
-
                 <span class="keyword">var</span> inside = r[<span class="integer">0</span>] &lt;= <span class="local-variable">this</span>._layout.absx
                         &amp;&amp; r[<span class="integer">1</span>] &lt;= <span class="local-variable">this</span>._layout.absy
                         &amp;&amp; r[<span class="integer">0</span>] + r[<span class="integer">2</span>] &gt;= <span class="local-variable">this</span>._layout.absx + <span class="local-variable">this</span>._layout.width
-                        &amp;&amp; r[<span class="integer">1</span>] + r[<span class="integer">3</span>] &gt;= <span class="local-variable">this</span>._layout.absy + <span class="local-variable">this</span>._layout.height;
-
-                <span class="keyword">return</span> inside;
-        };
+                        &amp;&amp; r[<span class="integer">1</span>] + r[<span class="integer">3</span>] &gt;= <span class="local-variable">this</span>._layout.absy + <span class="local-variable">this</span>._layout.height
+                <span class="keyword">return</span> inside
+        }
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">viewportblend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.draworder = <span class="integer">10</span>
@@ -4118,25 +4049,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> pimul3 = (PI*<span class="float">0.5</span>)/(pidiv3-<span class="integer">1</span>)
                         <span class="keyword">var</span> pimul4 = (PI*<span class="float">0.5</span>)/(pidiv4-<span class="integer">1</span>)
 
-                        <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; pidiv1; p ++){
-                                <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), p*pimul1, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>);
-                                <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), p*pimul1, vec4(scale0,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>);
+                        <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; pidiv1; p ++){
+                                <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), p*pimul1, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
+                                <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), p*pimul1, vec4(scale0,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
                         }
 
-                        <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv2;p++){
-                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">1</span>],borderradius[<span class="integer">1</span>]), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>);
-                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">1</span>],borderradius[<span class="integer">1</span>]), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,scale1,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>);
+                        <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv2;p++){
+                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">1</span>],borderradius[<span class="integer">1</span>]), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
+                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">1</span>],borderradius[<span class="integer">1</span>]), p*pimul2 + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,scale1,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
                         }
-                        <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv3;p++){
-                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">2</span>],height-borderradius[<span class="integer">2</span>]), p*pimul3 + PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">1</span>);
-                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">2</span>],height-borderradius[<span class="integer">2</span>]), p*pimul3 + PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,scale2,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">1</span>);
+                        <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv3;p++){
+                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">2</span>],height-borderradius[<span class="integer">2</span>]), p*pimul3 + PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">1</span>)
+                                <span class="local-variable">this</span>.mesh.push(vec2(width-borderradius[<span class="integer">2</span>],height-borderradius[<span class="integer">2</span>]), p*pimul3 + PI, vec4(<span class="integer">0</span>,<span class="integer">0</span>,scale2,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">1</span>)
                         }
-                        <span class="keyword">for</span>(<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv4;p++){
-                                <span class="local-variable">this</span>.mesh.push(vec2(borderradius[<span class="integer">3</span>],height-borderradius[<span class="integer">3</span>]), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="integer">0</span>,<span class="integer">1</span>);
-                                <span class="local-variable">this</span>.mesh.push(vec2(borderradius[<span class="integer">3</span>],height-borderradius[<span class="integer">3</span>]), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,scale3), <span class="integer">0</span>,<span class="integer">1</span>);
+                        <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>;p&lt;pidiv4;p++){
+                                <span class="local-variable">this</span>.mesh.push(vec2(borderradius[<span class="integer">3</span>],height-borderradius[<span class="integer">3</span>]), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="integer">0</span>,<span class="integer">1</span>)
+                                <span class="local-variable">this</span>.mesh.push(vec2(borderradius[<span class="integer">3</span>],height-borderradius[<span class="integer">3</span>]), p*pimul4 + PI + PI/<span class="integer">2</span>, vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,scale3), <span class="integer">0</span>,<span class="integer">1</span>)
                         }
-                        <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), <span class="integer">0</span>, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>);
-                        <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), <span class="integer">0</span>, vec4(scale0,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>);
+                        <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), <span class="integer">0</span>, vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
+                        <span class="local-variable">this</span>.mesh.push(vec2( borderradius[<span class="integer">0</span>] ,borderradius[<span class="integer">0</span>]), <span class="integer">0</span>, vec4(scale0,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="integer">1</span>,<span class="integer">0</span>)
 
                 }
 
@@ -4163,11 +4094,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         sized = vec2(pos.x, pos.y)
                         <span class="keyword">return</span> vec4(sized.x, sized.y, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                 }
-
-        <span class="comment">//        this.atExtend = function(){</span>
-        <span class="comment">//                console.log(&quot;EXTENDING&quot;, this.constructor.outer.bordercolorfn)</span>
-                        <span class="comment">//Object.getPrototypeOf(this).atExtend.call(this)</span>
-        <span class="comment">//        }</span>
         })
 
         <span class="comment">// lets pull in the scrollbar on the view</span>

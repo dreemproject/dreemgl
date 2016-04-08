@@ -183,8 +183,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
 <a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> createPadding = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createPadding</span><span class="delimiter">'</span></span>),
+    stringSize = require(<span class="string"><span class="delimiter">'</span><span class="content">./_stringSize</span><span class="delimiter">'</span></span>),
+    toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>),
     toString = require(<span class="string"><span class="delimiter">'</span><span class="content">./toString</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
@@ -193,6 +203,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 4.0.0
  * @category String
  * @param {string} [string=''] The string to pad.
  * @param {number} [length=0] The padding length.
@@ -211,7 +222,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">padStart</span>(string, length, chars) {
   string = toString(string);
-  <span class="keyword">return</span> createPadding(string, length, chars) + string;
+  length = toInteger(length);
+
+  <span class="keyword">var</span> strLength = length ? stringSize(string) : <span class="integer">0</span>;
+  <span class="keyword">return</span> (length &amp;&amp; strLength &lt; length)
+    ? (createPadding(length - strLength, chars) + string)
+    : string;
 }
 
 module.exports = padStart;

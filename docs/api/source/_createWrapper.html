@@ -268,6 +268,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     setData = require(<span class="string"><span class="delimiter">'</span><span class="content">./_setData</span><span class="delimiter">'</span></span>),
     toInteger = require(<span class="string"><span class="delimiter">'</span><span class="content">./toInteger</span><span class="delimiter">'</span></span>);
 
+<span class="comment">/** Used as the `TypeError` message for &quot;Functions&quot; methods. */</span>
+<span class="keyword">var</span> FUNC_ERROR_TEXT = <span class="string"><span class="delimiter">'</span><span class="content">Expected a function</span><span class="delimiter">'</span></span>;
+
 <span class="comment">/** Used to compose bitmasks for wrapper metadata. */</span>
 <span class="keyword">var</span> BIND_FLAG = <span class="integer">1</span>,
     BIND_KEY_FLAG = <span class="integer">2</span>,
@@ -275,9 +278,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     CURRY_RIGHT_FLAG = <span class="integer">16</span>,
     PARTIAL_FLAG = <span class="integer">32</span>,
     PARTIAL_RIGHT_FLAG = <span class="integer">64</span>;
-
-<span class="comment">/** Used as the `TypeError` message for &quot;Functions&quot; methods. */</span>
-<span class="keyword">var</span> FUNC_ERROR_TEXT = <span class="string"><span class="delimiter">'</span><span class="content">Expected a function</span><span class="delimiter">'</span></span>;
 
 <span class="comment">/* Built-in method references for those with the same name as other `lodash` methods. */</span>
 <span class="keyword">var</span> nativeMax = Math.max;

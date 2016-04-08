@@ -156,41 +156,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2" name="n2">2</a>
 <a href="#n3" name="n3">3</a>
 <a href="#n4" name="n4">4</a>
-<a href="#n5" name="n5">5</a>
-<a href="#n6" name="n6">6</a>
-<a href="#n7" name="n7">7</a>
-<a href="#n8" name="n8">8</a>
-<a href="#n9" name="n9">9</a>
-<strong><a href="#n10" name="n10">10</a></strong>
-<a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and limitations under the License.*/</span>
-
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, <span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$$</span>, dpad, game, knob, keyboard) {
-
-    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-        <span class="keyword">return</span> [
-            screen(
-                dpad({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>}),
-                game({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>}),
-                knob({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>}),
-                keyboard({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>})
-            )
-        ]
-    }
-});
+  <td class="code"><pre><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>;
+module.<span class="function">exports</span> = <span class="keyword">function</span> () {
+        <span class="keyword">return</span> <span class="regexp"><span class="delimiter">/</span><span class="content">[</span><span class="char">\u001b</span><span class="char">\u009b</span><span class="content">][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=&gt;&lt;]</span><span class="delimiter">/</span><span class="modifier">g</span></span>;
+};
 </pre></td>
 </tr></table>
 

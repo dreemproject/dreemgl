@@ -202,206 +202,56 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n48" name="n48">48</a>
 <a href="#n49" name="n49">49</a>
 <strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
-<a href="#n54" name="n54">54</a>
-<a href="#n55" name="n55">55</a>
-<a href="#n56" name="n56">56</a>
-<a href="#n57" name="n57">57</a>
-<a href="#n58" name="n58">58</a>
-<a href="#n59" name="n59">59</a>
-<strong><a href="#n60" name="n60">60</a></strong>
-<a href="#n61" name="n61">61</a>
-<a href="#n62" name="n62">62</a>
-<a href="#n63" name="n63">63</a>
-<a href="#n64" name="n64">64</a>
-<a href="#n65" name="n65">65</a>
-<a href="#n66" name="n66">66</a>
-<a href="#n67" name="n67">67</a>
-<a href="#n68" name="n68">68</a>
-<a href="#n69" name="n69">69</a>
-<strong><a href="#n70" name="n70">70</a></strong>
-<a href="#n71" name="n71">71</a>
-<a href="#n72" name="n72">72</a>
-<a href="#n73" name="n73">73</a>
-<a href="#n74" name="n74">74</a>
-<a href="#n75" name="n75">75</a>
-<a href="#n76" name="n76">76</a>
-<a href="#n77" name="n77">77</a>
-<a href="#n78" name="n78">78</a>
-<a href="#n79" name="n79">79</a>
-<strong><a href="#n80" name="n80">80</a></strong>
-<a href="#n81" name="n81">81</a>
-<a href="#n82" name="n82">82</a>
-<a href="#n83" name="n83">83</a>
-<a href="#n84" name="n84">84</a>
-<a href="#n85" name="n85">85</a>
-<a href="#n86" name="n86">86</a>
-<a href="#n87" name="n87">87</a>
-<a href="#n88" name="n88">88</a>
-<a href="#n89" name="n89">89</a>
-<strong><a href="#n90" name="n90">90</a></strong>
-<a href="#n91" name="n91">91</a>
-<a href="#n92" name="n92">92</a>
-<a href="#n93" name="n93">93</a>
-<a href="#n94" name="n94">94</a>
-<a href="#n95" name="n95">95</a>
-<a href="#n96" name="n96">96</a>
-<a href="#n97" name="n97">97</a>
-<a href="#n98" name="n98">98</a>
-<a href="#n99" name="n99">99</a>
-<strong><a href="#n100" name="n100">100</a></strong>
-<a href="#n101" name="n101">101</a>
-<a href="#n102" name="n102">102</a>
-<a href="#n103" name="n103">103</a>
-<a href="#n104" name="n104">104</a>
-<a href="#n105" name="n105">105</a>
-<a href="#n106" name="n106">106</a>
-<a href="#n107" name="n107">107</a>
-<a href="#n108" name="n108">108</a>
-<a href="#n109" name="n109">109</a>
-<strong><a href="#n110" name="n110">110</a></strong>
-<a href="#n111" name="n111">111</a>
-<a href="#n112" name="n112">112</a>
-<a href="#n113" name="n113">113</a>
-<a href="#n114" name="n114">114</a>
-<a href="#n115" name="n115">115</a>
-<a href="#n116" name="n116">116</a>
-<a href="#n117" name="n117">117</a>
-<a href="#n118" name="n118">118</a>
-<a href="#n119" name="n119">119</a>
-<strong><a href="#n120" name="n120">120</a></strong>
-<a href="#n121" name="n121">121</a>
-<a href="#n122" name="n122">122</a>
-<a href="#n123" name="n123">123</a>
-<a href="#n124" name="n124">124</a>
-<a href="#n125" name="n125">125</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/**
- * Helpers.
- */</span>
+  <td class="code"><pre>module.exports = balanced;
+<span class="keyword">function</span> <span class="function">balanced</span>(a, b, str) {
+  <span class="keyword">var</span> r = range(a, b, str);
 
-<span class="keyword">var</span> s = <span class="integer">1000</span>;
-<span class="keyword">var</span> m = s * <span class="integer">60</span>;
-<span class="keyword">var</span> h = m * <span class="integer">60</span>;
-<span class="keyword">var</span> d = h * <span class="integer">24</span>;
-<span class="keyword">var</span> y = d * <span class="float">365.25</span>;
+  <span class="keyword">return</span> r &amp;&amp; {
+    <span class="key">start</span>: r[<span class="integer">0</span>],
+    <span class="key">end</span>: r[<span class="integer">1</span>],
+    <span class="key">pre</span>: str.slice(<span class="integer">0</span>, r[<span class="integer">0</span>]),
+    <span class="key">body</span>: str.slice(r[<span class="integer">0</span>] + a.length, r[<span class="integer">1</span>]),
+    <span class="key">post</span>: str.slice(r[<span class="integer">1</span>] + b.length)
+  };
+}
 
-<span class="comment">/**
- * Parse or format the given `val`.
- *
- * Options:
- *
- *  - `long` verbose formatting [false]
- *
- * @param {String|Number} val
- * @param {Object} options
- * @return {String|Number}
- * @api public
- */</span>
+balanced.range = range;
+<span class="keyword">function</span> <span class="function">range</span>(a, b, str) {
+  <span class="keyword">var</span> begs, beg, left, right, result;
+  <span class="keyword">var</span> ai = str.indexOf(a);
+  <span class="keyword">var</span> bi = str.indexOf(b, ai + <span class="integer">1</span>);
+  <span class="keyword">var</span> i = ai;
 
-module.<span class="function">exports</span> = <span class="keyword">function</span>(val, options){
-  options = options || {};
-  <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> == <span class="keyword">typeof</span> val) <span class="keyword">return</span> parse(val);
-  <span class="keyword">return</span> options.<span class="reserved">long</span>
-    ? <span class="reserved">long</span>(val)
-    : <span class="reserved">short</span>(val);
-};
+  <span class="keyword">if</span> (ai &gt;= <span class="integer">0</span> &amp;&amp; bi &gt; <span class="integer">0</span>) {
+    begs = [];
+    left = str.length;
 
-<span class="comment">/**
- * Parse the given `str` and return milliseconds.
- *
- * @param {String} str
- * @return {Number}
- * @api private
- */</span>
+    <span class="keyword">while</span> (i &lt; str.length &amp;&amp; i &gt;= <span class="integer">0</span> &amp;&amp; ! result) {
+      <span class="keyword">if</span> (i == ai) {
+        begs.push(i);
+        ai = str.indexOf(a, i + <span class="integer">1</span>);
+      } <span class="keyword">else</span> <span class="keyword">if</span> (begs.length == <span class="integer">1</span>) {
+        result = [ begs.pop(), bi ];
+      } <span class="keyword">else</span> {
+        beg = begs.pop();
+        <span class="keyword">if</span> (beg &lt; left) {
+          left = beg;
+          right = bi;
+        }
 
-<span class="keyword">function</span> <span class="function">parse</span>(str) {
-  str = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> + str;
-  <span class="keyword">if</span> (str.length &gt; <span class="integer">10000</span>) <span class="keyword">return</span>;
-  <span class="keyword">var</span> match = <span class="regexp"><span class="delimiter">/</span><span class="content">^((?:</span><span class="char">\d</span><span class="content">+)?</span><span class="content">\.</span><span class="content">?</span><span class="char">\d</span><span class="content">+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$</span><span class="delimiter">/</span><span class="modifier">i</span></span>.exec(str);
-  <span class="keyword">if</span> (!match) <span class="keyword">return</span>;
-  <span class="keyword">var</span> n = parseFloat(match[<span class="integer">1</span>]);
-  <span class="keyword">var</span> type = (match[<span class="integer">2</span>] || <span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>).toLowerCase();
-  <span class="keyword">switch</span> (type) {
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">years</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">year</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">yrs</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">yr</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">y</span><span class="delimiter">'</span></span>:
-      <span class="keyword">return</span> n * y;
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">days</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">day</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>:
-      <span class="keyword">return</span> n * d;
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hours</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hour</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hrs</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">hr</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">h</span><span class="delimiter">'</span></span>:
-      <span class="keyword">return</span> n * h;
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">minutes</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">minute</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">mins</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">min</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>:
-      <span class="keyword">return</span> n * m;
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">seconds</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">second</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">secs</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">sec</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>:
-      <span class="keyword">return</span> n * s;
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">milliseconds</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">millisecond</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">msecs</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">msec</span><span class="delimiter">'</span></span>:
-    <span class="keyword">case</span> <span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>:
-      <span class="keyword">return</span> n;
+        bi = str.indexOf(b, i + <span class="integer">1</span>);
+      }
+
+      i = ai &lt; bi &amp;&amp; ai &gt;= <span class="integer">0</span> ? ai : bi;
+    }
+
+    <span class="keyword">if</span> (begs.length) {
+      result = [ left, right ];
+    }
   }
-}
 
-<span class="comment">/**
- * Short format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */</span>
-
-<span class="keyword">function</span> <span class="reserved">short</span>(ms) {
-  <span class="keyword">if</span> (ms &gt;= d) <span class="keyword">return</span> Math.round(ms / d) + <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span>;
-  <span class="keyword">if</span> (ms &gt;= h) <span class="keyword">return</span> Math.round(ms / h) + <span class="string"><span class="delimiter">'</span><span class="content">h</span><span class="delimiter">'</span></span>;
-  <span class="keyword">if</span> (ms &gt;= m) <span class="keyword">return</span> Math.round(ms / m) + <span class="string"><span class="delimiter">'</span><span class="content">m</span><span class="delimiter">'</span></span>;
-  <span class="keyword">if</span> (ms &gt;= s) <span class="keyword">return</span> Math.round(ms / s) + <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>;
-  <span class="keyword">return</span> ms + <span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>;
-}
-
-<span class="comment">/**
- * Long format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */</span>
-
-<span class="keyword">function</span> <span class="reserved">long</span>(ms) {
-  <span class="keyword">return</span> plural(ms, d, <span class="string"><span class="delimiter">'</span><span class="content">day</span><span class="delimiter">'</span></span>)
-    || plural(ms, h, <span class="string"><span class="delimiter">'</span><span class="content">hour</span><span class="delimiter">'</span></span>)
-    || plural(ms, m, <span class="string"><span class="delimiter">'</span><span class="content">minute</span><span class="delimiter">'</span></span>)
-    || plural(ms, s, <span class="string"><span class="delimiter">'</span><span class="content">second</span><span class="delimiter">'</span></span>)
-    || ms + <span class="string"><span class="delimiter">'</span><span class="content"> ms</span><span class="delimiter">'</span></span>;
-}
-
-<span class="comment">/**
- * Pluralization helper.
- */</span>
-
-<span class="keyword">function</span> <span class="function">plural</span>(ms, n, name) {
-  <span class="keyword">if</span> (ms &lt; n) <span class="keyword">return</span>;
-  <span class="keyword">if</span> (ms &lt; n * <span class="float">1.5</span>) <span class="keyword">return</span> Math.floor(ms / n) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + name;
-  <span class="keyword">return</span> Math.ceil(ms / n) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>;
+  <span class="keyword">return</span> result;
 }
 </pre></td>
 </tr></table>

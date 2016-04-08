@@ -173,8 +173,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n19" name="n19">19</a>
 <strong><a href="#n20" name="n20">20</a></strong>
 <a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> baseForIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForIn</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> getAllKeysIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./_getAllKeysIn</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * The base implementation of  `_.pickBy` without support for iteratee shorthands.
@@ -185,12 +192,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Object} Returns the new object.
  */</span>
 <span class="keyword">function</span> <span class="function">basePickBy</span>(object, predicate) {
-  <span class="keyword">var</span> result = {};
-  baseForIn(object, <span class="keyword">function</span>(value, key) {
+  <span class="keyword">var</span> index = -<span class="integer">1</span>,
+      props = getAllKeysIn(object),
+      length = props.length,
+      result = {};
+
+  <span class="keyword">while</span> (++index &lt; length) {
+    <span class="keyword">var</span> key = props[index],
+        value = object[key];
+
     <span class="keyword">if</span> (predicate(value, key)) {
       result[key] = value;
     }
-  });
+  }
   <span class="keyword">return</span> result;
 }
 

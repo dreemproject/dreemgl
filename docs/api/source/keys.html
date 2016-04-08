@@ -153,8 +153,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <table class="CodeRay"><tr>
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
 </pre></td>
-  <td class="code"><pre>module.exports = require(<span class="string"><span class="delimiter">'</span><span class="content">../keys</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre>exports = module.exports = <span class="keyword">typeof</span> Object.keys === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>
+  ? Object.keys : shim;
+
+exports.shim = shim;
+<span class="keyword">function</span> <span class="function">shim</span> (obj) {
+  <span class="keyword">var</span> keys = [];
+  <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) keys.push(key);
+  <span class="keyword">return</span> keys;
+}
 </pre></td>
 </tr></table>
 

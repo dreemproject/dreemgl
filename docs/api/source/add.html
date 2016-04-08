@@ -174,19 +174,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n20" name="n20">20</a></strong>
 <a href="#n21" name="n21">21</a>
 <a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/**
+  <td class="code"><pre><span class="keyword">var</span> createMathOperation = require(<span class="string"><span class="delimiter">'</span><span class="content">./_createMathOperation</span><span class="delimiter">'</span></span>);
+
+<span class="comment">/**
  * Adds two numbers.
  *
  * @static
  * @memberOf _
+ * @since 3.4.0
  * @category Math
  * @param {number} augend The first number in an addition.
  * @param {number} addend The second number in an addition.
@@ -196,19 +192,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.add(6, 4);
  * // =&gt; 10
  */</span>
-<span class="keyword">function</span> <span class="function">add</span>(augend, addend) {
-  <span class="keyword">var</span> result;
-  <span class="keyword">if</span> (augend === <span class="predefined-constant">undefined</span> &amp;&amp; addend === <span class="predefined-constant">undefined</span>) {
-    <span class="keyword">return</span> <span class="integer">0</span>;
-  }
-  <span class="keyword">if</span> (augend !== <span class="predefined-constant">undefined</span>) {
-    result = augend;
-  }
-  <span class="keyword">if</span> (addend !== <span class="predefined-constant">undefined</span>) {
-    result = result === <span class="predefined-constant">undefined</span> ? addend : (result + addend);
-  }
-  <span class="keyword">return</span> result;
-}
+<span class="keyword">var</span> add = createMathOperation(<span class="keyword">function</span>(augend, addend) {
+  <span class="keyword">return</span> augend + addend;
+});
 
 module.exports = add;
 </pre></td>

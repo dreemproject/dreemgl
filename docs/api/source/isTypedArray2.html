@@ -227,6 +227,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n73" name="n73">73</a>
 <a href="#n74" name="n74">74</a>
 <a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isLength = require(<span class="string"><span class="delimiter">'</span><span class="content">./isLength</span><span class="delimiter">'</span></span>),
     isObjectLike = require(<span class="string"><span class="delimiter">'</span><span class="content">./isObjectLike</span><span class="delimiter">'</span></span>);
@@ -247,6 +251,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     weakMapTag = <span class="string"><span class="delimiter">'</span><span class="content">[object WeakMap]</span><span class="delimiter">'</span></span>;
 
 <span class="keyword">var</span> arrayBufferTag = <span class="string"><span class="delimiter">'</span><span class="content">[object ArrayBuffer]</span><span class="delimiter">'</span></span>,
+    dataViewTag = <span class="string"><span class="delimiter">'</span><span class="content">[object DataView]</span><span class="delimiter">'</span></span>,
     float32Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Float32Array]</span><span class="delimiter">'</span></span>,
     float64Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Float64Array]</span><span class="delimiter">'</span></span>,
     int8Tag = <span class="string"><span class="delimiter">'</span><span class="content">[object Int8Array]</span><span class="delimiter">'</span></span>,
@@ -266,11 +271,12 @@ typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
 typedArrayTags[uint32Tag] = <span class="predefined-constant">true</span>;
 typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
 typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
-typedArrayTags[dateTag] = typedArrayTags[errorTag] =
-typedArrayTags[funcTag] = typedArrayTags[mapTag] =
-typedArrayTags[numberTag] = typedArrayTags[objectTag] =
-typedArrayTags[regexpTag] = typedArrayTags[setTag] =
-typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = <span class="predefined-constant">false</span>;
+typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
+typedArrayTags[errorTag] = typedArrayTags[funcTag] =
+typedArrayTags[mapTag] = typedArrayTags[numberTag] =
+typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
+typedArrayTags[setTag] = typedArrayTags[stringTag] =
+typedArrayTags[weakMapTag] = <span class="predefined-constant">false</span>;
 
 <span class="comment">/** Used for built-in method references. */</span>
 <span class="keyword">var</span> objectProto = Object.prototype;
@@ -286,9 +292,11 @@ typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = <span class="predefined
  *
  * @static
  * @memberOf _
+ * @since 3.0.0
  * @category Lang
  * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @returns {boolean} Returns `true` if `value` is correctly classified,
+ *  else `false`.
  * @example
  *
  * _.isTypedArray(new Uint8Array);

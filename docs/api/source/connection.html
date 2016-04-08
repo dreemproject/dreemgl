@@ -498,6 +498,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n344" name="n344">344</a>
 <a href="#n345" name="n345">345</a>
 <a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -522,6 +523,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">color2</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>),<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
                 <span class="key">centralcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>),<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
                 <span class="key">inselection</span> : Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
+                <span class="key">stripe</span>:<span class="predefined-constant">false</span>,
                 <span class="key">hasball</span>: <span class="predefined-constant">true</span>
 
         }
@@ -706,10 +708,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="comment">//return 'blue'</span>
                         <span class="keyword">var</span> a= <span class="float">1.0</span> - pow(abs(mesh.y*<span class="float">2.0</span>), <span class="float">2.5</span>);
+                        <span class="keyword">if</span> (view.stripe &amp;&amp; mesh.x &lt; <span class="float">0.6</span> &amp;&amp; <span class="reserved">int</span>(mod(<span class="float">0.03</span> * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), <span class="float">2.0</span>)) == <span class="integer">1</span>) {
+                                <span class="keyword">return</span> vec4(mix(mix(vec3(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), view.color1.xyz, mesh.x * <span class="float">0.5</span>), view.color2.xyz, mesh.x),a)
+                        }
                         <span class="keyword">return</span> vec4(vec3(<span class="float">0.01</span>) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*<span class="float">1.1</span>,a);
-                        <span class="keyword">return</span> vec4(view.bgcolor.xyz,a);
                 }
         })
 
@@ -760,7 +763,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//return 'red'</span>
                         <span class="keyword">var</span> a= <span class="float">1.0</span>-pow(abs(mesh.y*<span class="float">2.0</span>), <span class="float">2.5</span>);
                         <span class="keyword">return</span> vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*<span class="float">0.3</span>);
-                        <span class="keyword">return</span> vec4(vec3(<span class="float">0.0</span>) + view.bgcolor.xyz*<span class="float">1.0</span>,a);
                 }
         })
         <span class="comment">// turn on the shaders</span>

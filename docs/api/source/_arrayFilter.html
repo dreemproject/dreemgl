@@ -190,13 +190,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="keyword">function</span> <span class="function">arrayFilter</span>(array, predicate) {
   <span class="keyword">var</span> index = -<span class="integer">1</span>,
       length = array.length,
-      resIndex = -<span class="integer">1</span>,
+      resIndex = <span class="integer">0</span>,
       result = [];
 
   <span class="keyword">while</span> (++index &lt; length) {
     <span class="keyword">var</span> value = array[index];
     <span class="keyword">if</span> (predicate(value, index, array)) {
-      result[++resIndex] = value;
+      result[resIndex++] = value;
     }
   }
   <span class="keyword">return</span> result;

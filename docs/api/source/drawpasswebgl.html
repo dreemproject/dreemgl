@@ -582,6 +582,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n428" name="n428">428</a>
 <a href="#n429" name="n429">429</a>
 <strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -723,21 +724,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         drawlayout.absy = drawlayout.top
                 }
 
-                <span class="keyword">if</span>(draw === view &amp;&amp; view.sublayout){
-                        width = view.sublayout.width
-                        height = view.sublayout.height
-                }
-                <span class="comment">// early out check</span>
-                <span class="keyword">if</span>(draw !== view &amp;&amp; !draw.noscroll){
-                        <span class="keyword">var</span> scroll = view._scroll
-                        <span class="keyword">var</span> zoom = view._zoom
-                        <span class="keyword">if</span>( drawlayout.absy - scroll[<span class="integer">1</span>] &gt; height * zoom || drawlayout.absy + drawlayout.height - scroll[<span class="integer">1</span>] &lt; <span class="integer">0</span>){
-                                <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        }
-                        <span class="keyword">if</span>(drawlayout.absx - scroll[<span class="integer">0</span>] &gt; width * zoom || drawlayout.absx + drawlayout.width - scroll[<span class="integer">0</span>] &lt; <span class="integer">0</span>){
-                                <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        }
-                }
+                <span class="comment">// if(draw === view &amp;&amp; view.sublayout){</span>
+                <span class="comment">//         width = view.sublayout.width</span>
+                <span class="comment">//         height = view.sublayout.height</span>
+                <span class="comment">// }</span>
+
+                <span class="comment">// // early out check</span>
+                <span class="comment">// if(draw !== view &amp;&amp; !draw.noscroll){</span>
+                <span class="comment">//         var scroll = view._scroll</span>
+                <span class="comment">//         var zoom = view._zoom</span>
+                <span class="comment">//         if( drawlayout.absy - scroll[1] &gt; height * zoom || drawlayout.absy + drawlayout.height - scroll[1] &lt; 0){</span>
+                <span class="comment">//                 return false</span>
+                <span class="comment">//         }</span>
+                <span class="comment">//         if(drawlayout.absx - scroll[0] &gt; width * zoom || drawlayout.absx + drawlayout.width - scroll[0] &lt; 0){</span>
+                <span class="comment">//                 return false</span>
+                <span class="comment">//         }</span>
+                <span class="comment">// }</span>
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
 

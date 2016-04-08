@@ -186,17 +186,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> isNumber = require(<span class="string"><span class="delimiter">'</span><span class="content">./isNumber</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
  * Checks if `value` is `NaN`.
  *
- * **Note:** This method is not the same as [`isNaN`](https://es5.github.io/#x15.1.2.4)
- * which returns `true` for `undefined` and other non-numeric values.
+ * **Note:** This method is not the same as
+ * [`isNaN`](https://es5.github.io/#x15.1.2.4) which returns `true` for
+ * `undefined` and other non-numeric values.
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Lang
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is `NaN`, else `false`.
@@ -216,7 +221,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 <span class="keyword">function</span> <span class="function">isNaN</span>(value) {
   <span class="comment">// An `NaN` primitive is the only value that is not equal to itself.</span>
-  <span class="comment">// Perform the `toStringTag` check first to avoid errors with some ActiveX objects in IE.</span>
+  <span class="comment">// Perform the `toStringTag` check first to avoid errors with some</span>
+  <span class="comment">// ActiveX objects in IE.</span>
   <span class="keyword">return</span> isNumber(value) &amp;&amp; value != +value;
 }
 

@@ -187,9 +187,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> baseCastFunction = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseCastFunction</span><span class="delimiter">'</span></span>),
-    baseForRight = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForRight</span><span class="delimiter">'</span></span>),
+  <td class="code"><pre><span class="keyword">var</span> baseForRight = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseForRight</span><span class="delimiter">'</span></span>),
+    baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>),
     keysIn = require(<span class="string"><span class="delimiter">'</span><span class="content">./keysIn</span><span class="delimiter">'</span></span>);
 
 <span class="comment">/**
@@ -198,6 +199,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 2.0.0
  * @category Object
  * @param {Object} object The object to iterate over.
  * @param {Function} [iteratee=_.identity] The function invoked per iteration.
@@ -214,12 +216,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.forInRight(new Foo, function(value, key) {
  *   console.log(key);
  * });
- * // =&gt; logs 'c', 'b', then 'a' assuming `_.forIn` logs 'a', 'b', then 'c'
+ * // =&gt; Logs 'c', 'b', then 'a' assuming `_.forIn` logs 'a', 'b', then 'c'.
  */</span>
 <span class="keyword">function</span> <span class="function">forInRight</span>(object, iteratee) {
   <span class="keyword">return</span> object == <span class="predefined-constant">null</span>
     ? object
-    : baseForRight(object, baseCastFunction(iteratee), keysIn);
+    : baseForRight(object, baseIteratee(iteratee), keysIn);
 }
 
 module.exports = forInRight;

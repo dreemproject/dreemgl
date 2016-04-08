@@ -234,7 +234,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n80" name="n80">80</a></strong>
 <a href="#n81" name="n81">81</a>
 <a href="#n82" name="n82">82</a>
-<a href="#n83" name="n83">83</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> Stack = require(<span class="string"><span class="delimiter">'</span><span class="content">./_Stack</span><span class="delimiter">'</span></span>),
     equalArrays = require(<span class="string"><span class="delimiter">'</span><span class="content">./_equalArrays</span><span class="delimiter">'</span></span>),
@@ -269,7 +268,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @param {Object} other The other object to compare.
  * @param {Function} equalFunc The function to determine equivalents of values.
  * @param {Function} [customizer] The function to customize comparisons.
- * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual` for more details.
+ * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual`
+ *  for more details.
  * @param {Object} [stack] Tracks traversed `object` and `other` objects.
  * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
  */</span>
@@ -281,41 +281,39 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
   <span class="keyword">if</span> (!objIsArr) {
     objTag = getTag(object);
-    <span class="keyword">if</span> (objTag == argsTag) {
-      objTag = objectTag;
-    } <span class="keyword">else</span> <span class="keyword">if</span> (objTag != objectTag) {
-      objIsArr = isTypedArray(object);
-    }
+    objTag = objTag == argsTag ? objectTag : objTag;
   }
   <span class="keyword">if</span> (!othIsArr) {
     othTag = getTag(other);
-    <span class="keyword">if</span> (othTag == argsTag) {
-      othTag = objectTag;
-    } <span class="keyword">else</span> <span class="keyword">if</span> (othTag != objectTag) {
-      othIsArr = isTypedArray(other);
-    }
+    othTag = othTag == argsTag ? objectTag : othTag;
   }
   <span class="keyword">var</span> objIsObj = objTag == objectTag &amp;&amp; !isHostObject(object),
       othIsObj = othTag == objectTag &amp;&amp; !isHostObject(other),
       isSameTag = objTag == othTag;
 
-  <span class="keyword">if</span> (isSameTag &amp;&amp; !(objIsArr || objIsObj)) {
-    <span class="keyword">return</span> equalByTag(object, other, objTag, equalFunc, customizer, bitmask);
+  <span class="keyword">if</span> (isSameTag &amp;&amp; !objIsObj) {
+    stack || (stack = <span class="keyword">new</span> Stack);
+    <span class="keyword">return</span> (objIsArr || isTypedArray(object))
+      ? equalArrays(object, other, equalFunc, customizer, bitmask, stack)
+      : equalByTag(object, other, objTag, equalFunc, customizer, bitmask, stack);
   }
-  <span class="keyword">var</span> isPartial = bitmask &amp; PARTIAL_COMPARE_FLAG;
-  <span class="keyword">if</span> (!isPartial) {
+  <span class="keyword">if</span> (!(bitmask &amp; PARTIAL_COMPARE_FLAG)) {
     <span class="keyword">var</span> objIsWrapped = objIsObj &amp;&amp; hasOwnProperty.call(object, <span class="string"><span class="delimiter">'</span><span class="content">__wrapped__</span><span class="delimiter">'</span></span>),
         othIsWrapped = othIsObj &amp;&amp; hasOwnProperty.call(other, <span class="string"><span class="delimiter">'</span><span class="content">__wrapped__</span><span class="delimiter">'</span></span>);
 
     <span class="keyword">if</span> (objIsWrapped || othIsWrapped) {
-      <span class="keyword">return</span> equalFunc(objIsWrapped ? object.value() : object, othIsWrapped ? other.value() : other, customizer, bitmask, stack);
+      <span class="keyword">var</span> objUnwrapped = objIsWrapped ? object.value() : object,
+          othUnwrapped = othIsWrapped ? other.value() : other;
+
+      stack || (stack = <span class="keyword">new</span> Stack);
+      <span class="keyword">return</span> equalFunc(objUnwrapped, othUnwrapped, customizer, bitmask, stack);
     }
   }
   <span class="keyword">if</span> (!isSameTag) {
     <span class="keyword">return</span> <span class="predefined-constant">false</span>;
   }
   stack || (stack = <span class="keyword">new</span> Stack);
-  <span class="keyword">return</span> (objIsArr ? equalArrays : equalObjects)(object, other, equalFunc, customizer, bitmask, stack);
+  <span class="keyword">return</span> equalObjects(object, other, equalFunc, customizer, bitmask, stack);
 }
 
 module.exports = baseIsEqualDeep;

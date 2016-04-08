@@ -174,7 +174,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @private
  * @param {*} value The value to inspect.
- * @returns {Array} Returns the array-like object.
+ * @returns {Function} Returns cast function.
  */</span>
 <span class="keyword">function</span> <span class="function">baseCastFunction</span>(value) {
   <span class="keyword">return</span> <span class="keyword">typeof</span> value == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? value : identity;

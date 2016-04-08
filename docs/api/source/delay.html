@@ -179,6 +179,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
 </pre></td>
   <td class="code"><pre><span class="keyword">var</span> baseDelay = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseDelay</span><span class="delimiter">'</span></span>),
     rest = require(<span class="string"><span class="delimiter">'</span><span class="content">./rest</span><span class="delimiter">'</span></span>),
@@ -190,6 +191,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  *
  * @static
  * @memberOf _
+ * @since 0.1.0
  * @category Function
  * @param {Function} func The function to delay.
  * @param {number} wait The number of milliseconds to delay invocation.
@@ -200,7 +202,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * _.delay(function(text) {
  *   console.log(text);
  * }, 1000, 'later');
- * // =&gt; logs 'later' after one second
+ * // =&gt; Logs 'later' after one second.
  */</span>
 <span class="keyword">var</span> delay = rest(<span class="keyword">function</span>(func, wait, args) {
   <span class="keyword">return</span> baseDelay(func, toNumber(wait) || <span class="integer">0</span>, args);

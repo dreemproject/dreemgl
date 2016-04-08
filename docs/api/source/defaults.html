@@ -215,70 +215,80 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n61" name="n61">61</a>
 <a href="#n62" name="n62">62</a>
 <a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
 </pre></td>
-  <td class="code"><pre><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>;
+  <td class="code"><pre><span class="comment">// Default inflections</span>
+module.<span class="function">exports</span> = <span class="keyword">function</span> (inflect) {
 
-<span class="keyword">var</span> utils = require(<span class="string"><span class="delimiter">'</span><span class="content">./utils</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">$</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">s</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(ax|test)is$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1es</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(octop|vir)us$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1i</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(octop|vir)i$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1i</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(alias|status)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1es</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(bu)s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ses</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(buffal|tomat)o$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1oes</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">([ti])um$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1a</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">([ti])a$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1a</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">sis$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">ses</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(?:([^fa])fe|(?:(oa)f)|([lr])f)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ves</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(hive)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1s</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">([^aeiouy]|qu)y$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ies</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(x|ch|ss|sh)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1es</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(matr|vert|ind)(?:ix|ex)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ices</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">([m|l])ouse$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ice</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">([m|l])ice$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ice</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">^(ox)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1en</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">^(oxen)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.plural(<span class="regexp"><span class="delimiter">/</span><span class="content">(quiz)$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1zes</span><span class="delimiter">'</span></span>);
 
-<span class="keyword">var</span> PROTECTION_PREFIX = <span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="content">\)</span><span class="content">\]</span><span class="content">\}</span><span class="content">',?</span><span class="char">\n</span><span class="delimiter">/</span></span>;
-<span class="keyword">var</span> DEFAULT_CONTENT_TYPE = {
-  <span class="key"><span class="delimiter">'</span><span class="content">Content-Type</span><span class="delimiter">'</span></span>: <span class="string"><span class="delimiter">'</span><span class="content">application/x-www-form-urlencoded</span><span class="delimiter">'</span></span>
-};
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(n)ews$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ews</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">([ti])a$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1um</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1sis</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(^analy)ses$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1sis</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">([^f])ves$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1fe</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(hive)s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(tive)s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(oave)s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">oaf</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">([lr])ves$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1f</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">([^aeiouy]|qu)ies$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1y</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(s)eries$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1eries</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(m)ovies$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ovie</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(x|ch|ss|sh)es$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">([m|l])ice$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ouse</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(bus)es$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(o)es$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(shoe)s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(cris|ax|test)es$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1is</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(octop|vir)i$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1us</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(alias|status)es$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">^(ox)en</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(vert|ind)ices$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ex</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(matr)ices$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1ix</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(quiz)zes$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
+  inflect.singular(<span class="regexp"><span class="delimiter">/</span><span class="content">(database)s$</span><span class="delimiter">/</span><span class="modifier">i</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>);
 
-module.exports = {
-  <span class="key">transformRequest</span>: [<span class="keyword">function</span> <span class="function">transformResponseJSON</span>(data, headers) {
-    <span class="keyword">if</span> (utils.isFormData(data)) {
-      <span class="keyword">return</span> data;
-    }
-    <span class="keyword">if</span> (utils.isArrayBuffer(data)) {
-      <span class="keyword">return</span> data;
-    }
-    <span class="keyword">if</span> (utils.isArrayBufferView(data)) {
-      <span class="keyword">return</span> data.buffer;
-    }
-    <span class="keyword">if</span> (utils.isObject(data) &amp;&amp; !utils.isFile(data) &amp;&amp; !utils.isBlob(data)) {
-      <span class="comment">// Set application/json if no Content-Type has been specified</span>
-      <span class="keyword">if</span> (!utils.isUndefined(headers)) {
-        utils.forEach(headers, <span class="keyword">function</span> <span class="function">processContentTypeHeader</span>(val, key) {
-          <span class="keyword">if</span> (key.toLowerCase() === <span class="string"><span class="delimiter">'</span><span class="content">content-type</span><span class="delimiter">'</span></span>) {
-            headers[<span class="string"><span class="delimiter">'</span><span class="content">Content-Type</span><span class="delimiter">'</span></span>] = val;
-          }
-        });
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">child</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">children</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">person</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">people</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">man</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">men</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">child</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">children</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">sex</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">sexes</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">moves</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">cow</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">kine</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">zombie</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">zombies</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">oaf</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">oafs</span><span class="delimiter">'</span></span>, <span class="predefined-constant">true</span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">jefe</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">jefes</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">save</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">saves</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">safe</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">safes</span><span class="delimiter">'</span></span>);
+  inflect.irregular(<span class="string"><span class="delimiter">'</span><span class="content">fife</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">fifes</span><span class="delimiter">'</span></span>);
 
-        <span class="keyword">if</span> (utils.isUndefined(headers[<span class="string"><span class="delimiter">'</span><span class="content">Content-Type</span><span class="delimiter">'</span></span>])) {
-          headers[<span class="string"><span class="delimiter">'</span><span class="content">Content-Type</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">'</span><span class="content">application/json;charset=utf-8</span><span class="delimiter">'</span></span>;
-        }
-      }
-      <span class="keyword">return</span> JSON.stringify(data);
-    }
-    <span class="keyword">return</span> data;
-  }],
-
-  <span class="key">transformResponse</span>: [<span class="keyword">function</span> <span class="function">transformResponseJSON</span>(data) {
-    <span class="comment">/*eslint no-param-reassign:0*/</span>
-    <span class="keyword">if</span> (<span class="keyword">typeof</span> data === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-      data = data.replace(PROTECTION_PREFIX, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
-      <span class="keyword">try</span> {
-        data = JSON.parse(data);
-      } <span class="keyword">catch</span> (e) { <span class="comment">/* Ignore */</span> }
-    }
-    <span class="keyword">return</span> data;
-  }],
-
-  <span class="key">headers</span>: {
-    <span class="key">common</span>: {
-      <span class="key"><span class="delimiter">'</span><span class="content">Accept</span><span class="delimiter">'</span></span>: <span class="string"><span class="delimiter">'</span><span class="content">application/json, text/plain, */*</span><span class="delimiter">'</span></span>
-    },
-    <span class="key">patch</span>: utils.merge(DEFAULT_CONTENT_TYPE),
-    <span class="key">post</span>: utils.merge(DEFAULT_CONTENT_TYPE),
-    <span class="key">put</span>: utils.merge(DEFAULT_CONTENT_TYPE)
-  },
-
-  <span class="key">timeout</span>: <span class="integer">0</span>,
-
-  <span class="key">xsrfCookieName</span>: <span class="string"><span class="delimiter">'</span><span class="content">XSRF-TOKEN</span><span class="delimiter">'</span></span>,
-  <span class="key">xsrfHeaderName</span>: <span class="string"><span class="delimiter">'</span><span class="content">X-XSRF-TOKEN</span><span class="delimiter">'</span></span>
-};
+  inflect.uncountable([<span class="string"><span class="delimiter">'</span><span class="content">equipment</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">information</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">rice</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">money</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">species</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">series</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">fish</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">sheep</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">jeans</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">sushi</span><span class="delimiter">'</span></span>]);
+}
 </pre></td>
 </tr></table>
 

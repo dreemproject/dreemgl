@@ -170,8 +170,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
 <a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Creates a clone of  `buffer`.
@@ -185,9 +183,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <span class="keyword">if</span> (isDeep) {
     <span class="keyword">return</span> buffer.slice();
   }
-  <span class="keyword">var</span> Ctor = buffer.constructor,
-      result = <span class="keyword">new</span> Ctor(buffer.length);
-
+  <span class="keyword">var</span> result = <span class="keyword">new</span> buffer.constructor(buffer.length);
   buffer.copy(result);
   <span class="keyword">return</span> result;
 }

@@ -191,72 +191,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
-<a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
-<strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
 </pre></td>
-  <td class="code"><pre><span class="keyword">var</span> arrayMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_arrayMap</span><span class="delimiter">'</span></span>),
-    baseIteratee = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseIteratee</span><span class="delimiter">'</span></span>),
-    baseMap = require(<span class="string"><span class="delimiter">'</span><span class="content">./_baseMap</span><span class="delimiter">'</span></span>),
-    isArray = require(<span class="string"><span class="delimiter">'</span><span class="content">./isArray</span><span class="delimiter">'</span></span>);
+  <td class="code"><pre><span class="keyword">var</span> concatMap = require(<span class="string"><span class="delimiter">'</span><span class="content">../</span><span class="delimiter">'</span></span>);
+<span class="keyword">var</span> test = require(<span class="string"><span class="delimiter">'</span><span class="content">tape</span><span class="delimiter">'</span></span>);
 
-<span class="comment">/**
- * Creates an array of values by running each element in `collection` through
- * `iteratee`. The iteratee is invoked with three arguments:
- * (value, index|key, collection).
- *
- * Many lodash methods are guarded to work as iteratees for methods like
- * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
- *
- * The guarded methods are:
- * `ary`, `curry`, `curryRight`, `drop`, `dropRight`, `every`, `fill`,
- * `invert`, `parseInt`, `random`, `range`, `rangeRight`, `slice`, `some`,
- * `sortBy`, `take`, `takeRight`, `template`, `trim`, `trimEnd`, `trimStart`,
- * and `words`
- *
- * @static
- * @memberOf _
- * @category Collection
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- * @example
- *
- * function square(n) {
- *   return n * n;
- * }
- *
- * _.map([4, 8], square);
- * // =&gt; [16, 64]
- *
- * _.map({ 'a': 4, 'b': 8 }, square);
- * // =&gt; [16, 64] (iteration order is not guaranteed)
- *
- * var users = [
- *   { 'user': 'barney' },
- *   { 'user': 'fred' }
- * ];
- *
- * // The `_.property` iteratee shorthand.
- * _.map(users, 'user');
- * // =&gt; ['barney', 'fred']
- */</span>
-<span class="keyword">function</span> <span class="function">map</span>(collection, iteratee) {
-  <span class="keyword">var</span> func = isArray(collection) ? arrayMap : baseMap;
-  <span class="keyword">return</span> func(collection, baseIteratee(iteratee, <span class="integer">3</span>));
-}
+test(<span class="string"><span class="delimiter">'</span><span class="content">empty or not</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (t) {
+    <span class="keyword">var</span> xs = [ <span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span> ];
+    <span class="keyword">var</span> ixes = [];
+    <span class="keyword">var</span> ys = concatMap(xs, <span class="keyword">function</span> (x, ix) {
+        ixes.push(ix);
+        <span class="keyword">return</span> x % <span class="integer">2</span> ? [ x - <span class="float">0.1</span>, x, x + <span class="float">0.1</span> ] : [];
+    });
+    t.same(ys, [ <span class="float">0.9</span>, <span class="integer">1</span>, <span class="float">1.1</span>, <span class="float">2.9</span>, <span class="integer">3</span>, <span class="float">3.1</span>, <span class="float">4.9</span>, <span class="integer">5</span>, <span class="float">5.1</span> ]);
+    t.same(ixes, [ <span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>, <span class="integer">5</span> ]);
+    t.end();
+});
 
-module.exports = map;
+test(<span class="string"><span class="delimiter">'</span><span class="content">always something</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (t) {
+    <span class="keyword">var</span> xs = [ <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span> ];
+    <span class="keyword">var</span> ys = concatMap(xs, <span class="keyword">function</span> (x) {
+        <span class="keyword">return</span> x === <span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span> ? [ <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span> ] : [ x ];
+    });
+    t.same(ys, [ <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span> ]);
+    t.end();
+});
+
+test(<span class="string"><span class="delimiter">'</span><span class="content">scalars</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (t) {
+    <span class="keyword">var</span> xs = [ <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span> ];
+    <span class="keyword">var</span> ys = concatMap(xs, <span class="keyword">function</span> (x) {
+        <span class="keyword">return</span> x === <span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span> ? [ <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span> ] : x;
+    });
+    t.same(ys, [ <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span> ]);
+    t.end();
+});
+
+test(<span class="string"><span class="delimiter">'</span><span class="content">undefs</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (t) {
+    <span class="keyword">var</span> xs = [ <span class="string"><span class="delimiter">'</span><span class="content">a</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">c</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">d</span><span class="delimiter">'</span></span> ];
+    <span class="keyword">var</span> ys = concatMap(xs, <span class="keyword">function</span> () {});
+    t.same(ys, [ <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span> ]);
+    t.end();
+});
 </pre></td>
 </tr></table>
 

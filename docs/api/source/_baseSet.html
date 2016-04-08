@@ -215,7 +215,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * @returns {Object} Returns `object`.
  */</span>
 <span class="keyword">function</span> <span class="function">baseSet</span>(object, path, value, customizer) {
-  path = isKey(path, object) ? [path + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>] : baseCastPath(path);
+  path = isKey(path, object) ? [path] : baseCastPath(path);
 
   <span class="keyword">var</span> index = -<span class="integer">1</span>,
       length = path.length,

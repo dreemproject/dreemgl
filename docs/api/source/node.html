@@ -1176,6 +1176,33 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1022" name="n1022">1022</a>
 <a href="#n1023" name="n1023">1023</a>
 <a href="#n1024" name="n1024">1024</a>
+<a href="#n1025" name="n1025">1025</a>
+<a href="#n1026" name="n1026">1026</a>
+<a href="#n1027" name="n1027">1027</a>
+<a href="#n1028" name="n1028">1028</a>
+<a href="#n1029" name="n1029">1029</a>
+<strong><a href="#n1030" name="n1030">1030</a></strong>
+<a href="#n1031" name="n1031">1031</a>
+<a href="#n1032" name="n1032">1032</a>
+<a href="#n1033" name="n1033">1033</a>
+<a href="#n1034" name="n1034">1034</a>
+<a href="#n1035" name="n1035">1035</a>
+<a href="#n1036" name="n1036">1036</a>
+<a href="#n1037" name="n1037">1037</a>
+<a href="#n1038" name="n1038">1038</a>
+<a href="#n1039" name="n1039">1039</a>
+<strong><a href="#n1040" name="n1040">1040</a></strong>
+<a href="#n1041" name="n1041">1041</a>
+<a href="#n1042" name="n1042">1042</a>
+<a href="#n1043" name="n1043">1043</a>
+<a href="#n1044" name="n1044">1044</a>
+<a href="#n1045" name="n1045">1045</a>
+<a href="#n1046" name="n1046">1046</a>
+<a href="#n1047" name="n1047">1047</a>
+<a href="#n1048" name="n1048">1048</a>
+<a href="#n1049" name="n1049">1049</a>
+<strong><a href="#n1050" name="n1050">1050</a></strong>
+<a href="#n1051" name="n1051">1051</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -1211,7 +1238,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">setInterval</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.interval_ids) <span class="local-variable">this</span>.interval_ids = []
 
-                <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> ? window : global;
 
                 <span class="keyword">var</span> id = platform.setInterval(<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.interval_ids.splice(<span class="local-variable">this</span>.interval_ids.indexOf(id), <span class="integer">1</span>)
@@ -1226,7 +1253,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.interval_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.interval_ids.splice(idx, <span class="integer">1</span>)
-                        <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                        <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> ? window : global;
 
                          platform.clearInterval(id)
                 }
@@ -1234,7 +1261,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">setTimeout</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.timeout_ids) <span class="local-variable">this</span>.timeout_ids = []
-                <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> ? window : global;
 
                 <span class="keyword">var</span> id = platform.setTimeout(<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.timeout_ids.splice(<span class="local-variable">this</span>.timeout_ids.indexOf(id), <span class="integer">1</span>)
@@ -1249,9 +1276,36 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.timeout_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.timeout_ids.splice(idx, <span class="integer">1</span>)
-                        <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                        <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> ? window : global;
 
                          platform.clearInterval(id)
+                }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">requestAnimationFrame</span> = <span class="keyword">function</span>(fn){
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.raf_ids) <span class="local-variable">this</span>.raf_ids = []
+                <span class="keyword">if</span> (<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
+                        <span class="keyword">var</span> id = window.requestAnimationFrame(<span class="keyword">function</span>(){
+                                <span class="local-variable">this</span>.raf_ids.splice(<span class="local-variable">this</span>.raf_ids.indexOf(id), <span class="integer">1</span>)
+                                fn.call(<span class="local-variable">this</span>)
+                        }.bind(<span class="local-variable">this</span>))
+                        <span class="local-variable">this</span>.raf_ids.push(id)
+                        <span class="keyword">return</span> id
+                } <span class="keyword">else</span> {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.setTimeout(fn, <span class="integer">1000</span> / <span class="integer">60</span>)
+                }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">cancelAnimationFrame</span> = <span class="keyword">function</span>(id){
+                <span class="keyword">if</span> (id === <span class="predefined-constant">undefined</span>) <span class="keyword">return</span>
+                <span class="keyword">var</span> idx = <span class="local-variable">this</span>.raf_ids.indexOf(id)
+                <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
+                        <span class="local-variable">this</span>.raf_ids.splice(idx, <span class="integer">1</span>)
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
+                                window.cancelAnimationFrame(id)
+                        } <span class="keyword">else</span> {
+                                <span class="local-variable">this</span>.clearTimeout(id)
+                        }
                 }
         }
 
