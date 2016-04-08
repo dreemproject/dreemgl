@@ -161,12 +161,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n7" name="n7">7</a>
 <a href="#n8" name="n8">8</a>
 <a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, label){
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
                         screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>},
-                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello world!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>})
+                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello world!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="function">bgcolorfn</span>: <span class="keyword">function</span>(pos) {
+                  <span class="keyword">return</span> mix(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>, pos.y)
+          }})
                         )
                 ];
         }
