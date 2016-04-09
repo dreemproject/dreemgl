@@ -557,7 +557,6 @@ define.class('$ui/view', function(require,
 	}
 
 	this.cancelConnection = function() {
-		console.log("cancelling exiting connection setup...")
 		this.newconnection = {}
 
 		var connectingconnection = this.find("openconnector")
