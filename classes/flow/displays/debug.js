@@ -16,16 +16,16 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view, label)
     };
 
     this.attributes = {
-		number: Config({type:Number, flow:"inout"}),
-		boolean: Config({type:Boolean, flow:"inout"}),
-        float: Config({type:float, flow:"inout"}),
-        int: Config({type:int, flow:"inout"}),
-        vec2: Config({type:vec2, flow:"inout"}),
-        vec3: Config({type:vec3, flow:"inout"}),
-        vec4: Config({type:vec4, flow:"inout"}),
-        array: Config({type:Array, flow:"inout"}),
-        string: Config({type:String, flow:"inout"}),
-        object: Config({type:Object, flow:"inout"})
+		number: Config({type:Number, flow:"in"}),
+		boolean: Config({type:Boolean, flow:"in"}),
+        float: Config({type:float, flow:"in"}),
+        int: Config({type:int, flow:"in"}),
+        vec2: Config({type:vec2, flow:"in"}),
+        vec3: Config({type:vec3, flow:"in"}),
+        vec4: Config({type:vec4, flow:"in"}),
+        array: Config({type:Array, flow:"in"}),
+        string: Config({type:String, flow:"in"}),
+        object: Config({type:Object, flow:"in"})
     };
 
     this.render = function(){
