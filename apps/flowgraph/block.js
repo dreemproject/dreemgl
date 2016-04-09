@@ -256,7 +256,7 @@ define.class('$ui/view', function(require,
 		this.tapped = function(){
 			var	bl = this.parent.parent.parent
 			var	fg = this.find("flowgraph")
-			fg.setConnectionEndpoint(bl.name, this.name, this.type)
+			fg.setConnectionEndpoint(bl.name, this.name, this.type, bl.type)
 		}
 
 		this.pointerover  = function(){
@@ -295,7 +295,7 @@ define.class('$ui/view', function(require,
 		this.tapped = function(){
 			var	bl = this.parent.parent.parent
 			var	fg = this.find("flowgraph")
-			fg.setConnectionStartpoint(bl.name, this.name)
+			fg.setConnectionStartpoint(bl.name, this.name, this.type)
 		}
 
 		this.marginbottom = 4

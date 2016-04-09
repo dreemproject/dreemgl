@@ -111,6 +111,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		if (H){
 			H.bordercolor = this.centralcolor;
 		}
+		setTimeout(function(){this.redraw()}.bind(this),1)
 	}
 
 	this.focus =function(){

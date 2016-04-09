@@ -158,6 +158,38 @@ define.class(function(require, $server$, dataset){
 		return found;
 	}
 
+	this.generateRPCKV = function(key, block, port) {
+		return {
+			kind:"init",
+			key:{type:"Value", kind:"string", value:key, multi:false, raw:JSON.stringify(key)},
+			value:{type:"Key",key:{type:"Property", name:port},
+				object:{type:"Key",key:{type:"Property", name:block},
+					object:{type:"Key",key:{type:"Property", name:"rpc"},
+						object:{type:"This"}
+					}
+				}
+			}
+		}
+	}
+
+	this.generateWire = function(key, value) {
+		return {
+			key:{name:key, type:'Id'},
+			value:{
+				type:"Call",
+				fn:{
+					type:"Id",
+					name:"wire"
+				},
+				args:[{
+					type:"Value",
+					kind:"string",
+					value:value
+				}]
+			}
+		}
+	}
+
 	this.deleteWire = function(sblock, soutput, tblock, tinput){
 		if (!tblock) {
 			return
@@ -181,7 +213,25 @@ define.class(function(require, $server$, dataset){
 						if (index >= 0) {
 							connections.splice(index, 1)
 						}
+						var isarray = false;
+						var isobject = false;
 						if (connections.length === 1) {
+							var con = connections[0].split('.');
+							var blockname = con[con.length - 2];
+							var outputname = con[con.length - 1];
+							var block = this.data.childnames[blockname]
+							if (block) {
+								var outputs = block.outputs;
+								for (var b=0;b<outputs.length;b++) {
+									var output = outputs[b];
+									if (output.name === outputname) {
+										isarray = output.type === Array
+										isobject = output.type === Object
+									}
+								}
+							}
+						}
+						if (connections.length === 1 && ((at.value[0] === '[' && isarray) || (at.value[0] === '{' && isobject))) {
 							at.value = connections[0]
 							at.raw = JSON.stringify(at.value)
 						} else if (connections.length) {
@@ -213,21 +263,7 @@ define.class(function(require, $server$, dataset){
 		}
 	}
 
-	this.generateRPCKV = function(key, block, port) {
-		return {
-			kind:"init",
-			key:{type:"Value", kind:"string", value:key, multi:false, raw:JSON.stringify(key)},
-			value:{type:"Key",key:{type:"Property", name:port},
-				object:{type:"Key",key:{type:"Property", name:block},
-					object:{type:"Key",key:{type:"Property", name:"rpc"},
-						object:{type:"This"}
-					}
-				}
-			}
-		}
-	}
-
-	this.insertWire = function(sblock, soutput, tblock, tinput) {
+	this.insertWire = function(sblock, soutput, stype, tblock, tinput) {
 		var target = this.data.childnames[tblock]
 		if (target) {
 			var props = target.propobj.keys
@@ -249,13 +285,20 @@ define.class(function(require, $server$, dataset){
 							return true;
 						}
 					}
+					console.log("is this really possible?", ast)
 				}
 			}
+			if (stype === "Array") {
+				props.push(this.generateWire(tinput, "this.rpc." + sblock + '.' + soutput))
+			} else {
+				props.push(this.generateWire(tinput, "[this.rpc." + sblock + '.' + soutput + "]"))
+			}
+			return true;
 		}
 		return false;
 	}
 
-	this.mergeWire = function(sblock, soutput, tblock, tinput) {
+	this.mergeWire = function(sblock, soutput, stype, tblock, tinput) {
 		var target = this.data.childnames[tblock]
 		if (target) {
 			var props = target.propobj.keys
@@ -304,10 +347,16 @@ define.class(function(require, $server$, dataset){
 					}
 				}
 			}
+			if (stype === "Object") {
+				props.push(this.generateWire(tinput, "this.rpc." + sblock + '.' + soutput))
+			} else {
+				props.push(this.generateWire(tinput, '{"' + sblock + "." + soutput + '":this.rpc.' + sblock + '.' + soutput + "}"))
+			}
+			return true;
+
 		}
 		return false;
 	}
-
 
 	this.createWire = function(sblock, soutput, tblock, tinput){
 		var target = this.data.childnames[tblock]
@@ -318,28 +367,12 @@ define.class(function(require, $server$, dataset){
 			if(props[i].key.name == tinput) break
 		}
 
-		// create a new one
-		var to = {
-			type:"Call",
-			fn:{
-				type:"Id",
-				name:"wire"
-			},
-			args:[{
-				type:"Value",
-				kind:"string",
-				value:'this.rpc.' + sblock + '.' + soutput
-			}]
-		}
+		var wire = this.generateWire(tinput, 'this.rpc.' + sblock + '.' + soutput)
 
 		if(i === props.length){
-			props.push({
-				key:{name:tinput, type:'Id'},
-				value:to
-			})
-		}
-		else{
-			props[i].value.value = to
+			props.push(wire)
+		} else{
+			props[i].value.value = wire.value
 		}
 	}
 

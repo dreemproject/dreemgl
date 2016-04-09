@@ -479,11 +479,9 @@ define.class('$ui/view', function(require,
 	this.makeNewConnection = function() {
 
 		this.sourceset.fork(function(src) {
-
-
 			var inserted;
-
 			if (this.newconnection.targettype === "Array") {
+
 				src.deleteWire(
 					this.newconnection.sourceblock,
 					this.newconnection.sourceoutput,
@@ -493,13 +491,18 @@ define.class('$ui/view', function(require,
 
 				inserted = src.insertWire(this.newconnection.sourceblock,
 					this.newconnection.sourceoutput,
+					this.newconnection.sourcetype,
 					this.newconnection.targetblock,
 					this.newconnection.targetinput);
+
 			} else if (this.newconnection.targettype === "Object") {
+
 				inserted = src.mergeWire(this.newconnection.sourceblock,
 					this.newconnection.sourceoutput,
+					this.newconnection.sourcetype,
 					this.newconnection.targetblock,
 					this.newconnection.targetinput)
+
 			}
 
 			if (!inserted) {
@@ -604,9 +607,10 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.setConnectionStartpoint = function(sourceblockname, outputname) {
+	this.setConnectionStartpoint = function(sourceblockname, outputname, sourcetype) {
 		this.newconnection.sourceblock = sourceblockname
 		this.newconnection.sourceoutput = outputname
+		this.newconnection.sourcetype = sourcetype
 		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ) {
 			this.makeNewConnection()
 		} else {
