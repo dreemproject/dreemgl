@@ -48,7 +48,7 @@ define.class('$system/base/node', function(require){
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:"style", type:vec4, value: vec4(NaN), meta:"color"}),
+		bgcolor: Config({group:"style", type:vec4, value: vec4(0,0,0,0), meta:"color"}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
@@ -1425,19 +1425,19 @@ define.class('$system/base/node', function(require){
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
 		this.color = function(){
-			// if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
-			// 	|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
-			// 	|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
-			// 	|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
-			// 	return view.bgcolor;
-			// }
-			var col = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
-			var cola = col.a;
-			// if (cola < 1.0) {
-			// 	col = mix(view.bgcolor, col, cola)
-			// 	cola = 1.0
-			// }
-			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], cola * view.opacity * view.colorfilter[3])
+			var img = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+			var bg = view.bgcolor
+
+			// premultiply alpha
+			img.rgb = (img.rgb * img.a) + (bg.rgb * (1 - img.a));
+
+			var col = mix(bg, img, img.a)
+
+			return vec4(
+				col.r * view.colorfilter[0],
+				col.g * view.colorfilter[1],
+				col.b * view.colorfilter[2],
+				col.a * view.colorfilter[3] * view.opacity)
 		}
 	})
 
