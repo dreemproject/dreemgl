@@ -213,7 +213,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		this.color = function(){
 			var a= 1.0 - pow(abs(mesh.y*2.0), 2.5);
-			if (view.stripe && mesh.x < 0.6 && int(mod(0.03 * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), 2.0)) == 1) {
+			if (view.stripe && mesh.x < 0.95 && int(mod(0.03 * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), 2.0)) == 1) {
 				return vec4(mix(mix(view.stripecolor.xyz, view.color1.xyz, mesh.x * 0.5), view.color2.xyz, mesh.x),a)
 			}
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
