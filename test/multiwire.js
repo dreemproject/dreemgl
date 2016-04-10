@@ -2,11 +2,10 @@ define.class("$server/composition",function($server$,service,$ui$,screen,$flow$d
   
   this.render=function(){
     return [
-      debugd({name:"ports",flowdata:{x:389,y:287},number:wire("this.rpc.b.number"),array:wire("[this.rpc.b.float,this.rpc.a.string]")}),
-      outputs({name:"a",flowdata:{x:64,y:43,screen:true}}),
-      outputs({name:"b",flowdata:{x:40,y:535,screen:true}}),
-      debug({name:'debug0',clearcolor:'#484230',flowdata:{x:783,y:307,screen:true},number:wire("this.rpc.ports.outnumber"),array:wire("[this.rpc.ports.outint,this.rpc.a.int,this.rpc.b.int]")}),
-      debug({name:"debug1",flowdata:{x:771,y:15,screen:true},object:wire("{\"b.string\":this.rpc.b.string,\"a.number\":this.rpc.a.number}"),array:wire("this.rpc.ports.outarray")})
+      debugd({name:"ports",flowdata:{x:392,y:428},number:wire("this.rpc.a.number"),object:wire("{\"a.boolean\":this.rpc.a.boolean,\"a.object\":this.rpc.a.object,\"debug0.outstring\":this.rpc.debug0.outstring}"),string:wire("this.rpc.debug0.outstring")}),
+      outputs({name:"a",flowdata:{x:15,y:221,screen:true}}),
+      debug({name:'debug0',clearcolor:'#484230',flowdata:{x:385,y:58,screen:true},number:wire("this.rpc.a.number"),object:wire("{\"a.float\":this.rpc.a.float,\"a.int\":this.rpc.a.int,\"a.string\":this.rpc.a.string}"),string:wire("this.rpc.a.string")}),
+      debug({name:"debug1",flowdata:{x:942,y:160,screen:true},array:wire("[this.rpc.debug0.outnumber,this.rpc.ports.outnumber]"),object:wire("{\"debug0.outobject\":this.rpc.debug0.outobject,\"ports.outobject\":this.rpc.ports.outobject}"),string:wire("this.rpc.ports.outstring")})
     ]
   }
   

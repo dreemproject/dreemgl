@@ -7,16 +7,16 @@
 define.class('$ui/screen', function(require, $ui$, screen, cadgrid, textbox, view, label, checkbox){
 
     this.attributes = {
-		number: Config({type:Number, flow:"out", value:100, persist:true}),
-		boolean: Config({type:Boolean, flow:"out", value:true, persist:true}),
-        float: Config({type:float, flow:"out", value:3.1415, persist:true}),
-        int: Config({type:int, flow:"out", value:42, persist:true}),
-        vec2: Config({type:vec2, flow:"out", value:vec2(1,2), persist:true}),
-        vec3: Config({type:vec3, flow:"out", value:vec3(1,2,3), persist:true}),
-        vec4: Config({type:vec4, flow:"out", value:vec4(1,2,3,4), persist:true}),
-        array: Config({type:Array, flow:"out", value:[1,2,3,4,5,"6"], persist:true}),
-        string: Config({type:String, flow:"out", value:"Cats", persist:true}),
-        object: Config({type:Object, flow:"out", value:{some:{complex:'object', persist:true}}})
+		number: Config({type:Number, flow:"out", value:99, persist:true}),
+		boolean: Config({type:Boolean, flow:"out", value:false, persist:true}),
+        float: Config({type:float, flow:"out", value:2.5, persist:true}),
+        int: Config({type:int, flow:"out", value:88, persist:true}),
+        vec2: Config({type:vec2, flow:"out", value:vec2(2,2), persist:true}),
+        vec3: Config({type:vec3, flow:"out", value:vec3(3,3,3), persist:true}),
+        vec4: Config({type:vec4, flow:"out", value:vec4(4,4,4,4), persist:true}),
+        array: Config({type:Array, flow:"out", value:[1,2,3,4,5], persist:true}),
+        string: Config({type:String, flow:"out", value:"String", persist:true}),
+        object: Config({type:Object, flow:"out", persist:true, value:{an:{object:'object'}}})
     };
 
     this.render = function(){
