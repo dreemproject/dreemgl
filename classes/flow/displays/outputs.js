@@ -21,11 +21,11 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, textbox, vie
 
     this.render = function(){
         return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030", flexdirection:"column", alignitems:"center", justifycontent:"space-around" },
-			view({alignitems:"center"}, label({flex:0, text:"Number", marginright:20}), textbox({flex:0, value:this.number, onfocus:function(ev,v,o){ if (!v) { this.number = o.value } }.bind(this)})),
+			view({alignitems:"center"}, label({flex:0, text:"Number", marginright:20}), textbox({flex:0, value:this.number, onvalue:function(ev,v,o){ this.number = o.value }.bind(this)})),
 			view({alignitems:"center"}, label({flex:0, text:"Boolean", marginright:20}), checkbox({flex:0, value:this.boolean, onclick:function(ev,v,o){ this.boolean = o.value }.bind(this)})),
-			view({alignitems:"center"}, label({flex:0, text:"Float", marginright:20}), textbox({flex:0, value:this.float, onfocus:function(ev,v,o){ if (!v) { this.float = o.value } }.bind(this)})),
-			view({alignitems:"center"}, label({flex:0, text:"Int", marginright:20}), textbox({flex:0, value:this.int, onfocus:function(ev,v,o){ if (!v) { this.int = o.value } }.bind(this)})),
-			view({alignitems:"center"}, label({flex:0, text:"String", marginright:20}), textbox({flex:0, value:this.string, onfocus:function(ev,v,o){ if (!v) { this.string = o.value } }.bind(this)}))
+			view({alignitems:"center"}, label({flex:0, text:"Float", marginright:20}), textbox({flex:0, value:this.float, onvalue:function(ev,v,o){ this.float = o.value }.bind(this)})),
+			view({alignitems:"center"}, label({flex:0, text:"Int", marginright:20}), textbox({flex:0, value:this.int, onvalue:function(ev,v,o){ this.int = o.value }.bind(this)})),
+			view({alignitems:"center"}, label({flex:0, text:"String", marginright:20}), textbox({flex:0, value:this.string, onvalue:function(ev,v,o){ this.string = o.value }.bind(this)}))
 		);
     }
 
