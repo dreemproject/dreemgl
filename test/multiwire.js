@@ -1,5 +1,5 @@
 define.class("$server/composition",function($server$,service,$ui$,screen,$flow$displays$,debug,outputs,$flow$services$,debugd){
-
+  
   this.render=function(){
     return [
       debugd({name:"ports",flowdata:{x:392,y:428},number:wire("this.rpc.a.number"),object:wire("{\"a.boolean\":this.rpc.a.boolean,\"a.object\":this.rpc.a.object,\"debug0.outstring\":this.rpc.debug0.outstring}"),string:wire("this.rpc.debug0.outstring"),array:wire("this.rpc.debugd0.outarray")}),
@@ -10,5 +10,5 @@ define.class("$server/composition",function($server$,service,$ui$,screen,$flow$d
       debug({name:"sort",flowdata:{x:901,y:495,screen:true},array:wire("[this.rpc.debug0.outstring,this.rpc.debug1.outstring,this.rpc.ports.outstring,this.rpc.a.string,this.rpc.debugd0.outstring].sort().reverse()")})
     ]
   }
-
+  
 })

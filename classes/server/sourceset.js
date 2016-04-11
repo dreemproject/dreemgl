@@ -155,6 +155,15 @@ define.class(function(require, $server$, dataset){
 				}
 			}
 		}
+
+		if (!found.length) {
+			var r = /(this\.rpc\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+)/g
+			var m;
+			while (m = r.exec(str)) {
+				found.push(m[1])
+			}
+		}
+
 		return found;
 	}
 
@@ -245,7 +254,12 @@ define.class(function(require, $server$, dataset){
 								at.value = obj.toSource(obj.atparent)
 								at.raw = JSON.stringify(at.value)
 							} else {
-								at.value = "[" + connections.join(",") + "]"
+								var endcap = ']'
+								var lix = at.value.lastIndexOf(']')
+								if (lix > -1 && lix !== at.value.length - 1) {
+									endcap = at.value.substring(lix)
+								}
+								at.value = "[" + connections.join(",") + endcap
 								at.raw = JSON.stringify(at.value)
 							}
 
@@ -280,7 +294,12 @@ define.class(function(require, $server$, dataset){
 							if (connections.indexOf(rpcstr) < 0) {
 								connections.push(rpcstr)
 							}
-							at.value = "[" + connections.join(",") + "]"
+							var endcap = ']'
+							var lix = at.value.lastIndexOf(']')
+							if (lix > -1 && lix !== at.value.length - 1) {
+								endcap = at.value.substring(lix)
+							}
+							at.value = "[" + connections.join(",") + endcap
 							at.raw = JSON.stringify(at.value)
 							return true;
 						}
