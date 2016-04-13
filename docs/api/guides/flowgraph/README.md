@@ -5,9 +5,7 @@ The Flow Graph is an application which allows a user to visually design applicat
 ## Loading a Composition
 
 The Flow Graph is located at [/apps/flowgraph](/apps/flowgraph).  It loads compositions using the `#composition` hash
-parameter.  
-
-For example: [/apps/flowgraph?#composition=$examples/flow.js](/apps/flowgraph?#composition=$examples/flow.js)
+parameter (see example below).  
 
 ## Blocks
 
