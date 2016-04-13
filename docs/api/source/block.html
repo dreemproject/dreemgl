@@ -613,6 +613,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n459" name="n459">459</a>
 <strong><a href="#n460" name="n460">460</a></strong>
 <a href="#n461" name="n461">461</a>
+<a href="#n462" name="n462">462</a>
+<a href="#n463" name="n463">463</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -872,7 +874,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">tapped</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
-                        fg.setConnectionEndpoint(bl.name, <span class="local-variable">this</span>.name)
+                        fg.setConnectionEndpoint(bl.name, <span class="local-variable">this</span>.name, <span class="local-variable">this</span>.type, bl.type)
                 }
 
                 <span class="local-variable">this</span>.<span class="function">pointerover</span>  = <span class="keyword">function</span>(){
@@ -911,7 +913,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">tapped</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
-                        fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name)
+                        fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name, <span class="local-variable">this</span>.type)
                 }
 
                 <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>
@@ -1029,24 +1031,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> screenbutton;
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.showscreenbutton) {
-                        screenbutton = button({
-                                <span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">tv</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">click</span>: <span class="keyword">function</span>(e){
-                                        <span class="keyword">var</span> comp = <span class="local-variable">this</span>.screen.locationhash.composition;
-                                        <span class="keyword">if</span> (comp) {
-                                                <span class="keyword">var</span> ext = <span class="string"><span class="delimiter">&quot;</span><span class="content">.js</span><span class="delimiter">&quot;</span></span>
-                                                <span class="keyword">var</span> location = define.expandVariables(comp)
-                                                <span class="keyword">if</span> (location.lastIndexOf(ext) === location.length - ext.length) {
-                                                        location = location.substring(<span class="integer">0</span>, location.length - ext.length)
-                                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.name) {
-                                                                location = location + <span class="string"><span class="delimiter">&quot;</span><span class="content">?</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.name
+                        screenbutton = [
+                                button({
+                                        <span class="reserved">class</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">desktop</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="function">click</span>: <span class="keyword">function</span>(e){
+                                                <span class="keyword">var</span> comp = <span class="local-variable">this</span>.screen.locationhash.composition;
+                                                <span class="keyword">if</span> (comp) {
+                                                        <span class="keyword">var</span> ext = <span class="string"><span class="delimiter">&quot;</span><span class="content">.js</span><span class="delimiter">&quot;</span></span>
+                                                        <span class="keyword">var</span> location = define.expandVariables(comp)
+                                                        <span class="keyword">if</span> (location.lastIndexOf(ext) === location.length - ext.length) {
+                                                                location = location.substring(<span class="integer">0</span>, location.length - ext.length)
+                                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.name) {
+                                                                        location = location + <span class="string"><span class="delimiter">&quot;</span><span class="content">?</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.name
+                                                                }
+                                                                window.open(location,<span class="string"><span class="delimiter">'</span><span class="content">_blank</span><span class="delimiter">'</span></span>);
                                                         }
-                                                        window.open(location,<span class="string"><span class="delimiter">'</span><span class="content">_blank</span><span class="delimiter">'</span></span>);
-                                                }
 
-                                        }
-                                }.bind(<span class="local-variable">this</span>)})
+                                                }
+                                        }.bind(<span class="local-variable">this</span>)}),
+                        ]
                 }
 
                 <span class="keyword">return</span> [

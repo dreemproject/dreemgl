@@ -164,35 +164,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n10" name="n10">10</a></strong>
 <a href="#n11" name="n11">11</a>
 <a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view, button){
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>},
-                                view({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">viewbg</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#CBD6D9</span><span class="delimiter">&quot;</span></span>, <span class="function">init</span>: <span class="keyword">function</span>() {
-      <span class="local-variable">this</span>.margin = <span class="integer">20</span>;
-    }, <span class="key">attributes</span>: {<span class="key">attr</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">val</span><span class="delimiter">&quot;</span></span>}), <span class="key">margin</span>: Config({<span class="key">listeners</span>: [<span class="keyword">function</span>(margin) {
-      console.log(<span class="string"><span class="delimiter">'</span><span class="content">onmargin</span><span class="delimiter">'</span></span>, margin.value);
-      <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>;
-    }]})}},
-                                        button({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="key">attributes</span>: {<span class="key">click</span>: Config({<span class="key">listeners</span>: [<span class="keyword">function</span>() {
-        console.log(<span class="string"><span class="delimiter">'</span><span class="content">onclick</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>);
-        <span class="local-variable">this</span>.parent.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>;
-        <span class="local-variable">this</span>.parent.fontfamily = <span class="string"><span class="delimiter">'</span><span class="content">leaguegothic</span><span class="delimiter">'</span></span>
-      }]})}})
-                                )
-                        )
-                ];
-        }
-});</pre></td>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$server$</span>,service,<span class="predefined">$ui$</span>,screen,<span class="predefined">$flow$displays$</span>,debug,outputs,<span class="predefined">$flow$services$</span>,debugd){
+
+  <span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
+    <span class="keyword">return</span> [
+      debugd({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">server</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">393</span>,<span class="key">y</span>:<span class="integer">22</span>},<span class="key">array</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">[this.rpc.testvalues.number,this.rpc.testvalues.boolean,this.rpc.testvalues.float,this.rpc.browser.outstring]</span><span class="delimiter">&quot;</span></span>),<span class="key">number</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.number</span><span class="delimiter">&quot;</span></span>),<span class="key">object</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">{</span><span class="char">\&quot;</span><span class="content">testvalues.string</span><span class="char">\&quot;</span><span class="content">:this.rpc.testvalues.string,</span><span class="char">\&quot;</span><span class="content">testvalues.int</span><span class="char">\&quot;</span><span class="content">:this.rpc.testvalues.int,</span><span class="char">\&quot;</span><span class="content">server.outarray</span><span class="char">\&quot;</span><span class="content">:this.rpc.server.outarray}</span><span class="delimiter">&quot;</span></span>)}),
+      outputs({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">testvalues</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">29</span>,<span class="key">y</span>:<span class="integer">203</span>,<span class="key">screen</span>:<span class="predefined-constant">true</span>}}),
+      debug({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">browser</span><span class="delimiter">&quot;</span></span>,<span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#484230</span><span class="delimiter">'</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">423</span>,<span class="key">y</span>:<span class="integer">322</span>,<span class="key">screen</span>:<span class="predefined-constant">true</span>},<span class="key">array</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.server.outarray</span><span class="delimiter">&quot;</span></span>),<span class="key">object</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.server.outobject</span><span class="delimiter">&quot;</span></span>),
+                  <span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.vec2</span><span class="delimiter">&quot;</span></span>),<span class="key">vec3</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.vec4</span><span class="delimiter">&quot;</span></span>),<span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.object</span><span class="delimiter">&quot;</span></span>),<span class="key">number</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.number</span><span class="delimiter">&quot;</span></span>),<span class="key">vec4</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.vec2</span><span class="delimiter">&quot;</span></span>),<span class="reserved">int</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.vec3</span><span class="delimiter">&quot;</span></span>),<span class="reserved">float</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.string</span><span class="delimiter">&quot;</span></span>),<span class="reserved">boolean</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.testvalues.array</span><span class="delimiter">&quot;</span></span>)})
+    ]
+  }
+
+})
+</pre></td>
 </tr></table>
 
 </body>

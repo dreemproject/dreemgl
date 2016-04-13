@@ -499,6 +499,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n345" name="n345">345</a>
 <a href="#n346" name="n346">346</a>
 <a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
+<a href="#n353" name="n353">353</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -524,6 +530,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">centralcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>),<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
                 <span class="key">inselection</span> : Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
                 <span class="key">stripe</span>:<span class="predefined-constant">false</span>,
+                <span class="key">stripecolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#333</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span> }),
                 <span class="key">hasball</span>: <span class="predefined-constant">true</span>
 
         }
@@ -555,7 +562,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">oninselection</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._inselection == <span class="integer">1</span>) <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor;<span class="keyword">else</span> <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.neutralbordercolor;
                 <span class="local-variable">this</span>.redraw();
-                <span class="local-variable">this</span>.updatecolor ();
+                <span class="local-variable">this</span>.updatecolor(<span class="predefined-constant">false</span>);
         }
 
         <span class="local-variable">this</span>.<span class="function">destroy</span> = <span class="keyword">function</span>(){
@@ -589,34 +596,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.screen.defaultKeyboardHandler.call(<span class="local-variable">this</span>, v);
         }
 
-        <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
+        <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(over){
 
-        <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.inselection) {
                         <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.focussedcolor;
                         <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.focussedcolor;
                         <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.focussedwidth;
-                }
-                <span class="keyword">else</span>{
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.over){
-                                <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.hoveredcolor;
-                                <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.hoveredcolor;
+                } <span class="keyword">else</span> <span class="keyword">if</span> (over) {
+                        <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.hoveredcolor;
+                        <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.hoveredcolor;
 
-                                <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.hoveredwidth;
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.neutralcolor1;
-                                <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.neutralcolor2;
-                                <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.neutrallinewidth;
-                        }
+                        <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.hoveredwidth;
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.neutralcolor1;
+                        <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.neutralcolor2;
+                        <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.neutrallinewidth;
                 }
 
                 <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);
-                                <span class="keyword">var</span> H = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>);
 
+                <span class="keyword">var</span> H = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (H){
                         H.bordercolor = <span class="local-variable">this</span>.centralcolor;
                 }
+                setTimeout(<span class="keyword">function</span>(){<span class="local-variable">this</span>.redraw()}.bind(<span class="local-variable">this</span>),<span class="integer">1</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">focus</span> =<span class="keyword">function</span>(){
@@ -645,14 +648,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(event.delta[<span class="integer">0</span>], event.delta[<span class="integer">0</span>]);
         }
 
-        <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>
-                <span class="local-variable">this</span>.updatecolor()
+        <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>() {
+                <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
+                <span class="keyword">if</span> (fg){
+                        <span class="keyword">var</span> hilighted = fg.allconnections;
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;hilighted.length;i++) {
+                                <span class="keyword">var</span> con = hilighted[i];
+                                <span class="keyword">if</span> (con !== <span class="local-variable">this</span>) {
+                                        con.updatecolor(<span class="predefined-constant">false</span>)
+                                }
+                        }
+                }
+
+                <span class="local-variable">this</span>.updatecolor(<span class="predefined-constant">true</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">pointerout</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>
-                <span class="local-variable">this</span>.updatecolor()
+                <span class="local-variable">this</span>.updatecolor(<span class="predefined-constant">false</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">updateMove</span> = <span class="keyword">function</span>(){
@@ -709,8 +721,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> a= <span class="float">1.0</span> - pow(abs(mesh.y*<span class="float">2.0</span>), <span class="float">2.5</span>);
-                        <span class="keyword">if</span> (view.stripe &amp;&amp; mesh.x &lt; <span class="float">0.6</span> &amp;&amp; <span class="reserved">int</span>(mod(<span class="float">0.03</span> * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), <span class="float">2.0</span>)) == <span class="integer">1</span>) {
-                                <span class="keyword">return</span> vec4(mix(mix(vec3(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), view.color1.xyz, mesh.x * <span class="float">0.5</span>), view.color2.xyz, mesh.x),a)
+                        <span class="keyword">if</span> (view.stripe &amp;&amp; mesh.x &lt; <span class="float">0.95</span> &amp;&amp; <span class="reserved">int</span>(mod(<span class="float">0.03</span> * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), <span class="float">2.0</span>)) == <span class="integer">1</span>) {
+                                <span class="keyword">return</span> vec4(mix(mix(view.stripecolor.xyz, view.color1.xyz, mesh.x * <span class="float">0.5</span>), view.color2.xyz, mesh.x),a)
                         }
                         <span class="keyword">return</span> vec4(vec3(<span class="float">0.01</span>) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*<span class="float">1.1</span>,a);
                 }

@@ -189,9 +189,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
-<a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (<span class="predefined">$ui$</span>, view, label) {
 
@@ -206,9 +203,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> type = <span class="local-variable">this</span>.config.facets[<span class="local-variable">this</span>.config.facets.length - <span class="integer">1</span>];
                 states.push(label({<span class="key">text</span>: <span class="string"><span class="delimiter">'</span><span class="content">type: </span><span class="delimiter">'</span></span> + type}))
                 <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.config.state) {
-                        <span class="comment">// skip timestamps</span>
-                        <span class="keyword">if</span> (key === <span class="string"><span class="delimiter">'</span><span class="content">@timestamp</span><span class="delimiter">'</span></span>) <span class="keyword">continue</span>;
-
                         <span class="keyword">var</span> state = <span class="local-variable">this</span>.config.state[key];
                         <span class="comment">// format type</span>
                         <span class="keyword">var</span> val = JSON.stringify(state.value);

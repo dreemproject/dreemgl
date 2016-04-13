@@ -808,14 +808,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">needsParens</span> = <span class="keyword">function</span>(node, other, isleft){
                 <span class="keyword">var</span> other_t = other.type
 
-                <span class="keyword">if</span>(other_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span> || 
+                <span class="keyword">if</span>(other_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span> ||
                         (other_t == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span>) &amp;&amp; other.prio &lt;= node.prio){
                         <span class="keyword">if</span>(other.prio == node.prio &amp;&amp; isleft) <span class="keyword">return</span> <span class="predefined-constant">false</span>
                         <span class="keyword">return</span> <span class="predefined-constant">true</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">Program</span> = <span class="keyword">function</span>(node, parent, state){ 
+        <span class="local-variable">this</span>.<span class="function">Program</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="local-variable">this</span>.block(node.steps, node, state, <span class="predefined-constant">true</span>)
         }
 
@@ -840,7 +840,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Define</span> = <span class="keyword">function</span>(node, parent, state){ <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">depricated</span><span class="delimiter">'</span></span>) }
 
         <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> node.raw 
+                <span class="keyword">return</span> node.raw
         }
          <span class="comment">// string, number, bool</span>
         <span class="local-variable">this</span>.<span class="function">This</span> = <span class="keyword">function</span>(node, parent, state){
@@ -854,23 +854,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> ret
         }
 
-        <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(node, parent, state){ 
+        <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(node, parent, state){
 
                 <span class="keyword">var</span> nstate = Object.create(state)
                 nstate.depth += <span class="local-variable">this</span>.indent
 
                 <span class="keyword">var</span> keys = node.keys
-                <span class="keyword">var</span> len = k.length
+                <span class="keyword">var</span> len = keys.length
                 <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
                         <span class="keyword">var</span> prop = keys[i]
                         <span class="keyword">if</span>(i) ret += <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space
-                        
+
                         <span class="keyword">var</span> ch = ret[ret.length -<span class="integer">1</span>]
                         <span class="keyword">if</span>(ch == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) ret += nstate.depth
                         <span class="keyword">else</span> <span class="keyword">if</span>(ch == <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>) ret +=  <span class="local-variable">this</span>.newline + nstate.depth
-                        
+
                         ret += prop.key.name || prop.key.raw
 
                         <span class="keyword">if</span>(prop.<span class="reserved">short</span> === <span class="predefined-constant">undefined</span>){
@@ -903,7 +903,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> obj = node.object
                 <span class="keyword">var</span> object_t = obj.type
                 <span class="keyword">var</span> object = <span class="local-variable">this</span>.expand(obj, node, state)
-        
+
                 <span class="keyword">if</span>(object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>&amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">ThisCall</span><span class="delimiter">'</span></span>)
                         object = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + object + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
@@ -914,7 +914,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> obj = node.object
                 <span class="keyword">var</span> object_t = obj.type
                 <span class="keyword">var</span> object = <span class="local-variable">this</span>.expand(obj, node)
-        
+
                 <span class="keyword">if</span>(object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>&amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">ThisCall</span><span class="delimiter">'</span></span>)
                         object = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + object + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
@@ -937,13 +937,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Template</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">`</span><span class="delimiter">'</span></span>
                 <span class="keyword">var</span> chain = node.chain
-                <span class="keyword">var</span> len = chain.length 
+                <span class="keyword">var</span> len = chain.length
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
                         <span class="keyword">var</span> item = chain[i]
                         <span class="keyword">if</span>(item.type == <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span>){
                                 <span class="keyword">if</span>(item.steps.length == <span class="integer">1</span> &amp;&amp; outer.IsExpr[item.steps[<span class="integer">0</span>].type]){
                                         ret += <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(item.steps[<span class="integer">0</span>], node, state) + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-                                } 
+                                }
                                 <span class="keyword">else</span> ret += <span class="local-variable">this</span>.expand(item, node, state)
                         }
                         <span class="keyword">else</span> {
@@ -971,7 +971,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 ret += <span class="local-variable">this</span>.expand(node.test, node, state)
 
                 <span class="keyword">if</span>(ret[ret.length - <span class="integer">1</span>] == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) ret += state.depth + <span class="local-variable">this</span>.indent
-                ret += <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.then, node, state) 
+                ret += <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.then, node, state)
 
                 <span class="keyword">if</span>(node.<span class="keyword">else</span>){
                         <span class="keyword">var</span> ch = ret[ret.length - <span class="integer">1</span>]
@@ -988,7 +988,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 ret += <span class="local-variable">this</span>.newline
 
                 <span class="keyword">var</span> nstate = Object.create(state)
-                nstate.depth += <span class="local-variable">this</span>.indent                                
+                nstate.depth += <span class="local-variable">this</span>.indent
 
                 <span class="keyword">var</span> cases = node.cases
                 <span class="keyword">if</span>(cases) <span class="keyword">for</span>( <span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; cases.length; i++ ) ret += nstate.depth + <span class="local-variable">this</span>.expand(cases[i], node, nstate)
@@ -1004,7 +1004,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">case </span><span class="delimiter">'</span></span>
 
-                ret += <span class="local-variable">this</span>.expand(node.test, node) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> 
+                ret += <span class="local-variable">this</span>.expand(node.test, node) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>
                 ret += <span class="local-variable">this</span>.newline
 
                 <span class="keyword">if</span>(node.steps.length) ret += <span class="local-variable">this</span>.block(node.steps, node)
@@ -1020,54 +1020,54 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">try</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">try</span>, node)
                 <span class="keyword">if</span>(node.<span class="keyword">catch</span>){
                         <span class="keyword">if</span>(node.arg.type !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">unsupported catch type</span><span class="delimiter">&quot;</span></span>)
-                        <span class="keyword">var</span> name = node.arg.name 
+                        <span class="keyword">var</span> name = node.arg.name
                         ret += <span class="string"><span class="delimiter">'</span><span class="content">catch(</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">catch</span>, node, state)
-                } 
+                }
 
                 <span class="keyword">if</span>(node.<span class="keyword">finally</span>) ret += <span class="string"><span class="delimiter">'</span><span class="content">finally</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">finally</span>, node, state)
                 <span class="keyword">return</span> ret
         }
 
         <span class="local-variable">this</span>.<span class="function">While</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">while(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
+                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">while(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.expand(node.loop, node, state)
         }
 
         <span class="local-variable">this</span>.<span class="function">DoWhile</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">do</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.loop, node, state) + 
+                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">do</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.loop, node, state) +
                         <span class="string"><span class="delimiter">'</span><span class="content">while(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
         }
 
         <span class="local-variable">this</span>.<span class="function">For</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.init, node, state)+<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>+
                                 <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span> +
-                                <span class="local-variable">this</span>.expand(node.update, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
+                                <span class="local-variable">this</span>.expand(node.update, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> +
                                 <span class="local-variable">this</span>.expand(node.loop, node, state)
         }
 
         <span class="local-variable">this</span>.<span class="function">ForIn</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
+                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.expand(node.loop, node, state)
         }
 
         <span class="local-variable">this</span>.<span class="function">ForOf</span> = <span class="keyword">function</span>(node, parent, state){
 
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> of </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
+                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.expand(node.loop, node, state)
         }
 
         <span class="local-variable">this</span>.<span class="function">ForFrom</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> from </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
+                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.expand(node.loop, node, state)
         }
 
         <span class="local-variable">this</span>.<span class="function">ForTo</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> to </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + 
-                        (node.<span class="keyword">in</span>?<span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">in</span>, node, state):<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
+                        <span class="local-variable">this</span>.expand(node.right, node, state) +
+                        (node.<span class="keyword">in</span>?<span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">in</span>, node, state):<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.expand(node.loop, node, state)
         }
 
@@ -1076,12 +1076,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">TypeVar</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.typing, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + 
+                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.typing, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.flat(node.defs, node, state)
         }
 
         <span class="local-variable">this</span>.<span class="function">Def</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.id, node, state) + 
+                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.id, node, state) +
                         (node.init ? <span class="local-variable">this</span>.space + <span class="string"><span class="delimiter">'</span><span class="content">=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.init, node, state) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
         }
 
@@ -1090,7 +1090,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">Enum</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">enum </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.id, node) + <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.newline + 
+                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">enum </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.id, node) + <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.newline +
                         state.depth + <span class="local-variable">this</span>.indent + <span class="local-variable">this</span>.list(node.enums, node, state) +<span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
         }
 
@@ -1104,20 +1104,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                         <span class="keyword">if</span>(node.name) ret += <span class="local-variable">this</span>.expand(node.name, node, state)
 
-                        ret += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> +(node.params?<span class="local-variable">this</span>.list(node.params, node, state):<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + 
-                                (node.rest ? <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.rest, node, state) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> )+ <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> 
+                        ret += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> +(node.params?<span class="local-variable">this</span>.list(node.params, node, state):<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) +
+                                (node.rest ? <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.rest, node, state) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> )+ <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
                         <span class="keyword">if</span>(!node.name || node.body.type != <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span> || arrow != <span class="string"><span class="delimiter">'</span><span class="content">-&gt;</span><span class="delimiter">'</span></span>) ret += arrow
                         ret += <span class="local-variable">this</span>.expand(node.body, node)
                         <span class="local-variable">this</span>.cignore = <span class="integer">1</span>
                         <span class="keyword">return</span> ret
                 }
-                <span class="keyword">var</span> ret 
+                <span class="keyword">var</span> ret
                 <span class="keyword">if</span>(node.name) ret = <span class="local-variable">this</span>.expand(node.name)
                 <span class="keyword">else</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>
                 <span class="keyword">if</span>( node.gen ) ret += <span class="string"><span class="delimiter">'</span><span class="content">*</span><span class="delimiter">'</span></span>
                 <span class="keyword">if</span>( node.id ) ret += <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.expand(node.id, node, state)
                 ret += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.list(node.params, node, state)
-                <span class="keyword">if</span>( node.rest ) ret += <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.rest, node, state) 
+                <span class="keyword">if</span>( node.rest ) ret += <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.rest, node, state)
                 ret += <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
                 ret += <span class="local-variable">this</span>.expand(node.body, node, state)
                 <span class="keyword">return</span> ret
@@ -1160,7 +1160,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> right = <span class="local-variable">this</span>.expand(node.right, node, state)
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.left)) left = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + left + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.right)) right = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + right + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> 
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.right)) right = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + right + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
                 <span class="keyword">return</span> left + <span class="local-variable">this</span>.space + node.op + <span class="local-variable">this</span>.space + right
         }
@@ -1170,7 +1170,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> right = <span class="local-variable">this</span>.expand(node.right, node, state)
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.left)) left = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + left + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.right)) right = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + right + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> 
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.right)) right = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + right + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
                 <span class="keyword">return</span> left + <span class="local-variable">this</span>.space + node.op + <span class="local-variable">this</span>.space + right
         }
@@ -1187,27 +1187,27 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">Condition</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="comment">// if we have a test of logic or binary </span>
+                <span class="comment">// if we have a test of logic or binary</span>
                 <span class="keyword">var</span> test = <span class="local-variable">this</span>.expand(node.test, node, state)
                 <span class="keyword">var</span> test_t = node.test.type
 
-                <span class="keyword">if</span>(test_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || test_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || 
+                <span class="keyword">if</span>(test_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || test_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> ||
                         test_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || test_t == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span>) test = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + test + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
                 <span class="keyword">var</span> else_v = <span class="local-variable">this</span>.expand(node.<span class="keyword">else</span>, node, state)
                 <span class="keyword">var</span> else_t = node.<span class="keyword">else</span>.type
-                <span class="keyword">if</span>(else_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || else_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || 
+                <span class="keyword">if</span>(else_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || else_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> ||
                         else_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || else_t == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span>) else_v = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + else_v + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
-                <span class="keyword">return</span> test + <span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.then, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + 
+                <span class="keyword">return</span> test + <span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span> +
+                        <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.then, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> +
                         <span class="local-variable">this</span>.space + else_v
         }
 
         <span class="local-variable">this</span>.<span class="function">New</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> fn = <span class="local-variable">this</span>.expand(node.fn, node, state)
                 <span class="keyword">var</span> fn_t = node.fn.type
-                <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>) 
+                <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>)
                         fn = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + fn + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">new </span><span class="delimiter">'</span></span> + fn + <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.list(node.args, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
         }
@@ -1229,7 +1229,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Call</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> fn = <span class="local-variable">this</span>.expand(node.fn, node, state)
                 <span class="keyword">var</span> fn_t = node.fn.type
-                <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Function</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>) 
+                <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Function</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>)
                         fn = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + fn + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
 
                 <span class="keyword">return</span> fn + <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.callArgs(node, parent, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
@@ -1241,7 +1241,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">Class</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">class </span><span class="delimiter">'</span></span> + node.id.name
-                <span class="keyword">if</span>(node.base) ret += <span class="string"><span class="delimiter">'</span><span class="content"> extends </span><span class="delimiter">'</span></span> + node.base.name 
+                <span class="keyword">if</span>(node.base) ret += <span class="string"><span class="delimiter">'</span><span class="content"> extends </span><span class="delimiter">'</span></span> + node.base.name
                 ret += <span class="local-variable">this</span>.expand(node.body, node, state)
                 <span class="keyword">return</span> ret
         }
@@ -1262,7 +1262,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> quote = <span class="local-variable">this</span>.expand(node.quote, node, state)
                 <span class="keyword">return</span> left + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + quote
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">Rest</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">...</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.id, node, state)
         }
@@ -1278,7 +1278,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">With</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">with(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.object, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.body, node, state)
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

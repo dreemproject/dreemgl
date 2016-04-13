@@ -30,6 +30,6 @@
  */
 /**
  * @method connect
- * Override to change what gets connected. Currently attemts to connect everything.
+ * Override to change what gets connected. Currently attempts to connect all devices.
  * @param iotdb
  */

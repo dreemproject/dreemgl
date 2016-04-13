@@ -272,6 +272,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n118" name="n118">118</a>
 <a href="#n119" name="n119">119</a>
 <strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/service</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require) {
         <span class="comment">// The iot class makes it very easy to connect to a wide variety of devices including</span>
@@ -326,6 +332,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         })
                 }
 
+                <span class="comment">// ignore timestamps</span>
+                <span class="keyword">delete</span> states[<span class="string"><span class="delimiter">'</span><span class="content">@timestamp</span><span class="delimiter">'</span></span>];
+
                 <span class="keyword">var</span> attributemeta = model[<span class="string"><span class="delimiter">'</span><span class="content">iot:attribute</span><span class="delimiter">'</span></span>]
                 <span class="comment">// console.log('thing metadata', id, meta, facets)</span>
                 <span class="comment">// console.log('thing model', attributemeta);</span>
@@ -346,8 +355,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
                 }
 
-                <span class="comment">// copy over fields</span>
-                <span class="local-variable">this</span>.__thingmodel[id] = {
+                <span class="keyword">var</span> newdata = {
                         <span class="key">state</span>: states,
                         <span class="key">id</span>: meta[<span class="string"><span class="delimiter">'</span><span class="content">iot:thing-id</span><span class="delimiter">'</span></span>],
                         <span class="key">name</span>: meta[<span class="string"><span class="delimiter">'</span><span class="content">schema:name</span><span class="delimiter">'</span></span>],
@@ -356,6 +364,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">model</span>: meta[<span class="string"><span class="delimiter">'</span><span class="content">schema:model</span><span class="delimiter">'</span></span>] || meta[<span class="string"><span class="delimiter">'</span><span class="content">iot:model-id</span><span class="delimiter">'</span></span>],
                         <span class="key">facets</span>: facets
                 };
+
+                <span class="comment">// copy over fields</span>
+                <span class="keyword">if</span> (JSON.stringify(<span class="local-variable">this</span>.__thingmodel[id]) === newdata) <span class="keyword">return</span>;
+                <span class="local-variable">this</span>.__thingmodel[id] = newdata
 
                 <span class="keyword">var</span> keys = Object.keys(<span class="local-variable">this</span>.__thingmodel).sort();
                 <span class="keyword">var</span> things = [];
@@ -386,7 +398,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }.bind(<span class="local-variable">this</span>));
         }
 
-        <span class="comment">// Override to change what gets connected. Currently attemts to connect everything.</span>
+        <span class="comment">// Override to change what gets connected. Currently attempts to connect all devices.</span>
         <span class="local-variable">this</span>.<span class="function">connect</span> = <span class="keyword">function</span>(iotdb) {
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.connected) <span class="keyword">return</span>;
                 <span class="keyword">return</span> iotdb.connect(<span class="string"><span class="delimiter">'</span><span class="content">HueLight</span><span class="delimiter">'</span></span>, {<span class="key">poll</span>: <span class="integer">1</span>}).connect();

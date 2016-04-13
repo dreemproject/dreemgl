@@ -170,6 +170,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
 <a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -180,10 +182,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, textbox, view, <span class="predefined">$$</span>, map) {
 
     <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
-        screen({},
-            view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="integer">1</span>},
-              textbox({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">placename</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">Portland, OR</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>}),
-              map({<span class="key">location</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">find.placename.value</span><span class="delimiter">'</span></span>), <span class="key">width</span>:<span class="integer">250</span>, <span class="key">height</span>:<span class="integer">250</span>}))
+        screen(
+                        view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="integer">1</span>},
+              textbox({<span class="key">multiline</span>:<span class="predefined-constant">false</span>, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Portland, OR</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
+                                  <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) { o.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">map</span><span class="delimiter">&quot;</span></span>).location = v }.bind(<span class="local-variable">this</span>),
+                                  <span class="function">onfocus</span>:<span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { o.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">map</span><span class="delimiter">&quot;</span></span>).location = o.value }}.bind(<span class="local-variable">this</span>)}),
+              map({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">map</span><span class="delimiter">&quot;</span></span>, <span class="key">location</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Portland, OR</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>:<span class="integer">250</span>, <span class="key">height</span>:<span class="integer">250</span>}))
             )
     ] }
 

@@ -2183,7 +2183,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">rear</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// the background color of a view, referenced by various shaders</span>
-                <span class="key">bgcolor</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="predefined-constant">NaN</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">bgcolor</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')</span>
                 <span class="key">bgimage</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>,<span class="key">type</span>:Object, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">texture</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// the opacity of the image</span>
@@ -3560,19 +3560,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="comment">// if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x &lt; 0.0</span>
-                        <span class="comment">//         || view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x &gt; 1.0</span>
-                        <span class="comment">//         || view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y &lt; 0.0</span>
-                        <span class="comment">//         || view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y &gt; 1.0) {</span>
-                        <span class="comment">//         return view.bgcolor;</span>
-                        <span class="comment">// }</span>
-                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.texture.samplemip(vec2(view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
-                        <span class="keyword">var</span> cola = col.a;
-                        <span class="comment">// if (cola &lt; 1.0) {</span>
-                        <span class="comment">//         col = mix(view.bgcolor, col, cola)</span>
-                        <span class="comment">//         cola = 1.0</span>
-                        <span class="comment">// }</span>
-                        <span class="keyword">return</span> vec4(col.r * view.colorfilter[<span class="integer">0</span>], col.g * view.colorfilter[<span class="integer">1</span>], col.b * view.colorfilter[<span class="integer">2</span>], cola * view.opacity * view.colorfilter[<span class="integer">3</span>])
+                        <span class="keyword">var</span> img = <span class="local-variable">this</span>.texture.samplemip(vec2(view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
+                        <span class="keyword">var</span> bg = view.bgcolor
+
+                        <span class="comment">// premultiply alpha</span>
+                        img.rgb = (img.rgb * img.a) + (bg.rgb * (<span class="integer">1</span> - img.a));
+
+                        <span class="keyword">var</span> col = mix(bg, img, img.a)
+
+                        <span class="keyword">return</span> vec4(
+                                col.r * view.colorfilter[<span class="integer">0</span>],
+                                col.g * view.colorfilter[<span class="integer">1</span>],
+                                col.b * view.colorfilter[<span class="integer">2</span>],
+                                col.a * view.colorfilter[<span class="integer">3</span>] * view.opacity)
                 }
         })
 

@@ -283,6 +283,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
 <a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$system/parse/onejswalk</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(baseclass, require) {
 
@@ -299,11 +310,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">char_count</span>:<span class="integer">0</span>
                 };
 
-                jsformatter.walk(ast, buf, <span class="keyword">function</span>(str){
-                        <span class="keyword">if</span> (str) {
-                                buf.char_count += str.length;
-                                buf.out += str
+                jsformatter.walk(ast, buf, {}, <span class="keyword">function</span>(str){
+
+                        <span class="keyword">if</span>(str === <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){
+                                <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">true</span>;
+                                <span class="keyword">return</span>
                         }
+                        <span class="keyword">if</span>(str === <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.last_is_newline){
+                                str = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>;
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.actual_indent;i++) {
+                                        str += <span class="string"><span class="delimiter">'</span><span class="content">  </span><span class="delimiter">'</span></span>
+                                }
+                        }
+                        <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">false</span>;
+
+                        buf.char_count += str.length;
+                        buf.out += str
                 });
 
                 <span class="keyword">return</span> buf.out;
