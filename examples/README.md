@@ -9,6 +9,7 @@ There are a number of examples designed to help you see recommended practices wi
 | calculator.js  | Basic calculator with simple operations.|
 | checkboxes.js  | Example of basic selected and unselected checkboxes, icon checkboxes with text, and checkboxes with images.|
 | drawers.js     | Drawer with left and right swipes, and a single drawer with a right swipe.|
+| flow.js        | Sample composition demonstrating complex wiring.  Intended for use with flowgraph.|
 | inputdevice.js | Example that displays input events, like position, click, hover, wheel, and so on.|
 | lists.js       | Simple scrollable list example: vertical, horizontal, and position that is adjusted programmatically with buttons.|
 | morph.js       | Shape morphing from a square to a circle to a cross.|
