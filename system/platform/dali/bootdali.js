@@ -88,10 +88,8 @@ define.class(function(require){
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.slow_watcher = new FileWatcher(200)
-		this.fast_watcher = new FileWatcher(10)
+		this.slow_watcher = new FileWatcher()
 
-		this.fast_watcher.atChange =
 		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
@@ -105,16 +103,8 @@ define.class(function(require){
 			this.paths += '$'+key+':"$root/'+key+'"'
 		}
 
-		this.fast_list = ['$examples']
-
 		// lets compile and run the dreem composition
 		define.atRequire = function(filename){
-			for(var i = 0; i < this.fast_list.length; i++){
-				var fast = this.fast_list[i]
-				if(filename.indexOf( define.expandVariables(fast) ) === 0){
-					return this.fast_watcher.watch(filename)
-				}
-			}
 			this.slow_watcher.watch(filename)
 		}.bind(this)
 		//

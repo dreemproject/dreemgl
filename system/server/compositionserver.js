@@ -8,16 +8,11 @@
 
 define.class(function(require){
 
-	var path = require('path')
 	var fs = require('fs')
 
-	var ExternalApps = require('./externalapps')
 	var FileWatcher = require('./filewatcher')
 
 	var BusServer = require('$system/rpc/busserver')
-	var HTMLParser = require('$system/parse/htmlparser')
-	var ScriptError = require('$system/parse/scripterror')
-	var legacy_support = 0
 
 	this.atConstructor = function(
 		args, //Object: Process arguments
@@ -30,13 +25,11 @@ define.class(function(require){
 
 		this.busserver = new BusServer()
 
-		this.slow_watcher = new FileWatcher(200)
+		this.slow_watcher = new FileWatcher()
 
-		this.fast_watcher = new FileWatcher(10)
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.fast_watcher.atChange =
 		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
@@ -55,15 +48,8 @@ define.class(function(require){
 		this.pathset += '}'
 
 
-		this.fast_list = ['$examples']
 		// lets compile and run the dreem composition
 		define.atRequire = function(filename){
-			for(var i = 0; i < this.fast_list.length; i++){
-				var fast = this.fast_list[i]
-				if(filename.indexOf( define.expandVariables(fast) ) === 0){
-					return this.fast_watcher.watch(filename)
-				}
-			}
 			this.slow_watcher.watch(filename)
 		}.bind(this)
 		//
