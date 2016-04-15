@@ -28,13 +28,8 @@ Follow the prompts. Note that you may need to unplug and plug in the ethernet po
 
 Follow the prompts, it's a lengthy process. When finished, hit control-c a few times to get back to the shell.
 
-### Link iotdb configuration to the root
-
-    cd ../../ # back to the dreemgl root
-    ln -s classes/iot/.iotdb/ .
+## Running
 
 You should be ready to roll. Start up your dreemgl server and try out some examples!
-
-## Running
 
 http://localhost:2000/examples/components/iot/ should show a listing of all connected IOT devices.
