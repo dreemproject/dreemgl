@@ -299,32 +299,10 @@ define.class(function(require, baseclass){
 				blendshader.depth_test = ''
 			}
 
-			// first, draw the blend texture
-			blendshader.texture = draw.drawpass.color_buffer
+			blendshader.texture = draw.drawpass.blendbuffer
 			blendshader.width = draw._layout.width
 			blendshader.height = draw._layout.height
 			blendshader.drawArrays(this.device)
-
-			// next draw shader passes
-			if (draw.passes > 0) {
-				// set up the shader draw passes
-				for (var i = 0; i < draw.passes; i++) {
-					var shader = draw.shaders['pass' + i]
-					// Add references so they work inside the shader
-					shader.framebuffer = draw.drawpass.color_buffer
-					for (var j = 0; j < 10; j++) {
-						// add pass0..9 references
-						var key = 'pass' + j
-						shader[key] = draw.shaders[key]
-					}
-
-					// set the texture to use its own framebuffer
-					shader.texture = draw.drawpass['framebuffer' + i]
-					shader.width = draw._layout.width
-					shader.height = draw._layout.height
-					shader.drawArrays(this.device)
-				}
-			}
 		}
 	}
 
@@ -453,15 +431,28 @@ define.class(function(require, baseclass){
 		if (view.passes > 0) {
 			// TODO: we have multiple passes, ignore pick_buffer it won't work.
 			for (var i = 0; i < view.passes; i++) {
-				// bind framebuffer
 				device.bindFramebuffer(this['framebuffer' + i])
-				// clear
 				device.clear(view._clearcolor)
-				// setup matrices
-				var matrices = this.colormatrices
-				this.calculateDrawMatrices(isroot, matrices);
-				view.colormatrices = matrices
+
+				var shader = view.shaders['pass' + i]
+				// Add references so they work inside the shader
+				shader.framebuffer = this.color_buffer
+				for (var j = 0; j < 10; j++) {
+					// add pass0..9 references to corresponding buffers
+					shader['pass' + j] = this['framebuffer' + j]
+				}
+				// set the texture to use its own framebuffer
+				shader.texture = this['framebuffer' + i]
+				shader.width = view._layout.width
+				shader.height = view._layout.height
+				// draw it into the framebuffer
+				shader.drawArrays(this.device)
 			}
+			// draw the final texture
+			this.blendbuffer = shader.texture
+		} else {
+			// draw the color buffer
+			this.blendbuffer = this.color_buffer
 		}
 		return hastime
 	}

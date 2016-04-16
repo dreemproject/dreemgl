@@ -14,7 +14,7 @@ define.class('$ui/view', function(require){
 	}
 
 	// Must define N RenderPass nested classes below to match this count
-	this.passes = 1
+	this.passes = 2
 	// Required for multipass to work
 	this.overflow = 'hidden'
 
@@ -23,6 +23,13 @@ define.class('$ui/view', function(require){
 	define.class(this, "pass0", this.RenderPass, function() {
 		this.color = function(){
 			var col = this.framebuffer.sample(mesh.xy) * view.tintcolor
+			return vec4(col.rgb, col.a * view.opacity)
+		}
+	})
+
+	define.class(this, "pass1", this.RenderPass, function() {
+		this.color = function(){
+			var col = this.pass0.sample(mesh.xy * 2)
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
