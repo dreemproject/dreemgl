@@ -463,20 +463,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n309" name="n309">309</a>
 <strong><a href="#n310" name="n310">310</a></strong>
 <a href="#n311" name="n311">311</a>
-<a href="#n312" name="n312">312</a>
-<a href="#n313" name="n313">313</a>
-<a href="#n314" name="n314">314</a>
-<a href="#n315" name="n315">315</a>
-<a href="#n316" name="n316">316</a>
-<a href="#n317" name="n317">317</a>
-<a href="#n318" name="n318">318</a>
-<a href="#n319" name="n319">319</a>
-<strong><a href="#n320" name="n320">320</a></strong>
-<a href="#n321" name="n321">321</a>
-<a href="#n322" name="n322">322</a>
-<a href="#n323" name="n323">323</a>
-<a href="#n324" name="n324">324</a>
-<a href="#n325" name="n325">325</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -488,16 +474,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
 
-        <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
 
-        <span class="keyword">var</span> ExternalApps = require(<span class="string"><span class="delimiter">'</span><span class="content">./externalapps</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> FileWatcher = require(<span class="string"><span class="delimiter">'</span><span class="content">./filewatcher</span><span class="delimiter">'</span></span>)
 
         <span class="keyword">var</span> BusServer = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/busserver</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> HTMLParser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/htmlparser</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> ScriptError = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/scripterror</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> legacy_support = <span class="integer">0</span>
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(
                 args, <span class="comment">//Object: Process arguments</span>
@@ -510,13 +491,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.busserver = <span class="keyword">new</span> BusServer()
 
-                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">200</span>)
+                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher()
 
-                <span class="local-variable">this</span>.fast_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">10</span>)
                 <span class="comment">// lets give it a session</span>
                 <span class="local-variable">this</span>.session = Math.random() * <span class="integer">1000000</span>
 
-                <span class="local-variable">this</span>.fast_watcher.atChange =
                 <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
                         <span class="comment">// lets reload this app</span>
                         <span class="local-variable">this</span>.reload()
@@ -535,15 +514,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.pathset += <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
 
 
-                <span class="local-variable">this</span>.fast_list = [<span class="string"><span class="delimiter">'</span><span class="content">$examples</span><span class="delimiter">'</span></span>]
                 <span class="comment">// lets compile and run the dreem composition</span>
                 define.<span class="function">atRequire</span> = <span class="keyword">function</span>(filename){
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.fast_list.length; i++){
-                                <span class="keyword">var</span> fast = <span class="local-variable">this</span>.fast_list[i]
-                                <span class="keyword">if</span>(filename.indexOf( define.expandVariables(fast) ) === <span class="integer">0</span>){
-                                        <span class="keyword">return</span> <span class="local-variable">this</span>.fast_watcher.watch(filename)
-                                }
-                        }
                         <span class="local-variable">this</span>.slow_watcher.watch(filename)
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">//</span>

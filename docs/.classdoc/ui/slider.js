@@ -4,8 +4,8 @@
  * Slider with customizable handle.  To customize the handle put views as the slider's constructor children.
  * <br/><a href="/examples/sliders">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:600px" src="/apps/docs/example.html#path=$ui/slider.js"></iframe>
- * <a target="blank" href="/apps/docs/example.html#path=$ui/slider.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:600px" src="/dreemgl/apps/docs/example.html#path=$ui/slider.js"></iframe>
+ * <a target="blank" href="/dreemgl/apps/docs/example.html#path=$ui/slider.js">open example in new tab &raquo;</a>
  * 
  */
 /**
