@@ -505,6 +505,7 @@ define.class('$system/base/node', function(require){
 			this.onbgimage()
 		}
 
+		// a _viewport is a top-level canvas object, or a scrolling view.
 		if (this._viewport){
 			for (var key in this.shaders){
 				var shader = this.shaders[key]
@@ -513,6 +514,7 @@ define.class('$system/base/node', function(require){
 				}
 			}
 			this.shaders.viewportblend = new this.viewportblend(this)
+			// TODO: loop and create RenderPass instances based on this.passes (a number) with names pass0..6
 		}
 		this.sortShaders()
 	}
@@ -1853,6 +1855,34 @@ define.class('$system/base/node', function(require){
 		return inside
 	}
 
+	// renders the previous pass into self. Instances are made in drawpasswebgl.
+	// child classes inherit from this
+	this.RenderPass = define.class(this.Shader, function(){
+		// create placeholder passes for the compiler
+		this.framebuffer = this.pass0 = this.pass1 = this.pass2 = this.pass3 = this.pass4
+		  = this.pass5 = Shader.prototype.Texture.fromType('rgba_depth_stencil')
+		this.view = {viewportmatrix: mat4(), viewmatrix: mat4()}
+		this.draworder = 10
+		this.updateorder = 10
+		this.omit_from_shader_list = true;
+		this.mesh = vec2.array()
+		this.mesh.pushQuad(0,0, 0,1, 1,0, 1,1)
+		this.width = 0
+		this.height = 0
+
+		this.position = function(){
+			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix
+		}
+
+		// TODO: child classes extending RenderPass implement color() and use one or more of this.framebuffer/pass0..6 internally, e.g.
+		// var col = this.framebuffer.sample(mesh.xy)
+		// return vec4(col.rgb, col.a * view.opacity)
+		this.color = function(){
+			return 'purple'
+		}
+	})
+
+	// blends current viewport into the parent
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10
