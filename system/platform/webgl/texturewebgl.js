@@ -266,6 +266,22 @@ define.class('$system/base/texture', function(exports){
 		})
 	}
 
+	// Average the image using neighboring (x,y) pixel values.
+	// px, py are the pixel x and y spacing
+	this.average = function(v, px, py){
+		var v1 = texture2D(this, v + vec2(-px,-py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v2 = texture2D(this, v + vec2(-px,0), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v3 = texture2D(this, v + vec2(-px,py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v4 = texture2D(this, v + vec2(0,-py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v5 = texture2D(this, v + vec2(0,0), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v6 = texture2D(this, v + vec2(0,py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v7 = texture2D(this, v + vec2(px,-py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v8 = texture2D(this, v + vec2(px,0), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		var v9 = texture2D(this, v + vec2(px,py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+
+		return v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9
+	}
+
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {

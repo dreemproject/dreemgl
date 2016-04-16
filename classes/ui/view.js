@@ -524,7 +524,10 @@ define.class('$system/base/node', function(require){
 				for (var i = 0; i < this.passes; i++) {
 					var key = 'pass' + i
 					if (key in this) {
-						this.shaders[key] = new this[key](this)
+						var shdr = this.shaders[key] = new this[key](this)
+						// Set view/screen size of the shader
+						shdr.width = this.width ? this.width : this.screen.size.x
+						shdr.height = this.height ? this.height : this.screen.size.y
 					} else {
 						console.warn('this.passes is too large, you are missing an inner class named', key, 'in', this)
 					}

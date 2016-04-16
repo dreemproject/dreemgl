@@ -22,8 +22,11 @@ define.class('$ui/view', function(require){
 	// 1 must define pass0, 2 must define pass0 and pass1...
 	define.class(this, "pass0", this.RenderPass, function(require) {
 		this.color = function(){
-			// TODO: implement the actual blurring instead of tinting red
-			var col = this.framebuffer.sample(mesh.xy) * 'red'
+			// x,y pixel spacing is used to average neighboring pixels
+			var px = 1.0 / this.width
+			var py = 1.0 / this.height
+			var col = this.framebuffer.average(mesh.xy, px, py)
+
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
