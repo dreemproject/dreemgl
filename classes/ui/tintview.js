@@ -10,7 +10,7 @@ define.class('$ui/view', function(require){
 // Example of how to use multiple render passes
 
 	this.attributes = {
-		blurradius: 2.
+		tintcolor: Config({type: vec4, value: vec4(1,1,1,1), meta:"color"})
 	}
 
 	// Must define N RenderPass nested classes below to match this count
@@ -18,14 +18,12 @@ define.class('$ui/view', function(require){
 	// Required for multipass to work
 	this.overflow = 'hidden'
 
-	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes of
-	// 1 must define pass0, 2 must define pass0 and pass1...
-	define.class(this, "pass0", this.RenderPass, function(require) {
+	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1
+	// must define pass0, 2 must define pass0 and pass1...
+	define.class(this, "pass0", this.RenderPass, function() {
 		this.color = function(){
-			// TODO: implement the actual blurring instead of tinting red
-			var col = this.framebuffer.sample(mesh.xy) * 'red'
+			var col = this.framebuffer.sample(mesh.xy) * view.tintcolor
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
-
 })

@@ -4,17 +4,23 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-// Randomly display squares in a parent view. Move each view when the parent
-// view is clicked.
-
-define.class(function($server$, composition, $ui$, screen, view, blurview, icon){
+define.class(function($server$, composition, $ui$, screen, view, tintview, icon, label, require){
 	this.render = function(){
 		return [
-		screen({name:'default', clearcolor:'#484230'},
-			blurview({flex: 1},
-				icon({icon: 'chain', fontsize: 100})
+			screen({name:'default'},
+				tintview({flex: 1, tintcolor: 'green'},
+					icon({icon: 'chain', fontsize: 100}),
+					label({text: 'Hello!', fontsize: 100}),
+					view({
+							width:200,
+							height:200,
+							borderwidth:1,
+							bordercolor:"white",
+							bgimagemode:"center",
+							bgimage:require('$resources/textures/landscape.jpg')
+					})
+				)
 			)
-		)
 		]
 	}
 })

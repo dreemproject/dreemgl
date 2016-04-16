@@ -515,18 +515,19 @@ define.class('$system/base/node', function(require){
 			}
 			this.shaders.viewportblend = new this.viewportblend(this)
 
-			// loop and create RenderPass instances based on this.passes with names pass0..9
 			if (this.passes > 0) {
+				// loop and create RenderPass instances
 				if (this.passes > 9) {
 					console.warning('this.passes has a maximum value of 9.')
 					this.passes = 9
 				}
 				for (var i = 0; i < this.passes; i++) {
+					// based on this.passes with names pass0..9
 					var key = 'pass' + i
 					if (key in this) {
-						this.shaders[key] = new this[key](this)
+						this.shaders[key] = new this[key]()
 					} else {
-						console.warn('this.passes is too large, you are missing an inner class named', key, 'in', this)
+						console.warn('you are missing an inner class named', key, 'in', this)
 					}
 				}
 			}
