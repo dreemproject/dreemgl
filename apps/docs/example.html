@@ -1,0 +1,54 @@
+<html lang="en">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>flow</title>
+  <style>
+    .unselectable{
+ 		-webkit-user-select: none;
+		-moz-user-select: none;
+		-user-select: none;
+    }
+    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}
+  </style>  <script type="text/javascript">
+    window.define = {
+      $disableserver:true,
+	    $platform:"webgl",
+      paths:{"system":1,"resources":1,"3d":1,"behaviors":1,"server":1,"ui":1,"flow":1,"testing":1,"widgets":1,"sensors":1,"iot":1,"examples":1,"apps":1,"docs":1,"test":1},
+     $system:"$root/system",
+		$resources:"$root/resources",
+		$3d:"$root/classes/3d",
+		$behaviors:"$root/classes/behaviors",
+		$server:"$root/classes/server",
+		$ui:"$root/classes/ui",
+		$flow:"$root/classes/flow",
+		$testing:"$root/classes/testing",
+		$widgets:"$root/classes/widgets",
+		$sensors:"$root/classes/sensors",
+		$iot:"$root/classes/iot",
+		$examples:"$root/examples",
+		$apps:"$root/apps",
+		$docs:"$root/docs",
+		$test:"$root/test",
+      main:["$system/base/math", "$apps/docs/example.js"],
+      atMain:function(require, modules){
+        define.endLoader()
+		 require(modules[0])
+		 var Composition = require(modules[1])
+		 var serverattrs = {}
+		 var renderTarget;
+        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs, renderTarget)
+      },
+	   atEnd:function(){
+         define.startLoader()
+      }
+    }
+  </script>
+  <script type="text/javascript" src="/system/base/define.js"></script>
+ </head>
+ <body class="unselectable">
+ </body>
+</html>

@@ -33,6 +33,10 @@ define.class(function(require, exports){
 		this.disconnect()
 		if(!this.queue) this.queue = []
 
+		if (define.$disableserver === true) {
+			return
+		}
+
 		this.socket = new this.websocketclass(this.url)
 
 		this.socket.binaryType = 'arraybuffer'
@@ -56,7 +60,7 @@ define.class(function(require, exports){
 				this.reconnect()
 			}.bind(this),this.backoff)
 		}.bind(this)
-	
+
 		if(this.use_xhr_fallback_for_binary){
 			var binary_xhr = []
 
@@ -157,7 +161,7 @@ define.class(function(require, exports){
 
 				for(var i = 0; i < binary.length; i++){
 					var data = binary[i].data
-					var datamsg = 
+					var datamsg =
 						this.socket_use_blob_send?
 							new Blob([data.buffer], {type: 'application/octet-binary'}):
 							data.buffer
@@ -173,7 +177,7 @@ define.class(function(require, exports){
 			}
 		}
 	}
-	
+
 	// Called when a message is received
 	this.atMessage = function(message){}
 })

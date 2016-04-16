@@ -635,8 +635,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
             <span class="keyword">return</span> output;
         }
 
-                <span class="keyword">var</span> exampleFunctions = {};
-
         <span class="keyword">if</span> (class_doc.body_text &amp;&amp; class_doc.body_text.length) {
             firstline = class_doc.body_text[<span class="integer">0</span>]
             <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
@@ -664,7 +662,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
             }
 
                         <span class="keyword">if</span> (class_doc.examples &amp;&amp; class_doc.examples.length) {
-                                <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">/apps/docs/example#path=$root/</span><span class="delimiter">'</span></span> + class_doc.sourcePath;
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="char">\n</span><span class="char">\n</span><span class="content">class_doc&gt;&gt;&gt;&gt;</span><span class="delimiter">&quot;</span></span>, class_doc.base_class_chain)
+                                <span class="keyword">var</span> ext = <span class="string"><span class="delimiter">&quot;</span><span class="content">.html</span><span class="delimiter">&quot;</span></span>
+                                <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">/apps/docs/example</span><span class="delimiter">'</span></span> + ext + <span class="string"><span class="delimiter">'</span><span class="content">#path=$</span><span class="delimiter">'</span></span> + class_doc.sourcePath;
                                 <span class="keyword">var</span> s = <span class="string"><span class="delimiter">&quot;</span><span class="content">border:0;</span><span class="delimiter">&quot;</span></span>;
                                 <span class="keyword">var</span> w = <span class="integer">900</span>;
                                 <span class="keyword">var</span> h = <span class="integer">300</span> * class_doc.examples.length;

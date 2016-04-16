@@ -331,6 +331,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n177" name="n177">177</a>
 <a href="#n178" name="n178">178</a>
 <a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -367,6 +371,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.disconnect()
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.queue) <span class="local-variable">this</span>.queue = []
 
+                <span class="keyword">if</span> (define.<span class="predefined">$disableserver</span> === <span class="predefined-constant">true</span>) {
+                        <span class="keyword">return</span>
+                }
+
                 <span class="local-variable">this</span>.socket = <span class="keyword">new</span> <span class="local-variable">this</span>.websocketclass(<span class="local-variable">this</span>.url)
 
                 <span class="local-variable">this</span>.socket.binaryType = <span class="string"><span class="delimiter">'</span><span class="content">arraybuffer</span><span class="delimiter">'</span></span>
@@ -390,7 +398,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.reconnect()
                         }.bind(<span class="local-variable">this</span>),<span class="local-variable">this</span>.backoff)
                 }.bind(<span class="local-variable">this</span>)
-        
+
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.use_xhr_fallback_for_binary){
                         <span class="keyword">var</span> binary_xhr = []
 
@@ -491,7 +499,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; binary.length; i++){
                                         <span class="keyword">var</span> data = binary[i].data
-                                        <span class="keyword">var</span> datamsg = 
+                                        <span class="keyword">var</span> datamsg =
                                                 <span class="local-variable">this</span>.socket_use_blob_send?
                                                         <span class="keyword">new</span> Blob([data.buffer], {<span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">application/octet-binary</span><span class="delimiter">'</span></span>}):
                                                         data.buffer
@@ -507,10 +515,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                 }
         }
-        
+
         <span class="comment">// Called when a message is received</span>
         <span class="local-variable">this</span>.<span class="function">atMessage</span> = <span class="keyword">function</span>(message){}
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

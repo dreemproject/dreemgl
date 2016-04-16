@@ -28,8 +28,18 @@ define.class(function(require){
 		this.compositions = {}
 		this.binrpc_incoming = {}
 		this.binrpc_outgoing = {}
-
 		this.args = args
+
+		if(this.args['-package']) {
+			var pkg = this.args['-package']
+			console.log("packaging up", pkg)
+			var mapped = this.mapPath(pkg)
+			console.log("mapped", mapped, Object.keys(define).filter(function(a){ return a[0] === '$' }))
+			var comp = this.getComposition('$' + pkg)
+			console.log("comp is", comp.loadHTML())
+			return process.exit(0);
+		}
+
 		var port = this.args['-port'] || process.env.PORT || 2000
 		var iface = this.args['-iface'] || process.env.IP || '127.0.0.1'
 
@@ -78,11 +88,6 @@ define.class(function(require){
 			    writable: false
 			});
 		}
-		// use the browser spawner
-		var browser = this.args['-browser']
-		if(browser && (!this.args['-delay'] || this.args['-count'] ==0 )){
-			ExternalApps.browser(this.address + (browser===true?'':browser), this.args['-devtools'])
-		}
 
 		this.watcher = new FileWatcher()
 		this.watcher.atChange = function(ifile){
@@ -115,9 +120,15 @@ define.class(function(require){
 		}.bind(this))
 
 		if(this.args['-web']) this.getComposition(this.args['-web'])
-	}
 
-	this.COMP_DIR = 'compositions'
+		// use the browser spawner
+		var browser = this.args['-browser']
+		if(browser && (!this.args['-delay'] || this.args['-count'] ==0 )){
+			ExternalApps.browser(this.address + (browser===true?'':browser), this.args['-devtools'])
+		}
+
+
+	}
 
 	this.broadcast = function(msg){
 		this.busserver.broadcast(msg)

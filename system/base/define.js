@@ -1237,6 +1237,11 @@
 				this.reload_socket.close()
 				this.reload_socket = undefined
 			}
+
+			if (define.$disableserver === true) {
+				return
+			}
+
 			this.reload_socket = new WebSocket((location.href.indexOf('https') === 0?'wss://':'ws://') + location.host)
 
 			this.reload_socket.onopen = function(){

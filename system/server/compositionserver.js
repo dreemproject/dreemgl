@@ -104,6 +104,22 @@ define.class(function(require){
 
 	this.loadHTML = function(title, boot, paths, pathset){
 
+		if (!title) {
+			title = this.title
+		}
+
+		if (!boot) {
+			boot = this.filename
+		}
+
+		if (!paths) {
+			paths = this.paths
+		}
+
+		if (!pathset) {
+			pathset = this.pathset
+		}
+
 		// These rpc attributes we will write directly into the header so that they are available even before the screen connects
 		var preloadattrs = {};
 
