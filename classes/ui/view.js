@@ -514,7 +514,22 @@ define.class('$system/base/node', function(require){
 				}
 			}
 			this.shaders.viewportblend = new this.viewportblend(this)
-			// TODO: loop and create RenderPass instances based on this.passes (a number) with names pass0..6
+
+			// loop and create RenderPass instances based on this.passes with names pass0..9
+			if (this.passes > 0) {
+				if (this.passes > 9) {
+					console.warning('this.passes has a maximum value of 9.')
+					this.passes = 9
+				}
+				for (var i = 0; i < this.passes; i++) {
+					var key = 'pass' + i
+					if (key in this) {
+						this.shaders[key] = new this[key](this)
+					} else {
+						console.warn('this.passes is too large, you are missing an inner class named', key, 'in', this)
+					}
+				}
+			}
 		}
 		this.sortShaders()
 	}
@@ -1874,9 +1889,8 @@ define.class('$system/base/node', function(require){
 			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix
 		}
 
-		// TODO: child classes extending RenderPass implement color() and use one or more of this.framebuffer/pass0..6 internally, e.g.
-		// var col = this.framebuffer.sample(mesh.xy)
-		// return vec4(col.rgb, col.a * view.opacity)
+		// child classes extending RenderPass implement color() and use references to
+		// this.framebuffer/pass0..9 internally. See /classes/ui/blurview for an example...
 		this.color = function(){
 			return 'purple'
 		}

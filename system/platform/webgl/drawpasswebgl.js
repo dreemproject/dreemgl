@@ -284,8 +284,6 @@ define.class(function(require, baseclass){
 
 	// accepts a view reference and takes the viewportblend shader
 	this.drawBlend = function(draw){
-		// TODO, use the final pass instead of color_buffer here, based on
-		// if (draw.passes !== 0) ...
 		if(!draw.drawpass.color_buffer){
 			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?", draw)
 		}
@@ -293,9 +291,6 @@ define.class(function(require, baseclass){
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 			// lets render the view as a layer
 
-			// TODO: make a shader for each pass.
-			// use explicit shader refs, e.g. duck type 'pass1', 'pass2' in order
-			// chaining the outputs into the inputs
 			var blendshader = draw.shaders.viewportblend
 			if (this.view._viewport === '3d'){
 				blendshader.depth_test = 'src_depth <= dst_depth'
@@ -304,11 +299,32 @@ define.class(function(require, baseclass){
 				blendshader.depth_test = ''
 			}
 
-			// TODO: copy from n color buffers, instead of assigning directly.
+			// first, draw the blend texture
 			blendshader.texture = draw.drawpass.color_buffer
 			blendshader.width = draw._layout.width
 			blendshader.height = draw._layout.height
 			blendshader.drawArrays(this.device)
+
+			// next draw shader passes
+			if (draw.passes > 0) {
+				// set up the shader draw passes
+				for (var i = 0; i < draw.passes; i++) {
+					var shader = draw.shaders['pass' + i]
+					// Add references so they work inside the shader
+					shader.framebuffer = draw.drawpass.color_buffer
+					for (var j = 0; j < 10; j++) {
+						// add pass0..9 references
+						var key = 'pass' + j
+						shader[key] = draw.shaders[key]
+					}
+
+					// set the texture to use its own framebuffer
+					shader.texture = draw.drawpass['framebuffer' + i]
+					shader.width = draw._layout.width
+					shader.height = draw._layout.height
+					shader.drawArrays(this.device)
+				}
+			}
 		}
 	}
 
@@ -338,7 +354,6 @@ define.class(function(require, baseclass){
 	}
 
 	// currently renders into color_buffer
-	// TODO: render final chain of textures into color_buffer, drawBlend() can pick it up
 	this.drawColor = function(isroot, time, clipview){
 		var view = this.view
 		var device = this.device
@@ -353,13 +368,13 @@ define.class(function(require, baseclass){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio
-			// allocate the texture for the color buffer.
-			// TODO: look at an attribute which is the number of passes and allocate buffers named
-			// color_buffer1, color_buffer2, e.g.
-			// this.allocDrawTarget(twidth, theight, this.view, 'color_buffer0')
-
-			// this is where the results of all the passes go.
 			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
+			if (view.passes > 0) {
+				for (var i = 0; i < view.passes; i++) {
+					// allocate a framebuffer for each pass
+					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i)
+				}
+			}
 		}
 
 		this.device.bindFramebuffer(this.color_buffer || null)
@@ -415,12 +430,10 @@ define.class(function(require, baseclass){
 
 				if(draw.atDraw && draw.atDraw(this)) hastime = true
 
-				// if we are hitting child node that is a 2d/3d viewport.
+				// if we are hitting child node that is a 2d/3d viewport,
 			  // and we aren't the root/canvas.
 				if(draw._viewport && draw.drawpass !== this){
 					// blend the already rendered child texture into the parent viewport.
-					// could make drawBlend multi-pass, or take multiple texture children.
-					// (really, draw is the iterator - it's a view reference)
 					this.drawBlend(draw)
 				}
 				else{
@@ -437,18 +450,19 @@ define.class(function(require, baseclass){
 			draw = this.nextItem(draw, 'pick')
 		}
 
-		// TODO: bind color_buffer0, color_buffer1, color_buffer2
-		// ignore pick_buffer it won't work.
-
-		// ... device.bindFramebuffer(this.color_buffer0 || null)
-		// ... clear ...
-		// ... setup matrices ...
-		// ... draw ...
-		// When doing a pass make sure previous passe(s) that are available
-		// assign new renderpass.pass0..6 to previous color buffers
-		// ... device.bindFramebuffer(this.color_buffer1 || null)
-		// ... clear ...
-		// etc.
+		if (view.passes > 0) {
+			// TODO: we have multiple passes, ignore pick_buffer it won't work.
+			for (var i = 0; i < view.passes; i++) {
+				// bind framebuffer
+				device.bindFramebuffer(this['framebuffer' + i])
+				// clear
+				device.clear(view._clearcolor)
+				// setup matrices
+				var matrices = this.colormatrices
+				this.calculateDrawMatrices(isroot, matrices);
+				view.colormatrices = matrices
+			}
+		}
 		return hastime
 	}
 /*

@@ -9,14 +9,17 @@
 define.class('$ui/view', function(require){
 // Example of how to use multiple render passes
 
-	// Must define N RenderPass nested classes below to match this count
-	this.passes = 1;
-
 	this.attributes = {
 		blurradius: 2.
 	}
 
-	// custom passes _must_ be named pass0..6
+	// Must define N RenderPass nested classes below to match this count
+	this.passes = 1
+	// Required for multipass to work
+	this.overflow = 'hidden'
+
+	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes of
+	// 1 must define pass0, 2 must define pass0 and pass1...
 	define.class(this, "pass0", this.RenderPass, function(require) {
 		this.color = function(){
 			// TODO: implement the actual blurring instead of tinting red
