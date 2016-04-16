@@ -7,14 +7,24 @@
 // Randomly display squares in a parent view. Move each view when the parent
 // view is clicked.
 
-define.class(function($server$, composition, $ui$, screen, view, blurview, icon){
+define.class(function($server$, require, composition, $ui$, screen, view, blurview, icon, label){
 	this.render = function(){
 		return [
 		screen({name:'default', clearcolor:'#484230'},
 			blurview({flex: 1},
-				icon({icon: 'chain', fontsize: 100})
-			)
-		)
+							 icon({icon: 'chain', fontsize: 100}),
+
+							 view({
+								 width:256,
+								 height:256,
+								 borderwidth:1,
+								 bordercolor:"white",
+								 bgimagemode:"stretch",
+								 bgimage:require('$resources/textures/landscape.jpg')
+							 })
+							)
+					 
+					)
 		]
 	}
 })

@@ -269,17 +269,22 @@ define.class('$system/base/texture', function(exports){
 	// Average the image using neighboring (x,y) pixel values.
 	// px, py are the pixel x and y spacing
 	this.average = function(v, px, py){
-		var v1 = texture2D(this, v + vec2(-px,-py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v2 = texture2D(this, v + vec2(-px,0), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v3 = texture2D(this, v + vec2(-px,py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v4 = texture2D(this, v + vec2(0,-py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v5 = texture2D(this, v + vec2(0,0), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v6 = texture2D(this, v + vec2(0,py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v7 = texture2D(this, v + vec2(px,-py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v8 = texture2D(this, v + vec2(px,0), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
-		var v9 = texture2D(this, v + vec2(px,py), {MIN_FILTER: 'LINEAR', MAG_FILTER: 'LINEAR', WRAP_S: 'CLAMP_TO_EDGE', WRAP_T: 'CLAMP_TO_EDGE'}) / 9.0
+		// This approximation of gaussian, using diagonals from
+		// http://www.sunsetlakesoftware.com/2013/10/21/optimizing-gaussian-blurs-mobile-gpu
+		var offset = vec2(px, py);
+		var p1 = v + offset * 1.407333
+		var p2 = v - offset * 1.407333
+		var p3 = v + offset * 3.294215
+		var p4 = v - offset * 3.294215
 
-		return v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9
+		var value = vec4(0.0);
+		value += texture2D(this, v) * 0.204164
+		value += texture2D(this, p1) * 0.304005
+		value += texture2D(this, p2) * 0.304005
+		value += texture2D(this, p3) * 0.093913
+		value += texture2D(this, p4) * 0.093913
+
+		return value;
 	}
 
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
