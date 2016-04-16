@@ -282,6 +282,7 @@ define.class(function(require, baseclass){
 		}
 	}
 
+	// accepts a view reference and takes the viewportblend shader
 	this.drawBlend = function(draw){
 		if(!draw.drawpass.color_buffer){
 			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?", draw)
@@ -289,6 +290,7 @@ define.class(function(require, baseclass){
 		else {
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 			// lets render the view as a layer
+
 			var blendshader = draw.shaders.viewportblend
 			if (this.view._viewport === '3d'){
 				blendshader.depth_test = 'src_depth <= dst_depth'
@@ -296,10 +298,33 @@ define.class(function(require, baseclass){
 			else{
 				blendshader.depth_test = ''
 			}
+
+			// first, draw the blend texture
 			blendshader.texture = draw.drawpass.color_buffer
 			blendshader.width = draw._layout.width
 			blendshader.height = draw._layout.height
 			blendshader.drawArrays(this.device)
+
+			// next draw shader passes
+			if (draw.passes > 0) {
+				// set up the shader draw passes
+				for (var i = 0; i < draw.passes; i++) {
+					var shader = draw.shaders['pass' + i]
+					// Add references so they work inside the shader
+					shader.framebuffer = draw.drawpass.color_buffer
+					for (var j = 0; j < 10; j++) {
+						// add pass0..9 references
+						var key = 'pass' + j
+						shader[key] = draw.shaders[key]
+					}
+
+					// set the texture to use its own framebuffer
+					shader.texture = draw.drawpass['framebuffer' + i]
+					shader.width = draw._layout.width
+					shader.height = draw._layout.height
+					shader.drawArrays(this.device)
+				}
+			}
 		}
 	}
 
@@ -328,6 +353,7 @@ define.class(function(require, baseclass){
 		return vtx_count
 	}
 
+	// currently renders into color_buffer
 	this.drawColor = function(isroot, time, clipview){
 		var view = this.view
 		var device = this.device
@@ -343,6 +369,12 @@ define.class(function(require, baseclass){
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio
 			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
+			if (view.passes > 0) {
+				for (var i = 0; i < view.passes; i++) {
+					// allocate a framebuffer for each pass
+					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i)
+				}
+			}
 		}
 
 		this.device.bindFramebuffer(this.color_buffer || null)
@@ -376,6 +408,7 @@ define.class(function(require, baseclass){
 		//console.log(matrices.viewmatrix)
 		device.clear(view._clearcolor)
 
+		// this is a tree walk down a view port tree. Every viewport that is 2d/3d is a render-to-texture pass.
 		var draw = view
 		while(draw){
 			draw.draw_dirty &= 2
@@ -396,10 +429,15 @@ define.class(function(require, baseclass){
 				draw.viewmatrix = matrices.viewmatrix
 
 				if(draw.atDraw && draw.atDraw(this)) hastime = true
+
+				// if we are hitting child node that is a 2d/3d viewport,
+			  // and we aren't the root/canvas.
 				if(draw._viewport && draw.drawpass !== this){
+					// blend the already rendered child texture into the parent viewport.
 					this.drawBlend(draw)
 				}
 				else{
+					// otherwise, just draw all the shaders into the parent viewport.
 					vtx_count += this.drawNormal(draw, view, matrices)
 				}
 
@@ -410,6 +448,20 @@ define.class(function(require, baseclass){
 				}
 			}
 			draw = this.nextItem(draw, 'pick')
+		}
+
+		if (view.passes > 0) {
+			// TODO: we have multiple passes, ignore pick_buffer it won't work.
+			for (var i = 0; i < view.passes; i++) {
+				// bind framebuffer
+				device.bindFramebuffer(this['framebuffer' + i])
+				// clear
+				device.clear(view._clearcolor)
+				// setup matrices
+				var matrices = this.colormatrices
+				this.calculateDrawMatrices(isroot, matrices);
+				view.colormatrices = matrices
+			}
 		}
 		return hastime
 	}
