@@ -1875,8 +1875,10 @@ define.class('$system/base/node', function(require){
 	// child classes inherit from this
 	this.RenderPass = define.class(this.Shader, function(){
 		// create placeholder passes for the compiler
-		this.framebuffer = this.pass0 = this.pass1 = this.pass2 = this.pass3 = this.pass4
-		  = this.pass5 = Shader.prototype.Texture.fromType('rgba_depth_stencil')
+		this.framebuffer = this.pass0 = this.pass1 = this.pass2 = this.pass3 =
+			this.pass4 = this.pass5 = this.pass6 = this.pass7 = this.pass8 =
+			this.pass9 = Shader.prototype.Texture.fromType('rgba_depth_stencil')
+		// placeholder view for compiler
 		this.view = {viewportmatrix: mat4(), viewmatrix: mat4()}
 		this.draworder = 10
 		this.updateorder = 10
