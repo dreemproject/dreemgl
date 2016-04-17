@@ -3040,11 +3040,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2886" name="n2886">2886</a>
 <a href="#n2887" name="n2887">2887</a>
 <a href="#n2888" name="n2888">2888</a>
-<a href="#n2889" name="n2889">2889</a>
-<strong><a href="#n2890" name="n2890">2890</a></strong>
-<a href="#n2891" name="n2891">2891</a>
-<a href="#n2892" name="n2892">2892</a>
-<a href="#n2893" name="n2893">2893</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -4285,11 +4280,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="local-variable">this</span>.reload_socket.close()
                                 <span class="local-variable">this</span>.reload_socket = <span class="predefined-constant">undefined</span>
                         }
-
-                        <span class="keyword">if</span> (define.<span class="predefined">$disableserver</span> === <span class="predefined-constant">true</span>) {
-                                <span class="keyword">return</span>
-                        }
-
                         <span class="local-variable">this</span>.reload_socket = <span class="keyword">new</span> WebSocket((location.href.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">https</span><span class="delimiter">'</span></span>) === <span class="integer">0</span>?<span class="string"><span class="delimiter">'</span><span class="content">wss://</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">ws://</span><span class="delimiter">'</span></span>) + location.host)
 
                         <span class="local-variable">this</span>.reload_socket.<span class="function">onopen</span> = <span class="keyword">function</span>(){

@@ -3,8 +3,8 @@
  * @extends view
  * Simple numberbox: a number with a plus and a minus button
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example.html#path=$ui/numberbox.js"></iframe>
- * <a target="blank" href="/apps/docs/example.html#path=$ui/numberbox.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/numberbox.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/numberbox.js">open example in new tab &raquo;</a>
  * 
  */
 /**

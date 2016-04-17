@@ -3,8 +3,8 @@
  * @extends view
  * The foldcontainer shows/hides all its children when the top bar is clicked
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example.html#path=$ui/foldcontainer.js"></iframe>
- * <a target="blank" href="/apps/docs/example.html#path=$ui/foldcontainer.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/foldcontainer.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/ui/foldcontainer.js">open example in new tab &raquo;</a>
  * 
  */
 /**

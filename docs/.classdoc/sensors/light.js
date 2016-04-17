@@ -4,8 +4,8 @@
  * The light sensor receives ambient light data where available.
  * <br/><a href="/examples/sensors">example &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example.html#path=$sensors/light.js"></iframe>
- * <a target="blank" href="/apps/docs/example.html#path=$sensors/light.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/sensors/light.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/sensors/light.js">open example in new tab &raquo;</a>
  * 
  */
 /**

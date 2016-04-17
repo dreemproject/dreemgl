@@ -219,15 +219,8 @@ function main(){
 			new RootServer(args)
 		}
 
-	} else if(args['-static']) {
-		define.$platform = 'nodejs'
-		for(var key in define.paths){
-			define['$'+key] = define.paths[key]
-		}
-
-		var RootServer = require('$system/server/rootserver')
-		new RootServer(args)
-	} else{
+	}
+	else{
 		var RunMonitor = require('$system/server/runmonitor')
 		new RunMonitor(args)
 	}

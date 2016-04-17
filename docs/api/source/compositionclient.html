@@ -469,7 +469,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.screenname = <span class="local-variable">this</span>.screen.name<span class="comment">// || this.screen.constructor.name</span>
                 }
 
-                <span class="keyword">if</span>(previous || parent || define.<span class="predefined">$disableserver</span> === <span class="predefined-constant">true</span>) <span class="local-variable">this</span>.doRender(previous, parent)
+                <span class="keyword">if</span>(previous || parent) <span class="local-variable">this</span>.doRender(previous, parent)
         }
 
         <span class="local-variable">this</span>.<span class="function">doRender</span> = <span class="keyword">function</span>(previous, parent){

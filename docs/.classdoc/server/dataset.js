@@ -5,8 +5,8 @@
  * The dataset provides undo/redo functionality by serializing its contents to a JSON string.
  * To modify a dataset you need to use the "fork" method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example.html#path=$server/dataset.js"></iframe>
- * <a target="blank" href="/apps/docs/example.html#path=$server/dataset.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/server/dataset.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$root/server/dataset.js">open example in new tab &raquo;</a>
  * 
  */
 /**

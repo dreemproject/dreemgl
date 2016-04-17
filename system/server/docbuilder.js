@@ -150,6 +150,8 @@ define.class(function(require){
             return output;
         }
 
+		var exampleFunctions = {};
+
         if (class_doc.body_text && class_doc.body_text.length) {
             firstline = class_doc.body_text[0]
             if (firstline && firstline.startsWith(internal)) {
@@ -177,9 +179,7 @@ define.class(function(require){
             }
 
 			if (class_doc.examples && class_doc.examples.length) {
-				console.log("\n\n\nclass_doc>>>>", class_doc.base_class_chain)
-				var ext = ".html"
-				var url = '/apps/docs/example' + ext + '#path=$' + class_doc.sourcePath;
+				var url = '/apps/docs/example#path=$root/' + class_doc.sourcePath;
 				var s = "border:0;";
 				var w = 900;
 				var h = 300 * class_doc.examples.length;

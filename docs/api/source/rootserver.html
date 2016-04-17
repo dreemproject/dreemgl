@@ -533,17 +533,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n379" name="n379">379</a>
 <strong><a href="#n380" name="n380">380</a></strong>
 <a href="#n381" name="n381">381</a>
-<a href="#n382" name="n382">382</a>
-<a href="#n383" name="n383">383</a>
-<a href="#n384" name="n384">384</a>
-<a href="#n385" name="n385">385</a>
-<a href="#n386" name="n386">386</a>
-<a href="#n387" name="n387">387</a>
-<a href="#n388" name="n388">388</a>
-<a href="#n389" name="n389">389</a>
-<strong><a href="#n390" name="n390">390</a></strong>
-<a href="#n391" name="n391">391</a>
-<a href="#n392" name="n392">392</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -575,18 +564,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.compositions = {}
                 <span class="local-variable">this</span>.binrpc_incoming = {}
                 <span class="local-variable">this</span>.binrpc_outgoing = {}
+
                 <span class="local-variable">this</span>.args = args
-
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-package</span><span class="delimiter">'</span></span>]) {
-                        <span class="keyword">var</span> pkg = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-package</span><span class="delimiter">'</span></span>]
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">packaging up</span><span class="delimiter">&quot;</span></span>, pkg)
-                        <span class="keyword">var</span> mapped = <span class="local-variable">this</span>.mapPath(pkg)
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">mapped</span><span class="delimiter">&quot;</span></span>, mapped, Object.keys(define).filter(<span class="keyword">function</span>(a){ <span class="keyword">return</span> a[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> }))
-                        <span class="keyword">var</span> comp = <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + pkg)
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">comp is</span><span class="delimiter">&quot;</span></span>, comp.loadHTML())
-                        <span class="keyword">return</span> process.exit(<span class="integer">0</span>);
-                }
-
                 <span class="keyword">var</span> port = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-port</span><span class="delimiter">'</span></span>] || process.env.PORT || <span class="integer">2000</span>
                 <span class="keyword">var</span> iface = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-iface</span><span class="delimiter">'</span></span>] || process.env.IP || <span class="string"><span class="delimiter">'</span><span class="content">127.0.0.1</span><span class="delimiter">'</span></span>
 
@@ -635,6 +614,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                             <span class="key">writable</span>: <span class="predefined-constant">false</span>
                         });
                 }
+                <span class="comment">// use the browser spawner</span>
+                <span class="keyword">var</span> browser = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-browser</span><span class="delimiter">'</span></span>]
+                <span class="keyword">if</span>(browser &amp;&amp; (!<span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-delay</span><span class="delimiter">'</span></span>] || <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-count</span><span class="delimiter">'</span></span>] ==<span class="integer">0</span> )){
+                        ExternalApps.browser(<span class="local-variable">this</span>.address + (browser===<span class="predefined-constant">true</span>?<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>:browser), <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-devtools</span><span class="delimiter">'</span></span>])
+                }
 
                 <span class="local-variable">this</span>.watcher = <span class="keyword">new</span> FileWatcher()
                 <span class="local-variable">this</span>.watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(ifile){
@@ -667,15 +651,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }.bind(<span class="local-variable">this</span>))
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-web</span><span class="delimiter">'</span></span>]) <span class="local-variable">this</span>.getComposition(<span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-web</span><span class="delimiter">'</span></span>])
-
-                <span class="comment">// use the browser spawner</span>
-                <span class="keyword">var</span> browser = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-browser</span><span class="delimiter">'</span></span>]
-                <span class="keyword">if</span>(browser &amp;&amp; (!<span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-delay</span><span class="delimiter">'</span></span>] || <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-count</span><span class="delimiter">'</span></span>] ==<span class="integer">0</span> )){
-                        ExternalApps.browser(<span class="local-variable">this</span>.address + (browser===<span class="predefined-constant">true</span>?<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>:browser), <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-devtools</span><span class="delimiter">'</span></span>])
-                }
-
-
         }
+
+        <span class="local-variable">this</span>.COMP_DIR = <span class="string"><span class="delimiter">'</span><span class="content">compositions</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.<span class="function">broadcast</span> = <span class="keyword">function</span>(msg){
                 <span class="local-variable">this</span>.busserver.broadcast(msg)
