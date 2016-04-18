@@ -292,7 +292,11 @@ define.class('$system/base/node', function(require){
 			'col-resize','row-resize',
 			'vertical-text','context-menu','no-drop','not-allowed',
 			'alias','cell','copy'
-		), value:''})
+		), value:''}),
+
+		// The number of render passes for this view
+		passes: Config({type:int, value:0, minvalue: 0, maxvalue:10}),
+
 	}
 
 	this.name = ""
@@ -517,10 +521,6 @@ define.class('$system/base/node', function(require){
 
 			if (this.passes > 0) {
 				// loop and create RenderPass instances
-				if (this.passes > 9) {
-					console.warning('this.passes has a maximum value of 9.')
-					this.passes = 9
-				}
 				for (var i = 0; i < this.passes; i++) {
 					// based on this.passes with names pass0..9
 					var key = 'pass' + i
@@ -1871,8 +1871,17 @@ define.class('$system/base/node', function(require){
 		return inside
 	}
 
-	// renders the previous pass into self. Instances are made in drawpasswebgl.
-	// child classes inherit from this
+
+	this.onpasses = function(passes) {
+		if (this._passes > 9) {
+			console.warn('this.passes has a maximum value of 9.')
+			this._passes = 9
+		}
+		if (!this._viewport) this._viewport = '2d'
+	}
+
+	// When passes > 0, create inner classes with names pass0..9 to implement the shaders
+	// for each pass.
 	this.RenderPass = define.class(this.Shader, function(){
 		// create placeholder passes for the compiler
 		this.framebuffer = this.pass0 = this.pass1 = this.pass2 = this.pass3 =
@@ -1887,6 +1896,9 @@ define.class('$system/base/node', function(require){
 		this.mesh.pushQuad(0,0, 0,1, 1,0, 1,1)
 		this.width = 0
 		this.height = 0
+		this.drawcount = 0.
+		this.isfloat = false
+		this.doublebuffer = false;
 
 		this.position = function(){
 			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix

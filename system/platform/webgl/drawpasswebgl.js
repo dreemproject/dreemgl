@@ -11,6 +11,7 @@ define.class(function(require, baseclass){
 	this.atConstructor = function(gldevice, view){
 		this.device = gldevice
 		this.view = view
+		this.drawcount = 0
 		view.drawpass = this
 
 		// lets do the flatten
@@ -40,12 +41,16 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
+	this.allocDrawTarget = function(width, height, view, drawtarget, passid, ratio, isfloat){
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
 		if(!this.drawtargets) this.drawtargets = []
 		if(this.drawtargets.indexOf(drawtarget) === -1) this.drawtargets.push(drawtarget)
+		texturetype = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+		if (isfloat) {
+			texturetype |= Texture.FLOAT
+		}
 		var dt = this[drawtarget]
 		//var twidth = this.nextPowerTwo(layout.width* main_ratio), theight = this.nextPowerTwo(layout.height* main_ratio)
 		if(!dt){
@@ -79,7 +84,7 @@ define.class(function(require, baseclass){
 			}
 			// otherwise we create a new one
 			if(!dt){
-				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:texturetype, width, height, this.device)
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
@@ -87,9 +92,12 @@ define.class(function(require, baseclass){
 		// make sure the drawtarget has the right size
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
+			// reset drawcount
+			this.drawcount = 0
 			this[drawtarget].delete()
-			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:texturetype, width, height, this.device)
 		}
+		this[drawtarget].ratio = ratio
 	}
 
 	this.calculateDrawMatrices = function(isroot, storage, pointerx, pointery){
@@ -346,11 +354,17 @@ define.class(function(require, baseclass){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio
-			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
+			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer', null, ratio)
 			if (view.passes > 0) {
+				var buffers = view.passes;
 				for (var i = 0; i < view.passes; i++) {
+					var usefloat = view.shaders['pass'+i].usefloat
 					// allocate a framebuffer for each pass
-					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i)
+					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i, null, ratio, usefloat)
+					if (view.shaders['pass'+i].doublebuffer) {
+						// allocate twice as many buffers
+						this.allocDrawTarget(twidth, theight, this.view, 'framebuffera' + i, null, ratio, usefloat)
+					}
 				}
 			}
 		}
@@ -431,29 +445,44 @@ define.class(function(require, baseclass){
 		if (view.passes > 0) {
 			// TODO: we have multiple passes, ignore pick_buffer it won't work.
 			for (var i = 0; i < view.passes; i++) {
-				device.bindFramebuffer(this['framebuffer' + i])
+				var shader = view.shaders['pass' + i]
+				// pass in the draw count so the shader can behave differently on the first draw
+				shader.drawcount = view.drawpass.drawcount
+
+				// decide which buffers to use
+				var writebuffername = 'framebuffer'
+				var readbuffername = 'framebuffer'
+				if (shader.doublebuffer) {
+					var readbuffername = 'framebuffera'
+					if (shader.drawcount % 2) {
+						// Alternate buffer every other draw
+						writebuffername = 'framebuffera'
+						readbuffername = 'framebuffer'
+					}
+				}
+				device.bindFramebuffer(this[writebuffername + i])
 				device.clear(view._clearcolor)
 
-				var shader = view.shaders['pass' + i]
 				// Add references so they work inside the shader
 				shader.framebuffer = this.color_buffer
 				for (var j = 0; j < 10; j++) {
 					// add pass0..9 references to corresponding buffers
-					shader['pass' + j] = this['framebuffer' + j]
+					shader['pass' + j] = this[readbuffername + j]
 				}
 				// set the texture to use its own framebuffer
-				shader.texture = this['framebuffer' + i]
+				shader.texture = this[writebuffername + i]
 				shader.width = view._layout.width
 				shader.height = view._layout.height
 				// draw it into the framebuffer
 				shader.drawArrays(this.device)
 			}
-			// draw the final texture
+			// draw the final pass
 			this.blendbuffer = shader.texture
 		} else {
-			// draw the color buffer
+			// draw the ordinary color buffer
 			this.blendbuffer = this.color_buffer
 		}
+		view.drawpass.drawcount++
 		return hastime
 	}
 /*

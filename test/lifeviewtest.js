@@ -4,35 +4,25 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$, view){
-
-	define.class(this, 'shape3d', this.Shader, function(){
-		this.draworder = 0
-
-		this.depth_test = 'src_depth < dst_depth'
-
-		this.vertexstruct = define.struct({
-			pos: vec3,
-			norm: vec3,
-			uv: vec2
-		})
-
-		this.diffusecolor = vec4("#ffffff")
-		this.mesh = this.vertexstruct.array()
-
-		this.position = function() {
-			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix)
-			transnorm = temp.xyz
-			pos = vec4(mesh.pos, 1) * view.totalmatrix * view.viewmatrix
-			return pos
-		}
-
-		this.color = function() {
-			var tn = normalize(transnorm.xyz)
-			return vec4(tn * 0.5 + 0.5, 1.0)
-		}
-	})
-
-	this.shape3d = true
-	this.hardrect = false
+define.class(function($server$, composition, $ui$, screen, view, lifeview, icon, label, require){
+	this.render = function(){
+		return [
+			screen({name:'default'},
+				lifeview({flex: 1},
+					icon({icon: 'chain', fontsize: 100}),
+					label({text: 'Hello!', fontsize: 100}),
+					view({
+							width:200,
+							height:200,
+							borderwidth:1,
+							rotate: 1,
+							bordercolor:"white",
+							bgimagemode:"center",
+							bgimage:require('$resources/textures/landscape.jpg')
+					})
+				)
+			)
+		]
+	}
 })
+

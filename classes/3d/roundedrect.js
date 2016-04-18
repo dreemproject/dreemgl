@@ -4,35 +4,26 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$, view){
+define.class(function(require, shape3d){
 
-	define.class(this, 'shape3d', this.Shader, function(){
-		this.draworder = 0
+	var GLGeom = require('$system/geometry/basicgeometry')
 
-		this.depth_test = 'src_depth < dst_depth'
+	this.attributes = {
+		width: Config({type:float, value:1}),
+		height: Config({type:float, value:1}),
+		radius: Config({type:float, value:0.1}),
+		detail: Config({type:float, value:64})
+	}
 
-		this.vertexstruct = define.struct({
-			pos: vec3,
-			norm: vec3,
-			uv: vec2
-		})
-
-		this.diffusecolor = vec4("#ffffff")
-		this.mesh = this.vertexstruct.array()
-
-		this.position = function() {
-			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix)
-			transnorm = temp.xyz
-			pos = vec4(mesh.pos, 1) * view.totalmatrix * view.viewmatrix
-			return pos
+	this.shape3d = {
+		update:function(){
+			var view = this.view
+			this.mesh = this.vertexstruct.array();
+			GLGeom.createRoundedRect(view.width, view.height, view.radius, view.detail, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
+				this.mesh.push(v1,n1,t1);
+				this.mesh.push(v2,n2,t2);
+				this.mesh.push(v3,n3,t3);
+			}.bind(this))
 		}
-
-		this.color = function() {
-			var tn = normalize(transnorm.xyz)
-			return vec4(tn * 0.5 + 0.5, 1.0)
-		}
-	})
-
-	this.shape3d = true
-	this.hardrect = false
+	}
 })

@@ -97,7 +97,7 @@ define.class('$system/base/texture', function(exports){
 			if(!ext) throw new Error('No OES_texture_half_float')
 			this.gldata_type = ext.HALF_FLOAT_OES
 		}
-		else if(type & Texture.HALF_FLOAT){
+		else if(type & Texture.FLOAT){
 			var ext = gl._getExtension('OES_texture_float')
 			if(!ext) throw new Error('No OES_texture_float')
 			this.gldata_type = gl.FLOAT
@@ -250,6 +250,15 @@ define.class('$system/base/texture', function(exports){
 	this.sample2 = function(x, y){ return sample(vec2(x, y)) }
 	this.sample = function(v){
 		return texture2D(this, v, {
+			MIN_FILTER: 'LINEAR',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+	this.pixel2 = function(x, y){ return pixel(vec2(x, y)) }
+	this.pixel = function(v){
+		return texture2D(this, v / size, {
 			MIN_FILTER: 'LINEAR',
 			MAG_FILTER: 'LINEAR',
 			WRAP_S: 'CLAMP_TO_EDGE',
