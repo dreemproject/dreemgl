@@ -1879,7 +1879,6 @@ define.class('$system/base/node', function(require){
 		}
 		if (!this._viewport) this._viewport = '2d'
 	}
-	this.passesdoublebuffer = false;
 
 	// When passes > 0, create inner classes with names pass0..9 to implement the shaders
 	// for each pass.
@@ -1899,6 +1898,7 @@ define.class('$system/base/node', function(require){
 		this.height = 0
 		this.drawcount = 0.
 		this.isfloat = false
+		this.doublebuffer = false;
 
 		this.position = function(){
 			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix

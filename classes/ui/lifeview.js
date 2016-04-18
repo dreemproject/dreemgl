@@ -12,14 +12,13 @@ define.class('$ui/view', function(require){
 	// Must define N RenderPass nested classes below to match this count
 	this.passes = 1
 
-	// Turn on double-buffering since we want to feed pass0 back into itself
-	this.passesdoublebuffer = true
-
 	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1
 	// must define pass0, 2 must define pass0 and pass1...
 	define.class(this, "pass0", this.RenderPass, function() {
 		// set to true to use floating point textures on this pass
-		this.isfloat = false
+		this.usefloat = false
+		// Turn on double-buffering since we want to feed pass0 back into itself
+		this.doublebuffer = true
 		// define the color to return in this pass
 		this.color = function(){
 			// this makes the shader redraw each frame, allowing loopback between the double
