@@ -30,25 +30,22 @@ define.class('$ui/view', function(require){
 			var neighbors = 0
 			// if this is the first time, read from the framebuffer
 			if (this.drawcount == 1.) {
-				if (noise.cheapnoise(mesh.xy) > .5) {
-					return 'white';
-				} else {
-					return 'black';
-				}
+				// or use noise
+				return vec4(noise.cheapnoise(mesh.xy) > .5)
 				return this.framebuffer.pixel(vec2(x,y))
 			}
 			if (this.drawcount > 4.) {
 				// return this.pass0.pixel(vec2(x,y))
 			}
 			// account for pixel ratio
-			if (this.pass0.pixel(vec2(x - 1, y - 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x - 1, y)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x - 1, y + 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x, y - 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x, y + 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x + 1, y - 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x + 1, y)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x + 1, y + 1)).r > 0.) neighbors++
+			if (this.pass0.pixel(vec2(x - 1, y - 1)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x - 1, y)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x - 1, y + 1)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x, y - 1)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x, y + 1)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x + 1, y - 1)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x + 1, y)).r >= 0.5) neighbors++
+			if (this.pass0.pixel(vec2(x + 1, y + 1)).r >= 0.5) neighbors++
 
 			// this makes the shader redraw each frame, allowing loopback between the double
 			// buffers
