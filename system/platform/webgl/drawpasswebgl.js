@@ -11,6 +11,7 @@ define.class(function(require, baseclass){
 	this.atConstructor = function(gldevice, view){
 		this.device = gldevice
 		this.view = view
+		this.drawcount = 0
 		view.drawpass = this
 
 		// lets do the flatten
@@ -335,6 +336,7 @@ define.class(function(require, baseclass){
 	// currently renders into color_buffer
 	this.drawColor = function(isroot, time, clipview){
 		var view = this.view
+		view.drawpass.drawcount++
 		var device = this.device
 		var layout = view._layout
 		var gl = device.gl
@@ -349,9 +351,14 @@ define.class(function(require, baseclass){
 			var twidth = layout.width * ratio, theight = layout.height * ratio
 			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer', null, ratio)
 			if (view.passes > 0) {
+				var buffers = view.passes;
 				for (var i = 0; i < view.passes; i++) {
 					// allocate a framebuffer for each pass
 					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i, null, ratio)
+					if (view.passesdoublebuffer) {
+						// allocate twice as many buffers
+						this.allocDrawTarget(twidth, theight, this.view, 'framebuffera' + i, null, ratio)
+					}
 				}
 			}
 		}
@@ -432,27 +439,42 @@ define.class(function(require, baseclass){
 		if (view.passes > 0) {
 			// TODO: we have multiple passes, ignore pick_buffer it won't work.
 			for (var i = 0; i < view.passes; i++) {
-				device.bindFramebuffer(this['framebuffer' + i])
+				var currentbuffer = 'framebuffer' + i
+				if (view.passesdoublebuffer) {
+					var odd = view.drawpass.drawcount % 2;
+					if (! odd) {
+						// prepend a 1, so 19 instead of 9
+						currentbuffer = 'framebuffera' + i
+					}
+				}
+				device.bindFramebuffer(this[currentbuffer])
 				device.clear(view._clearcolor)
 
 				var shader = view.shaders['pass' + i]
 				// Add references so they work inside the shader
 				shader.framebuffer = this.color_buffer
 				for (var j = 0; j < 10; j++) {
+					var readbuffer = 'framebuffer' + j
 					// add pass0..9 references to corresponding buffers
-					shader['pass' + j] = this['framebuffer' + j]
+					if (view.passesdoublebuffer) {
+						if (odd) {
+							readbuffer = 'framebuffera' + j
+						}
+					}
+					shader['pass' + j] = this[readbuffer]
 				}
+				shader.drawcount = view.drawpass.drawcount
 				// set the texture to use its own framebuffer
-				shader.texture = this['framebuffer' + i]
+				shader.texture = this[currentbuffer]
 				shader.width = view._layout.width
 				shader.height = view._layout.height
 				// draw it into the framebuffer
 				shader.drawArrays(this.device)
 			}
-			// draw the final texture
+			// draw the final pass
 			this.blendbuffer = shader.texture
 		} else {
-			// draw the color buffer
+			// draw the ordinary color buffer
 			this.blendbuffer = this.color_buffer
 		}
 		return hastime
