@@ -41,12 +41,16 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.allocDrawTarget = function(width, height, view, drawtarget, passid, ratio){
+	this.allocDrawTarget = function(width, height, view, drawtarget, passid, ratio, isfloat){
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
 		if(!this.drawtargets) this.drawtargets = []
 		if(this.drawtargets.indexOf(drawtarget) === -1) this.drawtargets.push(drawtarget)
+		texturetype = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+		if (isfloat) {
+			texturetype |= Texture.FLOAT
+		}
 		var dt = this[drawtarget]
 		//var twidth = this.nextPowerTwo(layout.width* main_ratio), theight = this.nextPowerTwo(layout.height* main_ratio)
 		if(!dt){
@@ -80,7 +84,7 @@ define.class(function(require, baseclass){
 			}
 			// otherwise we create a new one
 			if(!dt){
-				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:texturetype, width, height, this.device)
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
@@ -91,7 +95,7 @@ define.class(function(require, baseclass){
 			// reset drawcount
 			this.drawcount = 1
 			this[drawtarget].delete()
-			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:texturetype, width, height, this.device)
 		}
 		this[drawtarget].ratio = ratio
 	}
@@ -356,10 +360,10 @@ define.class(function(require, baseclass){
 				var buffers = view.passes;
 				for (var i = 0; i < view.passes; i++) {
 					// allocate a framebuffer for each pass
-					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i, null, ratio)
+					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i, null, ratio, view.shaders['pass'+i].isfloat)
 					if (view.passesdoublebuffer) {
 						// allocate twice as many buffers
-						this.allocDrawTarget(twidth, theight, this.view, 'framebuffera' + i, null, ratio)
+						this.allocDrawTarget(twidth, theight, this.view, 'framebuffera' + i, null, ratio, view.shaders['pass'+i].isfloat)
 					}
 				}
 			}

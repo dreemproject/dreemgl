@@ -1898,6 +1898,7 @@ define.class('$system/base/node', function(require){
 		this.width = 0
 		this.height = 0
 		this.drawcount = 0.
+		this.isfloat = false
 
 		this.position = function(){
 			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix

@@ -97,7 +97,7 @@ define.class('$system/base/texture', function(exports){
 			if(!ext) throw new Error('No OES_texture_half_float')
 			this.gldata_type = ext.HALF_FLOAT_OES
 		}
-		else if(type & Texture.HALF_FLOAT){
+		else if(type & Texture.FLOAT){
 			var ext = gl._getExtension('OES_texture_float')
 			if(!ext) throw new Error('No OES_texture_float')
 			this.gldata_type = gl.FLOAT
