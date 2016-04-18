@@ -89,6 +89,8 @@ define.class(function(require, baseclass){
 		// make sure the drawtarget has the right size
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
+			// reset drawcount
+			this.drawcount = 1
 			this[drawtarget].delete()
 			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 		}

@@ -9,7 +9,9 @@
 define.class('$ui/view', function(require){
 // an implementation of https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
+	// Must define N RenderPass nested classes below to match this count
 	this.passes = 1
+
 	this.passesdoublebuffer = true
 
 	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1
@@ -20,12 +22,25 @@ define.class('$ui/view', function(require){
 			var x = mesh.x * view.layout.width
 			var y = mesh.y * view.layout.height
 
+			// account for the pixel ratio
+			x *= this.pass0.ratio
+			y *= this.pass0.ratio
+
 			// count number of neighbors
 			var neighbors = 0
 			// if this is the first time, read from the framebuffer
 			if (this.drawcount == 1.) {
+				if (noise.cheapnoise(mesh.xy) > .5) {
+					return 'white';
+				} else {
+					return 'black';
+				}
 				return this.framebuffer.pixel(vec2(x,y))
 			}
+			if (this.drawcount > 4.) {
+				// return this.pass0.pixel(vec2(x,y))
+			}
+			// account for pixel ratio
 			if (this.pass0.pixel(vec2(x - 1, y - 1)).r > 0.) neighbors++
 			if (this.pass0.pixel(vec2(x - 1, y)).r > 0.) neighbors++
 			if (this.pass0.pixel(vec2(x - 1, y + 1)).r > 0.) neighbors++

@@ -258,7 +258,7 @@ define.class('$system/base/texture', function(exports){
 	}
 	this.pixel2 = function(x, y){ return pixel(vec2(x, y)) }
 	this.pixel = function(v){
-		return texture2D(this, (v * ratio) / size, {
+		return texture2D(this, v / size, {
 			MIN_FILTER: 'LINEAR',
 			MAG_FILTER: 'LINEAR',
 			WRAP_S: 'CLAMP_TO_EDGE',
