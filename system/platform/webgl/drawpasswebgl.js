@@ -40,7 +40,7 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
+	this.allocDrawTarget = function(width, height, view, drawtarget, passid, ratio){
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
@@ -83,6 +83,7 @@ define.class(function(require, baseclass){
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
+			dt.ratio = ratio
 		}
 		// make sure the drawtarget has the right size
 		var tsize = this[drawtarget].size
@@ -346,11 +347,11 @@ define.class(function(require, baseclass){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio
-			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
+			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer', null, ratio)
 			if (view.passes > 0) {
 				for (var i = 0; i < view.passes; i++) {
 					// allocate a framebuffer for each pass
-					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i)
+					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i, null, ratio)
 				}
 			}
 		}
