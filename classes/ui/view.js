@@ -525,7 +525,7 @@ define.class('$system/base/node', function(require){
 					// based on this.passes with names pass0..9
 					var key = 'pass' + i
 					if (key in this) {
-						this.shaders[key] = new this[key]()
+						this.shaders[key] = new this[key](this)
 					} else {
 						console.warn('you are missing an inner class named', key, 'in', this)
 					}

@@ -314,4 +314,33 @@ define.class('$system/base/texture', function(exports){
 		})
 	}
 
+	// 1-D convolution with a kernel.
+	// kernel is a N length array of weights. kenel must be odd length
+	// scale is a scaling factor to multiple the result by
+	// direction is 'x' or 'y'.
+	// spacing is the vec2 pixel spacing (fractional) between pixels. Typically
+	// this will be vec2(px,0) or vec2(0,py)
+	this.conv1d3 = function(v, k1, k2, k3, scale, spacing) {
+		var sum = texture2D(this, v) * k2
+		sum += texture2D(this, v - spacing) * k1
+		sum += texture2D(this, v + spacing) * k3
+
+		sum = scale * sum
+		return sum
+	}
+
+	this.conv1d7 = function(v, k1, k2, k3, k4, k5, k6, k7, scale, spacing) {
+		var sum = texture2D(this, v) * k4
+		sum += texture2D(this, v - spacing) * k3
+		sum += texture2D(this, v - 2 * spacing) * k2
+		sum += texture2D(this, v - 3 * spacing) * k1
+		sum += texture2D(this, v + spacing) * k5
+		sum += texture2D(this, v + 2 * spacing) * k6
+		sum += texture2D(this, v + 3 * spacing) * k7
+
+		sum = scale * sum
+		return sum
+	}
+
+
 })
