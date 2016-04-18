@@ -467,6 +467,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n313" name="n313">313</a>
 <a href="#n314" name="n314">314</a>
 <a href="#n315" name="n315">315</a>
+<a href="#n316" name="n316">316</a>
+<a href="#n317" name="n317">317</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -673,13 +675,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets do a power of two</span>
                         <span class="keyword">if</span>(samplerdef.MIN_FILTER === <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>){
                                 <span class="keyword">if</span> (!<span class="reserved">int</span>.isPowerOfTwo(image.width) || !<span class="reserved">int</span>.isPowerOfTwo(image.height)) {
-                                    <span class="comment">// Scale up the texture to the next highest power of two dimensions.</span>
-                                    <span class="keyword">var</span> canvas = document.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">canvas</span><span class="delimiter">&quot;</span></span>)
-                                    canvas.width = <span class="reserved">int</span>.nextHighestPowerOfTwo(image.width)
-                                    canvas.height = <span class="reserved">int</span>.nextHighestPowerOfTwo(image.height)
-                                    <span class="keyword">var</span> ctx = canvas.getContext(<span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>)
-                                    ctx.drawImage(image, <span class="integer">0</span>, <span class="integer">0</span>, image.width, image.height)
-                                    image = canvas
+                                        <span class="comment">// Scale up the texture to the next highest power of two dimensions.</span>
+                                        <span class="keyword">var</span> canvas = document.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">canvas</span><span class="delimiter">&quot;</span></span>)
+                                        canvas.width = <span class="reserved">int</span>.nextHighestPowerOfTwo(image.width)
+                                        canvas.height = <span class="reserved">int</span>.nextHighestPowerOfTwo(image.height)
+                                        <span class="keyword">var</span> ctx = canvas.getContext(<span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>)
+                                        ctx.drawImage(image, <span class="integer">0</span>, <span class="integer">0</span>, canvas.width, canvas.height)
+                                        image = canvas
                                 }
                         }
 
@@ -701,6 +703,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(samplerdef.MIN_FILTER === <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>){
                         gl.generateMipmap(gl.TEXTURE_2D)
                 }
+
                 <span class="local-variable">this</span>[samplerid] = gltex
                 <span class="keyword">return</span> gltex
         }
@@ -734,6 +737,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
                 })
         }
+
         <span class="local-variable">this</span>.<span class="function">flipped2</span> = <span class="keyword">function</span>(x,y){ <span class="keyword">return</span> flipped(vec2(x,y)) }
         <span class="local-variable">this</span>.<span class="function">flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {

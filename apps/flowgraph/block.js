@@ -54,6 +54,7 @@ define.class('$ui/view', function(require,
 		inselection : Config({type: boolean, value: false}),
 		editables: [],
 		nodeprops:{},
+		showscreenbutton:false,
 		inputs: [{name: "a0", title: "test input!", color: vec4("blue")}],
 		outputs: [{name: "b1", title: "output? ", color: vec4("yellow")}]
 	}
@@ -255,7 +256,7 @@ define.class('$ui/view', function(require,
 		this.tapped = function(){
 			var	bl = this.parent.parent.parent
 			var	fg = this.find("flowgraph")
-			fg.setConnectionEndpoint(bl.name, this.name)
+			fg.setConnectionEndpoint(bl.name, this.name, this.type, bl.type)
 		}
 
 		this.pointerover  = function(){
@@ -294,7 +295,7 @@ define.class('$ui/view', function(require,
 		this.tapped = function(){
 			var	bl = this.parent.parent.parent
 			var	fg = this.find("flowgraph")
-			fg.setConnectionStartpoint(bl.name, this.name)
+			fg.setConnectionStartpoint(bl.name, this.name, this.type)
 		}
 
 		this.marginbottom = 4
@@ -410,6 +411,30 @@ define.class('$ui/view', function(require,
 					}.bind(this)})));
 		}
 
+		var screenbutton;
+		if (this.showscreenbutton) {
+			screenbutton = [
+				button({
+					class: "header",
+					icon: "desktop",
+					click: function(e){
+						var comp = this.screen.locationhash.composition;
+						if (comp) {
+							var ext = ".js"
+							var location = define.expandVariables(comp)
+							if (location.lastIndexOf(ext) === location.length - ext.length) {
+								location = location.substring(0, location.length - ext.length)
+								if (this.name) {
+									location = location + "?" + this.name
+								}
+								window.open(location,'_blank');
+							}
+
+						}
+					}.bind(this)}),
+			]
+		}
+
 		return [
 			view({class: 'header',alignitems: "center" }
 				,view({bgcolor: NaN, justifycontent: "center", alignitems: "center" }
@@ -417,7 +442,8 @@ define.class('$ui/view', function(require,
 					,button({
 						class: "header",
 						icon: "pencil",
-						click: function(e){this.renameBlock(e);}.bind(this)})
+						click: function(e){this.renameBlock(e);}.bind(this)}),
+					screenbutton
 				)
 				,button({class: "header", icon: "remove",click: function(e){this.removeBlock(e);}.bind(this)})
 			)

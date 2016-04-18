@@ -1126,6 +1126,42 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n972" name="n972">972</a>
 <a href="#n973" name="n973">973</a>
 <a href="#n974" name="n974">974</a>
+<a href="#n975" name="n975">975</a>
+<a href="#n976" name="n976">976</a>
+<a href="#n977" name="n977">977</a>
+<a href="#n978" name="n978">978</a>
+<a href="#n979" name="n979">979</a>
+<strong><a href="#n980" name="n980">980</a></strong>
+<a href="#n981" name="n981">981</a>
+<a href="#n982" name="n982">982</a>
+<a href="#n983" name="n983">983</a>
+<a href="#n984" name="n984">984</a>
+<a href="#n985" name="n985">985</a>
+<a href="#n986" name="n986">986</a>
+<a href="#n987" name="n987">987</a>
+<a href="#n988" name="n988">988</a>
+<a href="#n989" name="n989">989</a>
+<strong><a href="#n990" name="n990">990</a></strong>
+<a href="#n991" name="n991">991</a>
+<a href="#n992" name="n992">992</a>
+<a href="#n993" name="n993">993</a>
+<a href="#n994" name="n994">994</a>
+<a href="#n995" name="n995">995</a>
+<a href="#n996" name="n996">996</a>
+<a href="#n997" name="n997">997</a>
+<a href="#n998" name="n998">998</a>
+<a href="#n999" name="n999">999</a>
+<strong><a href="#n1000" name="n1000">1000</a></strong>
+<a href="#n1001" name="n1001">1001</a>
+<a href="#n1002" name="n1002">1002</a>
+<a href="#n1003" name="n1003">1003</a>
+<a href="#n1004" name="n1004">1004</a>
+<a href="#n1005" name="n1005">1005</a>
+<a href="#n1006" name="n1006">1006</a>
+<a href="#n1007" name="n1007">1007</a>
+<a href="#n1008" name="n1008">1008</a>
+<a href="#n1009" name="n1009">1009</a>
+<strong><a href="#n1010" name="n1010">1010</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -1483,7 +1519,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;defs.length;i++) {
                                                         <span class="keyword">var</span> def = defs[i];
                                                         <span class="keyword">var</span> name = def.id.name;
-                                                        <span class="keyword">if</span> (name[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> &amp;&amp; name[name.length - <span class="integer">1</span>] === <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>) {
+                                                        <span class="keyword">if</span> (name[name.length - <span class="integer">1</span>] === <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>) {
                                                                 category = {
                                                                         <span class="key">name</span>:name,<span class="comment">//.substring(1, name.length).replace(/\$/g, &quot;/&quot;),</span>
                                                                         <span class="key">children</span>:[]
@@ -1606,22 +1642,49 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">makeNewConnection</span> = <span class="keyword">function</span>() {
-                <span class="comment">// DO CONNECTION HERE!</span>
-                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">making connection...</span><span class="delimiter">&quot;</span></span>)
-                <span class="local-variable">this</span>.sourceset.fork(<span class="keyword">function</span>() {
-                        <span class="local-variable">this</span>.sourceset.deleteWire(
-                                <span class="local-variable">this</span>.newconnection.sourceblock,
-                                <span class="local-variable">this</span>.newconnection.sourceoutput,
-                                <span class="local-variable">this</span>.newconnection.targetblock,
-                                <span class="local-variable">this</span>.newconnection.targetinput
-                        )
 
-                        <span class="local-variable">this</span>.sourceset.createWire(
-                                <span class="local-variable">this</span>.newconnection.sourceblock,
-                                <span class="local-variable">this</span>.newconnection.sourceoutput,
-                                <span class="local-variable">this</span>.newconnection.targetblock,
-                                <span class="local-variable">this</span>.newconnection.targetinput
-                        )
+                <span class="local-variable">this</span>.sourceset.fork(<span class="keyword">function</span>(src) {
+                        <span class="keyword">var</span> inserted;
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.newconnection.targettype === <span class="string"><span class="delimiter">&quot;</span><span class="content">Array</span><span class="delimiter">&quot;</span></span>) {
+
+                                src.deleteWire(
+                                        <span class="local-variable">this</span>.newconnection.sourceblock,
+                                        <span class="local-variable">this</span>.newconnection.sourceoutput,
+                                        <span class="local-variable">this</span>.newconnection.targetblock,
+                                        <span class="local-variable">this</span>.newconnection.targetinput
+                                )
+
+                                inserted = src.insertWire(<span class="local-variable">this</span>.newconnection.sourceblock,
+                                        <span class="local-variable">this</span>.newconnection.sourceoutput,
+                                        <span class="local-variable">this</span>.newconnection.sourcetype,
+                                        <span class="local-variable">this</span>.newconnection.targetblock,
+                                        <span class="local-variable">this</span>.newconnection.targetinput);
+
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.newconnection.targettype === <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>) {
+
+                                inserted = src.mergeWire(<span class="local-variable">this</span>.newconnection.sourceblock,
+                                        <span class="local-variable">this</span>.newconnection.sourceoutput,
+                                        <span class="local-variable">this</span>.newconnection.sourcetype,
+                                        <span class="local-variable">this</span>.newconnection.targetblock,
+                                        <span class="local-variable">this</span>.newconnection.targetinput)
+
+                        }
+
+                        <span class="keyword">if</span> (!inserted) {
+                                src.deleteWire(
+                                        <span class="predefined-constant">null</span>,
+                                        <span class="predefined-constant">null</span>,
+                                        <span class="local-variable">this</span>.newconnection.targetblock,
+                                        <span class="local-variable">this</span>.newconnection.targetinput
+                                )
+
+                                src.createWire(
+                                        <span class="local-variable">this</span>.newconnection.sourceblock,
+                                        <span class="local-variable">this</span>.newconnection.sourceoutput,
+                                        <span class="local-variable">this</span>.newconnection.targetblock,
+                                        <span class="local-variable">this</span>.newconnection.targetinput
+                                )
+                        }
                 }.bind(<span class="local-variable">this</span>))
 
                 <span class="local-variable">this</span>.cancelConnection()
@@ -1659,7 +1722,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">cancelConnection</span> = <span class="keyword">function</span>() {
-                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">cancelling exiting connection setup...</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.newconnection = {}
 
                 <span class="keyword">var</span> connectingconnection = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">openconnector</span><span class="delimiter">&quot;</span></span>)
@@ -1709,9 +1771,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">setConnectionStartpoint</span> = <span class="keyword">function</span>(sourceblockname, outputname) {
+        <span class="local-variable">this</span>.<span class="function">setConnectionStartpoint</span> = <span class="keyword">function</span>(sourceblockname, outputname, sourcetype) {
                 <span class="local-variable">this</span>.newconnection.sourceblock = sourceblockname
                 <span class="local-variable">this</span>.newconnection.sourceoutput = outputname
+                <span class="local-variable">this</span>.newconnection.sourcetype = sourcetype
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.newconnection.targetblock &amp;&amp; <span class="local-variable">this</span>.newconnection.targetblock !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span> ) {
                         <span class="local-variable">this</span>.makeNewConnection()
                 } <span class="keyword">else</span> {
@@ -1719,10 +1782,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">setConnectionEndpoint</span> = <span class="keyword">function</span>(targetblockname, inputname) {
+        <span class="local-variable">this</span>.<span class="function">setConnectionEndpoint</span> = <span class="keyword">function</span>(targetblockname, inputname, targettype) {
                 <span class="comment">//console.log(targetblockname, inputname)</span>
                 <span class="local-variable">this</span>.newconnection.targetblock = targetblockname
                 <span class="local-variable">this</span>.newconnection.targetinput = inputname
+                <span class="local-variable">this</span>.newconnection.targettype = targettype
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.newconnection.sourceblock &amp;&amp; <span class="local-variable">this</span>.newconnection.sourceblock !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span> ) {
                         <span class="local-variable">this</span>.makeNewConnection()
                 } <span class="keyword">else</span> {
@@ -1768,7 +1832,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="key">from</span>:w.from,
                                                         <span class="key">fromoutput</span>:w.output,
                                                         <span class="key">to</span>:node.name,
-                                                        <span class="key">toinput</span>:w.input
+                                                        <span class="key">toinput</span>:w.input,
+                                                        <span class="key">stripe</span>:!!(w.multi)
                                                 }))
                                         } <span class="keyword">else</span> {
                                                 <span class="comment">// console.log(&quot;Not rendering&quot;, w, &quot;for&quot;, node.name)</span>
@@ -1808,7 +1873,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="key">nodeprops</span>:node.propobj,
                                                 <span class="key">editables</span>:node.editables,
                                                 <span class="key">inputs</span>:node.inputs,
-                                                <span class="key">outputs</span>:node.outputs
+                                                <span class="key">outputs</span>:node.outputs,
+                                                <span class="key">showscreenbutton</span>:!!(fd.screen)
                                         })
                                 )
                         }
@@ -1996,7 +2062,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//,</span>
                         splitcontainer({}
                                 ,splitcontainer({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">direction</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>}
-                                        ,dockpanel({<span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Composition</span><span class="delimiter">&quot;</span></span> , <span class="key">flex</span>: <span class="float">0.2</span>}
+                                        ,dockpanel({<span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Composition</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>: <span class="float">0.2</span>, <span class="function">click</span>:<span class="keyword">function</span>(e){
+                                                <span class="keyword">var</span> comp = <span class="local-variable">this</span>.screen.locationhash.composition;
+                                                <span class="keyword">if</span> (comp) {
+                                                        <span class="keyword">var</span> location = define.expandVariables(comp)
+                                                        window.open(location,<span class="string"><span class="delimiter">'</span><span class="content">_blank</span><span class="delimiter">'</span></span>);
+                                                }
+                                        }.bind(<span class="local-variable">this</span>)}
                                                 <span class="comment">//,searchbox()</span>
 
                                                 ,treeview({<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">dataset</span>: <span class="local-variable">this</span>.sourceset})

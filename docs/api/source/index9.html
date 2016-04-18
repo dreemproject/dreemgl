@@ -174,91 +174,29 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n20" name="n20">20</a></strong>
 <a href="#n21" name="n21">21</a>
 <a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
-<a href="#n36" name="n36">36</a>
-<a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
-<a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
-<a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
-<strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
 </pre></td>
-  <td class="code"><pre><span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>;
-
-<span class="comment">//</span>
-<span class="comment">// This wrapper is to provide some continuity in the modifications of the APIs over time</span>
-<span class="comment">//</span>
-
-<span class="keyword">var</span> bridgeDiscovery = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api/bridge-discovery</span><span class="delimiter">&quot;</span></span>)
-    , Hue = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api</span><span class="delimiter">&quot;</span></span>)
-    , lightState = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api/lightstate</span><span class="delimiter">&quot;</span></span>)
-    , scheduledEvent = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api/scheduledEvent</span><span class="delimiter">&quot;</span></span>)
-    , scene = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api/scene</span><span class="delimiter">&quot;</span></span>)
-    , timer = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api/timer</span><span class="delimiter">&quot;</span></span>)
-    , ApiError = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./hue-api/errors</span><span class="delimiter">&quot;</span></span>).ApiError
-    ;
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$server$</span>,service,<span class="predefined">$ui$</span>,screen,view,<span class="predefined">$flow$services$</span>,map,webrequest,<span class="predefined">$flow$controllers$</span>,xypad,knob,keyboard,dpad,<span class="predefined">$flow$displays$</span>,labtext){
 
 
-<span class="keyword">function</span> <span class="function">deprecated</span>(fn, message) {
-    <span class="keyword">return</span> <span class="keyword">function</span> () {
-        <span class="keyword">var</span> args = Array.prototype.slice.call(<span class="local-variable">arguments</span>);
-        console.error(message);
-        <span class="keyword">return</span> fn.apply(<span class="local-variable">this</span>, args);
-    };
-}
+<span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
 
 
-module.exports = {
-    <span class="key">HueApi</span>: Hue,
-    <span class="key">BridgeApi</span>: Hue,
-    <span class="key">api</span>: Hue,
+<span class="keyword">return</span> [
+xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">25</span>,<span class="key">y</span>:<span class="integer">133</span>}}),
+labtext({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">labtext0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">326</span>,<span class="key">y</span>:<span class="integer">24</span>},<span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.pointerpos</span><span class="delimiter">&quot;</span></span>),<span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.dpad0.value</span><span class="delimiter">&quot;</span></span>)}),
+dpad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">dpad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">21</span>,<span class="key">y</span>:<span class="integer">23</span>}})
+]
 
-    <span class="comment">//TODO document this, it is currently broken though</span>
-    <span class="function">connect</span>: <span class="keyword">function</span>(config) {
-        <span class="keyword">return</span> <span class="keyword">new</span> Hue(config);
-    },
 
-    <span class="key">lightState</span>: lightState,
-    <span class="key">scheduledEvent</span>: scheduledEvent,
-    <span class="key">scene</span>: scene,
-    <span class="key">timer</span>: timer,
 
-    <span class="key">upnpSearch</span>: bridgeDiscovery.networkSearch,
-    <span class="key">nupnpSearch</span>: bridgeDiscovery.locateBridges,
 
-    <span class="key">locateBridges</span>: deprecated(bridgeDiscovery.locateBridges
-        , <span class="string"><span class="delimiter">&quot;</span><span class="content">'locateBridges' is deprecated, please use 'nupnpSearch' instead</span><span class="delimiter">&quot;</span></span>),
+        }
 
-    <span class="key">searchForBridges</span>: deprecated(
-        bridgeDiscovery.networkSearch
-        , <span class="string"><span class="delimiter">&quot;</span><span class="content">'searchForBridges' is deprecated, please use 'upnpSearch' instead</span><span class="delimiter">&quot;</span></span>
-    ),
 
-    <span class="key">ApiError</span>: ApiError
-};</pre></td>
+
+
+        }
+)</pre></td>
 </tr></table>
 
 </body>

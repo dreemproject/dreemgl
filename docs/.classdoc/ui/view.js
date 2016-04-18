@@ -56,7 +56,7 @@
  * alias for z component of corner
  */
 /**
- * @attribute {vec4} [bgcolor="NaN,NaN,NaN,NaN"]
+ * @attribute {vec4} [bgcolor="0,0,0,0"]
  * the background color of a view, referenced by various shaders
  */
 /**

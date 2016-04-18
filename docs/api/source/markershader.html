@@ -272,6 +272,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n118" name="n118">118</a>
 <a href="#n119" name="n119">119</a>
 <strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -343,19 +360,37 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(end &gt; length) end = length
                         <span class="keyword">var</span> min = <span class="predefined-constant">Infinity</span>
                         <span class="comment">//if(textbuf.charCodeAt(start) === 10) start--</span>
+
+                        <span class="comment">//console.log(&quot;&gt;&gt;&gt;&quot;, textbuf.cursorRect(start), start, end, deltay)</span>
+
+                        <span class="keyword">var</span> ch, lasty;
                         <span class="keyword">for</span>(<span class="keyword">var</span> o = start, last = o; o &lt; end; o++){
                                 ch = textbuf.charCodeAt(o)
                                 <span class="comment">//next = textbuf.charCodeAt(o+1)</span>
                                 <span class="keyword">if</span>(o == end - <span class="integer">1</span> || ch == <span class="integer">10</span>){
                                         <span class="keyword">var</span> r = textbuf.cursorRect(last)
                                         <span class="keyword">var</span> r2 = textbuf.cursorRect(o)
-                                        <span class="keyword">var</span> x = ch === <span class="integer">10</span>? r2.x: r2.x + r2.w;<span class="comment">//ch === 10? textbuf.char_tl_x(o-1): textbuf.char_tr_x(o)</span>
+                                        <span class="keyword">if</span> (!lasty) {
+                                                lasty = r.y
+                                        }
+
+                                        <span class="keyword">var</span> prev = array[array.length -<span class="integer">1</span>]
+                                        <span class="keyword">if</span> (lasty &lt; r.y) {
+                                                <span class="keyword">var</span> coords= textbuf.charCoords(last - <span class="integer">2</span>)
+                                                <span class="keyword">if</span> (prev) {
+                                                        prev.w = (coords.x + coords.w) - prev.x
+                                                        prev.x2 = prev.x + prev.w
+                                                }
+                                        }
+                                        lasty = r.y
+
+                                        <span class="keyword">var</span> x = ch === <span class="integer">10</span> ? r2.x : r2.x + r2.w;<span class="comment">//ch === 10? textbuf.char_tl_x(o-1): textbuf.char_tr_x(o)</span>
                                         r.start = last + <span class="integer">1</span>
                                         r.end = o
-                                        <span class="keyword">if</span>(r.x &lt; min) min = r.x
+                                        <span class="keyword">if</span> (r.x &lt; min) min = r.x
                                         r.x = min
                                         r.w = x - r.x
-                                        <span class="keyword">if</span>(r.w &lt; <span class="integer">4</span>) r.w = <span class="integer">4</span>
+                                        <span class="keyword">if</span> (r.w &lt; <span class="integer">4</span>) r.w = <span class="integer">4</span>
                                         r.x2 = r.x + r.w
                                         r.y2 = r.y + r.h
                                         r.y += deltay
@@ -363,7 +398,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                         <span class="comment">// check if the previous item is on the same r.y</span>
                                         <span class="comment">// ifso fuse it with this marker</span>
-                                        <span class="keyword">var</span> prev = array[array.length -<span class="integer">1</span>]
                                         <span class="keyword">if</span>(prev &amp;&amp; abs(prev.y-r.y) &lt; <span class="float">1e-4</span>){ <span class="comment">// fuse marker</span>
                                                 prev.x2 = r.x2
                                                 prev.w += r.w

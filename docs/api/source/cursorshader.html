@@ -216,7 +216,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> mesh.pos * view.totalmatrix  * view.viewmatrix
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> view.cursorcolor
                 <span class="comment">//var rel = mesh.edge//cursor_pos</span>
@@ -239,20 +239,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">addCursor</span> = <span class="keyword">function</span>(textbuf, start){
                         <span class="keyword">var</span> pos = textbuf.cursorRect(start)
 
-                        pos.w = textbuf.fontsize*<span class="float">0.1</span> 
+                        pos.w = textbuf.fontsize*<span class="float">0.1</span>
 
                         <span class="local-variable">this</span>.pushQuad(
-                                pos.x, pos.y, <span class="integer">0</span>, <span class="integer">0</span>, 
+                                pos.x, pos.y, <span class="integer">0</span>, <span class="integer">0</span>,
                                 pos.x + pos.w, pos.y, <span class="integer">1</span>, <span class="integer">0</span>,
                                 pos.x, pos.y + pos.h, <span class="integer">0</span>, <span class="integer">1</span>,
                                 pos.x + pos.w, pos.y + pos.h, <span class="integer">1</span>, <span class="integer">1</span>
                         )
 
                 }
-        }) 
+        })
 
         <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array()
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

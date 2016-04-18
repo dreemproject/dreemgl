@@ -2472,11 +2472,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> alpha = glyphy_antialias(-dist)
 
                 <span class="keyword">if</span>(stylepack.z&gt;<span class="integer">0</span>.){
-                        <span class="keyword">var</span> dist2 = abs(dist) - (stylepack.y) +<span class="integer">2</span>.
+                        <span class="keyword">var</span> dist2 = abs(dist) - (stylepack.y) + <span class="integer">4</span>.
 
                         <span class="keyword">var</span> alpha2 = glyphy_antialias(-dist2)
 
-                        <span class="keyword">var</span> rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2*<span class="integer">8</span>.);
+                        <span class="keyword">var</span> rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2);
 
                         <span class="keyword">return</span> vec4(rgb, alpha * stylefgcolor.a * view.opacity)
                 }

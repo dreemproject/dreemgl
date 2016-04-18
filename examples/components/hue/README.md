@@ -6,25 +6,16 @@
 
 Be sure to run `npm install` in the hue component directory:
 
-    cd ./examples/components/hue
+    cd ./examples/components/iot
     
     npm install
 
-### Username
+    ./node_modules/homestar/bin/homestar setup
 
-#### Manual
+### Philips Hue
 
-In order to use the `basestation` to control a Phillips Hue basestation you first must obtain the base station's 
-username, a process as described in Phillip's [Developer Guide](http://www.developers.meethue.com/documentation/getting-started),
-and required physical access to the device.  Once a username is obtained it will continue to remain valid, so this process
-only needs to be perfomed once.  The username should be set in index.js (line #13) on the `basestation` instance as follows e.g.
+    ./node_modules/homestar/bin/homestar install homestar-hue
 
-    basestation({username:"6ba5c7d32222e31f779722a818296a09"})
+    ./node_modules/homestar/bin/homestar configure homestar-hue
 
-#### Automatic
-
-Usernames can be automatically generated though the missing link dialog that appears when the Hue component is unable to 
-find a username.  This username is not stored in the compositons, so you will have to reconnect any time you restart
-or reload the server.
-
-
+Follow the prompts. Note that you may need to unplug and plug in the ethernet port on your hue, then refresh your browser to see the 'Pair' button. When finished, hit control-c a few times to get back to the shell.

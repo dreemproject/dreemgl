@@ -21,6 +21,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		color2: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
+		stripe:false,
+		stripecolor: Config({type:vec4, value:vec4("#333"), meta:"color" }),
 		hasball: true
 
 	}
@@ -52,7 +54,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.oninselection = function(){
 		if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;
 		this.redraw();
-		this.updatecolor ();
+		this.updatecolor(false);
 	}
 
 	this.destroy = function(){
@@ -86,34 +88,30 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.screen.defaultKeyboardHandler.call(this, v);
 	}
 
-	this.over = false;
+	this.updatecolor = function(over){
 
-	this.updatecolor = function(){
 		if (this.inselection) {
 			this.color1 = this.focussedcolor;
 			this.color2 = this.focussedcolor;
 			this.linewidth = this.focussedwidth;
-		}
-		else{
-			if (this.over){
-				this.color1 = this.hoveredcolor;
-				this.color2 = this.hoveredcolor;
+		} else if (over) {
+			this.color1 = this.hoveredcolor;
+			this.color2 = this.hoveredcolor;
 
-				this.linewidth = this.hoveredwidth;
-			}
-			else{
-				this.color1 = this.neutralcolor1;
-				this.color2 = this.neutralcolor2;
-				this.linewidth = this.neutrallinewidth;
-			}
+			this.linewidth = this.hoveredwidth;
+		} else {
+			this.color1 = this.neutralcolor1;
+			this.color2 = this.neutralcolor2;
+			this.linewidth = this.neutrallinewidth;
 		}
 
 		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);
-				var H = this.findChild("handle");
 
+		var H = this.findChild("handle");
 		if (H){
 			H.bordercolor = this.centralcolor;
 		}
+		setTimeout(function(){this.redraw()}.bind(this),1)
 	}
 
 	this.focus =function(){
@@ -142,14 +140,23 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.find("flowgraph").moveSelected(event.delta[0], event.delta[0]);
 	}
 
-	this.pointerover = function(){
-		this.over = true
-		this.updatecolor()
+	this.pointerover = function() {
+		var fg = this.find("flowgraph");
+		if (fg){
+			var hilighted = fg.allconnections;
+			for (var i=0;i<hilighted.length;i++) {
+				var con = hilighted[i];
+				if (con !== this) {
+					con.updatecolor(false)
+				}
+			}
+		}
+
+		this.updatecolor(true)
 	}
 
 	this.pointerout = function(){
-		this.over = false
-		this.updatecolor()
+		this.updatecolor(false)
 	}
 
 	this.updateMove = function(){
@@ -205,10 +212,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 
 		this.color = function(){
-			//return 'blue'
 			var a= 1.0 - pow(abs(mesh.y*2.0), 2.5);
+			if (view.stripe && mesh.x < 0.95 && int(mod(0.03 * ( (gl_FragCoord.x + gl_FragCoord.y) * mesh.x ), 2.0)) == 1) {
+				return vec4(mix(mix(view.stripecolor.xyz, view.color1.xyz, mesh.x * 0.5), view.color2.xyz, mesh.x),a)
+			}
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
-			return vec4(view.bgcolor.xyz,a);
 		}
 	})
 
@@ -259,7 +267,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//return 'red'
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
-			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);
 		}
 	})
 	// turn on the shaders

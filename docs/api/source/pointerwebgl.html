@@ -328,6 +328,42 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n174" name="n174">174</a>
 <a href="#n175" name="n175">175</a>
 <a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -455,6 +491,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// Internal: handler for `touchstart` event.</span>
                 <span class="local-variable">this</span>.<span class="function">touchstart</span> = <span class="keyword">function</span>(e) {
                         e.preventDefault()
+                        <span class="local-variable">this</span>.touchwheelstart(touchToPointers(e))
                         <span class="local-variable">this</span>.setstart(touchToPointers(e))
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchstart</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchstart.bind(<span class="local-variable">this</span>))
@@ -462,17 +499,52 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// Internal: handler for `touchmove` event.</span>
                 <span class="local-variable">this</span>.<span class="function">touchmove</span> = <span class="keyword">function</span>(e) {
                         e.preventDefault()
+                        <span class="local-variable">this</span>.touchwheel(touchToPointers(e))
                         <span class="local-variable">this</span>.setmove(touchToPointers(e))
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchmove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchmove.bind(<span class="local-variable">this</span>))
 
                 <span class="comment">// Internal: handler for `touchend` event.</span>
                 <span class="local-variable">this</span>.<span class="function">touchend</span> = <span class="keyword">function</span>(e) {
+                        <span class="local-variable">this</span>.touchwheelend(touchToPointers(e))
                         <span class="local-variable">this</span>.setend(touchToPointers(e))
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchend.bind(<span class="local-variable">this</span>))
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchcancel</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchend.bind(<span class="local-variable">this</span>))
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">touchleave</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.touchend.bind(<span class="local-variable">this</span>))
+
+                <span class="local-variable">this</span>.<span class="function">touchwheelstart</span> = <span class="keyword">function</span> (e) {
+                        <span class="keyword">var</span> touch = e[<span class="integer">0</span>]
+                        <span class="local-variable">this</span>._preventInertia = <span class="predefined-constant">true</span>
+                        <span class="local-variable">this</span>._touchwheelpos = vec2(touch.position.x, touch.position.y)
+                }
+
+                <span class="local-variable">this</span>.<span class="function">touchwheel</span> = <span class="keyword">function</span> (e) {
+                        <span class="keyword">var</span> touch = e[<span class="integer">0</span>]
+                        <span class="local-variable">this</span>._preventInertia = <span class="predefined-constant">true</span>
+                        touch.wheel = vec2(<span class="local-variable">this</span>._touchwheelpos.x - touch.position.x, <span class="local-variable">this</span>._touchwheelpos.y - touch.position.y)
+                        <span class="local-variable">this</span>._touchwheelpos = vec2(touch.position.x, touch.position.y)
+                        <span class="local-variable">this</span>.setwheel([touch])
+                        <span class="local-variable">this</span>._lasttouchwheel = touch
+                }
+
+                <span class="local-variable">this</span>.<span class="function">touchwheelend</span> = <span class="keyword">function</span> (e) {
+                        <span class="keyword">var</span> touch = e[<span class="integer">0</span>]
+                        <span class="local-variable">this</span>._preventInertia = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.touchwheelanim()
+                }
+
+                <span class="local-variable">this</span>.<span class="function">touchwheelanim</span> = <span class="keyword">function</span> () {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._lasttouchwheel) {
+                                <span class="keyword">if</span> (!<span class="local-variable">this</span>._preventInertia) {
+                                        vec2.mul_float32(<span class="local-variable">this</span>._lasttouchwheel.wheel, <span class="float">0.95</span>, <span class="local-variable">this</span>._lasttouchwheel.wheel)
+                                        <span class="local-variable">this</span>.setwheel([<span class="local-variable">this</span>._lasttouchwheel])
+                                        requestAnimationFrame(<span class="local-variable">this</span>.touchwheelanim.bind(<span class="local-variable">this</span>))
+                                }
+                                <span class="local-variable">this</span>._preventInertia = vec2.distance(<span class="local-variable">this</span>._lasttouchwheel.wheel, vec2()) &lt; <span class="float">0.5</span> ? <span class="predefined-constant">true</span> : <span class="predefined-constant">false</span>
+                        }
+                }
+
 
                 <span class="comment">// scrollwheel fun</span>
                 <span class="comment">// the different platforms</span>

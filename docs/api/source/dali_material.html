@@ -325,6 +325,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n171" name="n171">171</a>
 <a href="#n172" name="n172">172</a>
 <a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -391,6 +397,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texid = </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.addTexture(texture</span><span class="delimiter">'</span></span> + texture.id + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="char">\'</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">, sampler</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
+                }
+
+                <span class="comment">// We currently have one texture per material. Delete existing textures</span>
+                <span class="keyword">while</span> (<span class="local-variable">this</span>.dalimaterial.getNumberOfTextures() &gt; <span class="integer">0</span>) {
+                        <span class="comment">// console.log('Removing texture', this.id);</span>
+                        <span class="local-variable">this</span>.removeTexture(<span class="integer">0</span>);
                 }
 
                 <span class="keyword">return</span> <span class="local-variable">this</span>.dalimaterial.addTexture(texture.image, name, sampler);

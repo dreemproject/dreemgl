@@ -6,9 +6,9 @@
 
 "use strict"
 
+define.class('$system/base/node', function(require){
 // Base UI view object
 
-define.class('$system/base/node', function(require){
 
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
@@ -48,7 +48,7 @@ define.class('$system/base/node', function(require){
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:"style", type:vec4, value: vec4(NaN), meta:"color"}),
+		bgcolor: Config({group:"style", type:vec4, value: vec4(0,0,0,0), meta:"color"}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
@@ -292,7 +292,11 @@ define.class('$system/base/node', function(require){
 			'col-resize','row-resize',
 			'vertical-text','context-menu','no-drop','not-allowed',
 			'alias','cell','copy'
-		), value:''})
+		), value:''}),
+
+		// The number of render passes for this view
+		passes: Config({type:int, value:0, minvalue: 0, maxvalue:10}),
+
 	}
 
 	this.name = ""
@@ -505,6 +509,7 @@ define.class('$system/base/node', function(require){
 			this.onbgimage()
 		}
 
+		// a _viewport is a top-level canvas object, or a scrolling view.
 		if (this._viewport){
 			for (var key in this.shaders){
 				var shader = this.shaders[key]
@@ -513,6 +518,19 @@ define.class('$system/base/node', function(require){
 				}
 			}
 			this.shaders.viewportblend = new this.viewportblend(this)
+
+			if (this.passes > 0) {
+				// loop and create RenderPass instances
+				for (var i = 0; i < this.passes; i++) {
+					// based on this.passes with names pass0..9
+					var key = 'pass' + i
+					if (key in this) {
+						this.shaders[key] = new this[key]()
+					} else {
+						console.warn('you are missing an inner class named', key, 'in', this)
+					}
+				}
+			}
 		}
 		this.sortShaders()
 	}
@@ -1425,19 +1443,19 @@ define.class('$system/base/node', function(require){
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
 		this.color = function(){
-			// if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
-			// 	|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
-			// 	|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
-			// 	|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
-			// 	return view.bgcolor;
-			// }
-			var col = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
-			var cola = col.a;
-			// if (cola < 1.0) {
-			// 	col = mix(view.bgcolor, col, cola)
-			// 	cola = 1.0
-			// }
-			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], cola * view.opacity * view.colorfilter[3])
+			var img = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+			var bg = view.bgcolor
+
+			// premultiply alpha
+			img.rgb = (img.rgb * img.a) + (bg.rgb * (1 - img.a));
+
+			var col = mix(bg, img, img.a)
+
+			return vec4(
+				col.r * view.colorfilter[0],
+				col.g * view.colorfilter[1],
+				col.b * view.colorfilter[2],
+				col.a * view.colorfilter[3] * view.opacity)
 		}
 	})
 
@@ -1853,6 +1871,47 @@ define.class('$system/base/node', function(require){
 		return inside
 	}
 
+
+	this.onpasses = function(passes) {
+		if (this._passes > 9) {
+			console.warn('this.passes has a maximum value of 9.')
+			this._passes = 9
+		}
+		if (!this._viewport) this._viewport = '2d'
+	}
+
+	// When passes > 0, create inner classes with names pass0..9 to implement the shaders
+	// for each pass.
+	this.RenderPass = define.class(this.Shader, function(){
+		// create placeholder passes for the compiler
+		this.framebuffer = this.pass0 = this.pass1 = this.pass2 = this.pass3 =
+			this.pass4 = this.pass5 = this.pass6 = this.pass7 = this.pass8 =
+			this.pass9 = Shader.prototype.Texture.fromType('rgba_depth_stencil')
+		// placeholder view for compiler
+		this.view = {viewportmatrix: mat4(), viewmatrix: mat4()}
+		this.draworder = 10
+		this.updateorder = 10
+		this.omit_from_shader_list = true;
+		this.mesh = vec2.array()
+		this.mesh.pushQuad(0,0, 0,1, 1,0, 1,1)
+		this.width = 0
+		this.height = 0
+		this.drawcount = 0.
+		this.isfloat = false
+		this.doublebuffer = false;
+
+		this.position = function(){
+			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix
+		}
+
+		// child classes extending RenderPass implement color() and use references to
+		// this.framebuffer/pass0..9 internally. See /classes/ui/blurview for an example...
+		this.color = function(){
+			return 'purple'
+		}
+	})
+
+	// blends current viewport into the parent
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10

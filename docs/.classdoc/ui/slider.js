@@ -29,6 +29,14 @@
  * Maximum value allowed, for restricting slider range
  */
 /**
+ * @attribute {vec2} [range="0,100"]
+ * The interpolated range of the slider between min and max value
+ */
+/**
+ * @attribute {float32} [rangevalue="50"]
+ * The current interpolated value, between range[0] and range[1]
+ */
+/**
  * @attribute {boolean} [horizontal="true"]
  * Horizontal or vertical arrangement
  */

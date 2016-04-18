@@ -38,14 +38,19 @@ The default path symbols are:
 ```
 	'system':'$root/system',
 	'resources':'$root/resources',
-	'examples':'$root/examples',
 	'3d':'$root/classes/3d',
 	'behaviors':'$root/classes/behaviors',
 	'server':'$root/classes/server',
-	'sensors':'$root/classes/sensors',
 	'ui':'$root/classes/ui',
+	'flow':'$root/classes/flow',
 	'testing':'$root/classes/testing',
 	'widgets':'$root/classes/widgets',
+	'sensors':'$root/classes/sensors',
+	'iot':'$root/classes/iot',
+	'examples':'$root/examples',
+	'apps':'$root/apps',
+	'docs':'$root/docs',
+	'test':'$root/test'
 ```
 
 Adding a path is done using the commandline

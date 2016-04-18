@@ -78,6 +78,7 @@ function main(){
 	}
 
 	// our default pathmap
+	// NOTE: if you change this, also update README.md
 	define.paths = {
 		'system':'$root/system',
 		'resources':'$root/resources',
@@ -89,6 +90,7 @@ function main(){
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
 		'sensors':'$root/classes/sensors',
+		'iot':'$root/classes/iot',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
 		'docs':'$root/docs',

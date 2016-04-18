@@ -1109,6 +1109,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n955" name="n955">955</a>
 <a href="#n956" name="n956">956</a>
 <a href="#n957" name="n957">957</a>
+<a href="#n958" name="n958">958</a>
+<a href="#n959" name="n959">959</a>
+<strong><a href="#n960" name="n960">960</a></strong>
+<a href="#n961" name="n961">961</a>
+<a href="#n962" name="n962">962</a>
+<a href="#n963" name="n963">963</a>
+<a href="#n964" name="n964">964</a>
+<a href="#n965" name="n965">965</a>
+<a href="#n966" name="n966">966</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -1374,7 +1383,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> maxlen = <span class="integer">0</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.keys.length; i ++){
                         <span class="keyword">var</span> prop = n.keys[i]
-                        <span class="keyword">var</span> len = prop.key.name.length
+                        <span class="keyword">var</span> name = prop.key.name
+                        <span class="keyword">if</span> (!name) {
+                                name = prop.key.value
+                        }
+
+                        <span class="keyword">var</span> len = name.length
                         <span class="keyword">if</span>(len&gt;maxlen) maxlen = len
                 }
 
@@ -1393,7 +1407,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.expand(prop.key, exports._Object)
 
                         <span class="keyword">if</span>(prop.value){
-                                <span class="keyword">var</span> diff = maxlen + <span class="integer">1</span> - prop.key.name.length
+                                <span class="keyword">var</span> name = prop.key.name
+                                <span class="keyword">if</span> (!name) {
+                                        name = prop.key.value
+                                }
+                                <span class="keyword">var</span> diff = maxlen + <span class="integer">1</span> - name.length
                                 <span class="local-variable">this</span>.colon(exports._Object, has_newlines?<span class="integer">1</span>*<span class="integer">256</span>+diff:<span class="integer">0</span>)
                                 <span class="local-variable">this</span>.expand(prop.value)
                         }

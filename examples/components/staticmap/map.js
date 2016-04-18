@@ -28,13 +28,12 @@ define.class('$ui/view', function() {
       mapzoom:14,
 
 	  // Google Static Map's endpoint
-      endpoint: "http://maps.googleapis.com/maps/api/staticmap",
-
-      bgimage:wire("this.mapurl()")
+      endpoint: "http://maps.googleapis.com/maps/api/staticmap"
     };
 
-	this.mapurl = function () {
-		return this.endpoint + '?key=' + this.apikey + '&center=' + encodeURIComponent(this.location) + '&maptype=' + this.maptype + '&scale=' + this.mapscale + '&zoom=' + this.mapzoom + '&size=' + this.width + 'x' + this.height + '&format=' + this.format
+	this.onendpoint = this.onlocation = this.onformat = this.onmaptype = this.onmapscale = this.onmapzoom = this.onendpoint = this.oninit = function () {
+		var url = this.endpoint + '?key=' + this.apikey + '&center=' + encodeURIComponent(this.location) + '&maptype=' + this.maptype + '&scale=' + this.mapscale + '&zoom=' + this.mapzoom + '&size=' + this.width + 'x' + this.height + '&format=' + this.format
+		this.bgimage = url;
 	}
 
 

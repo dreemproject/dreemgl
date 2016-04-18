@@ -28,10 +28,11 @@ define.class(function(require, $ui$, view){
 		}
 
 		this.color = function() {
-			var tn = normalize(transnorm.xyz);
-			return vec4(tn * 0.5 + 0.5, 1.0);
+			var tn = normalize(transnorm.xyz)
+			return vec4(tn * 0.5 + 0.5, 1.0)
 		}
 	})
+
 	this.shape3d = true
-	this.hardrect =false;
+	this.hardrect = false
 })

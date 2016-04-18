@@ -354,7 +354,7 @@ define.class('$ui/view', function(require,
 						for (var i=0;i<defs.length;i++) {
 							var def = defs[i];
 							var name = def.id.name;
-							if (name[0] === '$' && name[name.length - 1] === '$') {
+							if (name[name.length - 1] === '$') {
 								category = {
 									name:name,//.substring(1, name.length).replace(/\$/g, "/"),
 									children:[]
@@ -477,22 +477,49 @@ define.class('$ui/view', function(require,
 	}
 
 	this.makeNewConnection = function() {
-		// DO CONNECTION HERE!
-		console.log("making connection...")
-		this.sourceset.fork(function() {
-			this.sourceset.deleteWire(
-				this.newconnection.sourceblock,
-				this.newconnection.sourceoutput,
-				this.newconnection.targetblock,
-				this.newconnection.targetinput
-			)
 
-			this.sourceset.createWire(
-				this.newconnection.sourceblock,
-				this.newconnection.sourceoutput,
-				this.newconnection.targetblock,
-				this.newconnection.targetinput
-			)
+		this.sourceset.fork(function(src) {
+			var inserted;
+			if (this.newconnection.targettype === "Array") {
+
+				src.deleteWire(
+					this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+
+				inserted = src.insertWire(this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.sourcetype,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput);
+
+			} else if (this.newconnection.targettype === "Object") {
+
+				inserted = src.mergeWire(this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.sourcetype,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput)
+
+			}
+
+			if (!inserted) {
+				src.deleteWire(
+					null,
+					null,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+
+				src.createWire(
+					this.newconnection.sourceblock,
+					this.newconnection.sourceoutput,
+					this.newconnection.targetblock,
+					this.newconnection.targetinput
+				)
+			}
 		}.bind(this))
 
 		this.cancelConnection()
@@ -530,7 +557,6 @@ define.class('$ui/view', function(require,
 	}
 
 	this.cancelConnection = function() {
-		console.log("cancelling exiting connection setup...")
 		this.newconnection = {}
 
 		var connectingconnection = this.find("openconnector")
@@ -580,9 +606,10 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.setConnectionStartpoint = function(sourceblockname, outputname) {
+	this.setConnectionStartpoint = function(sourceblockname, outputname, sourcetype) {
 		this.newconnection.sourceblock = sourceblockname
 		this.newconnection.sourceoutput = outputname
+		this.newconnection.sourcetype = sourcetype
 		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ) {
 			this.makeNewConnection()
 		} else {
@@ -590,10 +617,11 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.setConnectionEndpoint = function(targetblockname, inputname) {
+	this.setConnectionEndpoint = function(targetblockname, inputname, targettype) {
 		//console.log(targetblockname, inputname)
 		this.newconnection.targetblock = targetblockname
 		this.newconnection.targetinput = inputname
+		this.newconnection.targettype = targettype
 		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ) {
 			this.makeNewConnection()
 		} else {
@@ -639,7 +667,8 @@ define.class('$ui/view', function(require,
 							from:w.from,
 							fromoutput:w.output,
 							to:node.name,
-							toinput:w.input
+							toinput:w.input,
+							stripe:!!(w.multi)
 						}))
 					} else {
 						// console.log("Not rendering", w, "for", node.name)
@@ -679,7 +708,8 @@ define.class('$ui/view', function(require,
 						nodeprops:node.propobj,
 						editables:node.editables,
 						inputs:node.inputs,
-						outputs:node.outputs
+						outputs:node.outputs,
+						showscreenbutton:!!(fd.screen)
 					})
 				)
 			}
@@ -867,7 +897,13 @@ define.class('$ui/view', function(require,
 			//,
 			splitcontainer({}
 				,splitcontainer({flex: 0.2, flexdirection: "column", direction: "horizontal"}
-					,dockpanel({title: "Composition" , flex: 0.2}
+					,dockpanel({title: "Composition", icon:"code", flex: 0.2, click:function(e){
+						var comp = this.screen.locationhash.composition;
+						if (comp) {
+							var location = define.expandVariables(comp)
+							window.open(location,'_blank');
+						}
+					}.bind(this)}
 						//,searchbox()
 
 						,treeview({flex: 1, dataset: this.sourceset})
