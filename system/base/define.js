@@ -1610,7 +1610,50 @@
 
 			noderequirewrapper.async = function(modname){
 				// For dali (and probably nodejs) relative paths must be made
-				// absolute to where the example is located.
+				// absolute to where the example is located. Retrieval
+				// method is different if running from a remote server
+				var remote = (define.$example.indexOf('://') !== -1);
+
+				if (define.$platform == 'dali') {
+					// Remote, relative
+					if (remote && modname.indexOf('./') == 0) {
+						modname = define.$example + modname.substring(2)
+						return define.httpGetCached(modname);
+					}
+
+					// Remote, absolute
+					if (remote && modname.indexOf('/') == 0) {
+						var p = define.$example.indexOf('/', 8);
+						modname = define.$example.substring(0, p) + modname;
+						return define.httpGetCached(modname);
+					}
+
+					// Local, relative
+					if (modname.indexOf('./') == 0) {
+						modname = '$root/' + define.$example + modname.substring(2)
+						modname = define.expandVariables(modname);
+
+						return new define.Promise(function(resolve, reject) {
+							return resolve(define.loadImage(modname));
+						});
+					}
+
+					// Local, absolute
+					if (modname.indexOf('/') == 0) {
+						modname = '$root' + modname
+						modname = define.expandVariables(modname);
+
+						return new define.Promise(function(resolve, reject) {
+							return resolve(define.loadImage(modname));
+						});
+					}
+
+					if (remote && modname.indexOf('://') === -1)
+						modname = define.$example + '/' + modname
+
+					modname = define.expandVariables(modname)
+				}
+
 				if (define.$platform == 'dali' && modname.indexOf('./') == 0)
 					modname = '$root' + '/' + define.$example + '/' + modname;
 
