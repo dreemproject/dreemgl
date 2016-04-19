@@ -282,6 +282,7 @@ define.class('$system/base/node', function(require){
 		// tabstop, sorted by number
 		tabstop: NaN,
 
+		// the type of pointer cursor to use for this view
 		cursor: Config({type:Enum(
 			'', 'arrow', 'none','wait','text','pointer',
 			'zoom-in','zoom-out','grab','grabbing',
@@ -294,9 +295,10 @@ define.class('$system/base/node', function(require){
 			'alias','cell','copy'
 		), value:''}),
 
-		// The number of render passes for this view
+		// The number of render passes for this view. Note that corresponding
+		// inner classes will need to be created for multi pass rendering to work,
+		// see /classes/ui/blurtest.js for an example.
 		passes: Config({type:int, value:0, minvalue: 0, maxvalue:10}),
-
 	}
 
 	this.name = ""
@@ -525,7 +527,7 @@ define.class('$system/base/node', function(require){
 					// based on this.passes with names pass0..9
 					var key = 'pass' + i
 					if (key in this) {
-						this.shaders[key] = new this[key]()
+						this.shaders[key] = new this[key](this)
 					} else {
 						console.warn('you are missing an inner class named', key, 'in', this)
 					}
