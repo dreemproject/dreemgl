@@ -12,7 +12,7 @@
  * Each thing consists of an object containing an id, name, and a state object representing its current state's value type, unit and if it's readonly or not where available.
  */
 /**
- * @attribute {Boolean} [connected="undefined"]
+ * @attribute {Boolean} [connected="false"]
  * If true, we are connected
  */
 /**

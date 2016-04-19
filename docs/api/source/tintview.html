@@ -188,41 +188,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
-<a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
-<a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
-<a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
-<strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
-<a href="#n54" name="n54">54</a>
-<a href="#n55" name="n55">55</a>
-<a href="#n56" name="n56">56</a>
-<a href="#n57" name="n57">57</a>
-<a href="#n58" name="n58">58</a>
-<a href="#n59" name="n59">59</a>
-<strong><a href="#n60" name="n60">60</a></strong>
-<a href="#n61" name="n61">61</a>
-<a href="#n62" name="n62">62</a>
-<a href="#n63" name="n63">63</a>
-<a href="#n64" name="n64">64</a>
-<a href="#n65" name="n65">65</a>
-<a href="#n66" name="n66">66</a>
-<a href="#n67" name="n67">67</a>
-<a href="#n68" name="n68">68</a>
-<a href="#n69" name="n69">69</a>
-<strong><a href="#n70" name="n70">70</a></strong>
-<a href="#n71" name="n71">71</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -230,70 +195,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-<span class="comment">// internal, Watch file changes</span>
+<span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>
 
-        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> promisify = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/promisify</span><span class="delimiter">'</span></span>)
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
+<span class="comment">// Example of how to use multiple render passes</span>
 
-        <span class="keyword">if</span> (fs) {
-                fs.statPromise = promisify(fs.stat)
+        <span class="local-variable">this</span>.attributes = {
+                <span class="key">tintcolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>})
         }
 
-        <span class="keyword">var</span> uid = <span class="integer">0</span>
-        <span class="local-variable">this</span>.__trace__  = <span class="integer">2</span>
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(delay){
-                <span class="local-variable">this</span>.files = {}
-                <span class="local-variable">this</span>.timeout = delay || <span class="integer">500</span>
-                <span class="local-variable">this</span>.poll = <span class="local-variable">this</span>.poll.bind(<span class="local-variable">this</span>)
-                <span class="local-variable">this</span>.itv = setTimeout(<span class="local-variable">this</span>.poll, <span class="integer">0</span>)
-                <span class="local-variable">this</span>.lastfire = <span class="integer">0</span>
-                <span class="local-variable">this</span>.firelimit = <span class="integer">1000</span>
-                <span class="local-variable">this</span>.uid = uid++
-        }
+        <span class="comment">// Must define N RenderPass nested classes below to match this count</span>
+        <span class="local-variable">this</span>.passes = <span class="integer">2</span>
+        <span class="comment">// Required for multipass to work</span>
+        <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>
 
-        <span class="local-variable">this</span>.<span class="function">atChange</span> = <span class="keyword">function</span>(changed_file){}
-
-        <span class="local-variable">this</span>.<span class="function">poll</span> = <span class="keyword">function</span>(file){
-                <span class="keyword">var</span> stats = []
-                <span class="keyword">var</span> names = []
-                <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> <span class="local-variable">this</span>.files){
-                        names.push(k)
-                        stats.push(fs.statPromise(define.expandVariables(k)))
+        <span class="comment">// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1</span>
+        <span class="comment">// must define pass0, 2 must define pass0 and pass1...</span>
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pass0</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.RenderPass, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.framebuffer.sample(mesh.xy) * view.tintcolor
+                        <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
                 }
-                Promise.all(stats).then(<span class="keyword">function</span>(results){
-                        setTimeout(<span class="local-variable">this</span>.poll, <span class="local-variable">this</span>.timeout)
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; results.length; i++){
-                                <span class="keyword">var</span> file = names[i]
-                                <span class="keyword">var</span> res = results[i]
-                                res.atime = <span class="predefined-constant">null</span>
-                                <span class="keyword">var</span> str = JSON.stringify(res)
-                                <span class="comment">// lets make sure we dont fire too often</span>
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.files[file] !== <span class="predefined-constant">null</span> &amp;&amp; <span class="local-variable">this</span>.files[file] !== str){
+        })
 
-                                        <span class="keyword">var</span> now = Date.now()
-                                        <span class="keyword">if</span>(now - <span class="local-variable">this</span>.lastfire &gt; <span class="local-variable">this</span>.firelimit){
-                                                <span class="local-variable">this</span>.lastfire = now
-                                                <span class="keyword">try</span>{
-                                                        <span class="local-variable">this</span>.atChange(file)
-                                                }
-                                                <span class="keyword">catch</span>(e){
-                                                        <span class="comment">//console.log('WATCH EXCEPTION', e, e.stack)</span>
-                                                        <span class="keyword">throw</span> e
-                                                }
-                                        }
-                                }
-                                <span class="local-variable">this</span>.files[file] = str
-                        }
-                }.bind(<span class="local-variable">this</span>)).<span class="keyword">catch</span>(<span class="keyword">function</span>(err){
-                        <span class="comment">// TODO lets unwatch the files that errored?</span>
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">WATCH ERROR</span><span class="delimiter">&quot;</span></span>, err.stack)
-                })
-        }
-
-        <span class="local-variable">this</span>.<span class="function">watch</span> = <span class="keyword">function</span>(file <span class="comment">/*String:path of file to watch*/</span>){
-                <span class="keyword">if</span>(!(file <span class="keyword">in</span> <span class="local-variable">this</span>.files)) <span class="local-variable">this</span>.files[file] = <span class="predefined-constant">null</span>
-        }
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pass1</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.RenderPass, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.pass0.sample(mesh.xy * <span class="integer">2</span>)
+                        <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
+                }
+        })
 })
 </pre></td>
 </tr></table>

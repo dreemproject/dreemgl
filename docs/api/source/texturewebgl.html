@@ -469,6 +469,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n315" name="n315">315</a>
 <a href="#n316" name="n316">316</a>
 <a href="#n317" name="n317">317</a>
+<a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
+<a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -722,6 +731,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">sample2</span> = <span class="keyword">function</span>(x, y){ <span class="keyword">return</span> sample(vec2(x, y)) }
         <span class="local-variable">this</span>.<span class="function">sample</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, v, {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+        <span class="local-variable">this</span>.<span class="function">pixel2</span> = <span class="keyword">function</span>(x, y){ <span class="keyword">return</span> pixel(vec2(x, y)) }
+        <span class="local-variable">this</span>.<span class="function">pixel</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, v / size, {
                         <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
                         <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
                         <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,

@@ -482,6 +482,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n328" name="n328">328</a>
 <a href="#n329" name="n329">329</a>
 <strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -664,7 +669,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
             }
 
                         <span class="keyword">if</span> (class_doc.examples &amp;&amp; class_doc.examples.length) {
-                                <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">/apps/docs/example#path=$root/</span><span class="delimiter">'</span></span> + class_doc.sourcePath;
+                                <span class="comment">// console.log(&quot;\n\n\nclass_doc&gt;&gt;&gt;&gt;&quot;, class_doc.base_class_chain)</span>
+                                <span class="keyword">var</span> ext = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+                                <span class="keyword">if</span> (define.<span class="predefined">$disableserver</span> === <span class="predefined-constant">true</span>) {
+                                        ext = <span class="string"><span class="delimiter">&quot;</span><span class="content">.html</span><span class="delimiter">&quot;</span></span>
+                                }
+                                <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">/apps/docs/example</span><span class="delimiter">'</span></span> + ext + <span class="string"><span class="delimiter">'</span><span class="content">#path=$</span><span class="delimiter">'</span></span> + class_doc.sourcePath;
                                 <span class="keyword">var</span> s = <span class="string"><span class="delimiter">&quot;</span><span class="content">border:0;</span><span class="delimiter">&quot;</span></span>;
                                 <span class="keyword">var</span> w = <span class="integer">900</span>;
                                 <span class="keyword">var</span> h = <span class="integer">300</span> * class_doc.examples.length;

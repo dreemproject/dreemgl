@@ -8,7 +8,7 @@
  * the video plays, and released when the video is finished.
  */
 /**
- * @attribute {String} [url="undefined"]
+ * @attribute {String} [url=""]
  * The URL to an video file to play
  */
 /**

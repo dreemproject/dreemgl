@@ -3,8 +3,8 @@
  * @extends node
  * Base UI view object
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/view.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/ui/view.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$ui/view.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$ui/view.js">open example in new tab &raquo;</a>
  * 
  */
 /**
@@ -84,7 +84,7 @@
  * When using `aspect-fit`, or `apsect-fill` this property will automatically adjust the image's location within the view.
  */
 /**
- * @attribute {vec4} [clearcolor="undefined"]
+ * @attribute {vec4} [clearcolor="NaN"]
  * the clear color of the view when it is in '2D' or '3D' viewport mode
  */
 /**
@@ -97,7 +97,7 @@
  * the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
  */
 /**
- * @attribute {Enum} [overflow="undefined"]
+ * @attribute {Enum} [overflow=""]
  * overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
  * works the same way as the CSS property
  */
@@ -130,7 +130,7 @@
  * alias for the z component of percentsize
  */
 /**
- * @attribute {float32} [pixelratio="undefined"]
+ * @attribute {float32} [pixelratio="NaN"]
  * the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
  */
 /**
@@ -250,7 +250,7 @@
  * alias for the fourth component of borderwith
  */
 /**
- * @attribute {float32} [flex="undefined"]
+ * @attribute {float32} [flex="NaN"]
  * turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
  * flexbox layout is a web standard and has many great tutorials online to learn how it works
  */
@@ -263,7 +263,7 @@
  * which direction the flex layout is working,
  */
 /**
- * @attribute {Enum} [justifycontent="undefined"]
+ * @attribute {Enum} [justifycontent=""]
  * pushes items eitehr to the start, center or end
  */
 /**
@@ -271,7 +271,7 @@
  * align items to either start, center, end or stretch them
  */
 /**
- * @attribute {Enum} [alignself="undefined"]
+ * @attribute {Enum} [alignself=""]
  * overrides the parents alignitems with our own preference
  */
 /**
@@ -284,7 +284,7 @@
  * Can be listened to to observe layout changes
  */
 /**
- * @attribute {Enum} [viewport="undefined"]
+ * @attribute {Enum} [viewport=""]
  * When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
  * using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
  * need to be processed and a single texture can just be drawn by the parent
@@ -327,7 +327,7 @@
  * drop shadow hardness
  */
 /**
- * @attribute {float32} [dropshadowopacity="undefined"]
+ * @attribute {float32} [dropshadowopacity="0"]
  * drop shadow opacity
  */
 /**
@@ -335,12 +335,16 @@
  * drop shadow color
  */
 /**
- * @attribute {boolean} [focus="undefined"]
+ * @attribute {boolean} [focus="false"]
  * whether this view has focus
  */
 /**
- * @attribute {float32} [tabstop="undefined"]
+ * @attribute {float32} [tabstop="NaN"]
  * tabstop, sorted by number
+ */
+/**
+ * @attribute {int32} [passes="0"]
+ * The number of render passes for this view
  */
 /**
  * @method atViewDestroy

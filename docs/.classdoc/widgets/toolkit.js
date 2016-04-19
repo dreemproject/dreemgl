@@ -32,7 +32,7 @@
  * whereas `groupdrag:false` will only move the view under the cursor
  */
 /**
- * @attribute {boolean} [groupreparent="undefined"]
+ * @attribute {boolean} [groupreparent="false"]
  * When dropping a multiple selection into a view, should all views be reparented into the view that the
  * mouse is over, or should they drop exactly where they are physically locate don the canvas.
  */
@@ -57,6 +57,6 @@
  * Show guidelines when moving
  */
 /**
- * @attribute {boolean} [hoverlines="undefined"]
+ * @attribute {boolean} [hoverlines="false"]
  * Always center guideline crosshairs on the mouse cursor
  */

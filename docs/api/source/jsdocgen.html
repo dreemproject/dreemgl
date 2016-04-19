@@ -527,7 +527,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                                 <span class="keyword">var</span> cmt = grabFirstCommentAbove(key.cmu)
                                                 <span class="keyword">var</span> defvaluename = <span class="predefined-constant">undefined</span>
-                                                <span class="keyword">if</span> (attr.value){
+                                                <span class="keyword">if</span> (<span class="keyword">typeof</span>(attr.value) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>){
                                                         defvaluename = attr.value
                                                 }
 

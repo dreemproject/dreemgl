@@ -354,16 +354,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n200" name="n200">200</a></strong>
 <a href="#n201" name="n201">201</a>
 <a href="#n202" name="n202">202</a>
-<a href="#n203" name="n203">203</a>
-<a href="#n204" name="n204">204</a>
-<a href="#n205" name="n205">205</a>
-<a href="#n206" name="n206">206</a>
-<a href="#n207" name="n207">207</a>
-<a href="#n208" name="n208">208</a>
-<a href="#n209" name="n209">209</a>
-<strong><a href="#n210" name="n210">210</a></strong>
-<a href="#n211" name="n211">211</a>
-<a href="#n212" name="n212">212</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -455,10 +445,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// lets give it a session</span>
                 <span class="local-variable">this</span>.session = Math.random() * <span class="integer">1000000</span>
 
-                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">200</span>)
-                <span class="local-variable">this</span>.fast_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">10</span>)
+                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher()
 
-                <span class="local-variable">this</span>.fast_watcher.atChange =
                 <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
                         <span class="comment">// lets reload this app</span>
                         <span class="local-variable">this</span>.reload()
@@ -472,16 +460,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.paths += <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">:&quot;$root/</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>
                 }
 
-                <span class="local-variable">this</span>.fast_list = [<span class="string"><span class="delimiter">'</span><span class="content">$examples</span><span class="delimiter">'</span></span>]
-
                 <span class="comment">// lets compile and run the dreem composition</span>
                 define.<span class="function">atRequire</span> = <span class="keyword">function</span>(filename){
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.fast_list.length; i++){
-                                <span class="keyword">var</span> fast = <span class="local-variable">this</span>.fast_list[i]
-                                <span class="keyword">if</span>(filename.indexOf( define.expandVariables(fast) ) === <span class="integer">0</span>){
-                                        <span class="keyword">return</span> <span class="local-variable">this</span>.fast_watcher.watch(filename)
-                                }
-                        }
                         <span class="local-variable">this</span>.slow_watcher.watch(filename)
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">//</span>

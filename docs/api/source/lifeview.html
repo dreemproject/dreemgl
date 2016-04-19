@@ -223,6 +223,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
 <a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -230,70 +235,75 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-<span class="comment">// internal, Watch file changes</span>
+<span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>
 
-        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> promisify = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/promisify</span><span class="delimiter">'</span></span>)
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
+<span class="comment">// an implementation of https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life</span>
 
-        <span class="keyword">if</span> (fs) {
-                fs.statPromise = promisify(fs.stat)
-        }
+        <span class="comment">// Must define N RenderPass nested classes below to match this count</span>
+        <span class="local-variable">this</span>.passes = <span class="integer">1</span>
 
-        <span class="keyword">var</span> uid = <span class="integer">0</span>
-        <span class="local-variable">this</span>.__trace__  = <span class="integer">2</span>
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(delay){
-                <span class="local-variable">this</span>.files = {}
-                <span class="local-variable">this</span>.timeout = delay || <span class="integer">500</span>
-                <span class="local-variable">this</span>.poll = <span class="local-variable">this</span>.poll.bind(<span class="local-variable">this</span>)
-                <span class="local-variable">this</span>.itv = setTimeout(<span class="local-variable">this</span>.poll, <span class="integer">0</span>)
-                <span class="local-variable">this</span>.lastfire = <span class="integer">0</span>
-                <span class="local-variable">this</span>.firelimit = <span class="integer">1000</span>
-                <span class="local-variable">this</span>.uid = uid++
-        }
+        <span class="local-variable">this</span>.passesdoublebuffer = <span class="predefined-constant">true</span>
 
-        <span class="local-variable">this</span>.<span class="function">atChange</span> = <span class="keyword">function</span>(changed_file){}
+        <span class="comment">// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1</span>
+        <span class="comment">// must define pass0, 2 must define pass0 and pass1...</span>
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pass0</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.RenderPass, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="comment">// convert floats to pixels</span>
+                        <span class="keyword">var</span> x = mesh.x * view.layout.width
+                        <span class="keyword">var</span> y = mesh.y * view.layout.height
 
-        <span class="local-variable">this</span>.<span class="function">poll</span> = <span class="keyword">function</span>(file){
-                <span class="keyword">var</span> stats = []
-                <span class="keyword">var</span> names = []
-                <span class="keyword">for</span>(<span class="keyword">var</span> k <span class="keyword">in</span> <span class="local-variable">this</span>.files){
-                        names.push(k)
-                        stats.push(fs.statPromise(define.expandVariables(k)))
-                }
-                Promise.all(stats).then(<span class="keyword">function</span>(results){
-                        setTimeout(<span class="local-variable">this</span>.poll, <span class="local-variable">this</span>.timeout)
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; results.length; i++){
-                                <span class="keyword">var</span> file = names[i]
-                                <span class="keyword">var</span> res = results[i]
-                                res.atime = <span class="predefined-constant">null</span>
-                                <span class="keyword">var</span> str = JSON.stringify(res)
-                                <span class="comment">// lets make sure we dont fire too often</span>
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.files[file] !== <span class="predefined-constant">null</span> &amp;&amp; <span class="local-variable">this</span>.files[file] !== str){
+                        <span class="comment">// account for the pixel ratio</span>
+                        x *= <span class="local-variable">this</span>.pass0.ratio
+                        y *= <span class="local-variable">this</span>.pass0.ratio
 
-                                        <span class="keyword">var</span> now = Date.now()
-                                        <span class="keyword">if</span>(now - <span class="local-variable">this</span>.lastfire &gt; <span class="local-variable">this</span>.firelimit){
-                                                <span class="local-variable">this</span>.lastfire = now
-                                                <span class="keyword">try</span>{
-                                                        <span class="local-variable">this</span>.atChange(file)
-                                                }
-                                                <span class="keyword">catch</span>(e){
-                                                        <span class="comment">//console.log('WATCH EXCEPTION', e, e.stack)</span>
-                                                        <span class="keyword">throw</span> e
-                                                }
-                                        }
-                                }
-                                <span class="local-variable">this</span>.files[file] = str
+                        <span class="comment">// count number of neighbors</span>
+                        <span class="keyword">var</span> neighbors = <span class="integer">0</span>
+                        <span class="comment">// if this is the first time, read from the framebuffer</span>
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.drawcount == <span class="integer">1</span>.) {
+                                <span class="comment">// or use noise</span>
+                                <span class="keyword">return</span> vec4(noise.cheapnoise(mesh.xy) &gt; <span class="float">.5</span>)
+                                <span class="keyword">return</span> <span class="local-variable">this</span>.framebuffer.pixel(vec2(x,y))
                         }
-                }.bind(<span class="local-variable">this</span>)).<span class="keyword">catch</span>(<span class="keyword">function</span>(err){
-                        <span class="comment">// TODO lets unwatch the files that errored?</span>
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">WATCH ERROR</span><span class="delimiter">&quot;</span></span>, err.stack)
-                })
-        }
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.drawcount &gt; <span class="integer">4</span>.) {
+                                <span class="comment">// return this.pass0.pixel(vec2(x,y))</span>
+                        }
+                        <span class="comment">// account for pixel ratio</span>
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
 
-        <span class="local-variable">this</span>.<span class="function">watch</span> = <span class="keyword">function</span>(file <span class="comment">/*String:path of file to watch*/</span>){
-                <span class="keyword">if</span>(!(file <span class="keyword">in</span> <span class="local-variable">this</span>.files)) <span class="local-variable">this</span>.files[file] = <span class="predefined-constant">null</span>
-        }
+                        <span class="comment">// this makes the shader redraw each frame, allowing loopback between the double</span>
+                        <span class="comment">// buffers</span>
+                        <span class="keyword">var</span> time = view.time
+
+                        <span class="comment">// are we alive?</span>
+                        <span class="keyword">var</span> alive = <span class="local-variable">this</span>.pass0.pixel(vec2(x,y))
+                        <span class="keyword">if</span> (alive.r &gt; <span class="integer">0</span>.) {
+                                <span class="comment">// Any live cell with two or three live neighbours lives on to the next generation.</span>
+                                alive = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
+                                <span class="keyword">if</span> (neighbors &lt; <span class="integer">2</span>) {
+                                        <span class="comment">// Any live cell with fewer than two live neighbours dies, as if caused by under-population.</span>
+                                        alive = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+                                } <span class="keyword">else</span> <span class="keyword">if</span> (neighbors &gt; <span class="integer">3</span>) {
+                                        <span class="comment">// Any live cell with more than three live neighbours dies, as if by over-population.</span>
+                                        alive = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+                                }
+                        } <span class="keyword">else</span> {
+                                <span class="keyword">if</span> (neighbors == <span class="integer">3</span>) {
+                                        <span class="comment">// Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</span>
+                                        alive = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
+                                }
+                        }
+
+                        <span class="keyword">return</span> vec4(alive.rgb, alive.a * view.opacity)
+                }
+        })
 })
 </pre></td>
 </tr></table>

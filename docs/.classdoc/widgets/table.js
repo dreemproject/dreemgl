@@ -6,8 +6,8 @@
  * either `row#` or `column#` style where `#` is the index of the particular row or column.
  * <br/><a href="/examples/tables">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/widgets/table.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/widgets/table.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$widgets/table.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$widgets/table.js">open example in new tab &raquo;</a>
  * 
  */
 /**
@@ -19,7 +19,7 @@
  * The number of columns in the table (not compatible with `rows`)
  */
 /**
- * @attribute {Enum} [justifysection="undefined"]
+ * @attribute {Enum} [justifysection=""]
  * justifycontent passed to the inner rows or columns
  */
 /**
