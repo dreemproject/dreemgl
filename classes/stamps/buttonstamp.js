@@ -24,7 +24,7 @@ define.class('$base/stamp', function(){
 
 	this.onpointerhover = function(event){
 		this.fgcolorBackground = Animate({1:[0,1,0,1]})
-		//this.xLabel += 10
+		this.xLabel = Animate.add({speed:5,1:10,2:0})///10
 	}
 
 	this.draw = function(){

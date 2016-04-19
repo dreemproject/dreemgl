@@ -9,6 +9,8 @@ define.class('$base/node', function(require){
 
 	var FlexLayout = require('$system/lib/layout')
 
+	var Animation = require('$base/animation')
+
 	var view = this.constructor
 	var Canvas = require('$base/canvas')
 
@@ -813,6 +815,7 @@ define.class('$base/node', function(require){
 		}
 	}
 
+	/*
 	// internal, decide to inject scrollbars into our childarray
 	this.atRender = function(){
 		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow==='hscroll' || this._overflow === 'vscroll' || this._overflow === 'auto')){
@@ -939,7 +942,7 @@ define.class('$base/node', function(require){
 				scroll._visible = false
 			}
 		}
-	}
+	}*/
 
 	// called in draw
 	this.updateMatrix = function(){
@@ -1065,31 +1068,55 @@ define.class('$base/node', function(require){
 		}.bind(this))
 	}
 
+	// step callback for the animation
+	function animStep(value){
+		if(this.config.storage){
+			this.obj['_' + this.config.storage][this.config.index] = value
+			this.obj.emit(this.config.storage, {animation:true, key: this.key, owner:this.obj, value:this.obj['_' + this.config.storage]})
+		}
+		this.obj['_' + this.key] = value
+		this.obj.emit(this.key, {animation:true, key: this.key, owner:this.obj, value:value})
+	}
+
 	this.startAnimation = function(key, value, track, resolve){
 		if(!this.initialized) return false
-		
-		return this.screen.startAnimationRoot(
-			this.pickview + '_' + key, 
-			this.getAttributeConfig(key), 
-			this['_'+key], 
-			this, 
-			key, 
-			value, 
-			track, 
-			resolve
-		)
+
+		// ok so. if we get a config passed in, we pass that in
+		var anim = new Animation()
+
+		var config = this.getAttributeConfig(key)
+		// store the config for the animStep
+		anim.config = config
+		anim.type = config.type
+		// track overloads config
+		if(track) config = track
+		// config sets props
+		if(config){
+			if(config.motion !== undefined) anim.motion = config.motion
+			if(config.delay !== undefined) anim.delay = config.delay
+			if(config.bounce !== undefined) anim.bounce = config.bounce
+			if(config.type !== undefined) anim.type = config.type
+			if(config.speed !== undefined) anim.speed = config.speed
+			if(!track){
+				track = {}
+				track[config.duration] = value
+			}
+		}
+		if(!track) throw new Error('no track')
+
+		anim.first_value = this['_'+key]
+		anim.track = track
+		anim.resolve = resolve		
+		anim.atStep = animStep
+		anim.view = this
+
+		this.screen.startViewAnimation(this.pickview + '_' + key, anim)
+		// start the animation with a redraw
+		this.redraw()
 	}
 
 	this.stopAnimation = function(key){
-		if(this.initialized) this.screen.stopAnimationRoot(this, key)
-	}
-
-	this.playAnimation = function(key){
-		if(this.initialized) this.screen.playAnimationRoot(this, key)
-	}
-
-	this.pauseAnimation = function(key){
-		if(this.initialized) this.screen.pauseAnimationRoot(this, key)
+		if(this.initialized) this.screen.stopViewAnimation(this.pickview + '_' + key)
 	}
 
 	this.renderChild = function(render){
@@ -1100,7 +1127,7 @@ define.class('$base/node', function(require){
 		vroot.parent = this
 		vroot.rpc = this.rpc
 		vroot.screen = this.screen
-		vroot.parent_viewport = this._viewport?this:this.parent_viewport
+		vroot.parent_viewport = this._viewport? this: this.parent_viewport
 		// render it
 		this.screen.composition.processRender(vroot, undefined, undefined, true)
 		// move the children over

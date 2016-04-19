@@ -15,7 +15,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 		}
 
-
 		// create a little stamp based button with hover anim
 		define.class(this, 'Test', '$base/stamp', function(){
 
@@ -28,7 +27,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					this.margin = 0
 					this.w = 80
 				})
-			
+
 				this.onpointerhover = function(event){
 					this.fgcolorBackground = Animate({1:[0,1,0,1]})
 				}
@@ -54,7 +53,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.fontsize = 12
 				this.fgcolor = [1,1,1,1]
 			})
-			
+
 			define.class(this, 'Icon', '$shaders/iconshader', function(){
 				this.fgcolor = 'white'
 				this.fontsize = 20
@@ -62,14 +61,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//this.x = float.right(0)
 				this.margin = [0,0,0,10]
 			})
+
 			define.class(this, 'Icon2', '$shaders/iconshader', function(){
 				///this.align = 'center'
 				this.fgcolor = 'white'
 				this.fontsize = 20
 				this.margin = [0,5,0,5]
 			})
+
 			define.class(this, 'Background', '$shaders/rectshader', function(){
-				this.fgcolor = [0.25,0.25,0.25,1]
+				this.fgcolor = [0.25, 0.25, 0.25, 1]
 				this.aligncontent = float.LEFT
 				//this.margin = [1,0,0,1]
 				this.margin = 1
@@ -103,7 +104,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		this.Rect = function(){
 			this.w = float.width("fill")
 			this.h = float.height("10%")
-			this.margin = 0
+			this.margin = .5
 		}
 
 		define.class(this, 'Button', '$stamps/buttonstamp', function(){
@@ -119,27 +120,23 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			if(c.startCache('button',this.layoutchanged)){
 				var icons = Object.keys(this.Test.prototype.Icon.prototype.table)
 				var dt = performance.now()
-				for(var i = 0; i < 500; i++){
-					//c.drawRect(float,float,10,10)//,50,50)
+				for(var i = 0; i < 10000; i++){
+					//c.drawRect(float,float,8+8*random(),8+8*random())//,50,50)
 					//c.drawRect(auto,auto,20,20)//,50,50)
-					c.drawButton(icons[i],icons[i])
-					//c.drawButton('Hi','')
-					
+					//c.drawButton(icons[i],icons[i])
+					c.drawButton('Hi','')
 					//c.drawTest('Btn'+i,icons[i+2])
 					//c.drawRect()
 					//c.drawRect()
 					//c.drawRect()
-
 					//console.log(c.align.y, c.align.x)
 					//c.newline()
 					//console.log("MARK")
 					//c.drawButton('Btn'+i,icons[i+2])
 					//console.log(c.align.x, c.align.y)
-					
 					//c.drawRect(auto,auto,fill,50)
 					//c.drawRect(auto,auto,20,20)//,50,50)
 					//c.drawRect(auto,auto,20,20)//,50,50)
-					
 					//c.drawRect()
 					//c.draw
 					//c.newline()
@@ -147,9 +144,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				}
 				c.stopCache()
 			}
+			//console.log(performance.now()-dt)
 			c.endAlign()
 		}
-
 	})
 
 	this.render = function(){ return [

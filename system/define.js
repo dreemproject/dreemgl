@@ -2789,6 +2789,14 @@
 			obj.track = track
 			return obj
 		}
+
+		exports.Animate.add = function(track){
+			var obj = Object.create(Animate.prototype)
+			obj.constructor = Animate
+			obj.add = true
+			obj.track = track
+			return obj
+		}
 	}
 
 	defineGlobals(typeof process !== 'undefined'? global: typeof window !== 'undefined'? window: self)

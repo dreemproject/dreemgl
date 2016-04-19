@@ -1,4 +1,6 @@
-define.class(function(exports){
+define.class(function(require, exports){
+
+	var Animation = require('$base/animation')
 
 	this.initCanvas = function(view){
 		this.view = view
@@ -29,7 +31,6 @@ define.class(function(exports){
 		this.align = this.stackAlign[0]
 		this.beginAlign(float.TOPLEFT, float.WRAP, this.view.padding)
 	}
-
 
 	this.push = function(){
 		var len = ++this.matrixStackLen
@@ -439,7 +440,7 @@ define.class(function(exports){
 		if(abs){
 			this.trackAlign.push(buffer, buffer.length, range || 1, this.stackAlign.len - 1)
 
-			// absolutely a a sub thing
+			// absolutely align a sub thing
 			if(oldalign){
 				var dx = x - oldalign.xstart + oldalign.p3
 				var dy = y - oldalign.ystart + oldalign.p0
@@ -719,8 +720,8 @@ define.class(function(exports){
 		canvas['class' + cap] = cls
 
 		// bail if we dont have any new functions or struct data
-		if(canvas[name+'_canvasverbs'] === verbs &&
-			canvas[name+'_canvasstruct'] === struct){
+		if(canvas[name + '_canvasverbs'] === verbs &&
+			canvas[name + '_canvasstruct'] === struct){
 			return
 		}
 
@@ -732,53 +733,99 @@ define.class(function(exports){
 		// put accessors on our root
 		if(struct){
 			function defProp(obj, key, offset, type){
-				var index = 'index'+cap
-				var buffer = 'buffer'+cap
+				var indexstart = 'indexstart' + cap
+				var indexend = 'indexend' + cap
+				var buffer = 'buffer' + cap
+
+				function setValue(stamp, value, start){
+					var buf = stamp.canvas[buffer]
+					var isv = 0
+
+					for(var i = stamp[indexstart], l = stamp[indexend]; i < l; i++){
+						var o = i * slots
+						if(type.slots>1){
+							for(var s = 0; s < type.slots; s++, isv++){
+								buf.array[o + offset + s] = value[s] + (start?start[isv]:0)
+							}
+						}
+						else{
+							buf.array[o + offset] = value + (start?start[isv]:0)
+							isv++
+						}
+					}
+					buf.clean = false
+					stamp.canvas.view.redraw()
+				}
+
+				function getValue(stamp){
+					var o = stamp[indexstart] * slots
+					var buf = stamp.canvas[buffer]
+					if(type.slots>1){
+						var ret = type()
+						for(var i = 0; i < type.slots; i++){
+							ret[i] = buf.array[o + offset + i]
+						}
+						return ret
+					}
+					else{
+						return buf.array[o + offset]
+					}
+				}
+
+				function animStep(value){
+					setValue(this.stamp, value, this.add && this.start_values)
+				}
+
+				// lets first just get this
 				var name = key + cap
 				if(!(name in cls)){
 					Object.defineProperty(obj, name,{
 						get:function(){
-							var o = this[index] * slots
-							var buf = this.canvas[buffer]
-							if(type.slots>1){
-								var ret = type()
-								for(var i = 0; i < type.slots; i++){
-									ret[i] = buf.array[o + offset + i]
-								}
-								return ret
-							}
-							else{
-								return buf.array[o + offset]
-							}
+							return getValue(this)
 						},
 						set:function(value){
 							// animation!
 							if(value instanceof Animate){
 								// lets hook an animation on view
-								var first = this[name]
-								this.canvas.view.screen.startAnimationRoot(
-									this.canvas.view.pickview + '_' + this.pickdraw+'_'+key,
-									{type:type},
-									first, 
-									this, 
-									name, 
-									undefined,
-									value.track
-								)
+								var view = this.canvas.view
+
+								var anim = new Animation()
+								
+								anim.type = type
+								anim.add = value.add
+
+								if(value.add) anim.first_value = type(0)
+								else anim.first_value = this[name]
+								
+								anim.atStep = animStep
+								anim.track = value.track
+								anim.view = view
+								anim.stamp = this
+								var config = value.track
+								if(config.motion !== undefined) anim.motion = config.motion
+								if(config.delay !== undefined) anim.delay = config.delay
+								if(config.bounce !== undefined) anim.bounce = config.bounce
+								if(config.speed !== undefined) anim.speed = config.speed
+
+								// copy all first values
+								var i = this[indexstart], l = this[indexend]
+								var sv = anim.start_values = new Float32Array((l - i) * type.slots)
+								var buf = this.canvas[buffer]
+								var isv = 0
+								for(;i < l; i++){
+									var o = i * slots
+									for(var j = 0; j < type.slots; j++, isv++){
+										sv[isv] = buf.array[o + offset + j]
+									}
+								}
+
+								var guid = view.pickview + '_' + this.pickdraw+'_'+key
+
+								view.screen.startViewAnimation(guid, anim)
+								view.redraw()
 								return
 							}
-							var o = this[index] * slots
-							var buf = this.canvas[buffer]
-							if(type.slots>1){
-								for(var i = 0; i < type.slots; i++){
-									buf.array[o + offset + i] = value[i]
-								}
-							}
-							else{
-								buf.array[o + offset] = value
-							}
-							buf.clean = false
-							this.canvas.view.redraw()
+							setValue(this, value)
 						}
 					})
 					//console.log('defining'+name, cls)
@@ -838,9 +885,9 @@ define.class(function(exports){
 					//}
 					return write
 				})
-				
+
 				fnstr = fnstr.replace(/(\t*)this\.RECTARGS\s*\(\s*\)/,function(m, ind){
-					 
+
 					//ind+'if(w === undefined && x !== undefined) w = x, x = undefined, console.log("hi")\n'+
 					//ind+'if(h ===undefined && y !== undefined) h = y, y = undefined\n'+
 					var write =  ''+
@@ -851,13 +898,16 @@ define.class(function(exports){
 					write += 'w = x.w, h = x.h, y = x.y, x = x.x\n'
 					//ind+'if(isNaN(x)) x = this.x\n'+
 					//ind+'if(isNaN(y)) y = this.y\n'+
-					if(args.indexOf('padding')!== -1) write += ind+'if(padding === undefined) padding = this.class'+cap+'.padding\n'
+					if(args.indexOf('padding')!== -1) write += ind+'if(padding === undefined) padding = this.scope.padding'+cap+'!==undefined?this.scope.padding'+cap+':this.class'+cap+'.padding\n'
 					if(args.indexOf('margin')!== -1) write += ind+'if(margin === undefined) margin = this.class'+cap+'.margin\n'
 					write +=
-						ind+'if(x === undefined) w = this.class'+cap+'.x\n'+
-						ind+'if(y === undefined) h = this.class'+cap+'.y\n'+
+						ind+'if(x === undefined) x = this.class'+cap+'.x\n'+
+						ind+'if(y === undefined) y = this.class'+cap+'.y\n'+
 						ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
 						ind+'if(h === undefined) h = this.class'+cap+'.h\n'
+						ind+'if(x === float) x = undefined\n'+
+						ind+'if(y === float) y = undefined\n'
+
 					return write
 					/*
 					ind+'if(w === stretch){\n'+
@@ -882,7 +932,9 @@ define.class(function(exports){
 						ind+'\tthis.buffer'+cap+' = buffer\n'+
 						ind+'}\n'+
 						ind+'buffer.clean = false\n'+
-						ind+'this.scope.index'+cap+' = buffer.length\n'+
+						// store the index how do we store the length?
+						ind+'if(!this.scope.indexstart'+cap+')this.scope.indexstart'+cap+' = buffer.length\n'+
+						ind+'this.scope.indexend'+cap+' = buffer.length + '+(needed || 1)+'\n'+
 						ind+'buffer.instancedivisor = this.instancedivisor'+cap+'|| 1\n'+
 						ind+'var _needed = '+(needed?(needed+' || 1'):'1')+'\n'+
 						ind+'if(buffer.length + _needed >= buffer.allocated){\n'+

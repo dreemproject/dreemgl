@@ -6,38 +6,28 @@
 
 define.class(function(require, exports){
 
-	// internal, instance of checkable end object
-	this.End = function(){
-	}
-
+	// track is {1:value, 2:value} time:value track
+	// can also contain any of the setting variables
+	this.track = undefined
+	// the first value
+	this.first_value = undefined	
+	// time skew to start in seconds
 	this.delay = 0
-	this.interrupt = false
+	// how many times to repeat
 	this.repeat = 1
+	// use bounce looping when repeating
 	this.bounce = false
+	// the type of the value
 	this.type = float32
+	// motion mapping of the whole animation
 	this.motion = float.ease.linear
+	// speed multiplier of the whole animation
 	this.speed = 1
+	// the interpolator
 	this.interpolator = mix
 
-	this.atConstructor = function(config, obj, key, track, first_value, last_value){
-		this.config = config
-		this.obj = obj
-		this.key = key
-		// the internal track construct
-		this.track = track
-		//else this.track = config
-
-		if(config.motion) this.motion = config.motion
-
-		if(typeof this.motion === 'string') this.motion = float.ease[this.motion] || float.ease.linear
-		if(!config) debugger
-		if(config.type) this.type = config.type
-		this.first_value = first_value
-		this.last_value = last_value
-	}
-
 	this.compute = function(local_time, time_skew){
-		// lazily initialize order
+		// lazily initialize order of the track keys
 		if(!this.order){
 			this.order = [0]
 			this.values = {}
@@ -62,32 +52,8 @@ define.class(function(require, exports){
 					if(time > this.end_time) this.end_time = time
 				}
 			}
-			if(!this.track && this.config.duration !== undefined){
-				var duration = this.config.duration
-				this.order.push(duration)
-				this.values[duration] = {value:this.type(this.last_value)}
-				if(duration > this.end_time) this.end_time = duration
-			}
 			this.order.sort()
 		}
-		// alright lets process the tracks.
-		/*if(this.reset_time){
-			this.last_time_stamp = time_stamp
-
-			this.start_time_stamp = time_stamp - (time_skew || 0)
-			// initialize slot 0
-			if(this.values[0] === undefined){
-				this.first_value = first_value !== undefined? first_value: (this.first_value || 0)
-			}
-			this.reset_time = false
-		}
-		if(this.pause_time !== undefined){
-			// just skid the start_time for as long as it is stopped
-			this.start_time_stamp = time_stamp - this.pause_time
-			return this.value
-		}
-		//var local_time = (time_stamp - this.start_time_stamp )
-		*/
 
 		// alright now, we have to compute the right time.
 
@@ -178,28 +144,8 @@ define.class(function(require, exports){
 			}
 		}
 	}
-	/*
-	// stops an animation, untill resumed
-	this.pause = function(){
-		this.pause_time = this.last_time_stamp - this.start_time_stamp
-	}
 
-	// resume a paused track
-	this.resume = function(){
-		this.pause_time = undefined
-	}
-
-	// this reverses the playback. it will just play the current trackbackwards starting now
-	this.reverse = function(){
-		// alright if we have reverse time, calculate the right start_time_stamp
-		if(this.reverse_time !== undefined){
-			// calculate the current time
-			this.start_time_stamp = 2*(this.last_time_stamp - this.reverse_time) - this.start_time_stamp
-			//this.start_time_stamp = this.last_time_stamp-this.reverse_time
-			this.reverse_time = undefined
-		}
-		else{
-			this.reverse_time = this.last_time_stamp - this.start_time_stamp
-		}
-	}*/
+	// internal, instance of checkable end object
+	this.End = function(){
+	}	
 })

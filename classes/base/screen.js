@@ -7,8 +7,6 @@
 define.class('$base/view', function(require, exports, $base$, view) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
 
-	var Animate = require('$base/animate')
-
 	this.attributes = {
 		// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
 		locationhash: Config({type:Object, value:{}}),
@@ -694,27 +692,20 @@ define.class('$base/view', function(require, exports, $base$, view) {
 	// animation
 
 	// internal, start an animation, delegated from view
-	this.startAnimationRoot = function(animkey, config, first, obj, key, value, track, resolve){
-		// ok so. if we get a config passed in, we pass that in
-		var anim = new Animate(config, obj, key, track, first, value)
-		anim.resolve = resolve
-		this.anims[animkey] = anim
-		obj.redraw()
-
-		return true
+	this.startViewAnimation = function(animguid, anim){
+		this.anims[animguid] = anim
 	}
 
 	// internal, stop an animation, delegated from view
-	this.stopAnimationRoot = function(obj, key){
-		var animkey = obj.getViewGuid() + '_' + key
-		var anim = this.anims[animkey]
+	this.stopViewAnimation = function(animguid){
+		var anim = this.anims[animguid]
 		if(anim){
 			delete this.anims[animkey]
 			if(anim.promise)anim.promise.reject()
 		}
 	}
 
-	// internal, called by the renderer to animate all items in our viewtree
+	// execute all running animations
 	this.doAnimation = function(time, redrawlist){
 		for(var key in this.anims){
 			var anim = this.anims[key]
@@ -723,31 +714,11 @@ define.class('$base/view', function(require, exports, $base$, view) {
 			var value = anim.compute(mytime)
 			if(value instanceof anim.End){
 				delete this.anims[key]
-				//console.log(value.last_value)
-				if(('_' + anim.key) in anim.obj){
-					anim.obj['_' + anim.key] = value.last_value
-					anim.obj.emit(anim.key, {animate:true, end:true, key: anim.key, owner:anim.obj, value:value.last_value})
-					anim.obj.redraw()
-				}
-				else{
-					anim.obj[anim.key] = value.last_value
-				}
-				if(anim.resolve) anim.resolve()
+				anim.atStep(value.last_value)
 			}
 			else{
-				// what if we have a value with storage?
-				if(('_' + anim.key) in anim.obj){
-					anim.obj['_' + anim.key] = value
-					if(anim.config.storage){
-						anim.obj['_' + anim.config.storage][anim.config.index] = value
-						anim.obj.emit(anim.config.storage, {type:'animation', key: anim.key, owner:anim.obj, value:value})
-					}
-					anim.obj.emit(anim.key, {animate:true, key: anim.key, owner:anim.obj, value:value})
-				}
-				else{
-					anim.obj[anim.key] = value
-				}
-				redrawlist.push(anim.obj)
+				anim.atStep(value)
+				redrawlist.push(anim.view)
 			}
 		}
 	}
