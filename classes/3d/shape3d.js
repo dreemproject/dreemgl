@@ -5,6 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $ui$, view){
+// Base class for 3d geometry.
 
 	define.class(this, 'shape3d', this.Shader, function(){
 		this.draworder = 0

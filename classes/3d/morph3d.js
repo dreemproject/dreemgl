@@ -5,13 +5,20 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $ui$, view){
+// Morphing 3d geometry class.
+// Target geometries are specified as children.
+// Both target geometries should have the same vertex attribues and vertex count.
 
 	this.attributes = {
+		// Morph weight - determines the interpolation between target shapes
 		morphweight: Config({type: float, value: 0}),
+		// Shape color
 		bgcolor: Config({type: vec4, value: vec4(1, 1, 1, 1)}),
+		// Shape opacity
 		opacity: Config({value: 1.0, type: float})
 	}
 
+	// Overridable bgcolor function
 	this.bgcolorfn = function(pos){
 		return this.bgcolor
 	}
