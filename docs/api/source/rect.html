@@ -180,6 +180,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -192,8 +195,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> GLGeom = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/geometry/basicgeometry</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
+                <span class="comment">// Width of the rect</span>
                 <span class="key">width</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">1</span>}),
+                <span class="comment">// Height of the rect</span>
                 <span class="key">height</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">1</span>}),
+                <span class="comment">// Detail: the number of vertices along the rect edge.</span>
                 <span class="key">detail</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">64</span>})
         }
 
