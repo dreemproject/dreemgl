@@ -651,6 +651,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n497" name="n497">497</a>
 <a href="#n498" name="n498">498</a>
 <a href="#n499" name="n499">499</a>
+<strong><a href="#n500" name="n500">500</a></strong>
+<a href="#n501" name="n501">501</a>
+<a href="#n502" name="n502">502</a>
+<a href="#n503" name="n503">503</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -695,12 +699,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">allocDrawTarget</span> = <span class="keyword">function</span>(width, height, view, drawtarget, passid, ratio){
+        <span class="local-variable">this</span>.<span class="function">allocDrawTarget</span> = <span class="keyword">function</span>(width, height, view, drawtarget, passid, ratio, isfloat){
                 width = floor(width)
                 height = floor(height)
                 <span class="keyword">var</span> Texture = <span class="local-variable">this</span>.device.Texture
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.drawtargets) <span class="local-variable">this</span>.drawtargets = []
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.drawtargets.indexOf(drawtarget) === -<span class="integer">1</span>) <span class="local-variable">this</span>.drawtargets.push(drawtarget)
+                texturetype = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+                <span class="keyword">if</span> (isfloat) {
+                        texturetype |= Texture.FLOAT
+                }
                 <span class="keyword">var</span> dt = <span class="local-variable">this</span>[drawtarget]
                 <span class="comment">//var twidth = this.nextPowerTwo(layout.width* main_ratio), theight = this.nextPowerTwo(layout.height* main_ratio)</span>
                 <span class="keyword">if</span>(!dt){
@@ -734,7 +742,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="comment">// otherwise we create a new one</span>
                         <span class="keyword">if</span>(!dt){
-                                dt = <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, <span class="local-variable">this</span>.device)
+                                dt = <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:texturetype, width, height, <span class="local-variable">this</span>.device)
                         }
                         <span class="keyword">else</span> <span class="local-variable">this</span>[drawtarget] = dt
                         dt.passid = passid
@@ -743,9 +751,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> tsize = <span class="local-variable">this</span>[drawtarget].size
                 <span class="keyword">if</span>(width !== tsize[<span class="integer">0</span>] || height !== tsize[<span class="integer">1</span>]){
                         <span class="comment">// reset drawcount</span>
-                        <span class="local-variable">this</span>.drawcount = <span class="integer">1</span>
+                        <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>
                         <span class="local-variable">this</span>[drawtarget].<span class="keyword">delete</span>()
-                        <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, <span class="local-variable">this</span>.device)
+                        <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:texturetype, width, height, <span class="local-variable">this</span>.device)
                 }
                 <span class="local-variable">this</span>[drawtarget].ratio = ratio
         }
@@ -992,7 +1000,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// currently renders into color_buffer</span>
         <span class="local-variable">this</span>.<span class="function">drawColor</span> = <span class="keyword">function</span>(isroot, time, clipview){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
-                view.drawpass.drawcount++
                 <span class="keyword">var</span> device = <span class="local-variable">this</span>.device
                 <span class="keyword">var</span> layout = view._layout
                 <span class="keyword">var</span> gl = device.gl
@@ -1009,11 +1016,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span> (view.passes &gt; <span class="integer">0</span>) {
                                 <span class="keyword">var</span> buffers = view.passes;
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; view.passes; i++) {
+                                        <span class="keyword">var</span> usefloat = view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span>+i].usefloat
                                         <span class="comment">// allocate a framebuffer for each pass</span>
-                                        <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span> + i, <span class="predefined-constant">null</span>, ratio)
-                                        <span class="keyword">if</span> (view.passesdoublebuffer) {
+                                        <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span> + i, <span class="predefined-constant">null</span>, ratio, usefloat)
+                                        <span class="keyword">if</span> (view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span>+i].doublebuffer) {
                                                 <span class="comment">// allocate twice as many buffers</span>
-                                                <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span> + i, <span class="predefined-constant">null</span>, ratio)
+                                                <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span> + i, <span class="predefined-constant">null</span>, ratio, usefloat)
                                         }
                                 }
                         }
@@ -1095,33 +1103,32 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span> (view.passes &gt; <span class="integer">0</span>) {
                         <span class="comment">// TODO: we have multiple passes, ignore pick_buffer it won't work.</span>
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; view.passes; i++) {
-                                <span class="keyword">var</span> currentbuffer = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span> + i
-                                <span class="keyword">if</span> (view.passesdoublebuffer) {
-                                        <span class="keyword">var</span> odd = view.drawpass.drawcount % <span class="integer">2</span>;
-                                        <span class="keyword">if</span> (! odd) {
-                                                <span class="comment">// prepend a 1, so 19 instead of 9</span>
-                                                currentbuffer = <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span> + i
+                                <span class="keyword">var</span> shader = view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + i]
+                                <span class="comment">// pass in the draw count so the shader can behave differently on the first draw</span>
+                                shader.drawcount = view.drawpass.drawcount
+
+                                <span class="comment">// decide which buffers to use</span>
+                                <span class="keyword">var</span> writebuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span>
+                                <span class="keyword">var</span> readbuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span>
+                                <span class="keyword">if</span> (shader.doublebuffer) {
+                                        <span class="keyword">var</span> readbuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span>
+                                        <span class="keyword">if</span> (shader.drawcount % <span class="integer">2</span>) {
+                                                <span class="comment">// Alternate buffer every other draw</span>
+                                                writebuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span>
+                                                readbuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span>
                                         }
                                 }
-                                device.bindFramebuffer(<span class="local-variable">this</span>[currentbuffer])
+                                device.bindFramebuffer(<span class="local-variable">this</span>[writebuffername + i])
                                 device.clear(view._clearcolor)
 
-                                <span class="keyword">var</span> shader = view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + i]
                                 <span class="comment">// Add references so they work inside the shader</span>
                                 shader.framebuffer = <span class="local-variable">this</span>.color_buffer
                                 <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; <span class="integer">10</span>; j++) {
-                                        <span class="keyword">var</span> readbuffer = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span> + j
                                         <span class="comment">// add pass0..9 references to corresponding buffers</span>
-                                        <span class="keyword">if</span> (view.passesdoublebuffer) {
-                                                <span class="keyword">if</span> (odd) {
-                                                        readbuffer = <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span> + j
-                                                }
-                                        }
-                                        shader[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + j] = <span class="local-variable">this</span>[readbuffer]
+                                        shader[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + j] = <span class="local-variable">this</span>[readbuffername + j]
                                 }
-                                shader.drawcount = view.drawpass.drawcount
                                 <span class="comment">// set the texture to use its own framebuffer</span>
-                                shader.texture = <span class="local-variable">this</span>[currentbuffer]
+                                shader.texture = <span class="local-variable">this</span>[writebuffername + i]
                                 shader.width = view._layout.width
                                 shader.height = view._layout.height
                                 <span class="comment">// draw it into the framebuffer</span>
@@ -1133,6 +1140,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">// draw the ordinary color buffer</span>
                         <span class="local-variable">this</span>.blendbuffer = <span class="local-variable">this</span>.color_buffer
                 }
+                view.drawpass.drawcount++
                 <span class="keyword">return</span> hastime
         }
 <span class="comment">/*

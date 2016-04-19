@@ -2190,6 +2190,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2036" name="n2036">2036</a>
 <a href="#n2037" name="n2037">2037</a>
 <a href="#n2038" name="n2038">2038</a>
+<a href="#n2039" name="n2039">2039</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -4072,7 +4073,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>._viewport) <span class="local-variable">this</span>._viewport = <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>
         }
-        <span class="local-variable">this</span>.passesdoublebuffer = <span class="predefined-constant">false</span>;
 
         <span class="comment">// When passes &gt; 0, create inner classes with names pass0..9 to implement the shaders</span>
         <span class="comment">// for each pass.</span>
@@ -4091,6 +4091,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.width = <span class="integer">0</span>
                 <span class="local-variable">this</span>.height = <span class="integer">0</span>
                 <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>.
+                <span class="local-variable">this</span>.isfloat = <span class="predefined-constant">false</span>
+                <span class="local-variable">this</span>.doublebuffer = <span class="predefined-constant">false</span>;
 
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                         <span class="keyword">return</span> vec4( mesh.x * width, mesh.y * height, <span class="integer">0</span>, <span class="integer">1</span>) * view.viewportmatrix * view.viewmatrix

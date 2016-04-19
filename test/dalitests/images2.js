@@ -6,6 +6,7 @@
 
 //Pure JS based composition
 define.class(function($server$, composition, $ui$, screen, view, label, require){
+//internal
 
 	// images, using both relative, and absolute syntax
 	this.images = ['./assets/0.png', '/test/dalitests/assets/1.png', './assets/2.png', '/test/dalitests/assets/3.png', './assets/4.png', '/test/dalitests/assets/5.png', './assets/6.png', '/test/dalitests/assets/7.png', './assets/8.png', '/test/dalitests/assets/9.png'];

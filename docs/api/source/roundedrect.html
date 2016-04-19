@@ -181,38 +181,34 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and limitations under the License.*/</span>
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, shape3d){
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, <span class="predefined">$3d$</span>, morph3d, circle, roundedrect) {
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        screen(
-                                morph3d({
-                                        <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>),
-                                        <span class="key">top</span>: <span class="integer">200</span>,
-                                        <span class="key">left</span>: <span class="integer">200</span>,
-                                        <span class="function">oninit</span>: <span class="keyword">function</span> () {
-                                                <span class="local-variable">this</span>.morphweight = Animate({
-                                                        <span class="key">repeat</span>: <span class="predefined-constant">Infinity</span>,
-                                                        <span class="integer">0</span>: {<span class="key">value</span>: <span class="integer">1</span>, <span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sine</span><span class="delimiter">&quot;</span></span>},
-                                                        <span class="integer">1</span>: {<span class="key">value</span>: <span class="integer">0</span>, <span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sine</span><span class="delimiter">&quot;</span></span>},
-                                                        <span class="integer">2</span>: {<span class="key">value</span>: <span class="integer">1</span>, <span class="key">motion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sine</span><span class="delimiter">&quot;</span></span>}
-                                                })
-                                        }
-                                }, [
-                                        circle({<span class="key">radius</span>: <span class="integer">200</span>, <span class="key">detail</span>: <span class="integer">64</span>}),
-                                        roundedrect({<span class="key">width</span>: <span class="integer">200</span>, <span class="key">height</span>: <span class="integer">200</span>, <span class="key">radius</span>: <span class="integer">4</span>, <span class="key">detail</span>: <span class="integer">64</span>})
-                                ])
-                        )
-                ]
+        <span class="keyword">var</span> GLGeom = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/geometry/basicgeometry</span><span class="delimiter">'</span></span>)
+
+        <span class="local-variable">this</span>.attributes = {
+                <span class="key">width</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">1</span>}),
+                <span class="key">height</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">1</span>}),
+                <span class="key">radius</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="float">0.1</span>}),
+                <span class="key">detail</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">64</span>})
+        }
+
+        <span class="local-variable">this</span>.shape3d = {
+                <span class="function">update</span>:<span class="keyword">function</span>(){
+                        <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
+                        <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array();
+                        GLGeom.createRoundedRect(view.width, view.height, view.radius, view.detail, <span class="keyword">function</span>(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
+                                <span class="local-variable">this</span>.mesh.push(v1,n1,t1);
+                                <span class="local-variable">this</span>.mesh.push(v2,n2,t2);
+                                <span class="local-variable">this</span>.mesh.push(v3,n3,t3);
+                        }.bind(<span class="local-variable">this</span>))
+                }
         }
 })
 </pre></td>

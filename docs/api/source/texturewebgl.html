@@ -578,7 +578,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(!ext) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">No OES_texture_half_float</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.gldata_type = ext.HALF_FLOAT_OES
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span>(type &amp; Texture.HALF_FLOAT){
+                <span class="keyword">else</span> <span class="keyword">if</span>(type &amp; Texture.FLOAT){
                         <span class="keyword">var</span> ext = gl._getExtension(<span class="string"><span class="delimiter">'</span><span class="content">OES_texture_float</span><span class="delimiter">'</span></span>)
                         <span class="keyword">if</span>(!ext) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">No OES_texture_float</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.gldata_type = gl.FLOAT

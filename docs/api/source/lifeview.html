@@ -243,13 +243,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Must define N RenderPass nested classes below to match this count</span>
         <span class="local-variable">this</span>.passes = <span class="integer">1</span>
 
-        <span class="local-variable">this</span>.passesdoublebuffer = <span class="predefined-constant">true</span>
-
         <span class="comment">// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1</span>
         <span class="comment">// must define pass0, 2 must define pass0 and pass1...</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pass0</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.RenderPass, <span class="keyword">function</span>() {
+                <span class="comment">// set to true to use floating point textures on this pass</span>
+                <span class="local-variable">this</span>.usefloat = <span class="predefined-constant">false</span>
+                <span class="comment">// Turn on double-buffering since we want to feed pass0 back into itself</span>
+                <span class="local-variable">this</span>.doublebuffer = <span class="predefined-constant">true</span>
+                <span class="comment">// define the color to return in this pass</span>
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="comment">// convert floats to pixels</span>
+                        <span class="comment">// this makes the shader redraw each frame, allowing loopback between the double</span>
+                        <span class="comment">// buffers in pass0</span>
+                        <span class="keyword">var</span> time = view.time
+
+                        <span class="comment">// convert position floats to pixels</span>
                         <span class="keyword">var</span> x = mesh.x * view.layout.width
                         <span class="keyword">var</span> y = mesh.y * view.layout.height
 
@@ -257,18 +264,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         x *= <span class="local-variable">this</span>.pass0.ratio
                         y *= <span class="local-variable">this</span>.pass0.ratio
 
-                        <span class="comment">// count number of neighbors</span>
-                        <span class="keyword">var</span> neighbors = <span class="integer">0</span>
                         <span class="comment">// if this is the first time, read from the framebuffer</span>
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.drawcount == <span class="integer">1</span>.) {
                                 <span class="comment">// or use noise</span>
                                 <span class="keyword">return</span> vec4(noise.cheapnoise(mesh.xy) &gt; <span class="float">.5</span>)
                                 <span class="keyword">return</span> <span class="local-variable">this</span>.framebuffer.pixel(vec2(x,y))
                         }
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.drawcount &gt; <span class="integer">4</span>.) {
-                                <span class="comment">// return this.pass0.pixel(vec2(x,y))</span>
-                        }
-                        <span class="comment">// account for pixel ratio</span>
+
+                        <span class="comment">// count number of neighbors</span>
+                        <span class="keyword">var</span> neighbors = <span class="integer">0</span>
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y)).r &gt;= <span class="float">0.5</span>) neighbors++
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
@@ -277,10 +281,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y)).r &gt;= <span class="float">0.5</span>) neighbors++
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
-
-                        <span class="comment">// this makes the shader redraw each frame, allowing loopback between the double</span>
-                        <span class="comment">// buffers</span>
-                        <span class="keyword">var</span> time = view.time
 
                         <span class="comment">// are we alive?</span>
                         <span class="keyword">var</span> alive = <span class="local-variable">this</span>.pass0.pixel(vec2(x,y))

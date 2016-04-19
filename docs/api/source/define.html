@@ -3040,6 +3040,49 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2886" name="n2886">2886</a>
 <a href="#n2887" name="n2887">2887</a>
 <a href="#n2888" name="n2888">2888</a>
+<a href="#n2889" name="n2889">2889</a>
+<strong><a href="#n2890" name="n2890">2890</a></strong>
+<a href="#n2891" name="n2891">2891</a>
+<a href="#n2892" name="n2892">2892</a>
+<a href="#n2893" name="n2893">2893</a>
+<a href="#n2894" name="n2894">2894</a>
+<a href="#n2895" name="n2895">2895</a>
+<a href="#n2896" name="n2896">2896</a>
+<a href="#n2897" name="n2897">2897</a>
+<a href="#n2898" name="n2898">2898</a>
+<a href="#n2899" name="n2899">2899</a>
+<strong><a href="#n2900" name="n2900">2900</a></strong>
+<a href="#n2901" name="n2901">2901</a>
+<a href="#n2902" name="n2902">2902</a>
+<a href="#n2903" name="n2903">2903</a>
+<a href="#n2904" name="n2904">2904</a>
+<a href="#n2905" name="n2905">2905</a>
+<a href="#n2906" name="n2906">2906</a>
+<a href="#n2907" name="n2907">2907</a>
+<a href="#n2908" name="n2908">2908</a>
+<a href="#n2909" name="n2909">2909</a>
+<strong><a href="#n2910" name="n2910">2910</a></strong>
+<a href="#n2911" name="n2911">2911</a>
+<a href="#n2912" name="n2912">2912</a>
+<a href="#n2913" name="n2913">2913</a>
+<a href="#n2914" name="n2914">2914</a>
+<a href="#n2915" name="n2915">2915</a>
+<a href="#n2916" name="n2916">2916</a>
+<a href="#n2917" name="n2917">2917</a>
+<a href="#n2918" name="n2918">2918</a>
+<a href="#n2919" name="n2919">2919</a>
+<strong><a href="#n2920" name="n2920">2920</a></strong>
+<a href="#n2921" name="n2921">2921</a>
+<a href="#n2922" name="n2922">2922</a>
+<a href="#n2923" name="n2923">2923</a>
+<a href="#n2924" name="n2924">2924</a>
+<a href="#n2925" name="n2925">2925</a>
+<a href="#n2926" name="n2926">2926</a>
+<a href="#n2927" name="n2927">2927</a>
+<a href="#n2928" name="n2928">2928</a>
+<a href="#n2929" name="n2929">2929</a>
+<strong><a href="#n2930" name="n2930">2930</a></strong>
+<a href="#n2931" name="n2931">2931</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -4653,7 +4696,50 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         noderequirewrapper.<span class="function">async</span> = <span class="keyword">function</span>(modname){
                                 <span class="comment">// For dali (and probably nodejs) relative paths must be made</span>
-                                <span class="comment">// absolute to where the example is located.</span>
+                                <span class="comment">// absolute to where the example is located. Retrieval</span>
+                                <span class="comment">// method is different if running from a remote server</span>
+                                <span class="keyword">var</span> remote = (define.<span class="predefined">$example</span>.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">://</span><span class="delimiter">'</span></span>) !== -<span class="integer">1</span>);
+
+                                <span class="keyword">if</span> (define.<span class="predefined">$platform</span> == <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>) {
+                                        <span class="comment">// Remote, relative</span>
+                                        <span class="keyword">if</span> (remote &amp;&amp; modname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">./</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) {
+                                                modname = define.<span class="predefined">$example</span> + modname.substring(<span class="integer">2</span>)
+                                                <span class="keyword">return</span> define.httpGetCached(modname);
+                                        }
+
+                                        <span class="comment">// Remote, absolute</span>
+                                        <span class="keyword">if</span> (remote &amp;&amp; modname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) {
+                                                <span class="keyword">var</span> p = define.<span class="predefined">$example</span>.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>, <span class="integer">8</span>);
+                                                modname = define.<span class="predefined">$example</span>.substring(<span class="integer">0</span>, p) + modname;
+                                                <span class="keyword">return</span> define.httpGetCached(modname);
+                                        }
+
+                                        <span class="comment">// Local, relative</span>
+                                        <span class="keyword">if</span> (modname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">./</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) {
+                                                modname = <span class="string"><span class="delimiter">'</span><span class="content">$root/</span><span class="delimiter">'</span></span> + define.<span class="predefined">$example</span> + modname.substring(<span class="integer">2</span>)
+                                                modname = define.expandVariables(modname);
+
+                                                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject) {
+                                                        <span class="keyword">return</span> resolve(define.loadImage(modname));
+                                                });
+                                        }
+
+                                        <span class="comment">// Local, absolute</span>
+                                        <span class="keyword">if</span> (modname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) {
+                                                modname = <span class="string"><span class="delimiter">'</span><span class="content">$root</span><span class="delimiter">'</span></span> + modname
+                                                modname = define.expandVariables(modname);
+
+                                                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject) {
+                                                        <span class="keyword">return</span> resolve(define.loadImage(modname));
+                                                });
+                                        }
+
+                                        <span class="keyword">if</span> (remote &amp;&amp; modname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">://</span><span class="delimiter">'</span></span>) === -<span class="integer">1</span>)
+                                                modname = define.<span class="predefined">$example</span> + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + modname
+
+                                        modname = define.expandVariables(modname)
+                                }
+
                                 <span class="keyword">if</span> (define.<span class="predefined">$platform</span> == <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span> &amp;&amp; modname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">./</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>)
                                         modname = <span class="string"><span class="delimiter">'</span><span class="content">$root</span><span class="delimiter">'</span></span> + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + define.<span class="predefined">$example</span> + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + modname;
 
