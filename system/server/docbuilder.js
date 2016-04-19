@@ -179,7 +179,12 @@ define.class(function(require){
             }
 
 			if (class_doc.examples && class_doc.examples.length) {
-				var url = '/apps/docs/example#path=$root/' + class_doc.sourcePath;
+				// console.log("\n\n\nclass_doc>>>>", class_doc.base_class_chain)
+				var ext = ""
+				if (define.$disableserver === true) {
+					ext = ".html"
+				}
+				var url = '/apps/docs/example' + ext + '#path=$' + class_doc.sourcePath;
 				var s = "border:0;";
 				var w = 900;
 				var h = 300 * class_doc.examples.length;

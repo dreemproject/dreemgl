@@ -140,10 +140,7 @@ define.class(function(require, exports){
 						}
 
 						var cmt = grabFirstCommentAbove(key.cmu)
-						var defvaluename = undefined
-						if (attr.value){
-							defvaluename = attr.value
-						}
+						var defvaluename = attr.value
 
 						var typename = "typeless";
 						if (attr.type && attr.type.name) typename = attr.type.name.toString()
