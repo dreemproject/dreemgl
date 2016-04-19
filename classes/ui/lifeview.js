@@ -12,13 +12,20 @@ define.class('$ui/view', function(require){
 	// Must define N RenderPass nested classes below to match this count
 	this.passes = 1
 
-	this.passesdoublebuffer = true
-
 	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1
 	// must define pass0, 2 must define pass0 and pass1...
 	define.class(this, "pass0", this.RenderPass, function() {
+		// set to true to use floating point textures on this pass
+		this.usefloat = false
+		// Turn on double-buffering since we want to feed pass0 back into itself
+		this.doublebuffer = true
+		// define the color to return in this pass
 		this.color = function(){
-			// convert floats to pixels
+			// this makes the shader redraw each frame, allowing loopback between the double
+			// buffers in pass0
+			var time = view.time
+
+			// convert position floats to pixels
 			var x = mesh.x * view.layout.width
 			var y = mesh.y * view.layout.height
 
@@ -26,18 +33,15 @@ define.class('$ui/view', function(require){
 			x *= this.pass0.ratio
 			y *= this.pass0.ratio
 
-			// count number of neighbors
-			var neighbors = 0
 			// if this is the first time, read from the framebuffer
 			if (this.drawcount == 1.) {
 				// or use noise
 				return vec4(noise.cheapnoise(mesh.xy) > .5)
 				return this.framebuffer.pixel(vec2(x,y))
 			}
-			if (this.drawcount > 4.) {
-				// return this.pass0.pixel(vec2(x,y))
-			}
-			// account for pixel ratio
+
+			// count number of neighbors
+			var neighbors = 0
 			if (this.pass0.pixel(vec2(x - 1, y - 1)).r >= 0.5) neighbors++
 			if (this.pass0.pixel(vec2(x - 1, y)).r >= 0.5) neighbors++
 			if (this.pass0.pixel(vec2(x - 1, y + 1)).r >= 0.5) neighbors++
@@ -46,10 +50,6 @@ define.class('$ui/view', function(require){
 			if (this.pass0.pixel(vec2(x + 1, y - 1)).r >= 0.5) neighbors++
 			if (this.pass0.pixel(vec2(x + 1, y)).r >= 0.5) neighbors++
 			if (this.pass0.pixel(vec2(x + 1, y + 1)).r >= 0.5) neighbors++
-
-			// this makes the shader redraw each frame, allowing loopback between the double
-			// buffers
-			var time = view.time
 
 			// are we alive?
 			var alive = this.pass0.pixel(vec2(x,y))
