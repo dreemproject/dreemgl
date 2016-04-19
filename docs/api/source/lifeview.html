@@ -228,6 +228,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n74" name="n74">74</a>
 <a href="#n75" name="n75">75</a>
 <a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -247,10 +263,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// must define pass0, 2 must define pass0 and pass1...</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pass0</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.RenderPass, <span class="keyword">function</span>() {
                 <span class="comment">// set to true to use floating point textures on this pass</span>
-                <span class="local-variable">this</span>.usefloat = <span class="predefined-constant">false</span>
+                <span class="local-variable">this</span>.usefloat = <span class="predefined-constant">true</span>
                 <span class="comment">// Turn on double-buffering since we want to feed pass0 back into itself</span>
                 <span class="local-variable">this</span>.doublebuffer = <span class="predefined-constant">true</span>
                 <span class="comment">// define the color to return in this pass</span>
+
+                <span class="local-variable">this</span>.<span class="function">isAlive</span> = <span class="keyword">function</span>(pos) {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.pass0.pixel(pos).r &gt;= <span class="float">0.7</span>
+                }
+
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                         <span class="comment">// this makes the shader redraw each frame, allowing loopback between the double</span>
                         <span class="comment">// buffers in pass0</span>
@@ -264,44 +285,55 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         x *= <span class="local-variable">this</span>.pass0.ratio
                         y *= <span class="local-variable">this</span>.pass0.ratio
 
-                        <span class="comment">// if this is the first time, read from the framebuffer</span>
+                        <span class="comment">// if this is the first time, read from the framebuffer instead of from our last pass</span>
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.drawcount == <span class="integer">1</span>.) {
-                                <span class="comment">// or use noise</span>
-                                <span class="keyword">return</span> vec4(noise.cheapnoise(mesh.xy) &gt; <span class="float">.5</span>)
                                 <span class="keyword">return</span> <span class="local-variable">this</span>.framebuffer.pixel(vec2(x,y))
+                                <span class="comment">// or start out with noise</span>
+                                <span class="keyword">return</span> vec4(noise.cheapnoise(mesh.xy))
                         }
 
                         <span class="comment">// count number of neighbors</span>
                         <span class="keyword">var</span> neighbors = <span class="integer">0</span>
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x - <span class="integer">1</span>, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y - <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y)).r &gt;= <span class="float">0.5</span>) neighbors++
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pass0.pixel(vec2(x + <span class="integer">1</span>, y + <span class="integer">1</span>)).r &gt;= <span class="float">0.5</span>) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x - <span class="integer">1</span>, y - <span class="integer">1</span>))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x - <span class="integer">1</span>, y))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x - <span class="integer">1</span>, y + <span class="integer">1</span>))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x, y - <span class="integer">1</span>))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x, y + <span class="integer">1</span>))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x + <span class="integer">1</span>, y - <span class="integer">1</span>))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x + <span class="integer">1</span>, y))) neighbors++
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.isAlive(vec2(x + <span class="integer">1</span>, y + <span class="integer">1</span>))) neighbors++
 
                         <span class="comment">// are we alive?</span>
-                        <span class="keyword">var</span> alive = <span class="local-variable">this</span>.pass0.pixel(vec2(x,y))
-                        <span class="keyword">if</span> (alive.r &gt; <span class="integer">0</span>.) {
+                        <span class="keyword">var</span> color = <span class="local-variable">this</span>.pass0.pixel2(x, y)
+                        <span class="keyword">if</span> (color.r &gt;= <span class="float">0.7</span>) {
+                                color = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
                                 <span class="comment">// Any live cell with two or three live neighbours lives on to the next generation.</span>
-                                alive = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
                                 <span class="keyword">if</span> (neighbors &lt; <span class="integer">2</span>) {
                                         <span class="comment">// Any live cell with fewer than two live neighbours dies, as if caused by under-population.</span>
-                                        alive = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+                                        color = vec4(<span class="float">.59</span>,<span class="integer">0</span>,<span class="integer">1</span>.,<span class="integer">1</span>.)
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (neighbors &gt; <span class="integer">3</span>) {
                                         <span class="comment">// Any live cell with more than three live neighbours dies, as if by over-population.</span>
-                                        alive = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+                                        color = vec4(<span class="float">.59</span>,<span class="integer">0</span>,<span class="integer">1</span>.,<span class="integer">1</span>.)
                                 }
                         } <span class="keyword">else</span> {
                                 <span class="keyword">if</span> (neighbors == <span class="integer">3</span>) {
                                         <span class="comment">// Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</span>
-                                        alive = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
+                                        color = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
                                 }
                         }
 
-                        <span class="keyword">return</span> vec4(alive.rgb, alive.a * view.opacity)
+                        <span class="comment">// fade colors over time</span>
+                        <span class="keyword">if</span> (color.g &gt; <span class="float">.001</span>) {
+                                color.g -= <span class="float">.004</span>;
+                        }
+                        <span class="keyword">if</span> (color.b &gt; <span class="float">.001</span>) {
+                                color.b -= <span class="float">.002</span>;
+                        }
+                        <span class="keyword">if</span> (color.r &gt; <span class="float">.001</span> &amp;&amp; color.r &lt; <span class="float">.7</span>) {
+                                color.r -= <span class="float">.002</span>;
+                        }
+
+                        <span class="keyword">return</span> color
                 }
         })
 })

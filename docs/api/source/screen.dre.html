@@ -172,31 +172,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n18" name="n18">18</a>
 <a href="#n19" name="n19">19</a>
 <strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$server$</span>,service,<span class="predefined">$ui$</span>,screen,view,<span class="predefined">$flow$services$</span>,map,webrequest,<span class="predefined">$flow$controllers$</span>,xypad,knob,keyboard,dpad,<span class="predefined">$flow$displays$</span>,labtext){
-
-
-<span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
-
-
-<span class="keyword">return</span> [
-xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">25</span>,<span class="key">y</span>:<span class="integer">133</span>}}),
-labtext({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">labtext0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">326</span>,<span class="key">y</span>:<span class="integer">24</span>},<span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.pointerpos</span><span class="delimiter">&quot;</span></span>),<span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.dpad0.value</span><span class="delimiter">&quot;</span></span>)}),
-dpad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">dpad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">21</span>,<span class="key">y</span>:<span class="integer">23</span>}})
-]
-
-
-
-
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view, button){
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>},
+                                view({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">viewbg</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#CBD6D9</span><span class="delimiter">&quot;</span></span>, <span class="function">init</span>: <span class="keyword">function</span>() {
+      <span class="local-variable">this</span>.margin = <span class="integer">20</span>;
+    }, <span class="key">attributes</span>: {<span class="key">attr</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">val</span><span class="delimiter">&quot;</span></span>}), <span class="key">margin</span>: Config({<span class="key">listeners</span>: [<span class="keyword">function</span>(margin) {
+      console.log(<span class="string"><span class="delimiter">'</span><span class="content">onmargin</span><span class="delimiter">'</span></span>, margin.value);
+      <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>;
+    }]})}},
+                                        button({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="key">attributes</span>: {<span class="key">click</span>: Config({<span class="key">listeners</span>: [<span class="keyword">function</span>() {
+        console.log(<span class="string"><span class="delimiter">'</span><span class="content">onclick</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>);
+        <span class="local-variable">this</span>.parent.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>;
+        <span class="local-variable">this</span>.parent.fontfamily = <span class="string"><span class="delimiter">'</span><span class="content">leaguegothic</span><span class="delimiter">'</span></span>
+      }]})}})
+                                )
+                        )
+                ];
         }
-
-
-
-
-        }
-)</pre></td>
+});</pre></td>
 </tr></table>
 
 </body>
