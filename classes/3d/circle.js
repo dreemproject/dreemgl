@@ -9,7 +9,9 @@ define.class(function(require, shape3d){
 	var GLGeom = require('$system/geometry/basicgeometry')
 
 	this.attributes = {
+		// Radius of the circle
 		radius: Config({type:float, value:1}),
+		// Detail: the number of vertices along the circle edge.
 		detail: Config({type:float, value:64})
 	}
 

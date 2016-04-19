@@ -9,8 +9,11 @@ define.class(function(require, shape3d){
 	var GLGeom = require('$system/geometry/basicgeometry')
 
 	this.attributes = {
+		// Width of the rect
 		width: Config({type:float, value:1}),
+		// Height of the rect
 		height: Config({type:float, value:1}),
+		// Detail: the number of vertices along the rect edge.
 		detail: Config({type:float, value:64})
 	}
 

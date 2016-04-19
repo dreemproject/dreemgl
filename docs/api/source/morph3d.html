@@ -230,6 +230,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n76" name="n76">76</a>
 <a href="#n77" name="n77">77</a>
 <a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -238,13 +245,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view){
+<span class="comment">// Morphing 3d geometry class.</span>
+<span class="comment">// Target geometries are specified as children.</span>
+<span class="comment">// Both target geometries should have the same vertex attribues and vertex count.</span>
 
         <span class="local-variable">this</span>.attributes = {
+                <span class="comment">// Morph weight - determines the interpolation between target shapes</span>
                 <span class="key">morphweight</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">0</span>}),
+                <span class="comment">// Shape color</span>
                 <span class="key">bgcolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="integer">1</span>, <span class="integer">1</span>, <span class="integer">1</span>, <span class="integer">1</span>)}),
+                <span class="comment">// Shape opacity</span>
                 <span class="key">opacity</span>: Config({<span class="key">value</span>: <span class="float">1.0</span>, <span class="key">type</span>: <span class="reserved">float</span>})
         }
 
+        <span class="comment">// Overridable bgcolor function</span>
         <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(pos){
                 <span class="keyword">return</span> <span class="local-variable">this</span>.bgcolor
         }

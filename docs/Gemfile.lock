@@ -20,6 +20,3 @@ PLATFORMS
 
 DEPENDENCIES
   jsduck (>= 6.0.0.beta)
-
-BUNDLED WITH
-   1.11.2
