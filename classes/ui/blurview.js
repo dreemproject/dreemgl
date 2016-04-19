@@ -109,9 +109,6 @@ define.class('$ui/view', function(require){
 	define.class(this, "pass0", this.Gaussian1D, function() {
 		this.atConstructor = function(view) {
 			// horizontal filter
-			//var width = view._layout.width ? view._layout.width : view.screen.size.x;
-			//this.spacing = vec2(1.0 / width, 0)
-
 			this.spacing = vec2(1.0, 0)
 		}
 	})
@@ -119,11 +116,16 @@ define.class('$ui/view', function(require){
 	define.class(this, "pass1", this.Gaussian1D, function() {
 		this.atConstructor = function(view) {
 			// vertical filter
-			//var height = view._layout.height ? view._layout.height : view.screen.size.y;
-			//this.spacing = vec2(0, 1.0 / height)
-
 			this.spacing = vec2(0, 1.0)
 		}
+
+		// I can't seem to embed the logic of what pass to use in base class.
+		this.color = function() {
+			var col = this.pass0.conv1d(mesh.xy, view.filterlength, view.filterscaling, this.spacing, view.k0, view.k1, view.k1, view.k2, view.k2, view.k3, view.k3, view.k4, view.k4, view.k5, view.k5, view.k6, view.k6, view.k7, view.k7, view.k8, view.k8, view.k9, view.k9, view.k10, view.k10)
+
+			return vec4(col.rgb, col.a * view.opacity)
+		}
+
 	})
 
 })
