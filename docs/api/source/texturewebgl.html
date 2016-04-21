@@ -478,6 +478,77 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n324" name="n324">324</a>
 <a href="#n325" name="n325">325</a>
 <a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
+<a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
+<strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
+<a href="#n336" name="n336">336</a>
+<a href="#n337" name="n337">337</a>
+<a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
+<a href="#n353" name="n353">353</a>
+<a href="#n354" name="n354">354</a>
+<a href="#n355" name="n355">355</a>
+<a href="#n356" name="n356">356</a>
+<a href="#n357" name="n357">357</a>
+<a href="#n358" name="n358">358</a>
+<a href="#n359" name="n359">359</a>
+<strong><a href="#n360" name="n360">360</a></strong>
+<a href="#n361" name="n361">361</a>
+<a href="#n362" name="n362">362</a>
+<a href="#n363" name="n363">363</a>
+<a href="#n364" name="n364">364</a>
+<a href="#n365" name="n365">365</a>
+<a href="#n366" name="n366">366</a>
+<a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
+<strong><a href="#n370" name="n370">370</a></strong>
+<a href="#n371" name="n371">371</a>
+<a href="#n372" name="n372">372</a>
+<a href="#n373" name="n373">373</a>
+<a href="#n374" name="n374">374</a>
+<a href="#n375" name="n375">375</a>
+<a href="#n376" name="n376">376</a>
+<a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
+<a href="#n382" name="n382">382</a>
+<a href="#n383" name="n383">383</a>
+<a href="#n384" name="n384">384</a>
+<a href="#n385" name="n385">385</a>
+<a href="#n386" name="n386">386</a>
+<a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
+<a href="#n391" name="n391">391</a>
+<a href="#n392" name="n392">392</a>
+<a href="#n393" name="n393">393</a>
+<a href="#n394" name="n394">394</a>
+<a href="#n395" name="n395">395</a>
+<a href="#n396" name="n396">396</a>
+<a href="#n397" name="n397">397</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -803,6 +874,77 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
                 })
         }
+
+
+        <span class="comment">// 1-D convolution with a kernel.</span>
+        <span class="comment">// 21 kernel weights are arranged 0, +1, -1, +2, -2, ... away from center.</span>
+        <span class="comment">// ksize is the size of the kernel (odd)</span>
+        <span class="comment">// scale is a scaling factor to multiple the result by</span>
+        <span class="comment">// direction is 'x' or 'y'.</span>
+        <span class="comment">// spacing is the vec2 pixel spacing (fractional) between pixels. Typically</span>
+        <span class="comment">// this will be vec2(px,0) or vec2(0,py)</span>
+        <span class="local-variable">this</span>.<span class="function">conv1d</span> = <span class="keyword">function</span>(v, ksize, scale, spacing, k0, kp1, km1, kp2, km2, kp3, km3, kp4, km4, kp5, km5, kp6, km6, kp7, km7, kp8, km8, kp9, km9, kp10, km10) {
+
+                <span class="comment">// Convert pixels spacing to fractional</span>
+    spacing = vec2(spacing.x / <span class="local-variable">this</span>.size.x, spacing.y / <span class="local-variable">this</span>.size.y)
+
+                <span class="comment">// Start with center pixel</span>
+                <span class="keyword">var</span> sum = texture2D(<span class="local-variable">this</span>, v) * k0
+
+                <span class="keyword">if</span> (ksize &gt; <span class="integer">1</span>.) {
+                        sum += texture2D(<span class="local-variable">this</span>, v + spacing) * kp1
+                        sum += texture2D(<span class="local-variable">this</span>, v - spacing) * km1
+
+                        <span class="keyword">if</span> (ksize &gt; <span class="integer">3</span>.) {
+                                sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">2</span> * spacing) * kp2
+                                sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">2</span> * spacing) * km2
+
+                                <span class="keyword">if</span> (ksize &gt; <span class="integer">5</span>.) {
+                                        sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">3</span> * spacing) * kp3
+                                        sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">3</span> * spacing) * km3
+
+                                        <span class="keyword">if</span> (ksize &gt; <span class="integer">7</span>.) {
+                                                sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">4</span> * spacing) * kp4
+                                                sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">4</span> * spacing) * km4
+
+                                                <span class="keyword">if</span> (ksize &gt; <span class="integer">9</span>.) {
+                                                        sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">5</span> * spacing) * kp5
+                                                        sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">5</span> * spacing) * km5
+
+                                                        <span class="keyword">if</span> (ksize &gt; <span class="integer">11</span>.) {
+                                                                sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">6</span> * spacing) * kp6
+                                                                sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">6</span> * spacing) * km6
+
+                                                                <span class="keyword">if</span> (ksize &gt; <span class="integer">13</span>.) {
+                                                                        sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">7</span> * spacing) * kp7
+                                                                        sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">7</span> * spacing) * km7
+
+                                                                        <span class="keyword">if</span> (ksize &gt; <span class="integer">15</span>.) {
+                                                                                sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">8</span> * spacing) * kp8
+                                                                                sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">8</span> * spacing) * km8
+
+                                                                                <span class="keyword">if</span> (ksize &gt; <span class="integer">17</span>.) {
+                                                                                        sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">9</span> * spacing) * kp9
+                                                                                        sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">9</span> * spacing) * km9
+
+                                                                                        <span class="keyword">if</span> (ksize &gt; <span class="integer">19</span>.) {
+                                                                                                sum += texture2D(<span class="local-variable">this</span>, v + <span class="integer">10</span> * spacing) * kp10
+                                                                                                sum += texture2D(<span class="local-variable">this</span>, v - <span class="integer">10</span> * spacing) * km10
+                                                                                        }
+                                                                                }
+                                                                        }
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                }
+
+                sum = scale * sum
+                <span class="keyword">return</span> sum
+        }
+
 
 })
 </pre></td>

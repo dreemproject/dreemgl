@@ -2191,6 +2191,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2037" name="n2037">2037</a>
 <a href="#n2038" name="n2038">2038</a>
 <a href="#n2039" name="n2039">2039</a>
+<strong><a href="#n2040" name="n2040">2040</a></strong>
+<a href="#n2041" name="n2041">2041</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2476,6 +2478,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// tabstop, sorted by number</span>
                 <span class="key">tabstop</span>: <span class="predefined-constant">NaN</span>,
 
+                <span class="comment">// the type of pointer cursor to use for this view</span>
                 <span class="key">cursor</span>: Config({<span class="key">type</span>:Enum(
                         <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">none</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">wait</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">text</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">pointer</span><span class="delimiter">'</span></span>,
                         <span class="string"><span class="delimiter">'</span><span class="content">zoom-in</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">zoom-out</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">grab</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">grabbing</span><span class="delimiter">'</span></span>,
@@ -2488,9 +2491,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="string"><span class="delimiter">'</span><span class="content">alias</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">cell</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">copy</span><span class="delimiter">'</span></span>
                 ), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>}),
 
-                <span class="comment">// The number of render passes for this view</span>
+                <span class="comment">// The number of render passes for this view. Note that corresponding</span>
+                <span class="comment">// inner classes will need to be created for multi pass rendering to work,</span>
+                <span class="comment">// see /classes/ui/blurtest.js for an example.</span>
                 <span class="key">passes</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">0</span>, <span class="key">minvalue</span>: <span class="integer">0</span>, <span class="key">maxvalue</span>:<span class="integer">10</span>}),
-
         }
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
@@ -2719,7 +2723,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="comment">// based on this.passes with names pass0..9</span>
                                         <span class="keyword">var</span> key = <span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + i
                                         <span class="keyword">if</span> (key <span class="keyword">in</span> <span class="local-variable">this</span>) {
-                                                <span class="local-variable">this</span>.shaders[key] = <span class="keyword">new</span> <span class="local-variable">this</span>[key]()
+                                                <span class="local-variable">this</span>.shaders[key] = <span class="keyword">new</span> <span class="local-variable">this</span>[key](<span class="local-variable">this</span>)
                                         } <span class="keyword">else</span> {
                                                 console.warn(<span class="string"><span class="delimiter">'</span><span class="content">you are missing an inner class named</span><span class="delimiter">'</span></span>, key, <span class="string"><span class="delimiter">'</span><span class="content">in</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>)
                                         }

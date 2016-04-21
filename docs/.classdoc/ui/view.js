@@ -343,8 +343,14 @@
  * tabstop, sorted by number
  */
 /**
+ * @attribute {Enum} [cursor=""]
+ * the type of pointer cursor to use for this view
+ */
+/**
  * @attribute {int32} [passes="0"]
- * The number of render passes for this view
+ * The number of render passes for this view. Note that corresponding
+ * inner classes will need to be created for multi pass rendering to work,
+ * see /classes/ui/blurtest.js for an example.
  */
 /**
  * @method atViewDestroy
