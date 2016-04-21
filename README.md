@@ -1,4 +1,4 @@
-# Dreem GL
+# DreemGL
 
 DreemGL is an open-source multi-screen prototyping framework for mediated environments, 
 with a visual editor and shader styling for webGL and DALi runtimes written in JavaScript.
