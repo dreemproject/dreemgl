@@ -159,19 +159,25 @@ All compositions need to subclass the *$server/composition* class. The syntax fo
 define.class("$server/composition", function() {});
 ```
 
-`$server` is a *default path symbol*, which resolves to a default path or folder in the DreemGL framework. The *default path symbols* are use in class definitions. The following table shows an overview all default paths you can use:
+`$server` is a *default path symbol*, which resolves to a default path or folder in the DreemGL framework. The *default path symbols* are used in class definitions. The following table shows an overview all default paths you can use:
 
 | Path Symbol | DreemGL Folder | Description |
 | ----------- | ------------ | ----------- |
-| `$behaviors` | [$root/classes/behaviors](../examples)| Behaviors (e.g. drag support)  |
-| `$examples` | [$root/examples](../examples)| DreemGL example compositions |
-| `$resources` | [$root/resources](../resources)| Fonts, icons, and textures. |
-| `$server` | [$root/classes/server](../classes/server)| Composition, dataset, IO, services. |
 | `$system` | [$root/system](../system)| System classes like geometry, shader support, runtimes, RPC classes. |
-| `$testing` | [$root/classes/testing](../classes/testing)| Classes used for testing.  |
-| `$ui` | [$root/classes/ui](../classes/ui)| Core UI components. |
-| `$widgets` | [$root/system](../classes/widgets)| UI widgets used by applications, e.g. colorpicker, searchbox, radiogroup. |
+| `$resources` | [$root/resources](../resources)| Fonts, icons, and textures. |
 | `$3d` | [$root/classes/3d](../classes/3d)| System classes for 3d support in DreemGL |
+| `$behaviors` | [$root/classes/behaviors](../examples)| Behaviors (e.g. drag support).  |
+| `$server` | [$root/classes/server](../classes/server)| Composition, dataset, IO, services. |
+| `$ui` | [$root/classes/ui](../classes/ui)| Core UI components. |
+|`$flow` | [$root/classes/flow](../classes/flow)| Components used by flow graph. |
+| `$testing` | [$root/classes/testing](../classes/testing)| Placeholder for class testing.  |
+| `$widgets` | [$root/system](../classes/widgets)| UI widgets used by applications, e.g. colorpicker, searchbox, radiogroup. |
+|`$sensors` | [$root/classes/sensors](../classes/sensors)| System classes for sensor support, e.g. gyroscope. |
+|`$iot` | [$root/classes/iot](../classes/iot)| System classes for IoT integration. |
+|`$examples` | [$root/examples](../examples)| Examples with multiple features for each component. Recommended usage patterns. |
+|`$apps` | [$root/apps](../apps)| Larger applications, e.g. flow graph, doc viewer. |
+|`$docs` | [$root/docs](../docs)| DreemGL developer documentation, presentations, and ideas. Any written notes. |
+|`$test` | [$root/test](../test)| Tests for specific functionality. |
 
 DreemGL uses an [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) based style of defining modules and internally works a lot like require.js. The loader is called define.js (after the define global it creates)
 In define.js classes are a first class citizen of the module system, which is used in the live reloading and the nested classes which the shaders are using.
