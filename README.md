@@ -2,7 +2,7 @@
 
 DreemGL is an open-source multi-screen prototyping framework for mediated environments, 
 with a visual editor and shader styling for webGL and DALi runtimes written in JavaScript.
-It is a toolkit for gpu-accelerated multiscreen development that includes features such as:
+As a toolkit for gpu-accelerated multiscreen development, DreemGL includes features such as:
 * IoT Integration for Smart Environments that is elegantly simple
 * Visual layouts and compositions using real data from network services
 * Fast protoyping that allows designers to easily test compositions that connect multiple users in shared experiences on big screens or projections, while allowing each person to use the control tools and preferences they have configured.
