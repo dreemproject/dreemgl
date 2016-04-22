@@ -9,7 +9,7 @@ define.class(function(exports){
 	// internal, Reactive renderer
 
 	var initializing = false
-	var log_render_cause = true
+	var log_render_cause = false
 	var process_list = []
 	var process_timer = undefined
 
@@ -37,7 +37,12 @@ define.class(function(exports){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
 			if(process_list.indexOf(this) === -1){
-				process_list.push(key, this)
+				if (value !== event.old || typeof value === 'object'){
+					// only render if the value changed and isn't an object
+					process_list.push(key, this)
+				} else {
+					return
+				}
 			}
 			if(!process_timer){
 				process_timer = setTimeout(processTimeout, 0)
