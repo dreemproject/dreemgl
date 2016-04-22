@@ -33,11 +33,17 @@ define.class(function(exports){
 		}
 	}
 
-	function __atAttributeGet(key){
+	function __atAttributeGetRender(event, value, pthis, key){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
 			if(process_list.indexOf(this) === -1){
-				process_list.push(key, this)
+				var oldval = (event && event.old) || this[key];
+				if (value !== oldval || typeof value === 'object'){
+					// only render if the value changed and isn't an object
+					process_list.push(key, this)
+				} else {
+					return
+				}
 			}
 			if(!process_timer){
 				process_timer = setTimeout(processTimeout, 0)
@@ -47,8 +53,8 @@ define.class(function(exports){
 
 	function atAttributeGet(key){
 		// lets find out if we already have a listener on it
-		if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGet')){
-			this.addListener(key, __atAttributeGet)
+		if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGetRender')){
+			this.addListener(key, __atAttributeGetRender)
 		}
 	}
 
@@ -101,7 +107,7 @@ define.class(function(exports){
 
 			// store the attribute dependencies
 			new_version.atAttributeGet = atAttributeGet
-			new_version.rerender = __atAttributeGet
+			new_version.rerender = __atAttributeGetRender
 
 			// lets check if object.constructor  a module, ifso
 			if(new_version.classroot === undefined){

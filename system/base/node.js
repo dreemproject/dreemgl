@@ -280,7 +280,7 @@ define.class(function(require){
 			if(callfn === null) return
 			if(callfn){
 				// lets see if we have an 'on' key defined
-				callfn.call(this, event, event.value, this)
+				callfn.call(this, event, event.value, this, key)
 				return
 			}
 		}
@@ -309,7 +309,7 @@ define.class(function(require){
 			while(on_key in proto || listen_key in proto){
 				if(proto.hasOwnProperty(on_key)){
 					callfn = proto[on_key]
-					callfn.call(this, event, event.value, this)
+					callfn.call(this, event, event.value, this, key)
 					if(event.stop) return
 					if(event.final) finals = finals || [], finals.push(event.final)
 					counter++
@@ -317,7 +317,7 @@ define.class(function(require){
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
 					for(var j = listeners.length - 1; j >= 0; j--){
-						listeners[j].call(this, event, event.value, this)
+						listeners[j].call(this, event, event.value, this, key)
 						if(event.stop) return
 						if(event.final) finals = finals || [], finals.push(event.final)
 						counter = -1
@@ -326,7 +326,7 @@ define.class(function(require){
 				proto = Object.getPrototypeOf(proto)
 			}
 			if(finals) for(var i = finals.length - 1; i >=0; i--){
-				finals[i].call(this, event, event.value, this)
+				finals[i].call(this, event, event.value, this, key)
 				if(event.stop) return
 			}
 		}

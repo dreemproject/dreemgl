@@ -304,8 +304,25 @@ define.class('$system/base/node', function(require){
 	this.name = ""
 	this.class = ""
 
-	this.onvisible = this.oncamera = this.onlookat = this.onup = function(){
+	this.oncamera = this.onlookat = this.onup = function(){
 		this.redraw()
+	}
+	this.onopacity = function(opacity){
+		// set/unset this.visible
+		if (opacity < 0.002) {
+			if (this._visible) {
+				this.visible = false
+				this.__opacityhidvisible = true
+			}
+		} else {
+			if (this.__opacityhidvisible && (! this._visible)) {
+				this.visible = true
+			}
+		}
+	}
+	this.onvisible = function(visible){
+		this.__opacityhidvisible = false
+		if (visible && this._opacity >= 0.002) this.redraw()
 	}
 
 	// the number of pick ID's to reserve for this view.
@@ -1049,6 +1066,7 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
+		if (this.__isinvisible()) return
 		// allow pre-matrix gen hooking
 		if (this.atMatrix) this.atMatrix()
 
@@ -1256,9 +1274,20 @@ define.class('$system/base/node', function(require){
 	this.scale =
 	this.rotate = this.rematrix
 
+
+	this.__isinvisible = function() {
+    var view = this
+    while (view) {
+      if (!view._visible) {
+        return true
+      }
+      view = view.parent
+    }
+	}
+
 	// internal, called by the render engine
 	this.doLayout = function(){
-
+		if (this.__isinvisible()) return
 		if (this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
 
 			var layout = this._layout
@@ -1336,6 +1365,11 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by animation setters
 	this.startAnimation = function(attribute, value, track, resolve){
+
+		if(this.hasListenerProp(attribute, 'name', '__atAttributeGetRender')){
+			console.error('WARNING: Animating property "' + attribute + '", which can cause performance problems. Update your class to listen for animation updates and set state there instead of in render(): ', this)
+		}
+
 		if (this.initialized) {
 			return this.screen.startAnimationRoot(this, attribute, value, track, resolve)
 		} else {
