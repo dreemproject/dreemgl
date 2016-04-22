@@ -84,7 +84,6 @@ define.class(function(require, baseclass){
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
-			dt.ratio = ratio
 		}
 		// make sure the drawtarget has the right size
 		var tsize = this[drawtarget].size
@@ -94,6 +93,7 @@ define.class(function(require, baseclass){
 			this[drawtarget].delete()
 			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 		}
+		this[drawtarget].ratio = ratio
 	}
 
 	this.calculateDrawMatrices = function(isroot, storage, pointerx, pointery){
@@ -463,7 +463,7 @@ define.class(function(require, baseclass){
 							readbuffer = 'framebuffera' + j
 						}
 					}
-					shader['pass' + j] = this[readbuffer]
+					var p = shader['pass' + j] = this[readbuffer]
 				}
 				shader.drawcount = view.drawpass.drawcount
 				// set the texture to use its own framebuffer

@@ -1334,6 +1334,11 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by animation setters
 	this.startAnimation = function(attribute, value, track, resolve){
+		
+		if(this.hasListenerProp(attribute, 'name', '__atAttributeGetRender')){
+			console.error('WARNING: Animating a property which is used in a render function: '+attribute, this)
+		}
+
 		if (this.initialized) {
 			return this.screen.startAnimationRoot(this, attribute, value, track, resolve)
 		} else {

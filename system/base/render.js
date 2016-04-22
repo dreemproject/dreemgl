@@ -9,7 +9,7 @@ define.class(function(exports){
 	// internal, Reactive renderer
 
 	var initializing = false
-	var log_render_cause = false
+	var log_render_cause = true
 	var process_list = []
 	var process_timer = undefined
 
@@ -33,7 +33,7 @@ define.class(function(exports){
 		}
 	}
 
-	function __atAttributeGet(key){
+	function __atAttributeGetRender(event, value, pthis, key){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
 			if(process_list.indexOf(this) === -1){
@@ -47,8 +47,8 @@ define.class(function(exports){
 
 	function atAttributeGet(key){
 		// lets find out if we already have a listener on it
-		if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGet')){
-			this.addListener(key, __atAttributeGet)
+		if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGetRender')){
+			this.addListener(key, __atAttributeGetRender)
 		}
 	}
 
@@ -101,7 +101,7 @@ define.class(function(exports){
 
 			// store the attribute dependencies
 			new_version.atAttributeGet = atAttributeGet
-			new_version.rerender = __atAttributeGet
+			new_version.rerender = __atAttributeGetRender
 
 			// lets check if object.constructor  a module, ifso
 			if(new_version.classroot === undefined){
