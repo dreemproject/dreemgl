@@ -8,18 +8,9 @@ define.class(function($server$, composition, $ui$, screen, view, lifeview, icon,
 	this.render = function(){
 		return [
 			screen({name:'default'},
-				lifeview({flex: 1},
-					icon({icon: 'chain', fontsize: 100}),
-					label({text: 'Hello!', fontsize: 100}),
-					view({
-							width:200,
-							height:200,
-							borderwidth:1,
-							rotate: 1,
-							bordercolor:"white",
-							bgimagemode:"center",
-							bgimage:require('$resources/textures/landscape.jpg')
-					})
+				lifeview({flex: 1, flexdirection: "column"},
+					label({text: 'DreemGL', fontsize: 300}),
+					label({text: 'is alive!', fontsize: 300})
 				)
 			)
 		]

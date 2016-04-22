@@ -78,7 +78,7 @@ function main(){
 	}
 
 	// our default pathmap
-	// NOTE: if you change this, also update README.md
+	// NOTE: if you change this, also update /docs/guides/dreem_in_10/README.md
 	define.paths = {
 		'system':'$root/system',
 		'resources':'$root/resources',

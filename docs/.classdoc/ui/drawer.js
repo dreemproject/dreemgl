@@ -7,8 +7,8 @@
  * and the left tray view, in that order.
  * <br/><a href="/examples/drawers">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/drawer.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/ui/drawer.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$ui/drawer.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$ui/drawer.js">open example in new tab &raquo;</a>
  * 
  */
 /**
@@ -16,7 +16,7 @@
  * The orientation of the drawers, ether left/right or top/bottom
  */
 /**
- * @attribute {float32} [value="undefined"]
+ * @attribute {float32} [value="0"]
  * The relative offset of the top drawer view to the center, a value between (far left) -1.0 ~ 1.0 (far right),
  * with 0 being exactly at the center.
  */

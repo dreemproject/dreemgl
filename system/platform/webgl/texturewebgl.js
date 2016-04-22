@@ -97,7 +97,7 @@ define.class('$system/base/texture', function(exports){
 			if(!ext) throw new Error('No OES_texture_half_float')
 			this.gldata_type = ext.HALF_FLOAT_OES
 		}
-		else if(type & Texture.HALF_FLOAT){
+		else if(type & Texture.FLOAT){
 			var ext = gl._getExtension('OES_texture_float')
 			if(!ext) throw new Error('No OES_texture_float')
 			this.gldata_type = gl.FLOAT
@@ -322,5 +322,76 @@ define.class('$system/base/texture', function(exports){
 			WRAP_T: 'CLAMP_TO_EDGE'
 		})
 	}
+
+
+	// 1-D convolution with a kernel.
+	// 21 kernel weights are arranged 0, +1, -1, +2, -2, ... away from center.
+	// ksize is the size of the kernel (odd)
+	// scale is a scaling factor to multiple the result by
+	// direction is 'x' or 'y'.
+	// spacing is the vec2 pixel spacing (fractional) between pixels. Typically
+	// this will be vec2(px,0) or vec2(0,py)
+	this.conv1d = function(v, ksize, scale, spacing, k0, kp1, km1, kp2, km2, kp3, km3, kp4, km4, kp5, km5, kp6, km6, kp7, km7, kp8, km8, kp9, km9, kp10, km10) {
+
+		// Convert pixels spacing to fractional
+    spacing = vec2(spacing.x / this.size.x, spacing.y / this.size.y)
+
+		// Start with center pixel
+		var sum = texture2D(this, v) * k0
+
+		if (ksize > 1.) {
+			sum += texture2D(this, v + spacing) * kp1
+			sum += texture2D(this, v - spacing) * km1
+
+			if (ksize > 3.) {
+				sum += texture2D(this, v + 2 * spacing) * kp2
+				sum += texture2D(this, v - 2 * spacing) * km2
+
+				if (ksize > 5.) {
+					sum += texture2D(this, v + 3 * spacing) * kp3
+					sum += texture2D(this, v - 3 * spacing) * km3
+
+					if (ksize > 7.) {
+						sum += texture2D(this, v + 4 * spacing) * kp4
+						sum += texture2D(this, v - 4 * spacing) * km4
+
+						if (ksize > 9.) {
+							sum += texture2D(this, v + 5 * spacing) * kp5
+							sum += texture2D(this, v - 5 * spacing) * km5
+
+							if (ksize > 11.) {
+								sum += texture2D(this, v + 6 * spacing) * kp6
+								sum += texture2D(this, v - 6 * spacing) * km6
+
+								if (ksize > 13.) {
+									sum += texture2D(this, v + 7 * spacing) * kp7
+									sum += texture2D(this, v - 7 * spacing) * km7
+
+									if (ksize > 15.) {
+										sum += texture2D(this, v + 8 * spacing) * kp8
+										sum += texture2D(this, v - 8 * spacing) * km8
+
+										if (ksize > 17.) {
+											sum += texture2D(this, v + 9 * spacing) * kp9
+											sum += texture2D(this, v - 9 * spacing) * km9
+
+											if (ksize > 19.) {
+												sum += texture2D(this, v + 10 * spacing) * kp10
+												sum += texture2D(this, v - 10 * spacing) * km10
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		sum = scale * sum
+		return sum
+	}
+
 
 })

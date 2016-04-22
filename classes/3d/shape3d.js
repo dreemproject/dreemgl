@@ -5,6 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $ui$, view){
+// Base class for 3d geometry.
 
 	define.class(this, 'shape3d', this.Shader, function(){
 		this.draworder = 0
@@ -28,10 +29,11 @@ define.class(function(require, $ui$, view){
 		}
 
 		this.color = function() {
-			var tn = normalize(transnorm.xyz);
-			return vec4(tn * 0.5 + 0.5, 1.0);
+			var tn = normalize(transnorm.xyz)
+			return vec4(tn * 0.5 + 0.5, 1.0)
 		}
 	})
+
 	this.shape3d = true
-	this.hardrect =false;
+	this.hardrect = false
 })

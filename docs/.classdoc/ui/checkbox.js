@@ -4,12 +4,12 @@
  * Simple checkbox/tobble button: a rectangle with a textlabel and an icon
  * <br/><a href="/examples/checkboxes">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/checkbox.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/ui/checkbox.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$ui/checkbox.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$ui/checkbox.js">open example in new tab &raquo;</a>
  * 
  */
 /**
- * @attribute {String} [text="undefined"]
+ * @attribute {String} [text=""]
  * The label for the button
  */
 /**

@@ -12,13 +12,25 @@ define.class('$ui/view', function(require){
 	// Must define N RenderPass nested classes below to match this count
 	this.passes = 1
 
-	this.passesdoublebuffer = true
-
 	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1
 	// must define pass0, 2 must define pass0 and pass1...
 	define.class(this, "pass0", this.RenderPass, function() {
+		// set to true to use floating point textures on this pass
+		this.usefloat = true
+		// Turn on double-buffering since we want to feed pass0 back into itself
+		this.doublebuffer = true
+		// define the color to return in this pass
+
+		this.isAlive = function(pos) {
+			return this.pass0.pixel(pos).r >= 0.7
+		}
+
 		this.color = function(){
-			// convert floats to pixels
+			// this makes the shader redraw each frame, allowing loopback between the double
+			// buffers in pass0
+			var time = view.time
+
+			// convert position floats to pixels
 			var x = mesh.x * view.layout.width
 			var y = mesh.y * view.layout.height
 
@@ -26,54 +38,55 @@ define.class('$ui/view', function(require){
 			x *= this.pass0.ratio
 			y *= this.pass0.ratio
 
+			// if this is the first time, read from the framebuffer instead of from our last pass
+			if (this.drawcount == 1.) {
+				return this.framebuffer.pixel(vec2(x,y))
+				// or start out with noise
+				return vec4(noise.cheapnoise(mesh.xy))
+			}
+
 			// count number of neighbors
 			var neighbors = 0
-			// if this is the first time, read from the framebuffer
-			if (this.drawcount == 1.) {
-				if (noise.cheapnoise(mesh.xy) > .5) {
-					return 'white';
-				} else {
-					return 'black';
-				}
-				return this.framebuffer.pixel(vec2(x,y))
-			}
-			if (this.drawcount > 4.) {
-				// return this.pass0.pixel(vec2(x,y))
-			}
-			// account for pixel ratio
-			if (this.pass0.pixel(vec2(x - 1, y - 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x - 1, y)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x - 1, y + 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x, y - 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x, y + 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x + 1, y - 1)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x + 1, y)).r > 0.) neighbors++
-			if (this.pass0.pixel(vec2(x + 1, y + 1)).r > 0.) neighbors++
-
-			// this makes the shader redraw each frame, allowing loopback between the double
-			// buffers
-			var time = view.time
+			if (this.isAlive(vec2(x - 1, y - 1))) neighbors++
+			if (this.isAlive(vec2(x - 1, y))) neighbors++
+			if (this.isAlive(vec2(x - 1, y + 1))) neighbors++
+			if (this.isAlive(vec2(x, y - 1))) neighbors++
+			if (this.isAlive(vec2(x, y + 1))) neighbors++
+			if (this.isAlive(vec2(x + 1, y - 1))) neighbors++
+			if (this.isAlive(vec2(x + 1, y))) neighbors++
+			if (this.isAlive(vec2(x + 1, y + 1))) neighbors++
 
 			// are we alive?
-			var alive = this.pass0.pixel(vec2(x,y))
-			if (alive.r > 0.) {
+			var color = this.pass0.pixel2(x, y)
+			if (color.r >= 0.7) {
+				color = 'white'
 				// Any live cell with two or three live neighbours lives on to the next generation.
-				alive = 'white'
 				if (neighbors < 2) {
 					// Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-					alive = 'black'
+					color = vec4(.59,0,1.,1.)
 				} else if (neighbors > 3) {
 					// Any live cell with more than three live neighbours dies, as if by over-population.
-					alive = 'black'
+					color = vec4(.59,0,1.,1.)
 				}
 			} else {
 				if (neighbors == 3) {
 					// Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-					alive = 'white'
+					color = 'white'
 				}
 			}
 
-			return vec4(alive.rgb, alive.a * view.opacity)
+			// fade colors over time
+			if (color.g > .001) {
+				color.g -= .004;
+			}
+			if (color.b > .001) {
+				color.b -= .002;
+			}
+			if (color.r > .001 && color.r < .7) {
+				color.r -= .002;
+			}
+
+			return color
 		}
 	})
 })

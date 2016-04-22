@@ -306,16 +306,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n152" name="n152">152</a>
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
-<a href="#n158" name="n158">158</a>
-<a href="#n159" name="n159">159</a>
-<strong><a href="#n160" name="n160">160</a></strong>
-<a href="#n161" name="n161">161</a>
-<a href="#n162" name="n162">162</a>
-<a href="#n163" name="n163">163</a>
-<a href="#n164" name="n164">164</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -356,7 +346,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.height = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-height</span><span class="delimiter">'</span></span>]) || <span class="integer">1080</span>;
                 <span class="local-variable">this</span>.name = args[<span class="string"><span class="delimiter">'</span><span class="content">-name</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">dreemgl</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.verbose = (<span class="string"><span class="delimiter">'</span><span class="content">-verbose</span><span class="delimiter">'</span></span> <span class="keyword">in</span> args);
-                
+
                 <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">-dumpstate</span><span class="delimiter">'</span></span> <span class="keyword">in</span> args) {
                         <span class="keyword">var</span> ds = args[<span class="string"><span class="delimiter">'</span><span class="content">-dumpstate</span><span class="delimiter">'</span></span>];
                         <span class="local-variable">this</span>.dumpstate = (ds.length &gt; <span class="integer">0</span>) ? args[<span class="string"><span class="delimiter">'</span><span class="content">-dumpstate</span><span class="delimiter">'</span></span>] : <span class="string"><span class="delimiter">'</span><span class="content">stdout</span><span class="delimiter">'</span></span>;
@@ -380,14 +370,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// lets give it a session</span>
                 <span class="local-variable">this</span>.session = Math.random() * <span class="integer">1000000</span>
 
-                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">200</span>)
-                <span class="local-variable">this</span>.fast_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">10</span>)
+                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher()
 
-                <span class="local-variable">this</span>.fast_watcher.atChange =
-                        <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
-                                <span class="comment">// lets reload this app</span>
-                                <span class="local-variable">this</span>.reload()
-                        }.bind(<span class="local-variable">this</span>)
+                <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
+                        <span class="comment">// lets reload this app</span>
+                        <span class="local-variable">this</span>.reload()
+                }.bind(<span class="local-variable">this</span>)
 
 
                         <span class="comment">//this.readSystemClasses('$classes', this.system_classes = {})</span>
@@ -401,16 +389,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.paths += <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">:&quot;$root/</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>
                 }
 
-                <span class="local-variable">this</span>.fast_list = [<span class="string"><span class="delimiter">'</span><span class="content">$examples</span><span class="delimiter">'</span></span>]
-
                 <span class="comment">// lets compile and run the dreem composition</span>
                 define.<span class="function">atRequire</span> = <span class="keyword">function</span>(filename){
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.fast_list.length; i++){
-                                <span class="keyword">var</span> fast = <span class="local-variable">this</span>.fast_list[i]
-                                <span class="keyword">if</span>(filename.indexOf( define.expandVariables(fast) ) === <span class="integer">0</span>){
-                                        <span class="keyword">return</span> <span class="local-variable">this</span>.fast_watcher.watch(filename)
-                                }
-                        }
                         <span class="local-variable">this</span>.slow_watcher.watch(filename)
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">//</span>
