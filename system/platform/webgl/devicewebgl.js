@@ -303,6 +303,7 @@ define.class(function(require, exports){
 		var animate_hooks = this.animate_hooks
 		for(var i = 0; i < animate_hooks.length; i++){
 			var item = animate_hooks[i]
+			if (item.__isinvisible()) continue
 			//console.log(item)
 			if(item.atAnimate(stime)){
 				anim_redraw.push(item)
@@ -333,6 +334,8 @@ define.class(function(require, exports){
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 
 			var view = this.drawpass_list[i]
+
+			if (view.__isinvisible()) continue
 			//var skip = false
 			var last = i === len - 1
 			//if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
