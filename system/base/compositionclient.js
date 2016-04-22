@@ -14,14 +14,20 @@ define.class('./compositionbase', function(require, baseclass){
 	var ASTScanner = require('$system/parse/astscanner')
 	var OneJSParser = require('$system/parse/onejsparser')
 
-	this.atConstructor = function(previous, parent){
+	this.screenForClient = function() {
+		return typeof location !== 'undefined' && location.search && location.search.slice(1)
+	};
+
+	this.atConstructor = function(previous, parent, precached){
 		this.parent = parent
 
 		// how come this one doesnt get patched up?
 		baseclass.atConstructor.call(this)
 
-		this.screenname = typeof location !== 'undefined' && location.search && location.search.slice(1)
-		this.cached_attributes = {}
+		this.cached_attributes = precached
+		if (!this.cached_attributes) {
+			this.cached_attributes = {}
+		}
 		// web environment
 		if(previous){
 			this.session = previous.session
@@ -47,6 +53,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.bus.atMessage(attrmsg)
 		}
 
+		this.screenname = this.screenForClient()
 		this.screen = this.names[this.screenname]
 		if(!this.screen){
 			// find the first screen

@@ -5,24 +5,22 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 
-// "Image"-like class for Dali. Dali expects to load the images so retain a
-// path to the file. Texture.Image is another name for this class.
-function DaliImage(path) 
-{
-	this.path = path;
-}
+define.class('$system/base/texture', function(require, exports){
+	// internal, DaliApi is a static object to access the dali api
+	DaliApi = require('./dali_api')
 
-
-define.class('$system/base/texture', function(exports, require){
 	var Texture = exports
 
 	Texture.GlobalId = 0
-	Texture.Image = DaliImage;
+
+	Texture.Image = function(path) {
+		//console.log('setting path to ', path);
+		this.path = path;
+	}
 
 	// Map hash of texture to an existing texture
 	Texture.Cache = {};
 
-	DaliApi = require('./dali_api')
 	fs = require('fs');
 
 	this.atConstructor = function(type, w, h, device){
@@ -44,26 +42,70 @@ define.class('$system/base/texture', function(exports, require){
 		return new Texture(type,0,0)
 	}
 
-	// imagedata is an instance of DaliImage
-	Texture.fromImage = function(imagedata){
+	// Load from a local image file. Returns the Texture
+	Texture.fromLocalImage = function(path){
+		var dali = DaliApi.dali;
+
+		var img = new dali.ResourceImage({url: path});
+
+		var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight())
+		tex.path = path;
+		tex.image = img
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + path + '\'});');
+		}
+
+		return tex
+	}
+
+
+	// Load texture from a local file or remote url.
+	// If imagedata is a texture, it is returned immediately.
+	// If the image is loaded remotely, the callback function is called when
+	// the texture is loaded.
+	Texture.fromImage = function(imagedata, callback){
+		// Return immediately if a texture was specified
+		if (imagedata.image || imagedata.array)
+			return imagedata;
+
 		var dali = DaliApi.dali;		
 
 		// With dali, the references should either be absolute, or relative
 		// to the path where dali runs.
 		var fullpath = imagedata.path;
+		if (!fullpath) {
+			console.error('Error: Use require() to load images for DALi platform');
+			return new Texture(Texture.RGBA, 0, 0);
+		}
+
 		if (imagedata.path[0] !== '/') fullpath = define.$example + fullpath;
 
-		var img = new dali.ResourceImage({url: fullpath});
+		if (fullpath.indexOf('http') < 0) {
+			// Local assets
+			return Texture.fromLocalImage(fullpath);
+		}
 
-		var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight())
-		//console.log('********** fromImage', img.getWidth(), img.getHeight());
-		tex.image = img
+		// Remote assets are loaded into the cache
+		var localpath = define.mapToCacheDir(fullpath);
+		try {
+			if (fs.statSync(localpath).isFile()) {
+				// File is already in the cache
+				return Texture.fromLocalImage(localpath);
+			}
+		}
+		catch (e) {
+		}
 
-		if (DaliApi.emitcode) {
-			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + fullpath + '\'});');
-		}		
+		// Load the image into the cache.
+		define.httpGetCached(fullpath).then(function(result){
+			var img = new dali.ResourceImage({url: result.path});
+			var tex = new Texture(Texture.RGBA, img.getWidth(), img.getHeight());
+			tex.image = img;
 
-		return tex
+			if (callback)
+				callback(tex);
+		});
 	}
 
 	Texture.fromArray = function(array, w, h){
@@ -349,6 +391,15 @@ define.class('$system/base/texture', function(exports, require){
 		})
 	}
 
+	this.samplemip = function(v){
+		return texture2D(this, v, {
+			MIN_FILTER: 'LINEAR_MIPMAP_NEAREST',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {
@@ -372,6 +423,24 @@ define.class('$system/base/texture', function(exports, require){
 	this.point_flipped2 = function(x, y){ return point_flipped(vec2(x, y)) }
 	this.point_flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
+	this.array1d = function(index){
+		return texture2D(this, vec2(mod(index, this.size.x), floor(index / this.size.x)), {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
+	this.array2d = function(v){
+		return texture2D(this, vec2(v.x * this.size.x, v.y * this.size.y), {
 			MIN_FILTER: 'NEAREST',
 			MAG_FILTER: 'NEAREST',
 			WRAP_S: 'CLAMP_TO_EDGE',

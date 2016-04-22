@@ -11,6 +11,7 @@ define.class(function(require, baseclass){
 	this.atConstructor = function(gldevice, view){
 		this.device = gldevice
 		this.view = view
+		this.drawcount = 0
 		view.drawpass = this
 
 		// lets do the flatten
@@ -23,8 +24,6 @@ define.class(function(require, baseclass){
 			viewmatrix: mat4.identity(),
 			noscrollmatrix: mat4.identity()
 		}
-
-		this.debugrect = new DebugRect()
 	}
 
 	this.atDestroy = function(){
@@ -42,12 +41,16 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
+	this.allocDrawTarget = function(width, height, view, drawtarget, passid, ratio, isfloat){
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
 		if(!this.drawtargets) this.drawtargets = []
 		if(this.drawtargets.indexOf(drawtarget) === -1) this.drawtargets.push(drawtarget)
+		texturetype = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+		if (isfloat) {
+			texturetype |= Texture.FLOAT
+		}
 		var dt = this[drawtarget]
 		//var twidth = this.nextPowerTwo(layout.width* main_ratio), theight = this.nextPowerTwo(layout.height* main_ratio)
 		if(!dt){
@@ -81,7 +84,7 @@ define.class(function(require, baseclass){
 			}
 			// otherwise we create a new one
 			if(!dt){
-				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:texturetype, width, height, this.device)
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
@@ -89,9 +92,12 @@ define.class(function(require, baseclass){
 		// make sure the drawtarget has the right size
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
+			// reset drawcount
+			this.drawcount = 0
 			this[drawtarget].delete()
-			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:texturetype, width, height, this.device)
 		}
+		this[drawtarget].ratio = ratio
 	}
 
 	this.calculateDrawMatrices = function(isroot, storage, pointerx, pointery){
@@ -140,21 +146,22 @@ define.class(function(require, baseclass){
 			drawlayout.absy = drawlayout.top
 		}
 
-		if(draw === view && view.sublayout){
-			width = view.sublayout.width
-			height = view.sublayout.height
-		}
-		// early out check
-		if(draw !== view && !draw.noscroll){
-			var scroll = view._scroll
-			var zoom = view._zoom
-			if( drawlayout.absy - scroll[1] > height * zoom || drawlayout.absy + drawlayout.height - scroll[1] < 0){
-				return false
-			}
-			if(drawlayout.absx - scroll[0] > width * zoom || drawlayout.absx + drawlayout.width - scroll[0] < 0){
-				return false
-			}
-		}
+		// if(draw === view && view.sublayout){
+		// 	width = view.sublayout.width
+		// 	height = view.sublayout.height
+		// }
+
+		// // early out check
+		// if(draw !== view && !draw.noscroll){
+		// 	var scroll = view._scroll
+		// 	var zoom = view._zoom
+		// 	if( drawlayout.absy - scroll[1] > height * zoom || drawlayout.absy + drawlayout.height - scroll[1] < 0){
+		// 		return false
+		// 	}
+		// 	if(drawlayout.absx - scroll[0] > width * zoom || drawlayout.absx + drawlayout.width - scroll[0] < 0){
+		// 		return false
+		// 	}
+		// }
 		return true
 	}
 
@@ -283,6 +290,7 @@ define.class(function(require, baseclass){
 		}
 	}
 
+	// accepts a view reference and takes the viewportblend shader
 	this.drawBlend = function(draw){
 		if(!draw.drawpass.color_buffer){
 			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?", draw)
@@ -290,6 +298,7 @@ define.class(function(require, baseclass){
 		else {
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 			// lets render the view as a layer
+
 			var blendshader = draw.shaders.viewportblend
 			if (this.view._viewport === '3d'){
 				blendshader.depth_test = 'src_depth <= dst_depth'
@@ -297,7 +306,8 @@ define.class(function(require, baseclass){
 			else{
 				blendshader.depth_test = ''
 			}
-			blendshader.texture = draw.drawpass.color_buffer
+
+			blendshader.texture = draw.drawpass.blendbuffer
 			blendshader.width = draw._layout.width
 			blendshader.height = draw._layout.height
 			blendshader.drawArrays(this.device)
@@ -329,6 +339,7 @@ define.class(function(require, baseclass){
 		return vtx_count
 	}
 
+	// currently renders into color_buffer
 	this.drawColor = function(isroot, time, clipview){
 		var view = this.view
 		var device = this.device
@@ -343,7 +354,19 @@ define.class(function(require, baseclass){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio
-			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
+			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer', null, ratio)
+			if (view.passes > 0) {
+				var buffers = view.passes;
+				for (var i = 0; i < view.passes; i++) {
+					var usefloat = view.shaders['pass'+i].usefloat
+					// allocate a framebuffer for each pass
+					this.allocDrawTarget(twidth, theight, this.view, 'framebuffer' + i, null, ratio, usefloat)
+					if (view.shaders['pass'+i].doublebuffer) {
+						// allocate twice as many buffers
+						this.allocDrawTarget(twidth, theight, this.view, 'framebuffera' + i, null, ratio, usefloat)
+					}
+				}
+			}
 		}
 
 		this.device.bindFramebuffer(this.color_buffer || null)
@@ -377,6 +400,7 @@ define.class(function(require, baseclass){
 		//console.log(matrices.viewmatrix)
 		device.clear(view._clearcolor)
 
+		// this is a tree walk down a view port tree. Every viewport that is 2d/3d is a render-to-texture pass.
 		var draw = view
 		while(draw){
 			draw.draw_dirty &= 2
@@ -397,10 +421,15 @@ define.class(function(require, baseclass){
 				draw.viewmatrix = matrices.viewmatrix
 
 				if(draw.atDraw && draw.atDraw(this)) hastime = true
+
+				// if we are hitting child node that is a 2d/3d viewport,
+			  // and we aren't the root/canvas.
 				if(draw._viewport && draw.drawpass !== this){
+					// blend the already rendered child texture into the parent viewport.
 					this.drawBlend(draw)
 				}
 				else{
+					// otherwise, just draw all the shaders into the parent viewport.
 					vtx_count += this.drawNormal(draw, view, matrices)
 				}
 
@@ -412,9 +441,51 @@ define.class(function(require, baseclass){
 			}
 			draw = this.nextItem(draw, 'pick')
 		}
+
+		if (view.passes > 0) {
+			// TODO: we have multiple passes, ignore pick_buffer it won't work.
+			for (var i = 0; i < view.passes; i++) {
+				var shader = view.shaders['pass' + i]
+				// pass in the draw count so the shader can behave differently on the first draw
+				shader.drawcount = view.drawpass.drawcount
+
+				// decide which buffers to use
+				var writebuffername = 'framebuffer'
+				var readbuffername = 'framebuffer'
+				if (shader.doublebuffer) {
+					var readbuffername = 'framebuffera'
+					if (shader.drawcount % 2) {
+						// Alternate buffer every other draw
+						writebuffername = 'framebuffera'
+						readbuffername = 'framebuffer'
+					}
+				}
+				device.bindFramebuffer(this[writebuffername + i])
+				device.clear(view._clearcolor)
+
+				// Add references so they work inside the shader
+				shader.framebuffer = this.color_buffer
+				for (var j = 0; j < 10; j++) {
+					// add pass0..9 references to corresponding buffers
+					shader['pass' + j] = this[readbuffername + j]
+				}
+				// set the texture to use its own framebuffer
+				shader.texture = this[writebuffername + i]
+				shader.width = view._layout.width
+				shader.height = view._layout.height
+				// draw it into the framebuffer
+				shader.drawArrays(this.device)
+			}
+			// draw the final pass
+			this.blendbuffer = shader.texture
+		} else {
+			// draw the ordinary color buffer
+			this.blendbuffer = this.color_buffer
+		}
+		view.drawpass.drawcount++
 		return hastime
 	}
-
+/*
 	var DebugRect = define.class(Shader, function(){
 		this.view = {totalmatrix:mat4(), viewmatrix:mat4(), layout:{width:0, height:0}}
 
@@ -428,5 +499,5 @@ define.class(function(require, baseclass){
 			return vec4(1,0,0,0.5)
 		}
 	})
-
+*/
 })

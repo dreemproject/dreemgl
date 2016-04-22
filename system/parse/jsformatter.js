@@ -87,7 +87,7 @@ define.class(function(require, exports){
 	this.tab = function(indent){
 		// lets add a tab
 		this.actual_indent = indent
-		// alright lets write it on the previous newline.		
+		// alright lets write it on the previous newline.
 		this.add('\t', 4*256 + indent)
 		//this.add(Array(indent+1).join('\t') )
 	}
@@ -262,7 +262,12 @@ define.class(function(require, exports){
 		var maxlen = 0
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
-			var len = prop.key.name.length
+			var name = prop.key.name
+			if (!name) {
+				name = prop.key.value
+			}
+
+			var len = name.length
 			if(len>maxlen) maxlen = len
 		}
 
@@ -281,7 +286,11 @@ define.class(function(require, exports){
 			this.expand(prop.key, exports._Object)
 
 			if(prop.value){
-				var diff = maxlen + 1 - prop.key.name.length
+				var name = prop.key.name
+				if (!name) {
+					name = prop.key.value
+				}
+				var diff = maxlen + 1 - name.length
 				this.colon(exports._Object, has_newlines?1*256+diff:0)
 				this.expand(prop.value)
 			}

@@ -7,6 +7,7 @@
 // Display every icon in a parent view.
 
 define.class(function($server$, composition, $ui$, screen, view, icon){
+	// internal
 
 	// Display every icon
 	this.rviews = function() {

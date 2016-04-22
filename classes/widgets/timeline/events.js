@@ -13,6 +13,8 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	this.height = ROW_HEIGHT
 	this.cursor = 'move'
 
+	var ubuntufont = require('$resources/fonts/ubuntu_medium_256_baked.glf')
+
 	this.attributes = {
 		zoom: wire('this.parent.zoom'),
 		scroll: wire('this.parent.scroll'),
@@ -202,7 +204,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 			this.atDraw = function () {
 				this.fontsize = 13
-				this.bold = true
 				this.opacity = this.xwidth < this.layout.width * 0.6 ? 0 : 1
 			}
 
@@ -217,7 +218,8 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			return [
 				this.eventlabel({
 					name: 'eventlabel',
-					text: this.title
+					text: this.title,
+					font: ubuntufont
 				})
 			]
 		}
@@ -227,7 +229,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		var rows = [[],[],[],[],[],[]]
 		this.rows = 1
 		for (var i = 0; i < data.length; i++) {
-			var color = (data[i].metadata && data[i].metadata.color) ? data[i].metadata.color : null
+			var color = data[i].color || null
 			var event = this.event({
 				title: data[i].title,
 				id: data[i].id,

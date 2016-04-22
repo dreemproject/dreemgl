@@ -8,16 +8,11 @@
 
 define.class(function(require){
 
-	var path = require('path')
 	var fs = require('fs')
 
-	var ExternalApps = require('./externalapps')
 	var FileWatcher = require('./filewatcher')
 
 	var BusServer = require('$system/rpc/busserver')
-	var HTMLParser = require('$system/parse/htmlparser')
-	var ScriptError = require('$system/parse/scripterror')
-	var legacy_support = 0
 
 	this.atConstructor = function(
 		args, //Object: Process arguments
@@ -30,13 +25,11 @@ define.class(function(require){
 
 		this.busserver = new BusServer()
 
-		this.slow_watcher = new FileWatcher(200)
+		this.slow_watcher = new FileWatcher()
 
-		this.fast_watcher = new FileWatcher(10)
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.fast_watcher.atChange =
 		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
@@ -55,15 +48,8 @@ define.class(function(require){
 		this.pathset += '}'
 
 
-		this.fast_list = ['$examples']
 		// lets compile and run the dreem composition
 		define.atRequire = function(filename){
-			for(var i = 0; i < this.fast_list.length; i++){
-				var fast = this.fast_list[i]
-				if(filename.indexOf( define.expandVariables(fast) ) === 0){
-					return this.fast_watcher.watch(filename)
-				}
-			}
 			this.slow_watcher.watch(filename)
 		}.bind(this)
 		//
@@ -117,6 +103,31 @@ define.class(function(require){
 	}
 
 	this.loadHTML = function(title, boot, paths, pathset){
+
+		// These rpc attributes we will write directly into the header so that they are available even before the screen connects
+		var preloadattrs = {};
+
+		var additionalHeader = "";
+
+		if (this.composition) {
+
+			// preload_rpc_attributes can be `true` to include everything or an array of `rpcobj_rpcattr` identifiers
+			var preload = this.composition.preload_rpc_attributes;
+			if (preload === true) {
+				preloadattrs = this.composition.server_attributes;
+			} else if (Array.isArray(preload)) {
+				for (var i = 0; i< preload.length;i++) {
+					var key = preload[i];
+					var attr = this.composition.server_attributes[key];
+					if (attr) {
+						preloadattrs[key] = attr
+					}
+				}
+			}
+			additionalHeader = this.composition.headHTML || "";
+		}
+
+
 		return '<html lang="en">\n'+
 			' <head>\n'+
 			'  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n'+
@@ -131,7 +142,7 @@ define.class(function(require){
   			'		-moz-user-select: none;\n'+
   			'		-user-select: none;\n'+
   			'    }\n'+
-			'    body {background-color:darkgray;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
+			'    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
 			'  </style>'+
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
@@ -143,7 +154,9 @@ define.class(function(require){
 			'        define.endLoader()\n'+
 			'		 require(modules[0])\n'+
 			'		 var Composition = require(modules[1])\n'+
-			'        define.rootComposition = new Composition(define.rootComposition)\n'+
+			'		 var serverattrs = ' + JSON.stringify(preloadattrs) + '\n'+
+			'		 var renderTarget;' + '\n'+
+			'        define.rootComposition = new Composition(define.rootComposition, undefined, serverattrs, renderTarget)\n'+
 			'      },\n'+
 			'	   atEnd:function(){\n'+
 			'         define.startLoader()\n'+
@@ -151,6 +164,7 @@ define.class(function(require){
 			'    }\n'+
 			'  </script>\n'+
 			'  <script type="text/javascript" src="/system/base/define.js"></script>\n'+
+			additionalHeader +
 			' </head>\n'+
 			' <body class="unselectable">\n'+
 			' </body>\n'+

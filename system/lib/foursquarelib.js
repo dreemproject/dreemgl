@@ -23,12 +23,12 @@ define.class(function(exports){
 	 *
 	 * Install the foursquare object via 'npm install node-foursquare'.
 	 */
-	this.atConstructor = function() {
+	this.atConstructor = function(clientid, secret) {
 		var config = {
 			foursquare: {},
 			secrets: {
-				clientId: process.env.FOURSQUARE_CLIENT_ID,
-				clientSecret: process.env.FOURSQUARE_SECRET,
+				clientId: process.env.FOURSQUARE_CLIENT_ID || clientid,
+				clientSecret: process.env.FOURSQUARE_SECRET || secret,
 				redirectUrl: 'redirect'
 			}
 		}
@@ -83,7 +83,6 @@ define.class(function(exports){
 						url: photoUrl,
 						id: venue.id,
 						title: venue.name,
-						category: venue.categories[0].name,
 						width: 300,
 						height: 300,
 						latitude: venue.location.lat,

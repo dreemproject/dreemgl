@@ -3,14 +3,14 @@
  * @extends node
  * The gyro receives gyroscope and compass data where available.
  * See [deviceorientation](https://w3c.github.io/deviceorientation/spec-source-orientation.html#deviceorientation) and [DeviceOrientationEvent](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
- * <br/><a href="/examples/sensors">examples &raquo;</a>
+ * <br/><a href="/examples/sensors">example &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/sensors/gyroscope.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/sensors/gyroscope.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$sensors/gyroscope.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$sensors/gyroscope.js">open example in new tab &raquo;</a>
  * 
  */
 /**
- * @attribute {Boolean} [supported="undefined"]
+ * @attribute {Boolean} [supported="false"]
  * True if gyro is supported
  */
 /**
@@ -30,10 +30,10 @@
  * Alias for the gamma component of orientation
  */
 /**
- * @attribute {Number} [compass="undefined"]
+ * @attribute {Number} [compass="0"]
  * The compass orientation, see [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
  */
 /**
- * @attribute {Number} [accuracy="undefined"]
+ * @attribute {Number} [accuracy="0"]
  * The compass accuracy, see [https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html](https://developer.apple.com/library/safari/documentation/SafariDOMAdditions/Reference/DeviceOrientationEventClassRef/DeviceOrientationEvent/DeviceOrientationEvent.html) for details.
  */

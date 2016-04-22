@@ -359,6 +359,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n205" name="n205">205</a>
 <a href="#n206" name="n206">206</a>
 <a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -426,12 +429,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.audioElement.play();
                         <span class="local-variable">this</span>.playing = <span class="predefined-constant">true</span>;
 
-                        <span class="comment">// The ontimeupdate event happens pretty slowly. Update more frequently</span>
-                        <span class="comment">// using a timer.</span>
-                        <span class="local-variable">this</span>.timer = setInterval(<span class="keyword">function</span>() {
-                                <span class="local-variable">this</span>.updateviz();
-                        }.bind(<span class="local-variable">this</span>), <span class="integer">100</span>);
-                        
+                        <span class="comment">// Updating in the animation loop is better than waiting for</span>
+                        <span class="comment">// the infrequent ontimeupdate events.</span>
+                        <span class="keyword">if</span> (window) {
+                                <span class="local-variable">this</span>.<span class="function">animFrame</span> = <span class="keyword">function</span>(time){
+                                        <span class="local-variable">this</span>.updateviz();
+                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.playing)
+                                                window.requestAnimationFrame(<span class="local-variable">this</span>.animFrame)
+                                }.bind(<span class="local-variable">this</span>);
+
+                                window.requestAnimationFrame(<span class="local-variable">this</span>.animFrame)
+                        }
 
                         <span class="comment">//console.log('play', this.audioElement);</span>
                 }
@@ -453,11 +461,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">// Stop the audio</span>
         <span class="local-variable">this</span>.<span class="function">stop</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.timer) {
-                        clearInterval(<span class="local-variable">this</span>.timer);
-                        <span class="local-variable">this</span>.timer = <span class="predefined-constant">undefined</span>;
-                }
-
                 <span class="keyword">var</span> viz = <span class="local-variable">this</span>.screen.find(<span class="string"><span class="delimiter">'</span><span class="content">viz</span><span class="delimiter">'</span></span>);
                 <span class="keyword">if</span> (viz)
                         viz.clear();
@@ -475,6 +478,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">// Update the current visualization</span>
         <span class="local-variable">this</span>.<span class="function">updateviz</span> = <span class="keyword">function</span>() {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.audioElement)
+                        <span class="keyword">return</span>;
+
                 <span class="local-variable">this</span>.currenttime = <span class="local-variable">this</span>.audioElement.currentTime;
                 <span class="local-variable">this</span>.fftNode.getByteFrequencyData(<span class="local-variable">this</span>.fftData);
 

@@ -1353,6 +1353,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1199" name="n1199">1199</a>
 <strong><a href="#n1200" name="n1200">1200</a></strong>
 <a href="#n1201" name="n1201">1201</a>
+<a href="#n1202" name="n1202">1202</a>
+<a href="#n1203" name="n1203">1203</a>
+<a href="#n1204" name="n1204">1204</a>
+<a href="#n1205" name="n1205">1205</a>
+<a href="#n1206" name="n1206">1206</a>
+<a href="#n1207" name="n1207">1207</a>
+<a href="#n1208" name="n1208">1208</a>
+<a href="#n1209" name="n1209">1209</a>
+<strong><a href="#n1210" name="n1210">1210</a></strong>
+<a href="#n1211" name="n1211">1211</a>
+<a href="#n1212" name="n1212">1212</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2445,26 +2456,37 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">glyphy_sdf_draw</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> pos = mesh.tex
 
-                <span class="keyword">var</span> m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2<span class="comment">//*0.1</span>
+                <span class="keyword">var</span> m = length(vec2(length(dFdx(mesh.tex)), length(dFdy(mesh.tex))))*<span class="float">0.25</span>
 
-                <span class="keyword">var</span> dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * <span class="float">0.003</span>
+                <span class="keyword">var</span> dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * <span class="float">0.0012</span>
 
                 dist -= stylepack.x / <span class="integer">300</span>.
                 dist = dist / m * pixel_contrast
 
-                dist = moddist(pos, dist)
+                <span class="comment">//dist = moddist(pos, dist)</span>
+                <span class="comment">// TODO(aki): verify that this is correct</span>
+                <span class="keyword">if</span>(dist &gt;= <span class="integer">1</span>. + stylepack.y){
+                        discard
+                }        
+
+                <span class="keyword">var</span> alpha = glyphy_antialias(-dist)
 
                 <span class="keyword">if</span>(stylepack.z&gt;<span class="integer">0</span>.){
-                        dist = abs(dist) - (stylepack.y)
+                        <span class="keyword">var</span> dist2 = abs(dist) - (stylepack.y) + <span class="integer">4</span>.
+
+                        <span class="keyword">var</span> alpha2 = glyphy_antialias(-dist2)
+
+                        <span class="keyword">var</span> rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2);
+
+                        <span class="keyword">return</span> vec4(rgb, alpha * stylefgcolor.a * view.opacity)
                 }
 
-                <span class="comment">// TODO(aki): verify that this is correct</span>
-                <span class="keyword">if</span>(dist &gt; <span class="integer">1</span>. + stylepack.y){
-                        discard
-                }
+                <span class="keyword">return</span> vec4(stylefgcolor.rgb, alpha * stylefgcolor.a * view.opacity)
 
-                <span class="comment">//return 'red'</span>
-                <span class="keyword">return</span> vec4(stylefgcolor.xyz, glyphy_antialias(-dist))
+                <span class="comment">//if(mesh.gamma_adjust.r != 1.){</span>
+                <span class="comment">//        alpha = pow(alpha, 1. / mesh.gamma_adjust.r)</span>
+                <span class="comment">//}</span>
+
                 <span class="comment">//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))</span>
         }
 

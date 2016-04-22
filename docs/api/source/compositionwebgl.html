@@ -238,7 +238,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> WebRTC = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/webrtc</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> BusClient = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/busclient</span><span class="delimiter">'</span></span>)
 
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent){
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent, precached, canvas){
                 window.composition = <span class="local-variable">this</span>
                 <span class="keyword">if</span>(previous){
                         <span class="local-variable">this</span>.reload = (previous.reload || <span class="integer">0</span>) + <span class="integer">1</span>
@@ -248,10 +248,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">else</span>{
                         <span class="comment">// lets spawn up a webGL device</span>
-                        <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device()
+                        <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device(<span class="predefined-constant">undefined</span>, canvas)
                 }
 
-                baseclass.atConstructor.call(<span class="local-variable">this</span>, previous, parent)
+                baseclass.atConstructor.call(<span class="local-variable">this</span>, previous, parent, precached)
                 <span class="local-variable">this</span>.screen._size = <span class="local-variable">this</span>.device.size
         }
 
@@ -275,7 +275,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
 
                 <span class="local-variable">this</span>.<span class="function">decodeLocationHash</span> = <span class="keyword">function</span>(){
-                        <span class="comment">// lets split it on &amp; into a=b pairs, </span>
+                        <span class="comment">// lets split it on &amp; into a=b pairs,</span>
                         <span class="keyword">var</span> obj = {}
                         <span class="keyword">var</span> parts = location.hash.slice(<span class="integer">1</span>).split(<span class="regexp"><span class="delimiter">/</span><span class="content">\&amp;</span><span class="delimiter">/</span></span>)
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; parts.length; i++){
@@ -296,7 +296,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.decodeLocationHash()
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

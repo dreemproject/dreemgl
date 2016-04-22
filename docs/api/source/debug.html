@@ -324,229 +324,179 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n170" name="n170">170</a></strong>
 <a href="#n171" name="n171">171</a>
 <a href="#n172" name="n172">172</a>
-<a href="#n173" name="n173">173</a>
-<a href="#n174" name="n174">174</a>
-<a href="#n175" name="n175">175</a>
-<a href="#n176" name="n176">176</a>
-<a href="#n177" name="n177">177</a>
-<a href="#n178" name="n178">178</a>
-<a href="#n179" name="n179">179</a>
-<strong><a href="#n180" name="n180">180</a></strong>
-<a href="#n181" name="n181">181</a>
-<a href="#n182" name="n182">182</a>
-<a href="#n183" name="n183">183</a>
-<a href="#n184" name="n184">184</a>
-<a href="#n185" name="n185">185</a>
-<a href="#n186" name="n186">186</a>
-<a href="#n187" name="n187">187</a>
-<a href="#n188" name="n188">188</a>
-<a href="#n189" name="n189">189</a>
-<strong><a href="#n190" name="n190">190</a></strong>
-<a href="#n191" name="n191">191</a>
-<a href="#n192" name="n192">192</a>
-<a href="#n193" name="n193">193</a>
-<a href="#n194" name="n194">194</a>
-<a href="#n195" name="n195">195</a>
-<a href="#n196" name="n196">196</a>
-<a href="#n197" name="n197">197</a>
 </pre></td>
-  <td class="code"><pre>
-<span class="comment">/**
- * This is the common logic for both the Node.js and web browser
- * implementations of `debug()`.
- *
- * Expose `debug()` as the module.
- */</span>
+  <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-exports = module.exports = debug;
-exports.coerce = coerce;
-exports.disable = disable;
-exports.enable = enable;
-exports.enabled = enabled;
-exports.humanize = require(<span class="string"><span class="delimiter">'</span><span class="content">ms</span><span class="delimiter">'</span></span>);
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/screen</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, cadgrid, view, label){
 
-<span class="comment">/**
- * The currently active debug mode names, and names to skip.
- */</span>
+    <span class="local-variable">this</span>.style = {
+       <span class="key">view</span>: {
+           <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>
+       },
+       <span class="key">label</span>: {
+           <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>
+       }
+    };
 
-exports.names = [];
-exports.skips = [];
+    <span class="local-variable">this</span>.attributes = {
+                <span class="key">outnumber</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Number, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="integer">100</span>}),
+                <span class="key">outboolean</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Boolean, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="predefined-constant">true</span>}),
+                <span class="key">outfloat</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:<span class="reserved">float</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="float">3.1415</span>}),
+                <span class="key">outint</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:<span class="reserved">int</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="integer">42</span>}),
+                <span class="key">outvec2</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:vec2, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:vec2(<span class="integer">1</span>,<span class="integer">2</span>)}),
+                <span class="key">outvec3</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:vec3, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:vec3(<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>)}),
+                <span class="key">outvec4</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:vec4, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:vec4(<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>,<span class="integer">4</span>)}),
+                <span class="key">outarray</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Array, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:[<span class="integer">1</span>,<span class="integer">2</span>,<span class="integer">3</span>,<span class="integer">4</span>,<span class="integer">5</span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">6</span><span class="delimiter">&quot;</span></span>]}),
+                <span class="key">outstring</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:String, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Cats</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">outobject</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Object, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:{<span class="key">some</span>:{<span class="key">complex</span>:<span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>}}}),
 
-<span class="comment">/**
- * Map of special &quot;%n&quot; handling functions, for the debug &quot;format&quot; argument.
- *
- * Valid key names are a single, lowercased letter, i.e. &quot;n&quot;.
- */</span>
+                <span class="key">number</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Number, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+                <span class="reserved">boolean</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Boolean, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="reserved">float</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:<span class="reserved">float</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="reserved">int</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:<span class="reserved">int</span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="key">vec2</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:vec2, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="key">vec3</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:vec3, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="key">vec4</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:vec4, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="key">array</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Array, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="key">string</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:String, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>}),
+        <span class="key">object</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Object, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>})
+    };
 
-exports.formatters = {};
+        <span class="local-variable">this</span>.<span class="function">onnumber</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.number)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outnumber = v;
+        }
 
-<span class="comment">/**
- * Previously assigned color.
- */</span>
+        <span class="local-variable">this</span>.<span class="function">onboolean</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.<span class="reserved">boolean</span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outboolean = v;
+        }
 
-<span class="keyword">var</span> prevColor = <span class="integer">0</span>;
+        <span class="local-variable">this</span>.<span class="function">onfloat</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.<span class="reserved">float</span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outfloat = v;
+        }
 
-<span class="comment">/**
- * Previous log timestamp.
- */</span>
+        <span class="local-variable">this</span>.<span class="function">onint</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.<span class="reserved">int</span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outint = v;
+        }
 
-<span class="keyword">var</span> prevTime;
+        <span class="local-variable">this</span>.<span class="function">onvec2</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.vec2)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outvec2 = v;
+        }
 
-<span class="comment">/**
- * Select a color.
- *
- * @return {Number}
- * @api private
- */</span>
+        <span class="local-variable">this</span>.<span class="function">onvec3</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.vec3)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outvec3 = v;
+        }
 
-<span class="keyword">function</span> <span class="function">selectColor</span>() {
-  <span class="keyword">return</span> exports.colors[prevColor++ % exports.colors.length];
-}
+        <span class="local-variable">this</span>.<span class="function">onvec4</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.vec4)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outvec4 = v;
+        }
 
-<span class="comment">/**
- * Create a debugger with the given `namespace`.
- *
- * @param {String} namespace
- * @return {Function}
- * @api public
- */</span>
+        <span class="local-variable">this</span>.<span class="function">onarray</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.array)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outarray = v;
+        }
 
-<span class="keyword">function</span> <span class="function">debug</span>(namespace) {
+        <span class="local-variable">this</span>.<span class="function">onstring</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.string)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outstring = v;
+        }
 
-  <span class="comment">// define the `disabled` version</span>
-  <span class="keyword">function</span> <span class="function">disabled</span>() {
-  }
-  disabled.enabled = <span class="predefined-constant">false</span>;
+        <span class="local-variable">this</span>.<span class="function">onobject</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.object)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.outobject = v;
+        }
 
-  <span class="comment">// define the `enabled` version</span>
-  <span class="keyword">function</span> <span class="function">enabled</span>() {
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(ev, v, o) {
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.number)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.<span class="reserved">boolean</span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.<span class="reserved">float</span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.<span class="reserved">int</span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.vec2)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.vec3)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.vec4)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.array)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.string)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.object)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
 
-    <span class="keyword">var</span> self = enabled;
+                <span class="local-variable">this</span>.outobject = <span class="local-variable">this</span>.object;
+                <span class="local-variable">this</span>.outstring = <span class="local-variable">this</span>.string;
+                <span class="local-variable">this</span>.outarray = <span class="local-variable">this</span>.array;
+                <span class="local-variable">this</span>.outvec4 = <span class="local-variable">this</span>.vec4;
+                <span class="local-variable">this</span>.outvec3 = <span class="local-variable">this</span>.vec3;
+                <span class="local-variable">this</span>.outvec2 = <span class="local-variable">this</span>.vec2;
+                <span class="local-variable">this</span>.outint = <span class="local-variable">this</span>.<span class="reserved">int</span>;
+                <span class="local-variable">this</span>.outfloat = <span class="local-variable">this</span>.<span class="reserved">float</span>;
+                <span class="local-variable">this</span>.outboolean = <span class="local-variable">this</span>.<span class="reserved">boolean</span>;
+                <span class="local-variable">this</span>.outnumber = <span class="local-variable">this</span>.number;
+        }
 
-    <span class="comment">// set `diff` timestamp</span>
-    <span class="keyword">var</span> curr = +<span class="keyword">new</span> Date();
-    <span class="keyword">var</span> ms = curr - (prevTime || curr);
-    self.diff = ms;
-    self.prev = prevTime;
-    self.curr = curr;
-    prevTime = curr;
+    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+        <span class="keyword">var</span> arr = <span class="local-variable">this</span>.array
+        <span class="keyword">if</span> (arr) {
+            arr = JSON.stringify(<span class="local-variable">this</span>.array);
+            <span class="keyword">if</span> (arr.length &gt; <span class="integer">100</span>) {
+                arr = <span class="local-variable">this</span>.array.length + <span class="string"><span class="delimiter">&quot;</span><span class="content"> object in array</span><span class="delimiter">&quot;</span></span>
+            }
+        }
 
-    <span class="comment">// add the `color` if not set</span>
-    <span class="keyword">if</span> (<span class="predefined-constant">null</span> == self.useColors) self.useColors = exports.useColors();
-    <span class="keyword">if</span> (<span class="predefined-constant">null</span> == self.color &amp;&amp; self.useColors) self.color = selectColor();
+        <span class="keyword">var</span> str = <span class="local-variable">this</span>.string;
+        <span class="keyword">if</span> (str &amp;&amp; str.length &gt; <span class="integer">100</span>) {
+            str = str.substring(<span class="integer">0</span>,<span class="integer">100</span>) + <span class="string"><span class="delimiter">'</span><span class="content">...</span><span class="delimiter">'</span></span>
+        }
 
-    <span class="keyword">var</span> args = Array.prototype.slice.call(<span class="local-variable">arguments</span>);
+        <span class="keyword">var</span> obj = <span class="local-variable">this</span>.object
+        <span class="keyword">if</span> (obj) {
+            obj = JSON.stringify(<span class="local-variable">this</span>.object);
+            <span class="keyword">if</span> (obj.length &gt; <span class="integer">100</span>) {
+                obj = obj.substring(<span class="integer">0</span>,<span class="integer">100</span>) + <span class="string"><span class="delimiter">'</span><span class="content">...</span><span class="delimiter">'</span></span>
+            }
+        }
 
-    args[<span class="integer">0</span>] = exports.coerce(args[<span class="integer">0</span>]);
 
-    <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> !== <span class="keyword">typeof</span> args[<span class="integer">0</span>]) {
-      <span class="comment">// anything else let's inspect with %o</span>
-      args = [<span class="string"><span class="delimiter">'</span><span class="content">%o</span><span class="delimiter">'</span></span>].concat(args);
+        <span class="keyword">return</span> cadgrid({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>, <span class="key">majorline</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#003040</span><span class="delimiter">&quot;</span></span>, <span class="key">minorline</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#002030</span><span class="delimiter">&quot;</span></span> },
+            view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> },
+                view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> },
+                    view({<span class="key">width</span>:<span class="integer">800</span>, <span class="key">bgcolor</span>:vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.15</span>),<span class="key">padding</span>:<span class="integer">30</span>, <span class="key">borderradius</span>:<span class="integer">50</span>,  <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span> },
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>, <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.number, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#FF7260</span><span class="delimiter">'</span></span>})),
+                                                view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>, <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.<span class="reserved">boolean</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#FF7260</span><span class="delimiter">'</span></span>})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">float</span><span class="delimiter">'</span></span>,  <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.<span class="reserved">float</span>,  <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#D23641</span><span class="delimiter">'</span></span>})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">int</span><span class="delimiter">'</span></span>,    <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.<span class="reserved">int</span>,    <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#FF0080</span><span class="delimiter">'</span></span>})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>,   <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.vec2,   <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#129492</span><span class="delimiter">'</span></span>})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>,   <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.vec3,   <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#31C3E7</span><span class="delimiter">'</span></span>})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>,   <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:<span class="local-variable">this</span>.vec4,   <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#4FD5D6</span><span class="delimiter">'</span></span>})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">array</span><span class="delimiter">'</span></span>,  <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:arr,  <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#0198E1</span><span class="delimiter">'</span></span>})),
+                                                view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>}, label({<span class="key">text</span>:JSON.stringify(<span class="local-variable">this</span>.array)})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>, <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:str, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#6ADA7A</span><span class="delimiter">'</span></span>})),
+                                                view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>}, label({<span class="key">text</span>:JSON.stringify(<span class="local-variable">this</span>.string)})),
+                        view({<span class="key">flex</span>:<span class="integer">1</span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>, <span class="key">paddingright</span>:<span class="integer">15</span>}), label({<span class="key">text</span>:obj, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#ffee14</span><span class="delimiter">'</span></span>})),
+                                                view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>}, label({<span class="key">text</span>:JSON.stringify(<span class="local-variable">this</span>.object)}))
+                    )
+                )
+            )
+        );
     }
-
-    <span class="comment">// apply any `formatters` transformations</span>
-    <span class="keyword">var</span> index = <span class="integer">0</span>;
-    args[<span class="integer">0</span>] = args[<span class="integer">0</span>].replace(<span class="regexp"><span class="delimiter">/</span><span class="content">%([a-z%])</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="keyword">function</span>(match, format) {
-      <span class="comment">// if we encounter an escaped % then don't increase the array index</span>
-      <span class="keyword">if</span> (match === <span class="string"><span class="delimiter">'</span><span class="content">%%</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> match;
-      index++;
-      <span class="keyword">var</span> formatter = exports.formatters[format];
-      <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> === <span class="keyword">typeof</span> formatter) {
-        <span class="keyword">var</span> val = args[index];
-        match = formatter.call(self, val);
-
-        <span class="comment">// now we need to remove `args[index]` since it's inlined in the `format`</span>
-        args.splice(index, <span class="integer">1</span>);
-        index--;
-      }
-      <span class="keyword">return</span> match;
-    });
-
-    <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> === <span class="keyword">typeof</span> exports.formatArgs) {
-      args = exports.formatArgs.apply(self, args);
-    }
-    <span class="keyword">var</span> logFn = enabled.log || exports.log || console.log.bind(console);
-    logFn.apply(self, args);
-  }
-  enabled.enabled = <span class="predefined-constant">true</span>;
-
-  <span class="keyword">var</span> fn = exports.enabled(namespace) ? enabled : disabled;
-
-  fn.namespace = namespace;
-
-  <span class="keyword">return</span> fn;
-}
-
-<span class="comment">/**
- * Enables a debug mode by namespaces. This can include modes
- * separated by a colon and wildcards.
- *
- * @param {String} namespaces
- * @api public
- */</span>
-
-<span class="keyword">function</span> <span class="function">enable</span>(namespaces) {
-  exports.save(namespaces);
-
-  <span class="keyword">var</span> split = (namespaces || <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>).split(<span class="regexp"><span class="delimiter">/</span><span class="content">[</span><span class="char">\s</span><span class="content">,]+</span><span class="delimiter">/</span></span>);
-  <span class="keyword">var</span> len = split.length;
-
-  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++) {
-    <span class="keyword">if</span> (!split[i]) <span class="keyword">continue</span>; <span class="comment">// ignore empty strings</span>
-    namespaces = split[i].replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\*</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">.*?</span><span class="delimiter">'</span></span>);
-    <span class="keyword">if</span> (namespaces[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">-</span><span class="delimiter">'</span></span>) {
-      exports.skips.push(<span class="keyword">new</span> RegExp(<span class="string"><span class="delimiter">'</span><span class="content">^</span><span class="delimiter">'</span></span> + namespaces.substr(<span class="integer">1</span>) + <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>));
-    } <span class="keyword">else</span> {
-      exports.names.push(<span class="keyword">new</span> RegExp(<span class="string"><span class="delimiter">'</span><span class="content">^</span><span class="delimiter">'</span></span> + namespaces + <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>));
-    }
-  }
-}
-
-<span class="comment">/**
- * Disable debug output.
- *
- * @api public
- */</span>
-
-<span class="keyword">function</span> <span class="function">disable</span>() {
-  exports.enable(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
-}
-
-<span class="comment">/**
- * Returns true if the given mode name is enabled, false otherwise.
- *
- * @param {String} name
- * @return {Boolean}
- * @api public
- */</span>
-
-<span class="keyword">function</span> <span class="function">enabled</span>(name) {
-  <span class="keyword">var</span> i, len;
-  <span class="keyword">for</span> (i = <span class="integer">0</span>, len = exports.skips.length; i &lt; len; i++) {
-    <span class="keyword">if</span> (exports.skips[i].test(name)) {
-      <span class="keyword">return</span> <span class="predefined-constant">false</span>;
-    }
-  }
-  <span class="keyword">for</span> (i = <span class="integer">0</span>, len = exports.names.length; i &lt; len; i++) {
-    <span class="keyword">if</span> (exports.names[i].test(name)) {
-      <span class="keyword">return</span> <span class="predefined-constant">true</span>;
-    }
-  }
-  <span class="keyword">return</span> <span class="predefined-constant">false</span>;
-}
-
-<span class="comment">/**
- * Coerce `val`.
- *
- * @param {Mixed} val
- * @return {Mixed}
- * @api private
- */</span>
-
-<span class="keyword">function</span> <span class="function">coerce</span>(val) {
-  <span class="keyword">if</span> (val <span class="keyword">instanceof</span> Error) <span class="keyword">return</span> val.stack || val.message;
-  <span class="keyword">return</span> val;
-}
+});
 </pre></td>
 </tr></table>
 

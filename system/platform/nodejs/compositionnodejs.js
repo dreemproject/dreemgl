@@ -69,7 +69,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 						res.push(prom)
 						prom.origuid = msg.uid
 						msg.uid = prom.uid
-						screensock.send(msg)
+						screensock.sendJSON(msg)
 					}
 				}
 				// lets wait for all screens of this name
@@ -110,13 +110,13 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 					})
 				}
 				else{
-					if(!define.isSafeJSON(ret)){
-						rmsg.error = 'Result not json safe'
-						rmsg.ret = undefined
-						console.log("Rpc result is not json safe "+msg.rpcid+"."+msg.method)
-					}
+					//if(!define.isSafeJSON(ret)){
+					//	rmsg.error = 'Result not json safe'
+					//	rmsg.ret = undefined
+					//	console.log("Rpc result is not json safe "+msg.rpcid+"."+msg.method)
+					//}
 					resolve(rmsg)
-					socket.send(rmsg)
+					//socket.sendJSON(rmsg)
 				}
 			}
 		}.bind(this))
@@ -131,7 +131,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	}
 
 
-	this.setRpcAttribute = function(msg, socket){
+	this.setRpcAttribute = function(msg, socket, real){
 		var parts = msg.rpcid.split('.')
 		// keep it around for new joins
 		this.server_attributes[msg.rpcid + '_' + msg.attribute] = msg
@@ -152,7 +152,14 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 					obj[msg.attribute] = msg.value
 				}
 			}
+		} else if (real) { // write it on the rpc system for local loopback
+			var obj = this.rpc[parts[0]]
+			var last_set = obj.atAttributeSet
+			obj.atAttributeSet = undefined
+			obj[msg.attribute] = msg.value
+			obj.atAttributeSet = last_set
 		}
+		
 		// lets send this attribute to everyone except socket
 		for(var scrkey in this.connected_screens){
 			var array = this.connected_screens[scrkey]
@@ -162,7 +169,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 					continue
 				}
 				if(sock.readyState === 1){
-					sock.send(msg)
+					sock.sendJSON(msg)
 				}
 			}
 		}
@@ -178,10 +185,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		this.connected_screens = previous && previous.connected_screens || {}
 		this.server_attributes = previous && previous.server_attributes || {}
 
-		bus.broadcast({type:'sessionCheck', session:this.session})
-
 		bus.atConnect = function(socket){
-			socket.send({type:'sessionCheck', session:this.session})
+			socket.sendJSON({type:'sessionCheck', session:this.session})
 		}.bind(this)
 
 		bus.atClose = function(socket){
@@ -208,14 +213,14 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 				// lets let everyone know a new screen joined, for what its worth
 				this.bus.broadcast({type:'connectScreen', name:msg.name, index:index}, socket)
 				// and send the OK back to the screen
-				socket.send({type:'connectScreenOK', attributes:this.server_attributes, index:index})
+				socket.sendJSON({type:'connectScreenOK', attributes:this.server_attributes, index:index})
 			}
 			else if(msg.type == 'attribute'){
 				this.setRpcAttribute(msg, socket)
 			}
 			else if(msg.type == 'method'){
 				this.handleRpcMethod(msg).then(function(result){
-					socket.send(result)
+					socket.sendJSON(result)
 				})
 			}
 			else if(msg.type == 'return'){
@@ -231,6 +236,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			}
 		}.bind(this)
 
+		bus.broadcast({type:'sessionCheck', session:this.session})
+
 		this.renderComposition()
 
 		// call init on the classes which are in our environment
@@ -243,7 +250,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			if(!child.environment || child.environment === define.$environment){
 				var init = []
 				child.connectWires(init)
-
 				for(var j = 0; j < init.length;j++) init[j]()
 				child.emit('init')
 			}

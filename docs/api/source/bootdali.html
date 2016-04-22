@@ -324,6 +324,36 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n170" name="n170">170</a></strong>
 <a href="#n171" name="n171">171</a>
 <a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -354,15 +384,31 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> ScriptError = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/scripterror</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> legacy_support = <span class="integer">0</span>
 
+        <span class="keyword">var</span> Texture = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/texture$platform</span><span class="delimiter">'</span></span>)
+
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(
                 args, <span class="comment">//Object: Process arguments</span>
                 compname, <span class="comment">//String: name of the composition</span>
                 rootserver){ <span class="comment">//TeemServer: teem server object</span>
 
+                define.<span class="predefined">$platform</span> = <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>
+
+                <span class="comment">// Called from define.noderequirewrapper to load a texture</span>
+                define.<span class="function">loadImage</span> = <span class="keyword">function</span>(name){
+                        <span class="comment">//console.log('loadImage', name);</span>
+                        <span class="keyword">return</span> Texture.fromImage({<span class="key">path</span>:name});
+                }
+
                 <span class="comment">// Dali stage settings (from command-line), or defaults</span>
                 <span class="local-variable">this</span>.width = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-width</span><span class="delimiter">'</span></span>]) || <span class="integer">1920</span>;
                 <span class="local-variable">this</span>.height = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-height</span><span class="delimiter">'</span></span>]) || <span class="integer">1080</span>;
                 <span class="local-variable">this</span>.name = args[<span class="string"><span class="delimiter">'</span><span class="content">-name</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">dreemgl</span><span class="delimiter">'</span></span>;
+
+                <span class="comment">// Check if a remote composition is used</span>
+                <span class="keyword">if</span> (compname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>) &gt;= <span class="integer">0</span>) {
+                        <span class="local-variable">this</span>.server = compname;
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">remote dreemgl server</span><span class="delimiter">'</span></span>, compname);
+                }
 
                 <span class="comment">// Detect location for Dali Node.js add-on. On Tizen</span>
                 <span class="comment">// it can be required like any npm module, on Ubuntu</span>
@@ -391,23 +437,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.rootserver = rootserver
 
                 <span class="local-variable">this</span>.busserver = <span class="keyword">new</span> BusServer()
-                <span class="comment">//this.busserver = null;</span>
+
+                <span class="comment">// Initialize dali early. Otherwise, some composition can fail</span>
+                <span class="comment">// when run from a remote server.</span>
+                <span class="local-variable">this</span>.initDali();
 
                 <span class="comment">// lets give it a session</span>
                 <span class="local-variable">this</span>.session = Math.random() * <span class="integer">1000000</span>
 
-                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">200</span>)
-                <span class="local-variable">this</span>.fast_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">10</span>)
+                <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher()
 
-                <span class="local-variable">this</span>.fast_watcher.atChange =
                 <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
                         <span class="comment">// lets reload this app</span>
                         <span class="local-variable">this</span>.reload()
                 }.bind(<span class="local-variable">this</span>)
-
-
-            <span class="comment">//this.readSystemClasses('$classes', this.system_classes = {})</span>
-            <span class="comment">//define.system_classes = this.system_classes;</span>
 
                 <span class="local-variable">this</span>.components = {}
 
@@ -417,16 +460,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.paths += <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">:&quot;$root/</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>
                 }
 
-                <span class="local-variable">this</span>.fast_list = [<span class="string"><span class="delimiter">'</span><span class="content">$examples</span><span class="delimiter">'</span></span>]
-
                 <span class="comment">// lets compile and run the dreem composition</span>
                 define.<span class="function">atRequire</span> = <span class="keyword">function</span>(filename){
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.fast_list.length; i++){
-                                <span class="keyword">var</span> fast = <span class="local-variable">this</span>.fast_list[i]
-                                <span class="keyword">if</span>(filename.indexOf( define.expandVariables(fast) ) === <span class="integer">0</span>){
-                                        <span class="keyword">return</span> <span class="local-variable">this</span>.fast_watcher.watch(filename)
-                                }
-                        }
                         <span class="local-variable">this</span>.slow_watcher.watch(filename)
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">//</span>
@@ -443,16 +478,27 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.mycomposition = <span class="predefined-constant">undefined</span>
         }
 
-        <span class="local-variable">this</span>.<span class="function">loadComposition</span> = <span class="keyword">function</span>(){
-                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Reloading composition </span><span class="delimiter">&quot;</span></span>+<span class="local-variable">this</span>.filename)
-                require.clearCache()
-
+        <span class="comment">// initialize dali runtime. This should be run before the composition is</span>
+        <span class="comment">// loaded.</span>
+        <span class="local-variable">this</span>.<span class="function">initDali</span> = <span class="keyword">function</span>() {
+                <span class="comment">// Load DALi module</span>
                 <span class="local-variable">this</span>.DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>);
                 <span class="local-variable">this</span>.DaliApi.initialize({<span class="key">width</span>: <span class="local-variable">this</span>.width, <span class="key">height</span>: <span class="local-variable">this</span>.height, <span class="key">name</span>: <span class="local-variable">this</span>.name, <span class="key">dalilib</span>: <span class="local-variable">this</span>.dalilib, <span class="key">dumpprog</span>: <span class="local-variable">this</span>.dumpprog});
+        }
 
+        <span class="comment">// Load the composition. If composition is defined, load it remotely</span>
+        <span class="local-variable">this</span>.<span class="function">loadComposition</span> = <span class="keyword">function</span>(composition){
+                require.clearCache()
 
-                <span class="keyword">var</span> Composition = require(define.expandVariables(<span class="local-variable">this</span>.filename))
-                <span class="local-variable">this</span>.composition = <span class="keyword">new</span> Composition(<span class="local-variable">this</span>.busserver, <span class="local-variable">this</span>.session)
+                <span class="keyword">if</span> (composition) {
+                        <span class="comment">// Remote server</span>
+                        <span class="local-variable">this</span>.composition = <span class="keyword">new</span> composition(<span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="local-variable">this</span>.server)
+                }
+                <span class="keyword">else</span> {
+                        <span class="comment">// Local assets</span>
+                        <span class="keyword">var</span> Composition = require(define.expandVariables(<span class="local-variable">this</span>.filename))
+                        <span class="local-variable">this</span>.composition = <span class="keyword">new</span> Composition(<span class="local-variable">this</span>.busserver, <span class="local-variable">this</span>.session)
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">reload</span> = <span class="keyword">function</span>(){
@@ -462,30 +508,44 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 require.clearCache()
 
                 <span class="comment">// lets see if our composition is a dir or a jsfile</span>
-                <span class="keyword">var</span> dir = <span class="string"><span class="delimiter">'</span><span class="content">$root/</span><span class="delimiter">'</span></span>
-                <span class="keyword">var</span> jsname = dir + <span class="local-variable">this</span>.compname+<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>
-                <span class="keyword">try</span>{
-                        <span class="keyword">if</span>(fs.existsSync(define.expandVariables(jsname))){
-                                <span class="local-variable">this</span>.filename = jsname
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.loadComposition()
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="keyword">var</span> jsname = dir + <span class="local-variable">this</span>.compname + <span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.server) {
+                        <span class="comment">// Remote server</span>
+                        <span class="keyword">var</span> self = <span class="local-variable">this</span>;
+                        require.async(self.server).then(<span class="keyword">function</span>(composition){
+                                <span class="keyword">return</span> self.loadComposition(composition);
+                        }).<span class="keyword">catch</span>(<span class="keyword">function</span>(error){
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Composition load failure</span><span class="delimiter">'</span></span>, error.stack)
+                        })
+                }
+                <span class="keyword">else</span> {
+                        <span class="comment">// Use local files</span>
+
+                        <span class="keyword">var</span> dir = <span class="string"><span class="delimiter">'</span><span class="content">$root/</span><span class="delimiter">'</span></span>
+                        <span class="keyword">var</span> jsname = dir + <span class="local-variable">this</span>.compname+<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>
+                        <span class="keyword">try</span> {
                                 <span class="keyword">if</span>(fs.existsSync(define.expandVariables(jsname))){
                                         <span class="local-variable">this</span>.filename = jsname
                                         <span class="keyword">return</span> <span class="local-variable">this</span>.loadComposition()
                                 }
+                                <span class="keyword">else</span>{
+                                        <span class="keyword">var</span> jsname = dir + <span class="local-variable">this</span>.compname + <span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>
+                                        <span class="keyword">if</span>(fs.existsSync(define.expandVariables(jsname))){
+                                                <span class="local-variable">this</span>.filename = jsname
+                                                <span class="keyword">return</span> <span class="local-variable">this</span>.loadComposition()
+                                        }
+                                }
+                        }
+                        <span class="keyword">finally</span>{
+                                <span class="comment">//console.log(e.stack)</span>
                         }
                 }
-                <span class="keyword">finally</span>{
-                        <span class="comment">//console.log(e.stack)</span>
-                }
+
 
                   <span class="local-variable">this</span>.screenname = <span class="local-variable">this</span>.compname;
 
                 <span class="comment">// Reaching here indicates the path does not exist</span>
-                console.log(<span class="string"><span class="delimiter">'</span><span class="content">bootdali.reload: Unable to load</span><span class="delimiter">'</span></span>, jsname);
-}
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">bootdali.reload: Unable to load</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.compname);
+        }
 
         <span class="local-variable">this</span>.<span class="function">loadHTML</span> = <span class="keyword">function</span>(title, boot){
             <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;

@@ -39,6 +39,12 @@
         "description": "A guide for designer's using the layout toolkit to prototype screen designs and interactions."
       },
       {
+        "name": "flowgraph",
+        "url": "guides/flowgraph",
+        "title": "DreemGL Flow Graph",
+        "description": "A guide for designer's using the flow graph app to prototype screen designs and interactions."
+      },
+      {
         "name": "dali_runtime",
         "url": "guides/dali",
         "title": "DreemGL DALi Runtime Guide",

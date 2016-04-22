@@ -37,8 +37,8 @@ define.class(function(require, exports){
 
 	this.visible = true
 
-	this.pickalpha = 0.5
-	
+	this.pickalpha = 0.01
+
 	// we can use singletons of these stateless classes
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}
@@ -48,46 +48,13 @@ define.class(function(require, exports){
 		this.view = this.outer
 	}
 
-	this.set_precision = true
-
-	this.extensions = ''
-	// put extensions as setters to not have to scan for them
-	/*
-	function defExt(ext){
-		Object.defineProperty(self, key,{
-			get:function(){
-				this.extensions.indexOf(ext) !== -1
-			},
-			set:function(value){
-				if(this.extensions.indexOf(ext) !== -1)
-					return
-				if(this.extensions) this.extensions += '|'
-				this.extensions += ext
-			}
-		})
-	}*/
-	//for(var key in gltypes.extensions) defExt(key)
-
-	//this.OES_standard_derivatives = 1
-
-	this.precision = 'highp'
+	this.set_precision = 'precision highp float;\n'
+	this.set_extensions = '#extension GL_OES_standard_derivatives : enable\n'
 
 	this.compileHeader = function(){
 		var ret = '';
-		// ehm how do we find extensions to enable?
-		// Extensions come first.
-		ret += '#extension GL_OES_standard_derivatives : enable\n'
-
-		ret += this.set_precision?'precision ' + this.precision + ' float;\n':''
-		//	'precision ' + this.precision + ' int;'
-
-		//var ret = ''
-		//for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
-		//	var ext = exts[i]
-	//		if(gltypes.extensions[ext] === 1)
-	//			ret += '\n#extension GL_' + ext + ' : enable'
-	//	}
-	
+		if(this.set_extensions) ret += this.set_extensions
+		if(this.set_precision) ret += this.set_precision
 		return ret + '\n'
 	}
 
@@ -223,7 +190,7 @@ define.class(function(require, exports){
 				name: tex.name
 			}
 			if(tex.name.indexOf('_DOT_') !== -1) loc.split = tex.name.split(/_DOT_/)
-		}		
+		}
 	}
 
 	this.mapAttributes = function(gl, shader, attributes, attrlocs, context){
@@ -239,7 +206,7 @@ define.class(function(require, exports){
 				var geom = context[name]
 				var last = geom.struct
 				var offset = 0
-				for(var i = 1; i < split.length; i++){					
+				for(var i = 1; i < split.length; i++){
 					// lets find split on our struct
 					var info = last.keyInfo(split[i])
 					offset += info.offset
@@ -320,7 +287,7 @@ define.class(function(require, exports){
 			if(eq.op == '+') out.op = gl.FUNC_ADD
 			else if(eq.op == '-') out.op = gl.FUNC_SUBTRACT
 
-			if(left.type == 'Id' && left.name == 'src_color' || 
+			if(left.type == 'Id' && left.name == 'src_color' ||
 			   left.type == 'Binary' && left.right.name == 'src_color'){
 				left = eq.right, right = eq.left
 				if(eq.op == '-') out.op = gl.FUNC_REVERSE_SUBTRACT
@@ -341,7 +308,7 @@ define.class(function(require, exports){
 				out.src = this.decodeBlendFactor(eq, 'src_color')
 			}
 			else throw new Error('Blend equation needs to have either pixel or frame on the right side of the *')
-		} 
+		}
 		else if(eq.type == 'Id'){
 			out.op = gl.FUNC_ADD
 			if(eq.name == 'dst_color'){
@@ -382,7 +349,7 @@ define.class(function(require, exports){
 
 	this.decodeStencilEquation = function(gl, eq, value){
 		if(!eq) return {}
-		else 
+		else
 		if(eq.type == 'Value'){
 
 		}
@@ -414,6 +381,7 @@ define.class(function(require, exports){
 	this.alpha_blend = ''
 	//this.depth_test = 'src_depth > dst_depth'
 	this.depth_test = ''
+	this.depth_mask = true
 	this.color_blend = '(1 - src_alpha) * dst_color + src_alpha * src_color'
 
 	this.alpha = ''
@@ -437,14 +405,14 @@ define.class(function(require, exports){
 	}
 
 	var ignore_compare = {
-		outer:1, 
-		view:1, 
-		shadername:1, 
-		order:1, 
-		shader:1, 
-		update_dirty:1, 
-		dirty_props:1, 
-		pix_state:1, 
+		outer:1,
+		view:1,
+		shadername:1,
+		order:1,
+		shader:1,
+		update_dirty:1,
+		dirty_props:1,
+		pix_state:1,
 		vtx_state:1,
 		_view_listeners:1,
 		pickguid:1
@@ -498,7 +466,7 @@ define.class(function(require, exports){
 			}
 		})
 	}
-	
+
 	this.getLocations = function(gl, shader, vtx_state, pix_state){
 		// get uniform locations
 		var uniset = shader.uniset = {}
@@ -506,7 +474,7 @@ define.class(function(require, exports){
 		var refattr = shader.refattr = {}
 		for(var key in vtx_state.reference_is_attr) refattr[key] = 1
 		for(var key in pix_state.reference_is_attr) refattr[key] = 1
-			
+
 		this.mapUniforms(gl, shader, vtx_state.uniforms, uniset, unilocs)
 		this.mapUniforms(gl, shader, pix_state.uniforms, uniset, unilocs)
 
@@ -518,7 +486,7 @@ define.class(function(require, exports){
 		// get attribute locations
 		var attrlocs = shader.attrlocs = {}
 		this.mapAttributes(gl, shader, vtx_state.attributes, attrlocs, this)
-		this.mapAttributes(gl, shader, pix_state.attributes, attrlocs, this)		
+		this.mapAttributes(gl, shader, pix_state.attributes, attrlocs, this)
 	}
 
 	// compile the shader
@@ -617,7 +585,7 @@ define.class(function(require, exports){
 		pix_base += this.compileUniforms(pix_state.uniforms)
 		pix_base += this.compileTextures(pix_state.textures)
 		pix_base += this.compileFunctions(pix_state.call)
-	
+
 		if(this.debug_type){
 			pix_debug += pix_base
 			pix_debug += '//------------------- Debug Pixel shader main -------------------\nvoid main(){\n'
@@ -640,7 +608,7 @@ define.class(function(require, exports){
 			pix_debug += '}\n'
 		}
 
-		pix_color += pix_base 
+		pix_color += pix_base
 		pix_color += '//------------------- Color Pixel shader main -------------------\nvoid main(){\n'
 		pix_color += this.compileUniformRename(pix_state.uniforms)
 		if(pix_state.dump.set){
@@ -696,7 +664,7 @@ define.class(function(require, exports){
 		}
 		this.shader = this.compileShader(gldevice)
 		this.connectWires()
-	}		
+	}
 
 	this.atExtend = function(){
 

@@ -69,20 +69,16 @@ function main(){
 		console.color('~bc~-port ~br~[port]~~ Server port\n')
 		console.color('~bc~-nomoni ~~ Start process without monitor\n')
 		console.color('~bc~-iface ~br~[interface]~~ Server interface\n')
-		console.color('~bc~-browser~~ Opens webbrowser on default app\n')
-		console.color('~bc~-notify~~ Shows errors in system notification\n')
-		console.color('~bc~-devtools~~ Automatically opens devtools in the browser\n')
-		console.color('~bc~-close~~ Auto closes your tab when reloading the server\n')
-		console.color('~bc~-delay~~ Delay reloads your pages when reloading the server\n')
 		console.color('~bc~-restart~~ Auto restarts after crash (Handy for client dev, not server dev)\n')
-		console.color('~bc~-edit~~ Automatically open an exception in your code editor at the right line\n')
 		console.color('~bc~-path~~ [name]:~br~[directory]~~ add a path to the server under name $name\n')
 		console.color('~bc~-dali~~ run a composition in DALi\n')
 		console.color('~bc~-dalilib~~ can be used to point to the DALi node-addon installation folder on Ubuntu (only to be used in combination with the ~bc~-dali~~ flag)\n')
+		console.color('~bc~-writefile ~~ Allow server to write files to disk\n')
 		return process.exit(0)
 	}
 
 	// our default pathmap
+	// NOTE: if you change this, also update /docs/guides/dreem_in_10/README.md
 	define.paths = {
 		'system':'$root/system',
 		'resources':'$root/resources',
@@ -94,6 +90,7 @@ function main(){
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
 		'sensors':'$root/classes/sensors',
+		'iot':'$root/classes/iot',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
 		'docs':'$root/docs',
@@ -113,7 +110,7 @@ function main(){
 		});
 	}
 
-	if(args['-unsafe']){
+	if(args['-unsafeorigin']){
 		Object.defineProperty(define, "$unsafeorigin", {
 			value: true,
 			writable: false
@@ -191,7 +188,7 @@ function main(){
 
 				var composition = args['-dali'];
 				if (composition === true)
-			composition = 'examples/rendertest'
+					composition = 'examples/rendertest'
 
 				define.$platform = 'dali'
 				define.$environment = 'dali' // Otherwise it is nodejs

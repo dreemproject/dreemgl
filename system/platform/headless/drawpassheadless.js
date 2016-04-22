@@ -146,21 +146,22 @@ define.class(function(require, baseclass){
 			drawlayout.absy = drawlayout.top
 		}
 
-		if(draw === view && view.sublayout){
-			width = view.sublayout.width
-			height = view.sublayout.height
-		}
+		// if(draw === view && view.sublayout){
+		// 	width = view.sublayout.width
+		// 	height = view.sublayout.height
+		// }
+
 		// early out check
-		if(draw !== view && !draw.noscroll){
-			var scroll = view._scroll
-			var zoom = view._zoom
-			if( drawlayout.absy - scroll[1] > height * zoom || drawlayout.absy + drawlayout.height - scroll[1] < 0){
-				return false
-			}
-			if(drawlayout.absx - scroll[0] > width * zoom || drawlayout.absx + drawlayout.width - scroll[0] < 0){
-				return false
-			}
-		}
+		// if(draw !== view && !draw.noscroll){
+		// 	var scroll = view._scroll
+		// 	var zoom = view._zoom
+		// 	if( drawlayout.absy - scroll[1] > height * zoom || drawlayout.absy + drawlayout.height - scroll[1] < 0){
+		// 		return false
+		// 	}
+		// 	if(drawlayout.absx - scroll[0] > width * zoom || drawlayout.absx + drawlayout.width - scroll[0] < 0){
+		// 		return false
+		// 	}
+		// }
 		return true
 	}
 

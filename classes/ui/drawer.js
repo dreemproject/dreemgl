@@ -31,14 +31,22 @@ define.class("$ui/view", function(require, $ui$, view){
 		min:-0.5,
 
 		// The threshold value at which to allow the drawer to open and lock the left tray
-		max:0.5
+		max:0.5,
+
+		// The reference value whether refer to current position or absolute position
+		referAbs: false,
+		refabs: { x: 0, y: 0 },
 	};
+
+	this.mainvalue = function(value) {
+		return value;
+	}
 
 	this.onvalue = function(ev,v,o) {
 
 		if (this._main) {
-			this._main.x = this.direction === "horizontal" ? v * this.width : 0;
-			this._main.y = this.direction === "vertical" ? v * this.height : 0;
+			this._main.x = this.direction === "horizontal" ? this.mainvalue(v) * this.width : 0;
+			this._main.y = this.direction === "vertical" ? this.mainvalue(v) * this.height : 0;
 		}
 
 		if (v > 0) {
@@ -67,37 +75,41 @@ define.class("$ui/view", function(require, $ui$, view){
 
 		var value = 0;
 
-		if (this.direction === "vertical") {
-			if (abs(p.movement[0]) > abs(p.movement[1])) return
-			var newy = main.y + p.movement.y;
-			newy = Math.min(Math.max(newy, 0 - main.height), this.height);
-			value = newy / this.height;
-		} else {
-			if (abs(p.movement[1]) > abs(p.movement[0])) return
-			var newx = main.x + p.movement.x;
-			newx = Math.min(Math.max(newx, 0 - main.width), this.width);
-			value = newx / this.width;
+		// cumulative damped movement value.
+		// Used to decide if enough horizontal/vertical movement is present.
+		this.dampedmovement = this.dampedmovement || vec2(0, 0)
+		this.dampedmovement = vec2(
+			(this.dampedmovement[0] * 9 + p.movement[0]) / 10,
+			(this.dampedmovement[1] * 9 + p.movement[1]) / 10
+		)
+
+		if(this.referAbs) {
+			if (this.direction === "vertical") {
+				if (abs(this.dampedmovement[0]) > abs(this.dampedmovement[1]) * 2) return
+				this.refabs.y += p.movement.y
+				var newy = this.refabs.y;
+				newy = Math.min(Math.max(newy, 0 - main.height), this.height);
+				value = newy / this.height;
+			} else {
+				if (abs(this.dampedmovement[1]) > abs(this.dampedmovement[0]) / 2) return
+				this.refabs.x += p.movement.x
+				var newx = this.refabs.x;
+				newx = Math.min(Math.max(newx, 0 - main.width), this.width);
+				value = newx / this.width;
+			}
 		}
-
-		if ((!this.leftview && value > 0) || (!this.rightview && value < 0)) {
-			value = 0;
-		}
-
-		if (value !== this.value) {
-			this.value = value;
-		}
-    };
-
-	this.pointerend = function(p, loc, v) {
-
-		var value = this.value;
-
-		if (value <= this.min) {
-			value = this.min
-		} else if (value >= this.max) {
-			value = this.max
-		} else {
-			value = 0;
+		else {
+			if (this.direction === "vertical") {
+				if (abs(this.dampedmovement[0]) > abs(this.dampedmovement[1]) * 2) return
+				var newy = main.y + p.movement.y;
+				newy = Math.min(Math.max(newy, 0 - main.height), this.height);
+				value = newy / this.height;
+			} else {
+				if (abs(this.dampedmovement[1]) > abs(this.dampedmovement[0]) / 2) return
+				var newx = main.x + p.movement.x;
+				newx = Math.min(Math.max(newx, 0 - main.width), this.width);
+				value = newx / this.width;
+			}
 		}
 
 		if ((!this.leftview && value > 0) || (!this.rightview && value < 0)) {
@@ -108,6 +120,42 @@ define.class("$ui/view", function(require, $ui$, view){
 			this.value = value;
 		}
 	};
+
+	this.pointerend = function(p, loc, v) {
+
+		var value = this.value;
+
+		if (value <= this.min) {
+			if(this.referAbs) {
+				if (this.direction === "vertical") this.refabs.y = this.min*this.height
+				else this.refabs.x = this.min*this.width
+			}
+			value = this.min
+		} else if (value >= this.max) {
+			if(this.referAbs) {
+				if (this.direction === "vertical") this.refabs.y = this.max*this.height
+				else this.refabs.x = this.max*this.width
+			}
+			value = this.max
+		} else {
+			if(this.referAbs) this.refabs = { x: 0, y: 0 }
+			value = 0;
+		}
+
+
+		if ((!this.leftview && value > 0) || (!this.rightview && value < 0)) {
+			value = 0;
+		}
+
+		if (value !== this.value) {
+			this.value = this.endvalue(value)
+		}
+
+	};
+
+	this.endvalue = function(value) {
+		return value;
+	}
 
 	this.init = function() {
 		this.mainview = this.constructor_children[0];

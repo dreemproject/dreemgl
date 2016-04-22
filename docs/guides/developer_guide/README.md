@@ -1,7 +1,7 @@
 # Developer's Guide to DreemGL
 This guide is intended for developers who want to write applications or extend the DreemGL framework.
 
-DreemGL is DreemGL, an open-source multi-screen prototyping framework
+DreemGL is an open-source multi-screen prototyping framework
 for iOT with a visual editor and shader styling for webGL and DALi
 runtimes written in JavaScript. An overview of the framework is shown
 here:
@@ -36,7 +36,7 @@ function, then live reloading becomes much harder as described further on.
 
 Learning how to use the render functions is very important. For many
 smaller scale datasets, it works great and is the recommended
-methodology. For very large scale datasets, it is adviseable to use
+methodology. For very large scale datasets, it is advisable to use
 the typed-array api, where you essentially write your own renderer for
 very large datasets.
 
@@ -93,6 +93,28 @@ yet. There are also other behind-the-scenes operations happening such as
 style application, which restricts the creation of views to be inside
 specific scopes.
 
+## Classes
+Classes are defined in a single file, using the following syntax:
+```
+define.class('$ui/view', function(require, exports, $ui$, label){
+        var mylib = require('./mylib')
+
+        this.method = function(){
+        }
+
+        exports.staticmethod = function(){
+        }
+})
+```
+
+Please note the 'require' syntax to specify the baseclass, and the $ui$ to switch directory in the dependency-class list.
+Other syntax: $$ - current directory, relative$dir$
+
+The prototype of the class is the 'this' of the function. Also note the two specially named arguments 'require' and 'exports' where they appear doesn't matter, but the name does:
+* exports is the class constructor function, which can hold the static methods.
+* require is simply the local instance of require if needed for normal requires.
+
+After the baseclass and dependencies, you can define attributes on a dreemclass.
 
 ## Attributes
 **Attributes** are special properties on an object. You can define them like this:
@@ -108,14 +130,33 @@ classes all at once: `{attributes:{}}`
 Again, all of these things are defined in
 [node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js).
 
+The way to create them in a class is to assign an object to this.attributes. The setter of 'attributes' will handle creating all the attributes on the class for you. Types of attributes are automatically inferred if assigned with a plain value, but can also be configured using a `Config({meta:'hello'})` object. Assigning a Config object to any existing attribute also refines its settings.
+
+Options for the config attribute are:
+```
+        type:vec2,float,String
+        value:0.4,vec2(3),"hello"
+        meta:'metadataforeditor'
+        persist:true // make sure the attribute survives a livereload / rerender
+```
+```
+this.attributes = {
+        propfloat: 1.0,
+        propstring: "HELLO",
+        propcustom: Config({type:vec2})
+}
+```
+
+Attributes are also automatically created if you pass them to the constructor function. `view({myprop:10})` automatically creates the myprop attribute.
+
+
 ### Listening to Changes
 
 Attributes can listen to changes, as they are implemented with an
 underlying getter/setter (see
 [system/base/node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js)).
 
-Attributes can be assigned 'listeners' which you can see, for example,
-in `borderradius` in
+An example of an attribute being assigned 'listeners' can be seen in `borderradius` in
 [view.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/view.js).
 
 The reason DreemGL uses these setters is that there is a very clean json mapping like so:
@@ -125,6 +166,41 @@ The reason DreemGL uses these setters is that there is a very clean json mapping
 which is the same as:
 
 `this.someattrib = function(){}`
+
+The use of listeners forms the core eventhandling system. When a value of an attribute changes, using a simple assignment:
+```
+this.attr = 10
+````
+This will fire all the listeners to this attribute. Adding listeners to attributes is advised to use the onattr (on prefix) syntax.
+```
+this.onattr = function(event){
+        // event object contains value, old, type, etc
+}
+```
+
+Attribute listeners are called parent-on-up in the prototype hierarchy, and each prototypelevel only has one 'onattr' slot, since this is a normal property. Emitting an event on an attribute can be done by assigning to it, but also using the emit syntax. This object goes to all the listeners as an argument:
+```
+this.emit('attr',{type:'myown'})
+```
+It is also possible to mark values going into a setter using the Mark wrapper:
+```
+this.attr = Mark(15, true) // or plainly Mark(15)
+```
+This 'mark' is passed into the event object to all the listener as the mark property. Using this it is possible to break infinite feedback loops like so:
+```
+this.onattr = function(event){
+        if(event.mark) return // someone did an attribute assign using the Mark
+}
+```
+
+It is also possible to use `addListener`, this adds a list of
+listeners which are not the same as the onattr (on prefix) slots on
+the prototype chain. However this is exceedingly rare:
+```
+this.addListener('attr', function(event){
+
+})
+```
 
 ### Using Attributes
 The recommended usage methodology is as follows.
@@ -172,6 +248,125 @@ Event flow follows the inheritance structure of
 the class. Base classes get their listeners called first as you can
 see in the implementation of
 [node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js).
+
+## Styles
+DreemGL does not implement CSS for styling components but instead relies on JavaScript notation for styling views and UI widgets. Each visual object in DreemGL has a *style* attribute, which can be set inside the class or on an instance. There are 3 different ways how styles can be set in DreemGL:
+
+1. Add style to composition using ```this.style = {...}``` inside the composition class body. Styles in compositions apply to all screens, views, and UI widgets on all screens.
+2. Add style to class using ```this.style = {...}```.
+3. Add style to instance inside a render function of a screen or view (or subclass of one of these).
+
+A code example will make things clearer. Let's take a look at the style1.js composition. There are two style sheets in this composition: One on the composition itself, then a class style in the embedded *redview* class.
+
+<a href="/docs/examples/devguide/style1" target="_blank" data-example="DreemGL Style Example|436|128">http://localhost:2000/docs/examples/devguide/style1</a>
+
+```javascript
+define.class('$server/composition', function ($ui$, screen, view, label){
+	this.style = {
+		view: {
+			bgcolor: 'orange',
+			margin: 10
+		},
+		label: {
+			fgcolor: 'blue'
+		}
+	}
+
+	// simple view subclass for testing styles inside a class
+	define.class(this, "redview", "$ui/view", function() {
+		this.bgcolor = "red";
+		this.style = {
+			view: {
+				w: 70,
+				h: 70,
+				bgcolor: 'green'
+			}
+		}
+		this.render = function() {
+			return [ view() ];
+		}
+	})
+
+	this.render = function(){
+		return [
+			screen({
+					name:"default",
+					clearcolor: 'white',
+					flexdirection: 'row'
+				},
+
+				// styles get applied to these views
+				view({ name: 'v1', w: 50, h: 50, bgcolor: 'gray' })
+				,this.redview({ name: 'redview1', w: 100, h: 100 })
+				,label({ name: 'l1', text: 'label1', fgcolor: 'black'})
+				,view({ name: 'v2', h: 50 }
+					,label({ name: 'l2', text: 'label2'})
+				)
+			)
+		];
+	}
+})
+```
+
+*Screenshot: /docs/examples/devguide/style1 compostion running*
+
+<img src="https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/devguide-style1-screenshot.png" width="436" height="128"/>
+
+Let's analyse this composition:
+
+* There is a style for the view class defined in the composition stylesheet, which sets attributes x, y, and bgcolor.
+* The embedded class *redview* - a subclass of view - has a class stylesheet, which will be applied to all children of *redview* instances.
+* The compositions render function generates a screen, with four views as direct children: view with name ```v1```, redview with name ```redview1```, label with name ```l1```, view with name ```v2```. The last view has a child label with name ```l2```.
+
+Explanation of styles applied to each visual object:
+
+**screen.name='default':** No style applied.
+
+**view.name='v1':**
+   
+   - ```margin: 10``` from composition stylesheet
+   - ```bgcolor: 'orange'``` from composition stylesheet is overwritten by inline bgcolor attribute value.
+
+**this.redview.name='redview1':**
+   
+   - ```bgcolor``` is set in class body without style. No other style is applied.
+
+**this.redview.name='redview1 - inner child view'**
+
+   - ```margin: 10``` from composition stylesheet
+   - ```w: 70, h:70``` from class stylesheet of *redview* class.
+
+**label.name='l1'**: No style applied.
+
+**view.name='v2':**
+
+   - ```bgcolor: 'orange', margin: 10``` from composition stylesheet
+ 
+**label.name='l2'**:
+
+   - ```fgcolor: 'blue'``` from composition stylesheet
+
+DreemGL supports a mechanism to assign stylesheet values to class instances using a limited number of selectors, which are described in the next section.
+
+### Style Selectors
+
+DreemGL supports the following selectors for applying styles to objects:
+
+| Selector | Example | Description |
+| -------- | ------- | ----------- |
+| ```$``` | ```style = { $: { bgcolor: 'red' } }``` | **Global Selector:** Applied to all visual objects which are children or descendants of the component |
+| ```{class}``` | ```style = { label{ fgcolor: 'red' }``` will be applied to ```label({})``` | **Class name:** Applies to all instances of that class. |
+| ```class_style``` | ```style = { label_largeLabel{ fgcolor: 'red' }``` will be applied to ```label({class:'largeLabel'})``` | **C**lass name with attribute class='value'**  Applied to all instances of that class with the attribute ```class``` set to the same value. |
+| ```style = {}``` | ```button: { label: {margin:[11,1,1,1]} }``` will be applied to the view structure ```button({}, label({}))``` | **Class and view child with class:** Applied to all instances of that class with the attribute ```class``` set to the same value. |
+
+Selecting objects through ID values is not not supported in DreemGL.
+
+### Style Best Practices
+ 
+ * Composition wide styles should be put unto the composition directly.
+ * For classes or UI widgets, add a style inside the class definition. Developers using those classes or widgets can override the stylesheet feels in their own compositions.
+ * If you want to style views inside complex UI widgets, you can select whole structures of views in a style, e.g. ```button: { label: {margin:[11,1,1,1]} }```.
+ * Be careful with style definitions on screens: These are a special case, since the values will only get applied to classes or instances which contain a render function.
 
 ## Shaders
 Each view contains several shaders (such as `bg`, `border`) which can be assigned
@@ -259,13 +454,47 @@ color:function(){
 }
 ```
 
-# Other Useful Documentation
+# Documentation
+DreemGL provides an [API reference](http://docs.dreemproject.org/docs/api/index.html#!/api), a
+[Developer's Guide](http://docs.dreemproject.org/docs/api/index.html#!/guide/devguide),
+and guides for all components, including the visual layout toolkit,
+the flow graph, and IoT integration. See the dreemproject server for a
+[listing of all guides](http://docs.dreemproject.org/docs/api/index.html#!/guide).
 
- * [API Reference](/docs/api/index.html#!/api)
- * [Components, Services & IoT](/docs/api/index.html#!/guide/components)
- * [DreemGL-in-10](/docs/api/index.html#!/guide/dreem_in_10_part1)
- * [DreemGL DALi Runtime](/docs/api/index.html#!/guide/dali_runtime)
- * [DreemGL Visual Toolkit](/docs/api/index.html#!/guide/toolkit)
- * [DreemGL Appendix](/docs/api/index.html#!/guide/appendix)
+## Adding Documentation to DreemGL
+DreemGL can generate documentation automatically from all the code in
+its system. Best practices encourage commenting code to improve raedability and maintainability. There are simple rules for adding comments to be included in the API documentation:
 
+* To document a class, add a comment immediately after the opening function definition as shown:
 
+```
+define.class("$server/service", function (require) {
+        // The iot class makes it very easy to connect to a wide variety of devices including
+        // SmartThings, Philips Hue and many more.
+        //
+        // IMPORTANT: see /examples/components/iot/README.md for setup instructions.
+        this.__thingmodel = {}
+        ...
+```
+
+* To document an attribute, place the comment immediately <strong>before</strong> it as shown:
+
+```
+this.attributes = {
+       // Things: A list of things connected to the hub, automatically updated as new 
+       //devices are discovered and their state changes.
+       things: Config({type: Array, value: [], flow:"out"}),
+
+       //Connected: If true, we are connected
+       connected: Config({type: Boolean, value: false, persist: true, flow:"out"})
+                 }
+````
+
+### Generating Documentation
+To generate HTML documentation to ensure getting the latest, run the documentation builder:
+
+                ./resources/bin/buiddocs
+
+Then, the documentation will be visible here [/docs/api/index.html](http://localhost:2000/docs/api/index.html) when the server is running.
+
+<iframe name='docrunner' style="width:1px; height:1px; border:0" src="/docs/examples/docexamplerunner"></iframe>

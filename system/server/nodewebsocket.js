@@ -11,13 +11,60 @@ define.class(function(require){
 	var url = require('url')
 	var http = require('http')
 
-	this.atConstructor = function(req, socket){
-		if(typeof req == 'string'){
-			this.initClient(req)
+	this.atConstructor = function(req, socket, head){
+		if(arguments.length === 1){
+			if(typeof req === 'string'){
+				this.initClient(req)
+			}
+			else{
+				this.initBare(req)
+			}
 		}
-		else{
-			this.initServer(req, socket)
+		if(arguments.length === 3) this.initServer(req, socket, head)
+	}
+
+	// events (looks just like browser websocket)
+	this.onmessage = function(event){
+	}
+
+	this.onclose = function(){
+	}
+
+	this.onerror = function(error){
+	}
+
+	// turn the socket into a socket that can send json with binary data
+	this.makeJSONSocket = function(){
+
+		var binary_buf = []
+		this.onmessage = function(event){
+			var message = event.data
+			if(message instanceof ArrayBuffer){
+				binary_buf.push(message)
+				return
+			}
+			var jsonmsg = JSON.parse(message)
+			jsonmsg = define.structFromJSON(jsonmsg, binary_buf)
+			binary_buf.length = 0
+			this.atJSONMessage(jsonmsg)
 		}
+
+		this.sendJSON = function(msg){
+			var binary = []
+			var newmsg = define.makeJSONSafe(msg, binary)
+			for(var i = 0; i < binary.length; i++){
+				var bin = binary[i]
+				this.send(bin.data.buffer)//data.buffer)
+			}
+			var jsonmsg = JSON.stringify(newmsg)
+			this.send(jsonmsg)
+		}
+	}
+
+	// us it as a communication pipe over any socket
+	this.initBare = function(socket){
+		this.socket = socket
+		this.initState()
 	}
 
 	this.initClient = function(server_url){
@@ -30,7 +77,7 @@ define.class(function(require){
 		shasum.update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11');
 		this.expectedServerKey = shasum.digest('base64');
 
-		var origin =  host + this.url.path
+		//var origin =  host + this.url.path
 		var opt = {
 			port: this.url.port,
 			host: this.url.hostname,
@@ -40,7 +87,7 @@ define.class(function(require){
 				'upgrade': 'websocket',
 				'pragma':'no-cache',
 				'host': host,
-				'origin': 'http://' + origin,
+				'origin': 'http://' + host,
 				'sec-websocket-version': 13,
 				'sec-websocket-key': key,
 			}
@@ -62,7 +109,7 @@ define.class(function(require){
 			}
 			this.socket = socket
 			this.initState()
-			if(this.atConnect) this.atConnect()
+			if(this.onopen) this.onopen()
 		}.bind(this))
 
 		req.end()
@@ -94,9 +141,9 @@ define.class(function(require){
 
 	this.initState = function(){
 
-		this.max = 100000000 // maximum receive buffer size (10 megs)
+		this.max = 500000000 // maximum receive buffer size (10 megs)
 		this.header = new Buffer(14) // header
-		this.output = new Buffer(1000000) // output
+		this.output = new Buffer(50000000) // output
 		this.state = this.opcode // start in the opcode state
 		this.expected = 1 // the bytes expected for the next state
 		this.written = 0 // how much we have written in the output buffers
@@ -107,6 +154,8 @@ define.class(function(require){
 		this.paylen = 0 // payload length
 		this.readyState = 1
 		this.partial_msg = ''
+		this.partial_binary = []
+		this.partial_binary_bytes = 0
 		// 10 second ping frames
 		this.pingframe = new Buffer(2)
 		this.pingframe[0] = 9 | 128
@@ -134,23 +183,15 @@ define.class(function(require){
 			this.close()
 		}.bind(this))
 	}
-
-	this.atMessage = function(message){
-	}
-
-	this.atClose = function(){
-	}
-
-	this.atError = function(error){
-	}
+	
 
 	this.error = function(t){
 		console.log("Error on websocket " + t)
-		this.atError(t)
+		this.onerror(t)
 		this.close()
 	}
 
-	this.send = function(data){
+	this.send = function(data, ispartial, iscontinuation, domask){
 		if(this.first_queue){
 			// put a tiny gap between a server connect and first data send
 			if(!this.first_queue.length){
@@ -165,7 +206,10 @@ define.class(function(require){
 			this.first_queue.push(data)
 			return
 		}
-		if(typeof data !== 'string' && !(data instanceof Buffer)) data = JSON.stringify(data)
+		//if(typeof data !== 'string' && !(data instanceof Buffer)){
+		//	var msg = define.
+		//	data = JSON.stringify(data)
+		//}
 		if(!this.socket) return
 		var head
 		var buf = new Buffer(data)
@@ -184,16 +228,33 @@ define.class(function(require){
 			head[2] = head[3] = head[4] = head[5] = 0
 			head.writeUInt32BE(buf.length, 6)
 		}
-		head[0] = 128 | 1
-		var mask = new Buffer(4)
-		mask[0] = mask[1] = mask[2] = mask[3] = 0
+		var type = 1
+		if(data instanceof Buffer || data instanceof ArrayBuffer) type = 2
+		if(iscontinuation) type = 0
+		head[0] = (ispartial?0:128) | type
+		
 		this.socket.write(head)
+	
+		// lets mask the data
+		if(domask){
+			head[1] |= 128
+			var mask = new Buffer(4)
+			mask[0] = 0x7f
+			mask[1] = 0x7f
+			mask[2] = 0x7f
+			mask[3] = 0x7f
+			this.socket.write(mask)
+			for(var i = 0; i < buf.length; i++){
+				buf[i] ^= mask[i&3]
+			}
+		}
+
 		this.socket.write(buf)
 	}
 
 	this.close = function(){
 		if(this.socket){
-			this.atClose()
+			this.onclose()
 			this.socket.destroy()
 			clearInterval(this.ping_interval)
 			this.readyState = 3
@@ -209,8 +270,9 @@ define.class(function(require){
 		if(this.written > this.header.length) return this.err("unexpected data in header"+ se + s.toString())
 		return this.expected != 0
 	}
-
+	var total =  0
 	this.data = function(){
+
 		if(this.masked){
 			while(this.expected > 0 && this.read < this.input.length){
 				this.output[this.written++] = this.input[this.read++] ^ this.header[this.maskoff + (this.maskcount++&3)]
@@ -227,8 +289,37 @@ define.class(function(require){
 		}
 
 		if(this.expected) return false
-		if(!this.partial){
-			this.atMessage(this.partial_msg + this.output.toString('utf8', 0, this.written))
+		if(this.binary){
+			// single message binary
+			if(!this.partial && !this.partial_binary_bytes){
+				var msg = new Uint8Array(this.written)
+				for(var i = 0; i < this.written; i++) msg[i] = this.output[i]
+				this.onmessage({data:msg.buffer})
+			}
+			else{ // multi message binary
+				var store = new Uint8Array(this.written)
+				this.partial_binary.push(store)
+				for(var i = 0; i < this.written; i++){
+					store[i] = this.output[i]
+				}
+				this.partial_binary_bytes += i
+				if(!this.partial){
+					var msg = new Uint8Array(this.partial_binary_bytes)
+					var off = 0
+					for(var i = 0; i < this.partial_binary.length; i++){
+						var item = this.partial_binary[i]
+						for(var j = 0; j < item.length; j++, off++){
+							msg[off] = item[j]
+						}
+					}
+					this.partial_binary.length = 0
+					this.partial_binary_bytes = 0
+					this.onmessage({data:msg.buffer})
+				}
+			}
+		}
+		else if(!this.partial){
+			this.onmessage({data:this.partial_msg + this.output.toString('utf8', 0, this.written)})
 			this.partial_msg = ''
 		}
 		else{
@@ -358,17 +449,17 @@ define.class(function(require){
 		if(this.head()) return
 		var frame = this.header[0] & 128
 		var type = this.header[0] & 15
-		if(type === 0 || type == 1){
-			if(!frame){
-			 //return this.error("only final frames supported")
+		if(type === 0 || type == 1 || type == 2){
+			if(!frame){          
 				this.partial = true
 			}
 			else{
 				this.partial = false
 			}
-
+			this.binary = type === 2 || type === 0 && this.last_type === 2
 			this.expected = 1
 			this.state = this.len1
+			if(type) this.last_type = type
 			return true
 		}
 		if(type == 8) return this.close()

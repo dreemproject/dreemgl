@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!---
+ DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.
+
+ Example viewer HTML page; used by the docs/examples/docexamplerunner.js composition to show the example corresponding
+ to the scrollposition in a guide on 2nd screen or devices. Related files:
+
+   /docs/jsduck-config.json                     Used to inject required JS libraries into JSduck's main HTML page
+   /docs/scripts/findVisibleExampleLink.js      Script which tracks the visible link to an example in a guide and
+                                                sends the value to the docexamplerunner.js composition.
+   /
+
+ --->
+<html>
+<head>
+    <title>Multiscreen Doc Example Viewer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+</head>
+<body>
+<style type="text/css">
+    body{
+        margin: 0;
+        padding: 0;
+    }
+    iframe {
+        padding: 0;
+        margin: 0;
+        border-width: 0;
+    }
+    .communicFrame{
+        position: absolute;
+        width:1px;
+        height:1px;
+        border:0;
+    }
+    .exFrame{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+<iframe name="doccommunicator" class="communicFrame" style="" src="/docs/examples/docexamplerunner"></iframe>
+<iframe name="exampleFrame" class="exFrame" style=""></iframe>
+<script type="text/javascript">
+    function loadComposition(href, compName) {
+        document.exampleFrame.location.href = href;
+        window.top.document.title = "Running " + compName;
+    }
+</script>
+</body>
+</html>
+

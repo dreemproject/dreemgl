@@ -243,7 +243,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">./render</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.<span class="function">_atConstructor</span> = <span class="keyword">function</span>(){
-                
+
         }
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
@@ -281,7 +281,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._intervals.push(id)
                 <span class="keyword">return</span> id
         }
- 
+
         <span class="local-variable">this</span>.<span class="function">clearInterval</span> = <span class="keyword">function</span>(id){
                 <span class="keyword">var</span> i = teem._intervals.indexOf(id)
                 <span class="keyword">if</span>(i != -<span class="integer">1</span>) teem._intervals.splice(i, <span class="integer">1</span>)
@@ -291,7 +291,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">renderComposition</span> = <span class="keyword">function</span>(){
                 <span class="comment">// we have to render the RPC bus</span>
                 Render.process(<span class="local-variable">this</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">false</span>, <span class="predefined-constant">true</span>)
-                
+
                 <span class="comment">//this.children = this.render()</span>
 
                 <span class="local-variable">this</span>.names = {}

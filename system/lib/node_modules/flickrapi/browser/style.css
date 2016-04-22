@@ -1,0 +1,13 @@
+input:focus { outline: none; }
+input:required:invalid { border: 1px solid red; background: rgba(255,0,0,0.2); }
+input:required:valid { border: 1px solid grey; }
+input { width:20em; font-family: courier; font-size: 16px; }
+
+.required { border: 3px solid rgb(40, 200, 40); border-width: 0 3px; }
+.optional { border: 3px solid rgb(200, 215, 255); border-width: 0 3px; }
+
+#arguments { border: 1px solid grey; border-left: none; border-right: none; margin-top: 1em;}
+#arguments div { padding-left: 1em; padding-bottom: 1em; }
+#arguments div * { margin: 0; margin-top: 0.2em;}
+#arguments div + div { border-top: 1px solid grey; padding-top: 1em; }
+#arguments div label { margin-right: 1em; font-weight: bold; font-family: Arial; }

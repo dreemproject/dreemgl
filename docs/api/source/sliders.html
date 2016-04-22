@@ -250,6 +250,47 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n96" name="n96">96</a>
 <a href="#n97" name="n97">97</a>
 <a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -257,7 +298,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, slider, screen, label, view, icon, cadgrid) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, slider, screen, label, view, icon, cadgrid, button) {
 
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                         <span class="keyword">return</span> [
@@ -282,7 +323,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         }),
                                                         slider({
                                                                 <span class="key">flex</span>:<span class="integer">0</span>,
-                                                                <span class="key">width</span>:<span class="integer">400</span>,
+                                                                <span class="key">width</span>:<span class="integer">300</span>,
                                                                 <span class="key">minhandlethreshold</span>:<span class="integer">26</span>,
                                                                 <span class="key">height</span>:<span class="integer">5</span>,
                                                                 <span class="key">value</span>:<span class="float">0.1</span>,
@@ -291,7 +332,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
                                                                         <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>);
                                                                         <span class="keyword">if</span> (current) {
-                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">4</span>)
                                                                         }
                                                                         <span class="local-variable">this</span>.height = <span class="integer">5</span> + <span class="integer">30</span> * v
                                                                 }
@@ -305,12 +346,53 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 ),
                                                 view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                                                         label({
+                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Step Usage w/range bet 100 ~ 600</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">marginbottom</span>:<span class="integer">30</span>
+                                                        }),
+                                                        slider({
+                                                                <span class="key">flex</span>:<span class="integer">0</span>,
+                                                                <span class="key">width</span>:<span class="integer">300</span>,
+                                                                <span class="key">height</span>:<span class="integer">10</span>,
+                                                                <span class="key">value</span>:<span class="float">0.2</span>,
+                                                                <span class="key">step</span>:<span class="float">0.2</span>,
+                                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">palegreen</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">smooth</span>:<span class="predefined-constant">false</span>,
+                                                                <span class="key">range</span>:vec2(<span class="integer">100</span>,<span class="integer">600</span>),
+                                                                <span class="function">onrangevalue</span>:<span class="keyword">function</span>(ev,v,o) {
+                                                                        <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">currentrange</span><span class="delimiter">&quot;</span></span>);
+                                                                        <span class="keyword">if</span> (current) {
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current range value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">0</span>)
+                                                                        }
+                                                                },
+                                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
+                                                                        <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>);
+                                                                        <span class="keyword">if</span> (current) {
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">1</span>)
+                                                                        }
+                                                                }
+                                                        }),
+                                                        label({
+                                                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">margintop</span>:<span class="integer">30</span>,
+                                                                <span class="key">fontsize</span>:<span class="integer">12</span>,
+                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: 0.2</span><span class="delimiter">&quot;</span></span>
+                                                        }),
+                                                        label({
+                                                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">currentrange</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">margintop</span>:<span class="integer">5</span>,
+                                                                <span class="key">fontsize</span>:<span class="integer">12</span>,
+                                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">The current range value is: 200</span><span class="delimiter">&quot;</span></span>
+                                                        })
+                                                ),
+                                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
+                                                        label({
                                                                 <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Custom Handle w/Image</span><span class="delimiter">&quot;</span></span>,
                                                                 <span class="key">marginbottom</span>:<span class="integer">30</span>
                                                         }),
                                                         slider({
                                                                 <span class="key">flex</span>:<span class="integer">0</span>,
-                                                                <span class="key">width</span>: <span class="integer">400</span>,
+                                                                <span class="key">width</span>: <span class="integer">300</span>,
                                                                 <span class="key">height</span>: <span class="integer">5</span>,
                                                                 <span class="key">bgcolor</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.2</span>),
                                                                 <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
@@ -319,7 +401,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
                                                                         <span class="keyword">var</span> current = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>);
                                                                         <span class="keyword">if</span> (current) {
-                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v
+                                                                                current.text = <span class="string"><span class="delimiter">&quot;</span><span class="content">The current value is: </span><span class="delimiter">&quot;</span></span> + v.toFixed(<span class="integer">3</span>)
                                                                         }
                                                                         <span class="keyword">var</span> handle = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>)
                                                                         <span class="keyword">if</span> (handle) {

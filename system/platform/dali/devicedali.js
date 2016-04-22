@@ -34,6 +34,7 @@ define.class(function(require, exports){
 	,getShaderInfoLog: function() {return ''}
 	,useProgram: function() {}
 	,createBuffer: function() {return 0;}
+	,deleteBuffer: function() {}
 	,bindBuffer: function() {}
 	,bufferData: function() {}
 	,enable: function() {}
@@ -55,9 +56,6 @@ define.class(function(require, exports){
 	,texImage2D: function() {}
 	};
 
-	// DaliApi is a static object to access the dali api
-	this.DaliApi = require('./dali_api')
-
 	this.Keyboard = require('./keyboarddali')
 	this.Pointer = require('./pointerdali')
 
@@ -74,6 +72,8 @@ define.class(function(require, exports){
 	this.document = null
 
 	this.atConstructor = function(previous){
+		// DaliApi is a static object to access the dali api
+		this.DaliApi = require('./dali_api')
 
 		this.extensions = previous && previous.extensions || {}
 		this.shadercache = previous &&  previous.shadercache || {}
@@ -89,11 +89,13 @@ define.class(function(require, exports){
 		this.animFrame = function(time){
 			//console.log('animFrame', time);
 			var interval = 16;
-			var t = this.doColor(time);
+			var cur = new Date().getTime();
+			var t = this.doColor(cur);
+
 			if(t){
 				this.anim_req = true
-                this.time += interval;
-                setTimeout(function() {this.animFrame(this.time);}.bind(this), interval)
+        this.time += interval;
+        setTimeout(function() {this.animFrame(this.time);}.bind(this), interval)
 			}
 			else this.anim_req = false
 			//if(this.pick_resolve.length) this.doPick()

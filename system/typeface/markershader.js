@@ -68,19 +68,37 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 			if(end > length) end = length
 			var min = Infinity
 			//if(textbuf.charCodeAt(start) === 10) start--
+
+			//console.log(">>>", textbuf.cursorRect(start), start, end, deltay)
+
+			var ch, lasty;
 			for(var o = start, last = o; o < end; o++){
 				ch = textbuf.charCodeAt(o)
 				//next = textbuf.charCodeAt(o+1)
 				if(o == end - 1 || ch == 10){
 					var r = textbuf.cursorRect(last)
 					var r2 = textbuf.cursorRect(o)
-					var x = ch === 10? r2.x: r2.x + r2.w;//ch === 10? textbuf.char_tl_x(o-1): textbuf.char_tr_x(o)
+					if (!lasty) {
+						lasty = r.y
+					}
+
+					var prev = array[array.length -1]
+					if (lasty < r.y) {
+						var coords= textbuf.charCoords(last - 2)
+						if (prev) {
+							prev.w = (coords.x + coords.w) - prev.x
+							prev.x2 = prev.x + prev.w
+						}
+					}
+					lasty = r.y
+
+					var x = ch === 10 ? r2.x : r2.x + r2.w;//ch === 10? textbuf.char_tl_x(o-1): textbuf.char_tr_x(o)
 					r.start = last + 1
 					r.end = o
-					if(r.x < min) min = r.x
+					if (r.x < min) min = r.x
 					r.x = min
 					r.w = x - r.x
-					if(r.w < 4) r.w = 4
+					if (r.w < 4) r.w = 4
 					r.x2 = r.x + r.w
 					r.y2 = r.y + r.h
 					r.y += deltay
@@ -88,7 +106,6 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 
 					// check if the previous item is on the same r.y
 					// ifso fuse it with this marker
-					var prev = array[array.length -1]
 					if(prev && abs(prev.y-r.y) < 1e-4){ // fuse marker
 						prev.x2 = r.x2
 						prev.w += r.w

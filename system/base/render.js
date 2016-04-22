@@ -141,7 +141,6 @@ define.class(function(exports){
 
 		if(!nochild && new_children) for(var i = 0; i < new_children.length; i++){
 			var new_child = new_children[i]
-
 			if(Array.isArray(new_child)){ // splice in the children
 				var args = Array.prototype.slice.call(new_child)
 				args.unshift(1)
@@ -168,6 +167,7 @@ define.class(function(exports){
 			new_child.rpc = new_version.rpc
 			new_child.parent_viewport = new_version.parent_viewport
 			new_children[i] = render(new_child, old_child, state, childreuse)
+			if(new_version.atChildRendered) new_version.atChildRendered(new_child)
 		}
 
 		if(new_version.atChildrenRendered) new_version.atChildrenRendered()
@@ -175,6 +175,7 @@ define.class(function(exports){
 		if(old_children) for(;i < old_children.length;i++){
 			var child = old_children[i]
 			child.destroyed = true
+			child.atViewDestroy()
 			child.emit('destroy')
 		}
 
@@ -185,12 +186,12 @@ define.class(function(exports){
 				var id = old_version.screen.device.animate_hooks.indexOf(old_version)
 				if(id !== -1) old_version.screen.device.animate_hooks.splice(id, 1)
 			}
-
+			old_version.atViewDestroy()
 			old_version.emit('destroy')
 		}
 
 		if(is_root){
-			
+
 
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){

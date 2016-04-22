@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.git
+data
+userdata
+node_modules
+data
+test.js
+tokentest.js

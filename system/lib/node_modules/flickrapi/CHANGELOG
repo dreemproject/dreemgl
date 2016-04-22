@@ -1,0 +1,167 @@
+v0.3.35
+  * tags can now include the apostrophe (') character
+
+v0.3.33
+  * Authenticate is now exiting, rather than wrapping the entire
+    life of the API object.
+
+v0.3.31
+  * Uploads can use tags either in string form or in array form.
+
+v0.3.30
+  * API functions that have optional authentication (such as
+    flickr.people.getPhotos) can now be told to explicitly use
+    authenticated calls, by passing in "authenticated: true"
+    as part of the function call options.
+
+v0.3.24
+  * The library can now be used to upload photos to Flickr.
+
+v0.3.23
+  * private photos are now downloaded during --downsync, provided
+    that the `force_auth` option is set in the flickr options, with
+    the ia function (src/handlers/ia.js) now having an options
+    object that can take a "loadPrivate" boolean property. If
+    false or omitted, private photos and photosets are filtered
+    out of the keysets for each. If true, photos and photosets
+    are left unfiltered and will show up if you do things based
+    on photo_keys and photoset_keys. (see README.md)
+
+v0.3.22
+  * Rewrote the downsync code to sommething a little more
+    sensible, and changed the downsync order from
+    photos/sets/collections to collections/sets/photos,
+    so that changes to the collection and set metadata aren't
+    held up by potentially thousands of photograph checks.
+
+v0.3.21
+  * Added "force_auth" as possible flickrOptions property,
+    which allows you to force authed API calls for functions
+    that do not require auth, but may generate more data if
+    authed (such as the photos.search function, which does
+    public searching without auth, but can return private
+    data when authed).
+
+v0.3.20
+  * fixed some remaining http: protocol URLs to be https:
+
+v0.3.19
+  * fixed lingering bug in tokenOnly() behaviour
+
+v0.3.18
+  * switch image download protocol from http: to https: due
+    to a change in Flickr's infrastructure to https-only.
+
+v0.3.17
+  * added catching "no response" errors when querying Flickr.
+
+v0.3.14
+  * Added "token only" access, so that the public Flickr API
+    calls do not require you to authenticate through oauth.
+
+v0.3.13
+  * Updated the authentication endpoints to the correct endpoints
+
+v0.3.12
+  * fixed infinite retries on downloading images
+
+v0.3.11
+  * Added additional options to control the authentication
+    procedure in terms of console logging, opening browsers,
+    etc. See the Custom authentication section in the README
+    for additional details.
+
+v0.3.8
+  * Image downloads from Flickr that result in incomplete images
+    will make the download module redownload the file. For JPG
+    images this means looking for 0xFFD9 as last two bytes,
+    for PNG files the code looks for the IEND chunk in the PNG
+    data. No more 0 byte or half-finished images (hopefully).
+
+v0.3.0
+  * In order to align the module with the Flickr API's property
+    names, the "key" property has been renamed to "api_key" in
+    the client-side library, as well as the server-side module.
+    As this breaks upgrades, the version has been moved up from
+    0.2 to 0.3
+  * The clientside library can be given a custom endpoint to
+    make it query proxies for the Flickr API, to get around
+    the security problems that stem from having a client side
+    library needing to use private credentials.
+
+v0.2.27
+  * oauth authentication now allows you to specify your own
+    callback endpoint. If not specified, the out-of-band method
+    is still used, requiring users to type an authentication
+    code that they receive in the browser. Otherwise all they
+    have to do is press the "I authorise this app" button.
+  * updated the test.js file to allow one-step downsyncing,
+    to save people the hassle of having to write an app around
+    the module. If you just want your flickr data, add your
+    Flickr API key information to the .env file, and then call
+    "node test --downsync"
+
+v0.2.26
+  * Flickr API proxying, so that your app can use query flickr
+    server side and send the response back over your own API
+    url. Because client-side Flickr-API calls cannot be signed
+    securely.
+
+v0.2.25
+  * client side improvment: much smaller production library,
+    acceptably sized dev library.
+  * README documentation ammended for client-side library use.
+
+v0.2.22
+  * also compiles to client-side library now, with a precompiled
+    library in the ./browser directory.
+
+v0.2.21
+  * all code uses strict pragma, and passes linting.
+
+v0.2.18
+  * added collection icon image mirroring, so you don't need
+    to create your own pinhead collages.
+
+v0.2.16
+  * "on downsync complete" callback added
+
+v0.2.14
+  * downsync will now prune entries that you removed from Flickr,
+    but still have in your mirror, but only when the `downsync`
+    function is called with the option second `removeDeleted`
+    parameter set to `true`.
+
+v0.2.11
+  * updated the progress package. It's now well-behaved on OSX.
+
+v0.2.9
+  * downsync now updates entries on disk that were updated on Flickr
+    since the last downsync, rather than requiring you delete your
+    ia directory and redownloading all the .json data.
+
+v0.2.8
+  * photos are correctly sorted in photosets
+
+v0.2.6
+  * comments and contexts are cross-referenced into photos
+
+v0.2.5
+  * functions calls are always correctly auth'd
+  * app permissions can be passed during the `authenticate` call,
+    defaulting to "read".
+
+v0.2.1
+  * downsync now downloads:
+    - comments for each photo
+    - contexts for each photo
+  * "large" and "medium 800" images are downloaded for each photo
+  * photos now indicate the image sizes that Flickr has for them
+
+v0.1.x
+  * downsync downloads:
+    - photos
+    - photosets
+    - collections
+
+Versions not listed are bug fix releases, rather than feature releases.

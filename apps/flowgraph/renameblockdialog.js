@@ -25,10 +25,10 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 					dropshadowoffset:vec2(9,9)
 
 				},
-				view({margin:10, flexdirection:"row",bgcolor:NaN},
-					label({text:"old name:",bgcolor:NaN}),
-					textbox({value:this.oldname, enabled: false, marginleft: 20, bgcolor:"#202020", multiline:false})
-				),
+				//view({margin:10, flexdirection:"row",bgcolor:NaN},
+				//	label({text:"old name:",bgcolor:NaN}),
+				//	textbox({value:this.oldname, enabled: false, marginleft: 20, bgcolor:"#202020", multiline:false})
+				//),
 				view({margin:10, flexdirection:"row",bgcolor:NaN},
 					label({text:"new name:",bgcolor:NaN}),
 					textbox({value:this.oldname, name:"newnamebox", marginleft: 20, bgcolor:"#202020", multiline:false})

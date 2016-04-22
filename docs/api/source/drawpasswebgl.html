@@ -584,6 +584,77 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n430" name="n430">430</a></strong>
 <a href="#n431" name="n431">431</a>
 <a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
+<a href="#n444" name="n444">444</a>
+<a href="#n445" name="n445">445</a>
+<a href="#n446" name="n446">446</a>
+<a href="#n447" name="n447">447</a>
+<a href="#n448" name="n448">448</a>
+<a href="#n449" name="n449">449</a>
+<strong><a href="#n450" name="n450">450</a></strong>
+<a href="#n451" name="n451">451</a>
+<a href="#n452" name="n452">452</a>
+<a href="#n453" name="n453">453</a>
+<a href="#n454" name="n454">454</a>
+<a href="#n455" name="n455">455</a>
+<a href="#n456" name="n456">456</a>
+<a href="#n457" name="n457">457</a>
+<a href="#n458" name="n458">458</a>
+<a href="#n459" name="n459">459</a>
+<strong><a href="#n460" name="n460">460</a></strong>
+<a href="#n461" name="n461">461</a>
+<a href="#n462" name="n462">462</a>
+<a href="#n463" name="n463">463</a>
+<a href="#n464" name="n464">464</a>
+<a href="#n465" name="n465">465</a>
+<a href="#n466" name="n466">466</a>
+<a href="#n467" name="n467">467</a>
+<a href="#n468" name="n468">468</a>
+<a href="#n469" name="n469">469</a>
+<strong><a href="#n470" name="n470">470</a></strong>
+<a href="#n471" name="n471">471</a>
+<a href="#n472" name="n472">472</a>
+<a href="#n473" name="n473">473</a>
+<a href="#n474" name="n474">474</a>
+<a href="#n475" name="n475">475</a>
+<a href="#n476" name="n476">476</a>
+<a href="#n477" name="n477">477</a>
+<a href="#n478" name="n478">478</a>
+<a href="#n479" name="n479">479</a>
+<strong><a href="#n480" name="n480">480</a></strong>
+<a href="#n481" name="n481">481</a>
+<a href="#n482" name="n482">482</a>
+<a href="#n483" name="n483">483</a>
+<a href="#n484" name="n484">484</a>
+<a href="#n485" name="n485">485</a>
+<a href="#n486" name="n486">486</a>
+<a href="#n487" name="n487">487</a>
+<a href="#n488" name="n488">488</a>
+<a href="#n489" name="n489">489</a>
+<strong><a href="#n490" name="n490">490</a></strong>
+<a href="#n491" name="n491">491</a>
+<a href="#n492" name="n492">492</a>
+<a href="#n493" name="n493">493</a>
+<a href="#n494" name="n494">494</a>
+<a href="#n495" name="n495">495</a>
+<a href="#n496" name="n496">496</a>
+<a href="#n497" name="n497">497</a>
+<a href="#n498" name="n498">498</a>
+<a href="#n499" name="n499">499</a>
+<strong><a href="#n500" name="n500">500</a></strong>
+<a href="#n501" name="n501">501</a>
+<a href="#n502" name="n502">502</a>
+<a href="#n503" name="n503">503</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -598,6 +669,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(gldevice, view){
                 <span class="local-variable">this</span>.device = gldevice
                 <span class="local-variable">this</span>.view = view
+                <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>
                 view.drawpass = <span class="local-variable">this</span>
 
                 <span class="comment">// lets do the flatten</span>
@@ -610,8 +682,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">viewmatrix</span>: mat4.identity(),
                         <span class="key">noscrollmatrix</span>: mat4.identity()
                 }
-
-                <span class="local-variable">this</span>.debugrect = <span class="keyword">new</span> DebugRect()
         }
 
         <span class="local-variable">this</span>.<span class="function">atDestroy</span> = <span class="keyword">function</span>(){
@@ -629,12 +699,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">allocDrawTarget</span> = <span class="keyword">function</span>(width, height, view, drawtarget, passid){
+        <span class="local-variable">this</span>.<span class="function">allocDrawTarget</span> = <span class="keyword">function</span>(width, height, view, drawtarget, passid, ratio, isfloat){
                 width = floor(width)
                 height = floor(height)
                 <span class="keyword">var</span> Texture = <span class="local-variable">this</span>.device.Texture
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.drawtargets) <span class="local-variable">this</span>.drawtargets = []
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.drawtargets.indexOf(drawtarget) === -<span class="integer">1</span>) <span class="local-variable">this</span>.drawtargets.push(drawtarget)
+                texturetype = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
+                <span class="keyword">if</span> (isfloat) {
+                        texturetype |= Texture.FLOAT
+                }
                 <span class="keyword">var</span> dt = <span class="local-variable">this</span>[drawtarget]
                 <span class="comment">//var twidth = this.nextPowerTwo(layout.width* main_ratio), theight = this.nextPowerTwo(layout.height* main_ratio)</span>
                 <span class="keyword">if</span>(!dt){
@@ -668,7 +742,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="comment">// otherwise we create a new one</span>
                         <span class="keyword">if</span>(!dt){
-                                dt = <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, <span class="local-variable">this</span>.device)
+                                dt = <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:texturetype, width, height, <span class="local-variable">this</span>.device)
                         }
                         <span class="keyword">else</span> <span class="local-variable">this</span>[drawtarget] = dt
                         dt.passid = passid
@@ -676,9 +750,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// make sure the drawtarget has the right size</span>
                 <span class="keyword">var</span> tsize = <span class="local-variable">this</span>[drawtarget].size
                 <span class="keyword">if</span>(width !== tsize[<span class="integer">0</span>] || height !== tsize[<span class="integer">1</span>]){
+                        <span class="comment">// reset drawcount</span>
+                        <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>
                         <span class="local-variable">this</span>[drawtarget].<span class="keyword">delete</span>()
-                        <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, <span class="local-variable">this</span>.device)
+                        <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:texturetype, width, height, <span class="local-variable">this</span>.device)
                 }
+                <span class="local-variable">this</span>[drawtarget].ratio = ratio
         }
 
         <span class="local-variable">this</span>.<span class="function">calculateDrawMatrices</span> = <span class="keyword">function</span>(isroot, storage, pointerx, pointery){
@@ -727,21 +804,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         drawlayout.absy = drawlayout.top
                 }
 
-                <span class="keyword">if</span>(draw === view &amp;&amp; view.sublayout){
-                        width = view.sublayout.width
-                        height = view.sublayout.height
-                }
-                <span class="comment">// early out check</span>
-                <span class="keyword">if</span>(draw !== view &amp;&amp; !draw.noscroll){
-                        <span class="keyword">var</span> scroll = view._scroll
-                        <span class="keyword">var</span> zoom = view._zoom
-                        <span class="keyword">if</span>( drawlayout.absy - scroll[<span class="integer">1</span>] &gt; height * zoom || drawlayout.absy + drawlayout.height - scroll[<span class="integer">1</span>] &lt; <span class="integer">0</span>){
-                                <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        }
-                        <span class="keyword">if</span>(drawlayout.absx - scroll[<span class="integer">0</span>] &gt; width * zoom || drawlayout.absx + drawlayout.width - scroll[<span class="integer">0</span>] &lt; <span class="integer">0</span>){
-                                <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        }
-                }
+                <span class="comment">// if(draw === view &amp;&amp; view.sublayout){</span>
+                <span class="comment">//         width = view.sublayout.width</span>
+                <span class="comment">//         height = view.sublayout.height</span>
+                <span class="comment">// }</span>
+
+                <span class="comment">// // early out check</span>
+                <span class="comment">// if(draw !== view &amp;&amp; !draw.noscroll){</span>
+                <span class="comment">//         var scroll = view._scroll</span>
+                <span class="comment">//         var zoom = view._zoom</span>
+                <span class="comment">//         if( drawlayout.absy - scroll[1] &gt; height * zoom || drawlayout.absy + drawlayout.height - scroll[1] &lt; 0){</span>
+                <span class="comment">//                 return false</span>
+                <span class="comment">//         }</span>
+                <span class="comment">//         if(drawlayout.absx - scroll[0] &gt; width * zoom || drawlayout.absx + drawlayout.width - scroll[0] &lt; 0){</span>
+                <span class="comment">//                 return false</span>
+                <span class="comment">//         }</span>
+                <span class="comment">// }</span>
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
 
@@ -870,6 +948,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
+        <span class="comment">// accepts a view reference and takes the viewportblend shader</span>
         <span class="local-variable">this</span>.<span class="function">drawBlend</span> = <span class="keyword">function</span>(draw){
                 <span class="keyword">if</span>(!draw.drawpass.color_buffer){
                         console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?</span><span class="delimiter">&quot;</span></span>, draw)
@@ -877,6 +956,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span> {
                         <span class="comment">// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data</span>
                         <span class="comment">// lets render the view as a layer</span>
+
                         <span class="keyword">var</span> blendshader = draw.shaders.viewportblend
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
@@ -884,7 +964,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">else</span>{
                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                         }
-                        blendshader.texture = draw.drawpass.color_buffer
+
+                        blendshader.texture = draw.drawpass.blendbuffer
                         blendshader.width = draw._layout.width
                         blendshader.height = draw._layout.height
                         blendshader.drawArrays(<span class="local-variable">this</span>.device)
@@ -916,6 +997,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> vtx_count
         }
 
+        <span class="comment">// currently renders into color_buffer</span>
         <span class="local-variable">this</span>.<span class="function">drawColor</span> = <span class="keyword">function</span>(isroot, time, clipview){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                 <span class="keyword">var</span> device = <span class="local-variable">this</span>.device
@@ -930,7 +1012,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> ratio = view._pixelratio
                         <span class="keyword">if</span>(isNaN(ratio)) ratio = device.main_frame.ratio
                         <span class="keyword">var</span> twidth = layout.width * ratio, theight = layout.height * ratio
-                        <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">color_buffer</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">color_buffer</span><span class="delimiter">'</span></span>, <span class="predefined-constant">null</span>, ratio)
+                        <span class="keyword">if</span> (view.passes &gt; <span class="integer">0</span>) {
+                                <span class="keyword">var</span> buffers = view.passes;
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; view.passes; i++) {
+                                        <span class="keyword">var</span> usefloat = view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span>+i].usefloat
+                                        <span class="comment">// allocate a framebuffer for each pass</span>
+                                        <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span> + i, <span class="predefined-constant">null</span>, ratio, usefloat)
+                                        <span class="keyword">if</span> (view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span>+i].doublebuffer) {
+                                                <span class="comment">// allocate twice as many buffers</span>
+                                                <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span> + i, <span class="predefined-constant">null</span>, ratio, usefloat)
+                                        }
+                                }
+                        }
                 }
 
                 <span class="local-variable">this</span>.device.bindFramebuffer(<span class="local-variable">this</span>.color_buffer || <span class="predefined-constant">null</span>)
@@ -964,6 +1058,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">//console.log(matrices.viewmatrix)</span>
                 device.clear(view._clearcolor)
 
+                <span class="comment">// this is a tree walk down a view port tree. Every viewport that is 2d/3d is a render-to-texture pass.</span>
                 <span class="keyword">var</span> draw = view
                 <span class="keyword">while</span>(draw){
                         draw.draw_dirty &amp;= <span class="integer">2</span>
@@ -984,10 +1079,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 draw.viewmatrix = matrices.viewmatrix
 
                                 <span class="keyword">if</span>(draw.atDraw &amp;&amp; draw.atDraw(<span class="local-variable">this</span>)) hastime = <span class="predefined-constant">true</span>
+
+                                <span class="comment">// if we are hitting child node that is a 2d/3d viewport,</span>
+                          <span class="comment">// and we aren't the root/canvas.</span>
                                 <span class="keyword">if</span>(draw._viewport &amp;&amp; draw.drawpass !== <span class="local-variable">this</span>){
+                                        <span class="comment">// blend the already rendered child texture into the parent viewport.</span>
                                         <span class="local-variable">this</span>.drawBlend(draw)
                                 }
                                 <span class="keyword">else</span>{
+                                        <span class="comment">// otherwise, just draw all the shaders into the parent viewport.</span>
                                         vtx_count += <span class="local-variable">this</span>.drawNormal(draw, view, matrices)
                                 }
 
@@ -999,23 +1099,65 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>)
                 }
+
+                <span class="keyword">if</span> (view.passes &gt; <span class="integer">0</span>) {
+                        <span class="comment">// TODO: we have multiple passes, ignore pick_buffer it won't work.</span>
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; view.passes; i++) {
+                                <span class="keyword">var</span> shader = view.shaders[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + i]
+                                <span class="comment">// pass in the draw count so the shader can behave differently on the first draw</span>
+                                shader.drawcount = view.drawpass.drawcount
+
+                                <span class="comment">// decide which buffers to use</span>
+                                <span class="keyword">var</span> writebuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span>
+                                <span class="keyword">var</span> readbuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span>
+                                <span class="keyword">if</span> (shader.doublebuffer) {
+                                        <span class="keyword">var</span> readbuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span>
+                                        <span class="keyword">if</span> (shader.drawcount % <span class="integer">2</span>) {
+                                                <span class="comment">// Alternate buffer every other draw</span>
+                                                writebuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffera</span><span class="delimiter">'</span></span>
+                                                readbuffername = <span class="string"><span class="delimiter">'</span><span class="content">framebuffer</span><span class="delimiter">'</span></span>
+                                        }
+                                }
+                                device.bindFramebuffer(<span class="local-variable">this</span>[writebuffername + i])
+                                device.clear(view._clearcolor)
+
+                                <span class="comment">// Add references so they work inside the shader</span>
+                                shader.framebuffer = <span class="local-variable">this</span>.color_buffer
+                                <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; <span class="integer">10</span>; j++) {
+                                        <span class="comment">// add pass0..9 references to corresponding buffers</span>
+                                        shader[<span class="string"><span class="delimiter">'</span><span class="content">pass</span><span class="delimiter">'</span></span> + j] = <span class="local-variable">this</span>[readbuffername + j]
+                                }
+                                <span class="comment">// set the texture to use its own framebuffer</span>
+                                shader.texture = <span class="local-variable">this</span>[writebuffername + i]
+                                shader.width = view._layout.width
+                                shader.height = view._layout.height
+                                <span class="comment">// draw it into the framebuffer</span>
+                                shader.drawArrays(<span class="local-variable">this</span>.device)
+                        }
+                        <span class="comment">// draw the final pass</span>
+                        <span class="local-variable">this</span>.blendbuffer = shader.texture
+                } <span class="keyword">else</span> {
+                        <span class="comment">// draw the ordinary color buffer</span>
+                        <span class="local-variable">this</span>.blendbuffer = <span class="local-variable">this</span>.color_buffer
+                }
+                view.drawpass.drawcount++
                 <span class="keyword">return</span> hastime
         }
+<span class="comment">/*
+        var DebugRect = define.class(Shader, function(){
+                this.view = {totalmatrix:mat4(), viewmatrix:mat4(), layout:{width:0, height:0}}
 
-        <span class="keyword">var</span> DebugRect = define.<span class="reserved">class</span>(Shader, <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.view = {<span class="key">totalmatrix</span>:mat4(), <span class="key">viewmatrix</span>:mat4(), <span class="key">layout</span>:{<span class="key">width</span>:<span class="integer">0</span>, <span class="key">height</span>:<span class="integer">0</span>}}
+                this.mesh = vec2.array()
+                this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 
-                <span class="local-variable">this</span>.mesh = vec2.array()
-                <span class="local-variable">this</span>.mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
-
-                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> vec4(vec2(mesh.x * view.layout.width, mesh.y * view.layout.height), <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                this.position = function(){
+                        return vec4(vec2(mesh.x * view.layout.width, mesh.y * view.layout.height), 0, 1) * view.totalmatrix * view.viewmatrix
                 }
-                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">0.5</span>)
+                this.color = function(){
+                        return vec4(1,0,0,0.5)
                 }
         })
-
+*/</span>
 })
 </pre></td>
 </tr></table>

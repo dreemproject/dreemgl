@@ -45,7 +45,7 @@
 	var config_define
 	if(typeof window !== 'undefined') config_define =  window.define
 	else if(typeof self !== 'undefined') config_define = self.define
-	else if(typeof global !== 'undefined') global.define
+	else if(typeof global !== 'undefined') config_define = global.define
 
 	// the main define function
 	function define(factory, package){
@@ -77,6 +77,7 @@
 
 	define.local_classes = {}
 	define.local_require_stack = []
+	define.ignore_reload = {}
 
 	define.partial_reload = true
 	define.reload_id = 0
@@ -88,6 +89,7 @@
 	if(typeof config_define == 'object') for(var key in config_define){
 		define[key] = config_define[key]
 	}
+
 
 	// storage structures
 	define.module = {}
@@ -175,7 +177,9 @@
 
 	define.expandVariables = function(str){
 		return define.cleanPath(str.replace(/(\$[a-zA-Z0-9]+[a-zA-Z0-9]*)/g, function(all, lut){
-			if(!(lut in define)) throw new Error("Cannot find " + lut + " used in require")
+			if(!(lut in define)){
+				throw new Error("Cannot find " + lut + " used in require")
+			}
 			return define.expandVariables(define[lut])
 		}))
 	}
@@ -251,7 +255,7 @@
 			var factory = define.factory[abs_path]
 
 			if(!factory && dep_path.indexOf('$') === -1 && dep_path.charAt(0) !== '.'){
-				console.log(abs_path)
+				//console.log(abs_path)
 				//console.log('skipping', dep_path)
 				return null
 			}
@@ -624,28 +628,6 @@
 		}
 
 		return Constructor
-	}
-
-
-	define.workers = function(head, tail, count){
-		if(!count) count = 1
-		var source = head + '\n\n\n;// Worker includes \nself.define = {packaged:true,$platform:"webgl"};(' + define_module.toString() + ')();\n'
-		source += '(' + define.module[define.expandVariables('$system/base/math.js')].factory.toString() + ')();\n'
-		for(var key in define.paths){
-			source += 'define.$'+key + ' = "'+define['$'+key]+'";\n'
-		}
-		source += tail
-		var blob = new Blob([source], { type: "text/javascript" })
-		var worker_url = URL.createObjectURL(blob)
-		var workers = []
-		for(var i = 0; i < count; i ++){
-			var worker = new Worker(worker_url)
-			worker.postMessage({initid:true, workerid:i})
-			worker.source = source
-			worker.stack = 0
-			workers.push(worker)
-		}
-		return workers
 	}
 
 	define.mixin = function(body, body2){
@@ -1036,6 +1018,11 @@
 		// the require function passed into the factory is local
 		var app_root = define.filePath(window.location.href)
 
+		define.getModule = function(name){
+			var expanded = define.expandVariables(name)
+			return define.module[expanded]
+		}
+
 		// loadAsync is the resource loader
 		define.loadAsync = function(files, from_file, inext){
 
@@ -1267,6 +1254,7 @@
 			this.reload_socket.onmessage = function(event){
 				var msg = JSON.parse(event.data)
 				if (msg.type === 'filechange'){
+					if(define.ignore_reload && define.ignore_reload[msg.file]) return console.log("Ignoring file change on "+msg.file)
 					var old_module = define.module[msg.file]
 					define.hideException()
 					if(define.partial_reload && old_module && typeof old_module.exports === 'function'){
@@ -1276,7 +1264,7 @@
 							define.showException(exception)
 						})
 					}
-					else{
+					else {//if (old_module){
 						//alert('filechange!' + msg.file)
 						console.clear()
 						location.href = location.href  // reload on filechange
@@ -1337,8 +1325,21 @@
 
 		var cache_path_root = define.makeCacheDir('node')
 
+		define.mapToCacheDir = function(name){
+			return cache_path_root + url.parse(define.expandVariables(name)).path
+		}
+
+		define.getModule = function(name){
+			var expanded = define.expandVariables(name)
+			if(expanded.indexOf('://')!==-1){
+				expanded = define.mapToCacheDir(expanded)
+			}
+			var module = define.module[expanded]
+			return module
+		}
+
 		// fetch it async!
-		function httpGetCached(httpurl){
+		define.httpGetCached = function(httpurl){
 			return new define.Promise(function(resolve, reject){
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
@@ -1397,6 +1398,7 @@
 		// hook compile to keep track of module objects
 		var Module = require("module")
 		var modules = []
+		var original_paths = []
 		var _compile = Module.prototype._compile
 		Module.prototype._compile = function(content, filename){
 			modules.push(this)
@@ -1420,7 +1422,7 @@
 			if(factory instanceof Array) throw new Error("injects-style not supported")
 
 			var module = modules[modules.length - 1] || require.main
-
+			//console.log(original_paths)
 			// store module and factory just like in the other envs
 			define.module[module.filename] = module
 			define.factory[module.filename] = factory
@@ -1442,18 +1444,27 @@
 				// we need to fetch the url, then look at its dependencies, fetch those
 				return define.download_queue[modurl] = new define.Promise(function(resolve, reject){
 					// lets make sure we dont already have the module in our system
-					httpGetCached(modurl).then(function(result){
+					define.httpGetCached(modurl).then(function(result){
 
 						// the root
 						if(result.type === 'text/json' && define.fileExt(parsedmodurl.path) === ''){
 							var data = JSON.parse(fs.readFileSync(result.path).toString())
 							// alright we get a boot file
 							// set our root properly
-							define.$root = 'http://'+parsedmodurl.hostname+':'+parsedmodurl.port+'/'
+							var mathmodule = define.getModule('$system/base/math.js')
+
+							// lets re-assign math
 							define.paths = data.paths
 							for(var key in data.paths){
 								define['$'+key] = '$root/'+key
 							}
+
+							define.paths.root =
+							define.$root = 'http://'+parsedmodurl.hostname+':'+parsedmodurl.port+'/'
+							var math2 = define.mapToCacheDir('$system/base/math.js')
+							define.module[math2] = mathmodule
+
+
 							// alright now, lets load up the root
 							loadModuleAsync(define.expandVariables(data.boot), modurl).then(function(result){
 								// ok so,
@@ -1528,21 +1539,22 @@
 					console.log("Cannot find "+e+" in module "+module.filename)
 					throw e
 				}
+
 				if(name.indexOf('://') !== -1){
-					// lets turn it into a cached name
-					name = cache_path_root + url.parse(name).path
+					name = define.mapToCacheDir(name)
 				}
 
+				var full_name = name;
 				try{
-					var full_name = Module._resolveFilename(name, module)
+					full_name = Module._resolveFilename(name, module)
 				}
 				catch(e){
-					console.log("Cannot find module " + name + ' in module! ' + module.filename)
-					throw e
+					// Don't generate an error becaues the image might be
+					// remote, or a relative path was specified.
 				}
 				if (full_name instanceof Array) full_name = full_name[0]
 
-				if(define.atRequire && full_name.charAt(0) == '/'){
+				if(define.atRequire && ((full_name.charAt(0) == '/') || (full_name.indexOf('\\') >= 0)) ){
 					define.atRequire(full_name)
 				}
 
@@ -1551,11 +1563,7 @@
 				if(ext !== '' && ext !== 'js'){
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
 						// Construct a Texture.Image object given its path
-						if(define.$platform === 'dali'){
-							var tex = define.expandVariables('$system/platform/$platform/texture$platform')
-							var Texture = define.require(tex);
-							return new Texture.Image(full_name)
-						}
+						if(define.loadImage) return define.loadImage(full_name)
 						return undefined
 					}
 					else{
@@ -1593,9 +1601,59 @@
 
 			noderequirewrapper.module = module
 
+			noderequirewrapper.loaded = function(path, ext){
+				var dep_path = define.joinPath(cache_path_root, define.expandVariables(path))
+				if(define.factory[dep_path]){
+					return true
+				}
+			}
+
 			noderequirewrapper.async = function(modname){
 				// For dali (and probably nodejs) relative paths must be made
-				// absolute to where the example is located.
+				// absolute to where the example is located. Retrieval
+				// method is different if running from a remote server
+				var remote = (define.$example.indexOf('://') !== -1);
+
+				if (define.$platform == 'dali') {
+					// Remote, relative
+					if (remote && modname.indexOf('./') == 0) {
+						modname = define.$example + modname.substring(2)
+						return define.httpGetCached(modname);
+					}
+
+					// Remote, absolute
+					if (remote && modname.indexOf('/') == 0) {
+						var p = define.$example.indexOf('/', 8);
+						modname = define.$example.substring(0, p) + modname;
+						return define.httpGetCached(modname);
+					}
+
+					// Local, relative
+					if (modname.indexOf('./') == 0) {
+						modname = '$root/' + define.$example + modname.substring(2)
+						modname = define.expandVariables(modname);
+
+						return new define.Promise(function(resolve, reject) {
+							return resolve(define.loadImage(modname));
+						});
+					}
+
+					// Local, absolute
+					if (modname.indexOf('/') == 0) {
+						modname = '$root' + modname
+						modname = define.expandVariables(modname);
+
+						return new define.Promise(function(resolve, reject) {
+							return resolve(define.loadImage(modname));
+						});
+					}
+
+					if (remote && modname.indexOf('://') === -1)
+						modname = define.$example + '/' + modname
+
+					modname = define.expandVariables(modname)
+				}
+
 				if (define.$platform == 'dali' && modname.indexOf('./') == 0)
 					modname = '$root' + '/' + define.$example + '/' + modname;
 
@@ -1616,7 +1674,7 @@
 
 				return new define.Promise(function(resolve, reject){
 					loadModuleAsync(modname, "root").then(function(path){
-						resolve(require(path))
+						resolve(noderequirewrapper(path))
 					}).catch(function(e){
 						console.log("ERROR", e.stack)
 					})
@@ -2010,20 +2068,93 @@
 		return outoff
 	}
 
-	define.structFromJSON = function(node){
+
+	define.structFromJSON = function(node, binary){
 		if (typeof(node) === "object" && node){
 			if  (node.____struct){
 				var lookup  = define.typemap.types[node.____struct] ;
 				return lookup.apply(null, node.data);
 			}
+			else if(node.____binary !== undefined){
+				return new define.typedArrayTypes[node.type](binary[node.____binary])
+			}
 			else{
-				for(var key in node){
-					node[key] = define.structFromJSON(node[key]);
+				if(Array.isArray(node)){
+					for(var i = 0; i < node.length; i++){
+						node[i] = define.structFromJSON(node[i], binary)
+					}
+				}
+				else for(var key in node){
+					node[key] = define.structFromJSON(node[key], binary)
 				}
 			}
 		}
 		return node;
 	}
+
+	define.typedArrayTypes = {
+		Float32Array:Float32Array,
+		Float64Array:Float64Array,
+		Int32Array:Int32Array,
+		Uint32Array:Uint32Array,
+		Int8Array:Int8Array,
+		Uint8Array:Uint8Array,
+		Int16Array:Int16Array,
+		Uint16Array:Uint16Array,
+	}
+
+	define.makeJSONSafe = function(obj, binary, stack){
+		if(obj === undefined || obj === null) return obj
+		if(typeof obj === 'function') return null
+		if(typeof obj !== 'object') return obj
+		if(!stack) stack = []
+		stack.push(obj)
+
+		if(Array.isArray(obj)){
+			var out = []
+			for(var i = 0; i < obj.length; i++){
+				var prop = obj[i]
+				if(stack.indexOf(prop) === -1){
+					out[i] = define.makeJSONSafe(prop, binary, stack)
+				}
+				else {
+					out[i] = null
+				}
+			}
+			stack.pop()
+			return out
+		}
+
+		if(typeof obj.toJSON === 'function'){
+			stack.pop()
+			return obj
+		}
+
+		if(obj.buffer instanceof ArrayBuffer){
+			var msg =  {____binary:binary.length, type:obj.constructor.name}
+			binary.push({data:obj, msg:msg})
+			stack.pop()
+			return msg
+		}
+
+		var out = {}
+		for(var key in obj){
+			var prop = obj[key]
+			if(typeof prop == 'object'){
+				if(stack.indexOf(prop) === -1){
+					out[key] = define.makeJSONSafe(prop, binary, stack)
+				}
+				else {
+					out[key] = null
+				}
+			}
+			else if(typeof prop == 'function') out[key] = null
+			else out[key] = prop
+		}
+		stack.pop()
+		return out
+	}
+
 
 	define.isSafeJSON = function(obj, stack){
 		if(obj === undefined || obj === null) return true

@@ -8,7 +8,7 @@
 define.class('$system/base/texture', function(exports){
 	var Texture = exports
 	Texture.Image = typeof window !== 'undefined'? window.Image: function(){}
-	
+
 	this.atConstructor = function(type, w, h, device){
 		this.device = device
 		this.type = type
@@ -19,7 +19,6 @@ define.class('$system/base/texture', function(exports){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub){
-		console.log(stub.type)
 		var tex = new Texture(stub.type || Texture.RGBA, stub.size[0], stub.size[1])
 		tex.array = stub.array
 		tex.image = stub.image
@@ -98,7 +97,7 @@ define.class('$system/base/texture', function(exports){
 			if(!ext) throw new Error('No OES_texture_half_float')
 			this.gldata_type = ext.HALF_FLOAT_OES
 		}
-		else if(type & Texture.HALF_FLOAT){
+		else if(type & Texture.FLOAT){
 			var ext = gl._getExtension('OES_texture_float')
 			if(!ext) throw new Error('No OES_texture_float')
 			this.gldata_type = gl.FLOAT
@@ -107,7 +106,7 @@ define.class('$system/base/texture', function(exports){
 
 	this.initAsRendertarget = function(){
 		var gl = this.device.gl
-		
+
 		if(!this.type) this.type = Texture.RGBA|Texture.DEPTH|Texture.STENCIL
 
 		this.glframe_buf = gl.createFramebuffer()
@@ -126,17 +125,17 @@ define.class('$system/base/texture', function(exports){
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this.glframe_buf)
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.gltex, 0)
 
-		if(type & Texture.DEPTH || type & Texture.STENCIL){
+		if(this.type & Texture.DEPTH || this.type & Texture.STENCIL){
 			this.gldepth_buf = gl.createRenderbuffer()
-	
+
 			this.gldepth_type = gl.DEPTH_COMPONENT16
 			this.glattach_type = gl.DEPTH_ATTACHMENT
 
-			if(type & Texture.DEPTH && type & Texture.STENCIL){
+			if(this.type & Texture.DEPTH && this.type & Texture.STENCIL){
 				this.gldepth_type = gl.DEPTH_STENCIL
 				this.glattach_type = gl.DEPTH_STENCIL_ATTACHMENT
 			}
-			else if(type & Texture.STENCIL){
+			else if(this.type & Texture.STENCIL){
 				this.gldepth_type = gl.STENCIL_INDEX
 				this.glattach_type = gl.STENCIL_ATTACHMENT
 			}
@@ -149,7 +148,7 @@ define.class('$system/base/texture', function(exports){
 		gl.bindTexture(gl.TEXTURE_2D, null)
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null)
 	}
-	
+
 	this.delete = function(){
 		if(!this.device) return
 		var gl = this.device.gl
@@ -173,7 +172,7 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	this.size = vec2(0, 0)
-	
+
 	this.createGLTexture = function(gl, texid, texinfo){
 		var samplerid = texinfo.samplerid
 
@@ -204,23 +203,23 @@ define.class('$system/base/texture', function(exports){
 			// lets do a power of two
 			if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
 				if (!int.isPowerOfTwo(image.width) || !int.isPowerOfTwo(image.height)) {
-				    // Scale up the texture to the next highest power of two dimensions.
-				    var canvas = document.createElement("canvas")
-				    canvas.width = int.nextHighestPowerOfTwo(image.width)
-				    canvas.height = int.nextHighestPowerOfTwo(image.height)
-				    var ctx = canvas.getContext("2d")
-				    ctx.drawImage(image, 0, 0, image.width, image.height)
-				    image = canvas
+					// Scale up the texture to the next highest power of two dimensions.
+					var canvas = document.createElement("canvas")
+					canvas.width = int.nextHighestPowerOfTwo(image.width)
+					canvas.height = int.nextHighestPowerOfTwo(image.height)
+					var ctx = canvas.getContext("2d")
+					ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+					image = canvas
 				}
 			}
-	
+
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 			this.image[samplerid] = gltex
 		}
 		else{
 			return undefined
 		}
-		
+
 		gltex.updateid = this.updateid
 		// set up sampler parameters
 		gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[samplerdef.MIN_FILTER])
@@ -232,16 +231,16 @@ define.class('$system/base/texture', function(exports){
 		if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
 			gl.generateMipmap(gl.TEXTURE_2D)
 		}
+
 		this[samplerid] = gltex
 		return gltex
 	}
 
 	this.updateGLTexture = function(gl, gltex){
 		if(this.array){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data))
 		}
 		else if(this.image){
-			console.log("UPDATING!")
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
 		}
 		gltex.updateid = this.updateid
@@ -257,6 +256,15 @@ define.class('$system/base/texture', function(exports){
 			WRAP_T: 'CLAMP_TO_EDGE'
 		})
 	}
+	this.pixel2 = function(x, y){ return pixel(vec2(x, y)) }
+	this.pixel = function(v){
+		return texture2D(this, v / size, {
+			MIN_FILTER: 'LINEAR',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
 
 	this.samplemip = function(v){
 		return texture2D(this, v, {
@@ -266,6 +274,7 @@ define.class('$system/base/texture', function(exports){
 			WRAP_T: 'CLAMP_TO_EDGE'
 		})
 	}
+
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {
@@ -313,5 +322,76 @@ define.class('$system/base/texture', function(exports){
 			WRAP_T: 'CLAMP_TO_EDGE'
 		})
 	}
+
+
+	// 1-D convolution with a kernel.
+	// 21 kernel weights are arranged 0, +1, -1, +2, -2, ... away from center.
+	// ksize is the size of the kernel (odd)
+	// scale is a scaling factor to multiple the result by
+	// direction is 'x' or 'y'.
+	// spacing is the vec2 pixel spacing (fractional) between pixels. Typically
+	// this will be vec2(px,0) or vec2(0,py)
+	this.conv1d = function(v, ksize, scale, spacing, k0, kp1, km1, kp2, km2, kp3, km3, kp4, km4, kp5, km5, kp6, km6, kp7, km7, kp8, km8, kp9, km9, kp10, km10) {
+
+		// Convert pixels spacing to fractional
+    spacing = vec2(spacing.x / this.size.x, spacing.y / this.size.y)
+
+		// Start with center pixel
+		var sum = texture2D(this, v) * k0
+
+		if (ksize > 1.) {
+			sum += texture2D(this, v + spacing) * kp1
+			sum += texture2D(this, v - spacing) * km1
+
+			if (ksize > 3.) {
+				sum += texture2D(this, v + 2 * spacing) * kp2
+				sum += texture2D(this, v - 2 * spacing) * km2
+
+				if (ksize > 5.) {
+					sum += texture2D(this, v + 3 * spacing) * kp3
+					sum += texture2D(this, v - 3 * spacing) * km3
+
+					if (ksize > 7.) {
+						sum += texture2D(this, v + 4 * spacing) * kp4
+						sum += texture2D(this, v - 4 * spacing) * km4
+
+						if (ksize > 9.) {
+							sum += texture2D(this, v + 5 * spacing) * kp5
+							sum += texture2D(this, v - 5 * spacing) * km5
+
+							if (ksize > 11.) {
+								sum += texture2D(this, v + 6 * spacing) * kp6
+								sum += texture2D(this, v - 6 * spacing) * km6
+
+								if (ksize > 13.) {
+									sum += texture2D(this, v + 7 * spacing) * kp7
+									sum += texture2D(this, v - 7 * spacing) * km7
+
+									if (ksize > 15.) {
+										sum += texture2D(this, v + 8 * spacing) * kp8
+										sum += texture2D(this, v - 8 * spacing) * km8
+
+										if (ksize > 17.) {
+											sum += texture2D(this, v + 9 * spacing) * kp9
+											sum += texture2D(this, v - 9 * spacing) * km9
+
+											if (ksize > 19.) {
+												sum += texture2D(this, v + 10 * spacing) * kp10
+												sum += texture2D(this, v - 10 * spacing) * km10
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		sum = scale * sum
+		return sum
+	}
+
 
 })

@@ -4,16 +4,16 @@
  * Simple gradient button: a rectangle with a textlabel and an icon
  * <br/><a href="/examples/buttons">examples &raquo;</a>
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/button.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/ui/button.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$ui/button.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$ui/button.js">open example in new tab &raquo;</a>
  * 
  */
 /**
- * @attribute {String} [text="undefined"]
+ * @attribute {String} [text=""]
  * The label for the button
  */
 /**
- * @attribute {String} [icon="undefined"]
+ * @attribute {String} [icon=""]
  * The icon for the button, see FontAwesome for the available icon-names.
  */
 /**
@@ -65,11 +65,14 @@
  * Second gradient color for the button background in pressed state
  */
 /**
+ * @attribute {boolean} [enabled="true"]
+ * bold: true,
+ */
+/**
  * @method bgcolorfn
  * Set the background
- * vec2 pos: position
- * return;
- * @param pos
+ * @param {vec2} pos
+ * position
  */
 /**
  * @method statehover

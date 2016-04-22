@@ -5,7 +5,7 @@
  * representation of the audio can be displayed in the view
  */
 /**
- * @attribute {String} [url="undefined"]
+ * @attribute {String} [url=""]
  * The URL to an audio file to play
  */
 /**

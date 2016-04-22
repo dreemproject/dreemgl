@@ -27,15 +27,31 @@ define.class(function(require){
 	var ScriptError = require('$system/parse/scripterror')
 	var legacy_support = 0
 
+	var Texture = require('$system/platform/$platform/texture$platform')
+
 	this.atConstructor = function(
 		args, //Object: Process arguments
 		compname, //String: name of the composition
 		rootserver){ //TeemServer: teem server object
 
+		define.$platform = 'dali'
+
+		// Called from define.noderequirewrapper to load a texture
+		define.loadImage = function(name){
+			//console.log('loadImage', name);
+			return Texture.fromImage({path:name});
+		}
+
 		// Dali stage settings (from command-line), or defaults
 		this.width = parseInt(args['-width']) || 1920;
 		this.height = parseInt(args['-height']) || 1080;
 		this.name = args['-name'] || 'dreemgl';
+
+		// Check if a remote composition is used
+		if (compname.indexOf('http') >= 0) {
+			this.server = compname;
+			console.log('remote dreemgl server', compname);
+		}
 
 		// Detect location for Dali Node.js add-on. On Tizen
 		// it can be required like any npm module, on Ubuntu
@@ -64,23 +80,20 @@ define.class(function(require){
 		this.rootserver = rootserver
 
 		this.busserver = new BusServer()
-		//this.busserver = null;
+
+		// Initialize dali early. Otherwise, some composition can fail
+		// when run from a remote server.
+		this.initDali();
 
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.slow_watcher = new FileWatcher(200)
-		this.fast_watcher = new FileWatcher(10)
+		this.slow_watcher = new FileWatcher()
 
-		this.fast_watcher.atChange =
 		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
 		}.bind(this)
-
-
-	    //this.readSystemClasses('$classes', this.system_classes = {})
-	    //define.system_classes = this.system_classes;
 
 		this.components = {}
 
@@ -90,16 +103,8 @@ define.class(function(require){
 			this.paths += '$'+key+':"$root/'+key+'"'
 		}
 
-		this.fast_list = ['$examples']
-
 		// lets compile and run the dreem composition
 		define.atRequire = function(filename){
-			for(var i = 0; i < this.fast_list.length; i++){
-				var fast = this.fast_list[i]
-				if(filename.indexOf( define.expandVariables(fast) ) === 0){
-					return this.fast_watcher.watch(filename)
-				}
-			}
 			this.slow_watcher.watch(filename)
 		}.bind(this)
 		//
@@ -116,16 +121,27 @@ define.class(function(require){
 		this.mycomposition = undefined
 	}
 
-	this.loadComposition = function(){
-		console.log("Reloading composition "+this.filename)
-		require.clearCache()
-
+	// initialize dali runtime. This should be run before the composition is
+	// loaded.
+	this.initDali = function() {
+		// Load DALi module
 		this.DaliApi = require('./dali_api');
 		this.DaliApi.initialize({width: this.width, height: this.height, name: this.name, dalilib: this.dalilib, dumpprog: this.dumpprog});
+	}
 
+	// Load the composition. If composition is defined, load it remotely
+	this.loadComposition = function(composition){
+		require.clearCache()
 
-		var Composition = require(define.expandVariables(this.filename))
-		this.composition = new Composition(this.busserver, this.session)
+		if (composition) {
+			// Remote server
+			this.composition = new composition(undefined, undefined, this.server)
+		}
+		else {
+			// Local assets
+			var Composition = require(define.expandVariables(this.filename))
+			this.composition = new Composition(this.busserver, this.session)
+		}
 	}
 
 	this.reload = function(){
@@ -135,30 +151,44 @@ define.class(function(require){
 		require.clearCache()
 
 		// lets see if our composition is a dir or a jsfile
-		var dir = '$root/'
-		var jsname = dir + this.compname+'.js'
-		try{
-			if(fs.existsSync(define.expandVariables(jsname))){
-				this.filename = jsname
-				return this.loadComposition()
-			}
-			else{
-				var jsname = dir + this.compname + '/index.js'
+		if (this.server) {
+			// Remote server
+			var self = this;
+			require.async(self.server).then(function(composition){
+				return self.loadComposition(composition);
+			}).catch(function(error){
+				console.log('Composition load failure', error.stack)
+			})
+		}
+		else {
+			// Use local files
+
+			var dir = '$root/'
+			var jsname = dir + this.compname+'.js'
+			try {
 				if(fs.existsSync(define.expandVariables(jsname))){
 					this.filename = jsname
 					return this.loadComposition()
 				}
+				else{
+					var jsname = dir + this.compname + '/index.js'
+					if(fs.existsSync(define.expandVariables(jsname))){
+						this.filename = jsname
+						return this.loadComposition()
+					}
+				}
+			}
+			finally{
+				//console.log(e.stack)
 			}
 		}
-		finally{
-			//console.log(e.stack)
-		}
+
 
   		this.screenname = this.compname;
 
 		// Reaching here indicates the path does not exist
-		console.log('bootdali.reload: Unable to load', jsname);
-}
+		console.log('bootdali.reload: Unable to load', this.compname);
+	}
 
 	this.loadHTML = function(title, boot){
 	    return '';

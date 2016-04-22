@@ -12,12 +12,14 @@ define.class('$system/base/pointer', function (require, exports) {
 	this._tooltip = 'Application'
 
 	Object.defineProperty(this, 'cursor', {
+		configurable:true,
 		get:function() {
 			return this._cursor
 		},
 		set:function(value) {
 			this._cursor = value
 			if (value === 'arrow') value = 'default'
+
 			this.device.keyboard.textarea.style.cursor =
 			document.body.style.cursor = value
 		}
@@ -25,6 +27,7 @@ define.class('$system/base/pointer', function (require, exports) {
 
 	this.atConstructor = function(device) {
 		this.device = device
+		var window = this.device.window
 		// Internal: creates pointer array with a single pointer from mouse event data.
 		var mouseToPointers = function (event, wheelx, wheely) {
 			return [{
@@ -65,17 +68,20 @@ define.class('$system/base/pointer', function (require, exports) {
 
 			e.preventDefault()
 			this.setstart(mouseToPointers(e))
+			window.removeEventListener('mousemove', this._mousehover)
+			window.removeEventListener('mousedown', this._mousedown)
 			window.addEventListener('mousemove', this._mousemove)
 			window.addEventListener('mouseup', this._mouseup)
 			window.addEventListener('contextmenu', this._mouseup)
-			window.removeEventListener('mousemove', this._mousehover)
-			window.removeEventListener('mousedown', this._mousedown)
 			// Hack to capture mouse up outside iframe
-			if (parent.window) parent.window.addEventListener('mouseup', this._mouseup)
-			if (parent.window) parent.window.addEventListener('contextmenu', this._mouseup)
+			if(typeof parent !== 'undefined'){
+				if (parent.window) parent.window.addEventListener('mouseup', this._mouseup)
+				if (parent.window) parent.window.addEventListener('contextmenu', this._mouseup)
+			}
 		}
+		this._mousedown = this.mousedown.bind(this)
 
-		window.addEventListener('mousedown', this.mousedown.bind(this))
+		window.addEventListener('mousedown', this._mousedown)
 
 		// Internal: handler for `mousemove` event.
 		this.mousemove = function(e) {
@@ -91,9 +97,7 @@ define.class('$system/base/pointer', function (require, exports) {
 			//console.log(e.button)
 			if(e.button === 2) this.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
 			//this.device.keyboard.checkSpecialKeys(e)
-
 			e.preventDefault()
-
 			this.setend(mouseToPointers(e))
 
 			window.removeEventListener('mousemove', this._mousemove)
@@ -102,8 +106,10 @@ define.class('$system/base/pointer', function (require, exports) {
 			window.addEventListener('mousemove', this._mousehover)
 			window.addEventListener('mousedown', this._mousedown)
 			// Hack to capture mouse up outside iframe
-			if (parent.window) parent.window.removeEventListener('mouseup', this._mouseup)
-			if (parent.window) parent.window.removeEventListener('contextmenu', this._mouseup)
+			if(typeof parent !== 'undefined'){
+				if (parent.window) parent.window.removeEventListener('mouseup', this._mouseup)
+				if (parent.window) parent.window.removeEventListener('contextmenu', this._mouseup)
+			}
 		}
 		this._mouseup = this.mouseup.bind(this)
 
@@ -118,6 +124,7 @@ define.class('$system/base/pointer', function (require, exports) {
 		// Internal: handler for `touchstart` event.
 		this.touchstart = function(e) {
 			e.preventDefault()
+			this.touchwheelstart(touchToPointers(e))
 			this.setstart(touchToPointers(e))
 		}
 		window.addEventListener('touchstart', this.touchstart.bind(this))
@@ -125,26 +132,61 @@ define.class('$system/base/pointer', function (require, exports) {
 		// Internal: handler for `touchmove` event.
 		this.touchmove = function(e) {
 			e.preventDefault()
+			this.touchwheel(touchToPointers(e))
 			this.setmove(touchToPointers(e))
 		}
 		window.addEventListener('touchmove', this.touchmove.bind(this))
 
 		// Internal: handler for `touchend` event.
 		this.touchend = function(e) {
+			this.touchwheelend(touchToPointers(e))
 			this.setend(touchToPointers(e))
 		}
 		window.addEventListener('touchend', this.touchend.bind(this))
 		window.addEventListener('touchcancel', this.touchend.bind(this))
 		window.addEventListener('touchleave', this.touchend.bind(this))
 
+		this.touchwheelstart = function (e) {
+			var touch = e[0]
+			this._preventInertia = true
+			this._touchwheelpos = vec2(touch.position.x, touch.position.y)
+		}
+
+		this.touchwheel = function (e) {
+			var touch = e[0]
+			this._preventInertia = true
+			touch.wheel = vec2(this._touchwheelpos.x - touch.position.x, this._touchwheelpos.y - touch.position.y)
+			this._touchwheelpos = vec2(touch.position.x, touch.position.y)
+			this.setwheel([touch])
+			this._lasttouchwheel = touch
+		}
+
+		this.touchwheelend = function (e) {
+			var touch = e[0]
+			this._preventInertia = false
+			this.touchwheelanim()
+		}
+
+		this.touchwheelanim = function () {
+			if (this._lasttouchwheel) {
+				if (!this._preventInertia) {
+					vec2.mul_float32(this._lasttouchwheel.wheel, 0.95, this._lasttouchwheel.wheel)
+					this.setwheel([this._lasttouchwheel])
+					requestAnimationFrame(this.touchwheelanim.bind(this))
+				}
+				this._preventInertia = vec2.distance(this._lasttouchwheel.wheel, vec2()) < 0.5 ? true : false
+			}
+		}
+
+
 		// scrollwheel fun
 		// the different platforms
-		var is_osx = navigator.userAgent.indexOf("Macintosh") > -1
-		var is_windows = navigator.appVersion.indexOf("Win") > -1
-		var is_gecko = 'MozAppearance' in document.documentElement.style
-		var is_chrome = navigator.userAgent.indexOf('Chrome') > -1
+		//var is_osx = navigator.userAgent.indexOf("Macintosh") > -1
+		var is_windows = typeof navigator !== 'undefined' && navigator.appVersion.indexOf("Win") > -1
+		//var is_gecko = 'MozAppearance' in document.documentElement.style
+		//var is_chrome = navigator.userAgent.indexOf('Chrome') > -1
 
-		document.addEventListener('wheel', function(e) {
+		window.addEventListener('wheel', function(e) {
 			e.preventDefault()
 
 			var d = vec2(e.deltaX, e.deltaY)
@@ -158,8 +200,6 @@ define.class('$system/base/pointer', function (require, exports) {
 			else if (e.deltaMode === 2) {
 				vec2.mul_float32(d, 400, d)
 			}
-
-			if (is_osx) {}
 
 			else if (is_windows) {
 				vec2.mul_float32(d, 0.125, d)

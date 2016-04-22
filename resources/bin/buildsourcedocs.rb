@@ -17,7 +17,7 @@ dirs = [classesdir, systemdir, examplesdir, appsdir]
 
 dirs.each do |dir|
   Find.find(dir) do |path|
-    if !FileTest.directory?(path) && File.extname(path) == '.js'
+    if !FileTest.directory?(path) && File.extname(path) == '.js' && path !~ /node_modules/
       name = path[/^.*?([^\/\\]+)\.js$/, 1]
       filedata = File.open(path).read
 

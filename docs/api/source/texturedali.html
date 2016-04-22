@@ -519,6 +519,90 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n365" name="n365">365</a>
 <a href="#n366" name="n366">366</a>
 <a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
+<strong><a href="#n370" name="n370">370</a></strong>
+<a href="#n371" name="n371">371</a>
+<a href="#n372" name="n372">372</a>
+<a href="#n373" name="n373">373</a>
+<a href="#n374" name="n374">374</a>
+<a href="#n375" name="n375">375</a>
+<a href="#n376" name="n376">376</a>
+<a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
+<a href="#n382" name="n382">382</a>
+<a href="#n383" name="n383">383</a>
+<a href="#n384" name="n384">384</a>
+<a href="#n385" name="n385">385</a>
+<a href="#n386" name="n386">386</a>
+<a href="#n387" name="n387">387</a>
+<a href="#n388" name="n388">388</a>
+<a href="#n389" name="n389">389</a>
+<strong><a href="#n390" name="n390">390</a></strong>
+<a href="#n391" name="n391">391</a>
+<a href="#n392" name="n392">392</a>
+<a href="#n393" name="n393">393</a>
+<a href="#n394" name="n394">394</a>
+<a href="#n395" name="n395">395</a>
+<a href="#n396" name="n396">396</a>
+<a href="#n397" name="n397">397</a>
+<a href="#n398" name="n398">398</a>
+<a href="#n399" name="n399">399</a>
+<strong><a href="#n400" name="n400">400</a></strong>
+<a href="#n401" name="n401">401</a>
+<a href="#n402" name="n402">402</a>
+<a href="#n403" name="n403">403</a>
+<a href="#n404" name="n404">404</a>
+<a href="#n405" name="n405">405</a>
+<a href="#n406" name="n406">406</a>
+<a href="#n407" name="n407">407</a>
+<a href="#n408" name="n408">408</a>
+<a href="#n409" name="n409">409</a>
+<strong><a href="#n410" name="n410">410</a></strong>
+<a href="#n411" name="n411">411</a>
+<a href="#n412" name="n412">412</a>
+<a href="#n413" name="n413">413</a>
+<a href="#n414" name="n414">414</a>
+<a href="#n415" name="n415">415</a>
+<a href="#n416" name="n416">416</a>
+<a href="#n417" name="n417">417</a>
+<a href="#n418" name="n418">418</a>
+<a href="#n419" name="n419">419</a>
+<strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
+<a href="#n444" name="n444">444</a>
+<a href="#n445" name="n445">445</a>
+<a href="#n446" name="n446">446</a>
+<a href="#n447" name="n447">447</a>
+<a href="#n448" name="n448">448</a>
+<a href="#n449" name="n449">449</a>
+<strong><a href="#n450" name="n450">450</a></strong>
+<a href="#n451" name="n451">451</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -527,24 +611,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-<span class="comment">// &quot;Image&quot;-like class for Dali. Dali expects to load the images so retain a</span>
-<span class="comment">// path to the file. Texture.Image is another name for this class.</span>
-<span class="keyword">function</span> <span class="function">DaliImage</span>(path) 
-{
-        <span class="local-variable">this</span>.path = path;
-}
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports){
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
+        DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/texture</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(exports, require){
         <span class="keyword">var</span> Texture = exports
 
         Texture.GlobalId = <span class="integer">0</span>
-        Texture.Image = DaliImage;
+
+        Texture.<span class="function">Image</span> = <span class="keyword">function</span>(path) {
+                <span class="comment">//console.log('setting path to ', path);</span>
+                <span class="local-variable">this</span>.path = path;
+        }
 
         <span class="comment">// Map hash of texture to an existing texture</span>
         Texture.Cache = {};
 
-        DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
         fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(type, w, h, device){
@@ -558,7 +640,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.frame_buf = <span class="predefined-constant">null</span>
 
         Texture.<span class="function">fromStub</span> = <span class="keyword">function</span>(stub){
-                <span class="keyword">return</span> Texture.buildDaliTexture(stub.array, stub.size[<span class="integer">0</span>], stub.size[<span class="integer">1</span>]);
+                <span class="keyword">return</span> Texture.buildDaliTexture(stub.array, stub.type, stub.size[<span class="integer">0</span>], stub.size[<span class="integer">1</span>]);
         }
 
         Texture.<span class="function">fromType</span> = <span class="keyword">function</span>(type){
@@ -566,52 +648,111 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> <span class="keyword">new</span> Texture(type,<span class="integer">0</span>,<span class="integer">0</span>)
         }
 
-        <span class="comment">// imagedata is an instance of DaliImage</span>
-        Texture.<span class="function">fromImage</span> = <span class="keyword">function</span>(imagedata){
+        <span class="comment">// Load from a local image file. Returns the Texture</span>
+        Texture.<span class="function">fromLocalImage</span> = <span class="keyword">function</span>(path){
+                <span class="keyword">var</span> dali = DaliApi.dali;
+
+                <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: path});
+
+                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.getWidth(), img.getHeight())
+                tex.path = path;
+                tex.image = img
+
+                <span class="keyword">if</span> (DaliApi.emitcode) {
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texture</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.ResourceImage({url: </span><span class="char">\'</span><span class="delimiter">'</span></span> + path + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">});</span><span class="delimiter">'</span></span>);
+                }
+
+                <span class="keyword">return</span> tex
+        }
+
+
+        <span class="comment">// Load texture from a local file or remote url.</span>
+        <span class="comment">// If imagedata is a texture, it is returned immediately.</span>
+        <span class="comment">// If the image is loaded remotely, the callback function is called when</span>
+        <span class="comment">// the texture is loaded.</span>
+        Texture.<span class="function">fromImage</span> = <span class="keyword">function</span>(imagedata, callback){
+                <span class="comment">// Return immediately if a texture was specified</span>
+                <span class="keyword">if</span> (imagedata.image || imagedata.array)
+                        <span class="keyword">return</span> imagedata;
+
                 <span class="keyword">var</span> dali = DaliApi.dali;                
 
                 <span class="comment">// With dali, the references should either be absolute, or relative</span>
                 <span class="comment">// to the path where dali runs.</span>
                 <span class="keyword">var</span> fullpath = imagedata.path;
+                <span class="keyword">if</span> (!fullpath) {
+                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">Error: Use require() to load images for DALi platform</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">return</span> <span class="keyword">new</span> Texture(Texture.RGBA, <span class="integer">0</span>, <span class="integer">0</span>);
+                }
+
                 <span class="keyword">if</span> (imagedata.path[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) fullpath = define.<span class="predefined">$example</span> + fullpath;
 
-                <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: fullpath});
+                <span class="keyword">if</span> (fullpath.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span>) {
+                        <span class="comment">// Local assets</span>
+                        <span class="keyword">return</span> Texture.fromLocalImage(fullpath);
+                }
 
-                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, img.getWidth(), img.getHeight())
-                <span class="comment">//console.log('********** fromImage', img.getWidth(), img.getHeight());</span>
-                tex.image = img
+                <span class="comment">// Remote assets are loaded into the cache</span>
+                <span class="keyword">var</span> localpath = define.mapToCacheDir(fullpath);
+                <span class="keyword">try</span> {
+                        <span class="keyword">if</span> (fs.statSync(localpath).isFile()) {
+                                <span class="comment">// File is already in the cache</span>
+                                <span class="keyword">return</span> Texture.fromLocalImage(localpath);
+                        }
+                }
+                <span class="keyword">catch</span> (e) {
+                }
 
-                <span class="keyword">if</span> (DaliApi.emitcode) {
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texture</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.ResourceImage({url: </span><span class="char">\'</span><span class="delimiter">'</span></span> + fullpath + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">});</span><span class="delimiter">'</span></span>);
-                }                
+                <span class="comment">// Load the image into the cache.</span>
+                define.httpGetCached(fullpath).then(<span class="keyword">function</span>(result){
+                        <span class="keyword">var</span> img = <span class="keyword">new</span> dali.ResourceImage({<span class="key">url</span>: result.path});
+                        <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, img.getWidth(), img.getHeight());
+                        tex.image = img;
 
-                <span class="keyword">return</span> tex
+                        <span class="keyword">if</span> (callback)
+                                callback(tex);
+                });
         }
 
         Texture.<span class="function">fromArray</span> = <span class="keyword">function</span>(array, w, h){
-                <span class="keyword">return</span> Texture.buildDaliTexture(array, w, h);
+                <span class="keyword">return</span> Texture.buildDaliTexture(array, Texture.RGBA, w, h);
         }
 
 
         <span class="comment">// Construct a texture from a ArrayBuffer, with a width/height (DALI)</span>
-        Texture.<span class="function">buildDaliTexture</span> = <span class="keyword">function</span>(array, w, h){
+        Texture.<span class="function">buildDaliTexture</span> = <span class="keyword">function</span>(array, type, w, h){
                 <span class="keyword">var</span> dali = DaliApi.dali;                
 
-                <span class="keyword">var</span> texture_key = DaliApi.getHash(array);
-                <span class="keyword">var</span> tex = Texture.Cache[texture_key];
-                <span class="keyword">if</span> (tex)
-                        <span class="keyword">return</span> tex;
-
-                tex = <span class="keyword">new</span> Texture(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, w, h)
+                <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(type, w, h)
                 tex.array = array
 
-                <span class="comment">// Dali wants a byte array</span>
+                <span class="comment">// Dali wants a byte array. Use a checksum + size to cache the data</span>
                 <span class="keyword">var</span> uint8 = <span class="keyword">new</span> Uint8Array(array);
+
+                <span class="keyword">var</span> sum = <span class="integer">0</span>;
+                <span class="keyword">var</span> offset = <span class="integer">0</span>;
+                <span class="keyword">var</span> nbytes = w * h * ((type == Texture.RGBA) ? <span class="integer">4</span> : <span class="integer">1</span>);
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;nbytes; i++) {
+                        sum += uint8[offset++];
+                }
+
+                <span class="comment">// Cache the texture based upon its size and texture data</span>
+                <span class="keyword">var</span> texture_key = w + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + h + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + sum;
+                <span class="keyword">if</span> (texture_key <span class="keyword">in</span> Texture.Cache) {
+                        tex = Texture.Cache[texture_key];
+                        <span class="comment">//console.log('Found cached texture', type, w, h, texture_key);</span>
+                        <span class="keyword">return</span> tex;
+                }
+
+                <span class="comment">//console.log('buildDaliTexture', type, w, h, texture_key);</span>
+
+                <span class="comment">// Support 1-byte per pixel and 4-byte per pixel textures.</span>
+                <span class="keyword">var</span> pixel_type = (type == Texture.LUMINANCE) ? dali.PIXEL_FORMAT_L8 : dali.PIXEL_FORMAT_RGBA8888;
 
                 <span class="keyword">var</span> image_options = {
                         <span class="key">width</span>: w,
                         <span class="key">height</span>: h,
-                        <span class="key">pixelFormat</span> : dali.PIXEL_FORMAT_RGBA8888
+                        <span class="key">pixelFormat</span> : pixel_type
                 };
                 <span class="comment">//console.log('********** fromArray', image_options, uint8.length);</span>
 
@@ -628,14 +769,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">File ERROR</span><span class="delimiter">'</span></span>, err);
                                         <span class="keyword">throw</span> err;
                                 }
-                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">File Saved</span><span class="delimiter">'</span></span>);
+                                <span class="comment">//console.log('File Saved');</span>
                         });
 
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texture</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var fs = require(</span><span class="char">\'</span><span class="content">fs</span><span class="char">\'</span><span class="content">);</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texturedata</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = fs.readFileSync(</span><span class="char">\'</span><span class="content">font_</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content">.bin</span><span class="char">\'</span><span class="content">);</span><span class="delimiter">'</span></span>);
 
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var image_options</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = {width: </span><span class="delimiter">'</span></span> + w + <span class="string"><span class="delimiter">'</span><span class="content">, height: </span><span class="delimiter">'</span></span> + h + <span class="string"><span class="delimiter">'</span><span class="content">, pixelFormat : dali.PIXEL_FORMAT_RGBA8888}</span><span class="delimiter">'</span></span>);
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var image_options</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = {width: </span><span class="delimiter">'</span></span> + w + <span class="string"><span class="delimiter">'</span><span class="content">, height: </span><span class="delimiter">'</span></span> + h + <span class="string"><span class="delimiter">'</span><span class="content">, pixelFormat : </span><span class="delimiter">'</span></span> + pixel_type + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var uint8_</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = new Uint8Array(texturedata</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texture</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.BufferImage(uint8_</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content">, image_options</span><span class="delimiter">'</span></span> + tex.id + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>);
                         tex.img = img;
@@ -856,6 +997,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
+        <span class="local-variable">this</span>.<span class="function">samplemip</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, v, {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR_MIPMAP_NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">LINEAR</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
         <span class="local-variable">this</span>.<span class="function">flipped2</span> = <span class="keyword">function</span>(x,y){ <span class="keyword">return</span> flipped(vec2(x,y)) }
         <span class="local-variable">this</span>.<span class="function">flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {
@@ -879,6 +1029,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">point_flipped2</span> = <span class="keyword">function</span>(x, y){ <span class="keyword">return</span> point_flipped(vec2(x, y)) }
         <span class="local-variable">this</span>.<span class="function">point_flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
+        <span class="local-variable">this</span>.<span class="function">array1d</span> = <span class="keyword">function</span>(index){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(mod(index, <span class="local-variable">this</span>.size.x), floor(index / <span class="local-variable">this</span>.size.x)), {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
+        <span class="local-variable">this</span>.<span class="function">array2d</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x * <span class="local-variable">this</span>.size.x, v.y * <span class="local-variable">this</span>.size.y), {
                         <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,

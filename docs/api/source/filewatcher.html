@@ -244,7 +244,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.__trace__  = <span class="integer">2</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(delay){
                 <span class="local-variable">this</span>.files = {}
-                <span class="local-variable">this</span>.timeout = delay || <span class="integer">100</span>
+                <span class="local-variable">this</span>.timeout = delay || <span class="integer">500</span>
                 <span class="local-variable">this</span>.poll = <span class="local-variable">this</span>.poll.bind(<span class="local-variable">this</span>)
                 <span class="local-variable">this</span>.itv = setTimeout(<span class="local-variable">this</span>.poll, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.lastfire = <span class="integer">0</span>

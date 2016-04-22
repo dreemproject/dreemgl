@@ -487,6 +487,52 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n333" name="n333">333</a>
 <a href="#n334" name="n334">334</a>
 <a href="#n335" name="n335">335</a>
+<a href="#n336" name="n336">336</a>
+<a href="#n337" name="n337">337</a>
+<a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
+<a href="#n353" name="n353">353</a>
+<a href="#n354" name="n354">354</a>
+<a href="#n355" name="n355">355</a>
+<a href="#n356" name="n356">356</a>
+<a href="#n357" name="n357">357</a>
+<a href="#n358" name="n358">358</a>
+<a href="#n359" name="n359">359</a>
+<strong><a href="#n360" name="n360">360</a></strong>
+<a href="#n361" name="n361">361</a>
+<a href="#n362" name="n362">362</a>
+<a href="#n363" name="n363">363</a>
+<a href="#n364" name="n364">364</a>
+<a href="#n365" name="n365">365</a>
+<a href="#n366" name="n366">366</a>
+<a href="#n367" name="n367">367</a>
+<a href="#n368" name="n368">368</a>
+<a href="#n369" name="n369">369</a>
+<strong><a href="#n370" name="n370">370</a></strong>
+<a href="#n371" name="n371">371</a>
+<a href="#n372" name="n372">372</a>
+<a href="#n373" name="n373">373</a>
+<a href="#n374" name="n374">374</a>
+<a href="#n375" name="n375">375</a>
+<a href="#n376" name="n376">376</a>
+<a href="#n377" name="n377">377</a>
+<a href="#n378" name="n378">378</a>
+<a href="#n379" name="n379">379</a>
+<strong><a href="#n380" name="n380">380</a></strong>
+<a href="#n381" name="n381">381</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -516,6 +562,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Doccumentation</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(args){
                 <span class="local-variable">this</span>.compositions = {}
+                <span class="local-variable">this</span>.binrpc_incoming = {}
+                <span class="local-variable">this</span>.binrpc_outgoing = {}
 
                 <span class="local-variable">this</span>.args = args
                 <span class="keyword">var</span> port = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-port</span><span class="delimiter">'</span></span>] || process.env.PORT || <span class="integer">2000</span>
@@ -573,13 +621,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="local-variable">this</span>.watcher = <span class="keyword">new</span> FileWatcher()
-                <span class="local-variable">this</span>.watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(file){
+                <span class="local-variable">this</span>.watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(ifile){
                         <span class="comment">// ok lets get the original path</span>
-                        file=file.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\\</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">var</span> file = ifile.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\\</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
                                 <span class="keyword">var</span> match = define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key])
                                 <span class="keyword">if</span>(file.indexOf(match) === <span class="integer">0</span>){
-                                        file = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+key+file.slice(match.length)
+                                        <span class="keyword">var</span> sliced = file.slice(match.length)
+                                        <span class="keyword">if</span> (sliced[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) {
+                                                sliced = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + sliced
+                                        }
+                                        file = <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+key+sliced
                                         <span class="keyword">break</span>
                                 }
                         }
@@ -628,8 +680,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> sock = <span class="keyword">new</span> NodeWebSocket(req, sock, head)
                 sock.url = req.url
                 <span class="keyword">var</span> mypath = req.url.slice(<span class="integer">1</span>)
-                <span class="keyword">if</span>(mypath) <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + decodeURIComponent(mypath)).busserver.addWebSocket(sock, req)
-                <span class="keyword">else</span> <span class="local-variable">this</span>.busserver.addWebSocket(sock, req)
+                <span class="keyword">var</span> busserver
+                <span class="keyword">if</span>(mypath) busserver = <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + decodeURIComponent(mypath)).busserver
+                <span class="keyword">else</span> busserver = <span class="local-variable">this</span>.busserver
+                busserver.addWebSocket(sock, req, <span class="local-variable">this</span>.binrpc_outgoing, <span class="local-variable">this</span>.binrpc_incoming)
         }
 
         <span class="comment">// maps an input path into our files</span>
@@ -663,6 +717,44 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> host = req.headers.host
                 <span class="keyword">var</span> requrl = req.url
 
+                <span class="keyword">if</span>(requrl.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/binrpc?</span><span class="delimiter">'</span></span>) === <span class="integer">0</span>){
+                        <span class="keyword">var</span> where = decodeURIComponent(requrl.slice(<span class="integer">8</span>))
+                        <span class="keyword">if</span>(req.method == <span class="string"><span class="delimiter">'</span><span class="content">POST</span><span class="delimiter">'</span></span>){
+                                <span class="comment">// alright lets store this somewhere</span>
+                                <span class="keyword">var</span> buf = <span class="keyword">new</span> Uint8Array(req.headers[<span class="string"><span class="delimiter">'</span><span class="content">content-length</span><span class="delimiter">'</span></span>])
+                                <span class="keyword">var</span> off = <span class="integer">0</span>
+
+                                req.on(<span class="string"><span class="delimiter">'</span><span class="content">data</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(data){
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; data.length; i ++, off++){
+                                                buf[off] = data[i]
+                                        }
+                                })
+                                req.on(<span class="string"><span class="delimiter">'</span><span class="content">end</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
+                                        <span class="local-variable">this</span>.binrpc_incoming[where] = buf
+                                        res.writeHead(<span class="integer">200</span>)
+                                        res.end()
+                                }.bind(<span class="local-variable">this</span>))
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="keyword">if</span>(!<span class="local-variable">this</span>.binrpc_outgoing[where]){
+                                        res.writeHead(<span class="integer">404</span>)
+                                        res.end()
+                                        <span class="keyword">return</span>
+                                }
+                                <span class="keyword">var</span> out = <span class="local-variable">this</span>.binrpc_outgoing[where]
+                                <span class="keyword">if</span>(out.remoteAddress !== req.connection.remoteAddress){
+                                        res.writeHead(<span class="integer">404</span>)
+                                        res.end()
+                                        <span class="keyword">return</span>
+                                }
+                                <span class="keyword">var</span> buf = <span class="keyword">new</span> Buffer(out.data)
+                                res.writeHead(<span class="integer">200</span>, {<span class="key"><span class="delimiter">'</span><span class="content">content-length</span><span class="delimiter">'</span></span>:buf.length, <span class="key"><span class="delimiter">'</span><span class="content">content-type</span><span class="delimiter">'</span></span>: <span class="string"><span class="delimiter">'</span><span class="content">application/octet-binary</span><span class="delimiter">'</span></span>})
+                                res.write(buf)
+                                <span class="local-variable">this</span>.binrpc_outgoing[where] = <span class="predefined-constant">undefined</span>
+                                res.end()
+                        }
+                        <span class="keyword">return</span>
+                }
                 <span class="comment">// otherwise handle as static file</span>
                 <span class="keyword">if</span>(requrl.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/proxy?</span><span class="delimiter">'</span></span>) === <span class="integer">0</span>){
                         <span class="comment">// lets connect a http request and forward it back!</span>

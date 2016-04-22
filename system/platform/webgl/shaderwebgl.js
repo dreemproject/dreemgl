@@ -37,7 +37,7 @@ define.class('$system/base/shader', function(require, exports){
 			return
 			//throw new Error(err)
 		}
-		
+
 		// compile the shader
 		var pix_color_shader = gl.createShader(gl.FRAGMENT_SHADER)
 		gl.shaderSource(pix_color_shader, pix_color)
@@ -111,7 +111,7 @@ define.class('$system/base/shader', function(require, exports){
 			if(this.compile_use) this.compileUse(shader.pick)
 		}
 
-		return shader		
+		return shader
 	}
 
 	this.useShader = function(gl, shader){
@@ -240,7 +240,7 @@ define.class('$system/base/shader', function(require, exports){
 		else{
 			gl.disable(gl.DEPTH_TEST)
 		}
-		
+
 		return len
 	}
 
@@ -273,7 +273,6 @@ define.class('$system/base/shader', function(require, exports){
 			}
 		}
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
-		if(TEXTURE_ID > 0)debugger
 		TEXTURE_END
 
 		// attributes
@@ -286,11 +285,14 @@ define.class('$system/base/shader', function(require, exports){
 			lastbuf = buf
 			if(buf.length > len) len = buf.length
 			if(len === 0) return 0
-			if(!buf.glvb) buf.glvb = gl.createBuffer()
+			if(!buf.glvb){
+				buf.glvb = gl.createBuffer()
+				buf.clean = false
+			}
 			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
 			if(!buf.clean){
 				var dt = Date.now()
-				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STREAM_DRAW)
+				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
 				buf.clean = true
 			}
 		}
@@ -322,7 +324,7 @@ define.class('$system/base/shader', function(require, exports){
 		else{
 			gl.disable(gl.BLEND)
 		}
-		
+
 		// set up depth test
 		if(root.depth_test_eq.func > 1){
 			//console.log(root.depth_test_eq)
@@ -332,12 +334,21 @@ define.class('$system/base/shader', function(require, exports){
 		else{
 			gl.disable(gl.DEPTH_TEST)
 		}
-		
+
+		// set up depth mask
+		if(root.depth_mask === false){
+			gl.depthMask(false)
+		}
+		else{
+			gl.depthMask(true)
+		}
+
+
 		return len
 	}
 
 	this.compileUse = function(shader){
-		// alright lets compile our useShader from 
+		// alright lets compile our useShader from
 		var tpl = this.useShaderTemplate.toString()
 		tpl = tpl.replace(/^function/, "function useshader_" + (this.view?this.view.constructor.name:'anonymous') + '_shader_' + this.constructor.name)
 		// ok lets replace shit.
@@ -362,8 +373,8 @@ define.class('$system/base/shader', function(require, exports){
 				out += '\t\tuni = root.' + name + '\n'
 			}
 			else{
-				out += '\t\tuni = root.' 
-				if(isattr) out += '_' 
+				out += '\t\tuni = root.'
+				if(isattr) out += '_'
 				out += key + '\n'
 			}
 			out += '\t\tloc = shader.unilocs.' + key + '\n'
@@ -423,30 +434,30 @@ define.class('$system/base/shader', function(require, exports){
 				var attrloc = attrlocs[key]
 				var ATTRLOC_BUF
 				if(attrloc.name){
-					ATTRLOC_BUF = 'root.' + attrloc.name 
+					ATTRLOC_BUF = 'root.' + attrloc.name
 					var buf = this[attrloc.name]
 				}
 				else{
-					ATTRLOC_BUF = 'root.' + key 
+					ATTRLOC_BUF = 'root.' + key
 				}
 				var ATTRLOC_LOC = 'shader.attrlocs.' + key +'.loc'
 
 				if(attrloc.name){
-					ATTRLOC_ATTRIBPTR = 
+					ATTRLOC_ATTRIBPTR =
 						'gl.vertexAttribPointer(loc, '+attrloc.slots+', gl.FLOAT, false, buf.stride, '+attrloc.offset+')'
 				}
 				else{
-					ATTRLOC_ATTRIBPTR = 
+					ATTRLOC_ATTRIBPTR =
 						'if(buf.slots>4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
 				}
-				out += body		
+				out += body
 					.replace(/ATTRLOC_BUF/, ATTRLOC_BUF)
 					.replace(/ATTRLOC_LOC/, ATTRLOC_LOC)
 					.replace(/ATTRLOC_ATTRIBPTR/, ATTRLOC_ATTRIBPTR)
 			}
 			return out
 		})
-		
+
 		tpl = tpl.replace(/gl.[A-Z][A-Z0-9_]+/g, function(m){
 			return gltypes.gl[m.slice(3)]
 		})

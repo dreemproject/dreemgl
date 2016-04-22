@@ -20,9 +20,10 @@ define.class(function(require, exports){
 	this.antialias = false
 	this.debug_pick = false
 
+	this.window =
 	this.document = typeof window !== 'undefined'?window : null
 
-	this.atConstructor = function(previous){
+	this.atConstructor = function(previous, canvas){
 
 		this.extensions = previous && previous.extensions || {}
 		this.shadercache = previous &&  previous.shadercache || {}
@@ -61,7 +62,7 @@ define.class(function(require, exports){
 			this.midi = new this.Midi(this)
 			this.drawtarget_pools = {}
 
-			this.createContext()
+			this.createContext(canvas)
 			this.createWakeupWatcher()
 		}
 
@@ -73,7 +74,7 @@ define.class(function(require, exports){
 		setInterval(function(){
 			var now = Date.now()
 			if(now - last > 1000 && this.screen){
-				this.doresize()
+				this.doSize()
  				this.redraw()
 				this.screen.emit('wakeup')
 			}
@@ -81,12 +82,20 @@ define.class(function(require, exports){
 		}.bind(this), 200)
 	}
 
-	this.createContext = function(){
+	this.createContext = function(canvas){
 		if(!this.parent) this.parent = document.body
 
-		this.canvas = document.createElement("canvas")
-		this.canvas.className = 'unselectable'
-		this.parent.appendChild(this.canvas)
+		if (canvas) {
+			if (typeof(canvas) === "string") {
+				canvas = document.getElementById(canvas)
+			}
+			this.canvas = canvas
+			this.canvas.className = 'unselectable'
+		} else {
+			this.canvas = document.createElement("canvas")
+			this.canvas.className = 'unselectable'
+			this.parent.appendChild(this.canvas)
+		}
 
 		var options = {
 			alpha: this.frame.type.indexOf('rgba') != -1,
@@ -114,7 +123,7 @@ define.class(function(require, exports){
 	this.initResize = function(){
 		//canvas.webkitRequestFullscreen()
 
-		var resize = this.doresize = function(){
+		var resize = this.doSize = function(){
 			var pixelRatio = window.devicePixelRatio
 
 			var w = this.parent.offsetWidth
@@ -160,7 +169,8 @@ define.class(function(require, exports){
 	this.getExtension = function(name){
 		var ext = this.extensions[name]
 		if(ext) return ext
-		return this.extensions[name] = this.gl.getExtension(name)
+		ext = this.extensions[name] = this.gl.getExtension(name)
+		return ext
 	}
 
 	this.redraw = function(){

@@ -18,17 +18,18 @@ define.class(function(exports){
 	 * static dali object to access dali api.
 	 */
 	Object.defineProperty(DaliApi, 'dali', {
+		// Internally, the dalimodule is stored in global
 		get: function() {
-			if (!this.value) {
-				console.trace('DaliApi: Dali has not been initialized');
+			if (!global.dalimodule) {
+				console.log('DaliApi: Dali has not been initialized');
 			}
-			return this.value;
+			return global.dalimodule;
 		}
 		,set: function(v) {
-			if (this.value) {
+			if (global.dalimodule) {
 				console.log('DaliApi: Dali has already been initialized');
 			}
-			this.value = v;
+			global.dalimodule = v;
 		}
 	});
 
@@ -36,12 +37,13 @@ define.class(function(exports){
 	// Set emitcode to true to emit dali code to the console. These lines
 	// are preceeded with DALICODE to make it easier to extract into a file.
 	// The -dumpprog command-line option codes this value
-	DaliApi.emitcode = false;
+	DaliApi.emitcode = global.emitcode;
 
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
 	// depthIndex property of Renderers.)
-	DaliApi.rootlayer = undefined;
+	// Changed to global.rootlayer
+	// DaliApi.rootlayer = undefined;
 
 	// The current layer to use when adding actors. Set by setLayer(). If
 	// currentlayer is never set, the root layer (DaliApi.rootlayer) is used.
@@ -52,7 +54,8 @@ define.class(function(exports){
 	//     if none was specified.
 	//   - Repeat the above process. You can reset the current layer by
 	//     passing null to DaliApi.setLayer
-	DaliApi.currentlayer = undefined;
+	// Changed to global.currentlayer
+	// DaliApi.currentlayer = undefined;
 
 	/**
 	 * @method setLayer
@@ -64,9 +67,9 @@ define.class(function(exports){
 	 */
 	DaliApi.setLayer = function(layer) {
 		if (!layer)
-			layer = DaliApi.rootlayer;
+			layer = global.rootlayer;
 
-		DaliApi.currentlayer = layer;
+		global.currentlayer = layer;
 	}
 
 	/**
@@ -80,7 +83,7 @@ define.class(function(exports){
 	 */
 	DaliApi.addActor = function(actor, layer) {
 		if (!layer)
-			layer = DaliApi.currentlayer;
+			layer = global.currentlayer;
 
 		layer.add(actor);
 	}
@@ -108,7 +111,9 @@ define.class(function(exports){
 		DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
 		DaliApi.dumpprog = settings.dumpprog;
 
-		DaliApi.emitcode = DaliApi.dumpprog;
+		if (DaliApi.dumpprog)
+			global.emitcode = DaliApi.dumpprog;
+		DaliApi.emitcode = global.emitcode;
 
 		var window= {
 			x:0,
@@ -139,17 +144,18 @@ define.class(function(exports){
 		}
 
 		try {
-            // Load the library and make available as DaliApi.dali
+      // Load the library and make available as DaliApi.dali
 			// console.log('LOADING', dalilib);
-			DaliApi.dali = define.require(DaliApi.dalilib)(options);
+			var dalimodule = define.require(DaliApi.dalilib)(options);
+			DaliApi.dali = dalimodule;
 
 			// Create a top-level 2D layer to the stage.
 			var dali = DaliApi.dali;
-			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
-			dali.stage.add(DaliApi.rootlayer.dalilayer);
+			global.rootlayer = global.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
+			dali.stage.add(global.rootlayer.dalilayer);
 
 			if (DaliApi.emitcode) {
-				console.log('DALICODE: dali.stage.add(' + DaliApi.rootlayer.name() + ');');
+				console.log('DALICODE: dali.stage.add(' + global.rootlayer.name() + ');');
 			}
 
 		}
@@ -240,12 +246,13 @@ define.class(function(exports){
 	 * @param {Object} Format hash, suitable for dali.PropertyBuffer.
 	 * The hash looks like {name : type}. See dali docs for dali.PropertyBuffer.
 	 * @param {Number} nrecs The number of records, in the buffer.
+	 * @param {Boolean} cache Set to true to re-use dali.PropertyBuffers.
 	 * @return {Object} [dali.PropertyBuffer, id]. This is the same value stored
 	 * in the cache DaliApi.BufferCache.
 	 */
 	DaliApi.BufferId = 0
 	DaliApi.BufferCache = {}; // key: hash  value: [Dali.PropertyBuffer, id]
-	DaliApi.daliBuffer = function(vals, format, nrecs) {
+	DaliApi.daliBuffer = function(vals, format, nrecs, cache) {
 		//console.log('daliBuffer format', format, 'nrecs', nrecs, 'vals', vals.length);
 		var dali = DaliApi.dali;
 
@@ -255,9 +262,11 @@ define.class(function(exports){
 		// console.trace('daliBuffer with', nrecs, 'items', 'length = ', data.length);
 
 		// Reuse an existing propertybuffer
-		var hash = DaliApi.getHash(vals);
-		if (DaliApi.BufferCache[hash]) {
-			return DaliApi.BufferCache[hash];
+		if (cache) {
+			var hash = DaliApi.getHash(vals);
+			if (DaliApi.BufferCache[hash]) {
+				return DaliApi.BufferCache[hash];
+			}
 		}
 
 		// Create the dali.PropertyBuffer
@@ -274,7 +283,10 @@ define.class(function(exports){
 		DaliApi.writeDaliBuffer(buffer, DaliApi.BufferId, data);
 
 		var ret = [buffer, DaliApi.BufferId];
-		DaliApi.BufferCache[hash] = ret;
+		if (cache) {
+			DaliApi.BufferCache[hash] = ret;
+		}
+
 		return ret;
 	}
 
@@ -293,6 +305,7 @@ define.class(function(exports){
 		var dataArray = new Float32Array(data.length);
 		dataArray.set(data);
 		buffer.setData(dataArray);
+		dataArray = null;
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var data' + bufferid + ' = ' + JSON.stringify(data));

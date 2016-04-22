@@ -3,8 +3,8 @@
  * @extends node
  * Base UI view object
  * 
- * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$root/ui/view.js"></iframe>
- * <a target="blank" href="/apps/docs/example#path=$root/ui/view.js">open example in new tab &raquo;</a>
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$ui/view.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$ui/view.js">open example in new tab &raquo;</a>
  * 
  */
 /**
@@ -56,7 +56,7 @@
  * alias for z component of corner
  */
 /**
- * @attribute {vec4} [bgcolor="NaN,NaN,NaN,NaN"]
+ * @attribute {vec4} [bgcolor="0,0,0,0"]
  * the background color of a view, referenced by various shaders
  */
 /**
@@ -72,11 +72,19 @@
  * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
  */
 /**
- * @attribute {Enum} [bgimagemode="resize"]
- * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+ * @attribute {Enum} [bgimagemode="stretch"]
+ * Image mode alters how/where the background image is scaled, streched, fit and drawn within the view's bounds.
  */
 /**
- * @attribute {vec4} [clearcolor="undefined"]
+ * @attribute {vec2} [bgimageoffset="0,0"]
+ * Offets the image within the view.  This value is in texture coordinates.
+ */
+/**
+ * @attribute {Enum} [bgimagealign="none"]
+ * When using `aspect-fit`, or `apsect-fill` this property will automatically adjust the image's location within the view.
+ */
+/**
+ * @attribute {vec4} [clearcolor="NaN"]
  * the clear color of the view when it is in '2D' or '3D' viewport mode
  */
 /**
@@ -89,7 +97,7 @@
  * the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
  */
 /**
- * @attribute {Enum} [overflow="undefined"]
+ * @attribute {Enum} [overflow=""]
  * overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
  * works the same way as the CSS property
  */
@@ -122,7 +130,7 @@
  * alias for the z component of percentsize
  */
 /**
- * @attribute {float32} [pixelratio="undefined"]
+ * @attribute {float32} [pixelratio="NaN"]
  * the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
  */
 /**
@@ -242,7 +250,7 @@
  * alias for the fourth component of borderwith
  */
 /**
- * @attribute {float32} [flex="undefined"]
+ * @attribute {float32} [flex="NaN"]
  * turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
  * flexbox layout is a web standard and has many great tutorials online to learn how it works
  */
@@ -255,7 +263,7 @@
  * which direction the flex layout is working,
  */
 /**
- * @attribute {Enum} [justifycontent="undefined"]
+ * @attribute {Enum} [justifycontent=""]
  * pushes items eitehr to the start, center or end
  */
 /**
@@ -263,7 +271,7 @@
  * align items to either start, center, end or stretch them
  */
 /**
- * @attribute {Enum} [alignself="undefined"]
+ * @attribute {Enum} [alignself=""]
  * overrides the parents alignitems with our own preference
  */
 /**
@@ -276,7 +284,7 @@
  * Can be listened to to observe layout changes
  */
 /**
- * @attribute {Enum} [viewport="undefined"]
+ * @attribute {Enum} [viewport=""]
  * When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
  * using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
  * need to be processed and a single texture can just be drawn by the parent
@@ -319,7 +327,7 @@
  * drop shadow hardness
  */
 /**
- * @attribute {float32} [dropshadowopacity="undefined"]
+ * @attribute {float32} [dropshadowopacity="0"]
  * drop shadow opacity
  */
 /**
@@ -327,12 +335,31 @@
  * drop shadow color
  */
 /**
- * @attribute {boolean} [focus="undefined"]
+ * @attribute {boolean} [focus="false"]
  * whether this view has focus
  */
 /**
- * @attribute {float32} [tabstop="undefined"]
+ * @attribute {float32} [tabstop="NaN"]
  * tabstop, sorted by number
+ */
+/**
+ * @attribute {Enum} [cursor=""]
+ * the type of pointer cursor to use for this view
+ */
+/**
+ * @attribute {int32} [passes="0"]
+ * The number of render passes for this view. Note that corresponding
+ * inner classes will need to be created for multi pass rendering to work,
+ * see /classes/ui/blurtest.js for an example.
+ */
+/**
+ * @method atViewDestroy
+ * lets destroy some shaders/vertexbuffers
+ */
+/**
+ * @method setBgImage
+ * image can be an image, or a Texture (has array property).
+ * @param image
  */
 /**
  * @method globalToLocal
@@ -344,6 +371,22 @@
  * starts a drag view via render function
  * @param pointerevent
  * @param render
+ */
+/**
+ * @method animate
+ * Animates an attribute over time.
+ * Returns a promise that resolves when the animation completes. This allows animations
+ * to be chained together, or other behaviors to occur when an animation ends.
+ * @param {String} attribute
+ * The name of the attribute to animate on this view.
+ * @param {Object} track
+ * An object consisting of keys with time offset (in seconds)/value pairs. Each value can be discrete, or an object with motion and value keys where motion describes the interpolation from the previous value to this one, and value describes the value to animate to.
+ */
+/**
+ * @method stopAnimation
+ * Stops a running animation for an attribute
+ * @param {String} attribute
+ * The name of the attribute to stop animating on this view.
  */
 /**
  * @method bgcolorfn

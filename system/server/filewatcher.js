@@ -18,7 +18,7 @@ define.class(function(require, exports){
 	this.__trace__  = 2
 	this.atConstructor = function(delay){
 		this.files = {}
-		this.timeout = delay || 100
+		this.timeout = delay || 500
 		this.poll = this.poll.bind(this)
 		this.itv = setTimeout(this.poll, 0)
 		this.lastfire = 0

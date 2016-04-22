@@ -6,7 +6,7 @@
 
 define.class("$ui/view", function(require,
 								  $ui$, view, label, textbox, icon, checkbox, treeview, button, tabbar,
-								  $widgets$, palette, propviewer, jseditor, jsviewer,
+								  $widgets$, palette, propviewer, jseditor,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
@@ -94,7 +94,7 @@ define.class("$ui/view", function(require,
 			//},
 			{
 				label:"Icon",
-				icon:"info-circle",
+				icon:"flag",
 				desc:"A Fontawesome icon",
 				classname:"icon",
 				classdir:"$ui$",
@@ -102,7 +102,7 @@ define.class("$ui/view", function(require,
 					fgcolor:'#e22',
 					bgcolor:'transparent',
 					pickalpha:-1,
-					icon:'heart',
+					icon:'flag',
 					fontsize:80
 				}
 			},
@@ -1116,7 +1116,7 @@ define.class("$ui/view", function(require,
 		if (this.__movepanel) {
 			this.__movepanel.flex = 0;
 			this.__movepanel.height = this.__movepanel._layout.height + ev.movement.y;
-			this.height = this._layout.height + ev.movement.y;
+//			this.height = this._layout.height + ev.movement.y;
 		}
 	};
 
@@ -1513,6 +1513,8 @@ define.class("$ui/view", function(require,
 				flex:1,
 				overflow:'scroll',
 				margin:vec4(2,7,2,2),
+				fontsize:12,
+				boldness:0.1,
 				wrap:true,
 				format_options: {
 					force_newlines_array:false,
@@ -1533,8 +1535,7 @@ define.class("$ui/view", function(require,
 							})
 						}
 					}
-				}.bind(this),
-				fontsize:12
+				}.bind(this)
 			})
 		));
 

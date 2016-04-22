@@ -645,6 +645,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n491" name="n491">491</a>
 <a href="#n492" name="n492">492</a>
 <a href="#n493" name="n493">493</a>
+<a href="#n494" name="n494">494</a>
+<a href="#n495" name="n495">495</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -682,6 +684,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         ,<span class="function">getShaderInfoLog</span>: <span class="keyword">function</span>() {<span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>}
         ,<span class="function">useProgram</span>: <span class="keyword">function</span>() {}
         ,<span class="function">createBuffer</span>: <span class="keyword">function</span>() {<span class="keyword">return</span> <span class="integer">0</span>;}
+        ,<span class="function">deleteBuffer</span>: <span class="keyword">function</span>() {}
         ,<span class="function">bindBuffer</span>: <span class="keyword">function</span>() {}
         ,<span class="function">bufferData</span>: <span class="keyword">function</span>() {}
         ,<span class="function">enable</span>: <span class="keyword">function</span>() {}
@@ -703,9 +706,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         ,<span class="function">texImage2D</span>: <span class="keyword">function</span>() {}
         };
 
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
-        <span class="local-variable">this</span>.DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
-
         <span class="local-variable">this</span>.Keyboard = require(<span class="string"><span class="delimiter">'</span><span class="content">./keyboarddali</span><span class="delimiter">'</span></span>)
         <span class="local-variable">this</span>.Pointer = require(<span class="string"><span class="delimiter">'</span><span class="content">./pointerdali</span><span class="delimiter">'</span></span>)
 
@@ -722,6 +722,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.document = <span class="predefined-constant">null</span>
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous){
+                <span class="comment">// DaliApi is a static object to access the dali api</span>
+                <span class="local-variable">this</span>.DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
                 <span class="local-variable">this</span>.extensions = previous &amp;&amp; previous.extensions || {}
                 <span class="local-variable">this</span>.shadercache = previous &amp;&amp;  previous.shadercache || {}
@@ -737,11 +739,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.<span class="function">animFrame</span> = <span class="keyword">function</span>(time){
                         <span class="comment">//console.log('animFrame', time);</span>
                         <span class="keyword">var</span> interval = <span class="integer">16</span>;
-                        <span class="keyword">var</span> t = <span class="local-variable">this</span>.doColor(time);
+                        <span class="keyword">var</span> cur = <span class="keyword">new</span> Date().getTime();
+                        <span class="keyword">var</span> t = <span class="local-variable">this</span>.doColor(cur);
+
                         <span class="keyword">if</span>(t){
                                 <span class="local-variable">this</span>.anim_req = <span class="predefined-constant">true</span>
-                <span class="local-variable">this</span>.time += interval;
-                setTimeout(<span class="keyword">function</span>() {<span class="local-variable">this</span>.animFrame(<span class="local-variable">this</span>.time);}.bind(<span class="local-variable">this</span>), interval)
+        <span class="local-variable">this</span>.time += interval;
+        setTimeout(<span class="keyword">function</span>() {<span class="local-variable">this</span>.animFrame(<span class="local-variable">this</span>.time);}.bind(<span class="local-variable">this</span>), interval)
                         }
                         <span class="keyword">else</span> <span class="local-variable">this</span>.anim_req = <span class="predefined-constant">false</span>
                         <span class="comment">//if(this.pick_resolve.length) this.doPick()</span>

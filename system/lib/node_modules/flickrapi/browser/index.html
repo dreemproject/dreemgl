@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Flickr api test</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <p>Fill in your Flickr API key here, and then hit the test button to query Flickr</p>
+    <label for="api_key">API key:</label>
+    <input id="api_key" type="text" pattern="[0-9a-fA-F]{32}" required>
+    <label for="methods">flickr method:</label>
+    <select id="methods"><option>&nbsp;</option></select>
+    <button onclick="testFlickrAPI()">test flickr</button>
+    <button onclick="testFlickrAPI(true)">test flickr by proxy</button>
+    <div id="arguments"></div>
+    <script src="flickrapi.dev.js"></script>
+    <script src="fromBrowser.js"></script>
+    </script>
+  </body>
+</html>

@@ -7,7 +7,7 @@
 
 define.class('$system/base/compositionclient', function(require, baseclass){
 
-	var Device = require('$system/platform/$platform/device$platform')
+	var Device = this.Device = require('$system/platform/$platform/device$platform')
 	var BusClient = require('$system/rpc/busclient')
 	var NodeWebSocket = require('$system/server/nodewebsocket')
 
@@ -24,6 +24,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 		}
 
 		baseclass.atConstructor.call(this)
+		this.screen._size = this.device.size
 	}
 
 	this.createBus = function(){

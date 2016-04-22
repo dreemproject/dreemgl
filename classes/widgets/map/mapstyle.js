@@ -6,251 +6,250 @@
 
 define.class(function(require){
 
-	var watercolor = vec4("#90cccb");
+	var watercolor = vec4("#90cccb")
 
 	this.mapstyle = {
-		ferry:{
+		ferry: {
 			roadcolor: vec4(0.6784313917160034,0.8470588326454163,0.9019607901573181,1)
 		},
-		riverbank:{color1:watercolor},
-		marina:{color1:watercolor},
-		reservoir:{color1:watercolor},
-		stream:{color1:watercolor},
-		canal:{color1:watercolor},
-		lake:{color1:watercolor},
-		playa:{color1:watercolor},
-		river:{color1:watercolor},
-		basin:{color1:watercolor},
-		swimming_pool:{color1:watercolor},
-		sea:{
-			color1:watercolor
+		riverbank: {color1: watercolor},
+		marina: {color1: watercolor},
+		reservoir: {color1: watercolor},
+		stream: {color1: watercolor},
+		canal: {color1: watercolor},
+		lake: {color1: watercolor},
+		playa: {color1: watercolor},
+		river: {color1: watercolor},
+		basin: {color1: watercolor},
+		swimming_pool: {color1: watercolor},
+		sea: {
+			color1: watercolor
 		},
-		ocean:{
-			color1:watercolor
+		ocean: {
+			color1: watercolor
 		},
-
-		earth:{
+		earth: {
 			color1: vec4("#f6f5f0")
 		},
-		national_park:{
-			color1:vec4("#b2c29d")
+		national_park: {
+			color1: vec4("#b2c29d")
 		},
-		park:{
-			offset:-7,
+		park: {
+			offset: -7,
 			color1: vec4("#d0dcae", 1)
 		},
-		residential:{
+		residential: {
 			color1: vec4("#ffffff")
 		},
-		industrial:{
-			color1:vec4("#dcd6d6")
+		industrial: {
+			color1: vec4("#dcd6d6")
 		},
-		recreation_ground:{
-			color1:vec4("#deddbe")
+		recreation_ground: {
+			color1: vec4("#deddbe")
 		},
-		scrub:{
+		scrub: {
 			color1: vec4("#e1e8d6")
 		},
-		wetland:{
-			offset:-18.5,
+		wetland: {
+			offset: -18.5,
 			color1: vec4("#e2e8e1")
 		},
-		beach:{
-			offset:-19,
+		beach: {
+			offset: -19,
 			color1: vec4("#f0f0e8")
 		},
-		nature_reserve:{
-			offset:-18,
+		nature_reserve: {
+			offset: -18,
 			color1: vec4("#deddbe")
 		},
-		commercial:{
+		commercial: {
 		},
-		golf_course:{
+		golf_course: {
 		},
-		farm:{
+		farm: {
 			color1: vec4("#e6e5e0")
 		},
-		grass:{
+		grass: {
 			color1: vec4("#d0dcae")
 		},
-		sports_centre:{
+		sports_centre: {
 			color1: vec4(1,0,0,1)
 		},
-		farmland:{
+		farmland: {
 			color1: vec4("#dddcbd")
 		},
-		hospital:{
+		hospital: {
 		},
-		retail:{
-			offset:27,
+		retail: {
+			offset: 27,
 			color1: vec4('#dcd6d6')
 		},
-		allotments:{
+		allotments: {
 		},
-		runway:{
-			offset:-20,
-			color1:vec4("#dcdf9d")
+		runway: {
+			offset: -20,
+			color1: vec4("#dcdf9d")
 		},
-		aerodrome:{
-			offset:-20,
-			color1:vec4("#dddddd")
+		aerodrome: {
+			offset: -20,
+			color1: vec4("#dddddd")
 		},
-		forest:{
-			offset:-30,
+		forest: {
+			offset: -30,
 			color1: vec4("#b2c29d")
 		},
-		meadow:{
+		meadow: {
 			color1: vec4("#deddbe")
 		},
-		parking:{
-			offset:-8,
+		parking: {
+			offset: -8,
 			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1)
 		},
-		plant:{
+		plant: {
 			color1: vec4("#b2c29d")
 		},
-		pitch:{
+		pitch: {
 			color1: vec4("#efeecd")
 		},
-		cemetery:{
+		cemetery: {
 			color1: vec4("gray")
 		},
-		zoo:{
+		zoo: {
 		},
-		attraction:{
+		attraction: {
 		},
-		university:{
-			offset:-21,
+		university: {
+			offset: -21,
 			color1: vec4('#dcd6d6')
 		},
-		apron:{
+		apron: {
 		},
-		military:{
+		military: {
 		},
-		wastewater_plant:{
+		wastewater_plant: {
 		},
-		playground:{
-			offset:-19,
+		playground: {
+			offset: -19,
 			color1: vec4("#f0eee4")
 		},
-		stadium:{
+		stadium: {
 		},
-		railway:{
+		railway: {
 			roadcolor: vec4("#f6f5f0"),
 			color1: vec4("#f6f5f0"),
-			sortkey:3
+			sortkey: 3
 		},
-		rail:{
+		rail: {
 			roadcolor: vec4("#999999"),
-			sortkey:3
+			sortkey: 3
 		},
-		garden:{
+		garden: {
 			color1: vec4("#d0dcae")
 		},
-		farmyard:{
+		farmyard: {
 			color1: vec4("#deddbe")
 		},
-		generator:{
+		generator: {
 		},
-		college:{
+		college: {
 		},
-		pedestrian:{
+		pedestrian: {
 			color1: vec4('#dddde8')
 		},
-		school:{
+		school: {
 		},
-		substation:{
+		substation: {
 		},
-		petting_zoo:{
+		petting_zoo: {
 		},
-		wood:{
-			color1:vec4("#b2c19c")
+		wood: {
+			color1: vec4("#b2c19c")
 		},
-		common:{
+		common: {
 			color1: vec4('#f6f5f0')
 		},
-		village_green:{
+		village_green: {
 			color1: vec4("#deddbe")
 		},
-		prison:{
+		prison: {
 		},
-		racetrack:{
+		racetrack: {
 			roadcolor: vec4("#eeece2")
 		},
-		major_road:{
+		major_road: {
 			roadcolor: vec4("#d1928d")
 		},
-		Ferry:{
+		Ferry: {
 			roadcolor: vec4("#509b9a"),
 			sortkey: -1
 		},
-		highway:{
+		highway: {
 			roadcolor: vec4("#a098b0"),
-			sortkey:2
+			sortkey: 2
 			},
-		minor_road:{
+		minor_road: {
 			roadcolor: vec4("#dcdf9d")
 		},
-		Road:{
+		Road: {
 			roadcolor: vec4("#d2938e")
 		},
-		undefined:{
+		undefined: {
 		},
-		works:{
+		works: {
 		},
-		protected_area:{
+		protected_area: {
 			color1: vec4("#f6f5f0")
 		},
-		theme_park:{
+		theme_park: {
 		},
-		path:{
+		path: {
 			roadcolor: vec4('#ebe9dc')
 		},
-		quarry:{
+		quarry: {
 			color1: vec4("#cccccc")
 		},
-		bridge:{
-			offset:-22,
+		bridge: {
+			offset: -22,
 			color1: vec4('#e8cab0')
 		},
-		breakwater:{
-			offset:-20,
+		breakwater: {
+			offset: -20,
 			color1: watercolor
 		},
-		water:{
-			offset:0,
+		water: {
+			offset: 0,
 			color1: watercolor
 		},
-		building:{
+		building: {
 			color1: vec4("#dcd6d6")
 		},
-		apartments:{
+		apartments: {
 		},
-		garages:{
+		garages: {
 		},
-		storage_tank:{
+		storage_tank: {
 		},
-		pier:{
-			offset:-5,
+		pier: {
+			offset: -5,
 			color1: vec4('#f6f5f0')
 		},
-		place_of_worship:{
+		place_of_worship: {
 		},
-		water_works:{
+		water_works: {
 		},
-		cinema:{
+		cinema: {
 		},
-		taxiway:{
+		taxiway: {
 		},
-		fuel:{
+		fuel: {
 		},
-		footway:{
-			offset:-12,
+		footway: {
+			offset: -12,
 			color1: vec4('#eeeeee')
 		},
-		groyne:{
+		groyne: {
 		},
-		roller_coaster:{
+		roller_coaster: {
 		},
 		default:
 		{

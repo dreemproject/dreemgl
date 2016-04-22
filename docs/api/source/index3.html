@@ -153,8 +153,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <table class="CodeRay"><tr>
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
 </pre></td>
-  <td class="code"><pre>module.exports = require(<span class="string"><span class="delimiter">'</span><span class="content">./lib/axios</span><span class="delimiter">'</span></span>);</pre></td>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$iot$</span>, iot, <span class="predefined">$$</span>, controller){
+
+  <span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
+    <span class="keyword">return</span> [
+      iot({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">iot</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">46</span>,<span class="key">y</span>:<span class="integer">57</span>}}),
+                        controller({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">desktop</span><span class="delimiter">&quot;</span></span>,<span class="key">things</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.iot.things</span><span class="delimiter">'</span></span>),<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">522</span>,<span class="key">y</span>:<span class="integer">116</span>}})
+    ]
+  }
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -1089,26 +1089,37 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.glyphy_sdf_draw = function(){
 		var pos = mesh.tex
 
-		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
+		var m = length(vec2(length(dFdx(mesh.tex)), length(dFdy(mesh.tex))))*0.25
 
-		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
+		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.0012
 
 		dist -= stylepack.x / 300.
 		dist = dist / m * pixel_contrast
 
-		dist = moddist(pos, dist)
+		//dist = moddist(pos, dist)
+		// TODO(aki): verify that this is correct
+		if(dist >= 1. + stylepack.y){
+			discard
+		}	
+
+		var alpha = glyphy_antialias(-dist)
 
 		if(stylepack.z>0.){
-			dist = abs(dist) - (stylepack.y)
+			var dist2 = abs(dist) - (stylepack.y) + 4.
+
+			var alpha2 = glyphy_antialias(-dist2)
+
+			var rgb = mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2);
+
+			return vec4(rgb, alpha * stylefgcolor.a * view.opacity)
 		}
 
-		// TODO(aki): verify that this is correct
-		if(dist > 1. + stylepack.y){
-			discard
-		}
+		return vec4(stylefgcolor.rgb, alpha * stylefgcolor.a * view.opacity)
 
-		//return 'red'
-		return vec4(stylefgcolor.xyz, glyphy_antialias(-dist))
+		//if(mesh.gamma_adjust.r != 1.){
+		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
+		//}
+
 		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
 	}
 

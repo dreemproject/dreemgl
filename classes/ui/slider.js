@@ -17,11 +17,20 @@ define.class("$ui/view", function($ui$, view, icon) {
 		// The current value, between 0.0 ~ 1.0
 		value:Config({value:0.5, persist:true}),
 
+		// The size of each step between 0 ~ 1, e.g. 0.01 would create 100 discrete steps.  The value of 0 indicates a continuum.
+		step:Config({value:0}),
+
 		// Minimum value allowed, for restricting slider range
 		minvalue:Config({value:0.0}),
 
 		// Maximum value allowed, for restricting slider range
 		maxvalue:Config({value:1.0}),
+
+		// The interpolated range of the slider between min and max value
+		range:Config({value:vec2(0, 100)}),
+
+		// The current interpolated value, between range[0] and range[1]
+		rangevalue:Config({value:50, persist:true}),
 
 		// Horizontal or vertical arrangement
 		horizontal:true,
@@ -50,45 +59,161 @@ define.class("$ui/view", function($ui$, view, icon) {
 		return bgcolor;
 	};
 
-	this.pointermove = this.pointerend = function(ev) {
+	this.keydown = function(ev, v, o) {
+		var value;
+		if (ev.name === "rightarrow") {
+			if (this._step) {
+				value = this._value + this._step
+			} else {
+				if (this._horizontal) {
+					value = this._value + 1.0 / this._layout.width;
+				} else {
+					value = this._value + 1.0 / this._layout.height;
+				}
+			}
+		} else if (ev.name === "leftarrow") {
+			if (this._step) {
+				value = this._value - this._step
+			} else {
+				if (this._horizontal) {
+					value = this._value - 1.0 / this._layout.width;
+				} else {
+					value = this._value - 1.0 / this._layout.height;
+				}
+			}
+		}
+
+		if (typeof(value) !== "undefined") {
+			value = Math.max(this._minvalue, Math.min(this._maxvalue, value));
+
+			value = this.stepValue(value)
+
+			this.setHandle(value)
+
+			if (this._value !== value) {
+				this.value = value
+			}
+		}
+
+	}
+
+	this.stepValue = function(value) {
+		if (this._step) {
+			var size = Math.round(value / this._step)
+			value = size * this._step
+		}
+		return value;
+	}
+
+	this.pointerstart = this.pointermove = function(ev) {
+		this.focus = true;
 		var pos = this.globalToLocal(ev.position);
 		var value;
-		if (this.horizontal) {
-			value = pos.x / this.width;
+		if (this._horizontal) {
+			value = pos.x / this._layout.width;
 		} else {
-			value = pos.y / this.height;
+			value = pos.y / this._layout.height;
 		}
-		this.value = Math.max(this.minvalue, Math.min(this.maxvalue, value));
+
+		value = Math.max(this._minvalue, Math.min(this._maxvalue, value));
+
+		this.setHandle(value)
+
+		value = this.stepValue(value)
+
+		this.value = value
 	};
 
+	this.setHandle = function(value) {
+		if (this.handlechildren) {
+			for (var i=0;i<this.handlechildren.length;i++) {
+				var child = this.handlechildren[i];
+				if (this.horizontal) {
+					child.x = this._layout.width * value - child.width * 0.5;
+					child.y = this._layout.height * 0.5 - child.height * 0.5;
+				} else {
+					child.y = this._layout.height * value - child.height * 0.5;
+					child.x = this._layout.width * 0.5 - child.width * 0.5;
+				}
+			}
+		}
+	}
+
+	this.pointerend = function(ev) {
+		var pos = this.globalToLocal(ev.position);
+		var value;
+		if (this._horizontal) {
+			value = pos.x / this._layout.width;
+		} else {
+			value = pos.y / this._layout.height;
+		}
+
+		value = Math.max(this._minvalue, Math.min(this._maxvalue, value));
+
+		value = this.stepValue(value)
+
+		this.setHandle(value)
+
+		this.value = value
+	};
+
+	this.onrange = function(ev,range,o) {
+		if (range) {
+			var distance = range[1] - range[0];
+			var rangevalue = (distance * this._value) + range[0]
+			if (this._rangevalue != rangevalue) {
+				this.rangevalue = rangevalue
+			}
+		}
+	}
+
 	this.onvalue = function(ev,v,o) {
-		var value = Math.max(this.minvalue, Math.min(this.maxvalue, v));
+		var value = Math.max(this._minvalue, Math.min(this._maxvalue, v));
+
+		var range = this._range;
+		var distance = range[1] - range[0];
+		var rangevalue = (distance * value) + range[0]
+		if (this._rangevalue != rangevalue) {
+			this.rangevalue = rangevalue
+		}
+
 		if (value != this.value) {
 			this.value = value;
 		} else {
 			this.onsize(null,this.size,this);
+			this.setHandle(value)
 		}
 	};
+
+	this.onrangevalue = function(ev,v,o) {
+		var range = this._range;
+		var distance = range[1] - range[0];
+		value = (v - range[0]) / distance;
+		if (this._value !== value) {
+			this.value = value
+		}
+
+	}
 
 	this.render = function() {
 		var views = [];
 
-		var cchildren = this.constructor_children;
+		this.handlechildren = this.constructor_children;
 
-		if (!cchildren.length
-			&& ((this.horizontal && this.height <= this.minhandlethreshold)
-			|| (!this.horizontal && this.width <= this.minhandlethreshold))) {
-			cchildren = [this.handle()]
+		if (!this.handlechildren.length
+			&& ((this._horizontal && this.height <= this.minhandlethreshold)
+			|| (!this._horizontal && this.width <= this._minhandlethreshold))) {
+			this.handlechildren = [this.handle()]
 		}
 
-		for (var i=0;i<cchildren.length;i++) {
-			var child = cchildren[i];
+		for (var i=0;i<this.handlechildren.length;i++) {
+			var child = this.handlechildren[i];
 			child.position = "absolute";
 			if (this.horizontal) {
-				child.x = this.width * this.value - child.width * 0.5;
+				child.x = this.width * this._value - child.width * 0.5;
 				child.y = this.height * 0.5 - child.height * 0.5;
 			} else {
-				child.y = this.height * this.value - child.height * 0.5;
+				child.y = this.height * this._value - child.height * 0.5;
 				child.x = this.width * 0.5 - child.width * 0.5;
 			}
 			views.push(child);

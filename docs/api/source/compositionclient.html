@@ -391,6 +391,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n237" name="n237">237</a>
 <a href="#n238" name="n238">238</a>
 <a href="#n239" name="n239">239</a>
+<strong><a href="#n240" name="n240">240</a></strong>
+<a href="#n241" name="n241">241</a>
+<a href="#n242" name="n242">242</a>
+<a href="#n243" name="n243">243</a>
+<a href="#n244" name="n244">244</a>
+<a href="#n245" name="n245">245</a>
+<a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -408,14 +416,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> ASTScanner = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/astscanner</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> OneJSParser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
 
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent){
+        <span class="local-variable">this</span>.<span class="function">screenForClient</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> <span class="keyword">typeof</span> location !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; location.search &amp;&amp; location.search.slice(<span class="integer">1</span>)
+        };
+
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent, precached){
                 <span class="local-variable">this</span>.parent = parent
 
                 <span class="comment">// how come this one doesnt get patched up?</span>
                 baseclass.atConstructor.call(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.screenname = <span class="keyword">typeof</span> location !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; location.search &amp;&amp; location.search.slice(<span class="integer">1</span>)
-                <span class="local-variable">this</span>.cached_attributes = {}
+                <span class="local-variable">this</span>.cached_attributes = precached
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.cached_attributes) {
+                        <span class="local-variable">this</span>.cached_attributes = {}
+                }
                 <span class="comment">// web environment</span>
                 <span class="keyword">if</span>(previous){
                         <span class="local-variable">this</span>.session = previous.session
@@ -441,6 +455,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.bus.atMessage(attrmsg)
                 }
 
+                <span class="local-variable">this</span>.screenname = <span class="local-variable">this</span>.screenForClient()
                 <span class="local-variable">this</span>.screen = <span class="local-variable">this</span>.names[<span class="local-variable">this</span>.screenname]
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.screen){
                         <span class="comment">// find the first screen</span>
@@ -580,6 +595,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">if</span>(!obj) <span class="keyword">return</span> console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Invalid rpc attribute </span><span class="delimiter">&quot;</span></span>+ msg.rpcid)
                                         }
                                 }
+                                <span class="keyword">if</span>(!obj) <span class="keyword">return</span> console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Invalid rpc attribute </span><span class="delimiter">&quot;</span></span>+ msg.rpcid)
                                 <span class="keyword">var</span> value =  define.structFromJSON(msg.value)
                                 <span class="keyword">var</span> attrset = obj.atAttributeSet
                                 obj.atAttributeSet = <span class="predefined-constant">undefined</span>

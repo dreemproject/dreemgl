@@ -177,6 +177,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -186,17 +195,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
 
-        <span class="keyword">var</span> NodeWebSocket = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodewebsocket</span><span class="delimiter">'</span></span>)
-
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(args){
                 <span class="comment">// allright lets fire up </span>
                 define.<span class="predefined">$platform</span> = <span class="string"><span class="delimiter">'</span><span class="content">nodegl</span><span class="delimiter">'</span></span>
+
+                <span class="keyword">var</span> Image = require(<span class="string"><span class="delimiter">'</span><span class="content">node-webgl/lib/image</span><span class="delimiter">'</span></span>) 
+
+                define.<span class="function">loadImage</span> = <span class="keyword">function</span>(name){
+                        <span class="keyword">var</span> img = <span class="keyword">new</span> Image()
+                        img.src = name
+                        <span class="keyword">return</span> img
+
+                }
                 console.log(args[<span class="string"><span class="delimiter">'</span><span class="content">-nodegl</span><span class="delimiter">'</span></span>])
                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">Downloading nodegl</span><span class="delimiter">'</span></span>)
-                require.async(args[<span class="string"><span class="delimiter">'</span><span class="content">-nodegl</span><span class="delimiter">'</span></span>]).then(<span class="keyword">function</span>(composition){                
+                <span class="comment">// lets make the math library requireable</span>
+                
+                require.async(args[<span class="string"><span class="delimiter">'</span><span class="content">-nodegl</span><span class="delimiter">'</span></span>]).then(<span class="keyword">function</span>(composition){        
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">Booting nodegl</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.comp = <span class="keyword">new</span> composition(<span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, args[<span class="string"><span class="delimiter">'</span><span class="content">-nodegl</span><span class="delimiter">'</span></span>])
-
+                        
                 }).<span class="keyword">catch</span>(<span class="keyword">function</span>(error){
                         console.log(error.stack)
                 })

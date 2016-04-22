@@ -7,7 +7,7 @@
 
 define.class('$system/base/node', function(require, exports){
 	var RpcProxy = exports
-	
+
 	// disconnect all listeners to this rpc object
 	this.disconnectAll = function(){
 		for(var key in this._attributes){
@@ -33,18 +33,7 @@ define.class('$system/base/node', function(require, exports){
 
 	RpcProxy.defineMethod = function(obj, key){
 		obj[key] = function(){
-			var args = []
-			var msg = {type:'method', method:key, args:args}
-
-			for(var i = 0; i < arguments.length; i++){
-				var arg = arguments[i]
-				
-				if(typeof arg == 'function' || typeof arg == 'object' && !define.isSafeJSON(arg)){
-					throw new Error('RPC call ' + key + ' can only support JSON safe objects')
-				}
-
-				args.push(arg)
-			}
+			var msg = {type:'method', method:key, args:Array.prototype.slice.apply(arguments)}
 			return this.parent.methodRpc(this.name, msg)
 		}
 	}
@@ -85,7 +74,7 @@ define.class('$system/base/node', function(require, exports){
 					var props = proto.getAttributeConfig(key)
 					var value = object['_' + key]
 					if(!props) props = {}
-					if(typeof value === 'function' && value.is_wired || 
+					if(typeof value === 'function' && value.is_wired ||
 						typeof value === 'string' && value.charAt(0) == '$' && value.charAt(1) === '{' && value.charAt(value.length - 1) === '}'){
 						props.value = undefined
 					}
@@ -111,7 +100,7 @@ define.class('$system/base/node', function(require, exports){
 			// lets call set attribute
 			if(!(key in proxy)) return
 			var msg = {type:'attribute', attribute:key, value:value}
-			proxy.parent.attributeRpc(proxy.name, msg)
+			proxy.parent.attributeRpc(proxy.name, msg, true)
 		}
 
 		proxy.atAttributeSet = function(key, value){

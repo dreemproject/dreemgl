@@ -324,6 +324,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n170" name="n170">170</a></strong>
 <a href="#n171" name="n171">171</a>
 <a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -331,13 +334,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> () {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require) {
 
         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.bold = <span class="predefined-constant">true</span>
+
+        <span class="keyword">var</span> ubuntufont = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_medium_256_baked.glf</span><span class="delimiter">'</span></span>)
+        <span class="local-variable">this</span>.font = ubuntufont
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
@@ -405,7 +411,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 date = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>)
                                 date.setYear(firstYear)
                                 date.setMonth(firstMonth)
-                                xoffset = (date.getTime() - first) / ts / zoom * w
+                                xoffset = (date.getTime() - first) / ts / zoom * w + <span class="integer">1</span>
                                 x = <span class="integer">0</span>, i = -<span class="integer">1</span>
                                 <span class="keyword">while</span> (x &lt; w &amp;&amp; i &lt; <span class="integer">100</span>) {
                                         date = <span class="keyword">new</span> Date(first)
@@ -424,7 +430,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 date.setYear(firstYear)
                                 date.setMonth(firstMonth)
                                 date.setDate(firstDate)
-                                xoffset = (date.getTime() - first) / ts / zoom * w
+                                xoffset = (date.getTime() - first) / ts / zoom * w + <span class="integer">5</span>
                                 x = <span class="integer">0</span>, i = -<span class="integer">1</span>
                                 <span class="keyword">while</span> (x &lt; w &amp;&amp; i &lt; <span class="integer">100</span>) {
                                         date = <span class="keyword">new</span> Date(first)

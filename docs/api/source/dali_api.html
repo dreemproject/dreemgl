@@ -577,6 +577,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n423" name="n423">423</a>
 <a href="#n424" name="n424">424</a>
 <a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
+<a href="#n427" name="n427">427</a>
+<a href="#n428" name="n428">428</a>
+<a href="#n429" name="n429">429</a>
+<strong><a href="#n430" name="n430">430</a></strong>
+<a href="#n431" name="n431">431</a>
+<a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -598,17 +611,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * static dali object to access dali api.
          */</span>
         Object.defineProperty(DaliApi, <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>, {
+                <span class="comment">// Internally, the dalimodule is stored in global</span>
                 <span class="function">get</span>: <span class="keyword">function</span>() {
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.value) {
-                                console.trace(<span class="string"><span class="delimiter">'</span><span class="content">DaliApi: Dali has not been initialized</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">if</span> (!global.dalimodule) {
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">DaliApi: Dali has not been initialized</span><span class="delimiter">'</span></span>);
                         }
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.value;
+                        <span class="keyword">return</span> global.dalimodule;
                 }
                 ,<span class="function">set</span>: <span class="keyword">function</span>(v) {
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.value) {
+                        <span class="keyword">if</span> (global.dalimodule) {
                                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">DaliApi: Dali has already been initialized</span><span class="delimiter">'</span></span>);
                         }
-                        <span class="local-variable">this</span>.value = v;
+                        global.dalimodule = v;
                 }
         });
 
@@ -616,12 +630,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Set emitcode to true to emit dali code to the console. These lines</span>
         <span class="comment">// are preceeded with DALICODE to make it easier to extract into a file.</span>
         <span class="comment">// The -dumpprog command-line option codes this value</span>
-        DaliApi.emitcode = <span class="predefined-constant">false</span>;
+        DaliApi.emitcode = global.emitcode;
 
         <span class="comment">// Create all actors on a layer to ignore depth test.</span>
         <span class="comment">// (From Nick: When using this mode any ordering would be with respect to</span>
         <span class="comment">// depthIndex property of Renderers.)</span>
-        DaliApi.rootlayer = <span class="predefined-constant">undefined</span>;
+        <span class="comment">// Changed to global.rootlayer</span>
+        <span class="comment">// DaliApi.rootlayer = undefined;</span>
 
         <span class="comment">// The current layer to use when adding actors. Set by setLayer(). If</span>
         <span class="comment">// currentlayer is never set, the root layer (DaliApi.rootlayer) is used.</span>
@@ -632,7 +647,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">//     if none was specified.</span>
         <span class="comment">//   - Repeat the above process. You can reset the current layer by</span>
         <span class="comment">//     passing null to DaliApi.setLayer</span>
-        DaliApi.currentlayer = <span class="predefined-constant">undefined</span>;
+        <span class="comment">// Changed to global.currentlayer</span>
+        <span class="comment">// DaliApi.currentlayer = undefined;</span>
 
         <span class="comment">/**
          * @method setLayer
@@ -644,9 +660,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          */</span>
         DaliApi.<span class="function">setLayer</span> = <span class="keyword">function</span>(layer) {
                 <span class="keyword">if</span> (!layer)
-                        layer = DaliApi.rootlayer;
+                        layer = global.rootlayer;
 
-                DaliApi.currentlayer = layer;
+                global.currentlayer = layer;
         }
 
         <span class="comment">/**
@@ -660,7 +676,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          */</span>
         DaliApi.<span class="function">addActor</span> = <span class="keyword">function</span>(actor, layer) {
                 <span class="keyword">if</span> (!layer)
-                        layer = DaliApi.currentlayer;
+                        layer = global.currentlayer;
 
                 layer.add(actor);
         }
@@ -688,7 +704,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
                 DaliApi.dumpprog = settings.dumpprog;
 
-                DaliApi.emitcode = DaliApi.dumpprog;
+                <span class="keyword">if</span> (DaliApi.dumpprog)
+                        global.emitcode = DaliApi.dumpprog;
+                DaliApi.emitcode = global.emitcode;
 
                 <span class="keyword">var</span> window= {
                         <span class="key">x</span>:<span class="integer">0</span>,
@@ -719,17 +737,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">try</span> {
-            <span class="comment">// Load the library and make available as DaliApi.dali</span>
+      <span class="comment">// Load the library and make available as DaliApi.dali</span>
                         <span class="comment">// console.log('LOADING', dalilib);</span>
-                        DaliApi.dali = define.require(DaliApi.dalilib)(options);
+                        <span class="keyword">var</span> dalimodule = define.require(DaliApi.dalilib)(options);
+                        DaliApi.dali = dalimodule;
 
                         <span class="comment">// Create a top-level 2D layer to the stage.</span>
                         <span class="keyword">var</span> dali = DaliApi.dali;
-                        DaliApi.rootlayer = DaliApi.currentlayer = <span class="keyword">new</span> DaliLayer(<span class="predefined-constant">null</span>, DaliApi.width, DaliApi.height);
-                        dali.stage.add(DaliApi.rootlayer.dalilayer);
+                        global.rootlayer = global.currentlayer = <span class="keyword">new</span> DaliLayer(<span class="predefined-constant">null</span>, DaliApi.width, DaliApi.height);
+                        dali.stage.add(global.rootlayer.dalilayer);
 
                         <span class="keyword">if</span> (DaliApi.emitcode) {
-                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: dali.stage.add(</span><span class="delimiter">'</span></span> + DaliApi.rootlayer.name() + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: dali.stage.add(</span><span class="delimiter">'</span></span> + global.rootlayer.name() + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
                         }
 
                 }
@@ -820,12 +839,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * @param {Object} Format hash, suitable for dali.PropertyBuffer.
          * The hash looks like {name : type}. See dali docs for dali.PropertyBuffer.
          * @param {Number} nrecs The number of records, in the buffer.
+         * @param {Boolean} cache Set to true to re-use dali.PropertyBuffers.
          * @return {Object} [dali.PropertyBuffer, id]. This is the same value stored
          * in the cache DaliApi.BufferCache.
          */</span>
         DaliApi.BufferId = <span class="integer">0</span>
         DaliApi.BufferCache = {}; <span class="comment">// key: hash  value: [Dali.PropertyBuffer, id]</span>
-        DaliApi.<span class="function">daliBuffer</span> = <span class="keyword">function</span>(vals, format, nrecs) {
+        DaliApi.<span class="function">daliBuffer</span> = <span class="keyword">function</span>(vals, format, nrecs, cache) {
                 <span class="comment">//console.log('daliBuffer format', format, 'nrecs', nrecs, 'vals', vals.length);</span>
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
@@ -835,9 +855,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// console.trace('daliBuffer with', nrecs, 'items', 'length = ', data.length);</span>
 
                 <span class="comment">// Reuse an existing propertybuffer</span>
-                <span class="keyword">var</span> hash = DaliApi.getHash(vals);
-                <span class="keyword">if</span> (DaliApi.BufferCache[hash]) {
-                        <span class="keyword">return</span> DaliApi.BufferCache[hash];
+                <span class="keyword">if</span> (cache) {
+                        <span class="keyword">var</span> hash = DaliApi.getHash(vals);
+                        <span class="keyword">if</span> (DaliApi.BufferCache[hash]) {
+                                <span class="keyword">return</span> DaliApi.BufferCache[hash];
+                        }
                 }
 
                 <span class="comment">// Create the dali.PropertyBuffer</span>
@@ -854,7 +876,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 DaliApi.writeDaliBuffer(buffer, DaliApi.BufferId, data);
 
                 <span class="keyword">var</span> ret = [buffer, DaliApi.BufferId];
-                DaliApi.BufferCache[hash] = ret;
+                <span class="keyword">if</span> (cache) {
+                        DaliApi.BufferCache[hash] = ret;
+                }
+
                 <span class="keyword">return</span> ret;
         }
 
@@ -873,6 +898,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> dataArray = <span class="keyword">new</span> Float32Array(data.length);
                 dataArray.set(data);
                 buffer.setData(dataArray);
+                dataArray = <span class="predefined-constant">null</span>;
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var data</span><span class="delimiter">'</span></span> + bufferid + <span class="string"><span class="delimiter">'</span><span class="content"> = </span><span class="delimiter">'</span></span> + JSON.stringify(data));

@@ -23,7 +23,19 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		segments:   Config({type: vec3, value: vec3()}),
 		lockscroll: Config({type: Boolean, value: false}),
 		autoexpand: Config({type: Boolean, value: false}),
-		change:     Config({type: Event})
+		change: Config({type: Event})
+	}
+
+	this.emitChange = function () {
+		this.emitUpward('change', {
+			data: this.data,
+			start: this.start,
+			end: this.end,
+			rangeStart: this.getRangeStart(),
+			rangeEnd: this.getRangeEnd(),
+			zoom: this.zoom,
+			scroll: this.scroll
+		})
 	}
 
 	this.onzoom = function () {
@@ -35,29 +47,21 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.dropEvent = function (eventdata, pointer) {
 		var pos = this.globalToLocal(pointer.position).x / this.layout.width
 		var stardate = this.getRangeStart() + this.getRange() * pos
-		// TODO(aki): implement zoom dependent snapping
-		stardate = floor(stardate / 900000) * 900000 // snap to 15 min
+		var snap = eventdata.snap || 900000 // snap to 15 min by default
+		stardate = floor(stardate / snap) * snap
 		var enddate = stardate + (eventdata.duration || 10800000) // 3 hrs default
-		this.makeEvent({
-			title: eventdata.title,
-			date: stardate,
-			enddate: enddate,
-			metadata: {
-				color: eventdata.color,
-				location: {
-					title: eventdata.title,
-					lattitude: eventdata.lattitude,
-					longitude: eventdata.longitude
-				}
-			}
-		})
+
+		eventdata.date = stardate
+		eventdata.enddate = enddate
+
+		this.makeEvent(eventdata)
 	}
 
 	this.makeEvent = function (eventdata) {
 		eventdata.id = eventdata.id || this.data.length + 1
 		this.data.push(eventdata)
 		this.data = this.data
-		this.emitUpward('change', this.data)
+		this.emitChange()
 	}
 
 	this.updateEvent = function (id, eventdata) {
@@ -67,7 +71,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 					this.data[i][key] = eventdata[key]
 				}
 				this.data = this.data
-				this.emitUpward('change', this.data)
+				this.emitChange()
 				break
 			}
 		}
@@ -78,7 +82,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			if (this.data[i].id === id) {
 				this.data.splice(i, 1)
 				this.data = this.data
-				this.emitUpward('change', this.data)
+				this.emitChange()
 				break
 			}
 		}
@@ -112,23 +116,28 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			var scrollend = new Date(this.getRangeEnd() + this.getRange())
 			var expand = false
 
-			if (scrollend > endtime) {
-				endtime = scrollend
+			if (scrollend.getTime() > endtime + 1000) {
+				endtime = scrollend.getTime()
 				expand = true
 			}
-			if (scrollstart < starttime) {
-				starttime = scrollstart
+			if (scrollstart.getTime() < starttime - 1000) {
+				starttime = scrollstart.getTime()
 				expand = true
 			}
 			if (expand) {
-				window.clearTimeout(this.expandTimeout)
-				this.expandTimeout = setTimeout(function() {
+				this.clearTimeout(this.expandTimeout)
+				this.expandTimeout = this.setTimeout(function() {
 					this.start = new Date(starttime).toString()
 					this.end = new Date(endtime).toString()
 					this.scroll = vec2(this.scroll[0] + (oldstarttime - this.getStart()) / this.zoom / this.TIME_SCALE, 0)
-				}.bind(this), 100)
+				}.bind(this), 50)
 			}
 		}
+
+		this.clearTimeout(this.emitChangeTimeout)
+		this.emitChangeTimeout = this.setTimeout(function() {
+			this.emitChange()
+		}.bind(this), 100)
 	}
 
 	this.atDraw = function () {
