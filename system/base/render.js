@@ -37,7 +37,8 @@ define.class(function(exports){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
 			if(process_list.indexOf(this) === -1){
-				if (value !== event.old || typeof value === 'object'){
+				var oldval = (event && event.old) || this[key];
+				if (value !== oldval || typeof value === 'object'){
 					// only render if the value changed and isn't an object
 					process_list.push(key, this)
 				} else {
