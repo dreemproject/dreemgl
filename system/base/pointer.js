@@ -328,11 +328,19 @@ define.class('$system/base/node', function(){
 			dist = vec2.distance(pointerlist[0].position, this._wheel[0].position)
 		}
 		if (dist > 0) {
-			this.device.pickScreen(pointerlist[0].position, function(view){
-				var pointer = new Pointer(pointerlist[0], 0, view)
+			if (this._start[0]) {
+				// Prevent continuous picking when dragging.
+				// TODO(aki): optimize the mousewheel picking below.
+				var pointer = new Pointer(pointerlist[0], 0, this._start[0].view)
 				pointer.value = pointer.wheel
 				this._wheel.setPointer(pointer)
-			}.bind(this), true)
+			} else {
+				this.device.pickScreen(pointerlist[0].position, function(view){
+					var pointer = new Pointer(pointerlist[0], 0, view)
+					pointer.value = pointer.wheel
+					this._wheel.setPointer(pointer)
+				}.bind(this), true)
+			}
 		} else {
 			var pointer = new Pointer(pointerlist[0], 0, this._wheel[0].view)
 			pointer.value = pointer.wheel
