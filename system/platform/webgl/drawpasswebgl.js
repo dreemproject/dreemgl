@@ -467,16 +467,7 @@ define.class(function(require, baseclass){
 				shader.framebuffer = this.color_buffer
 				for (var j = 0; j < 10; j++) {
 					// add pass0..9 references to corresponding buffers
-<<<<<<< HEAD
-					if (view.passesdoublebuffer) {
-						if (odd) {
-							readbuffer = 'framebuffera' + j
-						}
-					}
-					var p = shader['pass' + j] = this[readbuffer]
-=======
 					shader['pass' + j] = this[readbuffername + j]
->>>>>>> origin/dev
 				}
 				// set the texture to use its own framebuffer
 				shader.texture = this[writebuffername + i]
