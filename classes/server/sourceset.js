@@ -369,7 +369,7 @@ define.class(function(require, $server$, dataset){
 			if (stype === "Object") {
 				props.push(this.generateWire(tinput, "this.rpc." + sblock + '.' + soutput))
 			} else {
-				props.push(this.generateWire(tinput, '{\\"' + sblock + "." + soutput + '\\":this.rpc.' + sblock + '.' + soutput + "}"))
+				props.push(this.generateWire(tinput, "{'" + sblock + "." + soutput + "':this.rpc." + sblock + '.' + soutput + "}"))
 			}
 			return true;
 
