@@ -10,7 +10,7 @@ define.class(function(require, $server$, composition, $ui$, screen, view, $widge
 		screen({name:'default', clearcolor:vec4('black')},
 			jseditor({
 				atDraw:function(){
-					this.zoom = sin(Date.now()/1000.)*3+4.
+					//this.zoom = sin(Date.now()/1000.)*3+4.
 					return true
 				},
 				flex:1, overflow:'scroll',fontsize:15,

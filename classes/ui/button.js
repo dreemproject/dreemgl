@@ -68,6 +68,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		bordercolor: vec4("#636363"),
 		pickalpha:-1,
 		iconmargin:4,
+		hover:0,
 
 		alignitems: "center",
 		justifycontent: "center"
@@ -120,6 +121,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.col1 = this.hovercolor1;
 		this.col2 = this.hovercolor2;
 		this.shadowopacity = 1.0;
+		this.hover = 1.0
 		this.setTextColor(this.textactivecolor)
 	}
 
@@ -127,6 +129,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 	this.statenormal = function(first) {
 		this.col1 = Mark(this.buttoncolor1, first);
 		this.col2 = Mark(this.buttoncolor2, first);
+		this.hover = 0.0
 		this.shadowopacity = 0.0
 		this.setTextColor(this.textcolor)
 	}
