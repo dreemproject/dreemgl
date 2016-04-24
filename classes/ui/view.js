@@ -1066,7 +1066,10 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
-		if (this.__isinvisible()) return
+		if (this.__isinvisible()) {
+			// console.log('skip updateMatrices')
+			return
+		}
 		// allow pre-matrix gen hooking
 		if (this.atMatrix) this.atMatrix()
 
@@ -1237,6 +1240,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.rematrix = function(){
+		if (this.matrix_dirty) return
 		this.matrix_dirty = true
 		if (this.parent_viewport){
 			this.parent_viewport.matrix_dirty = true
@@ -1245,7 +1249,10 @@ define.class('$system/base/node', function(require){
 	}
 
 	// internal, moving a position in absolute should only trigger a matrix reload
-	this.pos = function(){
+	this.pos = function(pos){
+		if (this._layout.left === this._pos[0] && this._layout.top === this._pos[1]) {
+			return
+		}
 		if (this._position === 'absolute'){
 			this._layout.left = this._pos[0]
 			this._layout.top = this._pos[1]
@@ -1287,12 +1294,11 @@ define.class('$system/base/node', function(require){
 
 	// internal, called by the render engine
 	this.doLayout = function(){
-		if (this.__isinvisible()) return
+		var layout = this._layout
+		var size = this._size
 		if (this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
 
-			var layout = this._layout
 			var flex = this._flex
-			var size = this._size
 
 			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * this._percentsize[0]
 			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * this._percentsize[1]
@@ -1317,15 +1323,10 @@ define.class('$system/base/node', function(require){
 
 			emitPostLayout(copynodes)
 		} else {
-			var layout = this._layout
-
-			//this._size = vec2(presizex, presizey)
-			var size = this._size
 			var pos = this._pos
 
 			var presizex = isNaN(this._percentsize[0])?size[0]: this.parent._layout.width * 0.01 * this._percentsize[0]
 			var presizey = isNaN(this._percentsize[1])?size[1]: this.parent._layout.height * 0.01 * this._percentsize[1]
-			var presizez = isNaN(this._percentsize[2])?size[2]: this.parent.depth * 0.01 * this._percentsize[2]
 
 			var preposx = isNaN(this._percentpos[0])?pos[0]: this.parent._layout.width * 0.01 * this._percentpos[0]
 			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1]
@@ -1344,9 +1345,6 @@ define.class('$system/base/node', function(require){
 			if (isNaN(presizey)){
 				this._layout.height = preheight
 			}
-
-			this._size = size
-			this._pos = pos
 
 			emitPostLayout(copynodes)
 		}
