@@ -1185,7 +1185,6 @@ define.class('$system/base/node', function(require){
 	// emit post layout
 	function emitPostLayout(node, nochild){
 		var ref = node.ref
-		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout
 
 		if (!nochild){
@@ -1197,8 +1196,8 @@ define.class('$system/base/node', function(require){
 			ref.layout_dirty = false
 		}
 
-		var oldlayout = ref.oldlayout || {}
-		if ((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+		var oldlayout = ref.oldlayout
+		if ((ref._listen_layout || ref.onlayout) && ref.oldlayout && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
@@ -1236,7 +1235,7 @@ define.class('$system/base/node', function(require){
 		if (this.layout_dirty) return
 		this.layout_dirty = true
 		this.redraw()
-		if (this.parent_viewport) this.parent_viewport.relayoutRecur()
+		if (this.parent_viewport) this.parent_viewport.relayoutRecur(this)
 	}
 
 	this.rematrix = function(){
@@ -1311,6 +1310,7 @@ define.class('$system/base/node', function(require){
 			this._size = vec2(presizex, presizey)
 			this._flexwrap = false
 
+			// implemented by text and label
 			if (this.measure) this.measure() // otherwise it doesnt get called
 
 			var copynodes = FlexLayout.fillNodes(this)
