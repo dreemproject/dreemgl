@@ -7,7 +7,7 @@
 "use strict"
 
 define.class('$ui/view', function(require){
-// Example of how to use multiple render passes
+// Uses multiple render passes to tint the color of the view's contents
 
 	this.attributes = {
 		tintcolor: Config({type: vec4, value: vec4(1,1,1,1), meta:"color"})
@@ -17,6 +17,19 @@ define.class('$ui/view', function(require){
 	this.passes = 2
 	// Required for multipass to work
 	this.overflow = 'hidden'
+
+	var tintview = this.constructor;
+	this.constructor.examples = {
+		Usage: function () {
+			return [
+				tintview({
+					tintcolor:"blue",
+					bgimagemode:"resize",
+					bgimage:"$resources/textures/portrait.jpg"
+				})
+			]
+		}
+	}
 
 	// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1
 	// must define pass0, 2 must define pass0 and pass1...

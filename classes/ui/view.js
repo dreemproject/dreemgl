@@ -1477,8 +1477,23 @@ define.class('$system/base/node', function(require){
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
 		this.color = function(){
-			var img = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+
 			var bg = view.bgcolor
+			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
+				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0)
+			{
+				//outside range of image so just return bgcolor
+				return vec4(
+					bg.r * view.colorfilter[0],
+					bg.g * view.colorfilter[1],
+					bg.b * view.colorfilter[2],
+					bg.a * view.colorfilter[3] * view.opacity
+				);
+			}
+
+			var img = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
 
 			// premultiply alpha
 			img.rgb = (img.rgb * img.a) + (bg.rgb * (1 - img.a));

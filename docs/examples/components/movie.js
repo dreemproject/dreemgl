@@ -9,8 +9,9 @@ define.class(function (require, $ui$, view, label) {
     this.flexdirection = 'column';
     this.padding = 10;
     this.margin = 10;
-    this.borderwidth = 2;
-    this.bordercolor = vec4(0.3,0.3,0.3,0.3);
+	this.width = 100
+	this.height = 200
+	this.bgimagemode = "aspect-fit"
 
     this.attributes = {
         Title:  Config({type: String, value: ""}),
