@@ -448,7 +448,7 @@ define.class('$system/base/shader', function(require, exports){
 				}
 				else{
 					ATTRLOC_ATTRIBPTR =
-						'if(buf.slots>4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
+						'gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
 				}
 				out += body
 					.replace(/ATTRLOC_BUF/, ATTRLOC_BUF)
