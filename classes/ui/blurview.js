@@ -92,7 +92,6 @@ define.class('$ui/view', function(require, $ui$, view){
 
 
 	var blurview = this.constructor;
-	// Basic usage of the button.
 	this.constructor.examples = {
 		Usage: function () {
 			return [

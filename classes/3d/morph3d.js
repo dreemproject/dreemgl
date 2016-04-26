@@ -82,4 +82,31 @@ define.class(function(require, $ui$, view){
 		this.children[1].visible = false
 		return this.children
 	}
+
+	var morph3d = this.constructor;
+	var circle = require("$3d/circle")
+	var rect = require("$3d/rect")
+	this.constructor.examples = {
+		Usage: function () {
+			return [
+				morph3d({
+					bgcolor: vec4('blue'),
+					top:100,
+					left:100,
+					oninit: function () {
+						this.morphweight = Animate({
+							repeat: Infinity,
+							0: {value: 1, motion: "sine"},
+							1: {value: 0, motion: "sine"},
+							2: {value: 1, motion: "sine"}
+						})
+					}
+				},
+					circle({radius: 100, detail: 64}),
+					rect({width: 100, height: 100, radius: 4, detail: 64})
+				)
+			]
+		}
+	}
+
 })

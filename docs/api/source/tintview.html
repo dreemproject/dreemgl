@@ -188,6 +188,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
 <a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -198,7 +211,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
-<span class="comment">// Example of how to use multiple render passes</span>
+<span class="comment">// Uses multiple render passes to tint the color of the view's contents</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">tintcolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>})
@@ -208,6 +221,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.passes = <span class="integer">2</span>
         <span class="comment">// Required for multipass to work</span>
         <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>
+
+        <span class="keyword">var</span> tintview = <span class="local-variable">this</span>.constructor;
+        <span class="local-variable">this</span>.constructor.examples = {
+                <span class="function">Usage</span>: <span class="keyword">function</span> () {
+                        <span class="keyword">return</span> [
+                                tintview({
+                                        <span class="key">tintcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgimagemode</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">resize</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgimage</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/portrait.jpg</span><span class="delimiter">&quot;</span></span>
+                                })
+                        ]
+                }
+        }
 
         <span class="comment">// Each pass _must_ be named pass0..9, define based on this.passes, e.g. this.passes = 1</span>
         <span class="comment">// must define pass0, 2 must define pass0 and pass1...</span>
