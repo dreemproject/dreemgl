@@ -29,7 +29,7 @@ define(function () {
 				bottom:0,
 			}
 		}
-		if (! node.visible) {
+		if (! node._visible) {
 			// console.log('bailing early')
 			return newnode
 		}
