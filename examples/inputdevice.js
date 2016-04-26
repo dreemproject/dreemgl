@@ -140,7 +140,8 @@ define.class('$server/composition', function($ui$, screen, view) {
 						position: 'absolute',
 						top: pos[1] - 15,
 						left: pos[0] - 15,
-						borderradius: 15
+						drawtarget: 'color',
+						borderradius: 15,
 					}))
 				}
 				return markers
