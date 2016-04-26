@@ -1,12 +1,15 @@
 define.class(function(require, exports){
 
 	var Animation = require('$base/animation')
+	this.Shader = require('$base/shader')
+	this.Texture = require('$base/texture')
 
 	this.initCanvas = function(view){
 		this.view = view
 		this.scope = view
 		this.matrix = mat4.identity()
 		this.cmds = []
+		this.shadernames = []
 		this.stackAlign = []
 		this.trackAlign = []
 		this.matrixStack = [this.matrix]
@@ -18,6 +21,7 @@ define.class(function(require, exports){
 		this.cmds.length = 0
 		this.stackAlign.len = 0
 		this.trackAlign.length = 0
+		this.shadernames.length = 0
 		this.matrixStackLen = 0
 		var o = this.matrix
 		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = 0,
@@ -173,9 +177,9 @@ define.class(function(require, exports){
 			str = str.slice(0,id)
 		}
 		var factor = parseFloat(str)/100
-
 		if(isNaN(factor)){
 			return function(align){
+		
 				var w = align.left + align.width - align.x - align.m1 + delta//- align.p3 - align.m3//+ align.p1  ///- align.m3 //- align.p1// - align.m3 //+align.p1
 				if(w<=0) w = align.left + align.width - align.m1 + delta
 				return w
@@ -183,7 +187,7 @@ define.class(function(require, exports){
 		}
 		else{
 			return function(align){
-				return floor((align.width) * factor)- align.m1 - align.m3 + delta
+				return ((align.width) * factor)- align.m1 - align.m3 + delta
 			}
 		}
 	}
@@ -204,7 +208,7 @@ define.class(function(require, exports){
 		} 
 		else{
 			return function(align){
-				return floor((align.height) * factor) + delta - align.m0 - align.m2
+				return ((align.height) * factor) + delta - align.m0 - align.m2
 			}
 		}
 	}
@@ -343,17 +347,28 @@ define.class(function(require, exports){
 			//if(isNaN(oa.inx)) this.w -= a.x
 			//else this.w -= oa.inx
 		}
-		//else this.w = oa.inw
+		else{
+			this.w = oa.inw
+			if(typeof this.w === 'function'){
+				this.w = this.w(oa, this)
+			}
+		}
 
 		if(oa.computeh){
 			this.h = (oa.boundy - oa.ystart + oa.p2 + oa.p0)// - oa.m2)
 			//if(isNaN(oa.iny)) this.h -= a.y
 			//else this.h -= oa.iny
 		}
-		//else this.h = oa.inh
+		else {
+			this.h = oa.inh
+			if(typeof this.h === 'function'){
+				this.h = this.h(oa, this)
+			}
+		}
 
 		this.x = oa.inx
 		this.y = oa.iny
+
 	}
 
 	float.WRAP = function(align, canvas, oldalign){
@@ -410,8 +425,8 @@ define.class(function(require, exports){
 		else{
 			a.m0 = a.m1 = a.m2 = a.m3 = 0
 		}
-
 		var w = this.w
+
 		if(typeof w === "function"){
 			w = w(a, this)
 			this.w = w
@@ -482,6 +497,7 @@ define.class(function(require, exports){
 
 	this.clear = function(r, g, b ,a){
 		var color = r
+		if(typeof r === 'string') color = vec4(r)
 		if(r !== undefined && g !== undefined) color = [r,g,b,a]
 		this.cmds.push('clear', color !== undefined?color:this.scope.clearcolor)
 	}
@@ -520,7 +536,7 @@ define.class(function(require, exports){
 			}
 		}
 		shader.view = this.view
-		shader._canvas = buffer
+		shader._canvasprops = buffer
 		this.cmds.push(
 			'drawShader',
 			shader
@@ -711,10 +727,33 @@ define.class(function(require, exports){
 
 		var verbs = cls._canvasverbs
 		var defaults = cls._defaults
-		var struct = cls._canvas && cls._canvas.struct
+		var struct = cls._canvasprops && cls._canvasprops.struct
 		var slots = struct && struct.slots
 		var def = struct && struct.def
 		var cap = name.charAt(0).toUpperCase() + name.slice(1)		
+
+		// lets overload our canvas attributes
+		if(root.canvasprops){
+			cls.canvasprops = root.canvasprops
+			function defStampProp(obj, key){
+				Object.defineProperty(obj, key, {
+					configurable:true,
+					get:function(value){
+
+					},
+					set:function(value){
+						// lets forward this key on all our stamps key+caps
+						var sn = this.canvas.shadernames
+						for(var i = 0; i < sn.length; i++){
+							this[key+sn[i]] = value
+						}
+					}
+				})
+			}
+			for(var key in root.canvasprops){
+				defStampProp(root, key)
+			}
+		}
 
 		canvas['array' + cap] = struct
 		canvas['class' + cap] = cls
@@ -736,9 +775,11 @@ define.class(function(require, exports){
 				var indexstart = 'indexstart' + cap
 				var indexend = 'indexend' + cap
 				var buffer = 'buffer' + cap
+				var name = key + cap
 
 				function setValue(stamp, value, start){
 					var buf = stamp.canvas[buffer]
+					if(!buf) return
 					var isv = 0
 
 					for(var i = stamp[indexstart], l = stamp[indexend]; i < l; i++){
@@ -754,12 +795,17 @@ define.class(function(require, exports){
 						}
 					}
 					buf.clean = false
+					// lets store the value on the stamp for re-use...
+					
+					stamp['_' + key + cap] = value
 					stamp.canvas.view.redraw()
 				}
 
 				function getValue(stamp){
 					var o = stamp[indexstart] * slots
 					var buf = stamp.canvas[buffer]
+					if(!buf) return vec4(1,0,1,1)
+
 					if(type.slots>1){
 						var ret = type()
 						for(var i = 0; i < type.slots; i++){
@@ -773,11 +819,13 @@ define.class(function(require, exports){
 				}
 
 				function animStep(value){
-					setValue(this.stamp, value, this.add && this.start_values)
+					// we have to reference stamp by ID
+					var stamp = this.view.draw_objects[this.pickdraw]
+					setValue(stamp, value, this.add && this.start_values)
 				}
 
 				// lets first just get this
-				var name = key + cap
+				
 				if(!(name in cls)){
 					Object.defineProperty(obj, name,{
 						get:function(){
@@ -786,6 +834,7 @@ define.class(function(require, exports){
 						set:function(value){
 							// animation!
 							if(value instanceof Animate){
+
 								// lets hook an animation on view
 								var view = this.canvas.view
 
@@ -796,11 +845,12 @@ define.class(function(require, exports){
 
 								if(value.add) anim.first_value = type(0)
 								else anim.first_value = this[name]
-								
+
 								anim.atStep = animStep
 								anim.track = value.track
 								anim.view = view
-								anim.stamp = this
+								anim.pickdraw = this.pickdraw
+
 								var config = value.track
 								if(config.motion !== undefined) anim.motion = config.motion
 								if(config.delay !== undefined) anim.delay = config.delay
@@ -844,10 +894,10 @@ define.class(function(require, exports){
 			if(typeof fn === 'function'){
 				var args = define.getFunctionArgs(fn)
 				var fnstr = fn.toString()	
-				fnstr = fnstr.replace(/(\t*)this\.DOSTAMP\s*\(\s*\)/,function(m, ind){
+				fnstr = fnstr.replace(/(\t*)this\.DOSTAMP\s*\(([^\)]*)\)/,function(m, ind, args){
 					return '\tthis.GETSTAMP()\n'+
 					       '\tthis.ARGSTO(stamp)\n'+
-			               '\tstamp.draw()\n'
+			               '\tstamp.draw('+args+')\n'
 				})
 
 				fnstr = fnstr.replace(/(\t*)this\.([\_]+[\_A-Z0-9]+)\s*\(\s*\)/,function(m,ind,name){
@@ -906,7 +956,8 @@ define.class(function(require, exports){
 						ind+'if(w === undefined) w = this.class'+cap+'.w\n'+
 						ind+'if(h === undefined) h = this.class'+cap+'.h\n'
 						ind+'if(x === float) x = undefined\n'+
-						ind+'if(y === float) y = undefined\n'
+						ind+'if(y === float) y = undefined\n'+
+						ind+'if(typeof h === "function") h = h(this, this.align)\n'
 
 					return write
 					/*
@@ -933,8 +984,6 @@ define.class(function(require, exports){
 						ind+'}\n'+
 						ind+'buffer.clean = false\n'+
 						// store the index how do we store the length?
-						ind+'if(!this.scope.indexstart'+cap+')this.scope.indexstart'+cap+' = buffer.length\n'+
-						ind+'this.scope.indexend'+cap+' = buffer.length + '+(needed || 1)+'\n'+
 						ind+'buffer.instancedivisor = this.instancedivisor'+cap+'|| 1\n'+
 						ind+'var _needed = '+(needed?(needed+' || 1'):'1')+'\n'+
 						ind+'if(buffer.length + _needed >= buffer.allocated){\n'+
@@ -948,8 +997,11 @@ define.class(function(require, exports){
 						ind+'\tbuffer.frameid = this.frameid\n'+
 						ind+'\tvar _shader = Object.create(this.class'+cap+')\n'+
 						ind+'\tthis.shaderNAME = _shader\n'+
+						ind+'\tthis.shadernames.push("NAME")\n'+
 						ind+'\tthis.drawShaderCmd(_shader, buffer)\n'+
-						ind+'}\n'
+						ind+'}\n'+
+						ind+'if(!this.scope.indexstart'+cap+')this.scope.indexstart'+cap+' = buffer.length\n'+
+						ind+'this.scope.indexend'+cap+' = buffer.length + '+(needed || 1)+'\n'
 						//ind+'var _array = buffer.array, _off = _len*'+slots+', _obj\n'
 					return write	
 				})
@@ -988,14 +1040,15 @@ define.class(function(require, exports){
 					for(var key in def) if(typeof def[key] === 'function'){
 						// lets output to the array
 						// and copy it from the canvas
-						var dft = '(this.scope._'+key+' || 0)'
-						if(key in defaults) dft = defaults[key]
+						//var dft = '(this.scope._'+key+' || 0)'
+						//if(key in defaults) dft = defaults[key]
 
 						var itemslots = def[key].slots
-						var value = 'this.'+key+'!==undefined?this.'+key+':this.class'+cap+'.'+key+'!==undefined?this.class'+cap+'.'+key+':'+dft
+						var value = 'this.scope._'+key+cap+'!==undefined?this.scope._'+key+cap+':this.'+key+'!==undefined?this.'+key+':this.class'+cap+'.'+key+'!==undefined?this.class'+cap+'.'+key+':1'//+':'+dft
 						if(key in argmap) value = argmap[key]
 						if(itemslots>1){
 							write += ind+'_obj = '+value+'\n'
+
 							write += ind+'if(_obj !== undefined){\n'
 							if(itemslots === 4)
 								write += ind+'if(typeof _obj === "string") _obj = this.parseColor(_obj, true)\n'

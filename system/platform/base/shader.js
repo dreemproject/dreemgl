@@ -842,20 +842,20 @@ define.class(function(require, exports){
 		}
 	})
 
-	Object.defineProperty(this, 'canvas',{
+	Object.defineProperty(this, 'canvasprops',{
 		get:function(){
-			return this._canvas
+			return this._canvasprops
 		},
 		set:function(props){
 			// lets load up the previous values and make a new struct
 			var struct = {}
-			if(this._canvas){
-				var def = this._canvas.struct.def
+			if(this._canvasprops){
+				var def = this._canvasprops.struct.def
 				for(var key in def) if(typeof def[key] === 'function')
 					struct[key] = def[key] 
 			}
 			for(var key in props) struct[key] = props[key]
-			this._canvas = define.struct(struct).array()
+			this._canvasprops = define.struct(struct).array()
 		}
 	})
 

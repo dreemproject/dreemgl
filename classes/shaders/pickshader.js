@@ -38,7 +38,7 @@ define.class('$base/shader', function(require){
 	// the pick entry point
 	this.pick = function(){
 		var col = this.color()
-		var total = view.pickview + canvas.pickdraw
+		var total = view.pickview + canvasprops.pickdraw
 		return vec4(floor(total/65536.)/255., mod(floor(total/256.),256.)/255., mod(total,256.)/255., col.a>pickalpha?1.:0.)
 	}
 
@@ -47,7 +47,7 @@ define.class('$base/shader', function(require){
 	this.margin = [0,0,0,0]
 	this.padding = [0,0,0,0]
 
-	this.canvas = {
+	this.canvasprops = {
 		pickdraw:float,
 	}
 })

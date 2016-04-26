@@ -4,12 +4,12 @@ define.class('$shaders/pickshader', function(require){
 		texture:this.Texture
 	}
 
-	this.fgcolor = vec4('gray')
+	this.color = vec4('gray')
 	this.fontsize = 10
 	this.linespacing = 1.3
 	this.baseline = 1
 
-	this.canvas = {	
+	this.canvasprops = {	
 		fgcolor: vec4,
 		outlinecolor: vec4,
 		boldness: float,
@@ -60,8 +60,8 @@ define.class('$shaders/pickshader', function(require){
 	this.position = function(){
 		// pass through the texture pos
 		texturepos = mix(
-			vec2(canvas.texminx, canvas.texminy),
-			vec2(canvas.texmaxx, canvas.texmaxy),
+			vec2(canvasprops.texminx, canvasprops.texminy),
+			vec2(canvasprops.texmaxx, canvasprops.texmaxy),
 			mesh.xy
 		)
 		return compute_position()		
@@ -102,25 +102,25 @@ define.class('$shaders/pickshader', function(require){
 		var matrix = view.totalmatrix  * state.viewmatrix
 
 		var s = font_style_t(
-			vec2(canvas.x, canvas.y),
-			canvas.fontsize,
-			canvas.fgcolor,
-			canvas.outlinecolor,
-			canvas.boldness,
-			canvas.outline,
-			(abs(canvas.unicode - 10.)<0.001 || abs(canvas.unicode - 32.)<0.001)?false:true
+			vec2(canvasprops.x, canvasprops.y),
+			canvasprops.fontsize,
+			canvasprops.fgcolor,
+			canvasprops.outlinecolor,
+			canvasprops.boldness,
+			canvasprops.outline,
+			(abs(canvasprops.unicode - 10.)<0.001 || abs(canvasprops.unicode - 32.)<0.001)?false:true
 		)
 
 		s = style(s)
 		
 		var pos = mix(
 			vec2(
-				s.pos.x + s.fontsize * canvas.minx,
-				s.pos.y - s.fontsize * canvas.miny + s.fontsize * canvas.baseline
+				s.pos.x + s.fontsize * canvasprops.minx,
+				s.pos.y - s.fontsize * canvasprops.miny + s.fontsize * canvasprops.baseline
 			),
 			vec2(
-				s.pos.x + s.fontsize * canvas.maxx,
-				s.pos.y - s.fontsize * canvas.maxy+ s.fontsize * canvas.baseline
+				s.pos.x + s.fontsize * canvasprops.maxx,
+				s.pos.y - s.fontsize * canvasprops.maxy+ s.fontsize * canvasprops.baseline
 			),
 			mesh.xy
 		)
@@ -294,7 +294,8 @@ define.class('$shaders/pickshader', function(require){
 			var width = 0
 			for(var i = 0; i < strlen; i++){
 				var unicode = str.charCodeAt(i)
-				width += glyphs[unicode].advance * fontsize
+				var glyph = glyphs[unicode]
+				if(glyph) width += glyph.advance * fontsize
 			}
 
 			this.w = width 
@@ -318,6 +319,7 @@ define.class('$shaders/pickshader', function(require){
 			for(var i = 0; i < strlen; i++){
 				var unicode = str.charCodeAt(i)
 				var info = glyphs[unicode]
+				if(!info) continue
 				//console.log(buffer.length, this.y)
 				//this.y = 0
 				this._ADDTOBUFFER()

@@ -90,7 +90,7 @@ define.class(function(require){
 			for(var key in define.paths){
 				var match = define.expandVariables(define['$'+key])
 				if(file.indexOf(match) === 0){
-					file = '/'+key+file.slice(match.length)
+					file = ('/'+key+'/'+file.slice(match.length)).replace(/\/\//g,"/")
 					break
 				}
 			}

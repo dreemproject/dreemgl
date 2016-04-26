@@ -20,6 +20,9 @@ define.class('$system/platform/base/texture', function(exports){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub, device){
+		if(stub instanceof window.Image){
+			return Texture.fromImage(stub)
+		}
 		if(stub.targetguid){ // its a render target. resolve it
 			return device.atResolveRenderTarget(stub)
 		}

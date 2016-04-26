@@ -16,7 +16,6 @@ define.class('$base/node', function(require){
 
 	this.Shader = require('$base/shader')
 	this.Texture = require('$base/texture')
-
 	this.Canvas = Object.create(Canvas.prototype)
 
 	this.attributes = {
@@ -329,12 +328,14 @@ define.class('$base/node', function(require){
 		if(this.draw_dirty) return
 
 		var parent = this
-		while(!parent.draw_dirty){
+		var screen = this.screen
+		while(parent !== screen && !parent.draw_dirty){
 			parent.draw_dirty = true
+			parent = parent.parent
 		}
-
-		if(this.screen) {
-			this.screen.redraw()
+		
+		if(screen) {
+			screen.redraw()
 		}
 	}
 
@@ -374,15 +375,6 @@ define.class('$base/node', function(require){
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
 	this.totalmatrix = mat4.identity()
-
-	// the last view matrix used
-	// this.viewmatrix = mat4.identity()
-	// the viewport matrix used to render the viewportblend
-	///this.viewportmatrix = mat4.identity()
-	// the normal matrix contains the transform without translate (for normals)
-	// this.normalmatrix = mat4.identity()
-	// the remap matrix used to remap pointer vec2 to local space
-	// this.remapmatrix = mat4();
 
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
@@ -448,6 +440,7 @@ define.class('$base/node', function(require){
 			}
 		}
 		else if(!isNaN(this.bgcolor[0])){
+			c.bgcolor = this.bgcolor
 			if(this.borderradius[0]>0){
 				c.drawRoundedrect(0, 0, c.width, c.height)
 			}
@@ -461,12 +454,12 @@ define.class('$base/node', function(require){
 	}
 
 	// the user draw function
-	this.draw = function(){
-		this.drawBackground()
-		this.drawChildren()
+	this.draw = function(stime, frameid){
+		this.drawBackground(stime, frameid)
+		this.drawChildren(stime, frameid)
 	}
 
-	this.drawChildren = function(){
+	this.drawChildren = function(stime, frameid){
 		var c = this.canvas
 		var redraw
 		// TODO add boundingbox clipping
@@ -474,12 +467,12 @@ define.class('$base/node', function(require){
 			var child = this.children[i]
 			// include it in our drawlist
 			c.addCanvas(child.canvas, i)
-			child.drawView()
+			child.drawView(stime, frameid)
 		}
 		return redraw
 	}
 
-	this.drawView = function(){
+	this.drawView = function(stime, frameid){
 		var c = this.canvas
 		c.width = this._layout.width
 		c.height = this._layout.height
@@ -509,7 +502,7 @@ define.class('$base/node', function(require){
 			if(this.draw_dirty){
 				c.clear()
 				this.atAttributeGetFlag = 2
-				redraw = this.draw()
+				redraw = this.draw(stime, frameid)
 				this.atAttributeGetFlag = 0
 				this.draw_dirty = false
 			}
@@ -518,11 +511,13 @@ define.class('$base/node', function(require){
 		}
 		else if(this.draw_dirty){
 			this.atAttributeGetFlag = 2
-			redraw = this.draw()
+			redraw = this.draw(stime, frameid)
 			this.atAttributeGetFlag = 0
 			this.draw_dirty = false
 		}
+
 		c.endAlign()
+	
 		this.layoutchanged = false
 		// check time
 		if(this._flag_time&2 || redraw){

@@ -1,17 +1,18 @@
 define.class('$shaders/pickshader', function(require){
 
 	this.position = function(){
-		if(canvas.visible < 0.5) return vec4(0.)
-		var pos = vec3(canvas.x + mesh.x * canvas.w, canvas.y + mesh.y * canvas.h, canvas.z)
-		var res = vec4(pos, 1) * canvas.matrix * view.totalmatrix * state.viewmatrix
+		if(canvasprops.visible < 0.5) return vec4(0.)
+		var pos = vec3(canvasprops.x + mesh.x * canvasprops.w, canvasprops.y + mesh.y * canvasprops.h, canvasprops.z)
+		var res = vec4(pos, 1) * canvasprops.matrix * view.totalmatrix * state.viewmatrix
 		return res
 	}
 
-	this.fgcolor = vec4('gray')
+	this.bgcolor = vec4('gray')
 
 	this.color = function(){
-		var col = canvas.fgcolor
-		return vec4(col.rgb, col.a)
+		var col = canvasprops.bgcolor
+//		return mix('red','green',mesh.y)
+		return col// vec4(col.rgb, col.a)
 	}
 
 	this.defaults = {
@@ -25,10 +26,10 @@ define.class('$shaders/pickshader', function(require){
 	this.contentalign = 
 	this.wrapalign = 
 
-	this.canvas = {
+	this.canvasprops = {
 		visible:float,
 		matrix:mat4,
-		fgcolor:vec4,
+		bgcolor:vec4,
 		x:float,
 		y:float,
 		w:float,
@@ -40,6 +41,7 @@ define.class('$shaders/pickshader', function(require){
 		begin:function(x, y, w, h, margin, padding, alignfn, wrapfn){
 			//console.log(this.align.x)
 			this.RECTARGS()
+
 			this.x = x, this.y = y, this.w = w, this.h = h
 			// just store the margin on our align
 			this.align.margin = margin,
@@ -49,19 +51,21 @@ define.class('$shaders/pickshader', function(require){
 				this.align.margin,
 				padding
 			)
-
 			this.GETBUFFER()
 		},
 		end:function(dbg){
-			var oldalign = this.align 
+			var oldalign = this.align
+
 			this.endAlign()
 			var buffer = this.bufferNAME
+			
 			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
 				this.runAlign(buffer, 1, this.align.margin, oldalign)
 			}
 			else{ // we have to mark our nesting to be absolute and not touched by outer layouts
 				this.markAbsolute(oldalign)
 			}
+
 			//console.error(this.align.x, this.align.y)
 			this.CANVASTOBUFFER()
 

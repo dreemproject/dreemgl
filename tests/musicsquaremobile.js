@@ -155,13 +155,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			myview({
 				flex:1, 
 				bgcolor:'orange',
-				Button:{
-					Background:{
-						color:function(){
-							return 'purple'
-						}
-					}
-				}
 			})
 		)
 	]}

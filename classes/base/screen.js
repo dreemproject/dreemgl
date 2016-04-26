@@ -313,7 +313,7 @@ define.class('$base/view', function(require, exports, $base$, view) {
 		// lets draw the screen
 		this.canvas.frameid = frameid
 		
-		this.drawView()
+		this.drawView(stime, frameid)
 
 		var overlay = {
 			_pixelentry:0
