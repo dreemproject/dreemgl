@@ -496,6 +496,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n342" name="n342">342</a>
 <a href="#n343" name="n343">343</a>
 <a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
+<a href="#n352" name="n352">352</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -827,11 +835,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         dist = vec2.distance(pointerlist[<span class="integer">0</span>].position, <span class="local-variable">this</span>._wheel[<span class="integer">0</span>].position)
                 }
                 <span class="keyword">if</span> (dist &gt; <span class="integer">0</span>) {
-                        <span class="local-variable">this</span>.device.pickScreen(pointerlist[<span class="integer">0</span>].position, <span class="keyword">function</span>(view){
-                                <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[<span class="integer">0</span>], <span class="integer">0</span>, view)
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._start[<span class="integer">0</span>]) {
+                                <span class="comment">// Prevent continuous picking when dragging.</span>
+                                <span class="comment">// TODO(aki): optimize the mousewheel picking below.</span>
+                                <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[<span class="integer">0</span>], <span class="integer">0</span>, <span class="local-variable">this</span>._start[<span class="integer">0</span>].view)
                                 pointer.value = pointer.wheel
                                 <span class="local-variable">this</span>._wheel.setPointer(pointer)
-                        }.bind(<span class="local-variable">this</span>), <span class="predefined-constant">true</span>)
+                        } <span class="keyword">else</span> {
+                                <span class="local-variable">this</span>.device.pickScreen(pointerlist[<span class="integer">0</span>].position, <span class="keyword">function</span>(view){
+                                        <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[<span class="integer">0</span>], <span class="integer">0</span>, view)
+                                        pointer.value = pointer.wheel
+                                        <span class="local-variable">this</span>._wheel.setPointer(pointer)
+                                }.bind(<span class="local-variable">this</span>), <span class="predefined-constant">true</span>)
+                        }
                 } <span class="keyword">else</span> {
                         <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[<span class="integer">0</span>], <span class="integer">0</span>, <span class="local-variable">this</span>._wheel[<span class="integer">0</span>].view)
                         pointer.value = pointer.wheel

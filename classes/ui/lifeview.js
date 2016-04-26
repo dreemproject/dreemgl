@@ -6,8 +6,8 @@
 
 "use strict"
 
-define.class('$ui/view', function(require){
-// an implementation of https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+define.class('$ui/view', function($ui$, label){
+// An implementation of [Conways' Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) using render passes
 
 	// Must define N RenderPass nested classes below to match this count
 	this.passes = 1
@@ -89,4 +89,24 @@ define.class('$ui/view', function(require){
 			return color
 		}
 	})
+
+	var lifeview = this.constructor;
+	this.constructor.examples = {
+		Usage: function () {
+			return [
+				lifeview({
+					width:300,
+					height:200,
+					flexdirection:"column"
+				},
+					label({flex:1, fontsize:20, text:"Dreem GL IS ALIVE!!!"}),
+					label({flex:1, fontsize:20, text:"Dreem GL IS ALIVE!!!"}),
+					label({flex:1, fontsize:20, text:"Dreem GL IS ALIVE!!!"}),
+					label({flex:1, fontsize:20, text:"Dreem GL IS ALIVE!!!"}),
+					label({flex:1, fontsize:20, text:"Dreem GL IS ALIVE!!!"})
+				)
+			]
+		}
+	}
+
 })

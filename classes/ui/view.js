@@ -425,6 +425,16 @@ define.class('$system/base/node', function(require){
 	// internal, listen to the viewport to turn off our background and border shaders when 3D
 	this.onviewport = function(event){
 		this.setBorderShaders()
+		// console.log('onviewport', event.value)
+		if (event.value === '3d') {
+			var shaders = this.shader_draw_list
+			if (! shaders) return
+			for(var j = 0; j < shaders.length; j++){
+				var shader = shaders[j]
+				if(shader.depth_test_eq.func === 0)
+					shader.depth_test = 'src_depth < dst_depth'
+			}
+		}
 	}
 
 	// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
@@ -1185,7 +1195,6 @@ define.class('$system/base/node', function(require){
 	// emit post layout
 	function emitPostLayout(node, nochild){
 		var ref = node.ref
-		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout
 
 		if (!nochild){
@@ -1197,8 +1206,8 @@ define.class('$system/base/node', function(require){
 			ref.layout_dirty = false
 		}
 
-		var oldlayout = ref.oldlayout || {}
-		if ((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+		var oldlayout = ref.oldlayout
+		if ((ref._listen_layout || ref.onlayout) && ref.oldlayout && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
@@ -1236,7 +1245,7 @@ define.class('$system/base/node', function(require){
 		if (this.layout_dirty) return
 		this.layout_dirty = true
 		this.redraw()
-		if (this.parent_viewport) this.parent_viewport.relayoutRecur()
+		if (this.parent_viewport) this.parent_viewport.relayoutRecur(this)
 	}
 
 	this.rematrix = function(){
@@ -1311,6 +1320,7 @@ define.class('$system/base/node', function(require){
 			this._size = vec2(presizex, presizey)
 			this._flexwrap = false
 
+			// implemented by text and label
 			if (this.measure) this.measure() // otherwise it doesnt get called
 
 			var copynodes = FlexLayout.fillNodes(this)
@@ -1346,6 +1356,8 @@ define.class('$system/base/node', function(require){
 				this._layout.height = preheight
 			}
 
+			this._size = size
+			this._pos = pos
 			emitPostLayout(copynodes)
 		}
 	}
@@ -1477,8 +1489,23 @@ define.class('$system/base/node', function(require){
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
 		this.color = function(){
-			var img = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
+
 			var bg = view.bgcolor
+			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
+				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0)
+			{
+				//outside range of image so just return bgcolor
+				return vec4(
+					bg.r * view.colorfilter[0],
+					bg.g * view.colorfilter[1],
+					bg.b * view.colorfilter[2],
+					bg.a * view.colorfilter[3] * view.opacity
+				);
+			}
+
+			var img = this.texture.samplemip(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
 
 			// premultiply alpha
 			img.rgb = (img.rgb * img.a) + (bg.rgb * (1 - img.a));

@@ -28,10 +28,10 @@ define.class("$server/composition",function(require,$ui$,icon,button,checkbox,la
               rem.opacity=v?0:1.0
             }
           },
-          x:596,
-          y:80.00003051757812,
+          x:576,
+          y:55,
           width:300,
-          height:774,
+          height:672,
           visible:true
         })
       )

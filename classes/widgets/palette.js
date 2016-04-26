@@ -335,6 +335,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	this.constructor.examples = {
 		Usage:function() {
 			return palette({
+				flex:1,
 				width:300,
 				bgcolor:"#4e4e4e",
 				items:{Views:[

@@ -28,3 +28,7 @@
  * @attribute {float32} [max="0.5"]
  * The threshold value at which to allow the drawer to open and lock the left tray
  */
+/**
+ * @attribute {boolean} [referAbs="false"]
+ * The reference value whether refer to current position or absolute position
+ */

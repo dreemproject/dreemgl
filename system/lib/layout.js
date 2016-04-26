@@ -10,11 +10,13 @@
 
 define(function () {
 
-	function fillNodes(node, nochildren, invisible) {
+	// pass in a view to start
+	// nochildren == true skips adding children (used )
+	function fillNodes(node, nochildren) {
 		var newnode = {
 			children:[],
 			ref:node,
-			visible:(!invisible && node.visible),
+			visible:node._visible,
 			dirty: node.layout_dirty,
 			layout:{
 				width:undefined,
@@ -26,6 +28,10 @@ define(function () {
 				right:0,
 				bottom:0,
 			}
+		}
+		if (! node.visible) {
+			// console.log('bailing early')
+			return newnode
 		}
 
 		//Object.defineProperty(newnode.layout, 'left', {get:function(){
@@ -42,30 +48,24 @@ define(function () {
 		var layout = node._layout = newnode.layout
 
 		// alright so. what we need to do is bubble down layout_dirty
-		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
-			var child = node.children[i]
-			if(!('_viewport' in child))continue
-			if(child._viewport){ // its using a different layout pass
-				// if we are flex, we have to compute the layout of this child
-				if(!isNaN(child._flex)){
-					var newchild = fillNodes(child, true, !newnode.visible)
-					if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
-					newnode.children.push(newchild)
+		if(!nochildren && node.children) {
+			for(var i = 0; i < node.children.length;i++){
+				var child = node.children[i]
+				if(!('_viewport' in child) || !(child._visible)) {
+					// skip non-views and invisible views
+					continue
 				}
-				else{
-					// otherwise this child has an already computed layout
-					// so how do we know if this is dirty?
-					newnode.children.push({
-						flex:undefined,
-						ref:child,
-						layout:child.layout,
-						children:[]
-					})
+				var newchild
+				if(child._viewport){ // its using a different layout pass
+					newchild = fillNodes(child, true)
+				} else { // child has no viewport
+					newchild = fillNodes(child, false)
 				}
-			}
-			else{
-				var newchild = fillNodes(child, false, !newnode.visible)
-				if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+				if(newchild.dirty) {
+					newnode.dirty = true
+					// parents get set to dirty also
+					node.layout_dirty = true
+				}
 				newnode.children.push(newchild)
 			}
 		}
@@ -108,34 +108,34 @@ define(function () {
 	}
 
 	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
+		// console.log('layoutNode', node)
 
 		var total = 1;
 
-		//var ref = node.ref
-		//var ol = ref.oldlayout
-		/*
+		var ref = node.ref
+		var ol = ref.oldlayout
 		if(!node.dirty && ol &&
-			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) &&
-			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) &&
-			(isNaN(ol.last_pos0) && isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) &&
-			(isNaN(ol.last_pos1) && isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) &&
+			(ol.last_size0 === ref._size[0]) &&
+			(ol.last_size1 === ref._size[1]) &&
+			(ol.last_pos0 === ref._pos[0]) &&
+			(ol.last_pos1 === ref._pos[1]) &&
 			ol.parentMaxWidth === parentMaxWidth && ol.parentDirection === parentDirection){
 			putBackOldLayout(node)
 			//ref.debug_view = true
-			return 1
-		}*/
+			return -1
+		}
 		//else ref.debug_view = false
 
 		total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
 
-		//ref._layout.last_left = ref._layout.left
-		//ref._layout.last_top = ref._layout.top
-		//ref._layout.last_pos0 = ref._pos[0]
-		//ref._layout.last_pos1 = ref._pos[1]
-		//ref._layout.last_size0 = ref._size[0]
-		//ref._layout.last_size1 = ref._size[1]
-		//ref._layout.parentMaxWidth = parentMaxWidth
-		//ref._layout.parentDirection = parentDirection
+		ref._layout.last_left = ref._layout.left
+		ref._layout.last_top = ref._layout.top
+		ref._layout.last_pos0 = ref._pos[0]
+		ref._layout.last_pos1 = ref._pos[1]
+		ref._layout.last_size0 = ref._size[0]
+		ref._layout.last_size1 = ref._size[1]
+		ref._layout.parentMaxWidth = parentMaxWidth
+		ref._layout.parentDirection = parentDirection
 
 		return total;
 	}

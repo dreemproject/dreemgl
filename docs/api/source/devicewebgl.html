@@ -653,6 +653,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n499" name="n499">499</a>
 <strong><a href="#n500" name="n500">500</a></strong>
 <a href="#n501" name="n501">501</a>
+<a href="#n502" name="n502">502</a>
+<a href="#n503" name="n503">503</a>
+<a href="#n504" name="n504">504</a>
+<a href="#n505" name="n505">505</a>
+<a href="#n506" name="n506">506</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -959,6 +964,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> animate_hooks = <span class="local-variable">this</span>.animate_hooks
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; animate_hooks.length; i++){
                         <span class="keyword">var</span> item = animate_hooks[i]
+                        <span class="keyword">if</span> (item.__isinvisible()) {
+                                <span class="comment">// console.log('skip atAnimate', item)</span>
+                                <span class="keyword">continue</span>
+                        }
                         <span class="comment">//console.log(item)</span>
                         <span class="keyword">if</span>(item.atAnimate(stime)){
                                 anim_redraw.push(item)
@@ -989,6 +998,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = <span class="local-variable">this</span>.drawpass_list.length; i &lt; len; i++){
 
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.drawpass_list[i]
+
                         <span class="comment">//var skip = false</span>
                         <span class="keyword">var</span> last = i === len - <span class="integer">1</span>
                         <span class="comment">//if(view.parent == this.screen &amp;&amp; view.flex == 1 &amp;&amp; this.screen.children.length ===1){</span>

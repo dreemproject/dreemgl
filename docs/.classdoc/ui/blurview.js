@@ -1,7 +1,11 @@
 /**
  * @class blurview
  * @extends view
- * Example of how to use multiple render passes
+ * Uses multiple render passes to render a gaussian blur over the view's contents
+ * 
+ * <iframe style="border:0;width:900px;height:300px" src="/apps/docs/example#path=$ui/blurview.js"></iframe>
+ * <a target="blank" href="/apps/docs/example#path=$ui/blurview.js">open example in new tab &raquo;</a>
+ * 
  */
 /**
  * @method buildKernel

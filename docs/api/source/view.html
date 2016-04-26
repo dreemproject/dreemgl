@@ -2193,6 +2193,38 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2039" name="n2039">2039</a>
 <strong><a href="#n2040" name="n2040">2040</a></strong>
 <a href="#n2041" name="n2041">2041</a>
+<a href="#n2042" name="n2042">2042</a>
+<a href="#n2043" name="n2043">2043</a>
+<a href="#n2044" name="n2044">2044</a>
+<a href="#n2045" name="n2045">2045</a>
+<a href="#n2046" name="n2046">2046</a>
+<a href="#n2047" name="n2047">2047</a>
+<a href="#n2048" name="n2048">2048</a>
+<a href="#n2049" name="n2049">2049</a>
+<strong><a href="#n2050" name="n2050">2050</a></strong>
+<a href="#n2051" name="n2051">2051</a>
+<a href="#n2052" name="n2052">2052</a>
+<a href="#n2053" name="n2053">2053</a>
+<a href="#n2054" name="n2054">2054</a>
+<a href="#n2055" name="n2055">2055</a>
+<a href="#n2056" name="n2056">2056</a>
+<a href="#n2057" name="n2057">2057</a>
+<a href="#n2058" name="n2058">2058</a>
+<a href="#n2059" name="n2059">2059</a>
+<strong><a href="#n2060" name="n2060">2060</a></strong>
+<a href="#n2061" name="n2061">2061</a>
+<a href="#n2062" name="n2062">2062</a>
+<a href="#n2063" name="n2063">2063</a>
+<a href="#n2064" name="n2064">2064</a>
+<a href="#n2065" name="n2065">2065</a>
+<a href="#n2066" name="n2066">2066</a>
+<a href="#n2067" name="n2067">2067</a>
+<a href="#n2068" name="n2068">2068</a>
+<a href="#n2069" name="n2069">2069</a>
+<strong><a href="#n2070" name="n2070">2070</a></strong>
+<a href="#n2071" name="n2071">2071</a>
+<a href="#n2072" name="n2072">2072</a>
+<a href="#n2073" name="n2073">2073</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2500,8 +2532,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.<span class="reserved">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
 
-        <span class="local-variable">this</span>.onvisible = <span class="local-variable">this</span>.oncamera = <span class="local-variable">this</span>.onlookat = <span class="local-variable">this</span>.<span class="function">onup</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.oncamera = <span class="local-variable">this</span>.onlookat = <span class="local-variable">this</span>.<span class="function">onup</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.redraw()
+        }
+        <span class="local-variable">this</span>.<span class="function">onopacity</span> = <span class="keyword">function</span>(opacity){
+                <span class="comment">// set/unset this.visible</span>
+                <span class="keyword">if</span> (opacity &lt; <span class="float">0.002</span>) {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._visible) {
+                                <span class="local-variable">this</span>.visible = <span class="predefined-constant">false</span>
+                                <span class="local-variable">this</span>.__opacityhidvisible = <span class="predefined-constant">true</span>
+                        }
+                } <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__opacityhidvisible &amp;&amp; (! <span class="local-variable">this</span>._visible)) {
+                                <span class="local-variable">this</span>.visible = <span class="predefined-constant">true</span>
+                        }
+                }
+        }
+        <span class="local-variable">this</span>.<span class="function">onvisible</span> = <span class="keyword">function</span>(visible){
+                <span class="local-variable">this</span>.__opacityhidvisible = <span class="predefined-constant">false</span>
+                <span class="keyword">if</span> (visible &amp;&amp; <span class="local-variable">this</span>._opacity &gt;= <span class="float">0.002</span>) <span class="local-variable">this</span>.redraw()
         }
 
         <span class="comment">// the number of pick ID's to reserve for this view.</span>
@@ -3245,6 +3294,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, called by doLayout, to update the matrices to layout and parent matrix</span>
         <span class="local-variable">this</span>.<span class="function">updateMatrices</span> = <span class="keyword">function</span>(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__isinvisible()) {
+                        <span class="comment">// console.log('skip updateMatrices')</span>
+                        <span class="keyword">return</span>
+                }
                 <span class="comment">// allow pre-matrix gen hooking</span>
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.atMatrix) <span class="local-variable">this</span>.atMatrix()
 
@@ -3360,7 +3413,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// emit post layout</span>
         <span class="keyword">function</span> <span class="function">emitPostLayout</span>(node, nochild){
                 <span class="keyword">var</span> ref = node.ref
-                <span class="keyword">var</span> oldlayout = ref.oldlayout || {}
                 <span class="keyword">var</span> layout = ref._layout
 
                 <span class="keyword">if</span> (!nochild){
@@ -3372,8 +3424,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ref.layout_dirty = <span class="predefined-constant">false</span>
                 }
 
-                <span class="keyword">var</span> oldlayout = ref.oldlayout || {}
-                <span class="keyword">if</span> ((ref._listen_layout || ref.onlayout) &amp;&amp; (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+                <span class="keyword">var</span> oldlayout = ref.oldlayout
+                <span class="keyword">if</span> ((ref._listen_layout || ref.onlayout) &amp;&amp; ref.oldlayout &amp;&amp; (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
                          layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
                         ref.emit(<span class="string"><span class="delimiter">'</span><span class="content">layout</span><span class="delimiter">'</span></span>, {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">setter</span><span class="delimiter">'</span></span>, <span class="key">owner</span>:ref, <span class="key">key</span>:<span class="string"><span class="delimiter">'</span><span class="content">layout</span><span class="delimiter">'</span></span>, <span class="key">value</span>:layout})
                 }
@@ -3411,10 +3463,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.layout_dirty) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.layout_dirty = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.redraw()
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport) <span class="local-variable">this</span>.parent_viewport.relayoutRecur()
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport) <span class="local-variable">this</span>.parent_viewport.relayoutRecur(<span class="local-variable">this</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">rematrix</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.matrix_dirty) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.matrix_dirty = <span class="predefined-constant">true</span>
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.parent_viewport){
                         <span class="local-variable">this</span>.parent_viewport.matrix_dirty = <span class="predefined-constant">true</span>
@@ -3423,7 +3476,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// internal, moving a position in absolute should only trigger a matrix reload</span>
-        <span class="local-variable">this</span>.<span class="function">pos</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">pos</span> = <span class="keyword">function</span>(pos){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._layout.left === <span class="local-variable">this</span>._pos[<span class="integer">0</span>] &amp;&amp; <span class="local-variable">this</span>._layout.top === <span class="local-variable">this</span>._pos[<span class="integer">1</span>]) {
+                        <span class="keyword">return</span>
+                }
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._position === <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>){
                         <span class="local-variable">this</span>._layout.left = <span class="local-variable">this</span>._pos[<span class="integer">0</span>]
                         <span class="local-variable">this</span>._layout.top = <span class="local-variable">this</span>._pos[<span class="integer">1</span>]
@@ -3452,14 +3508,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.scale =
         <span class="local-variable">this</span>.rotate = <span class="local-variable">this</span>.rematrix
 
+
+        <span class="local-variable">this</span>.<span class="function">__isinvisible</span> = <span class="keyword">function</span>() {
+    <span class="keyword">var</span> view = <span class="local-variable">this</span>
+    <span class="keyword">while</span> (view) {
+      <span class="keyword">if</span> (!view._visible) {
+        <span class="keyword">return</span> <span class="predefined-constant">true</span>
+      }
+      view = view.parent
+    }
+        }
+
         <span class="comment">// internal, called by the render engine</span>
         <span class="local-variable">this</span>.<span class="function">doLayout</span> = <span class="keyword">function</span>(){
-
+                <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
+                <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.parent &amp;&amp; !isNaN(<span class="local-variable">this</span>._flex)){ <span class="comment">// means our layout has been externally defined</span>
 
-                        <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
                         <span class="keyword">var</span> flex = <span class="local-variable">this</span>._flex
-                        <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
 
                         <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?layout.width:<span class="local-variable">this</span>.parent._layout.width * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>]
                         <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?layout.height: <span class="local-variable">this</span>.parent._layout.height * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>]
@@ -3472,6 +3538,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>._size = vec2(presizex, presizey)
                         <span class="local-variable">this</span>._flexwrap = <span class="predefined-constant">false</span>
 
+                        <span class="comment">// implemented by text and label</span>
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.measure) <span class="local-variable">this</span>.measure() <span class="comment">// otherwise it doesnt get called</span>
 
                         <span class="keyword">var</span> copynodes = FlexLayout.fillNodes(<span class="local-variable">this</span>)
@@ -3484,15 +3551,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         emitPostLayout(copynodes)
                 } <span class="keyword">else</span> {
-                        <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
-
-                        <span class="comment">//this._size = vec2(presizex, presizey)</span>
-                        <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
                         <span class="keyword">var</span> pos = <span class="local-variable">this</span>._pos
 
                         <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?size[<span class="integer">0</span>]: <span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>]
                         <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?size[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>]
-                        <span class="keyword">var</span> presizez = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">2</span>])?size[<span class="integer">2</span>]: <span class="local-variable">this</span>.parent.depth * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">2</span>]
 
                         <span class="keyword">var</span> preposx = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">0</span>])?pos[<span class="integer">0</span>]: <span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">0</span>]
                         <span class="keyword">var</span> preposy = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">1</span>])?pos[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">1</span>]
@@ -3512,9 +3574,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>._layout.height = preheight
                         }
 
-                        <span class="local-variable">this</span>._size = size
-                        <span class="local-variable">this</span>._pos = pos
-
                         emitPostLayout(copynodes)
                 }
         }
@@ -3532,6 +3591,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, called by animation setters</span>
         <span class="local-variable">this</span>.<span class="function">startAnimation</span> = <span class="keyword">function</span>(attribute, value, track, resolve){
+
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.hasListenerProp(attribute, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">__atAttributeGetRender</span><span class="delimiter">'</span></span>)){
+                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">WARNING: Animating property &quot;</span><span class="delimiter">'</span></span> + attribute + <span class="string"><span class="delimiter">'</span><span class="content">&quot;, which can cause performance problems. Update your class to listen for animation updates and set state there instead of in render(): </span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>)
+                }
+
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.initialized) {
                         <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startAnimationRoot(<span class="local-variable">this</span>, attribute, value, track, resolve)
                 } <span class="keyword">else</span> {

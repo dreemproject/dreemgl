@@ -357,6 +357,38 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n203" name="n203">203</a>
 <a href="#n204" name="n204">204</a>
 <a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
+<a href="#n235" name="n235">235</a>
+<a href="#n236" name="n236">236</a>
+<a href="#n237" name="n237">237</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -391,7 +423,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">min</span>:-<span class="float">0.5</span>,
 
                 <span class="comment">// The threshold value at which to allow the drawer to open and lock the left tray</span>
-                <span class="key">max</span>:<span class="float">0.5</span>
+                <span class="key">max</span>:<span class="float">0.5</span>,
+
+                <span class="comment">// The reference value whether refer to current position or absolute position</span>
+                <span class="key">referAbs</span>: <span class="predefined-constant">false</span>,
+                <span class="key">refabs</span>: { <span class="key">x</span>: <span class="integer">0</span>, <span class="key">y</span>: <span class="integer">0</span> },
         };
 
         <span class="local-variable">this</span>.<span class="function">mainvalue</span> = <span class="keyword">function</span>(value) {
@@ -439,16 +475,33 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         (<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>] * <span class="integer">9</span> + p.movement[<span class="integer">1</span>]) / <span class="integer">10</span>
                 )
 
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">0</span>]) &gt; abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>]) * <span class="integer">2</span>) <span class="keyword">return</span>
-                        <span class="keyword">var</span> newy = main.y + p.movement.y;
-                        newy = Math.min(Math.max(newy, <span class="integer">0</span> - main.height), <span class="local-variable">this</span>.height);
-                        value = newy / <span class="local-variable">this</span>.height;
-                } <span class="keyword">else</span> {
-                        <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>]) &gt; abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">0</span>]) / <span class="integer">2</span>) <span class="keyword">return</span>
-                        <span class="keyword">var</span> newx = main.x + p.movement.x;
-                        newx = Math.min(Math.max(newx, <span class="integer">0</span> - main.width), <span class="local-variable">this</span>.width);
-                        value = newx / <span class="local-variable">this</span>.width;
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.referAbs) {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>) {
+                                <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">0</span>]) &gt; abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>]) * <span class="integer">2</span>) <span class="keyword">return</span>
+                                <span class="local-variable">this</span>.refabs.y += p.movement.y
+                                <span class="keyword">var</span> newy = <span class="local-variable">this</span>.refabs.y;
+                                newy = Math.min(Math.max(newy, <span class="integer">0</span> - main.height), <span class="local-variable">this</span>.height);
+                                value = newy / <span class="local-variable">this</span>.height;
+                        } <span class="keyword">else</span> {
+                                <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>]) &gt; abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">0</span>]) / <span class="integer">2</span>) <span class="keyword">return</span>
+                                <span class="local-variable">this</span>.refabs.x += p.movement.x
+                                <span class="keyword">var</span> newx = <span class="local-variable">this</span>.refabs.x;
+                                newx = Math.min(Math.max(newx, <span class="integer">0</span> - main.width), <span class="local-variable">this</span>.width);
+                                value = newx / <span class="local-variable">this</span>.width;
+                        }
+                }
+                <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>) {
+                                <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">0</span>]) &gt; abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>]) * <span class="integer">2</span>) <span class="keyword">return</span>
+                                <span class="keyword">var</span> newy = main.y + p.movement.y;
+                                newy = Math.min(Math.max(newy, <span class="integer">0</span> - main.height), <span class="local-variable">this</span>.height);
+                                value = newy / <span class="local-variable">this</span>.height;
+                        } <span class="keyword">else</span> {
+                                <span class="keyword">if</span> (abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">1</span>]) &gt; abs(<span class="local-variable">this</span>.dampedmovement[<span class="integer">0</span>]) / <span class="integer">2</span>) <span class="keyword">return</span>
+                                <span class="keyword">var</span> newx = main.x + p.movement.x;
+                                newx = Math.min(Math.max(newx, <span class="integer">0</span> - main.width), <span class="local-variable">this</span>.width);
+                                value = newx / <span class="local-variable">this</span>.width;
+                        }
                 }
 
                 <span class="keyword">if</span> ((!<span class="local-variable">this</span>.leftview &amp;&amp; value &gt; <span class="integer">0</span>) || (!<span class="local-variable">this</span>.rightview &amp;&amp; value &lt; <span class="integer">0</span>)) {
@@ -465,12 +518,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> value = <span class="local-variable">this</span>.value;
 
                 <span class="keyword">if</span> (value &lt;= <span class="local-variable">this</span>.min) {
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.referAbs) {
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>) <span class="local-variable">this</span>.refabs.y = <span class="local-variable">this</span>.min*<span class="local-variable">this</span>.height
+                                <span class="keyword">else</span> <span class="local-variable">this</span>.refabs.x = <span class="local-variable">this</span>.min*<span class="local-variable">this</span>.width
+                        }
                         value = <span class="local-variable">this</span>.min
                 } <span class="keyword">else</span> <span class="keyword">if</span> (value &gt;= <span class="local-variable">this</span>.max) {
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.referAbs) {
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>) <span class="local-variable">this</span>.refabs.y = <span class="local-variable">this</span>.max*<span class="local-variable">this</span>.height
+                                <span class="keyword">else</span> <span class="local-variable">this</span>.refabs.x = <span class="local-variable">this</span>.max*<span class="local-variable">this</span>.width
+                        }
                         value = <span class="local-variable">this</span>.max
                 } <span class="keyword">else</span> {
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.referAbs) <span class="local-variable">this</span>.refabs = { <span class="key">x</span>: <span class="integer">0</span>, <span class="key">y</span>: <span class="integer">0</span> }
                         value = <span class="integer">0</span>;
                 }
+
 
                 <span class="keyword">if</span> ((!<span class="local-variable">this</span>.leftview &amp;&amp; value &gt; <span class="integer">0</span>) || (!<span class="local-variable">this</span>.rightview &amp;&amp; value &lt; <span class="integer">0</span>)) {
                         value = <span class="integer">0</span>;
@@ -479,6 +542,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span> (value !== <span class="local-variable">this</span>.value) {
                         <span class="local-variable">this</span>.value = <span class="local-variable">this</span>.endvalue(value)
                 }
+
         };
 
         <span class="local-variable">this</span>.<span class="function">endvalue</span> = <span class="keyword">function</span>(value) {
