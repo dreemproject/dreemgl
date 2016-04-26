@@ -10,11 +10,14 @@
 
 define(function () {
 
-	function fillNodes(node, nochildren, invisible) {
+	// pass in a view to start
+	// nochildren == true skips adding children (used )
+	function fillNodes(node, nochildren, parenthidden) {
+		var visible = !parenthidden && node.visible
 		var newnode = {
 			children:[],
 			ref:node,
-			visible:(!invisible && node.visible),
+			visible:visible,
 			dirty: node.layout_dirty,
 			layout:{
 				width:undefined,
@@ -26,6 +29,9 @@ define(function () {
 				right:0,
 				bottom:0,
 			}
+		}
+		if (! visible) {
+			return newnode
 		}
 
 		//Object.defineProperty(newnode.layout, 'left', {get:function(){
@@ -42,30 +48,36 @@ define(function () {
 		var layout = node._layout = newnode.layout
 
 		// alright so. what we need to do is bubble down layout_dirty
-		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
-			var child = node.children[i]
-			if(!('_viewport' in child))continue
-			if(child._viewport){ // its using a different layout pass
-				// if we are flex, we have to compute the layout of this child
-				if(!isNaN(child._flex)){
-					var newchild = fillNodes(child, true, !newnode.visible)
-					if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
-					newnode.children.push(newchild)
+		if(!nochildren && node.children) {
+			for(var i = 0; i < node.children.length;i++){
+				var child = node.children[i]
+				if(!('_viewport' in child)) {
+					// console.log('no viewport')
+					continue
 				}
-				else{
-					// otherwise this child has an already computed layout
-					// so how do we know if this is dirty?
-					newnode.children.push({
-						flex:undefined,
-						ref:child,
-						layout:child.layout,
-						children:[]
-					})
+				var newchild
+				if(child._viewport){ // its using a different layout pass
+					if(!isNaN(child._flex)){
+						// if we are flex, we have to compute the layout of this child
+						// skip children
+						newchild = fillNodes(child, true, !visible)
+					} else {
+						// otherwise this child has an already computed layout
+						// so how do we know if this is dirty?
+						newchild = {
+							flex:undefined,
+							ref:child,
+							layout:child.layout,
+							children:[]
+						}
+					}
+				} else { // child has no viewport
+					newchild = fillNodes(child, false, !visible)
 				}
-			}
-			else{
-				var newchild = fillNodes(child, false, !newnode.visible)
-				if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+				if(newchild.dirty) {
+					newnode.dirty = true
+					node.layout_dirty = true
+				}
 				newnode.children.push(newchild)
 			}
 		}
