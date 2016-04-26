@@ -235,7 +235,11 @@ define.class(function(require, baseclass){
 					// ok so the pick pass needs the alpha from the color buffer
 					// and then hard forward the color
 					var blendshader = draw.shaders.viewportblend
-					if (view._viewport !== '3d'){
+					if (view._viewport === '3d'){
+						// dont do this!
+						if (shader.depth_test_eq.func === 0) shader.depth_test = 'src_depth <= dst_depth'
+					}
+					else{
 						blendshader.depth_test = ''
 					}
 					blendshader.texture = draw.drawpass.pick_buffer
@@ -249,6 +253,10 @@ define.class(function(require, baseclass){
 					var shaders =  draw.shader_draw_list
 					for(var j = 0; j < shaders.length; j++){
 						var shader = shaders[j]
+
+						if(view._viewport === '3d'){
+							if (shader.depth_test_eq.func == 0) shader.depth_test = 'src_depth <= dst_depth'
+						}
 
 						shader.pickguid = pickguid
 
@@ -292,7 +300,10 @@ define.class(function(require, baseclass){
 			// lets render the view as a layer
 
 			var blendshader = draw.shaders.viewportblend
-			if (this.view._viewport !== '3d'){
+			if (this.view._viewport === '3d'){
+				blendshader.depth_test = 'src_depth <= dst_depth'
+			}
+			else{
 				blendshader.depth_test = ''
 			}
 
@@ -311,6 +322,10 @@ define.class(function(require, baseclass){
 		for(var j = 0; j < shaders.length; j++){
 			// lets draw em
 			var shader = shaders[j]
+			if(view._viewport === '3d'){
+				if(shader.depth_test_eq.func === 0)
+					shader.depth_test = 'src_depth < dst_depth'
+			}
 
 			if(shader.pickonly || !shader.visible) continue // was pick only
 			shader.view = draw

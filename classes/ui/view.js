@@ -425,16 +425,6 @@ define.class('$system/base/node', function(require){
 	// internal, listen to the viewport to turn off our background and border shaders when 3D
 	this.onviewport = function(event){
 		this.setBorderShaders()
-		// console.log('onviewport', event.value)
-		if (event.value === '3d') {
-			var shaders = this.shader_draw_list
-			if (! shaders) return
-			for(var j = 0; j < shaders.length; j++){
-				var shader = shaders[j]
-				if(shader.depth_test_eq.func === 0)
-					shader.depth_test = 'src_depth < dst_depth'
-			}
-		}
 	}
 
 	// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
