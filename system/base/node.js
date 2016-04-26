@@ -290,7 +290,7 @@ define.class(function(require){
 		this[lock_key] = true
 
 		var counter = 0
-		try{
+		// try{
 
 			var on_key = 'on' + key
 			var listen_key = '_listen_' + key
@@ -329,8 +329,7 @@ define.class(function(require){
 				finals[i].call(this, event, event.value, this, key)
 				if(event.stop) return
 			}
-		}
-		finally{
+		// } finally{
 			this[lock_key] = false
 			if(counter === 1){
 				this[fast_key] = callfn
@@ -338,7 +337,7 @@ define.class(function(require){
 			else if(counter === 0){
 				this[fast_key] = null
 			}
-		}
+		// }
 	}
 
 	// add a listener to an attribute
