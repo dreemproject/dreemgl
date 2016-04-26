@@ -1432,7 +1432,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1278" name="n1278">1278</a>
 <a href="#n1279" name="n1279">1279</a>
 <strong><a href="#n1280" name="n1280">1280</a></strong>
-<a href="#n1281" name="n1281">1281</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Copyright (c) 2014, Facebook, Inc.
@@ -1547,31 +1546,30 @@ define(<span class="keyword">function</span> () {
 
                 <span class="keyword">var</span> total = <span class="integer">1</span>;
 
-                <span class="comment">//var ref = node.ref</span>
-                <span class="comment">//var ol = ref.oldlayout</span>
-                <span class="comment">/*
-                if(!node.dirty &amp;&amp; ol &amp;&amp;
-                        (isNaN(ol.last_size0) &amp;&amp; isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) &amp;&amp;
-                        (isNaN(ol.last_size1) &amp;&amp; isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) &amp;&amp;
-                        (isNaN(ol.last_pos0) &amp;&amp; isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) &amp;&amp;
-                        (isNaN(ol.last_pos1) &amp;&amp; isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) &amp;&amp;
+                <span class="keyword">var</span> ref = node.ref
+                <span class="keyword">var</span> ol = ref.oldlayout
+                <span class="keyword">if</span>(!node.dirty &amp;&amp; ol &amp;&amp;
+                        (ol.last_size0 === ref._size[<span class="integer">0</span>]) &amp;&amp;
+                        (ol.last_size1 === ref._size[<span class="integer">1</span>]) &amp;&amp;
+                        (ol.last_pos0 === ref._pos[<span class="integer">0</span>]) &amp;&amp;
+                        (ol.last_pos1 === ref._pos[<span class="integer">1</span>]) &amp;&amp;
                         ol.parentMaxWidth === parentMaxWidth &amp;&amp; ol.parentDirection === parentDirection){
                         putBackOldLayout(node)
-                        //ref.debug_view = true
-                        return 1
-                }*/</span>
+                        <span class="comment">//ref.debug_view = true</span>
+                        <span class="keyword">return</span> -<span class="integer">1</span>
+                }
                 <span class="comment">//else ref.debug_view = false</span>
 
                 total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
 
-                <span class="comment">//ref._layout.last_left = ref._layout.left</span>
-                <span class="comment">//ref._layout.last_top = ref._layout.top</span>
-                <span class="comment">//ref._layout.last_pos0 = ref._pos[0]</span>
-                <span class="comment">//ref._layout.last_pos1 = ref._pos[1]</span>
-                <span class="comment">//ref._layout.last_size0 = ref._size[0]</span>
-                <span class="comment">//ref._layout.last_size1 = ref._size[1]</span>
-                <span class="comment">//ref._layout.parentMaxWidth = parentMaxWidth</span>
-                <span class="comment">//ref._layout.parentDirection = parentDirection</span>
+                ref._layout.last_left = ref._layout.left
+                ref._layout.last_top = ref._layout.top
+                ref._layout.last_pos0 = ref._pos[<span class="integer">0</span>]
+                ref._layout.last_pos1 = ref._pos[<span class="integer">1</span>]
+                ref._layout.last_size0 = ref._size[<span class="integer">0</span>]
+                ref._layout.last_size1 = ref._size[<span class="integer">1</span>]
+                ref._layout.parentMaxWidth = parentMaxWidth
+                ref._layout.parentDirection = parentDirection
 
                 <span class="keyword">return</span> total;
         }

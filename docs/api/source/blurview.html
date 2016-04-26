@@ -283,6 +283,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
 <a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -292,8 +307,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
-<span class="comment">// Example of how to use multiple render passes</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view){
+<span class="comment">// Uses multiple render passes to render a gaussian blur over the view's contents</span>
 
         <span class="comment">// k0 is the weight for the center pixel. k1 is used for +1 and -1 away,</span>
         <span class="comment">// k2 is used for +2 and -2 away, ...</span>
@@ -376,6 +391,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Required for multipass to work</span>
         <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>
 
+
+        <span class="keyword">var</span> blurview = <span class="local-variable">this</span>.constructor;
+        <span class="comment">// Basic usage of the button.</span>
+        <span class="local-variable">this</span>.constructor.examples = {
+                <span class="function">Usage</span>: <span class="keyword">function</span> () {
+                        <span class="keyword">return</span> [
+                                blurview({
+                                        <span class="key">height</span>:<span class="integer">100</span>,
+                                        <span class="key">width</span>:<span class="integer">100</span>,
+                                        <span class="key">blurradius</span>:<span class="integer">50</span>,
+                                        <span class="key">bgimage</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$resources/textures/landscape.jpg</span><span class="delimiter">&quot;</span></span>
+                                })
+                        ]
+                }
+        }
 
         <span class="comment">// x or y shader filter for a 1D Gaussian</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Gaussian1D</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.RenderPass, <span class="keyword">function</span>() {

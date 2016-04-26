@@ -161,42 +161,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n7" name="n7">7</a>
 <a href="#n8" name="n8">8</a>
 <a href="#n9" name="n9">9</a>
-<strong><a href="#n10" name="n10">10</a></strong>
-<a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$server$</span>,service,<span class="predefined">$ui$</span>,screen,view,<span class="predefined">$flow$services$</span>,map,webrequest,<span class="predefined">$flow$controllers$</span>,xypad,knob,keyboard,dpad,<span class="predefined">$flow$displays$</span>,labtext){
-
-
-<span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
-
-
-<span class="keyword">return</span> [
-xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">25</span>,<span class="key">y</span>:<span class="integer">133</span>}}),
-labtext({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">labtext0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">326</span>,<span class="key">y</span>:<span class="integer">24</span>},<span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.pointerpos</span><span class="delimiter">&quot;</span></span>),<span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.dpad0.value</span><span class="delimiter">&quot;</span></span>)}),
-dpad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">dpad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">21</span>,<span class="key">y</span>:<span class="integer">23</span>}})
-]
-
-
-
-
-        }
-
-
-
-
-        }
-)</pre></td>
+  <span class="local-variable">this</span>.<span class="function">render</span>=<span class="keyword">function</span>(){
+    <span class="keyword">return</span> [
+      xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">22</span>,<span class="key">y</span>:<span class="integer">133</span>,<span class="key">screen</span>:<span class="predefined-constant">true</span>}}),
+      labtext({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">labtext0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">326</span>,<span class="key">y</span>:<span class="integer">24</span>,<span class="key">screen</span>:<span class="predefined-constant">true</span>},<span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.dpad0.value</span><span class="delimiter">&quot;</span></span>),<span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.pointerpos</span><span class="delimiter">&quot;</span></span>)}),
+      dpad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">dpad0</span><span class="delimiter">&quot;</span></span>,<span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">21</span>,<span class="key">y</span>:<span class="integer">23</span>,<span class="key">screen</span>:<span class="predefined-constant">true</span>}})
+    ]
+  }
+})
+</pre></td>
 </tr></table>
 
 </body>

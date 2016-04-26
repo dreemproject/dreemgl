@@ -372,6 +372,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n218" name="n218">218</a>
 <a href="#n219" name="n219">219</a>
 <strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -408,11 +414,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="keyword">function</span> <span class="function">__atAttributeGet</span>(key){
+        <span class="keyword">function</span> <span class="function">__atAttributeGetRender</span>(event, value, pthis, key){
                 <span class="keyword">if</span>(!initializing){
                         <span class="comment">//exports.process(this, undefined, undefined, true)</span>
                         <span class="keyword">if</span>(process_list.indexOf(<span class="local-variable">this</span>) === -<span class="integer">1</span>){
-                                process_list.push(key, <span class="local-variable">this</span>)
+                                <span class="keyword">var</span> oldval = (event &amp;&amp; event.old) || <span class="local-variable">this</span>[key];
+                                <span class="keyword">if</span> (value !== oldval || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>){
+                                        <span class="comment">// only render if the value changed and isn't an object</span>
+                                        process_list.push(key, <span class="local-variable">this</span>)
+                                } <span class="keyword">else</span> {
+                                        <span class="keyword">return</span>
+                                }
                         }
                         <span class="keyword">if</span>(!process_timer){
                                 process_timer = setTimeout(processTimeout, <span class="integer">0</span>)
@@ -422,8 +434,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="keyword">function</span> <span class="function">atAttributeGet</span>(key){
                 <span class="comment">// lets find out if we already have a listener on it</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.getAttributeConfig(key).rerender !== <span class="predefined-constant">false</span> &amp;&amp; !<span class="local-variable">this</span>.hasListenerProp(key, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">__atAttributeGet</span><span class="delimiter">'</span></span>)){
-                        <span class="local-variable">this</span>.addListener(key, __atAttributeGet)
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.getAttributeConfig(key).rerender !== <span class="predefined-constant">false</span> &amp;&amp; !<span class="local-variable">this</span>.hasListenerProp(key, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">__atAttributeGetRender</span><span class="delimiter">'</span></span>)){
+                        <span class="local-variable">this</span>.addListener(key, __atAttributeGetRender)
                 }
         }
 
@@ -476,7 +488,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         <span class="comment">// store the attribute dependencies</span>
                         new_version.atAttributeGet = atAttributeGet
-                        new_version.rerender = __atAttributeGet
+                        new_version.rerender = __atAttributeGetRender
 
                         <span class="comment">// lets check if object.constructor  a module, ifso</span>
                         <span class="keyword">if</span>(new_version.classroot === <span class="predefined-constant">undefined</span>){

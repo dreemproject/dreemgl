@@ -6,8 +6,8 @@
 
 "use strict"
 
-define.class('$ui/view', function(require){
-// Example of how to use multiple render passes
+define.class('$ui/view', function(require, $ui$, view){
+// Uses multiple render passes to render a gaussian blur over the view's contents
 
 	// k0 is the weight for the center pixel. k1 is used for +1 and -1 away,
 	// k2 is used for +2 and -2 away, ...
@@ -90,6 +90,21 @@ define.class('$ui/view', function(require){
 	// Required for multipass to work
 	this.overflow = 'hidden'
 
+
+	var blurview = this.constructor;
+	// Basic usage of the button.
+	this.constructor.examples = {
+		Usage: function () {
+			return [
+				blurview({
+					height:100,
+					width:100,
+					blurradius:50,
+					bgimage:"$resources/textures/landscape.jpg"
+				})
+			]
+		}
+	}
 
 	// x or y shader filter for a 1D Gaussian
 	define.class(this, "Gaussian1D", this.RenderPass, function() {
