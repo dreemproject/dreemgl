@@ -12,12 +12,11 @@ define(function () {
 
 	// pass in a view to start
 	// nochildren == true skips adding children (used )
-	function fillNodes(node, nochildren, parenthidden) {
-		var visible = !parenthidden && node.visible
+	function fillNodes(node, nochildren) {
 		var newnode = {
 			children:[],
 			ref:node,
-			visible:visible,
+			visible:node.visible,
 			dirty: node.layout_dirty,
 			layout:{
 				width:undefined,
@@ -30,7 +29,8 @@ define(function () {
 				bottom:0,
 			}
 		}
-		if (! visible) {
+		if (! node.visible) {
+			// console.log('bailing early')
 			return newnode
 		}
 
@@ -51,28 +51,15 @@ define(function () {
 		if(!nochildren && node.children) {
 			for(var i = 0; i < node.children.length;i++){
 				var child = node.children[i]
-				if(!('_viewport' in child)) {
-					// console.log('no viewport')
+				if(!('_viewport' in child) || !(child.visible)) {
+					// skip non-views and invisible views
 					continue
 				}
 				var newchild
 				if(child._viewport){ // its using a different layout pass
-					if(!isNaN(child._flex)){
-						// if we are flex, we have to compute the layout of this child
-						// skip children
-						newchild = fillNodes(child, true, !visible)
-					} else {
-						// otherwise this child has an already computed layout
-						// so how do we know if this is dirty?
-						newchild = {
-							flex:undefined,
-							ref:child,
-							layout:child.layout,
-							children:[]
-						}
-					}
+					newchild = fillNodes(child, true)
 				} else { // child has no viewport
-					newchild = fillNodes(child, false, !visible)
+					newchild = fillNodes(child, false)
 				}
 				if(newchild.dirty) {
 					newnode.dirty = true
@@ -120,6 +107,7 @@ define(function () {
 	}
 
 	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
+		// console.log('layoutNode', node)
 
 		var total = 1;
 
