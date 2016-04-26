@@ -1346,6 +1346,8 @@ define.class('$system/base/node', function(require){
 				this._layout.height = preheight
 			}
 
+			this._size = size
+			this._pos = pos
 			emitPostLayout(copynodes)
 		}
 	}
