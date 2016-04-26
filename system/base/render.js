@@ -38,10 +38,11 @@ define.class(function(exports){
 			//exports.process(this, undefined, undefined, true)
 			if(process_list.indexOf(this) === -1){
 				var oldval = (event && event.old) || this[key];
-				if (value !== oldval || typeof value === 'object'){
+				if (! key || ((value !== oldval) || typeof value === 'object')){
 					// only render if the value changed and isn't an object
 					process_list.push(key, this)
 				} else {
+					// console.log('skipping render for', key, value, oldval, this)
 					return
 				}
 			}
