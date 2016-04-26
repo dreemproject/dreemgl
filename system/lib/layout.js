@@ -16,7 +16,7 @@ define(function () {
 		var newnode = {
 			children:[],
 			ref:node,
-			visible:node.visible,
+			visible:node._visible,
 			dirty: node.layout_dirty,
 			layout:{
 				width:undefined,
@@ -51,7 +51,7 @@ define(function () {
 		if(!nochildren && node.children) {
 			for(var i = 0; i < node.children.length;i++){
 				var child = node.children[i]
-				if(!('_viewport' in child) || !(child.visible)) {
+				if(!('_viewport' in child) || !(child._visible)) {
 					// skip non-views and invisible views
 					continue
 				}
@@ -63,6 +63,7 @@ define(function () {
 				}
 				if(newchild.dirty) {
 					newnode.dirty = true
+					// parents get set to dirty also
 					node.layout_dirty = true
 				}
 				newnode.children.push(newchild)
