@@ -276,13 +276,10 @@ define.class(function(require){
 
 		// FAST OUT
 		var callfn = this[fast_key]
-		if(this['on'+key] == callfn){
-			if(callfn === null) return
-			if(callfn){
-				// lets see if we have an 'on' key defined
-				callfn.call(this, event, event.value, this, key)
-				return
-			}
+		if(callfn && this['on'+key] === callfn){
+			// lets see if we have an 'on' key defined
+			callfn.call(this, event, event.value, this, key)
+			return
 		}
 
 		var lock_key = '_lock_' + key
@@ -885,17 +882,26 @@ define.class(function(require){
 		}
 
 		setter.isAttribute = true
-		Object.defineProperty(this, key, {
-			configurable:true,
-			enumerable:true,
-			get: function(){
-				if(this.atAttributeGet !== undefined) this.atAttributeGet(key)
-				var getter = this[get_key]
-				if(getter !== undefined) return getter()
+		var get
+		if (this[get_key]) {
+			var getter = this[get_key]
+			get = function() {
+				if(this.atAttributeGet) this.atAttributeGet(key)
+				return getter()
+			}
+		} else {
+			get = function() {
+				if(this.atAttributeGet) this.atAttributeGet(key)
 				// lets check if we need to map our stored type
 				// if we are in motion, we should return the end value
 				return this[value_key]
-			},
+			}
+		}
+
+		Object.defineProperty(this, key, {
+			configurable:true,
+			enumerable:true,
+			get: get,
 			set: setter
 		})
 	}
