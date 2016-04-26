@@ -33,15 +33,15 @@ define.class(function(require, shape3d){
 			
 			this.mesh = this.vertexstruct.array();
 			GLGeom.createCone(alpha,view.pointradius, view.height, view.detail,view.cap, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
-				this.mesh.push(v1[0],v1[1]+coneoffs,v1[2],n1,t1);
-				this.mesh.push(v2[0],v2[1]+coneoffs,v2[2],n2,t2);
-				this.mesh.push(v3[0],v3[1]+coneoffs,v3[2],n3,t3);
+				this.mesh.push(v1[0],v1[1]+coneoffs,v1[2],n1,t1,0,0,0,0);
+				this.mesh.push(v2[0],v2[1]+coneoffs,v2[2],n2,t2,0,0,0,0);
+				this.mesh.push(v3[0],v3[1]+coneoffs,v3[2],n3,t3,0,0,0,0);
 			}.bind(this))	
 			
 			GLGeom.createSphere(view.radius*1, view.detail, view.detail,function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
-				this.mesh.push(v1,n1,t1);
-				this.mesh.push(v2,n2,t2);
-				this.mesh.push(v3,n3,t3);
+				this.mesh.push(v1,n1,t1,0,0,0,0);
+				this.mesh.push(v2,n2,t2,0,0,0,0);
+				this.mesh.push(v3,n3,t3,0,0,0,0);
 			}.bind(this))	
 		}
 	}

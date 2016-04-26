@@ -91,7 +91,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 
 							if(mesh.isberry > 0.){
 								mycolor = 'red'
-								scale *= vec2(0.5,0.5)
+								scale *= vec2(1.5,1.5)
 							}
 							else{
 								dir = math.rotate2d(dir, -50.*math.DEG*noise)
@@ -117,7 +117,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							var isberry = 0
 
 							// probabilistically spread the berries through the tree
-							if(depth > 13 && Math.random()<0.5) isberry = 1
+							if(depth > 13 && Math.random()<0.1) isberry = 1
 
 							// we push plain rectangles in the geometry buffer with just the path + depth added
 							mesh.pushQuad(

@@ -24,9 +24,9 @@ define.class(function(require, shape3d){
 			var view = this.view
 			this.mesh = this.vertexstruct.array();
 			GLGeom.createRoundedRect(view.width, view.height, view.radius, view.detail, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
-				this.mesh.push(v1,n1,t1);
-				this.mesh.push(v2,n2,t2);
-				this.mesh.push(v3,n3,t3);
+				this.mesh.push(v1,n1,t1,0,0,0,0);
+				this.mesh.push(v2,n2,t2,0,0,0,0);
+				this.mesh.push(v3,n3,t3,0,0,0,0);
 			}.bind(this))
 		}
 	}

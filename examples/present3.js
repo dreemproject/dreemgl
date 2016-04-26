@@ -23,8 +23,8 @@ define.class("$server/composition", function($ui$, screen, view) {
 						dump:1,
 						color:function(){
 							//return 'red'
-							return mix('blue','purple',view.myvalue)
-							//return pal.pal1(view.myvalue*noise.noise3d(vec3(mesh.x, mesh.y, view.time)))
+							//return mix('blue','purple',view.myvalue)
+							return pal.pal1(view.myvalue * noise.noise3d(vec3(mesh.x, mesh.y, view.time)))
 						}
 					},
 					bgcolor:'blue',

@@ -15,7 +15,8 @@ define.class(function(require, $ui$, view){
 		this.vertexstruct = define.struct({
 			pos: vec3,
 			norm: vec3,
-			uv: vec2
+			uv: vec2,
+			data: vec4
 		})
 
 		this.diffusecolor = vec4("#ffffff")
