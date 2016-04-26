@@ -221,6 +221,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n67" name="n67">67</a>
 <a href="#n68" name="n68">68</a>
 <a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -240,14 +242,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">padding</span>:<span class="integer">10</span>,
                                         <span class="key">flex</span>:<span class="integer">1</span>,
                                         <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
-                                        <span class="key">classconstr</span>: Config({<span class="key">type</span>:Function, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
+                                        <span class="key">classconstr</span>: Config({<span class="key">type</span>:Function, <span class="key">persist</span>:<span class="predefined-constant">false</span>}),
                                         <span class="function">init</span>:<span class="keyword">function</span>() {
                                                 <span class="local-variable">this</span>.screen.<span class="function">locationhash</span> = <span class="keyword">function</span>(event){
                                                         <span class="keyword">if</span> (event.value.path) {
                                                                 require
                                                                         .async(event.value.path)
                                                                         .then(<span class="keyword">function</span>(module){
-                                                                                <span class="local-variable">this</span>.classconstr = module;
+                                                                                <span class="local-variable">this</span>._classconstr = module;
+                                                                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">classconstr</span><span class="delimiter">'</span></span>, module)
                                                                         }.bind(<span class="local-variable">this</span>))
                                                         }
                                                 }.bind(<span class="local-variable">this</span>)
@@ -259,6 +262,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">var</span> parseDoc = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsdocgen</span><span class="delimiter">'</span></span>).parseDoc;
 
                                                 <span class="keyword">var</span> class_doc = parseDoc(<span class="local-variable">this</span>.classconstr);
+
                                                 <span class="keyword">if</span> (class_doc &amp;&amp; class_doc.examples) {
                                                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt; class_doc.examples.length;i++){
                                                                 <span class="keyword">var</span> example = class_doc.examples[i];

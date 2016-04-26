@@ -33,7 +33,7 @@ var exampleTracker = (function() {
 	};
 
 	var findVisibleExample = function() {
-		if (document.docrunner.define) {
+		if (document && document.docrunner && document.docrunner.define) {
 			dreemgl = document.docrunner.define.rootComposition
 		} else {
 			console.log("docexamplerunner composition not initialized, cancelling");
@@ -65,8 +65,12 @@ var exampleTracker = (function() {
 	}
 
 	var initialize = function () {
-		setInterval(findVisibleExample, 500);
+		if (document && document.docrunner && document.docrunner.define) {
+			setInterval(findVisibleExample, 700);
+		}
 	}
-	jQuery(initialize);
+	if (jQuery) {
+		jQuery(initialize);
+	}
 
 })();

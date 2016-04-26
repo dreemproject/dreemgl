@@ -1,7 +1,7 @@
 {
 	"--head-html": [
 		"<script src=\"./scripts/jquery-1.12.0.min.js\"></script>",
-		"<script>jQuery.noConflict();</script>",
+		"<script>if (jQuery) { jQuery.noConflict(); } </script>",
 		"<script src=\"./scripts/jquery.inview.min.js\"></script>",
 		"<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>"
 	],

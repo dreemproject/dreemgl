@@ -16,14 +16,15 @@ define.class('$server/composition', function(require, $ui$, screen, view, label,
 					padding:10,
 					flex:1,
 					flexdirection:'column',
-					classconstr: Config({type:Function, persist:true}),
+					classconstr: Config({type:Function, persist:false}),
 					init:function() {
 						this.screen.locationhash = function(event){
 							if (event.value.path) {
 								require
 									.async(event.value.path)
 									.then(function(module){
-										this.classconstr = module;
+										this._classconstr = module;
+										this.emit('classconstr', module)
 									}.bind(this))
 							}
 						}.bind(this)
@@ -35,6 +36,7 @@ define.class('$server/composition', function(require, $ui$, screen, view, label,
 						var parseDoc = require('$system/parse/jsdocgen').parseDoc;
 
 						var class_doc = parseDoc(this.classconstr);
+
 						if (class_doc && class_doc.examples) {
 							for (var i = 0;i< class_doc.examples.length;i++){
 								var example = class_doc.examples[i];
