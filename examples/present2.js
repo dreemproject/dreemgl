@@ -37,8 +37,8 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						isberry:float
 					}).array(),
 					position:function(){
-						var mainscale = vec2(30,30)
-						var mainoffset = vec2(300,400)
+						var mainscale = vec2(50,50)
+						var mainoffset = vec2(400,500)
 						var mousepos = (view.mousepos - mainoffset) / mainscale
 						// the path is a set of float 'bits' that can be walked to go left or right
 						var path = mesh.path
@@ -90,7 +90,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							// only rotate the leaves
 
 							if(mesh.isberry > 0.){
-								mycolor = 'red'
+								mycolor = 'blue'
 								scale *= vec2(1.5,1.5)
 							}
 							else{
