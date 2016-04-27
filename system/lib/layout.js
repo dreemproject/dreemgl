@@ -115,10 +115,10 @@ define(function () {
 		var ref = node.ref
 		var ol = ref.oldlayout
 		if(!node.dirty && ol &&
-			((! isNaN(ol.last_size0)) && ol.last_size0 === ref._size[0]) &&
-			((! isNaN(ol.last_size1)) && ol.last_size1 === ref._size[1]) &&
-			((! isNaN(ol.last_pos0)) && ol.last_pos0 === ref._pos[0]) &&
-			((! isNaN(ol.last_pos1)) && ol.last_pos1 === ref._pos[1]) &&
+			(ol.last_size0 === ref._size[0]) &&
+			(ol.last_size1 === ref._size[1]) &&
+			(ol.last_pos0 === ref._pos[0]) &&
+			(ol.last_pos1 === ref._pos[1]) &&
 			ol.parentMaxWidth === parentMaxWidth && ol.parentDirection === parentDirection){
 			putBackOldLayout(node)
 			//ref.debug_view = true
