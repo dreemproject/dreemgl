@@ -1068,7 +1068,8 @@ define.class('$system/base/node', function(require){
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
 		if (this.__isinvisible()) {
 			// console.log('skip updateMatrices')
-			return
+			// return
+			// TODO: bailing breaks dragging lines in flowgraph
 		}
 		// allow pre-matrix gen hooking
 		if (this.atMatrix) this.atMatrix()
