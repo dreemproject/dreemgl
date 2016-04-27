@@ -1042,10 +1042,10 @@ define.class('$ui/view', function(require, $ui$, view, label, button, labelset, 
 		}))
 		res.push(label({
 			bottom: 10,
-			fontsize: 8,
+			fontsize: 12,
 			position: 'absolute',
 			fgcolor: 'black',
-			text: 'Vector data copyright OpenStreetMap contributors, Whos On First. Webservice by mapzen.',
+			text: 'Vector data copyright OpenStreetMap contributors, Whos On First. Webservice by mapzen. Location data provided by Foursquare & Airbnb, Inc.',
 			font: ubuntufont
 		}))
 		this.framessincerender = 0
