@@ -35,9 +35,10 @@ define.class('$system/base/texture', function(exports){
 		return tex
 	}
 
-	Texture.fromArray = function(array, w, h){
+	Texture.fromArray = function(array, w, h, type){
 		var tex = new Texture(Texture.RGBA, w, h)
 		tex.array = array
+		tex.type = type
 		return tex
 	}
 
@@ -196,7 +197,9 @@ define.class('$system/base/texture', function(exports){
 
 		if(this.array){
 			this.typeFlagsToGLType(gl, this.type)
-			gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, new Uint8Array(this.array))
+			var arraytype = Uint8Array 
+			if(this.type & Texture.FLOAT) arraytype = Float32Array
+			gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, new arraytype(this.array))
 		}
 		else if(this.image){
 			var image = this.image
@@ -238,7 +241,9 @@ define.class('$system/base/texture', function(exports){
 
 	this.updateGLTexture = function(gl, gltex){
 		if(this.array){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data))
+			var arraytype = Uint8Array 
+			if(this.type & Texture.FLOAT) arraytype = Float32Array
+			gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, new arraytype(this.array))
 		}
 		else if(this.image){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
@@ -315,7 +320,7 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	this.array2d = function(v){
-		return texture2D(this, vec2(v.x * this.size.x, v.y * this.size.y), {
+		return texture2D(this, vec2(v.x / this.size.x, v.y / this.size.y), {
 			MIN_FILTER: 'NEAREST',
 			MAG_FILTER: 'NEAREST',
 			WRAP_S: 'CLAMP_TO_EDGE',
@@ -323,6 +328,14 @@ define.class('$system/base/texture', function(exports){
 		})
 	}
 
+	this.nearest = function(v){
+		return texture2D(this, v, {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
 
 	// 1-D convolution with a kernel.
 	// 21 kernel weights are arranged 0, +1, -1, +2, -2, ... away from center.

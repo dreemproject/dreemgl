@@ -116,6 +116,7 @@ define.class(function(require, exports){
 			console.log("Could not get webGL context!")
 		}
 
+		this.gl._getExtension = this.getExtension.bind(this)
 		// require derivatives
 		this.getExtension('OES_standard_derivatives')
 	}
