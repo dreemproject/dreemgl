@@ -88,9 +88,9 @@ define.class('$system/base/node', function(require){
 		// internal, alias for the z component of size
 		d: Config({alias:'size', index:2}),
 
-		// alias for the x component of size
+		// alias for setting the x component of size. To read the width, use this.layout.width.
 		width: Config({alias:'size', index:0}),
-		// alias for the y component of size
+		// alias for the y component of size. To read the height, use this.layout.height.
 		height: Config({alias:'size', index:1}),
 		// alias for the z component of size
 		depth: Config({alias:'size', index:2}),
