@@ -35,6 +35,10 @@ DreemGL can generate documentation automatically from all the code in its system
 
 Instructions for adding documentation and rebuilding the documentation can be found in the [Developer's Guide](http://docs.dreemproject.org/docs/api/index.html#!/guide/devguide).
 
+##Talk to Us
+Have a question? Comment? Something cool to show people? We're all on Slack. Join us:
+[![Slack Status](https://dreemproject.herokuapp.com/badge.svg)](https://dreemproject.herokuapp.com/)
+
 ## Contributing to DreemGL
 Like DreemGL? Get involved. Find more information in the file ["Contributing.md"](https://github.com/dreemproject/dreemgl/blob/master/CONTRIBUTING.md), also in this directory. 
 
