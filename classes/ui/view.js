@@ -1067,9 +1067,8 @@ define.class('$system/base/node', function(require){
 	// internal, called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
 		if (this.__isinvisible()) {
-			// console.log('skip updateMatrices')
-			// return
-			// TODO: bailing breaks dragging lines in flowgraph
+			// console.log('skip updateMatrices', this)
+			return
 		}
 		// allow pre-matrix gen hooking
 		if (this.atMatrix) this.atMatrix()
@@ -1285,7 +1284,7 @@ define.class('$system/base/node', function(require){
 	this.__isinvisible = function() {
     var view = this
     while (view) {
-      if (!view._visible) {
+      if (view._visible === false) {
         return true
       }
       view = view.parent

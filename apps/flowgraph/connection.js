@@ -166,7 +166,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.frompos= vec2(0,0);
-	this.topos= vec2(0,100);
+	this.topos= vec2(0,0);
 	this.bgcolor = NaN
 
 	define.class(this, "connectionshader", this.Shader,function($ui$, view){

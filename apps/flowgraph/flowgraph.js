@@ -464,15 +464,13 @@ define.class('$ui/view', function(require,
 	this.updateConnector = function(ev) {
 		var connectingconnection = this.find("openconnector")
 		if (connectingconnection && connectingconnection.ready) {
+		  connectingconnection.visible = true
 		  if (connectingconnection.to === "undefined") {
 			  connectingconnection.topos = this.find("centralconstructiongrid").globalToLocal(ev.position);
-			  connectingconnection.visible = true
-			  connectingconnection.redraw();
 		  } else if (connectingconnection.from === "undefined") {
 			  connectingconnection.frompos = this.find("centralconstructiongrid").globalToLocal(ev.position);
-			  connectingconnection.visible = true
-			  connectingconnection.redraw();
 		  }
+		  connectingconnection.redraw();
 		}
 	}
 
@@ -578,6 +576,7 @@ define.class('$ui/view', function(require,
 		var connectingconnection = this.find("openconnector")
 		if (connectingconnection) {
 			connectingconnection.ready = true;
+			connectingconnection.visible = true;
 			connectingconnection.from = this.newconnection.sourceblock
 			connectingconnection.fromoutput = this.newconnection.sourceoutput
 			connectingconnection.to = this.newconnection.targetblock
@@ -977,7 +976,7 @@ define.class('$ui/view', function(require,
 							return this.renderConnections()
 						}.bind(this)}
 						)
-						,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false, visible: false}))
+						,view({bgcolor: NaN}, connection({name: "openconnector", hasball: false}))
 						,view({name: "blocklayer", bgcolor: NaN,  dataset: this.sourceset, render: function() {
 							return this.renderBlocks()
 						}.bind(this)})

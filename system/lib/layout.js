@@ -29,10 +29,10 @@ define(function () {
 				bottom:0,
 			}
 		}
-		if (! node._visible) {
-			// console.log('bailing early')
+		if (node._visible === false) {
+			// console.log('bailing early', node)
 			// TODO: this breaks dragging lines in flowgraph
-			// return newnode
+			return newnode
 		}
 
 		//Object.defineProperty(newnode.layout, 'left', {get:function(){
@@ -52,9 +52,9 @@ define(function () {
 		if(!nochildren && node.children) {
 			for(var i = 0; i < node.children.length;i++){
 				var child = node.children[i]
-				if(!('_viewport' in child)) {
-					// TODO: bailing for ! visible breaks dragging lines in flowgraph
+				if(!('_viewport' in child) || child._visible === false) {
 					// skip non-views and invisible views
+					// console.log('skipping', child)
 					continue
 				}
 				var newchild
