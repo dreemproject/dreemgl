@@ -560,7 +560,7 @@ define.class(function(require){
 		},
 		set:function(arg){
 			for(var key in arg){
-				this.adListener(key, arg[key])
+				this.addListener(key, arg[key])
 			}
 		}
 	})
