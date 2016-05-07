@@ -9,7 +9,7 @@ define.class('$shaders/pickshader', function(require){
 	this.linespacing = 1.3
 	this.baseline = 1
 
-	this.canvasprops = {	
+	this.canvasprops = {
 		fgcolor: vec4,
 		outlinecolor: vec4,
 		boldness: float,
@@ -31,20 +31,6 @@ define.class('$shaders/pickshader', function(require){
 		clipy:float,
 		clipw:float,
 		cliph:float
-		//line: float,
-		//char: float,
-		//charpos: float,
-		//addpos: float
-		//w: float,
-		//h: float,
-		//texx2: float,
-		//texx2: float,
-	}
-
-	this.defaults = {
-//		x:'this.scope._layout?0:this.scope.x',
-//		y:'this.scope._layout?0:this.scope.y',
-//		fgcolor:'this.scope._layout?this.scope._fggcolor:this.scope.fgcolor'
 	}
 
 	this.font_style_t = define.struct({
@@ -86,6 +72,8 @@ define.class('$shaders/pickshader', function(require){
 	this.polygonoffset = 0.
 	this.pixel_contrast = 1.4
 	this.pixel_gamma_adjust = vec3(1.2)
+	this.outline = 0.0
+	this.boldness = 0.0
 
 	this.font_pixelstyle_t = define.struct({
 		pos: vec2,

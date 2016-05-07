@@ -59,21 +59,21 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.fontsize = 20
 				//this.y = float.top(0)
 				//this.x = float.right(0)
-				this.margin = [0,0,0,10]
+				this.margin = [0, 0, 0, 10]
 			})
 
 			define.class(this, 'Icon2', '$shaders/iconshader', function(){
 				///this.align = 'center'
 				this.fgcolor = 'white'
 				this.fontsize = 20
-				this.margin = [0,5,0,5]
+				this.margin = [0, 5, 0, 5]
 			})
 
 			define.class(this, 'Background', '$shaders/rectshader', function(){
 				this.fgcolor = [0.25, 0.25, 0.25, 1]
 				this.aligncontent = float.LEFT
 				//this.margin = [1,0,0,1]
-				this.margin = 1
+				this.margin = 1 
 				this.h = float.height("10%")
 				this.padding = 10//[10,0,10,0]
 				//this.w = float//float.width("50%")
@@ -112,21 +112,22 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		})
 
 		this.draw = function(){
-			var c = this.canvas 
+			var c = this.canvas
 			//c.drawRect(0,0,500,500)//10+800*abs(sin(this.time)),10+800*abs(sin(this.time)))
 			//c.drawRect(0, 0, c.width, c.height)
 			c.fontsize = 5
 			c.beginAlign(float.TOPLEFT)
-			if(c.startCache('button',this.layoutchanged)){
+			if(c.startCache('button', this.layoutchanged)){
 				var icons = Object.keys(this.Test.prototype.Icon.prototype.table)
 				//var dt = performance.now()
-				for(var i = 0; i < 1000; i++){
+				for(var i = 1; i < 200; i++){
+					//c.drawRect(0, 0, 100, 100)
 					//c.drawRect(float,float,8+8*random(),8+8*random())//,50,50)
 					//c.drawRect(float.auto,float.auto,float.width("10%"),float.height("20%"))//,50,50)
-					//c.drawButton(icons[i],icons[i])
-					c.drawButton('test',icons[i])//icons[floor(Math.random()*icons.length)])
+					c.drawButton(icons[i],icons[i])
+					//c.drawButton(icons[i],icons[i])//icons[floor(Math.random()*icons.length)])
 					//c.drawTest('Btn'+i,icons[i+2])
-					//c.drawRect()
+					//c.drawRect(float,float,100,100)
 					//c.drawRect()
 					//c.drawRect()
 					//console.log(c.align.y, c.align.x)
@@ -157,7 +158,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				bgcolor:'orange',
 				Button:{
 					Background:{
-						color:function(){
+						color2:function(){
 							return 'purple'
 						}
 					}

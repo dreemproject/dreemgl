@@ -28,6 +28,7 @@ define.class('$base/stamp', function(){
 		//c.drawRect(0,0,100,100)
 		// lets get the dims
 		var dim = imageset.dims[index]
+		//c.myprop = index/10
 		c.drawImage(imageset.tgt, this.x, this.y, this.w, this.h, dim.x, dim.y, dim.w, dim.h)
 	}
 
@@ -38,9 +39,8 @@ define.class('$base/stamp', function(){
 	this.makeSet = function(c, set, tgt){
 		// auto size target
 		var imageset = {dims:[]}
-		imageset.tgt = c.pushTarget(tgt)
-		c.setOrthoViewMatrix()
 		
+		c.setOrthoViewMatrix()
 		c.clear()
 
 		var x = 0, y = 0, maxy = 0
@@ -72,7 +72,7 @@ define.class('$base/stamp', function(){
 	this.canvasverbs = {
 		draw: function(setarray, index, x, y, w, h){
 			// ok where do we store the imageset?
-			var tgt = this.getTarget("images",this.RGBA, this.classNAME.tgtwidth, this.classNAME.tgtheight )
+			var tgt = this.getTarget("imagesNAME",this.RGBA, this.classNAME.tgtwidth, this.classNAME.tgtheight )
 			if(!this.imagesetNAME){
 				this.imagesetNAME = this.classNAME.makeSet(this, setarray, tgt)
 				//console.log(this.imagesetNAME)

@@ -2,7 +2,6 @@
 define.class('$base/stamp', function(){
 
 	// a stamp really needs a canvas struct thing to add to all its subshaders.
-
 	this.attributes = {
 		click: Config({type:Event})
 	}
@@ -41,7 +40,7 @@ define.class('$base/stamp', function(){
 
 	this.onpointerhover = function(event){
 		this.hover = 1.0
-		this.bgcolorBackground = Animate({1:vec4('red')})
+		//this.bgcolorBackground = Animate({1:vec4('red')})
 	}
 
 	this.onpointerout = function(event){
@@ -65,14 +64,14 @@ define.class('$base/stamp', function(){
 		c.fontsize = this.fontsize
 		c.beginBackground(this)
 		if(this.text){
-			c.drawLabel(this.text)
+			c.drawLabel(this.text)//,0,10)
 			if(this.icon) c.align.x += 5
 		}
 		// lets check what kind of icon we have, if its an image we need to draw an image
 		if(typeof this.icon === 'string'){
 			c.drawIcon(this.icon)
 		}
-		else{
+		else if(this.icon){
 			c.drawImage(this.icon)
 		}
 		c.endBackground()
