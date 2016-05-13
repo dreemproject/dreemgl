@@ -157,11 +157,11 @@ And finally, the `index.js` wires all the components together:
         this.render = function() { return [
             search({
                 name:'omdb',
-                keyword:'${this.rpc.user.main.term}'
+                keyword:wire('this.rpc.user.main.term')
             }),
             browser({
                 name:'main',
-                movies:'${this.rpc.omdb.results}'
+                movies:wire('this.rpc.omdb.results')
             })
         ] }
     });
