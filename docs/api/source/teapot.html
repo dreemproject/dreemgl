@@ -204,9 +204,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                         <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array();
                         GLGeom.createTeapot(view.radius, view.detail, <span class="keyword">function</span>(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
-                                <span class="local-variable">this</span>.mesh.push(v1,n1,t1);
-                                <span class="local-variable">this</span>.mesh.push(v2,n2,t2);
-                                <span class="local-variable">this</span>.mesh.push(v3,n3,t3);
+                                <span class="local-variable">this</span>.mesh.push(v1,n1,t1,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
+                                <span class="local-variable">this</span>.mesh.push(v2,n2,t2,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
+                                <span class="local-variable">this</span>.mesh.push(v3,n3,t3,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
                         }.bind(<span class="local-variable">this</span>))
                 }
         }

@@ -389,6 +389,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n235" name="n235">235</a>
 <a href="#n236" name="n236">236</a>
 <a href="#n237" name="n237">237</a>
+<a href="#n238" name="n238">238</a>
+<a href="#n239" name="n239">239</a>
+<strong><a href="#n240" name="n240">240</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -460,6 +463,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">bordercolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#636363</span><span class="delimiter">&quot;</span></span>),
                 <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                 <span class="key">iconmargin</span>:<span class="integer">4</span>,
+                <span class="key">hover</span>:<span class="integer">0</span>,
 
                 <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>
@@ -512,6 +516,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.col1 = <span class="local-variable">this</span>.hovercolor1;
                 <span class="local-variable">this</span>.col2 = <span class="local-variable">this</span>.hovercolor2;
                 <span class="local-variable">this</span>.shadowopacity = <span class="float">1.0</span>;
+                <span class="local-variable">this</span>.hover = <span class="float">1.0</span>
                 <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textactivecolor)
         }
 
@@ -519,6 +524,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">statenormal</span> = <span class="keyword">function</span>(first) {
                 <span class="local-variable">this</span>.col1 = Mark(<span class="local-variable">this</span>.buttoncolor1, first);
                 <span class="local-variable">this</span>.col2 = Mark(<span class="local-variable">this</span>.buttoncolor2, first);
+                <span class="local-variable">this</span>.hover = <span class="float">0.0</span>
                 <span class="local-variable">this</span>.shadowopacity = <span class="float">0.0</span>
                 <span class="local-variable">this</span>.setTextColor(<span class="local-variable">this</span>.textcolor)
         }

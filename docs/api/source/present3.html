@@ -182,35 +182,45 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and limitations under the License.*/</span>
+ Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, shape3d){
 
-        <span class="keyword">var</span> GLGeom = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/geometry/basicgeometry</span><span class="delimiter">'</span></span>)
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view) {
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        screen(
+                                view({
+                                        <span class="key">flex</span>:<span class="integer">1</span>,
+                                        <span class="key">myvalue</span>: Config({<span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">linear</span><span class="delimiter">'</span></span>,<span class="key">duration</span>:<span class="float">0.5</span>,<span class="key">value</span>:<span class="integer">0</span>}),
 
-        <span class="local-variable">this</span>.attributes = {
-                <span class="key">radius</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">1</span>}),
-                <span class="key">pointradius</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
-                <span class="key">height</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">1</span>}),
-                <span class="key">detail</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">60</span>}),
-                <span class="key">cap</span>: <span class="predefined-constant">true</span>
-        }
-
-        <span class="local-variable">this</span>.shape3d = {
-                <span class="function">update</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
-                        <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array();
-                        GLGeom.createCone(view.radius,view.pointradius, view.height, view.detail,view.cap, <span class="keyword">function</span>(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
-                                <span class="local-variable">this</span>.mesh.push(v1,n1,t1,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-                                <span class="local-variable">this</span>.mesh.push(v2,n2,t2,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-                                <span class="local-variable">this</span>.mesh.push(v3,n3,t3,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
-                        }.bind(<span class="local-variable">this</span>))        
-                }
+                                        <span class="function">pointerstart</span>:<span class="keyword">function</span>(){
+                                                <span class="local-variable">this</span>.myvalue = <span class="integer">1</span>
+                                        },
+                                        <span class="function">pointerend</span>:<span class="keyword">function</span>(){
+                                                <span class="local-variable">this</span>.myvalue = <span class="integer">0</span>
+                                        },
+                                        <span class="key">hardrect</span>:{
+                                                <span class="key">dump</span>:<span class="integer">1</span>,
+                                                <span class="function">color</span>:<span class="keyword">function</span>(){
+                                                        <span class="comment">//return 'red'</span>
+                                                        <span class="comment">//return mix('blue','purple',view.myvalue)</span>
+                                                        <span class="keyword">return</span> pal.pal1(noise.noise3d(vec3(mesh.x, mesh.y, view.time)))
+                                                }
+                                        },
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>,
+                                })
+                        )
+                ]
         }
 })
 </pre></td>

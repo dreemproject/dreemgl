@@ -549,6 +549,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n395" name="n395">395</a>
 <a href="#n396" name="n396">396</a>
 <a href="#n397" name="n397">397</a>
+<a href="#n398" name="n398">398</a>
+<a href="#n399" name="n399">399</a>
+<strong><a href="#n400" name="n400">400</a></strong>
+<a href="#n401" name="n401">401</a>
+<a href="#n402" name="n402">402</a>
+<a href="#n403" name="n403">403</a>
+<a href="#n404" name="n404">404</a>
+<a href="#n405" name="n405">405</a>
+<a href="#n406" name="n406">406</a>
+<a href="#n407" name="n407">407</a>
+<a href="#n408" name="n408">408</a>
+<a href="#n409" name="n409">409</a>
+<strong><a href="#n410" name="n410">410</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -587,9 +600,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> tex
         }
 
-        Texture.<span class="function">fromArray</span> = <span class="keyword">function</span>(array, w, h){
+        Texture.<span class="function">fromArray</span> = <span class="keyword">function</span>(array, w, h, type){
                 <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(Texture.RGBA, w, h)
                 tex.array = array
+                tex.type = type
                 <span class="keyword">return</span> tex
         }
 
@@ -748,7 +762,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.array){
                         <span class="local-variable">this</span>.typeFlagsToGLType(gl, <span class="local-variable">this</span>.type)
-                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.gldata_type, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.array))
+                        <span class="keyword">var</span> arraytype = Uint8Array 
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.type &amp; Texture.FLOAT) arraytype = Float32Array
+                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.gldata_type, <span class="keyword">new</span> arraytype(<span class="local-variable">this</span>.array))
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.image){
                         <span class="keyword">var</span> image = <span class="local-variable">this</span>.image
@@ -790,7 +806,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">updateGLTexture</span> = <span class="keyword">function</span>(gl, gltex){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.array){
-                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, gl.RGBA, gl.UNSIGNED_BYTE, <span class="keyword">new</span> Uint8Array(<span class="local-variable">this</span>.data))
+                        <span class="keyword">var</span> arraytype = Uint8Array 
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.type &amp; Texture.FLOAT) arraytype = Float32Array
+                        gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.size[<span class="integer">0</span>], <span class="local-variable">this</span>.size[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.glbuf_type, <span class="local-variable">this</span>.gldata_type, <span class="keyword">new</span> arraytype(<span class="local-variable">this</span>.array))
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.image){
                         gl.texImage2D(gl.TEXTURE_2D, <span class="integer">0</span>, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, <span class="local-variable">this</span>.image)
@@ -867,7 +885,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">array2d</span> = <span class="keyword">function</span>(v){
-                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x * <span class="local-variable">this</span>.size.x, v.y * <span class="local-variable">this</span>.size.y), {
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x / <span class="local-variable">this</span>.size.x, v.y / <span class="local-variable">this</span>.size.y), {
                         <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
@@ -875,6 +893,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
+        <span class="local-variable">this</span>.<span class="function">nearest</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, v, {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
 
         <span class="comment">// 1-D convolution with a kernel.</span>
         <span class="comment">// 21 kernel weights are arranged 0, +1, -1, +2, -2, ... away from center.</span>

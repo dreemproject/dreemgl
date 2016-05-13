@@ -1432,6 +1432,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1278" name="n1278">1278</a>
 <a href="#n1279" name="n1279">1279</a>
 <strong><a href="#n1280" name="n1280">1280</a></strong>
+<a href="#n1281" name="n1281">1281</a>
+<a href="#n1282" name="n1282">1282</a>
+<a href="#n1283" name="n1283">1283</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Copyright (c) 2014, Facebook, Inc.
@@ -1445,11 +1448,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define(<span class="keyword">function</span> () {
 
-        <span class="keyword">function</span> <span class="function">fillNodes</span>(node, nochildren, invisible) {
+        <span class="comment">// pass in a view to start</span>
+        <span class="comment">// nochildren == true skips adding children (used )</span>
+        <span class="keyword">function</span> <span class="function">fillNodes</span>(node, nochildren) {
                 <span class="keyword">var</span> newnode = {
                         <span class="key">children</span>:[],
                         <span class="key">ref</span>:node,
-                        <span class="key">visible</span>:(!invisible &amp;&amp; node.visible),
+                        <span class="key">visible</span>:node._visible,
                         <span class="key">dirty</span>: node.layout_dirty,
                         <span class="key">layout</span>:{
                                 <span class="key">width</span>:<span class="predefined-constant">undefined</span>,
@@ -1461,6 +1466,11 @@ define(<span class="keyword">function</span> () {
                                 <span class="key">right</span>:<span class="integer">0</span>,
                                 <span class="key">bottom</span>:<span class="integer">0</span>,
                         }
+                }
+                <span class="keyword">if</span> (node._visible === <span class="predefined-constant">false</span>) {
+                        <span class="comment">// console.log('bailing early', node)</span>
+                        <span class="comment">// TODO: this breaks dragging lines in flowgraph</span>
+                        <span class="keyword">return</span> newnode
                 }
 
                 <span class="comment">//Object.defineProperty(newnode.layout, 'left', {get:function(){</span>
@@ -1477,30 +1487,25 @@ define(<span class="keyword">function</span> () {
                 <span class="keyword">var</span> layout = node._layout = newnode.layout
 
                 <span class="comment">// alright so. what we need to do is bubble down layout_dirty</span>
-                <span class="keyword">if</span>(!nochildren &amp;&amp; node.children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; node.children.length;i++){
-                        <span class="keyword">var</span> child = node.children[i]
-                        <span class="keyword">if</span>(!(<span class="string"><span class="delimiter">'</span><span class="content">_viewport</span><span class="delimiter">'</span></span> <span class="keyword">in</span> child))<span class="keyword">continue</span>
-                        <span class="keyword">if</span>(child._viewport){ <span class="comment">// its using a different layout pass</span>
-                                <span class="comment">// if we are flex, we have to compute the layout of this child</span>
-                                <span class="keyword">if</span>(!isNaN(child._flex)){
-                                        <span class="keyword">var</span> newchild = fillNodes(child, <span class="predefined-constant">true</span>, !newnode.visible)
-                                        <span class="keyword">if</span>(newchild.dirty) newnode.dirty = <span class="predefined-constant">true</span>, node.layout_dirty = <span class="predefined-constant">true</span>
-                                        newnode.children.push(newchild)
+                <span class="keyword">if</span>(!nochildren &amp;&amp; node.children) {
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; node.children.length;i++){
+                                <span class="keyword">var</span> child = node.children[i]
+                                <span class="keyword">if</span>(!(<span class="string"><span class="delimiter">'</span><span class="content">_viewport</span><span class="delimiter">'</span></span> <span class="keyword">in</span> child) || child._visible === <span class="predefined-constant">false</span>) {
+                                        <span class="comment">// skip non-views and invisible views</span>
+                                        <span class="comment">// console.log('skipping', child)</span>
+                                        <span class="keyword">continue</span>
                                 }
-                                <span class="keyword">else</span>{
-                                        <span class="comment">// otherwise this child has an already computed layout</span>
-                                        <span class="comment">// so how do we know if this is dirty?</span>
-                                        newnode.children.push({
-                                                <span class="key">flex</span>:<span class="predefined-constant">undefined</span>,
-                                                <span class="key">ref</span>:child,
-                                                <span class="key">layout</span>:child.layout,
-                                                <span class="key">children</span>:[]
-                                        })
+                                <span class="keyword">var</span> newchild
+                                <span class="keyword">if</span>(child._viewport){ <span class="comment">// its using a different layout pass</span>
+                                        newchild = fillNodes(child, <span class="predefined-constant">true</span>)
+                                } <span class="keyword">else</span> { <span class="comment">// child has no viewport</span>
+                                        newchild = fillNodes(child, <span class="predefined-constant">false</span>)
                                 }
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="keyword">var</span> newchild = fillNodes(child, <span class="predefined-constant">false</span>, !newnode.visible)
-                                <span class="keyword">if</span>(newchild.dirty) newnode.dirty = <span class="predefined-constant">true</span>, node.layout_dirty = <span class="predefined-constant">true</span>
+                                <span class="keyword">if</span>(newchild.dirty) {
+                                        newnode.dirty = <span class="predefined-constant">true</span>
+                                        <span class="comment">// parents get set to dirty also</span>
+                                        node.layout_dirty = <span class="predefined-constant">true</span>
+                                }
                                 newnode.children.push(newchild)
                         }
                 }
@@ -1543,6 +1548,7 @@ define(<span class="keyword">function</span> () {
         }
 
         <span class="keyword">function</span> <span class="function">layoutNode</span>(node, parentMaxWidth, <span class="comment">/*css_direction_t*/</span>parentDirection) {
+                <span class="comment">// console.log('layoutNode', node)</span>
 
                 <span class="keyword">var</span> total = <span class="integer">1</span>;
 

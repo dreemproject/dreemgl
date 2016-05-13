@@ -107,11 +107,11 @@
  */
 /**
  * @attribute {typeless} [width="undefined"]
- * alias for the x component of size
+ * alias for setting the x component of size. To read the width, use this.layout.width.
  */
 /**
  * @attribute {typeless} [height="undefined"]
- * alias for the y component of size
+ * alias for the y component of size. To read the height, use this.layout.height.
  */
 /**
  * @attribute {typeless} [depth="undefined"]

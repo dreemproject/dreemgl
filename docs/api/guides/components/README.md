@@ -1,4 +1,4 @@
-# DreemGL IoT Guide
+# DreemGL External Component Authoring Guide
 
 This document describes how to extend DreemGL to communicate with and access IoT devices, web services and other external resources.
 
@@ -62,8 +62,8 @@ database (see `./docs/examples/components/search.js` for more detailed version):
     define.class('$server/service', function(require) {
 
         this.attributes = {
-          results: {type:Array},
-          keyword: {type:String}
+          results: Config({type:Array}),
+          keyword: Config({type:String})
         };
 
         this.onkeyword = function (keyword) {
@@ -88,9 +88,9 @@ to consume the data coming from it's server component (see `./docs/examples/comp
     define.class('$ui/view', function (label) {
 
         this.attributes = {
-          Title: {type:String},
-          Year: {type:String},
-          Poster: {type:String}
+          Title: Config({type:String}),
+          Year: Config({type:String}),
+          Poster: Config({type:String})
         }
         this.onPoster = function (poster) { this.bgimage = poster; };
 
@@ -126,8 +126,8 @@ movies (as `movie` objects) returned by the web service:
     define.class('$ui/screen', function($ui$, view, button, label, $$, movie) {
 
         this.attributes = {
-          term: {type:String},
-          movies: {type:Array}
+          term: Config({type:String}),
+          movies: Config({type:Array})
         };
 
         this.renderMovies = function() {
@@ -157,11 +157,11 @@ And finally, the `index.js` wires all the components together:
         this.render = function() { return [
             search({
                 name:'omdb',
-                keyword:'${this.rpc.user.main.term}'
+                keyword:wire('this.rpc.main.term')
             }),
             browser({
                 name:'main',
-                movies:'${this.rpc.omdb.results}'
+                movies:wire('this.rpc.omdb.results')
             })
         ] }
     });
@@ -185,10 +185,7 @@ attach them to `this.constructor` as an attribute named `examples`.  For example
     				example({some:[{other:'example'}]})
     			]
     		}    		
-    	}
-
-    
-    
+    	}    
 
 ## Working with screen &lt;&mdash;&gt; server RPC
 

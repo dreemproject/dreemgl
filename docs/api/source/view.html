@@ -2225,6 +2225,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2071" name="n2071">2071</a>
 <a href="#n2072" name="n2072">2072</a>
 <a href="#n2073" name="n2073">2073</a>
+<a href="#n2074" name="n2074">2074</a>
+<a href="#n2075" name="n2075">2075</a>
+<a href="#n2076" name="n2076">2076</a>
+<a href="#n2077" name="n2077">2077</a>
+<a href="#n2078" name="n2078">2078</a>
+<a href="#n2079" name="n2079">2079</a>
+<strong><a href="#n2080" name="n2080">2080</a></strong>
+<a href="#n2081" name="n2081">2081</a>
+<a href="#n2082" name="n2082">2082</a>
+<a href="#n2083" name="n2083">2083</a>
+<a href="#n2084" name="n2084">2084</a>
+<a href="#n2085" name="n2085">2085</a>
+<a href="#n2086" name="n2086">2086</a>
+<a href="#n2087" name="n2087">2087</a>
+<a href="#n2088" name="n2088">2088</a>
+<a href="#n2089" name="n2089">2089</a>
+<strong><a href="#n2090" name="n2090">2090</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -2316,9 +2333,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// internal, alias for the z component of size</span>
                 <span class="key">d</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
-                <span class="comment">// alias for the x component of size</span>
+                <span class="comment">// alias for setting the x component of size. To read the width, use this.layout.width.</span>
                 <span class="key">width</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
-                <span class="comment">// alias for the y component of size</span>
+                <span class="comment">// alias for the y component of size. To read the height, use this.layout.height.</span>
                 <span class="key">height</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
                 <span class="comment">// alias for the z component of size</span>
                 <span class="key">depth</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
@@ -3295,7 +3312,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// internal, called by doLayout, to update the matrices to layout and parent matrix</span>
         <span class="local-variable">this</span>.<span class="function">updateMatrices</span> = <span class="keyword">function</span>(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.__isinvisible()) {
-                        <span class="comment">// console.log('skip updateMatrices')</span>
+                        <span class="comment">// console.log('skip updateMatrices', this)</span>
                         <span class="keyword">return</span>
                 }
                 <span class="comment">// allow pre-matrix gen hooking</span>
@@ -3512,7 +3529,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">__isinvisible</span> = <span class="keyword">function</span>() {
     <span class="keyword">var</span> view = <span class="local-variable">this</span>
     <span class="keyword">while</span> (view) {
-      <span class="keyword">if</span> (!view._visible) {
+      <span class="keyword">if</span> (view._visible === <span class="predefined-constant">false</span>) {
         <span class="keyword">return</span> <span class="predefined-constant">true</span>
       }
       view = view.parent
@@ -3574,6 +3591,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>._layout.height = preheight
                         }
 
+                        <span class="local-variable">this</span>._size = size
+                        <span class="local-variable">this</span>._pos = pos
                         emitPostLayout(copynodes)
                 }
         }
@@ -3705,8 +3724,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">var</span> img = <span class="local-variable">this</span>.texture.samplemip(vec2(view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
+
                         <span class="keyword">var</span> bg = view.bgcolor
+                        <span class="keyword">if</span> (view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect.x &lt; <span class="float">0.0</span>
+                                || view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect.x &gt; <span class="float">1.0</span>
+                                || view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect.y &lt; <span class="float">0.0</span>
+                                || view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect.y &gt; <span class="float">1.0</span>)
+                        {
+                                <span class="comment">//outside range of image so just return bgcolor</span>
+                                <span class="keyword">return</span> vec4(
+                                        bg.r * view.colorfilter[<span class="integer">0</span>],
+                                        bg.g * view.colorfilter[<span class="integer">1</span>],
+                                        bg.b * view.colorfilter[<span class="integer">2</span>],
+                                        bg.a * view.colorfilter[<span class="integer">3</span>] * view.opacity
+                                );
+                        }
+
+                        <span class="keyword">var</span> img = <span class="local-variable">this</span>.texture.samplemip(vec2(view.bgimageoffset[<span class="integer">0</span>] + mesh.xy.x * view.bgimageaspect[<span class="integer">0</span>], view.bgimageoffset[<span class="integer">1</span>] + mesh.xy.y * view.bgimageaspect[<span class="integer">1</span>]));
 
                         <span class="comment">// premultiply alpha</span>
                         img.rgb = (img.rgb * img.a) + (bg.rgb * (<span class="integer">1</span> - img.a));

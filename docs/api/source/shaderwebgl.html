@@ -1095,7 +1095,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                                 <span class="keyword">else</span>{
                                         ATTRLOC_ATTRIBPTR =
-                                                <span class="string"><span class="delimiter">'</span><span class="content">if(buf.slots&gt;4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)</span><span class="delimiter">'</span></span>
+                                                <span class="string"><span class="delimiter">'</span><span class="content">gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)</span><span class="delimiter">'</span></span>
                                 }
                                 out += body
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">ATTRLOC_BUF</span><span class="delimiter">/</span></span>, ATTRLOC_BUF)

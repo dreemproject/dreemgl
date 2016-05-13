@@ -658,6 +658,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n504" name="n504">504</a>
 <a href="#n505" name="n505">505</a>
 <a href="#n506" name="n506">506</a>
+<a href="#n507" name="n507">507</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -777,6 +778,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Could not get webGL context!</span><span class="delimiter">&quot;</span></span>)
                 }
 
+                <span class="local-variable">this</span>.gl._getExtension = <span class="local-variable">this</span>.getExtension.bind(<span class="local-variable">this</span>)
                 <span class="comment">// require derivatives</span>
                 <span class="local-variable">this</span>.getExtension(<span class="string"><span class="delimiter">'</span><span class="content">OES_standard_derivatives</span><span class="delimiter">'</span></span>)
         }

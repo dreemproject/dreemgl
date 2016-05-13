@@ -29,8 +29,14 @@
       {
         "name": "components",
         "url": "guides/components",
-        "title": "DreemGL IoT Guide",
+        "title": "DreemGL External Component Authoring Guide",
         "description": "A guide for extending DreemGL with new services, devices and other components."
+      },
+      {
+        "name": "iot",
+        "url": "guides/iot",
+        "title": "DreemGL IoT Guide",
+        "description": "A guide for working with DreemGL's IoT infrastructure."
       },
       {
         "name": "toolkit",

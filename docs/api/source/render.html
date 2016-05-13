@@ -378,6 +378,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n224" name="n224">224</a>
 <a href="#n225" name="n225">225</a>
 <a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); You may not use this file except in compliance with the License.
@@ -419,10 +420,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//exports.process(this, undefined, undefined, true)</span>
                         <span class="keyword">if</span>(process_list.indexOf(<span class="local-variable">this</span>) === -<span class="integer">1</span>){
                                 <span class="keyword">var</span> oldval = (event &amp;&amp; event.old) || <span class="local-variable">this</span>[key];
-                                <span class="keyword">if</span> (value !== oldval || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>){
+                                <span class="keyword">if</span> (! key || ((value !== oldval) || <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>)){
                                         <span class="comment">// only render if the value changed and isn't an object</span>
                                         process_list.push(key, <span class="local-variable">this</span>)
                                 } <span class="keyword">else</span> {
+                                        <span class="comment">// console.log('skipping render for', key, value, oldval, this)</span>
                                         <span class="keyword">return</span>
                                 }
                         }
