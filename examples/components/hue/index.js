@@ -10,7 +10,7 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 			return [
 				basestation(
-					{username:"6ba5c7d32222e31f779722a818296a09"}
+					{username:"U25oiZ7c0cUV6Z7mE1EVVBiY3tiLY9K47GTo0iuP"}
 				),
 				screen({
 					name:"desktop",

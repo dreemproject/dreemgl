@@ -51,7 +51,7 @@ define.class("$server/service", function() {
 
 		var hue = new this.HueApi();
 
-		console.log("Attempting to register...")
+		console.log("Attempting to register...", this.ipaddress)
 
 		hue.registerUser(this.ipaddress, "DreemGL Hue Bridge")
 			.then(function (result) {

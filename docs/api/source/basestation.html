@@ -380,7 +380,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> hue = <span class="keyword">new</span> <span class="local-variable">this</span>.HueApi();
 
-                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Attempting to register...</span><span class="delimiter">&quot;</span></span>)
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Attempting to register...</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.ipaddress)
 
                 hue.registerUser(<span class="local-variable">this</span>.ipaddress, <span class="string"><span class="delimiter">&quot;</span><span class="content">DreemGL Hue Bridge</span><span class="delimiter">&quot;</span></span>)
                         .then(<span class="keyword">function</span> (result) {

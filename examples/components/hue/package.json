@@ -2,6 +2,6 @@
   "name": "dreemgl-hue",
   "version": "0.0.1",
   "devDependencies": {
-    "node-hue-api": "2.1.1"
+    "node-hue-api": "2.2.0"
   }
 }

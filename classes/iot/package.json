@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "homestar": "^0.3.6",
-    "homestar-hue": "^0.1.22",
-    "homestar-smartthings": "^0.1.25"
+    "homestar-hue": "^0.1.24",
+    "homestar-smartthings": "^0.1.25",
+    "iotdb-upnp": "0.0.11"
   },
   "devDependencies": {},
   "scripts": {
