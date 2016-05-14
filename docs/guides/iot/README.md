@@ -61,8 +61,38 @@ When finished, hit control-c until you've returned to the shell.
 Follow the prompts which may be a lengthy process. 
 When finished, hit control-c until you've returned to the shell.
 
-## Running
+## Using IoT in DreemGL
 
-You should be ready to roll. Start up your dreemgl server and try out some examples!
+### IoT "Things" API
 
-http://localhost:2000/examples/components/iot/ should show a listing of all connected IOT devices.
+The IoT service will continually populate it's `things` attribute with the current set of active and accessible devices.  
+This attribute can be watched via rpc wire to update client side UI.  For example, the following composition will print 
+out the names of all accessible devices:
+
+    define.class('$server/composition', function($iot$, iot, $ui$, screen, label) {
+    
+    	this.render = function() {
+    		return [
+    			iot(),
+    			screen({render:function(){
+    				var things = [];
+    				var found = this.rpc.iot.things;
+    				for (var i = 0;i < found.length;i++) {
+    					var thing = found[i];
+    					things.push(label({text:thing.name}))
+    				}
+    				return things;
+    			}})
+    		]
+    	}
+    	
+    });
+
+
+### Live example
+
+Once the setup is complete, start the DreemGl server, and [the following example](http://localhost:2000/examples/components/iot/) should show a listing of all connected IOT devices.
+
+<iframe style="border:0;width:900px; height:400px" src="/examples/components/iot/"></iframe>
+
+

@@ -278,12 +278,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n124" name="n124">124</a>
 <a href="#n125" name="n125">125</a>
 <a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/service</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require) {
         <span class="comment">// The iot class makes it very easy to connect to a wide variety of devices including</span>
         <span class="comment">// SmartThings, Philips Hue and many more.</span>
         <span class="comment">//</span>
         <span class="comment">// IMPORTANT: see /examples/components/iot/README.md for setup instructions.</span>
+        <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">iot</span><span class="delimiter">&quot;</span></span>
+
         <span class="local-variable">this</span>.__thingmodel = {}
 
         <span class="local-variable">this</span>.attributes = {

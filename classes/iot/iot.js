@@ -3,6 +3,8 @@ define.class("$server/service", function (require) {
 	// SmartThings, Philips Hue and many more.
 	//
 	// IMPORTANT: see /examples/components/iot/README.md for setup instructions.
+	this.name = "iot"
+
 	this.__thingmodel = {}
 
 	this.attributes = {
