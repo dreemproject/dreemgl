@@ -481,6 +481,7 @@ define.class('$base/node', function(require){
 
 		// clear commandset
 		c.clearCmds()
+		c.setTotalMatrix(this.totalmatrix)
 		this.pickdraw = 0
 		// update matrices
 		this.updateMatrix()
@@ -1066,11 +1067,11 @@ define.class('$base/node', function(require){
 	// step callback for the animation
 	function animStep(value){
 		if(this.config.storage){
-			this.obj['_' + this.config.storage][this.config.index] = value
-			this.obj.emit(this.config.storage, {animation:true, key: this.key, owner:this.obj, value:this.obj['_' + this.config.storage]})
+			this.view['_' + this.config.storage][this.config.index] = value
+			this.view.emit(this.config.storage, {animation:true, key: this.key, owner:this.view, value:this.view['_' + this.config.storage]})
 		}
-		this.obj['_' + this.key] = value
-		this.obj.emit(this.key, {animation:true, key: this.key, owner:this.obj, value:value})
+		this.view['_' + this.key] = value
+		this.view.emit(this.key, {animation:true, key: this.key, owner:this.view, value:value})
 	}
 
 	this.startAnimation = function(key, value, track, resolve){
@@ -1082,6 +1083,7 @@ define.class('$base/node', function(require){
 		var config = this.getAttributeConfig(key)
 		// store the config for the animStep
 		anim.config = config
+		anim.key = key
 		anim.type = config.type
 		// track overloads config
 		if(track) config = track
@@ -1098,7 +1100,7 @@ define.class('$base/node', function(require){
 			}
 		}
 		if(!track) throw new Error('no track')
-
+		if(track.motion) anim.motion = track.motion
 		anim.first_value = this['_'+key]
 		anim.track = track
 		anim.resolve = resolve		

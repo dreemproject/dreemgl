@@ -3,7 +3,7 @@ define.class('$shaders/pickshader', function(require){
 	this.position = function(){
 		if(canvasprops.visible < 0.5) return vec4(0.)
 		var pos = vec3(canvasprops.x + mesh.x * canvasprops.w, canvasprops.y + mesh.y * canvasprops.h, canvasprops.z)
-		var res = vec4(pos, 1) * canvasprops.matrix * view.totalmatrix * state.viewmatrix
+		var res = vec4(pos, 1) * canvasprops.matrix * state.totalmatrix * state.viewmatrix
 		return res
 	}
 

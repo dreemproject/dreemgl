@@ -14,7 +14,7 @@ define.class('$base/shader', function(require){
 	this.Texture = require('$base/texture')
 
 	this.view = {totalmatrix:mat4(), pickview:0.}
-	this.state = {viewmatrix:mat4()}
+	this.state = {viewmatrix:mat4(), totalmatrix:mat4()}
 
 	// baseic rect
 	this.mesh = vec2.array()

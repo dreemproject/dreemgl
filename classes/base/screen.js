@@ -149,6 +149,10 @@ define.class('$base/view', function(require, exports, $base$, view) {
 			//console.log(shader._canvas.clean)
 			this.cmdid += 2
 		},
+		setTotalMatrix: function(){
+			this.totalmatrix = this.cmds[this.cmdid+1]
+			this.cmdid += 2
+		},
 		setViewMatrix: function(){
 			var name = this.cmds[this.cmdid+2]
 			this.viewmatrix = this.replace_matrices && this.replace_matrices[name] || this.cmds[this.cmdid+1]

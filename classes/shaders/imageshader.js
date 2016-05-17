@@ -26,7 +26,6 @@ define.class('$shaders/rectshader', function(){
 			if(isNaN(th)) th = 1
 
 			var doalign = isNaN(x) || isNaN(y)
-		
 			this.RECTARGS()
 			//console.log(this.)
 			// flush the shader call

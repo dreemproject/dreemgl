@@ -144,7 +144,15 @@ define.class(function(require, exports){
 		this.has_view_matrix_set = true
 	}
 	
-		// sets the view matrix to default ortho projection which is in device pixels top left 0,0
+	this.setTotalMatrix = function(itotalmatrix){
+		this.totalmatrix = itotalmatrix
+		this.cmds.push(
+			'setTotalMatrix',
+			itotalmatrix
+		)
+	}
+
+	// sets the view matrix to default ortho projection which is in device pixels top left 0,0
 	this.setOrthoViewMatrix = function(yflip, xflip, iwidth, iheight, ixscroll, iyscroll, izoom, left, top){
 		// lets set up a 2D matrix
 		var width = iwidth !== undefined?iwidth:this.target.width
@@ -166,7 +174,6 @@ define.class(function(require, exports){
 		var T = top || 0
 		var B = height
 		mat4.ortho(xflip?R:L, xflip?L:R, yflip?T:B, yflip?B:T, -100, 100, noscrollmatrix)
-
 		this.setViewMatrix(viewmatrix)
 	}
 	
@@ -230,13 +237,15 @@ define.class(function(require, exports){
 		//)
 		return target
 	}
+	
+	this.identity = mat4.identity()
 
 	this.pushTarget = function(name, iflags, iwidth, iheight){
 		var target = name
 		if(typeof name !== 'object') target = this.getTarget(name, iflags, iwidth, iheight)
 
 		if(!this.cmdstack) this.cmdstack = []
-		this.cmdstack.push(this.cmds, this.target)
+		this.cmdstack.push(this.totalmatrix, this.cmds, this.target)
 		this.cmds = []
 		this.target = target
 		this.width = target.width
@@ -260,6 +269,8 @@ define.class(function(require, exports){
 				pick_passes.push(target.targetguid, pass)
 			}
 		}
+		// we should push the total matrix to be identity
+		this.setTotalMatrix(this.identity)
 
 		this.has_view_matrix_set = false
 
@@ -270,6 +281,7 @@ define.class(function(require, exports){
 		if(!this.cmdstack.length) throw new Error('popTarget empty')
 		this.target = this.cmdstack.pop()
 		this.cmds = this.cmdstack.pop()
+		this.setTotalMatrix(this.cmdstack.pop())
 		if(this.target){
 			this.height = this.target.height
 			this.width = this.target.width

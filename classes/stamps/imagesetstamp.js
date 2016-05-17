@@ -40,6 +40,7 @@ define.class('$base/stamp', function(){
 		// auto size target
 		var imageset = {dims:[]}
 		
+		imageset.tgt = c.pushTarget(tgt)
 		c.setOrthoViewMatrix()
 		c.clear()
 
