@@ -25,7 +25,7 @@ define.class('$base/node', function(require){
 		drawtarget: Config({type:Enum('both','pick','color'), value:'both'}),
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
-		pos: Config({type:vec3, value:vec3(0,0,0),meta:"xyz"}),
+		pos: Config({type:vec3, value:vec3(0,0,0), meta:'xyz'}),
 
 		// alias for the x component of pos
 		x: Config({alias:'pos', index:0}),
@@ -51,22 +51,22 @@ define.class('$base/node', function(require){
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:"style", type:vec4, value: vec4(NaN), meta:"color"}),
+		bgcolor: Config({group:'style', type:vec4, value: vec4(NaN), meta:'color'}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: Config({group:"style",type:Object, meta:"texture"}),
+		bgimage: Config({group:'style',type:Object, meta:'texture'}),
 		// the opacity of the image
-		opacity: Config({group:"style", value: 1.0, type:float}),
+		opacity: Config({group:'style', value: 1.0, type:float}),
 
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		// colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
-		
+		// colorfilter: Config({group:'style', type:vec4, value: vec4(1,1,1,1), meta:'color'}),
+
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
-		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
-		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
+		bgimagemode: Config({group:'style', type:Enum('stretch', 'aspect-fit', 'aspect-fill', 'custom', 'resize'), value:'resize'}),
+		bgimageaspect: Config({group:'style', value:vec2(1,1)}),
+		bgimageoffset: Config({group:'style', value:vec2(0,0)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
-		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
+		clearcolor: Config({group:'style',type:vec4, value: vec4('transparent'), meta:'color'}),
 
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
@@ -78,7 +78,7 @@ define.class('$base/node', function(require){
 		overflow: Config({type: Enum('','hidden','scroll','auto','hscroll','vscroll'), value:''}),
 
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
-		size: Config({type:vec3, value:vec3(NaN), meta:"xyz"}),
+		size: Config({type:vec3, value:vec3(NaN), meta:'xyz'}),
 
 		// internal, alias for the x component of size
 		w: Config({alias:'size', index:0}),
@@ -116,9 +116,9 @@ define.class('$base/node', function(require){
 		pixelratio: Config({type: float, value:NaN}),
 
 		// the minimum size for the flexbox layout engine
-		minsize: Config({type: vec3, value:vec3(NaN), meta:"xyz"}),
+		minsize: Config({type: vec3, value:vec3(NaN), meta:'xyz'}),
 		// the maximum size for the flexbox layout engine
-		maxsize: Config({type: vec3, value:vec3(NaN), meta:"xyz"}),
+		maxsize: Config({type: vec3, value:vec3(NaN), meta:'xyz'}),
 
 		// alias for the x component of minsize
 		minwidth: Config({alias:'minsize', index:0}),
@@ -135,7 +135,7 @@ define.class('$base/node', function(require){
 		maxdepth: Config({alias:'maxsize', index:2}),
 
 		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
-		margin: Config({type: vec4, value: vec4(0,0,0,0), meta: "ltrb"}),
+		margin: Config({type: vec4, value: vec4(0,0,0,0), meta: 'ltrb'}),
 		// alias for the first component of margin
 		marginleft: Config({alias:'margin', index:0}),
 		// alias for the second component of margin
@@ -146,7 +146,7 @@ define.class('$base/node', function(require){
 		marginbottom: Config({alias:'margin', index:3}),
 
 		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
-		padding: Config({type: vec4, value: vec4(0,0,0,0), meta: "ltrb"}),
+		padding: Config({type: vec4, value: vec4(0,0,0,0), meta: 'ltrb'}),
 		// alias for the first component of padding
 		paddingleft: Config({alias:'padding', index:0}),
 		// alias for the second component of padding
@@ -157,7 +157,7 @@ define.class('$base/node', function(require){
 		paddingbottom: Config({alias:'padding', index:3}),
 
 		// Scale of an item, only useful for items belof a 3D viewport
-		scale: Config({type: vec3, value: vec3(1), meta:"xyz"}),
+		scale: Config({type: vec3, value: vec3(1), meta:'xyz'}),
 		// The anchor point around which items scale and rotate, depending on anchor mode its either a factor of size or and absolute value
 		anchor: Config({type: vec3, value: vec3(0.)}),
 		// the mode with which the anchor is computed. Factor uses the size of an item to find the point, defaulting to center
@@ -176,13 +176,13 @@ define.class('$base/node', function(require){
 		rotatey: Config({alias:'orientation', index:1}),
 
 		// the color of the border of an item.
-		bordercolor: Config({group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"}),
+		bordercolor: Config({group:'style',type: vec4, value: vec4(0,0,0,0), meta:'color'}),
 
 		// the radius of the corners of an item, individually settable left, top, right, bottom. Setting this value will switch to rounded corner shaders
-		borderradius: Config({group:"style",type: vec4, value: vec4(0,0,0,0)}),
+		borderradius: Config({group:'style',type: vec4, value: vec4(0,0,0,0)}),
 
 		// the width of the border. Setting this value will automatically enable the border shaders
-		borderwidth: Config({group:"style",type: vec4, value: vec4(0,0,0,0)}),
+		borderwidth: Config({group:'style',type: vec4, value: vec4(0,0,0,0)}),
 
 		// alias for the first component of borderwidth
 		borderleftwidth: Config({alias:'borderwidth', index:0}),
@@ -195,47 +195,47 @@ define.class('$base/node', function(require){
 
 		// turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
 		// flexbox layout is a web standard and has many great tutorials online to learn how it works
-		flex: Config({group:"layout", type: float, value: NaN}),
+		flex: Config({group:'layout', type: float, value: NaN}),
 
 		// wraps nodes around when the flexspace is full
-		flexwrap: Config({group:"layout", type: Enum('wrap','nowrap'), value: "wrap"}),
+		flexwrap: Config({group:'layout', type: Enum('wrap','nowrap'), value: 'wrap'}),
 		// which direction the flex layout is working,
-		flexdirection: Config({group:"layout", type: Enum('row','column'), value: "row"}),
+		flexdirection: Config({group:'layout', type: Enum('row','column'), value: 'row'}),
 		// pushes items eitehr to the start, center or end
-		justifycontent: Config({group:"layout", type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ""}),
+		justifycontent: Config({group:'layout', type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ''}),
 		// align items to either start, center, end or stretch them
-		alignitems: Config({group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"}),
+		alignitems: Config({group:'layout', type: Enum('flex-start','center','flex-end','stretch'), value:'stretch'}),
 		// overrides the parents alignitems with our own preference
-		alignself: Config({group:"layout", type: Enum('', 'flex-start','center','flex-end','stretch'), value:""}),
+		alignself: Config({group:'layout', type: Enum('', 'flex-start','center','flex-end','stretch'), value:''}),
 		// item positioning, if absolute it steps 'outside' the normal flex layout
-		position: Config({group:"layout", type:  Enum('relative','absolute'), value: "relative" }),
+		position: Config({group:'layout', type:  Enum('relative','absolute'), value: 'relative'}),
 
 		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
 		// Can be listened to to observe layout changes
-		layout: Config({ type:Object, value:{}, meta:"hidden"}),
+		layout: Config({ type:Object, value:{}, meta:'hidden'}),
 
 		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
 		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
 		// need to be processed and a single texture can just be drawn by the parent
 		// the viewportblend shader can be used to render this texture it into its parent
-		viewport: Config({group:"layout", type:Enum('','2d','3d'), value:''}),
+		viewport: Config({group:'layout', type:Enum('','2d','3d'), value:''}),
 
 		// the field of view of a 3D viewport. Only useful on a viewport:'3D'
-		camerafov: Config({group:"3d", type:float, value: 45}),
+		camerafov: Config({group:'3d', type:float, value: 45}),
 		// the nearplane of a 3D viewport, controls at which Z value near clipping start. Only useful on a viewport:'3D'
-		cameranear: Config({group:"3d",type:float, value: 0.001}),
+		cameranear: Config({group:'3d',type:float, value: 0.001}),
 		// the farplane of a 3D viewport, controls at which Z value far clipping start. Only useful on a viewport:'3D'
-		camerafar: Config({group:"3d",type:float, value: 1000}),
+		camerafar: Config({group:'3d',type:float, value: 1000}),
 
 		// the position of the camera in 3D space. Only useful on a viewport:'3D'
-		camerapos: Config({group:"3d",type: vec3, value: vec3(-2,2,-2)}),
+		camerapos: Config({group:'3d',type: vec3, value: vec3(-2,2,-2)}),
 		// the point the camera is looking at in 3D space. Only useful on a viewport:'3D'
-		cameralookat: Config({group:"3d",type: vec3, value: vec3(0)}),
+		cameralookat: Config({group:'3d',type: vec3, value: vec3(0)}),
 		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
-		cameraup: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
+		cameraup: Config({group:'3d',type: vec3, value: vec3(0,-1,0)}),
 
 		// internal, the current time which can be used in shaders to create continous animations
-		time:Config({meta:"hidden", value:0}),
+		time:Config({meta:'hidden', value:0}),
 
 		// fires when pointer is pressed down.
 		pointerstart:Config({type:Event}),
@@ -283,10 +283,10 @@ define.class('$base/node', function(require){
 		// drop shadow opacity
 		dropshadowopacity:Config({type:float, value:0, minvalue: 0, maxvalue:1}),
 		// drop shadow color
-		dropshadowcolor:Config({type:vec4,meta:"color", value:vec4("black")}),
+		dropshadowcolor:Config({type:vec4,meta:'color', value:vec4('black')}),
 
 		// whether this view has focus
-		focus: Config({meta:"hidden", value:false, persist:true}),
+		focus: Config({meta:'hidden', value:false, persist:true}),
 		// tabstop, sorted by number
 		tabstop: NaN,
 
@@ -303,8 +303,8 @@ define.class('$base/node', function(require){
 		), value:''})
 	}
 
-	this.name = ""
-	this.class = ""
+	this.name = ''
+	this.class = ''
 
 	// trigger redraw
 	this.emitFlags(1, [
@@ -333,7 +333,7 @@ define.class('$base/node', function(require){
 			parent.draw_dirty = true
 			parent = parent.parent
 		}
-		
+
 		if(screen) {
 			screen.redraw()
 		}
@@ -485,19 +485,19 @@ define.class('$base/node', function(require){
 		this.pickdraw = 0
 		// update matrices
 		this.updateMatrix()
-		var redraw 
+		var redraw
 		// alright its a viewport, render to a texture
 		if(this._viewport){
 			// do the 2d
 			var tgt
 			if(this._viewport === '2d'){
 				this.viewport_target =
-				tgt = c.pushTarget("viewport", c.RGBA|c.PICK)
+				tgt = c.pushTarget('viewport', c.RGBA|c.PICK)
 				c.setOrthoViewMatrix(!this.parent)
 			}
 			else{
 				this.viewport_target =
-				tgt = c.pushTarget("viewport", c.RGBA|c.DEPTH|c.PICK)
+				tgt = c.pushTarget('viewport', c.RGBA|c.DEPTH|c.PICK)
 				c.setPerspectiveViewMatrix()
 			}
 			if(this.draw_dirty){
@@ -518,7 +518,7 @@ define.class('$base/node', function(require){
 		}
 
 		c.endAlign()
-	
+
 		this.layoutchanged = false
 		// check time
 		if(this._flag_time&2 || redraw){
@@ -601,7 +601,7 @@ define.class('$base/node', function(require){
 	}
 	/*
 	this.defaultKeyboardHandler = function(v, prefix){
-		if (!prefix) prefix = ""
+		if (!prefix) prefix = '
 
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
@@ -629,7 +629,7 @@ define.class('$base/node', function(require){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
 		var img = shader.texture = Shader.Texture.fromImage(image);
-		if(this.bgimagemode === "resize"){
+		if(this.bgimagemode === 'resize'){
 			this._size = img.size
 			this.relayout()
 		} else if (img) {
@@ -704,23 +704,23 @@ define.class('$base/node', function(require){
 		var scaletemp = mat4.scalematrix([1,1,1])
 		var transtemp2 = mat4.translatematrix([-1,-1,0])
 
-		var lastmode = "2d"
+		var lastmode = '2d'
 
 		this.remapmatrix = mat4.identity()
 
 		for(var i = parentlist.length - 1; i >= 0; i--) {
 			var P = parentlist[i]
-			var newmode = P.parent? P._viewport:"2d"
+			var newmode = P.parent? P._viewport:'2d'
 
 			if (P.parent) {
 
 				var MM = P._viewport? P.viewportmatrix: P.totalmatrix
 
-				if (!P.viewportmatrix) console.log(i, "whaaa" )
+				if (!P.viewportmatrix) console.log(i, 'whaaa' )
 				mat4.invert(P.viewportmatrix, this.remapmatrix)
 
 				// 3d to layer transition -> do a raypick.
-				if (lastmode == "3d") {
+				if (lastmode == '3d') {
 					var startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 0, lastviewmatrix, lastprojection)
 					var endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 1, lastviewmatrix, lastprojection)
 
@@ -1005,7 +1005,7 @@ define.class('$base/node', function(require){
 			}
 			if (child.boundsInsideRect(rect)) {
 				hits.push(child)
-			} 
+			}
 			else {
 				var sub = child.childrenInRect(rect, exclude)
 				if (sub.length) {
@@ -1050,14 +1050,12 @@ define.class('$base/node', function(require){
 	}
 
 	this.doLayout = function(){
-
 		if(!this.layout_dirty) return
 		var copynodes = FlexLayout.fillNodes(this)
 		FlexLayout.computeLayout(copynodes)
-
 		emitPostLayout(copynodes)
 	}
-	
+
 	this.animate = function(key, track){
 		return new define.Promise(function(resolve, reject){
 			this.startAnimation(key, undefined, track, resolve)
@@ -1103,7 +1101,7 @@ define.class('$base/node', function(require){
 		if(track.motion) anim.motion = track.motion
 		anim.first_value = this['_'+key]
 		anim.track = track
-		anim.resolve = resolve		
+		anim.resolve = resolve
 		anim.atStep = animStep
 		anim.view = this
 

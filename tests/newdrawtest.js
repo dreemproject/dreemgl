@@ -7,13 +7,6 @@
 define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class(view, function(){
-		this.Rect = function(){
-			//this.margin = [10,10,0,10],
-			this.fgcolor = vec4('blue')
-			this.color = function(){
-				return mix(vec4(0,0,0,0),this.fgcolor,length(mesh.xy*2-1.))
-			}
-		}
 
 		// create a little stamp based button with hover anim
 		define.class(this, 'Test', '$base/stamp', function(){
@@ -73,7 +66,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				this.fgcolor = [0.25, 0.25, 0.25, 1]
 				this.aligncontent = float.LEFT
 				//this.margin = [1,0,0,1]
-				this.margin = 1 
+				this.margin = 1
 				this.h = float.height("10%")
 				this.padding = 10//[10,0,10,0]
 				//this.w = float//float.width("50%")
@@ -100,12 +93,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				}
 			}
 		})
-
-		this.Rect = function(){
-			this.w = float.width("fill")
-			this.h = float.height("10%")
-			this.margin = .5
-		}
 
 		define.class(this, 'Button', '$stamps/buttonstamp', function(){
 			this.padding = 5
@@ -152,18 +139,21 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	})
 
 	this.render = function(){ return [
-		screen({name:'default', bgcolor:'orange',rect:{color:function(){return 'blue'}},clearcolor:vec4('purple')},
+		screen({
+			name: 'default',
+			bgcolor: 'orange'
+		}, [
 			myview({
-				flex:1, 
-				bgcolor:'orange',
-				Button:{
-					Background:{
-						color2:function(){
+				flex: 1,
+				bgcolor: 'orange',
+				Button: {
+					Background: {
+						color2: function(){
 							return 'purple'
 						}
 					}
 				}
 			})
-		)
+		])
 	]}
 })
