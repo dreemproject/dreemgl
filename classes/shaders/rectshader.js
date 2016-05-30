@@ -23,8 +23,8 @@ define.class('$shaders/pickshader', function(require){
 //		fgcolor:'this.scope._layout?this.scope._bgcolor:this.scope.color'
 	}
 
-	this.contentalign = 
-	this.wrapalign = 
+	this.contentalign =
+	this.wrapalign =
 
 	this.canvasprops = {
 		visible:float,
@@ -46,8 +46,8 @@ define.class('$shaders/pickshader', function(require){
 			// just store the margin on our align
 			this.align.margin = margin,
 			this.beginAlign(
-				alignfn !== undefined? alignfn: this.classNAME.aligncontent, 
-				wrapfn !== undefined? wrapfn: this.classNAME.wrapcontent, 
+				alignfn !== undefined? alignfn: this.classNAME.aligncontent,
+				wrapfn !== undefined? wrapfn: this.classNAME.wrapcontent,
 				this.align.margin,
 				padding
 			)
@@ -58,8 +58,8 @@ define.class('$shaders/pickshader', function(require){
 
 			this.endAlign()
 			var buffer = this.bufferNAME
-			
-			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){ 
+
+			if(isNaN(oldalign.inx) || isNaN(oldalign.iny)){
 				this.runAlign(buffer, 1, this.align.margin, oldalign)
 			}
 			else{ // we have to mark our nesting to be absolute and not touched by outer layouts

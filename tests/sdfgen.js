@@ -41,12 +41,11 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 				pos1.w += polygonoffset;
 				return pos1
 			}
-			
+
 			this.color = function(){
 				var nominal_size = (ivec2(mod(glyph.zw, 256.)) + 2) / 4
 				var atlas_pos = ivec2(glyph.zw) / 256
 				var dist = arc_sdf(glyph.xy, nominal_size, atlas_pos) //+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6
-
 				return sdf_encode(dist)
 			}
 
@@ -72,7 +71,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 
 		this.draw = function(){
 			var c = this.canvas
-			
+
 			var tgt = c.pushTarget('surface', c.RGBA, 2048, 2048)
 
 			c.clear(0,0,0,1.)
@@ -82,7 +81,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			var px = 0
 			var py = 0
 			var pad = 4
-			
+
 			var font = c.classSdfgen.font
 			var glyphs = font.glyphs
 			var xymap = {}
@@ -100,7 +99,7 @@ define.class('$base/composition', function(require, $base$, screen, view, $serve
 			var sdf_pixel_width = width
 			var sdf_pixel_height = int.nextHighestPowerOfTwo(py)
 
-			var header = 12 + font.count * 10 * 4 
+			var header = 12 + font.count * 10 * 4
 			var body = sdf_pixel_width * sdf_pixel_height * 1
 
 			var alldata = new Uint8Array(header + body)
