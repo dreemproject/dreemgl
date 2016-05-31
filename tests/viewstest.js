@@ -7,7 +7,7 @@
 // Randomly display squares in a parent view. Move each view when the parent
 // view is clicked.
 
-define.class('$base/composition', function(require, $base$, screen, view){
+define.class('$base/composition', function(require, $base$, screen, view, $views$, button, label){
 	// Internal
 	// Helper functions
 
@@ -19,14 +19,12 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	// Return random color
 	function rcolor() {
-		var color = vec4(Math.random(), Math.random(), Math.random(), 1)
-		return color
+		return vec4(Math.random(), Math.random(), Math.random(), 1)
 	}
 
 	// Return a random position
 	function rpos() {
-		var pos = vec3(random(450), random(450), 0)
-		return pos
+		return vec3(random(250), random(250), 0)
 	}
 
 	// Create N random views
@@ -34,9 +32,10 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		// Create dynamic squares (location and color)
 		var dynviews = []
 		for (var i = 0; i < n; i++) {
-			var v = view({
+			var v = button({
 				pos: rpos(),
-				size: vec2(50, 50),
+				title: 'asdf',
+				icon: 'apple',
 				bgcolor: rcolor(),
 				position: 'absolute'
 			})
@@ -57,11 +56,10 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	this.render = function(){
 		return screen(
-			{name: 'default', clearcolor: '#484230'},
+			{name: 'default'},
 			view({
-				name: 'top',
-				size: vec2(500,500),
-				bgcolor: vec4('gray'),
+				flex: 1,
+				bgcolor: '#484230',
 				pointertap: this.updatePositions
 			},
 			this.rviews(50))

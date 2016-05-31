@@ -7,16 +7,19 @@
 define.class('$base/view', function(require){
 
 	this.title = ''
+	this.fontsize = 15
 
-	this.attribute = {
-		click:Config({type:Event})
-	}
-
-	define.class(this, 'Button', '$stamps/buttonstamp', function(){
+	define.class(this, 'Label', '$shaders/fontshader', function(){
+		this.fgcolor = [1,1,1,1]
+		this.style = function(style){
+			return style
+		}
 	})
 
+	// check if icon is an image, we use that
 	this.draw = function(){
 		var c = this.canvas
-		c.drawButton(this.title, this.icon, undefined, undefined, undefined, undefined, this.bgcolor)
+		c.fontsize = this.fontsize
+		c.drawLabel(this.title)
 	}
 })

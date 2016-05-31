@@ -13,39 +13,36 @@ define.class('$base/stamp', function(){
 	}
 
 	define.class(this, 'Label', '$shaders/fontshader', function(){
-		this.fgcolor = [1,1,1,1]
 		this.style = function(style){
 			return style
 		}
 	})
-	
+
 	define.class(this, 'Icon', '$shaders/iconshader', function(){
-		this.fgcolor = [1,1,1,1]
 	})
 
 	define.class(this, 'Image', '$shaders/imageshader', function(){
 	})
 
 	define.class(this, 'Background', '$shaders/rectshader', function(){
-		this.bgcolor = 'gray'
 		this.aligncontent = float.CENTER
 	})
 
 	this.fontsize = 15
 	this.margin = 0
 
-	this.normalcolor = 'gray'
+	this.normalcolor = 'silver'
 	this.hovercolor = 'lightgray'
 	this.downcolor = '#4f4f4f'
 
 	this.onpointerhover = function(event){
 		this.hover = 1.0
-		//this.bgcolorBackground = Animate({1:vec4('red')})
+		this.bgcolorBackground = Animate({0.2:vec4('yellow')})
 	}
 
 	this.onpointerout = function(event){
 		this.hover = 0.
-		this.bgcolorBackground = Animate({1:this.normalcolor})
+		this.bgcolorBackground = Animate({0.2:this.normalcolor})
 	}
 
 	this.onpointerstart = function(){
@@ -60,9 +57,9 @@ define.class('$base/stamp', function(){
 
 	this.draw = function(){
 		var c = this.canvas
-		//console.log(c.scope.bgcolorBackground)
 		c.fontsize = this.fontsize
 		c.beginBackground(this)
+		this.bgcolorBackground = this.bgcolor
 		if(this.text){
 			c.drawLabel(this.text)//,0,10)
 			if(this.icon) c.align.x += 5
@@ -78,7 +75,7 @@ define.class('$base/stamp', function(){
 	}
 
 	this.canvasverbs = {
-		draw: function(text, icon, x, y, w, h){
+		draw: function(text, icon, x, y, w, h, bgcolor){
 			this.DOSTAMP()
 			return stamp
 		}
