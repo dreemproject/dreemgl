@@ -6,10 +6,10 @@ define.class('$shaders/rectshader', function(){
 	this.canvasprops = {
 		tx: float,
 		ty: float,
-		tw: float, 
+		tw: float,
 		th: float
 	}
-
+	
 	this.color = function(){
 		return texture.sample(vec2(
 			mesh.x * canvasprops.tw + canvasprops.tx,
@@ -18,7 +18,16 @@ define.class('$shaders/rectshader', function(){
 	}
 
 	this.canvasverbs = {
+
 		draw:function(image, x, y, w, h, tx, ty, tw, th, margin){
+
+			this.DEFARGS({
+				tx: 0,
+				ty: 0,
+				tw: 1,
+				th: 1
+			})
+
 			// lets do an aspect ratio safe width/height scale
 			if(isNaN(tx)) tx = 0
 			if(isNaN(ty)) ty = 0
@@ -33,7 +42,7 @@ define.class('$shaders/rectshader', function(){
 			this.GETBUFFER()
 			this.shaderNAME.texture = image//this.Texture.fromImage(image)
 			this.ARGSTO(this)
-			if(doalign) this.runAlign(buffer,1, margin)
+			if(doalign) this.runAlign(buffer, 1, margin)
 			this.CANVASTOBUFFER()
 		}
 	}

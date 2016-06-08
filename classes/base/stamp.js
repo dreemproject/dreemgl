@@ -5,6 +5,8 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 "use strict"
 define.class('$base/node', function(require){
+	this.__isstamp__ = true
+
 	this.Shader = require('$system/platform/$platform/shader$platform')
 
 	var view = require('$base/view')
@@ -16,14 +18,51 @@ define.class('$base/node', function(require){
 
 	Object.defineProperty(this, 'canvasverbs',{
 		set:function(verbs){
-			if(this._canvasverbs) this._canvasverbs = Object.create(this._canvasverbs)
+			if(!this.hasOwnProperty('_canvasverbs')) this._canvasverbs = Object.create(this._canvasverbs || {})
 			else this._canvasverbs = {}
 			for(var key in verbs) this._canvasverbs[key] = verbs[key]
 		}
 	})
 
-	this.totalmatrix = mat4()
-	this.pickview = 0
+	function defProp(obj, key){
+		var store = '_' + key
+		Object.defineProperty(obj, key,{
+			get:function(){
+				//!TODO mark usage w draw
+				return this[store]
+			},
+			set:function(value){
+				this[store] = value
+				//!TODO repaint/poke into shaders
+			}
+		})
+	}
+
+	Object.defineProperty(this, 'props', {
+		set:function(props){
+			if(!this.hasOwnProperty('_props')){
+				this._props = Object.create(this._props || {})
+			}
+			for(var key in props){
+				this[key] = this._props[key] = props[key]
+			}
+		},
+		get:function(){
+			return this._props
+		}
+	})
+
+	this.props = {
+		x:0,
+		y:0,
+		w:0,
+		h:0,
+		margin:[0,0,0,0],
+		padding:[0,0,0,0],
+		aligncontent: float.LEFTTOP,
+		alignwrap: float.WRAP
+	}
+
 	// the draw api
 	define.class(this, 'Rect', '$shaders/rectshader')
 
@@ -53,7 +92,6 @@ define.class('$base/node', function(require){
 		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
-
 	}
 
 	this.redraw = function(){

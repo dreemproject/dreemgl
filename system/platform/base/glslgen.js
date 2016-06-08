@@ -45,7 +45,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 		return gltypes.getType(infer)
 	}
 
-	this.resolveContext = function(node, context, name, basename, state){
+	this.resolveContext = function(node, context, name, basename, state, infer){
 		// compute output name
 		var outname
 
@@ -67,10 +67,37 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 		else{
 			obj = context[name]
 		}
+
 		if(typeof obj === 'undefined' && context.wildcard){
 			obj = context.wildcard
 		}
-		
+
+		// okay. so, here we check wether infer.name === 'geometry'
+		if(infer){
+			if(infer.name === 'geometry'){ // its a geometry attribute on geometry
+				if(!obj || !obj.struct){
+					console.error('Geometry attribute specified but not found'+name)
+				}
+				if(obj.struct.id){
+					state.attributes[outname] = obj.struct
+				}
+				node.infer = {
+					fn_t: 'attribute',
+					array: obj
+				}
+				return outname
+			}
+			if(infer.name === 'props'){ // its a property attribute
+				// infer the type based on the arg
+				if(typeof obj === 'number') node.infer = float32
+				else if(typeof obj === 'boolean') node.infer = float32
+				else if(typeof obj === 'object' && obj.struct) node.infer = obj.struct
+				state.attributes[outname] = node.infer
+				return outname
+			}
+		}
+
+		// otherwise its a uniform
 		if(typeof obj === 'number'){
 			state.uniforms[outname] = node.infer = float32
 			return outname
@@ -93,13 +120,14 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 		if(obj && typeof obj === 'object' && obj.struct){
 			// if we are an array, we are an attribute
 			if(obj.isArray){
-				if(obj.struct.id){
-					state.attributes[outname] = obj.struct
-				}
-				node.infer = {
-					fn_t: 'attribute',
-					array: obj
-				}
+				throw new Error("array uniforms not supported (yet)")
+				//if(obj.struct.id){
+				//	state.attributes[outname] = obj.struct
+				//}
+				//node.infer = {
+				//	fn_t: 'attribute',
+				//	array: obj
+				//}
 			}
 			else{
 				node.infer = state.uniforms[outname] = obj.struct
@@ -111,6 +139,9 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 				obj = context[name] = Texture.fromImage(obj)
 			}
 			node.infer = {fn_t:'object', object:obj}
+
+			node.infer.name = name
+
 			//if(state.basename) return state.basename + '_DOT_' + outname
 			return outname
 		}
@@ -219,7 +250,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 			//while(p.parent) p = p.parent
 			//var str = gen.expand(p, null, {})
 			//var name = gen.expand(node, null, {})
-			console.error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source)
+			console.error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source, node)
 			// make it throw in the function so we can find it
 			//state.functionref()
 			//state.fn()
@@ -239,7 +270,8 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 		// we can also be referencing another object
 		if(infer.fn_t === 'object'){
 			// lets switch context and expand id
-			var ret =  this.resolveContext(node, infer.object, key, obj, state)
+			var ret =  this.resolveContext(node, infer.object, key, obj, state, infer)
+
 			//if(key === 'bgcolor')console.log(ret)
 			//if(ret === 'view_DOT_layoutview_DOT_width') console.log(key, obj, state.basename)
 			if(ret === undefined){
@@ -409,7 +441,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 
 			if(node.args){
 				fn += '_T'
-				for(var i = 0; i<node.args.length; i++){
+				for(var i = 0; i < node.args.length; i++){
 					var infer = node.args[i].infer
 					if(!infer)throw new Error('Argument type cannot be inferred ' + fn + ' ' +  i)
 					fn += '_' + this.getType(infer, state)
@@ -710,6 +742,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 		if(parent && parent.type === 'Call' && parent.fn.infer && parent.fn.infer.fn_t === 'constructor' && parent.infer.primary === float32){
 			floatcast = true
 		}
+
 		if(node.kind === 'num'){
 			var isfloat = node.raw.indexOf('.') !== -1 || node.raw.indexOf('e') !== -1
 			if(node.raw.indexOf('0x') === -1 && floatcast && !isfloat){

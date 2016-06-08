@@ -144,7 +144,7 @@ define.class('$base/view', function(require, exports, $base$, view) {
 		drawShader: function(){
 			var shader = this.cmds[this.cmdid+1]
 			// lets draw it	
-			shader.state = this
+			shader.system = this
 			shader.draw(this.device, this.overlay)
 			//console.log(shader._canvas.clean)
 			this.cmdid += 2

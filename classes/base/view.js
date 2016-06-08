@@ -406,9 +406,6 @@ define.class('$base/node', function(require){
 			else this.totalmatrix = mat4()
 		}
 
-		// create a context
-		if(!this.Canvas.drawRect) debugger
-
 		this.canvas = Object.create(this.Canvas)
 		this.canvas.initCanvas(this)
 
@@ -445,7 +442,7 @@ define.class('$base/node', function(require){
 				c.drawRoundedrect(0, 0, c.width, c.height)
 			}
 			else{
-				c.drawRect(0, 0, c.width, c.height)
+				c.drawRect({x:0, y:0, w:c.width, h:c.height})
 			}
 		}
 		if(this._viewport === '2d'){
@@ -481,10 +478,7 @@ define.class('$base/node', function(require){
 
 		// clear commandset
 		c.clearCmds()
-		c.setTotalMatrix(this.totalmatrix)
-		this.pickdraw = 0
-		// update matrices
-		this.updateMatrix()
+		 
 		var redraw
 		// alright its a viewport, render to a texture
 		if(this._viewport){
@@ -501,7 +495,7 @@ define.class('$base/node', function(require){
 				c.setPerspectiveViewMatrix()
 			}
 			if(this.draw_dirty){
-				c.clear()
+				c.clear(this.clearcolor)
 				this.atAttributeGetFlag = 2
 				redraw = this.draw(stime, frameid)
 				this.atAttributeGetFlag = 0
@@ -533,7 +527,6 @@ define.class('$base/node', function(require){
 			}
 		}
 	}
-
 
 	// lets manage the drawcanvas
 	this.atInnerClassAssign = function(key, value){
@@ -576,7 +569,6 @@ define.class('$base/node', function(require){
 			})
 		}
 	}
-
 
 	this.onbgimage = function(){
 		if(this.initialized){
@@ -1136,7 +1128,7 @@ define.class('$base/node', function(require){
 
 	// the draw api
 	define.class(this, 'Rect', '$shaders/rectshader')
-	define.class(this, 'Image', '$shaders/imageshader')
+	//define.class(this, 'Image', '$shaders/imageshader')
 
 	// Basic usage of the splitcontainer
 	this.constructor.examples = {

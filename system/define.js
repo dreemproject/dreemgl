@@ -1287,6 +1287,7 @@
 					define.hideException()
 					if(define.partial_reload && old_module && typeof old_module.exports === 'function'){
 						define.require.reloadAsync(msg.file).then(function(){
+						
 							if(define.atMain) define.atMain(define.require, define.main)
 						}).catch(function(exception){
 							define.showException(exception)

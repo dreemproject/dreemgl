@@ -96,7 +96,7 @@ define.class(function(require, exports){
 		}
 	}
 	
-	this.drawShaderCmd = function(shader, buffer){
+	this.drawShaderCmd = function(shader){
 		if(!this.has_view_matrix_set){
 			if(this.target.flags&this.DEPTH){
 				this.setPerspectiveViewMatrix()
@@ -106,7 +106,6 @@ define.class(function(require, exports){
 			}
 		}
 		shader.view = this.view
-		shader._canvasprops = buffer
 		this.cmds.push(
 			'drawShader',
 			shader

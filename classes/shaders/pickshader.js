@@ -13,23 +13,47 @@ define.class('$base/shader', function(require){
 
 	this.Texture = require('$base/texture')
 
-	this.view = {totalmatrix:mat4(), pickview:0.}
-	this.state = {viewmatrix:mat4(), totalmatrix:mat4()}
+	this.props = {
+		x:0,
+		y:0,
+		z:0,
+		w:100,
+		h:100,
+		margin:[0,0,0,0],
+		padding:[0,0,0,0],
+		aligncontent: float.LEFTTOP,
+		alignwrap: float.WRAP
+	}
+
+	this.view = {
+		totalmatrix:mat4(),
+		pickview:0.
+	}
+
+	this.system = {
+		time:0.,
+		viewmatrix:mat4(),
+	}
+
+	var mystruct = define.struct({
+		a:vec2,
+		b:vec2
+	})
 
 	// baseic rect
-	this.mesh = vec2.array()
-	this.mesh.pushQuad(0,0,1,0,0,1,1,1)
+	this.geometry = {
+		pos:vec2.array()
+	}
 
-	this.position = function(){
-		var pos = vec3(mesh.x * 100, mesh.y * 100, 0)
-		var res = vec4(pos, 1) * view.totalmatrix * state.viewmatrix
+	this.geometry.pos.pushQuad(0, 0, 1, 0, 0, 1, 1, 1)
+
+	this.vertex = function(){
+		var pos = vec3(geometry.pos.x * 100, geometry.pos.y * 100, 0)
+		var res = vec4(pos, 1.) * view.totalmatrix * system.viewmatrix
 		return res
 	}
 
-	this.aligncontent = float.LEFTTOP
-	this.alignwrap = float.WRAP
-
-	this.color = function(){
+	this.pixel = function(){
 		return vec4('red')
 	}
 
@@ -37,17 +61,21 @@ define.class('$base/shader', function(require){
 
 	// the pick entry point
 	this.pick = function(){
-		var col = this.color()
-		var total = view.pickview + canvasprops.pickdraw
+		var col = this.pixel()
+		var total = view.pickview + this.pickdraw
 		return vec4(floor(total/65536.)/255., mod(floor(total/256.),256.)/255., mod(total,256.)/255., col.a>pickalpha?1.:0.)
 	}
 
-	this.pixelentries = ['color','pick']
+	this.pixelentries = ['pixel','pick']
 
-	this.margin = [0,0,0,0]
-	this.padding = [0,0,0,0]
+	this.pickdraw = 0.
 
-	this.canvasprops = {
-		pickdraw:float,
+	this.canvasverbs = {
+		uniforms: function(uni){
+		},
+		geometry: function(geom){
+		},
+		flush: function(){
+		}
 	}
 })

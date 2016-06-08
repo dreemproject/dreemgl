@@ -27,7 +27,6 @@ define.class(function(require, exports){
 	this.SQRT2 = '1.4142135623730951'
 
 	this.visible = true
-
 	this.pickalpha = 0.5
 	
 	// we can use singletons of these stateless classes
@@ -40,78 +39,60 @@ define.class(function(require, exports){
 	}
 
 	this.set_precision = true
-
 	this.extensions = ''
-	// put extensions as setters to not have to scan for them
-	/*
-	function defExt(ext){
-		Object.defineProperty(self, key,{
-			get:function(){
-				this.extensions.indexOf(ext) !== -1
-			},
-			set:function(value){
-				if(this.extensions.indexOf(ext) !== -1)
-					return
-				if(this.extensions) this.extensions += '|'
-				this.extensions += ext
-			}
-		})
-	}*/
-	//for(var key in gltypes.extensions) defExt(key)
-
-	//this.OES_standard_derivatives = 1
-
 	this.precision = 'highp'
-
 	this.compileHeader = function(){
 		var ret = '';
-		// ehm how do we find extensions to enable?
-		// Extensions come first.
 		ret += '#extension GL_OES_standard_derivatives : enable\n'
-
 		ret += this.set_precision?'precision ' + this.precision + ' float;\n':''
-		//	'precision ' + this.precision + ' int;'
-
-		//var ret = ''
-		//for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
-		//	var ext = exts[i]
-	//		if(gltypes.extensions[ext] === 1)
-	//			ret += '\n#extension GL_' + ext + ' : enable'
-	//	}
-	
 		return ret + '\n'
 	}
 
 	this.compileAttributes = function(vtxattr, pixattr, context, shader){
 		var ret = ''
 		var attr = {}
-		// alright we have to pack the attribute streams
-		// group by attribute name
 
 		// and then just allocate attribute slots
 		var objs = context.attr_objs = {}
 
+		var props = {}
+
 		if(vtxattr) for(var key in vtxattr){
-			var obj = key.split('_DOT_')[0]
+			var split = key.split('_DOT_')
+			var obj = split[0] === 'geometry'?'geometry_DOT_'+split[1]:'props'
+			if(obj === 'props') props[split[1]] = vtxattr[key]
 			var gltype = gltypes.getType(vtxattr[key])
 			objs[obj] = 1
 			attr[key] = gltype
 		}
+
 		if(pixattr) for(var key in pixattr) if(!(key in vtxattr)){
-			var obj = key.split('_DOT_')[0]
+			var split = key.split('_DOT_')
+			var obj = split[0] === 'geometry'?'geometry_DOT_'+split[1]:'props'
+			if(obj === 'props') props[split[1]] = pixattr[key]
 			var gltype = gltypes.getType(pixattr[key])
 			objs[obj] = 1
 			attr[key] = gltype
 		}
+
+		context._propstruct = define.struct(props)
+
 		// lets define sets of attributes per object packed
 		for(var key in objs){
-			var struct = context[key].struct
+			var struct
+
+			if(key.indexOf('geometry_DOT_') === 0){
+				struct = context._geometry[key.slice(13)].struct
+			}
+			else struct  = context._propstruct
+
+			if(!struct) console.error("Not an attribute: " + key, objs)
 			// lets create the minimum set of attributes for this object
 			// one vec4 at a time, and then unpack them accordingly
 			var left = struct.slots
 			var slot = 0
 			while(left){
-				if(left>=4){
+				if(left >= 4){
 					ret += 'attribute vec4 _attr_'+key+'_'+slot+';\n'
 					left -=4
 				}
@@ -130,18 +111,6 @@ define.class(function(require, exports){
 				slot++
 			}
 		}
-
-		//if(vtxattr) for(var key in vtxattr){
-		//	var gltype = gltypes.getType(vtxattr[key])
-		//	ret += 'attribute ' + gltype + ' _' + key + ';\n'
-		//	attr[key] = gltype
-		//}
-		//if(pixattr) for(var key in pixattr) if(!(key in vtxattr)){
-		//	var gltype = gltypes.getType(pixattr[key])
-		//	ret += 'attribute ' + gltype + ' _' + key + ';\n'
-		//	attr[key] = gltype
-		//}
-
 		// create named items
 		for(var key in attr){
 			var gltype = attr[key]
@@ -171,10 +140,21 @@ define.class(function(require, exports){
 	}
 
 	function decodeAttribItem(key, attrtype, context){
+
 		var split = key.split('_DOT_')
-		var obj = split[0]
-		var prop = split[1]
-		var struct = context[obj].struct
+		var obj, prop, struct
+
+		if(split[0] === 'geometry'){
+			obj = 'geometry_DOT_'+split[1]
+			prop = split[2]
+			struct = context._geometry[split[1]].struct
+		}
+		else {
+			obj = 'props'
+			prop = split[1]
+			struct = context._propstruct
+		}
+
 		var gltype = gltypes.getType(attrtype)
 
 		if(!prop) offset = 0
@@ -259,14 +239,6 @@ define.class(function(require, exports){
 		return ret
 	}
 
-/*	this.compileUniformRename = function(uniforms){
-		var ret = ''
-		for(var key in uniforms){
-			ret += '\t' + key + ' = _' + key + ';\n'
-		}
-		return ret
-	}*/
-
 	this.compileFunctions = function(call, mask){
 		var ret = ''
 		var init
@@ -338,7 +310,15 @@ define.class(function(require, exports){
 
 	this.mapAttributes = function(gl, shader, attrlocs, context){
 		for(var key in context.attr_objs){
-			var struct = context[key].struct
+
+			var split = key.split('_DOT_')
+			if(key.indexOf('geometry_DOT_') === 0){
+				struct = context._geometry[key.slice(13)].struct
+			}
+			else {
+				struct = context._propstruct
+			}			
+
 			// ok. now. we should map all attrlocs
 			var left = struct.slots
 			var slot = 0, offset = 0
@@ -521,92 +501,16 @@ define.class(function(require, exports){
 	})
 
 	this.alpha_blend = ''
-	//this.depth_test = 'src_depth > dst_depth'
 	this.depth_test = ''
 	this.color_blend = '(1 - src_alpha) * dst_color + src_alpha * src_color'
 
 	this.alpha = ''
 	this.color = vec4(0,1,0,1)
 
-	this.position = function(){
+	this.vertex = function(){
 		return vec4(0,0,0,0)
 	}
 
-	this.update_dirty = true
-
-	this.reupdate = function(){
-		if(!this.update_dirty){
-			this.update_dirty = true
-			if(this.view && !this.view.update_dirty){
-				this.view.update_dirty = true
-				this.view.redraw()
-			}
-		}
-	}
-
-	var ignore_compare = {
-		outer:1, 
-		view:1, 
-		shadername:1, 
-		order:1, 
-		shader:1, 
-		update_dirty:1, 
-		dirty_props:1, 
-		pix_state:1, 
-		vtx_state:1,
-		_view_listeners:1,
-		pickguid:1
-	}
-
-	this.isShaderEqual = function(prevshader, view, prev){
-		// lets compare the prevshader.view vs my view
-		var array = prevshader.view_functions
-		if(array) for(var i = 0; i < array.length; i++){
-			var key = array[i]
-			var vfn = view[key], pfn = prev[key]
-			if(!vfn || !pfn || vfn.toString() !== pfn.toString()){
-				return false
-			}
-		}
-		for(var key in this){
-			if(key in ignore_compare) continue
-			if(this.__lookupSetter__(key)) continue
-			// we also have to ignore geometry..
-
-			var value = this[key]
-			var other = prevshader[key]
-			// check type
-			if(!(value && value.struct && !value.struct.equals || // geometry object
-				value && value.struct && other && other.struct && value.struct.equals && value.struct.equals(value, other) || // vector type
-				typeof value === 'function' && typeof other === 'function' && value.toString() === other.toString() || value === other)){ // function
-				return false
-			}
-		}
-		return true
-	}
-
-	this.monitorCompiledProperty = function(name){
-		if(this.__lookupSetter__(name)) return
-		var get = '_' + name
-		this[get] = this[name]
-		Object.defineProperty(this, name, {
-			enumerable:false,
-			configurable:false,
-			get:function(){
-				return this[get]
-			},
-			set:function(value){
-				if(this[get] === value) return
-				this.dirty = true
-				if(!this.hasOwnProperty('dirty_props')) this.dirty_props = []
-				this.dirty_props.push(name)
-				// trigger a recompile
-				if(this.hasOwnProperty('shader')) this.shader = undefined
-				this[get] = value
-			}
-		})
-	}
-	
 	this.getLocations = function(gl, shader, vtx_state, pix_state){
 		// get uniform locations
 		var uniset = shader.uniset = {}
@@ -647,12 +551,14 @@ define.class(function(require, exports){
 			return
 		}
 		
-		var vtx_ast = onejsparser.parse(this.position).steps[0]
-		if(vtx_ast.type == 'Function') vtx_ast = onejsparser.parse('position()').steps[0]
+		var vtx_ast = onejsparser.parse(this.vertex).steps[0]
+
+		if(vtx_ast.type == 'Function') vtx_ast = onejsparser.parse('vertex()').steps[0]
 		// ok lets run the vertex codegen.
 		var vtx_state = glslgen.newState(this)
 
 		var vtx_code = glslgen.expand(vtx_ast, undefined, vtx_state)
+
 		// pixel
 		var pix_state = glslgen.newState(this, vtx_state.varyings)
 
@@ -665,10 +571,10 @@ define.class(function(require, exports){
 		// what we can do is if we have pix_attr we make them varying
 
 		for(var key in vtx_state.uniforms){
-			if(this.uniform_types[key]) vtx_state.uniforms[key] = this.uniform_types[key] 
+			if(this.uniform_types[key]) vtx_state.uniforms[key] = this.uniform_types[key]
 		}
 		for(var key in pix_state.uniforms){
-			if(this.uniform_types[key]) pix_state.uniforms[key] = this.uniform_types[key] 
+			if(this.uniform_types[key]) pix_state.uniforms[key] = this.uniform_types[key]
 		}
 
 		// lets generate the vertex shader
@@ -695,52 +601,11 @@ define.class(function(require, exports){
 		pix_base += this.compileUniforms(pix_state.uniforms)
 		pix_base += this.compileTextures(pix_state.textures)
 		pix_base += this.compileFunctions(pix_state.call)
-		/*
-		if(this.debug_type){
-			pix_debug += pix_base
-			pix_debug += '//------------------- Debug Pixel shader main -------------------\nvoid main(){\n'
-			pix_debug += this.compileUniformRename(pix_state.uniforms)
-
-			if(this.debug_type == 'int') pix_debug += '\tdbg = 20;\n'
-			if(this.debug_type == 'float') pix_debug += '\tdbg = 20.;\n'
-			if(this.debug_type == 'vec2') pix_debug += '\tdbg = vec2(.2,.2);\n'
-			if(this.debug_type == 'ivec2') pix_debug += '\tdbg = ivec2(20,20);\n'
-			if(this.debug_type == 'vec3') pix_debug += '\tdbg = vec3(.2,.2,.2);\n'
-			if(this.debug_type == 'ivec3') pix_debug += '\tdbg = ivec3(20,20);\n'
-
-			pix_debug += '\t' + this.toVec4(pix_code, pix_ast, alpha_code, alpha_ast) + ';\n'
-			if(this.debug_type == 'int') pix_debug += '\tgl_FragColor = vec4(mod(abs(float(dbg)),256.)/255.,abs(float(dbg/256))/256.,dbg >= 0? 1.: 0.,1.);\n'
-			if(this.debug_type == 'float') pix_debug += '\tgl_FragColor = vec4(mod(abs(dbg),1.),float(floor(abs(dbg))/256.),dbg >= 0.? 1.: 0.,1.);\n'
-			if(this.debug_type == 'vec2') pix_debug += '\tgl_FragColor = vec4(clamp(dbg.x,0.,1.),clamp(dbg.y,0.,1.),0,1.);\n'
-			if(this.debug_type == 'ivec2') pix_debug += '\tgl_FragColor = vec4(float(dbg.x)/255.,float(dbg.y)/255.,0,1.);\n'
-			if(this.debug_type == 'vec3') pix_debug += '\tgl_FragColor = vec4(clamp(dbg.x,0.,1.),clamp(dbg.y,0.,1.),clamp(dbg.z,0.,1.),1.);\n'
-			if(this.debug_type == 'ivec3') pix_debug += '\tgl_FragColor = vec4(float(dbg.x)/255.,float(dbg.y)/255.,float(dbg.z)/255.,1.);\n'
-			pix_debug += '}\n'
-		}*/
 
 		pix_color += pix_base 
 		pix_color += '//------------------- Color Pixel shader main -------------------\nvoid main(){\n'
-		//pix_color += this.compileUniformRename(pix_state.uniforms)
-		//if(pix_state.dump.set){
-		//	pix_color += '\tdump = vec4(.5,.5,.5,1.);\n'
-		//}
 		pix_color += '\tgl_FragColor = ' + this.toVec4(pix_code, pix_ast) + ';\n'
-		//if(pix_state.dump.set){
-		//	pix_color += '\tgl_FragColor = dump;\n'
-		//}
 		pix_color += '}\n'
-
-		/*
-		pix_pick += pix_base
-		pix_pick += 'uniform float _pickview;\n'
-		pix_pick += 'uniform float _pickalpha;\n'
-		pix_pick += '//------------------- Pick Pixel shader main -------------------\nvoid main(){\n'
-		pix_pick += this.compileUniformRename(pix_state.uniforms)
-		pix_pick += '\tvec4 col = ' + this.toVec4(pix_code, pix_ast, alpha_code, alpha_ast) + ';\n'
-		pix_pick += '\tfloat _pickguid = _pickview + PickDraw;\n'
-		pix_pick += '\tgl_FragColor = vec4(floor(_pickguid/65536.)/255., floor(_pickguid/256.)/255., mod(_pickguid,256.)/255., col.a>_pickalpha?1.:0.);\n'
-		pix_pick += '}\n'
-		*/
 
 		if(this.dump){
 			console.log(vtx)
@@ -805,59 +670,80 @@ define.class(function(require, exports){
 		}
 	})
 
-	this.pixelentries = ['color']
-	this.pixelentry = 'color'
+	this.pixelentries = ['pixel']
+	this.pixelentry = 'pixel'
 
 	this.uniform_types = {
 		_pixelentry:int
 	}
 
-	this.color = function(){
+	this.pixel = function(){
 		return vec4(0.)
 	}
 
-	this.position = function(){
+	this.vertex = function(){
 		return vec4(0.)
 	}
-
-	Object.defineProperty(this, 'defaults',{
-		get:function(){
-			return this._defaults
-		},
-		set:function(map){
-			if(this._defaults) this._defaults = Object.create(this._defaults)
-			else this._defaults = {}
-			for(var key in map) this._defaults[key] = map[key]
-		}
-	})
 
 	Object.defineProperty(this, 'canvasverbs',{
 		get:function(){
 			return this._canvasverbs
 		},
 		set:function(verbs){
-			if(this._canvasverbs) this._canvasverbs = Object.create(this._canvasverbs)
+			if(!this.hasOwnProperty('canvasverbs')) this._canvasverbs = Object.create(this._canvasverbs || {})
 			else this._canvasverbs = {}
 			for(var key in verbs) this._canvasverbs[key] = verbs[key]
 		}
 	})
 
-	Object.defineProperty(this, 'canvasprops',{
+	Object.defineProperty(this, 'geometry', {
 		get:function(){
-			return this._canvasprops
+			return this._geometry
 		},
-		set:function(props){
-			// lets load up the previous values and make a new struct
-			var struct = {}
-			if(this._canvasprops){
-				var def = this._canvasprops.struct.def
-				for(var key in def) if(typeof def[key] === 'function')
-					struct[key] = def[key] 
+		set:function(geom){
+			if(!this.hasOwnProperty('_geometry')) this._geometry = Object.create(this._geometry || {})
+			for(var key in geom){
+				this['_geometry_DOT_'+key] = this._geometry[key] = geom[key]
+				console.error("HERE!", this)
 			}
-			for(var key in props) struct[key] = props[key]
-			this._canvasprops = define.struct(struct).array()
 		}
 	})
+
+	Object.defineProperty(this, 'props', {
+		get:function(){
+			return this._props
+		},
+		set:function(prop){
+			if(!this.hasOwnProperty('_props')) this._props = Object.create(this._props || {})
+			for(var key in prop){
+				this._props[key] = prop[key]
+				this[key] = prop[key] // store default value
+			}
+		}
+	})
+
+
+	this.monitorCompiledProperty = function(name){
+		if(this.__lookupSetter__(name)) return
+		var get = '_' + name
+		this[get] = this[name]
+		Object.defineProperty(this, name, {
+			enumerable:false,
+			configurable:false,
+			get:function(){
+				return this[get]
+			},
+			set:function(value){
+				if(this[get] === value) return
+				this.dirty = true
+				if(!this.hasOwnProperty('dirty_props')) this.dirty_props = []
+				this.dirty_props.push(name)
+				// trigger a recompile
+				if(this.hasOwnProperty('shader')) this.shader = undefined
+				this[get] = value
+			}
+		})
+	}
 
 	this.atExtend = function(){
 

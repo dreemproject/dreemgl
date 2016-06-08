@@ -69,112 +69,20 @@ define.class('$system/platform/base/shader', function(require, exports){
 		return shader		
 	}
 	
-	this.useShaderTemplate = function(gldevice, shader, root, overlay){
-		var gl = gldevice.gl
-		var ANGLE_instanced_arrays = gldevice.ANGLE_instanced_arrays
-		// use the shader
-		gl.useProgram(shader)
-
-		// set uniforms
-		SET_UNIFORMS
-
-		// textures
-		TEXTURE_START
-		var texture = TEXTURE_VALUE
-		// lets fetch the sampler
-		var gltex = texture.TEXTURE_SAMPLER
-		// lets do the texture slots correct
-		if(!gltex){
-			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture, gldevice)
-			gltex = texture.createGLTexture(TEXTURE_ID, TEXTURE_INFO, gldevice)
-			if(!gltex) return 0
-			gltex.updateid = texture.updateid
-		}
-		else{
-			gl.activeTexture(TEXTUREGL_ID) // gl.TEXTURE0 + TEXTURE_ID
-			gl.bindTexture(gl.TEXTURE_2D, gltex)
-			if(texture.updateid !== gltex.updateid){
-				texture.updateGLTexture(gl, gltex)
-			}
-		}
-		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
-		if(TEXTURE_ID > 0)debugger
-		TEXTURE_END
-
-		// attributes
-		var len = 0 // pull the length out of the buffers
-		var lastbuf
-		ATTRLOC_START
-		var buf = ATTRLOC_BUF
-		if (!buf) return 0;
-		if(lastbuf !== buf){
-			lastbuf = buf
-			if(buf.length === 0) return 0
-			if(!buf.glvb) buf.glvb = gl.createBuffer()
-			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
-			if(!buf.clean){
-				var dt = Date.now()
-				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
-				buf.clean = true
-			}
-		}
-		var loc = ATTRLOC_LOC
-		gl.enableVertexAttribArray(loc)
-		ATTRLOC_ATTRIBPTR
-		if(buf.instancedivisor){
-			ANGLE_instanced_arrays.vertexAttribDivisorANGLE(loc, buf.instancedivisor)
-			root.instance_len = buf.length
-		}
-		else{
-			ANGLE_instanced_arrays.vertexAttribDivisorANGLE(loc, 0)
-			len = buf.length
-		}
-		ATTRLOC_END
-
-		// set up blend mode
-		if(root.alpha_blend_eq.op){
-			var constant = root.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
-			gl.enable(gl.BLEND)
-			gl.blendEquationSeparate(root.color_blend_eq.op, root.alpha_blend_eq.op)
-			gl.blendFuncSeparate(
-				root.color_blend_eq.src,
-				root.color_blend_eq.dst,
-				root.alpha_blend_eq.src,
-				root.alpha_blend_eq.dst
-			)
-		}
-		else if(root.color_blend_eq.op){
-			var constant = root.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
-			gl.enable(gl.BLEND)
-			gl.blendEquation(root.color_blend_eq.op)
-			gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
-		}
-		else{
-			gl.disable(gl.BLEND)
-		}
-		
-		// set up depth test
-		if(root.depth_test_eq.func > 1){
-			//console.log(root.depth_test_eq)
-			gl.enable(gl.DEPTH_TEST)
-			gl.depthFunc(root.depth_test_eq.func)
-		}
-		else{
-			gl.disable(gl.DEPTH_TEST)
-		}
-		
-		return len
-	}
-
 	this.compileUse = function(shader){
+
 		// alright lets compile our useShader from 
-		var tpl = this.useShaderTemplate.toString()
-		tpl = tpl.replace(/^function/, "function useshader_" + (this.view?this.view.constructor.name:'anonymous') + '_shader_' + this.constructor.name)
-		// ok lets replace shit.
+		var code = ''
+
+		code += 'var gl = gldevice.gl\n'
+		code += 'var ANGLE_instanced_arrays = gldevice.ANGLE_instanced_arrays\n'
+		code += 'gl.useProgram(shader)\n'
+
+		/// lets do the uniform code
+		var shadername = "useshader_" + (this.view?this.view.constructor.name:'anonymous') + '_shader_' + this.constructor.name
+
 		// set uniforms
-		var out = 'var loc, uni\n'
+		code += 'var loc, uni\n'
 		var uniset = shader.uniset
 		var unilocs = shader.unilocs
 		var refattr = shader.refattr
@@ -191,107 +99,144 @@ define.class('$system/platform/base/shader', function(require, exports){
 					if(part === 'layout' || isattr && i === split.length - 1) name += '_'
 					name += part
 				}
-				out += '\t\tuni = "'+key+'" in overlay?overlay.'+key+':root.' + name + '\n'
+				code += 'uni = "'+key+'" in overlay?overlay.'+key+':root.' + name + '\n'
 			}
 			else{
-				out += '\t\tuni = "'+key+'" in overlay?overlay.'+key+':root.' 
-				if(isattr) out += '_' 
-				out += key + '\n'
+				code += 'uni = "'+key+'" in overlay?overlay.'+key+':root.' 
+				if(isattr) code += '_' 
+				code += key + '\n'
 			}
 			// put in a bailout when we doing have the pixel entry
 			if(key === '_pixelentry'){
-				out += 'if(uni<0 || uni >'+this._pixelentries.length+') return 0\n'
+				code += 'if(uni<0 || uni >'+this._pixelentries.length+') return 0\n'
 			}
 
-			out += '\t\tloc = shader.unilocs.' + key + '\n'
+			code += 'loc = shader.unilocs.' + key + '\n'
 			var gen = gltypes.uniform_gen[loc.type]
 
 			var call = gen.call
 
-			out += 'gl.' + gen.call + '(loc.loc'
+			code += 'gl.' + gen.call + '(loc.loc'
 
-			if(gen.mat) out += ', false'
+			if(gen.mat) code += ', false'
 
-			if(gen.args == 1) out += ',uni)\n'
-			if(gen.args == 2) out += ',uni[0], uni[1])\n'
-			if(gen.args == 3) out += ',uni[0], uni[1], uni[2])\n'
-			if(gen.args == 4) out += ',uni[0], uni[1], uni[2], uni[3])\n'
-			if(gen.args === this.loguni) out += 'if(typeof uni === "number")console.log(uni)\n'
+			if(gen.args == 1) code += ',uni)\n'
+			if(gen.args == 2) code += ',uni[0], uni[1])\n'
+			if(gen.args == 3) code += ',uni[0], uni[1], uni[2])\n'
+			if(gen.args == 4) code += ',uni[0], uni[1], uni[2], uni[3])\n'
+			if(gen.args === this.loguni) code += 'if(typeof uni === "number")console.log(uni)\n'
 		}
-		tpl = tpl.replace(/SET\_UNIFORMS/, out)
 
-		tpl = tpl.replace(/TEXTURE\_START([\S\s]*)TEXTURE\_END/, function(m){
-			var out =''
-			var body = m.slice(13,-11)
-			var texlocs = shader.texlocs
-			var texid = 0
-			for(var key in texlocs){
-				var texinfo = texlocs[key]
-				var split = texinfo.split
+		var texlocs = shader.texlocs
+		var texid = 0
+		for(var key in texlocs){
+			var texinfo = texlocs[key]
+			var split = texinfo.split
 
-				var TEXTURE_VALUE =''
-				if(split){
-					TEXTURE_VALUE = 'root.' + split.join('.')
-				}
-				else{
-					TEXTURE_VALUE = 'root.' + texinfo.name
-				}
-
-				out += body
-					.replace(/TEXTURE_VALUE/g, TEXTURE_VALUE)
-					.replace(/TEXTURE_SAMPLER/, texinfo.samplerid)
-					.replace(/TEXTURE_ID/g, texid)
-					.replace(/TEXTURE_LOC/, 'shader.texlocs.' + key+ '.loc')
-					.replace(/TEXTURE_INFO/, 'shader.texlocs.' + key)
-					.replace(/TEXTUREGL_ID/g, gltypes.gl.TEXTURE0 + texid)
-
-				texid++
+			var texture_prop =''
+			if(split){
+				texture_prop = 'root.' + split.join('.')
 			}
-			return out
-		})
-
-		tpl = tpl.replace(/ATTRLOC\_START([\S\s]*)ATTRLOC\_END/, function(m){
-			var body = m.slice(13,-11)
-			var out = ''
-			var attrlocs = shader.attrlocs
-			var len = 0 // pull the length out of the buffers
-			var lastbuf
-			for(var key in attrlocs){
-				var attrloc = attrlocs[key]
-				if(!attrloc){
-					continue
-				}
-				var ATTRLOC_BUF
-				if(attrloc.name){
-					ATTRLOC_BUF = 'root.' + attrloc.name 
-					var buf = this[attrloc.name]
-				}
-				else{
-					ATTRLOC_BUF = 'root.' + key 
-				}
-				var ATTRLOC_LOC = 'shader.attrlocs.' + key +'.loc'
-
-				if(attrloc.name){
-					ATTRLOC_ATTRIBPTR = 
-						'gl.vertexAttribPointer(loc, '+attrloc.slots+', gl.FLOAT, false, buf.stride, '+attrloc.offset+')'
-				}
-				else{
-					ATTRLOC_ATTRIBPTR = 
-						'gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
-				}
-				out += body		
-					.replace(/ATTRLOC_BUF/, ATTRLOC_BUF)
-					.replace(/ATTRLOC_LOC/, ATTRLOC_LOC)
-					.replace(/ATTRLOC_ATTRIBPTR/, ATTRLOC_ATTRIBPTR)
+			else{
+				texture_prop = 'root.' + texinfo.name
 			}
-			return out
-		})
-		
-		tpl = tpl.replace(/gl.[A-Z][A-Z0-9_]+/g, function(m){
-			return gltypes.gl[m.slice(3)]
-		})
 
-		shader.use = new Function('return ' + tpl)()
+			code += 'var texture = '+texture_prop+'\n'
+			code += 'var gltex = texture.'+texinfo.samplerid+'\n'
+			code += 'if(!gltext){\n'
+			code += '	if(!texture.createGLTexture) texture = '+texture_prop+' = root.Texture.fromStub(texture, gldevice)\n'
+			code += '	gltex = texture.createGLTexture('+texid+', shader.texlocs.'+key+', gldevice)\n'
+			code += '	if(!gltex) return 0\n'
+			code += '	gltex.updateid = texture.updateid\n'
+			code += '}\n'
+			code += 'else{\n'
+			code += '	gl.activeTexture(' + gltypes.gl.TEXTURE0+texid+')\n'
+			code += '	gl.bindTexture('+gltypes.gl.TEXTURE_2D+', gltext)\n'
+			code += '	if(texture.updateid !== gltex.updateid){\n'
+			code += '		texture.updateGLTexture(gl, gltex)\n'
+			code += '	}\n'
+			code += '}\n'
+			code += 'gl.uniforms1i(shader.texlocs.' + key + '.loc, '+texid+')\n'
+
+			texid++
+		}
+
+		// attributes
+		var attrlocs = shader.attrlocs
+		var len = 0 // pull the length out of the buffers
+		var lastbuf
+		for(var key in attrlocs){
+			// key geometry ... props
+			var attrloc = attrlocs[key]
+			if(!attrloc){
+				continue
+			}
+
+			var propname
+			if(attrloc.name === 'props') propname = 'root._propsbuffer'
+			else propname = 'root._' + attrloc.name
+
+			code += 'var buf = '+propname+'\n'
+			if(lastbuf !== propname){
+				lastbuf = propname
+				code += 'if(buf.length === 0) return 0\n'
+				code += 'if(!buf.glvb) buf.glvb = gl.createBuffer()\n'
+				code += 'gl.bindBuffer('+gltypes.gl.ARRAY_BUFFER+', buf.glvb)\n'
+				code += 'if(!buf.clean){\n'
+				code += '	gl.bufferData('+gltypes.gl.ARRAY_BUFFER+', buf.array, '+gltypes.gl.STATIC_DRAW+')\n'
+				code += '	buf.clean = true\n'
+				code += '}\n'
+			}
+			code += 'var loc = shader.attrlocs.'+key+'.loc\n'
+			code += 'gl.enableVertexAttribArray(loc)\n'
+			code += 'gl.vertexAttribPointer(loc, '+attrloc.slots+', gl.FLOAT, false, buf.stride, '+attrloc.offset+')\n'
+			code += 'if(buf.instancedivisor){\n'
+			code += '	ANGLE_instanced_arrays.vertexAttribDivisorANGLE(loc, buf.instancedivisor)\n'
+			code += '	root.instance_len = buf.length\n'
+			code += '}\n'
+			code += 'else{\n'
+			code += '	ANGLE_instanced_arrays.vertexAttribDivisorANGLE(loc, 0)\n'
+			code += '	len = buf.length\n'
+			code += '}\n'
+		}
+
+		// set up blend mode
+		code += 'if(root.alpha_blend_eq.op){\n'
+		code += '	var constant = root.constant\n'
+		code += '	if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)\n'
+		code += '	gl.enable('+gltypes.gl.BLEND+')\n'
+		code += '	gl.blendEquationSeparate(root.color_blend_eq.op, root.alpha_blend_eq.op)\n'
+		code += '	gl.blendFuncSeparate(\n'
+		code += '		root.color_blend_eq.src,\n'
+		code += '		root.color_blend_eq.dst,\n'
+		code += '		root.alpha_blend_eq.src,\n'
+		code += '		root.alpha_blend_eq.dst\n'
+		code += '	)\n'
+		code += '}\n'
+		code += 'else if(root.color_blend_eq.op){\n'
+		code += '	var constant = root.constant\n'
+		code += '	if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)\n'
+		code += '	gl.enable('+gltypes.gl.BLEND+')\n'
+		code += '	gl.blendEquation(root.color_blend_eq.op)\n'
+		code += '	gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)\n'
+		code += '}\n'
+		code += 'else{\n'
+		code += '	gl.disable('+gltypes.gl.BLEND+')\n'
+		code += '}'
+
+		// set up depth test
+		code += 'if(root.depth_test_eq.func > 1){\n'
+		code += '	gl.enable('+gltypes.gl.DEPTH_TEST+')\n'
+		code += '	gl.depthFunc(root.depth_test_eq.func)\n'
+		code += '}\n'
+		code += 'else{\n'
+		code += '	gl.disable('+gltypes.gl.DEPTH_TEST+')\n'
+		code += '}\n'
+		code += 'console.log("HURRAH", len)\n'
+
+		code += 'return len\n'
+
+		shader.use = new Function('return function '+shadername+'(gldevice, shader, root, overlay){'+code+'}')()
 	}
 
 	// all draw types
