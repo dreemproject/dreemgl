@@ -9,6 +9,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	var myview = define.class(view, function(){
 
 		define.class(this, 'Button', '$stamps/buttonstamp', function(){
+			//this.x = 10
+			//this.x = float.right(10)
+			this.align = float.LEFT
 		})
 
 
@@ -31,15 +34,45 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 		}
 
-		this.draw = function(){
+		this.Rect = {
+			w:NaN,h:NaN,margin:[1,1,1,1],
+		}
+
+		this.draw = function(time){
 			var c = this.canvas
 			//c.geometryRect({})
 			//c.uniformsRect({})
 			//c.flushRect()
+			var dt = performance.now()
+			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
+			for(var i = 0; i < 10; i++){
+				//obj.x = 10+sin(i+time)*100
+				//obj.y = 10+sin(i*0.13+time)*300
+				//c.drawRect({color:[random(),0,random(),1]})
+				c.beginRect({
+					align:float.RIGHT,
+					color:[i*0.33%1,0,i*0.33%1,1],
+					padding:[0,0,0,0],
+					w:50,
+					h:50
+				})
+				//for(var j = 0; j < 100; j++){
+				c.drawRect({margin:[0,0,0,0],color:[1,1,1,1],w:10,h:10})
+				//}
+				c.endRect()
+			}
 
-			c.drawButton({color:[1,1,0,1],x:10, y:10, w:100, h:100})
-			console.log(c)	
-			//c.drawRect({bgcolor:'blue'})
+			//c.beginAlign(float.CENTER, float.NOWRAP)
+			//c.drawRect({w:100,h:100})
+			//c.drawRect({w:100,h:100})
+			//c.endAlign()
+
+			//c.beginRect()
+
+			///c.endRect()
+			console.log(performance.now()-dt)
+			//return true
+				//c.drawRect({bgcolor:'blue'})
 		}
 	})
 
@@ -47,7 +80,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	this.render = function(){ return [
 		screen({
 			name: 'default',
-			clearcolor: 'purple'
+			clearcolor: '#1f1f1f'
 		}, [
 			myview({
 				flex: 1,

@@ -14,23 +14,34 @@ define.class(function(require, exports){
 	this.Shader = require('$base/shader')
 	this.Texture = require('$base/texture')
 
+	this.defaultArray = [0,0,0,0]
+
 	this.initCanvas = function(view){
 		this.view = view
 		this.scope = view
 		this.matrix = mat4.identity()
 		this.cmds = []
 		this.shadernames = []
-		this.stackAlign = []
-		this.trackAlign = []
+		this.turtleStack = []
+		this.rangeList = []
 		this.matrixStack = [this.matrix]
 		this.matrixStackLen = 0
-		this.align = this.stackAlign[0] = {x:0, y:0, w:0, h:0, flags:this.LEFT, total:0}
+		this.turtle = this.turtleStack[0] = {
+			align:float.LEFTTOP,
+			wrap:float.WRAP,
+			xwalk:0,
+			ywalk:0,
+			x:0, 
+			y:0,
+			margin:[0,0,0,0],
+			padding:[0,0,0,0]
+		}
 	}
 
 	this.clearCmds = function(){
 		this.cmds.length = 0
-		this.stackAlign.len = 0
-		this.trackAlign.length = 0
+		this.turtleStack.len = 0
+		this.rangeList.length = 0
 		this.shadernames.length = 0
 		this.matrixStackLen = 0
 		var o = this.matrix
@@ -38,12 +49,13 @@ define.class(function(require, exports){
 		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = 0,
 		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= 0,
 		o[12]= 0, o[13]= 0, o[14]= 0, o[15]= 1
-		this.x = undefined
-		this.y = undefined
-		this.w = this.width
-		this.h = this.height
-		this.align = this.stackAlign[0]
-		this.beginAlign(float.TOPLEFT, float.WRAP, this.view.padding)
+		//this.x = undefined
+		//this.y = undefined
+		//this.w = this.width
+		//this.h = this.height
+		var t = this.turtle = this.turtleStack[0]
+		t.width = this.width
+		t.height = this.height
 	}
 
 	// readpixel
@@ -54,14 +66,15 @@ define.class(function(require, exports){
 	}
 
 	this.addCanvas = function(ctx, index){
-		ctx.trackAlign = this.trackAlign
-		ctx.stackAlign = this.stackAlign
-		//console.log(this.align.w)
+		ctx.turtleStack = this.turtleStack
+		ctx.rangeStack = this.rangeStack
+
 		ctx.width = this.width
 		ctx.height = this.height
 		ctx.frameid = this.frameid
 		ctx.target = this.target
 		ctx.has_view_matrix_set = this.has_view_matrix_set
+
 		this.cmds.push('canvas', ctx.cmds, ctx.view)
 	}
 
@@ -302,5 +315,55 @@ define.class(function(require, exports){
 		}
 		return vec4.parse(col, undefined, true)
 	}
+
+
+	this.push = function(){
+		var len = ++this.matrixStackLen
+		var n = this.matrix
+		var o = this.matrixStack[len] || (this.matrixStack[len] = mat4())
+		o[0] = n[0], o[1] = n[1], o[2] = n[2], o[3] = n[3]
+		o[4] = n[4], o[5] = n[5], o[6] = n[6], o[7] = n[7]
+		o[8] = n[8], o[9] = n[9], o[10]= n[10], o[11]= n[11]
+		o[12]= n[12], o[13]= n[13], o[14]= n[14], o[15]= n[15]
+	}
+
+	this.pop = function(){
+		if(this.matrixStackLen <= 0) return
+		var len = --this.matrixStackLen
+		this.matrix = this.matrixStack[len]
+	}
+
+	this.translate = function(x, y, z){
+		mat4.translateXYZ(this.matrix, x, y, z, this.matrix)
+	}
+
+	this.rotate = function(x, y, z, r){
+		mat4.rotateXYZ(this.matrix, r, x, y, z, this.matrix)
+	}
+
+	this.rotateX = function(r){
+		mat4.rotateX(this.matrix, r, this.matrix)
+	}
+
+	this.rotateY = function(r){
+		mat4.rotateY(this.matrix, r, this.matrix)
+	}
+
+	this.rotateZ = function(r){
+		mat4.rotateZ(this.matrix, r, this.matrix)
+	}
+
+	this.scale = function(x,y,z){
+		mat4.scaleXYZ(this.matrix, x, y, z, this.matrix)
+	}
+
+	// readpixel
+	this.readPixels = function(x, y, w, h, buffer){
+		return new define.Promise(function(resolve, reject){
+			this.cmds.push('readPixels', {x:x,y:y,w:w,h:h, buffer:buffer, resolve:resolve})
+		}.bind(this))
+	}
+
+
 
 })

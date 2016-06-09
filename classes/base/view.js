@@ -402,8 +402,8 @@ define.class('$base/node', function(require){
 		}
 		else{
 			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = mat4()// mat4.identity()
-			else this.totalmatrix = mat4()
+			if(this._viewport) this.totalmatrix = mat4.identity()
+			else this.totalmatrix = mat4.identity()
 		}
 
 		this.canvas = Object.create(this.Canvas)
@@ -478,7 +478,8 @@ define.class('$base/node', function(require){
 
 		// clear commandset
 		c.clearCmds()
-		 
+		c.beginTurtle() 
+
 		var redraw
 		// alright its a viewport, render to a texture
 		if(this._viewport){
@@ -511,7 +512,7 @@ define.class('$base/node', function(require){
 			this.draw_dirty = false
 		}
 
-		c.endAlign()
+		c.endTurtle()
 
 		this.layoutchanged = false
 		// check time

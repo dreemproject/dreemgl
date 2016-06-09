@@ -22,8 +22,13 @@ define.class(function(require, exports){
 		h:1,
 		margin:1,
 		padding:1,
-		aligncontent:1,
-		alignwrap:1
+		align:1,
+		wrap:1
+	}
+
+	var layoutproparray = {
+		margin:1,
+		padding:1
 	}
 
 	// magical words
@@ -96,14 +101,16 @@ define.class(function(require, exports){
 							code += '}\n'
 						}
 						// store layoutprops on canvas
-						for(var key in layoutprops){
-							code += 'this.'+key+' = _'+key+'\n'
+						code += 'var _turtle = this.turtle\n'
+						for(var i = 0; i < allpropkeys.length; i++){
+							var key = allpropkeys[i]
+							code += '_turtle.'+((key in layoutprops)?'':'_')+key+' = _'+key + ((key in layoutproparray)?' || this.defaultArray\n':'\n')
 						}
 
 						// stringreplace on template.. concatenate to code
 
-						code += 'var _props = this.propsbufferNAME\n'
-						code += 'var _shader = this.shaderNAME\n'
+						code += 'var _props = this.propsbuffer'+clsname+'\n'
+						code += 'var _shader = this.shader'+clsname+'\n'
 						code += 'if(!_props){\n'
 						code += '	this.propsbuffer'+clsname+' = _props = this.propstype'+clsname+'.array(this.propsalloc'+clsname+' || 0)\n'
 						code += '}\n'
@@ -127,20 +134,25 @@ define.class(function(require, exports){
 						code += '}\n'
 						code += 'if(!_scope.indexstart'+clsname+') _scope.indexstart'+clsname+' = _props.length\n'
 						code += '_scope.indexend'+clsname+' = _props.length + _needed\n'
-
+						code += '_turtle._propoff = _props.length\n'
+						code += '_props.length += _needed\n'
 						return code
 					})
 
 					fnstr = fnstr.replace(/this\.PUTPROPS\s*\(\s*\)/,function(m){
-						var code = 'var _array = _props.array, _off = _props.length * '+slots+'\n'
+						var code = 'var _turtle = this.turtle\n'
+						code += 'var _props = this.propsbuffer'+clsname+'\n'
+						code += 'var _array = _props.array\n'
+						code += 'var _off = _turtle._propoff * '+slots+'\n'
 						var def = struct.def
 						var off = 0
 						for(var key in def) if(typeof def[key] === 'function'){
 							var itemslots = def[key].slots
-							var src = key in layoutprops?'this.'+key:'_'+key
+							var src = '_turtle.'+ ((key in layoutprops)?'':'_')+key
 							if(itemslots > 1){
+								code += 'var _'+key+' = ' + src + '\n'
 								for(var i = 0; i < itemslots; i++, off++){
-									code += '_array[_off+'+off+'] = '+src+'['+i+']\n'
+									code += '_array[_off+'+off+'] = _'+key+'['+i+']\n'
 								}
 							}
 							else{
@@ -148,12 +160,14 @@ define.class(function(require, exports){
 								off++
 							}
 						}
-						code += '_props.length++\n'
+						
+
 						return code
 						// read layoutprops from canvas (in props)
 						// read others from _local
 
 					})
+
 				}
 				else{
 					// we are on a stamp. now what.

@@ -14,15 +14,15 @@ define.class('$base/shader', function(require){
 	this.Texture = require('$base/texture')
 
 	this.props = {
-		x:0,
-		y:0,
+		x:NaN,
+		y:NaN,
 		z:0,
 		w:100,
 		h:100,
 		margin:[0,0,0,0],
 		padding:[0,0,0,0],
-		aligncontent: float.LEFTTOP,
-		alignwrap: float.WRAP
+		align: float.LEFTTOP,
+		wrap: float.WRAP
 	}
 
 	this.view = {

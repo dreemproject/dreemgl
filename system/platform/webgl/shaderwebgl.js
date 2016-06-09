@@ -125,6 +125,7 @@ define.class('$system/platform/base/shader', function(require, exports){
 			if(gen.args == 3) code += ',uni[0], uni[1], uni[2])\n'
 			if(gen.args == 4) code += ',uni[0], uni[1], uni[2], uni[3])\n'
 			if(gen.args === this.loguni) code += 'if(typeof uni === "number")console.log(uni)\n'
+			//code += 'console.log("'+name+'",root,uni)\n'
 		}
 
 		var texlocs = shader.texlocs
@@ -187,6 +188,7 @@ define.class('$system/platform/base/shader', function(require, exports){
 				code += '	buf.clean = true\n'
 				code += '}\n'
 			}
+			//else code += 'gl.bindBuffer('+gltypes.gl.ARRAY_BUFFER+', buf.glvb)\n'
 			code += 'var loc = shader.attrlocs.'+key+'.loc\n'
 			code += 'gl.enableVertexAttribArray(loc)\n'
 			code += 'gl.vertexAttribPointer(loc, '+attrloc.slots+', gl.FLOAT, false, buf.stride, '+attrloc.offset+')\n'
@@ -232,7 +234,6 @@ define.class('$system/platform/base/shader', function(require, exports){
 		code += 'else{\n'
 		code += '	gl.disable('+gltypes.gl.DEPTH_TEST+')\n'
 		code += '}\n'
-		code += 'console.log("HURRAH", len)\n'
 
 		code += 'return len\n'
 

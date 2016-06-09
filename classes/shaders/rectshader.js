@@ -22,9 +22,20 @@ define.class('$shaders/pickshader', function(require){
 	this.canvasverbs = {
 		draw:function(overload){
 			this.GETPROPS()
-		//	this.runAlign(_props)
+			this.walkTurtle(this.propsbufferNAME)
+			this.PUTPROPS()
+		},
+		begin:function(overload){
+			this.GETPROPS()
+			this.beginTurtle()
+		},
+		end:function(){
+			this.endTurtle()
+			this.walkTurtle(this.propsbufferNAME)
 			this.PUTPROPS()
 		}
+
+
 		/*
 			//overload, scope.propmap.Rect, scope.extstatemap.Rect, scope.statemap.Rect, clsobj 
 			// canvasprops <- pops out of the shadercompiler, w types

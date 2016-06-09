@@ -704,7 +704,6 @@ define.class(function(require, exports){
 			if(!this.hasOwnProperty('_geometry')) this._geometry = Object.create(this._geometry || {})
 			for(var key in geom){
 				this['_geometry_DOT_'+key] = this._geometry[key] = geom[key]
-				console.error("HERE!", this)
 			}
 		}
 	})
