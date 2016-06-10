@@ -8,134 +8,229 @@ define.class(function(require, exports){
 	
 	var defarray = [0,0,0,0]
 
-	float.LEFTTOP = function(){
 
+	float.LEFTTOP = float.TOPLEFT = function float_TOPLEFT(t, canvas){
 	}
 
-	float.RIGHT = function(){
-		
+	float.LEFT =
+	float.LEFTCENTER = float.CENTERLEFT = function float_CENTERLEFT(t, canvas){
+		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', (t.height - (t.maxy - t.starty)) / 2)
 	}
 
-	float.WRAP = function(){
+	float.LEFTBOTTOM = float.BOTTOMLEFT = function float_BOTTOMLEFT(t, canvas){
+		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', t.height - (t.maxy - t.starty))
+	}
 
+	float.TOP = 
+	float.CENTERTOP = float.TOPCENTER = function float_TOPCENTER(t, canvas){
+		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', (t.width - (t.maxx - t.startx)) / 2)
+	}
+
+	float.CENTER = function float_CENTER(t, canvas){
+		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', (t.width - (t.maxx - t.startx)) / 2)
+		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', (t.height - (t.maxy - t.starty)) / 2)
+	}
+	
+	float.BOTTOM =
+	float.CENTERBOTTOM = float.BOTTOMCENTER = function float_CENTERBOTTOM(t, canvas){
+		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', (t.width - (t.maxx - t.startx)) / 2)
+		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', t.height - (t.maxy - t.starty))
+	}
+
+	float.TOPRIGHT = float.RIGHTTOP = function float_TOPRIGHT(t, canvas){
+		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', t.width - (t.maxx - t.startx))
+	}
+
+	float.RIGHT =
+	float.RIGHTCENTER =  float.CENTERRIGHT = function float_CENTERRIGHT(t, canvas){
+		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', t.width - (t.maxx - t.startx))
+		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', (t.height - (t.maxy - t.starty)) / 2)
+	}
+
+	float.RIGHTBOTTOM = float.BOTTOMRIGHT = function float_BOTTOMRIGHT(t, canvas){
+		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', t.width - (t.maxx - t.startx))
+		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', t.height - (t.maxy - t.starty))
+	}
+
+	float.LRTBWRAP = {
+		begin:function(t, canvas){
+			//var ot = t.outer
+			t.startx = t.walkx = t.initx + t.padding[3] + t.margin[3]
+			t.starty = t.walky = t.inity + t.padding[0] + t.margin[0]
+		},
+		walk:function(t, canvas){
+			// oops we will be over the edge, lets wrap
+			if(!isNaN(t.width) && t.walkx + t._w + t._margin[3] + t._margin[1] > t.startx + t.width){
+				t.walkx = t.startx
+				t.walky += t.maxh
+				t.maxh = 0
+			}
+
+			// walk it
+			t._x = t.walkx + t._margin[3]
+			t._y = t.walky + t._margin[0]
+
+			// this part is the stack left WRAP
+			t.walkx += t._w + t._margin[3] + t._margin[1]
+
+			// lets compute the maxx / maxy
+			var tx = t.walkx
+			if(tx > t.maxx) t.maxx = tx
+
+			var h = t._h + t._margin[0] + t._margin[2]
+			if(h > t.maxh) t.maxh = h
+
+			var ty = t.walky + h
+			if(ty > t.maxy) t.maxy = ty 
+		}
+	}
+	
+	float.LRTBNOWRAP = {
+		begin:function(t, canvas){
+			var ot = t.outer
+			t.startx = t.walkx = t.initx + t.padding[3] + t.margin[3]
+			t.starty = t.walky = t.inity + t.padding[0] + t.margin[0]
+		},
+		walk:function(t, canvas){
+			// walk no wrap
+			t._x = t.walkx + t._margin[3]
+			t._y = t.walky + t._margin[0]
+
+			// this part is the stack left WRAP
+			t.walkx += t._w + t._margin[3] + t._margin[1]
+
+			var tx = t.walkx
+			if(tx > t.maxx) t.maxx = tx
+
+			var h = t._h + t._margin[0] + t._margin[2]
+			if(h > t.maxh) t.maxh = h
+
+			var ty = t.walky + h
+			if(ty > t.maxy) t.maxy = ty
+		}
 	}
 
 	this.beginTurtle = function(){
 		// allocate alignment object
 		var ot = this.turtleStack[this.turtleStack.len] = this.turtle
-		var t = this.turtle = this.turtleStack[++this.turtleStack.len] || {}
-		t.old = ot
+		var t = this.turtle = this.turtleStack[++this.turtleStack.len] || {_staticmargin:[0,0,0,0],_staticpadding:[0,0,0,0]}
+		t.outer = ot
 
-		var xs
-		if(typeof ot.x === "function"){
-			xs = ot.x(t, this)
+		// store our local values from the old turtle
+		t.align = ot._align
+		t.walk = ot._walk
+		t.margin = ot._margin
+		t.padding = ot._padding
+
+		if(typeof ot._x === "function"){
+			t.initx = ot._x(t, this)
 		}
-		else xs = ot.x
+		else t.initx = ot._x
 
-		var ys 
-		if(typeof ot.y === "function"){
-			ys = ot.y(t, this)
+		if(typeof ot._y === "function"){
+			t.inity = ot._y(t, this)
 		}		
-		else ys = ot.y
+		else t.inity = ot._y
 
-		if(isNaN(xs)) xs = ot.walkx
-		if(isNaN(ys)) ys = ot.walky
+		if(isNaN(t.initx)) t.initx = ot.walkx
+		if(isNaN(t.inity)) t.inity = ot.walky
 
-		t.startx = t.walkx = xs + ot.padding[3] + ot.margin[3]
-		t.starty = t.walky = ys + ot.padding[0] + ot.margin[0]
-
-		if(ot.w === undefined || ot.w === float){
+		if(ot._w === undefined || ot._w === float){
 			t.width = NaN
 		}
-		else if(typeof ot.w === 'function'){
-			t.width = ot.w(t, this) - ot.padding[1] - ot.padding[3] 
+		else if(typeof ot._w === 'function'){
+			t.width = ot._w(t, this) - t.padding[1] - t.padding[3] 
 		}
 		else{
-			t.width = ot.w - ot.padding[1] - ot.padding[3] 
+			t.width = ot._w - t.padding[1] - t.padding[3] 
 		}
 
-		if(ot.h === undefined || ot.h === float){
+		if(ot._h === undefined || ot._h === float){
 			t.height = NaN
 		}
-		else if(typeof ot.h === 'function'){
-			t.height = ot.h(t, this) - ot.padding[0] - ot.padding[2] 
+		else if(typeof ot._h === 'function'){
+			t.height = ot._h(t, this) - t.padding[0] - t.padding[2] 
 		}
 		else{
-			t.height = ot.h - ot.padding[0] - ot.padding[2]
+			t.height = ot._h - t.padding[0] - t.padding[2]
 		}
 
 		// bounding rect (including abs pos)
-		t.boundx = 0
-		t.boundy = 0
-		// alignment rect (excluding abs pos)
-		t.maxx = 0
-		t.maxy = 0
+		t.boundminx = Infinity
+		t.boundminy = Infinity
+		t.boundmaxx = -Infinity
+		t.boundmaxy = -Infinity
 
-		t.rangeStart = this.rangeStack && this.rangeStack.length || 0
+		// alignment rect (excluding abs pos)
+		t.minx = Infinity
+		t.miny = Infinity
+		t.maxx = -Infinity
+		t.maxy = -Infinity
+		t.maxh = 0
+
+		//console.log(this.rangeList.length)
+		if(!t.walk) debugger
+		t.walk.begin(t, this)
+
+		t.rangeStart = this.rangeList && this.rangeList.length || 0
 	}
 
-	this.walkTurtle = function(buffer, range){
+	this.walkTurtle = function(){
 		// local state x /y / w/ h/ margin/padding
 		var t = this.turtle
-		var ot = t.old
+		var ot = t.outer
 
-		if(typeof t.w === "function"){
-			t.w = t.w(t, this)
+		if(typeof t._w === "function"){
+			t._w = t._w(t, this)
 		}
-		if(typeof t.h === "function"){
-			t.h = t.h(t, this)
+		if(typeof t._h === "function"){
+			t._h = t._h(t, this)
 		}
-		if(typeof t.x === "function"){
-			t.x = t.x(t, this)
+		if(typeof t._x === "function"){
+			t._x = t._x(t, this)
 		}
-		if(typeof t.y === "function"){
-			t.y = t.y(t, this)
+		if(typeof t._y === "function"){
+			t._y = t._y(t, this)
 		}
 
-		this.rangeList.push(buffer, buffer.length, range||1, this.turtleStack.len)
-
-		if(isNaN(t.x)|| isNaN(t.y)){
-			t.x = t.walkx + t.margin[3]
-			t.y = t.walky + t.margin[0]
-			
-			t.walkx += t.w + t.margin[3] + t.margin[1]
-
-			var tx = t.walkx
-			if(tx > t.maxx) t.maxx = tx
-
-			var h = t.h + t.margin[0] + t.margin[2]
-			var ty = t.walky + h
-			if(ty > t.maxy) t.maxy = ty
+		// its not absolutely positioned
+		if(isNaN(t._x)|| isNaN(t._y)){
+			// walk the turtle
+			ot.walk.walk(t, this)	
 		}
 	}
 
 	this.endTurtle = function(){
 		// moves stuff as needed from the
 		var t = this.turtle
-		var ot = t.old
+		var ot = t.outer
 
-		var padh = ot.padding[0] + ot.padding[2]
-		var padw = ot.padding[3] + ot.padding[1]
+		var padw = t.padding[3] + t.padding[1]
+		var padh = t.padding[0] + t.padding[2]
 
 		if(isNaN(t.width)){
-			ot.w = (t.maxx - t.startx) + padw
+			ot._w = (t.maxx - t.startx) + padw
 		}
 		else{
-			ot.w = t.width + padw 
+			ot._w = t.width + padw 
 		}
 
 		if(isNaN(t.height)){
-			ot.h = (t.maxy - t.starty) + padh
+			ot._h = (t.maxy - t.starty) + padh
 		}
-		else ot.h = t.height + padh
+		else ot._h = t.height + padh
+
+		// lets end the turtle walking
+		if(ot.walk.end) ot.walk.end(t, this)
 
 		// call alignment function
-		ot.align(ot, this)
+		ot.align(t, this)
 
 		this.turtle = this.turtleStack[--this.turtleStack.len]
 	}
 
-	this.displacePropBuffer = function(start, key, displace){
+	this.displaceProp = function(start, key, displace){
+		
 		var ranges = this.rangeList
 		var current = this.turtleStack.len
 		for(var i = start; i < ranges.length; i += 4){
@@ -147,6 +242,7 @@ define.class(function(require, exports){
 			var slots = buf.struct.slots
 			var rel = buf.struct.offsets[key]
 			var array = buf.array
+
 			for(var j = off; j < off+range; j++){
 				var offset = j * slots + rel
 				array[offset] += displace

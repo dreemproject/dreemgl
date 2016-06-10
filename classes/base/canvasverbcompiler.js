@@ -23,7 +23,7 @@ define.class(function(require, exports){
 		margin:1,
 		padding:1,
 		align:1,
-		wrap:1
+		walk:1
 	}
 
 	var layoutproparray = {
@@ -104,7 +104,17 @@ define.class(function(require, exports){
 						code += 'var _turtle = this.turtle\n'
 						for(var i = 0; i < allpropkeys.length; i++){
 							var key = allpropkeys[i]
-							code += '_turtle.'+((key in layoutprops)?'':'_')+key+' = _'+key + ((key in layoutproparray)?' || this.defaultArray\n':'\n')
+							if(key in layoutproparray){
+								code += 'if(typeof _'+key + ' === "number"){\n'
+								code += '	var _ts = _turtle._static'+key+'\n'
+								code += '   _ts[0] = _ts[1] = _ts[2] = _ts[3] = _' + key + '\n'
+								code += '	_turtle._'+key+' = _ts\n'
+								code += '}\n'
+								code += 'else _turtle._'+key+'= _'+key+'\n'
+							}
+							else{
+								code += '_turtle._'+key+' = _'+key+'\n'
+							}
 						}
 
 						// stringreplace on template.. concatenate to code
@@ -135,7 +145,9 @@ define.class(function(require, exports){
 						code += 'if(!_scope.indexstart'+clsname+') _scope.indexstart'+clsname+' = _props.length\n'
 						code += '_scope.indexend'+clsname+' = _props.length + _needed\n'
 						code += '_turtle._propoff = _props.length\n'
+						code += 'this.rangeList.push(_props, _props.length, _needed, this.turtleStack.len)\n'
 						code += '_props.length += _needed\n'
+						code += ''
 						return code
 					})
 
@@ -148,9 +160,14 @@ define.class(function(require, exports){
 						var off = 0
 						for(var key in def) if(typeof def[key] === 'function'){
 							var itemslots = def[key].slots
-							var src = '_turtle.'+ ((key in layoutprops)?'':'_')+key
+							var src = '_turtle._'+key
 							if(itemslots > 1){
-								code += 'var _'+key+' = ' + src + '\n'
+								if(itemslots === 4){
+									code += 'var _'+key+' = typeof ' + src + ' === "string"?this.parseColor('+src+',true):'+src+'\n'
+								}
+								else{
+									code += 'var _'+key+' = ' + src + '\n'
+								}
 								for(var i = 0; i < itemslots; i++, off++){
 									code += '_array[_off+'+off+'] = _'+key+'['+i+']\n'
 								}
@@ -160,8 +177,6 @@ define.class(function(require, exports){
 								off++
 							}
 						}
-						
-
 						return code
 						// read layoutprops from canvas (in props)
 						// read others from _local

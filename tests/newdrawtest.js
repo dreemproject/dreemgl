@@ -35,7 +35,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		}
 
 		this.Rect = {
-			w:NaN,h:NaN,margin:[1,1,1,1],
+			w:NaN,h:NaN,
 		}
 
 		this.draw = function(time){
@@ -45,21 +45,41 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.flushRect()
 			var dt = performance.now()
 			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
-			for(var i = 0; i < 10; i++){
+			for(var i = 0; i < 1; i++){
 				//obj.x = 10+sin(i+time)*100
 				//obj.y = 10+sin(i*0.13+time)*300
 				//c.drawRect({color:[random(),0,random(),1]})
 				c.beginRect({
-					align:float.RIGHT,
-					color:[i*0.33%1,0,i*0.33%1,1],
-					padding:[0,0,0,0],
-					w:50,
+					walk:float.LRTBWRAP,
+					align:float.RIGHTTOP,
+					color:'orange',
+					padding:10,
+					margin:30,
+					w:50 + 50*sin(time),
 					h:50
 				})
-				//for(var j = 0; j < 100; j++){
-				c.drawRect({margin:[0,0,0,0],color:[1,1,1,1],w:10,h:10})
+
+				for(var j = 0; j < 5; j++){
+					c.beginRect({
+						margin:1,
+						walk:float.LRTBWRAP,
+						align:float.RIGHTBOTTOM,
+						color:[0,0,1,1],
+						padding:[0,0,0,0],
+						w:10,
+						h:10
+					})
+
+				//for(var j = 0; j < 8; j++){
+				//	c.drawRect({margin:[0,0,1,1],color:[1,i*0.1,1,1],w:10,h:10})
+				//}
+
+
+					c.endRect()
+				}
 				//}
 				c.endRect()
+
 			}
 
 			//c.beginAlign(float.CENTER, float.NOWRAP)
@@ -70,8 +90,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//c.beginRect()
 
 			///c.endRect()
-			console.log(performance.now()-dt)
-			//return true
+			//console.log(performance.now()-dt)
+			return true
 				//c.drawRect({bgcolor:'blue'})
 		}
 	})

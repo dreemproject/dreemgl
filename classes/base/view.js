@@ -478,7 +478,17 @@ define.class('$base/node', function(require){
 
 		// clear commandset
 		c.clearCmds()
-		c.beginTurtle() 
+
+		// lets set our turtle values
+		var t = c.turtle
+		
+		//TODO pull these from a view?
+		t._align = float.LEFTTOP
+		t._walk = float.LRTBWRAP			
+		t._margin = [0,0,0,0]
+		t._padding = [0,0,0,0]
+
+		c.beginTurtle()
 
 		var redraw
 		// alright its a viewport, render to a texture

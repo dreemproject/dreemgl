@@ -22,7 +22,7 @@ define.class('$shaders/pickshader', function(require){
 	this.canvasverbs = {
 		draw:function(overload){
 			this.GETPROPS()
-			this.walkTurtle(this.propsbufferNAME)
+			this.walkTurtle()
 			this.PUTPROPS()
 		},
 		begin:function(overload){
@@ -31,7 +31,7 @@ define.class('$shaders/pickshader', function(require){
 		},
 		end:function(){
 			this.endTurtle()
-			this.walkTurtle(this.propsbufferNAME)
+			this.walkTurtle()
 			this.PUTPROPS()
 		}
 

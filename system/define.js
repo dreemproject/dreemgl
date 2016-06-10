@@ -1749,6 +1749,33 @@
 		}
 	}
 
+	define.struct2JSON = function(array, offkey){
+		var struct = array.struct
+		var out = []
+		//console.log(array)
+		var off = 0
+		for(var i = 0; i < array.length; i++){
+			var obj = {}
+			for(var key in struct.def){
+				var cons = struct.def[key]
+				var slots = cons.slots
+				var outkey = offkey?key+'_'+off:key
+				if(slots > 1){
+					var args = []
+					for(var j = 0; j < slots; j++){
+						args.push(array.array[off++])
+					}
+					obj[outkey] = cons.apply(null, args)
+				}
+				else{
+					obj[outkey] = array.array[off++]
+				}
+			}
+			out.push(obj)
+		}
+		return out
+	}
+
 	define.struct = function(def, id){
 
 		function getStructArrayType(type){
@@ -1786,10 +1813,9 @@
 			function MyStruct(){
 				var out = new myarray(mysize), len = arguments.length
 				out.toJSON = function(){
-
-					var res = [];
-					res.push.apply(res, this);
-					return {____struct: this.struct.id, data: res};
+					var res = []
+					res.push.apply(res, this)
+					return {____struct: this.struct.id, data: res}
 				}
 				out.struct = MyStruct
 				if(len === 0) return out

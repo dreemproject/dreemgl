@@ -28,11 +28,11 @@ define.class(function(require, exports){
 		this.matrixStackLen = 0
 		this.turtle = this.turtleStack[0] = {
 			align:float.LEFTTOP,
-			wrap:float.WRAP,
-			xwalk:0,
-			ywalk:0,
-			x:0, 
-			y:0,
+			walk:float.LRTBWRAP,
+			walkx:0,
+			walky:0,
+			startx:0,
+			starty:0,
 			margin:[0,0,0,0],
 			padding:[0,0,0,0]
 		}
@@ -54,6 +54,8 @@ define.class(function(require, exports){
 		//this.w = this.width
 		//this.h = this.height
 		var t = this.turtle = this.turtleStack[0]
+		t.walkx = 0
+		t.walky = 0
 		t.width = this.width
 		t.height = this.height
 	}
