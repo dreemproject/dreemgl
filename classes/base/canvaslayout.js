@@ -79,7 +79,6 @@ define.class(function(require, exports){
 			// this part is the stack left WRAP
 			t.walkx += t._w + t._margin[3] + t._margin[1]
 
-			// lets compute the maxx / maxy
 			var tx = t.walkx
 			if(tx > t.maxx) t.maxx = tx
 
@@ -153,7 +152,8 @@ define.class(function(require, exports){
 		var factor = parseFloat(str)/100
 
 		return function(t, canvas){
-			return ((t.width) * factor)- t._margin[1] - t._margin[3] + delta
+			var ret = ((t.width) * factor)- t._margin[1] - t._margin[3] + delta
+			return ret
 		}
 	}
 
@@ -172,7 +172,6 @@ define.class(function(require, exports){
 		}
 	}
 
-
 	this.beginTurtle = function(){
 		// allocate alignment object
 		var ot = this.turtleStack[this.turtleStack.len] = this.turtle
@@ -182,8 +181,8 @@ define.class(function(require, exports){
 		// store our local values from the old turtle
 		t.align = ot._align || float.LEFTTOP
 		t.walk = ot._walk || float.LRTBWRAP
-		t.margin = ot._margin
-		t.padding = ot._padding
+		t._margin = t.margin = ot._margin
+		t._padding = t.padding = ot._padding
 
 		if(typeof ot._x === "function"){
 			t.initx = ot._x(t, this)
@@ -202,7 +201,7 @@ define.class(function(require, exports){
 			t.width = NaN
 		}
 		else if(typeof ot._w === 'function'){
-			t.width = ot._w(t, this) - t.padding[1] - t.padding[3] 
+			t.width = ot._w(ot, this) - t.padding[1] - t.padding[3] 
 		}
 		else{
 			t.width = ot._w - t.padding[1] - t.padding[3] 
@@ -212,7 +211,7 @@ define.class(function(require, exports){
 			t.height = NaN
 		}
 		else if(typeof ot._h === 'function'){
-			t.height = ot._h(t, this) - t.padding[0] - t.padding[2] 
+			t.height = ot._h(ot, this) - t.padding[0] - t.padding[2] 
 		}
 		else{
 			t.height = ot._h - t.padding[0] - t.padding[2]
@@ -320,6 +319,4 @@ define.class(function(require, exports){
 			track[i+3] = -1
 		}
 	}
-
-
 })

@@ -7,13 +7,22 @@
 define.class(function(require){
 	// Node class provides attributes for events and values, propertybinding and constructor semantics
 
+	var RpcProxy = require('$system/rpc/rpcproxy')
+
+	var WiredWalker = require('$system/parse/wiredwalker')
+	var OneJSParser =  require('$system/parse/onejsparser')
+	var wiredwalker = new WiredWalker()
+
+	// parser and walker for wired attributes
+	var onejsparser = new OneJSParser()
+	onejsparser.parser_cache = {}
+
 	this._atConstructor = function(){
 		// this.parent = undefined
-		this.children = []
+		this.children =
+		this.constructor_children = []
 		this.initFromConstructorArgs(arguments)
 	}
-
-	nodeConstructor = this.constructor
 
 	// internal, called by the constructor
 	this.initFromConstructorArgs = function(args){
@@ -25,38 +34,24 @@ define.class(function(require){
 			}
 			else if(typeof arg === 'object' && Object.getPrototypeOf(arg) === Object.prototype){
 				this.attributes = arg
-				//this.initFromConstructorProps(arg)
 				continue
 			}
-			else if(arg !== undefined && arg instanceof nodeConstructor) {
+			else if(arg !== undefined && typeof arg === 'object') {
 				arg.__constructorIndex = i
-				this.children.push(arg)
+				this.constructor_children.push(arg)
 			}
 		}
 	}
 
 	this.emit_block_set = undefined
-
+	
 	this.emit = function(key, ievent){
 
-		var flag_key = '_flag_' + key
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 
 		// lets do a fastpass
 		var event = ievent || {}
-
-		// flag based listener callbacks
-		var flags = this[flag_key]
-		var flag_pos = 1
-		while(flags){
-			if(flags&flag_pos){
-				var flagfn = this['atFlag'+(flags&flag_pos)]
-				if(flagfn) flagfn.call(this, key, event)
-				flags -= flag_pos
-			}
-			flag_pos = flag_pos << 1
-		}
 
 		if(!this[on_key] && !this[listen_key]) return
 
@@ -65,7 +60,6 @@ define.class(function(require){
 		this[lock_key] = true
 
 		try{
-
 			if(!this.__lookupSetter__(key)){
 				var fn = this[key]
 				if(typeof fn === 'function'){
@@ -103,6 +97,45 @@ define.class(function(require){
 			this[lock_key] = false
 		}
 	}
+
+	// internal, emits an event recursively on all children
+	this.emitRecursive = function(key, event, block){
+		if(block && block.indexOf(child)!== -1) return
+		this.emit(key, event)
+		for(var a in this.children){
+			var child = this.children[a]
+			child.emitRecursive(key, event)
+		}
+	}
+	
+	// internal, return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
+	this.emitForward = function(key){
+		return function(value){
+			this.emit(key, value)
+		}.bind(this)
+	}
+
+	// add a listener to an attribute
+	this.addListener = function(key, cb){
+		if(!this.__lookupSetter__(key)){
+			this.defineAttribute(key, this[key])
+		}
+		var listen_key = '_listen_' + key
+		var array
+		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
+		else array = this[listen_key]
+		if(array.indexOf(cb) === -1){
+			array.push(cb)
+		}
+	}
+
+	// internal, create an rpc proxy
+	this.createRpcProxy = function(parent){
+		return RpcProxy.createFromObject(this, parent)
+	}
+
+	// the RPCProxy class reads these booleans to skip RPC interface creation for this prototype level
+	this.rpcproxy = false
 
 	// pass an object such as {myattribute: Config({type:float, value:0}) to define attribute
 	Object.defineProperty(this, 'attributes', {
@@ -168,9 +201,6 @@ define.class(function(require){
 			else if(typeof value === 'string'){
 				config.type = String
 			}
-		}
-		if(config.persist){
-			// this.definePersist(key)
 		}
 
 		if(!this.hasOwnProperty('_attributes')){
@@ -241,11 +271,11 @@ define.class(function(require){
 			if(this[set_key] !== undefined) value = this[set_key](value)
 			if(typeof value === 'function'){
 				if(value.is_wired) return this.setWiredAttribute(key, value)
-				if(config.type !== Function){
+				//if(config.type !== Function){
 					//this.addListener(on_key, value)
-					this[on_key] = value
-					return
-				}
+				//	this[on_key] = value
+				//	return
+				//}
 			}
 			if(typeof value === 'object'){
 				if(value instanceof Mark){
@@ -277,6 +307,19 @@ define.class(function(require){
 			this[value_key] = value
 
 			if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
+
+			// call setflags on setter
+			var flags = this[flag_key]
+			var flag_pos = 1
+			while(flags){
+				if(flags&flag_pos){
+					var flagfn = this['atFlag'+(flags&flag_pos)]
+					if(flagfn) flagfn.call(this, key, event)
+					flags -= flag_pos
+				}
+				flag_pos = flag_pos << 1
+			}
+
 			this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
 		}
 
@@ -285,8 +328,8 @@ define.class(function(require){
 			configurable:true,
 			enumerable:true,
 			get: function(){
-				if(this.atAttributeGetFlag){
-					this[flag_key] |= this.atAttributeGetFlag
+				if(this.atAttributeGet_SetFlag){
+					this[flag_key] |= this.atAttributeGet_SetFlag
 				}
 				return this[value_key]
 			},
@@ -320,6 +363,59 @@ define.class(function(require){
 			node = node.parent
 		}
 	}
+
+	this.emitFlags = function(flag, keys){
+		for(var i = 0; i < keys.length; i++ ){
+			this['_flag_'+keys[i]] |= flag
+		}
+	}
+
+	// internal, check if property is an attribute
+	this.isAttribute = function(key){
+		var setter = this.__lookupSetter__(key)
+		if(setter !== undefined && setter.isAttribute) return true
+		else return false
+	}
+
+	// internal, used by find and findChild
+	this._findChild = function(name, ignore){
+		if(this === ignore) return
+		if(this.name === name){
+			return this
+		}
+		if(this.children) {
+			for(var i = 0; i < this.children.length; i ++){
+				var child = this.children[i]
+				if(child === ignore) continue
+				var ret = child._findChild(name, ignore)
+				if(ret !== undefined){
+					return ret
+				}
+			}
+		}
+	}
+
+	// Finds a child node by name.
+	this.findChild = function(name){
+		if(!this.find_cache) this.find_cache = {}
+		var child = this.find_cache[name]
+		if(child && !child.destroyed) return child
+		child = this.find_cache[name] = this._findChild(name)
+		return child
+	}
+
+	// Finds a parent node by name.
+	this.find = function(name){
+		var child = this.findChild(name)
+		var node = this
+		while(child === undefined && node.parent){
+			child = node.parent._findChild(name, node)
+			node = node.parent
+		}
+		this.find_cache[name] = child
+		return child
+	}
+
 
 	// TODO: implement
 	this.setFocus = function () {}

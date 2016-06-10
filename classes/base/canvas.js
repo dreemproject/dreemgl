@@ -8,7 +8,9 @@ define.class(function(require, exports){
 
 	// mixins / external deps
 	var CanvasLayout = require('$base/canvaslayout')
+
 	for(var key in CanvasLayout.prototype) this[key] = CanvasLayout.prototype[key]
+
 	exports.compileCanvasVerbs = require('$base/canvasverbcompiler').prototype.compileCanvasVerbs
 
 	this.Shader = require('$base/shader')
@@ -56,8 +58,8 @@ define.class(function(require, exports){
 		var t = this.turtle = this.turtleStack[0]
 		t.walkx = 0
 		t.walky = 0
-		t.width = this.width
-		t.height = this.height
+		//t._w = this.width
+		//t._h = this.height
 	}
 
 	// readpixel
@@ -235,8 +237,8 @@ define.class(function(require, exports){
 		if(typeof name !== 'string'){
 			throw new Error('Please provide a string unique target identifier')
 		}
-		var width = iwidth !== undefined?iwidth:this.scope._layout.width
-		var height = iheight !== undefined?iheight:this.scope._layout.height
+		var width = iwidth !== undefined?iwidth:this.scope._layout.w
+		var height = iheight !== undefined?iheight:this.scope._layout.h
 		var flags = iflags !== undefined?iflags:this.RGBA
 		var targetguid = this.view.guid + '_' + flags + '_'+ (name || this.cmds.length)
 		var target = {targetguid:targetguid, name:name, width:width, height:height, flags:flags, frameid:this.frameid}

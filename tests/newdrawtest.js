@@ -40,6 +40,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.draw = function(time){
 			var c = this.canvas
+			/*
 			var dt = performance.now()
 			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
 			for(var i = 0; i < 1; i++){
@@ -52,7 +53,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					color:'orange',
 					padding:30,
 					margin:30,
-					w:200,// + 50*sin(time),
+					w:400,// + 50*sin(time),
 				})
 
 				for(var j = 0; j < 5; j++){
@@ -93,8 +94,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//}
 				c.endRect()
 
-			}
-
+			}*/
+			this.drawChildren()
 			//c.beginAlign(float.CENTER, float.NOWRAP)
 			//c.drawRect({w:100,h:100})
 			//c.drawRect({w:100,h:100})
@@ -115,7 +116,17 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			name: 'default',
 			clearcolor: '#1f1f1f'
 		}, [
-			myview({name: 'myview'})
+			myview({
+				align:float.CENTER,
+				name: 'myview',
+				w:float.width('100%'), 
+				h:float.height('100%')
+			}
+				,view({name:'view1',bgcolor:'red',w:100,h:100})
+				,view({name:'view1',bgcolor:'blue',w:100,h:100})
+
+				//view({name:'view2'})
+			)
 		])
 	]}
 })

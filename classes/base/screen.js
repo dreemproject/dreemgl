@@ -4,8 +4,9 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$base/view', function() {
+define.class('$base/view', function(require) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
+	var canvasLayout = Object.create(require('$base/canvaslayout').prototype)
 
 	this.attributes = {
 		// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
@@ -271,6 +272,131 @@ define.class('$base/view', function() {
 		this.current_pass_is_pick = false
 
 		return match
+	}
+
+
+	function canvasLayoutSubclass(){
+
+		this.turtleStack = []
+		this.turtleStack.len = 0
+		this.rangeList = []
+
+		this.turtle = this.turtleStack[0] = {
+			align:float.LEFTTOP,
+			walk:float.LRTBWRAP,
+			_w:0,
+			_h:0,
+			walkx:0,
+			walky:0,
+			startx:0,
+			starty:0,
+			margin:[0,0,0,0],
+			padding:[0,0,0,0]
+		}
+
+		this.displaceProp = function(start, key, displace){
+			var ranges = this.rangeList
+			var current = this.turtleStack.len
+			for(var i = start; i < ranges.length; i += 2){
+				var node = ranges[i]
+				var level = ranges[i+1]
+				if(current > level) continue
+				node._layout[key] += displace
+			}
+		}
+	}
+	canvasLayoutSubclass.call(canvasLayout)
+
+	function emitPostLayout(ref){
+		var oldlayout = ref.oldlayout || {}
+		var layout = ref._layout
+
+		var children = ref.children
+		for(var i = 0; i < children.length; i++){
+			var child = children[i]
+			emitPostLayout(child)
+		}
+		ref.layout_dirty = false
+
+		var oldlayout = ref.oldlayout || {}
+		if(layout.x !== oldlayout.x || layout.y !== oldlayout.y ||
+			 layout.w !== oldlayout.w || layout.h !== oldlayout.h){
+			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
+			ref.oldlayout = layout
+			ref.layoutchanged = true
+		}
+	}
+
+	this.doLayout = function(){
+		
+		var c = canvasLayout
+		var t = c.turtle
+		
+		c.rangeList.length = 0
+
+		var node = this
+		node._x = 0
+		node._y = 0
+		node._w = this.device.width
+		node._h = this.device.height
+
+		while(node){
+			
+			var t = c.turtle
+			t._align = node._align
+			t._walk = node._walk			
+			t._margin = node._margin
+			t._padding = node._padding
+			t._x = node._x
+			t._y = node._y
+			t._w = node._w
+			t._h = node._h
+
+			// push view into rangelist
+			var level
+			if(typeof t._x === "number" && !isNaN(t._x) || typeof t._x === "function" || typeof t._y === "number" && !isNaN(t._y) || typeof t._y === "function"){
+				level = c.turtleStack.len - 1
+			}
+			else{
+				level = c.turtleStack.len
+			}
+			c.rangeList.push(node, level)
+
+			// begin a turtle
+			c.beginTurtle()
+			
+			var t = c.turtle
+			t.view_object = node
+
+			var next = node.children[0]
+			var next_index = 0
+			while(!next){ // skip to parent next
+
+				var view = c.turtle.view_object
+				var t = c.turtle
+				c.endTurtle()
+				c.walkTurtle(t)
+	
+				// after end we have
+				var t = c.turtle
+				view._layout = {
+					x:t._x,
+					y:t._y,
+					w:t._w,
+					h:t._h
+				}
+
+				if(!node.parent){
+					break
+				}
+				next_index = node._iter_index + 1
+				node = node.parent
+				next = node.children[next_index]
+			}
+			if(next) next._iter_index = next_index
+			node = next
+		}
+		emitPostLayout(this)
 	}
 
 	this.drawColor = function(stime, frameid){

@@ -134,10 +134,13 @@ define.class('$base/node',function(require){
 			// TODO: implement style
 			// 	define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
 
+			new_version.atAttributeGetFlag = 2
 	 		new_version.children = new_version.render()
+			new_version.atAttributeGetFlag = 0
+
+	 		new_version.atAttributeGet = undefined
 
 	 		define.atConstructor = undefined
-			new_version.atAttributeGet = undefined
 		}
 
 		if(!Array.isArray(new_version.children)){

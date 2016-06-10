@@ -9,56 +9,88 @@
 define.class('$base/node', function(require){
 	// Base UI view Object
 
-	var FlexLayout = require('$system/lib/layout')
-
 	var view = this.constructor
 
 	var Canvas = require('$base/canvas')
 
 	this.Shader = require('$base/shader')
 	this.Texture = require('$base/texture')
+
 	this.Canvas = Object.create(Canvas.prototype)
 
 	this.attributes = {
 		// visibility
 		visible: true,
-		drawtarget: Config({type:Enum('both','pick','color'), value:'both'}),
-		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
-		pos: Config({type:vec3, value:vec3(0,0,0), meta:'xyz'}),
+
+		x: Config({group:'style', type:Object, value:NaN}),
+		y: Config({group:'style', type:Object, value:NaN}),
+		z: Config({group:'style', type:Object, value:NaN}),
+
+		w: Config({group:'style', type:Object, value:NaN}),
+		h: Config({group:'style', type:Object, value:NaN}),
+		d: Config({group:'style', type:Object, value:NaN}),
+		// Scale of an item, only useful for items belof a 3D viewport
+		scale: Config({type: vec3, value: vec3(1), meta:'xyz'}),
+
+		// orientation
+		orientation: Config({type:vec3, value:vec3(0)}),
+
+		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
+		margin: Config({type: vec4, value: vec4(0,0,0,0), meta: 'trbl'}),
+		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
+		padding: Config({type: vec4, value: vec4(0,0,0,0), meta: 'trbl'}),
+		// align
+		align: Config({type:Function, value:float.LEFTTOP}),
+		// walk
+		walk: Config({type:Function, value:float.LRTBWRAP}),
+
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:'style',type:vec4, value: vec4('transparent'), meta:'color'}),
-		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
-		size: Config({type:vec3, value:vec3(NaN), meta:'xyz'}),
-		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
-		margin: Config({type: vec4, value: vec4(0,0,0,0), meta: 'ltrb'}),
-		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
-		padding: Config({type: vec4, value: vec4(0,0,0,0), meta: 'ltrb'}),
-		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
-		// Can be listened to to observe layout changes
-		layout: Config({ type:Object, value:{}, meta:'hidden'}),
+
+		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
+		bgimage: Config({group:'style',type:Object, meta:'texture'}),
 		bgimagemode: Config({group:'style', type:Enum('stretch', 'aspect-fit', 'aspect-fill', 'custom', 'resize'), value:'resize'}),
 		bgimageaspect: Config({group:'style', value:vec2(1,1)}),
 		bgimageoffset: Config({group:'style', value:vec2(0,0)}),
+
 		// the background color of a view, referenced by various shaders
 		bgcolor: Config({group:'style', type:vec4, value: vec4(NaN), meta:'color'}),
-		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: Config({group:'style',type:Object, meta:'texture'}),
+
 		// the opacity of the image
 		opacity: Config({group:'style', value: 1.0, type:float}),
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
+
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
 		scroll: Config({type:vec2, value:vec2(0, 0), persist: true}),
+
 		// the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
 		zoom: Config({type:float, value:1}),
+
 		// overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
 		// works the same way as the CSS property
 		overflow: Config({type: Enum('','hidden','scroll','auto','hscroll','vscroll'), value:''}),
-		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
-		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
-		// need to be processed and a single texture can just be drawn by the parent
-		// the viewportblend shader can be used to render this texture it into its parent
-		viewport: Config({group:'layout', type:Enum('','2d','3d'), value:''})
+
+		// viewport
+		viewport: Config({group:'layout', type:Enum('','2d','3d'), value:''}),
+
+		// layout property
+		layout: Config({ type:Object, value:{}, meta:'hidden'})
 	}
+
+	// trigger redraw
+	this.emitFlags(1, [
+		'visible'
+	])
+
+	// trigger a relayout
+	this.emitFlags(2, [
+		'x','y','w','h','margin','padding','align','walk'
+	])
+
+	// trigger matrix_dirty
+	this.emitFlags(4, [
+		'orientation', 'layout'
+	])
 
 	this.name = ''
 	this.class = ''
@@ -112,7 +144,8 @@ define.class('$base/node', function(require){
 	this.totalmatrix = mat4.identity()
 
 	// forward references for shaders
-	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
+	this.layout = {x:NaN, y:NaN, w:NaN, h:NaN}
+
 	this.screen = {device:{size:vec2(), frame:{size:vec2()}}}
 
 	// turn off rpc proxy generation for this prototype level
@@ -145,9 +178,10 @@ define.class('$base/node', function(require){
 		this.canvas.initCanvas(this)
 
 		this.atFlag1 = this.redraw
-		this.atFlag2 = this.relayout
+		this.atFlag2 = this.rerender
 		this.atFlag4 = this.rematrix
 	}
+
 
 	this.atViewDestroy = function(){
 		for(var key in this.render_targets){
@@ -173,12 +207,12 @@ define.class('$base/node', function(require){
 		}
 		else if(!isNaN(this.bgcolor[0])){
 			c.bgcolor = this.bgcolor
-			if(this.borderradius[0]>0){
-				c.drawRoundedrect(0, 0, c.width, c.height)
-			}
-			else{
-				c.drawRect({x:0, y:0, w:c.width, h:c.height})
-			}
+			//if(this.borderradius[0]>0){
+			//	c.drawRoundedrect(0, 0, c.width, c.height)
+			//}
+			//else{
+			c.drawRect({color:this.bgcolor, x:0, y:0, w:c.width, h:c.height})
+			//}
 		}
 		if(this._viewport === '2d'){
 			c.setViewMatrix('view')
@@ -186,12 +220,12 @@ define.class('$base/node', function(require){
 	}
 
 	// the user draw function
-	this.draw = function(stime, frameid){
-		this.drawBackground(stime, frameid)
-		this.drawChildren(stime, frameid)
+	this.draw = function(time, frameid){
+		this.drawBackground(time, frameid)
+		this.drawChildren(time, frameid)
 	}
 
-	this.drawChildren = function(stime, frameid){
+	this.drawChildren = function(time, frameid){
 		var c = this.canvas
 		var redraw
 		// TODO add boundingbox clipping
@@ -199,37 +233,48 @@ define.class('$base/node', function(require){
 			var child = this.children[i]
 			// include it in our drawlist
 			c.addCanvas(child.canvas, i)
-			child.drawView(stime, frameid)
+			child.drawView(time, frameid)
 		}
 		return redraw
 	}
 
-	this.drawView = function(stime, frameid){
+	this.drawView = function(time, frameid){
 		var c = this.canvas
-		c.width = this._layout.width
-		c.height = this._layout.height
+		//c.width = this._layout.w
+		//c.height = this._layout.h
+
 		this._time = this.screen._time
 		if(!this._viewport && !this.draw_dirty) return
 
 		// clear commandset
 		c.clearCmds()
+		this.pickdraw = 0
+		
+		// update matrices
+		this.updateMatrix()
 
 		// lets set our turtle values
 		var t = c.turtle
 
 		//TODO pull these from a view?
+		c.width = 
+		t._w = this._layout.w
+		c.height = 
+		t._h = this._layout.h
 		t._align = float.LEFTTOP
 		t._walk = float.LRTBWRAP			
 		t._margin = [0,0,0,0]
 		t._padding = [0,0,0,0]
 
+		// here we need to know the size if its defined by the
 		c.beginTurtle()
 
 		var redraw
 		// alright its a viewport, render to a texture
+
+		var tgt
 		if(this._viewport){
 			// do the 2d
-			var tgt
 			if(this._viewport === '2d'){
 				this.viewport_target =
 				tgt = c.pushTarget('viewport', c.RGBA|c.PICK)
@@ -242,22 +287,21 @@ define.class('$base/node', function(require){
 			}
 			if(this.draw_dirty){
 				c.clear(this.clearcolor)
-				this.atAttributeGetFlag = 2
-				redraw = this.draw(stime, frameid)
-				this.atAttributeGetFlag = 0
-				this.draw_dirty = false
 			}
-			c.popTarget()
-			//c.blendDraw(tgt)
 		}
-		else if(this.draw_dirty){
-			this.atAttributeGetFlag = 2
-			redraw = this.draw(stime, frameid)
+		if(this.draw_dirty){
+			this.atAttributeGetFlag = 1
+			redraw = this.draw(time, frameid)
 			this.atAttributeGetFlag = 0
 			this.draw_dirty = false
 		}
-
+		if(this._viewport){
+			c.popTarget()
+			//c.blendDraw(tgt)
+		}
+		
 		c.endTurtle()
+		// here we know the computed size of a view
 
 		this.layoutchanged = false
 		// check time
@@ -363,9 +407,9 @@ define.class('$base/node', function(require){
 				// compute TSRT matrix
 				var s = this._scale
 				var r = this._orientation
-				var t0 = layout.left, t1 = layout.top, t2 = 0
-				var hw = layout.width / 2
-				var hh = layout.height / 2
+				var t0 = layout.x, t1 = layout.y, t2 = 0
+				var hw = layout.w / 2
+				var hh = layout.h / 2
 				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
 			}
 			this.last_matrix_update = frameid
@@ -388,39 +432,7 @@ define.class('$base/node', function(require){
 			}
 		}
 	}
-
-	function emitPostLayout(node){
-		var ref = node.ref
-		var oldlayout = ref.oldlayout || {}
-		var layout = ref._layout
-
-		var children = node.children
-		for(var i = 0; i < children.length; i++){
-			var child = children[i]
-			emitPostLayout(child)
-		}
-		ref.layout_dirty = false
-
-		var oldlayout = ref.oldlayout || {}
-		if(layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
-			 layout.width !== oldlayout.width || layout.height !== oldlayout.height){
-			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
-			ref.oldlayout = layout
-			ref.layoutchanged = true
-		}
-
-		if(ref._bgimage){
-			ref.onbgimagemode()
-		}
-	}
-
-	this.doLayout = function(){
-		if(!this.layout_dirty) return
-		var copynodes = FlexLayout.fillNodes(this)
-		FlexLayout.computeLayout(copynodes)
-		emitPostLayout(copynodes)
-	}
-
+	
 	this.renderChild = function(render){
 		// wrap our render function in a temporary view
 		var vroot = view()
