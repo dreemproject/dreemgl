@@ -145,7 +145,13 @@ define.class(function(require, exports){
 						code += 'if(!_scope.indexstart'+clsname+') _scope.indexstart'+clsname+' = _props.length\n'
 						code += '_scope.indexend'+clsname+' = _props.length + _needed\n'
 						code += '_turtle._propoff = _props.length\n'
-						code += 'this.rangeList.push(_props, _props.length, _needed, this.turtleStack.len)\n'
+						// need to know wether _x and _y are absolute. how? 
+						// its a function and not float or undefined
+						// or a number
+						code += 'var _level\n'
+						code += 'if(typeof _x === "number" && !isNaN(_x) || typeof _x === "function" || typeof _y === "number" && !isNaN(_y) || typeof _y === "function") _level = this.turtleStack.len - 1\n'
+						code += 'else  _level = this.turtleStack.len\n'
+						code += 'this.rangeList.push(_props, _props.length, _needed, _level)\n'
 						code += '_props.length += _needed\n'
 						code += ''
 						return code

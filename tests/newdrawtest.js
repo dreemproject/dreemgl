@@ -51,29 +51,45 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//c.drawRect({color:[random(),0,random(),1]})
 				c.beginRect({
 					walk:float.LRTBWRAP,
-					align:float.RIGHTTOP,
+					align:float.CENTER,
 					color:'orange',
-					padding:10,
+					padding:30,
 					margin:30,
-					w:50 + 50*sin(time),
-					h:50
+					w:200,// + 50*sin(time),
 				})
 
 				for(var j = 0; j < 5; j++){
 					c.beginRect({
 						margin:1,
 						walk:float.LRTBWRAP,
-						align:float.RIGHTBOTTOM,
-						color:[0,0,1,1],
-						padding:[0,0,0,0],
-						w:10,
-						h:10
+						align:float.LEFTTOP,
+						color:'blue',
+						padding:0,
+						w:100,
+						h:100
 					})
 
-				//for(var j = 0; j < 8; j++){
-				//	c.drawRect({margin:[0,0,1,1],color:[1,i*0.1,1,1],w:10,h:10})
-				//}
+					//for(var k = 0; k < 3; k++){
+					//	c.drawRect({color:'purple',w:3,h:3})
+					//}
 
+					c.drawRect({
+						color:'yellow', 
+						x:float.left(0),
+						y:float.top(3),
+						w:float.width('50%'), 
+						h:float.height('100%-5')
+						//h:float.height('50%')
+					})
+					c.drawRect({
+						color:'red', 
+						x:float.right(0), 
+						y:float.top(3), 
+						w:float.width('50%'), 
+						h:float.width('100%-5')
+					})
+
+					//c.drawRect({color:'yellow', x:float.right(0), y:float.top(-10), w:3, h:3})
 
 					c.endRect()
 				}
@@ -91,7 +107,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			///c.endRect()
 			//console.log(performance.now()-dt)
-			return true
+			//return true
 				//c.drawRect({bgcolor:'blue'})
 		}
 	})

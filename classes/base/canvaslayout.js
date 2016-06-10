@@ -8,7 +8,6 @@ define.class(function(require, exports){
 	
 	var defarray = [0,0,0,0]
 
-
 	float.LEFTTOP = float.TOPLEFT = function float_TOPLEFT(t, canvas){
 	}
 
@@ -58,12 +57,19 @@ define.class(function(require, exports){
 			t.startx = t.walkx = t.initx + t.padding[3] + t.margin[3]
 			t.starty = t.walky = t.inity + t.padding[0] + t.margin[0]
 		},
-		walk:function(t, canvas){
-			// oops we will be over the edge, lets wrap
+		walk:function(t, canvas, oldturtle){
+
 			if(!isNaN(t.width) && t.walkx + t._w + t._margin[3] + t._margin[1] > t.startx + t.width){
+				var dx = t.startx - t.walkx 
+				var dy = t.maxh
 				t.walkx = t.startx
 				t.walky += t.maxh
 				t.maxh = 0
+				// move the body of the wrapped thing
+				if(oldturtle){
+					canvas.displaceProp(oldturtle.rangeStart, 'x', dx)
+					canvas.displaceProp(oldturtle.rangeStart, 'y', dy)
+				}
 			}
 
 			// walk it
@@ -91,7 +97,7 @@ define.class(function(require, exports){
 			t.startx = t.walkx = t.initx + t.padding[3] + t.margin[3]
 			t.starty = t.walky = t.inity + t.padding[0] + t.margin[0]
 		},
-		walk:function(t, canvas){
+		walk:function(t, canvas, oldturtle){
 			// walk no wrap
 			t._x = t.walkx + t._margin[3]
 			t._y = t.walky + t._margin[0]
@@ -110,6 +116,63 @@ define.class(function(require, exports){
 		}
 	}
 
+	float.left = function float_left(left){
+		return function(t, canvas){
+			return t.startx + t._margin[3] + left
+		}
+	}
+
+	float.top = function float_top(top){
+		return function(t, canvas){
+			return t.starty + t._margin[0] + top
+		}
+	}
+
+	float.right = function float_right(right){
+		return function(t, canvas){
+			if(isNaN(t.width)) t.startx + t._margin[3] + right
+			return t.startx + t.width - t._w - t._margin[1] - right
+		}
+	}
+
+	float.bottom = function float_bottom(bottom){
+		return function(t, canvas){
+			if(isNaN(t.height)) return t.starty + t._margin[0] + bottom
+			else return t.starty + t.height - t._h - t.margin[2] - bottom
+		}
+	}
+
+	float.width = function float_width(str){
+
+		var delta = 0, id
+		if((id = str.indexOf('+')) > 0 || (id = str.indexOf('-')) > 0){
+			delta = parseFloat(str.slice(id))
+			str = str.slice(0,id)
+		}
+
+		var factor = parseFloat(str)/100
+
+		return function(t, canvas){
+			return ((t.width) * factor)- t._margin[1] - t._margin[3] + delta
+		}
+	}
+
+	float.height = function float_height(str){
+
+		var delta = 0, id
+		if((id = str.indexOf('+')) > 0 || (id = str.indexOf('-')) > 0){
+			delta = parseFloat(str.slice(id))
+			str = str.slice(0,id)
+		}
+
+		var factor = parseFloat(str)/100
+
+		return function(t, canvas){
+			return ((t.height) * factor)- t._margin[0] - t._margin[2] + delta
+		}
+	}
+
+
 	this.beginTurtle = function(){
 		// allocate alignment object
 		var ot = this.turtleStack[this.turtleStack.len] = this.turtle
@@ -117,8 +180,8 @@ define.class(function(require, exports){
 		t.outer = ot
 
 		// store our local values from the old turtle
-		t.align = ot._align
-		t.walk = ot._walk
+		t.align = ot._align || float.LEFTTOP
+		t.walk = ot._walk || float.LRTBWRAP
 		t.margin = ot._margin
 		t.padding = ot._padding
 
@@ -175,7 +238,7 @@ define.class(function(require, exports){
 		t.rangeStart = this.rangeList && this.rangeList.length || 0
 	}
 
-	this.walkTurtle = function(){
+	this.walkTurtle = function(oldturtle){
 		// local state x /y / w/ h/ margin/padding
 		var t = this.turtle
 		var ot = t.outer
@@ -196,7 +259,7 @@ define.class(function(require, exports){
 		// its not absolutely positioned
 		if(isNaN(t._x)|| isNaN(t._y)){
 			// walk the turtle
-			ot.walk.walk(t, this)	
+			ot.walk.walk(t, this, oldturtle)	
 		}
 	}
 
@@ -221,10 +284,10 @@ define.class(function(require, exports){
 		else ot._h = t.height + padh
 
 		// lets end the turtle walking
-		if(ot.walk.end) ot.walk.end(t, this)
+		if(t.walk.end) t.walk.end(t, this)
 
 		// call alignment function
-		ot.align(t, this)
+		t.align(t, this)
 
 		this.turtle = this.turtleStack[--this.turtleStack.len]
 	}

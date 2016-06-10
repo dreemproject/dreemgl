@@ -30,8 +30,9 @@ define.class('$shaders/pickshader', function(require){
 			this.beginTurtle()
 		},
 		end:function(){
+			var t = this.turtle
 			this.endTurtle()
-			this.walkTurtle()
+			this.walkTurtle(t)
 			this.PUTPROPS()
 		}
 
