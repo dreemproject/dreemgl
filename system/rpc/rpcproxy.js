@@ -7,7 +7,7 @@
 
 define.class('$base/node', function(require, exports){
 	var RpcProxy = exports
-	
+
 	// disconnect all listeners to this rpc object
 	this.disconnectAll = function(){
 		for(var key in this._attributes){
@@ -74,7 +74,7 @@ define.class('$base/node', function(require, exports){
 					var props = proto.getAttributeConfig(key)
 					var value = object['_' + key]
 					if(!props) props = {}
-					if(typeof value === 'function' && value.is_wired || 
+					if(typeof value === 'function' && value.is_wired ||
 						typeof value === 'string' && value.charAt(0) == '$' && value.charAt(1) === '{' && value.charAt(value.length - 1) === '}'){
 						props.value = undefined
 					}
@@ -128,8 +128,8 @@ define.class('$base/node', function(require, exports){
 		childset.parent = parent
 		childset.name = object.name || object.constructor.name
 
-		for(var i = 0; i < object.constructor_children.length; i++){
-			var child = object.constructor_children[i]
+		for(var i = 0; i < object.children.length; i++){
+			var child = object.children[i]
 			childset[child.name || child.constructor.name] = child.createRpcProxy(childset)
 		}
 		return childset

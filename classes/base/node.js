@@ -7,71 +7,10 @@
 define.class(function(require){
 	// Node class provides attributes for events and values, propertybinding and constructor semantics
 
-	var OneJSParser =  require('$system/parse/onejsparser')
-	var WiredWalker = require('$system/parse/wiredwalker')
-	var RpcProxy = require('$system/rpc/rpcproxy')
-	var ASTScanner = require('$system/parse/astscanner')
-
-	// parser and walker for wired attributes
-	var onejsparser = new OneJSParser()
-	onejsparser.parser_cache = {}
-	var wiredwalker = new WiredWalker()
-
-	// the RPCProxy class reads these booleans to skip RPC interface creation for this prototype level
-	this.rpcproxy = false
-
 	// internal, called by the constructor
 	this._atConstructor = function(){
-		// store the args for future reference
-		//var args = this.constructor_args = Array.prototype.slice.call(arguments)
-		this.children =
-		this.constructor_children = []
+		this.children = []
 		this.initFromConstructorArgs(arguments)
-	}
-
-	this.setInterval = function(fn, mstime){
-		if(!this.interval_ids) this.interval_ids = []
-		
-		var platform = typeof window !== 'undefined'?window:global;
-		
-		var id = platform.setInterval(function(){
-			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
-			fn.call(this)
-		}.bind(this), mstime)
-		this.interval_ids.push(id)
-		return id
-	}
-
-	this.clearInterval = function(id){
-		var idx = this.interval_ids.indexOf(id)
-		if(idx !== -1){
-			this.interval_ids.splice(idx, 1)
-			var platform = typeof window !== 'undefined'?window:global;
-		
-		 	platform.clearInterval(id)
-		}
-	}
-
-	this.setTimeout = function(fn, mstime){
-		if(!this.timeout_ids) this.timeout_ids = []
-		var platform = typeof window !== 'undefined'?window:global;
-		
-		var id = platform.setTimeout(function(){
-			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
-			fn.call(this)
-		}.bind(this), mstime)
-		this.timeout_ids.push(id)
-		return id
-	}
-
-	this.clearTimeout = function(id){
-		var idx = this.timeout_ids.indexOf(id)
-		if(idx !== -1){
-			this.timeout_ids.splice(idx, 1)
-			var platform = typeof window !== 'undefined'?window:global;
-		
-		 	platform.clearInterval(id)
-		}
 	}
 
 	// internal, called by the constructor
@@ -100,104 +39,10 @@ define.class(function(require){
 				this.initFromConstructorArgs(arg)
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
-				arg.__constructorIndex = i;
-				this.constructor_children.push(arg)
+				arg.__constructorIndex = i
+				this.children.push(arg)
 				// var name = arg.name
 				//if(name !== undefined && !(name in this)) this[name] = arg
-			}
-		}
-	}
-/*
-	// internal, called by the constructor
-	this.initFromConstructorProps = function(obj){
-
-		for(var key in obj){
-			var prop = obj[key]
-			var tgt = this
-			var type = 0
-
-			if(!this.constructor_props) this.constructor_props = {}
-			this.constructor_props[key] = prop
-
-			var idx = key.indexOf('.')
-			if(idx !== -1){
-				tgt = this[key.slice(0,idx)]
-				key = key.slice(idx + 1)
-			}
-
-			tgt[key] = prop
-		}
-	}*/
-
-
-	// Mixes in another class or object, just pass in any number of object or class references. They are copied on key by key
-	this.mixin = function(){
-		for(var i = 0; i < arguments.length; i++){
-			var obj = arguments[i]
-			if(typeof obj === 'function') obj = obj.prototype
-			for(var key in obj){
-				// copy over getters and setters
-				if(obj.__lookupGetter__(key) || obj.__lookupSetter__(key)){
-					// ignore it
-				}
-				else{
-					// other
-					this[key] = obj[key]
-				}
-			}
-		}
-	}
-
-	// internal, used by find and findChild
-	this._findChild = function(name, ignore){
-		if(this === ignore) return
-		if(this.name === name){
-			return this
-		}
-		if(this.children) {
-			for(var i = 0; i < this.children.length; i ++){
-				var child = this.children[i]
-				if(child === ignore) continue
-				var ret = child._findChild(name, ignore)
-				if(ret !== undefined){
-					return ret
-				}
-			}
-		}
-	}
-
-	// Finds a child node by name.
-	this.findChild = function(name){
-		if(!this.find_cache) this.find_cache = {}
-		var child = this.find_cache[name]
-		if(child && !child.destroyed) return child
-		child = this.find_cache[name] = this._findChild(name)
-		return child
-	}
-
-	// Finds a parent node by name.
-	this.find = function(name){
-		var child = this.findChild(name)
-		var node = this
-		while(child === undefined && node.parent){
-			child = node.parent._findChild(name, node)
-			node = node.parent
-		}
-		this.find_cache[name] = child
-		return child
-	}
-
-	// internal, hide a property, pass in any set of strings
-	this.hideProperty = function(){
-		for(var i = 0; i<arguments.length; i++){
-			var arg = arguments[i]
-			if(Array.isArray(arg)){
-				for(var j = 0; j<arg.length; j++){
-					Object.defineProperty(this, arg[j],{enumerable:false, configurable:true, writeable:true})
-				}
-			}
-			else{
-				Object.defineProperty(this, arg,{enumerable:false, configurable:true, writeable:true})
 			}
 		}
 	}
@@ -214,23 +59,10 @@ define.class(function(require){
 		return this._attributes[key]
 	}
 
-	// internal, check if an attribute has wires connected
-	this.hasWires = function(key){
-		var wiredfn_key = '_wiredfn_' + key
-		return wiredfn_key in this
-	}
-
-	// internal, returns the wired-call for an attribute
-	this.wiredCall = function(key){
-		var wiredcl_key = '_wiredcl_' + key
-		return this[wiredcl_key]
-	}
-
 	// internal, emits an event recursively on all children
 	this.emitRecursive = function(key, event, block){
-
 		if(block && block.indexOf(child)!== -1) return
-		this.emit(key, event);
+		this.emit(key, event)
 		for(var a in this.children){
 			var child = this.children[a]
 			child.emitRecursive(key, event)
@@ -372,13 +204,6 @@ define.class(function(require){
 				this[key] = undefined
 			}
 		}
-	}
-
-	// internal, set the wired function for an attribute
-	this.setWiredAttribute = function(key, value){
-		if(!this.hasOwnProperty('_wiredfns')) this._wiredfns = this._wiredfns?Object.create(this._wiredfns):{}
-		this._wiredfns[key] = value
-		this['_wiredfn_'+key] = value
 	}
 
 	// internal, mark an attribute as persistent accross live reload / renders
@@ -526,52 +351,6 @@ define.class(function(require){
 		}
 	})
 
-	// define listeners {attrname:function(){}}
-	Object.defineProperty(this, 'listeners', {
-		get:function(){
-			throw new Error("listeners can only be assigned to")
-		},
-		set:function(arg){
-			for(var key in arg){
-				this.adListener(key, arg[key])
-			}
-		}
-	})
-
-	// internal, animate an attribute with an animation object see animate
-	this.animateAttributes = function(arg){
-		// count
-		var arr = []
-		for(var key in arg){
-			var value = arg[key]
-			if(typeof value === 'object'){
-				var resolve, reject
-				var promise = new Promise(function(res, rej){ resolve = res, reject = rej })
-				promise.resolve = resolve
-				promise.reject = reject
-				arr.push(promise)
-				this.startAnimation(key, undefined, value, promise)
-			}
-			else{
-				if(typeof value === 'string'){
-					value = value.toLowerCase()
-					if(value === 'stop'){
-						this.stopAnimation(key)
-					}
-					else if(value === 'play'){
-						this.playAnimation(key)
-					}
-					else if(value === 'pause'){
-						this.pauseAnimation(key)
-					}
-				}
-				resolve()
-			}
-		}
-		if(arr.length <= 1) return arr[0]
-		return Promise.all(arr)
-	}
-
 	// internal, define an attribute, use the attributes =  api
 	this.defineAttribute = function(key, config, always_define){
 		// lets create an attribute
@@ -659,7 +438,7 @@ define.class(function(require){
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
 		var flag_key = '_flag_' + key
-		
+
 		this[flag_key] = 0
 
 		if(!config.group) config.group  = this.constructor.name
@@ -836,151 +615,57 @@ define.class(function(require){
 		})
 	}
 
-	// internal, connect a wired attribute up to its listeners
-	this.connectWiredAttribute = function(key, initarray){
-		var wiredfn_key = '_wiredfn_' + key
-		var wiredcl_key = '_wiredcl_' + key
-		var wiredfn = this[wiredfn_key]
-		var ast = onejsparser.parse(wiredfn.toString())
-		var state = wiredwalker.newState()
-
-		wiredwalker.expand(ast, null, state)
-
-		var bindcall = function(){
-			var deps = bindcall.deps
-			if(deps && !bindcall.initialized){
-				bindcall.initialized = true
-				for(var i = 0; i < deps.length; i++) deps[i]()
-			}
-			this[key] = this[wiredfn_key].call(this, this[wiredcl_key].find, this.rpc)
-		}.bind(this)
-
-		this[wiredcl_key] = bindcall
-		bindcall.find = {}
-
-		for(var j = 0; j < state.references.length; j++){
-			var ref = state.references[j]
-			var obj = {'this':this,'find':bindcall.find,'rpc':this.rpc}
-			for(var k = 0; k < ref.length; k++){
-
-				var part = ref[k]
-				if(k === ref.length - 1){
-					// lets add a listener
-					if(!obj || !obj.isAttribute || !obj.isAttribute(part)){
-						console.error("Attribute does not exist: "+ref.join('.') + " (at " + part + ") in wiring " + this[wiredfn_key].toString())
-						continue
-					}
-
-					obj.addListener(part, bindcall)
-
-					if(obj.hasWires(part) && !obj.wiredCall(part)){
-						obj.connectWiredAttribute(part)
-						if(!bindcall.deps) bindcall.deps = []
-						bindcall.deps.push(obj.wiredCall(part))
-					}
-				}
-				else{
-					var newobj = obj[part]
-					if(!newobj){
-						if(obj === bindcall.find){ // lets make an alias on this, scan the parent chain
-							obj = this.find(part)
-							if(obj) bindcall.find[part] = obj
-							/*
-							while(obj){
-								if(part in obj){
-									if(part in this) console.log("Aliasing error with "+part)
-									//console.log("ALIASING" + part, this)
-									obj = this[part] = obj[part]
-									break
-								}
-								obj = obj.parent
-							}*/
-						}
-					}
-					else obj = newobj
-					if(!obj) console.log('Cannot find part ' + part + ' in ' + ref.join('.') + ' in propertybind', this)
-				}
-			}
-		}
-		if(initarray) initarray.push(bindcall)
-	}
-
-	// internal, return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
-	this.emitForward = function(key){
-		return function(value){
-			this.emit(key, value)
-		}.bind(this)
-	}
-
-	// internal, connect all wires using the initarray returned by connectWiredAttribute
-	this.connectWires = function(initarray, depth){
-
-		var immediate = false
-		if(!initarray) {
-			initarray = []
-			immediate = true
-		}
-
-		if(this._wiredfns){
-			for(var key in this._wiredfns){
-				this.connectWiredAttribute(key, initarray)
-			}
-		}
-		// lets initialize bindings on all nested classes
-		var nested = this.constructor.nested
-		if(nested) for(var name in nested){
-			var nest = this[name.toLowerCase()]
-			if(nest.connectWires){
-				nest.connectWires(initarray, depth)
-			}
-		}
-		if(immediate === true){
-			for(var i = 0; i < initarray.length; i++){
-				initarray[i]()
-			}
-		}
-	}
-
-	// internal, does nothing sofar
-	this.disconnectWires = function(){
-	}
-
-	// internal, used by the attribute setter to start a 'motion' which is an auto-animated attribute
-	this.startMotion = function(key, value){
-		if(!this.screen) return false
-		return this.screen.startMotion(this, key, value)
-	}
-
-	// internal, create an rpc proxy
-	this.createRpcProxy = function(parent){
-		return RpcProxy.createFromObject(this, parent)
-	}
-
-	// mixin setter API to easily assign mixins using an is: syntax in the constructors
-	Object.defineProperty(this, 'is', {
-		set:function(value){
-			// lets copy on value.
-			if(Array.isArray(value)){
-				for(var i = 0; i<value.length; i++) this.is = value[i]
-				return
-			}
-			if(typeof value === 'function') value = value.prototype
-			if(typeof value === 'object'){
-				for(var key in value){
-					this[key] = value[key]
-				}
-			}
-		}
-	})
-
-	this.hideProperty(Object.keys(this))
-
 	// internal, always define an init and destroy
 	this.attributes = {
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
 		init:Config({type:Event}),
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
 		destroy:Config({type:Event})
-	};
+	}
+
+	this.setInterval = function(fn, mstime){
+		if(!this.interval_ids) this.interval_ids = []
+
+		var platform = typeof window !== 'undefined'?window:global
+
+		var id = platform.setInterval(function(){
+			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
+			fn.call(this)
+		}.bind(this), mstime)
+		this.interval_ids.push(id)
+		return id
+	}
+
+	this.clearInterval = function(id){
+		var idx = this.interval_ids.indexOf(id)
+		if(idx !== -1){
+			this.interval_ids.splice(idx, 1)
+			var platform = typeof window !== 'undefined'?window:global
+
+		 	platform.clearInterval(id)
+		}
+	}
+
+	this.setTimeout = function(fn, mstime){
+		if(!this.timeout_ids) this.timeout_ids = []
+		var platform = typeof window !== 'undefined'?window:global
+
+		var id = platform.setTimeout(function(){
+			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
+			fn.call(this)
+		}.bind(this), mstime)
+		this.timeout_ids.push(id)
+		return id
+	}
+
+	this.clearTimeout = function(id){
+		var idx = this.timeout_ids.indexOf(id)
+		if(idx !== -1){
+			this.timeout_ids.splice(idx, 1)
+			var platform = typeof window !== 'undefined'?window:global
+
+		 	platform.clearInterval(id)
+		}
+	}
 
 })

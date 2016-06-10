@@ -10,7 +10,7 @@ define.class('$base/node',function(require){
 	var RpcHub = require('$system/rpc/rpchub')
 
 	this._atConstructor = function(){
-		
+
 	}
 
 	this.atConstructor = function(){
@@ -48,7 +48,7 @@ define.class('$base/node',function(require){
 		this._intervals.push(id)
 		return id
 	}
- 
+
 	this.clearInterval = function(id){
 		var i = teem._intervals.indexOf(id)
 		if(i != -1) teem._intervals.splice(i, 1)
@@ -58,7 +58,7 @@ define.class('$base/node',function(require){
 	this.renderComposition = function(){
 		// we have to render the RPC bus
 		this.processRender(this, undefined, undefined, false, true)
-		
+
 		//this.children = this.render()
 
 		this.names = {}
@@ -66,10 +66,10 @@ define.class('$base/node',function(require){
 		for(var i = 0; i < this.children.length; i++){
 			// ok so as soon as we are stubbed, we need to proxify the object
 			var child = this.children[i]
-			if(!child.createRpcProxy) continue
+			// if(!child.createRpcProxy) continue
 			// add the proxy to the rpc object. Default screen name = 'default'
 			var name = child.name || 'default' // || child.constructor.name
-			this.rpc[name] = child.createRpcProxy(this.rpc)
+			// this.rpc[name] = child.createRpcProxy(this.rpc)
 			this.names[name] = child
 		}
 	}
@@ -87,7 +87,7 @@ define.class('$base/node',function(require){
 		// call connect wires before
 		if(!rerender){
 			var wires = []
-			new_version.connectWires(wires)
+			// new_version.connectWires(wires)
 			initializing = true
 			for(var i = 0; i < wires.length; i++){
 				wires[i]()
@@ -137,9 +137,6 @@ define.class('$base/node',function(require){
 
 	 		define.atConstructor = undefined
 			new_version.atAttributeGet = undefined
-		}
-		else{
-			new_version.children = new_version.constructor_children
 		}
 
 		if(!Array.isArray(new_version.children)){
@@ -213,7 +210,7 @@ define.class('$base/node',function(require){
 		}
 
 		if(is_root){
-			
+
 
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){
