@@ -364,6 +364,7 @@ define(function () {
 	function getPaddingAndBorderAxis(node, axis) {
 		// expand the fucker
 		var style = node.ref
+		style._borderwidth = style._borderwidth || vec4()
 		if(axis === 'row'){
 			return (style._padding[0] >=0? style._padding[0]: 0) + (style._borderwidth[0] >=0? style._borderwidth[0]: 0) +
 			       (style._padding[2] >=0? style._padding[2]: 0) + (style._borderwidth[2] >=0? style._borderwidth[2]: 0)
@@ -507,6 +508,8 @@ define(function () {
 	function boundAxis(node, axis, value) {
 
 		var min, max
+		node.ref._minsize = node.ref._minsize || vec4()
+		node.ref._maxsize = node.ref._maxsize || vec4(Infinity)
 		if(axis === 'row') min = node.ref._minsize[0], max = node.ref._maxsize[0]
 		else if(axis === 'column') min = node.ref._minsize[1], max = node.ref._maxsize[1]
 		else throw new Error('axis not defined')

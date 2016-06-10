@@ -131,7 +131,8 @@ define.class('$base/node',function(require){
 				//console.log(object)
 	 		}
 
-	 		define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
+			// TODO: implement style
+			// 	define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
 
 	 		new_version.children = new_version.render()
 
@@ -210,10 +211,9 @@ define.class('$base/node',function(require){
 		}
 
 		if(is_root){
-
-
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){
+				// TODO: refactor
 				new_version.screen.atNewlyRendered(new_version)
 			}
 		}

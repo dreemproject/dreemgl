@@ -216,7 +216,7 @@ define.class('$base/node', function(){
 				pick(pointerlist[i].handovered, pointerlist[i].handovered_pickdraw)
 			}
 			else {
-				var  match = this.device.screen.doPick(pointerlist[i].position)
+				var  match = this.device.screen.drawPick(pointerlist[i].position)
 				pick(match.view, match.pickdraw)
 			}
 		}
@@ -238,7 +238,7 @@ define.class('$base/node', function(){
 			// emit event hooks
 			if (start){
 				if (start.pickview){
-					var match = this.device.screen.doPick(pointerlist[i].position)
+					var match = this.device.screen.drawPick(pointerlist[i].position)
 					pointer.pick = match.view
 					pointer.pickdraw = match.pickdraw
 				}
@@ -273,7 +273,7 @@ define.class('$base/node', function(){
 				if (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
 			}
 
-			var match = this.device.screen.doPick(pointerlist[i].position)
+			var match = this.device.screen.drawPick(pointerlist[i].position)
 
 			var previous = this._move.getClosest(pointerlist[i])
 			var first = this._first.getById(previous.id)
@@ -299,7 +299,7 @@ define.class('$base/node', function(){
 		this._over.length = 0
 		this._out.length = 0
 
-		var match = this.device.screen.doPick(pointerlist[0].position)
+		var match = this.device.screen.drawPick(pointerlist[0].position)
 
 		var view = match.view
 
@@ -338,7 +338,7 @@ define.class('$base/node', function(){
 			dist = vec2.distance(pointerlist[0].position, this._wheel[0].position)
 		}
 		if (dist > 0) {
-			var match = this.device.screen.doPick(pointerlist[0].position)
+			var match = this.device.screen.drawPick(pointerlist[0].position)
 			var pointer = new Pointer(pointerlist[0], 0, match.view, match.pickdraw)
 			pointer.value = pointer.wheel
 			this._wheel.setPointer(pointer)

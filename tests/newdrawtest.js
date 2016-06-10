@@ -40,9 +40,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 		this.draw = function(time){
 			var c = this.canvas
-			//c.geometryRect({})
-			//c.uniformsRect({})
-			//c.flushRect()
 			var dt = performance.now()
 			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
 			for(var i = 0; i < 1; i++){
@@ -118,9 +115,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			name: 'default',
 			clearcolor: '#1f1f1f'
 		}, [
-			myview({
-				flex: 1,
-			})
+			myview({name: 'myview'})
 		])
 	]}
 })

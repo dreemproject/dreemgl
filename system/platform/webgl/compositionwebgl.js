@@ -34,21 +34,21 @@ define.class('$system/platform/base/compositionclient', function(require, basecl
 
 	this.doRender = function(previous, parent){
 		baseclass.doRender.call(this, previous, parent)
-
-		this.screen.addListener('locationhash', function(event){
-			var obj = event.value
-			var str = ''
-			for(var key in obj){
-				var value = obj[key]
-				if(str.length) str += '&'
-				if(value === true) str += key
-				else str += key + '=' + value
-			}
-			location.hash = '#' + str
-		})
+		// TODO: implement in node.js
+		// this.screen.addListener('locationhash', function(event){
+		// 	var obj = event.value
+		// 	var str = ''
+		// 	for(var key in obj){
+		// 		var value = obj[key]
+		// 		if(str.length) str += '&'
+		// 		if(value === true) str += key
+		// 		else str += key + '=' + value
+		// 	}
+		// 	location.hash = '#' + str
+		// })
 
 		this.decodeLocationHash = function(){
-			// lets split it on & into a=b pairs, 
+			// lets split it on & into a=b pairs,
 			var obj = {}
 			var parts = location.hash.slice(1).split(/\&/)
 			for(var i = 0; i < parts.length; i++){
