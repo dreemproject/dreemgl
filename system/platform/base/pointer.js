@@ -17,7 +17,7 @@ define.class('$base/node', function(){
 	var PointerList = function () {
 		Array.call( this )
 	}
-	PointerList.prototype = Object.create( Array.prototype )
+	PointerList.prototype = Object.create(Array.prototype)
 	PointerList.prototype.constructor = PointerList
 
 	// Internal: Finds first unused id in sorted pointer list
@@ -143,6 +143,9 @@ define.class('$base/node', function(){
 		}
 	}
 
+	this._atConstructor = function () {
+		console.log('pointer', this)
+	}
 
 	// TODO(aki): initialize per instance
 	this.attributes = {
@@ -302,7 +305,7 @@ define.class('$base/node', function(){
 		var match = this.device.screen.drawPick(pointerlist[0].position)
 
 		var view = match.view
-
+		console.log(this._hover)
 		var previous = this._hover.getById(0)
 		if (previous) previous = new Pointer(previous, 0, previous.view, previous.pickdraw)
 		var pointer = new Pointer(pointerlist[0], 0, view, match.pickdraw)

@@ -26,7 +26,6 @@ define.class(function(require){
 
 	// internal, called by the constructor
 	this.initFromConstructorArgs = function(args){
-		// console.log(args)
 		for(var i = 0; i < args.length; i++){
 			var arg = args[i]
 			if(Array.isArray(arg)){
@@ -44,7 +43,7 @@ define.class(function(require){
 	}
 
 	this.emit_block_set = undefined
-	
+
 	this.emit = function(key, ievent){
 
 		var on_key = 'on' + key
@@ -107,7 +106,7 @@ define.class(function(require){
 			child.emitRecursive(key, event)
 		}
 	}
-	
+
 	// internal, return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
 	this.emitForward = function(key){
 		return function(value){
@@ -150,19 +149,17 @@ define.class(function(require){
 	})
 
 	// internal, define an attribute, use the attributes =  api
-	this.defineAttribute = function(key, config){
-
+	this.defineAttribute = function(key, config, always_define){
 		// lets create an attribute
 		var is_config =  config instanceof Config
 		var is_attribute = key in this
 		// use normal value assign
-
 		var islistener = false
 		if(key[0] === 'o' && key[1] === 'n'){
 			if(this.__lookupSetter__(key.slice(2))) islistener = true
 		}
 
-		if(is_attribute && !is_config || islistener || typeof config === 'function' && !config.is_wired){
+		if(!always_define && (is_attribute && !is_config || islistener || typeof config === 'function' && !config.is_wired)){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -339,19 +336,10 @@ define.class(function(require){
 
 	// internal, always define an init and destroy
 	this.attributes = {
-		parent: Config({type: Object}),
-		children: Config({type: Array, init: true}),
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
 		init: Config({type: Event}),
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
-		destroy: Config({type: Event}),
-		// node cursor
-		cursor: Config({type: Enum('', 'arrow', 'none', 'wait', 'text', 'pointer', 'zoom-in', 'zoom-out',
-			'grab', 'grabbing', 'ns-resize', 'ew-resize', 'nwse-resize', 'nesw-resize', 'w-resize',
-			'e-resize', 'n-resize', 's-resize', 'nw-resize', 'ne-resize', 'sw-resize', 'se-resize', 'help',
-			'crosshair', 'move', 'col-resize', 'row-resize', 'vertical-text', 'context-menu', 'no-drop',
-			'not-allowed', 'alias', 'cell', 'copy'
-		), value: ''})
+		destroy: Config({type: Event})
 	}
 
 	this.getCursor = function(){
@@ -415,7 +403,6 @@ define.class(function(require){
 		this.find_cache[name] = child
 		return child
 	}
-
 
 	// TODO: implement
 	this.setFocus = function () {}

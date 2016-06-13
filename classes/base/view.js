@@ -74,7 +74,14 @@ define.class('$base/node', function(require){
 		viewport: Config({group:'layout', type:Enum('','2d','3d'), value:''}),
 
 		// layout property
-		layout: Config({ type:Object, value:{}, meta:'hidden'})
+		layout: Config({ type:Object, value:{}, meta:'hidden'}),
+		// node cursor
+		cursor: Config({type: Enum('', 'arrow', 'none', 'wait', 'text', 'pointer', 'zoom-in', 'zoom-out',
+			'grab', 'grabbing', 'ns-resize', 'ew-resize', 'nwse-resize', 'nesw-resize', 'w-resize',
+			'e-resize', 'n-resize', 's-resize', 'nw-resize', 'ne-resize', 'sw-resize', 'se-resize', 'help',
+			'crosshair', 'move', 'col-resize', 'row-resize', 'vertical-text', 'context-menu', 'no-drop',
+			'not-allowed', 'alias', 'cell', 'copy'
+		), value: ''})
 	}
 
 	// trigger redraw
@@ -249,7 +256,7 @@ define.class('$base/node', function(require){
 		// clear commandset
 		c.clearCmds()
 		this.pickdraw = 0
-		
+
 		// update matrices
 		this.updateMatrix()
 
@@ -257,12 +264,12 @@ define.class('$base/node', function(require){
 		var t = c.turtle
 
 		//TODO pull these from a view?
-		c.width = 
+		c.width =
 		t._w = this._layout.w
-		c.height = 
+		c.height =
 		t._h = this._layout.h
 		t._align = float.LEFTTOP
-		t._walk = float.LRTBWRAP			
+		t._walk = float.LRTBWRAP
 		t._margin = [0,0,0,0]
 		t._padding = [0,0,0,0]
 
@@ -299,7 +306,7 @@ define.class('$base/node', function(require){
 			c.popTarget()
 			//c.blendDraw(tgt)
 		}
-		
+
 		c.endTurtle()
 		// here we know the computed size of a view
 
@@ -432,7 +439,7 @@ define.class('$base/node', function(require){
 			}
 		}
 	}
-	
+
 	this.renderChild = function(render){
 		// wrap our render function in a temporary view
 		var vroot = view()
