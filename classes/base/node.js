@@ -17,6 +17,41 @@ define.class(function(require){
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}
 
+	function arrayPush(){
+		Array.prototype.push.apply(this, arguments)
+		this._pthis.emit(this._key, {setter:true, owner:pthis, key:this._key, value:this})
+	}
+
+	function arrayPop(){
+		Array.prototype.pop.apply(this, arguments)
+		this._pthis.emit(this._key, {setter:true, owner:pthis, key:this._key, value:this})
+	}
+
+	function arraySplice(){
+		Array.prototype.splice.apply(this, arguments)
+		this._pthis.emit(this._key, {setter:true, owner:pthis, key:this._key, value:this})
+	}
+
+	function arrayShift(){
+		Array.prototype.shift.apply(this, arguments)
+		this._pthis.emit(this._key, {setter:true, owner:pthis, key:this._key, value:this})
+	}
+
+	function arrayUnshift(){
+		Array.prototype.unshift.apply(this, arguments)
+		this._pthis.emit(this._key, {setter:true, owner:pthis, key:this._key, value:this})
+	}
+
+	function observeArray(array, pthis, key){
+		array._pthis = pthis
+		array._key = key
+		array.push = arrayPush
+		array.pop = arrayPop
+		array.splice = arraySplice
+		array.shift = arrayShift
+		array.unshit = arrayUnshift
+	}
+
 	this._atConstructor = function(){
 		// this.parent = undefined
 		this.children =
@@ -27,7 +62,10 @@ define.class(function(require){
 		var attr = this._attributes
 		for(var key in this._attribute_init){
 			var config = attr[key]
-			this['_' + key] = config.type.apply(null, config.init)
+			var value = this['_' + key] = config.type.apply(null, config.init)
+			if(config.type === Array){
+				observeArray(value, this, key)
+			}
 		}
 	}
 
@@ -184,8 +222,16 @@ define.class(function(require){
 
 			if(typeof value === 'object'){
 				if(value && typeof value.struct === 'function') config.type = value.struct
-				else if(Array.isArray(value)) config.type = Array
-				else config.type = Object
+				else if(Array.isArray(value)){
+					if(value.length === 0) config.init = []
+					config.type = Array
+				}
+				else {
+					config.type = Object
+					if(Object.getPrototypeOf(value) === Object.prototype && Object.keys(value).length === 0){
+						config.init = []
+					}
+				}
 			}
 			else if(typeof value === 'number'){
 				config.type = float
