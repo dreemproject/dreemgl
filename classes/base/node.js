@@ -22,6 +22,13 @@ define.class(function(require){
 		this.children =
 		this.constructor_children = []
 		this.initFromConstructorArgs(arguments)
+
+		// create attributes 
+		var attr = this._attributes
+		for(var key in this._attribute_init){
+			var config = attr[key]
+			this['_' + key] = config.type.apply(null, config.init)
+		}
 	}
 
 	// internal, called by the constructor
@@ -258,6 +265,13 @@ define.class(function(require){
 		this._attributes[key] = config
 
 		if(config.listeners) this[listen_key] = config.listeners
+
+		if(config.init !== undefined){
+			if(!this.hasOwnProperty('_attribute_init')){
+				this._attribute_init = this._attribute_init?Object.create(this._attribute_init):{}
+			}
+			this._attribute_init[key] = true
+		}
 
 		// block attribute emission on objects with an environment thats (stub it)
 		var setter = function(value){

@@ -178,7 +178,7 @@ define.class(function(require, exports){
 		var t = this.turtle = this.turtleStack[++this.turtleStack.len] || {_staticmargin:[0,0,0,0],_staticpadding:[0,0,0,0]}
 		t.outer = ot
 
-		// store our local values from the old turtle
+		// store our local values from the outer turtle
 		t.align = ot._align || float.LEFTTOP
 		t.walk = ot._walk || float.LRTBWRAP
 		t._margin = t.margin = ot._margin
@@ -230,8 +230,6 @@ define.class(function(require, exports){
 		t.maxy = -Infinity
 		t.maxh = 0
 
-		//console.log(this.rangeList.length)
-		if(!t.walk) debugger
 		t.walk.begin(t, this)
 
 		t.rangeStart = this.rangeList && this.rangeList.length || 0
@@ -240,7 +238,6 @@ define.class(function(require, exports){
 	this.walkTurtle = function(oldturtle){
 		// local state x /y / w/ h/ margin/padding
 		var t = this.turtle
-		var ot = t.outer
 
 		if(typeof t._w === "function"){
 			t._w = t._w(t, this)
@@ -258,7 +255,7 @@ define.class(function(require, exports){
 		// its not absolutely positioned
 		if(isNaN(t._x)|| isNaN(t._y)){
 			// walk the turtle
-			ot.walk.walk(t, this, oldturtle)	
+			t.walk.walk(t, this, oldturtle)
 		}
 	}
 

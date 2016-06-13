@@ -366,13 +366,13 @@ define.class('$base/view', function(require) {
 			c.beginTurtle()
 			
 			var t = c.turtle
-			t.view_object = node
+			t._view_object = node
 
 			var next = node.children[0]
 			var next_index = 0
 			while(!next){ // skip to parent next
 
-				var view = c.turtle.view_object
+				var view = c.turtle._view_object
 				var t = c.turtle
 				c.endTurtle()
 				c.walkTurtle(t)

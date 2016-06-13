@@ -264,10 +264,8 @@ define.class('$base/node', function(require){
 		var t = c.turtle
 
 		//TODO pull these from a view?
-		c.width =
-		t._w = this._layout.w
-		c.height =
-		t._h = this._layout.h
+		c.width = t._w = this._layout.w
+		c.height = t._h = this._layout.h
 		t._align = float.LEFTTOP
 		t._walk = float.LRTBWRAP
 		t._margin = [0,0,0,0]

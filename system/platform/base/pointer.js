@@ -11,11 +11,12 @@ define.class('$base/node', function(){
 	var TAPSPEED = 150
 	var TAPDIST = 5
 
-	this.atConstructor = function(){}
-
 	// Internal: Pointer list with helper methods.
 	var PointerList = function () {
-		Array.call( this )
+		var pthis = this
+		if(!(this instanceof PointerList)) pthis = Object.create(PointerList.prototype)
+		Array.call( pthis )
+		return pthis
 	}
 	PointerList.prototype = Object.create(Array.prototype)
 	PointerList.prototype.constructor = PointerList
@@ -143,32 +144,31 @@ define.class('$base/node', function(){
 		}
 	}
 
-	this._atConstructor = function () {
-		console.log('pointer', this)
-	}
-
 	// TODO(aki): initialize per instance
 	this.attributes = {
 		// List of pointers that are captured.
-		first:Config({type: Array, value: new PointerList()}),
+		first:Config({type: PointerList, init:[]}),
+
+		// List of pointers that are captured.
+		first:Config({type: PointerList, init:[]}),
 		// List of pointers at the moment of capture.
-		start:Config({type: Array, value: new PointerList()}),
+		start:Config({type: PointerList, init:[]}),
 		// List of captured pointers while moving.
-		move:Config({type: Array, value: new PointerList()}),
+		move:Config({type: PointerList, init:[]}),
 		// List of pointers released from capture.
-		end:Config({type: Array, value: new PointerList()}),
+		end:Config({type: PointerList, init:[]}),
 		// List of pointers that satisfy tap criteria at the moment of release.
-		tap:Config({type: Array, value: new PointerList()}),
+		tap:Config({type: PointerList, init:[]}),
 		// List of uncaptured pointers in movinf state (should apply only to mouse).
-		hover:Config({type: Array, value: new PointerList()}),
+		hover:Config({type: PointerList, init:[]}),
 		// List of pointers that entered a view.
-		over:Config({type: Array, value: new PointerList()}),
+		over:Config({type: PointerList, init:[]}),
 		// List of pointers that exited a view.
-		out:Config({type: Array, value: new PointerList()}),
+		out:Config({type: PointerList, init:[]}),
 		// List of pointers that emitted wheel event (should apply only to mouse).
-		wheel:Config({type: Array, value: new PointerList()}),
+		wheel:Config({type: PointerList, init:[]}),
 		// list of previous taps
-		clickerstash:Config({type: Array, value: []})
+		clickerstash:Config({type: Array, init:[]})
 	}
 
 	this.emitPointerList = function(pointerlist, eventname) {
@@ -305,7 +305,6 @@ define.class('$base/node', function(){
 		var match = this.device.screen.drawPick(pointerlist[0].position)
 
 		var view = match.view
-		console.log(this._hover)
 		var previous = this._hover.getById(0)
 		if (previous) previous = new Pointer(previous, 0, previous.view, previous.pickdraw)
 		var pointer = new Pointer(pointerlist[0], 0, view, match.pickdraw)

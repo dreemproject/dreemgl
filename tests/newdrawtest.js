@@ -122,9 +122,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				w:float.width('100%'), 
 				h:float.height('100%')
 			}
-				,view({name:'view1',bgcolor:'red',w:100,h:100})
-				,view({name:'view1',bgcolor:'blue',w:100,h:100})
-
+				,view({name:'view1',bgcolor:'red',margin:[0,10,0,10],w:float.width('50%'),h:100})
+				,view({name:'view1',bgcolor:'blue',margin:[0,10,0,0],w:float.width('50%'),h:100})
 				//view({name:'view2'})
 			)
 		])
