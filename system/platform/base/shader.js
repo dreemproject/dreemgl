@@ -74,7 +74,6 @@ define.class(function(require, exports){
 			objs[obj] = 1
 			attr[key] = gltype
 		}
-
 		context._propstruct = define.struct(props)
 
 		// lets define sets of attributes per object packed

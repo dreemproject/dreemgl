@@ -412,7 +412,7 @@ define.class('$base/node', function(require){
 				// compute TSRT matrix
 				var s = this._scale
 				var r = this._orientation
-				var t0 = layout.x, t1 = layout.y, t2 = 0
+				var t0 = layout.relx, t1 = layout.rely, t2 = 0
 				var hw = layout.w / 2
 				var hh = layout.h / 2
 				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);

@@ -20,16 +20,14 @@ define.class('$shaders/fontsdfshader', function(require){
 			//this.w = 
 			//this.h = this.fontsize * this.linespacing
 			// write the item
-			this.CANVASTOBUFFER({
+			this.PUTPROPS({
 				minx:info.min_x,
 				maxx:info.max_x,
 				miny:info.min_y,
 				maxy:info.max_y,
 				unicode:unicode,
 				texminx:texx,
-				texminy:texy,
-				fontsize:fontsize,
-				baseline:baseline
+				texminy:texy
 			})
 		},
 		

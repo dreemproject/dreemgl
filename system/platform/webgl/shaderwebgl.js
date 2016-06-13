@@ -144,20 +144,21 @@ define.class('$system/platform/base/shader', function(require, exports){
 
 			code += 'var texture = '+texture_prop+'\n'
 			code += 'var gltex = texture.'+texinfo.samplerid+'\n'
-			code += 'if(!gltext){\n'
+			code += 'if(!gltex){\n'
 			code += '	if(!texture.createGLTexture) texture = '+texture_prop+' = root.Texture.fromStub(texture, gldevice)\n'
 			code += '	gltex = texture.createGLTexture('+texid+', shader.texlocs.'+key+', gldevice)\n'
 			code += '	if(!gltex) return 0\n'
 			code += '	gltex.updateid = texture.updateid\n'
 			code += '}\n'
 			code += 'else{\n'
-			code += '	gl.activeTexture(' + gltypes.gl.TEXTURE0+texid+')\n'
-			code += '	gl.bindTexture('+gltypes.gl.TEXTURE_2D+', gltext)\n'
+			code += '	gl.activeTexture(' + (gltypes.gl.TEXTURE0+texid)+')\n'
+			code += '	gl.bindTexture('+gltypes.gl.TEXTURE_2D+', gltex)\n'
 			code += '	if(texture.updateid !== gltex.updateid){\n'
 			code += '		texture.updateGLTexture(gl, gltex)\n'
 			code += '	}\n'
 			code += '}\n'
-			code += 'gl.uniforms1i(shader.texlocs.' + key + '.loc, '+texid+')\n'
+			//code += 'console.log(gltex, shader.texlocs.' + key + '.loc, '+texid+')\n'
+			code += 'gl.uniform1i(shader.texlocs.' + key + '.loc, '+texid+')\n'
 
 			texid++
 		}

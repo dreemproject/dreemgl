@@ -35,13 +35,28 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		}
 
 		this.Rect = {
-			w:NaN,h:NaN,
+			w:5,h:5,
 		}
+
+		define.class(this, 'Text', '$shaders/fontshader', function(){
+			this.fontsize = 5
+		})
+
 
 		this.draw = function(time){
 			var c = this.canvas
-			/*
 			var dt = performance.now()
+
+			for(var i = 0; i < 1;i++){
+				//c.drawRect({color:[random(),random(),random(),1],w:random()*100})
+				//c.drawText({text:""+i+random(),})
+				//c.drawRect({color:'red'})
+				c.drawText({break:'word', text:"HELLO THING"})
+			}
+			//console.log(performance.now()-dt)
+
+			//return true
+			/*
 			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
 			for(var i = 0; i < 1; i++){
 				//obj.x = 10+sin(i+time)*100
@@ -95,7 +110,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				c.endRect()
 
 			}*/
-			this.drawChildren()
+			//this.drawChildren()
 			//c.beginAlign(float.CENTER, float.NOWRAP)
 			//c.drawRect({w:100,h:100})
 			//c.drawRect({w:100,h:100})

@@ -307,26 +307,7 @@ define.class('$base/view', function(require) {
 	}
 	canvasLayoutSubclass.call(canvasLayout)
 
-	function emitPostLayout(ref){
-		var oldlayout = ref.oldlayout || {}
-		var layout = ref._layout
-
-		var children = ref.children
-		for(var i = 0; i < children.length; i++){
-			var child = children[i]
-			emitPostLayout(child)
-		}
-		ref.layout_dirty = false
-
-		var oldlayout = ref.oldlayout || {}
-		if(layout.x !== oldlayout.x || layout.y !== oldlayout.y ||
-			 layout.w !== oldlayout.w || layout.h !== oldlayout.h){
-			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
-			ref.oldlayout = layout
-			ref.layoutchanged = true
-		}
-	}
-
+	
 	this.doLayout = function(){
 		
 		var c = canvasLayout
@@ -396,7 +377,39 @@ define.class('$base/view', function(require) {
 			if(next) next._iter_index = next_index
 			node = next
 		}
-		emitPostLayout(this)
+
+		// emit treewalk
+		var node = this
+		while(node){
+			node.layout_dirty = false
+			var p = node._layout
+			var o = node.oldlayout || {}
+			if(p.x !== o.x || p.y !== o.y ||
+				 p.w !== o.w || p.h !== o.h){
+				node.emit('layout', {type:'setter', owner:node, key:'layout', value:p})
+				node.oldlayout = p
+				node.layoutchanged = true
+			}
+
+			var next = node.children[0]
+			var next_index = 0
+			while(!next){ // skip to parent next
+				if(!node.parent){
+					break
+				}
+				next_index = node._iter_index + 1
+				node = node.parent
+				next = node.children[next_index]
+			}
+			if(next){
+				next._iter_index = next_index
+				p = next.parent._layout
+				var c = next._layout
+				c.relx = c.x - p.x
+				c.rely = c.y - p.y
+			}
+			node = next
+		}
 	}
 
 	this.drawColor = function(stime, frameid){

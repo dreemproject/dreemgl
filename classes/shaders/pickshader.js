@@ -17,12 +17,13 @@ define.class('$base/shader', function(require){
 		x:NaN,
 		y:NaN,
 		z:0,
-		w:100,
-		h:100,
+		w:NaN,
+		h:NaN,
 		margin:[0,0,0,0],
 		padding:[0,0,0,0],
 		align: float.LEFTTOP,
-		wrap: float.WRAP
+		wrap: float.WRAP,
+		visible:1.0,
 	}
 
 	this.view = {

@@ -72,28 +72,29 @@ define.class(function(require, exports){
 					var slots = struct && struct.slots
 
 					canvas['propstype' + clsname] = struct
-	
-					var allpropkeys = Object.keys(struct.def)
-					for(var key in layoutprops){
-						if(allpropkeys.indexOf(key) == -1) allpropkeys.push(key)
-					}
+					
+					var props = cls._props
 
-					fnstr = fnstr.replace(/this\.GETPROPS\s*\(\s*([^\)]*)\s*\)/,function(m,needed){
+					//var allpropkeys = Object.keys(struct.def)
+					//for(var key in layoutprops){
+					//	if(allpropkeys.indexOf(key) == -1) allpropkeys.push(key)
+					//}
 
-						if(!needed) needed = '1'
+					fnstr = fnstr.replace(/this\.GETPROPS\s*\(\s*\)/,function(m){
+		
+						if(!args.length) console.error('Please give draw macro atleast one argument:'+clsname+' '+fnstr)
 
-						var code = 'var _scope = this.scope, _o1 = overload, _o2 = _scope.propmap && _scope.propmap.'+clsname+', _o3 = _scope.extstatemap && _scope.extstatemap.'+clsname+', _o4 = _scope.statemap && _scope.statemap.'+clsname+',_o5 = this.class'+clsname+'\n'
+						var code = 'var _scope = this.scope, _o1 = '+args[0]+', _o2 = _scope.propmap && _scope.propmap.'+clsname+', _o3 = _scope.extstatemap && _scope.extstatemap.'+clsname+', _o4 = _scope.statemap && _scope.statemap.'+clsname+',_o5 = this.class'+clsname+'\n'
 
+						var vars = ''
 						code += 'var '
-						for(var i = 0; i < allpropkeys.length; i++){
-							var key = allpropkeys[i]
-							code += (i?',':'') + '_'+key
+						for(var key in props){
+							vars += (vars?',':'') + '_'+key
 						}
-						code += '\n'
+						code += vars + '\n'
 						for(var ol = 1; ol <= 5; ol++){
 							code += 'if(_o'+ol+'){\n'
-							for(var i = 0; i < allpropkeys.length; i++){
-								var key = allpropkeys[i]
+							for(var key in props){
 								if(ol !== 1) code += '	if(_'+key+' === undefined) '
 								else code += '	'
 								code += '_'+key+' = _o'+ol+'.'+key+'\n'
@@ -102,8 +103,7 @@ define.class(function(require, exports){
 						}
 						// store layoutprops on canvas
 						code += 'var _turtle = this.turtle\n'
-						for(var i = 0; i < allpropkeys.length; i++){
-							var key = allpropkeys[i]
+						for(var key in props){//i = 0; i < allpropkeys.length; i++){
 							if(key in layoutproparray){
 								code += 'if(typeof _'+key + ' === "number"){\n'
 								code += '	var _ts = _turtle._static'+key+'\n'
@@ -117,7 +117,12 @@ define.class(function(require, exports){
 							}
 						}
 
-						// stringreplace on template.. concatenate to code
+						return code
+					})
+
+					fnstr = fnstr.replace(/this\.ALLOCPROPS\s*\(\s*([^\)]*)\s*\)/,function(m,needed){
+						if(!needed) needed = '1'
+						var code = ''
 
 						code += 'var _props = this.propsbuffer'+clsname+'\n'
 						code += 'var _shader = this.shader'+clsname+'\n'
@@ -145,28 +150,38 @@ define.class(function(require, exports){
 						code += 'if(!_scope.indexstart'+clsname+') _scope.indexstart'+clsname+' = _props.length\n'
 						code += '_scope.indexend'+clsname+' = _props.length + _needed\n'
 						code += '_turtle._propoff = _props.length\n'
-						// need to know wether _x and _y are absolute. how? 
-						// its a function and not float or undefined
-						// or a number
+						code += '_turtle._propcount = 0\n'
 						code += 'var _level\n'
 						code += 'if(typeof _x === "number" && !isNaN(_x) || typeof _x === "function" || typeof _y === "number" && !isNaN(_y) || typeof _y === "function") _level = this.turtleStack.len - 1\n'
 						code += 'else  _level = this.turtleStack.len\n'
 						code += 'this.rangeList.push(_props, _props.length, _needed, _level)\n'
 						code += '_props.length += _needed\n'
 						code += ''
+
 						return code
 					})
 
-					fnstr = fnstr.replace(/this\.PUTPROPS\s*\(\s*\)/,function(m){
+					fnstr = fnstr.replace(/this\.PUTPROPS\s*\(\s*([^\)]*)\s*\)/,function(m, argmapstr){
+						
+						var argmap = {}
+						if(argmapstr){ // quickly parse map {key:value}
+							// fetch string baseclasses for nested classes and add them
+							var argmaprx = new RegExp(/([$_\w]+)\:([^},\n]+)/g)
+							var result
+							while((result = argmaprx.exec(argmapstr)) !== null) {
+								argmap[result[1]] = result[2]
+							}
+						}
+
 						var code = 'var _turtle = this.turtle\n'
 						code += 'var _props = this.propsbuffer'+clsname+'\n'
 						code += 'var _array = _props.array\n'
-						code += 'var _off = _turtle._propoff * '+slots+'\n'
+						code += 'var _off = (_turtle._propoff + _turtle._propcount++) * '+slots+'\n'
 						var def = struct.def
 						var off = 0
 						for(var key in def) if(typeof def[key] === 'function'){
 							var itemslots = def[key].slots
-							var src = '_turtle._'+key
+							var src = argmap[key]?argmap[key]:'_turtle._'+key
 							if(itemslots > 1){
 								if(itemslots === 4){
 									code += 'var _'+key+' = typeof ' + src + ' === "string"?this.parseColor('+src+',true):'+src+'\n'
@@ -188,6 +203,11 @@ define.class(function(require, exports){
 						// read others from _local
 
 					})
+
+					fnstr = fnstr.replace(/this\.SETPROPSLEN\s*\(\s*\)/,function(m){
+						return '_props.length = _turtle._propoff + _turtle._propcount\n'
+					})
+
 
 				}
 				else{

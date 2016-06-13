@@ -2,8 +2,7 @@ define.class('$shaders/pickshader', function(require){
 	
 	this.props = {
 		matrix: mat4.identity(),
-		color: vec4('gray'),
-		visible: 1.0
+		color: vec4('gray')
 	}
 
 	//this.dump = 1
@@ -22,11 +21,13 @@ define.class('$shaders/pickshader', function(require){
 	this.canvasverbs = {
 		draw:function(overload){
 			this.GETPROPS()
+			this.ALLOCPROPS()
 			this.walkTurtle()
 			this.PUTPROPS()
 		},
 		begin:function(overload){
 			this.GETPROPS()
+			this.ALLOCPROPS()
 			this.beginTurtle()
 		},
 		end:function(){

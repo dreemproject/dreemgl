@@ -4,59 +4,68 @@ define.class('$shaders/pickshader', function(require){
 		texture:this.Texture
 	}
 
-	this.color = vec4('gray')
-	this.fontsize = 10
-	this.linespacing = 1.3
-	this.baseline = 1
+	this.props = {
+		text:'',
+		break:'',
+		color: vec4('white'),
+		outlinecolor: vec4(NaN),
+		boldness: 0.,
+		outline: 0.,
+		x: NaN,	
+		y: NaN,
+		fontsize:12,
+		linespacing:1.3,
+		unicode:NaN,
+		minx:NaN,
+		miny:NaN,
+		maxx:NaN, 
+		maxy:NaN,
+		texminx:NaN,
+		texminy:NaN,
+		texmaxx:NaN,
+		texmaxy:NaN,
+		baseline:1
+//		clipx:NaN,
+//		clipy:NaN,
+//		clipw:NaN,
+//		cliph:NaN
+	}
 
-	this.canvasprops = {
-		fgcolor: vec4,
-		outlinecolor: vec4,
-		boldness: float,
-		outline: float,
-		x: float,		
-		y: float,
-		fontsize:float,
-		minx:float,
-		miny:float,
-		maxx:float, 
-		maxy:float,
-		texminx:float,
-		texminy:float,
-		texmaxx:float,
-		texmaxy:float,
-		unicode:float,
-		baseline:float,
-		clipx:float,
-		clipy:float,
-		clipw:float,
-		cliph:float
+	this.pixel = function(){
+		//return 'red'
+		return sdf_draw()
+	}	
+
+	this.vertex = function(){
+		// pass through the texture pos
+		texturepos = mix(
+			vec2(props.texminx, props.texminy),
+			vec2(props.texmaxx, props.texmaxy),
+			geometry.pos.xy
+		)
+		return compute_position()		
 	}
 
 	this.font_style_t = define.struct({
 		pos:vec2,
 		fontsize:float,
-		fgcolor: vec4,
+		color: vec4,
 		outlinecolor: vec4,
 		boldness: float,
 		outline: float,
 		visible: bool
 	}, "font_style_t")
 
-	this.position = function(){
-		// pass through the texture pos
-		texturepos = mix(
-			vec2(canvasprops.texminx, canvasprops.texminy),
-			vec2(canvasprops.texmaxx, canvasprops.texmaxy),
-			mesh.xy
-		)
-		return compute_position()		
-	}
+	this.font_pixelstyle_t = define.struct({
+		pos: vec2,
+		fontsize: float,
+		color:vec4,
+		outlinecolor: vec4,
+		boldness: float,
+		outline: float,
+		field: float
+	}, "font_pixelstyle_t")
 
-	this.color = function(){
-		//return 'red'
-		return sdf_draw()
-	}	
 
 	// default text style
 	this.style = function(style){
@@ -67,54 +76,43 @@ define.class('$shaders/pickshader', function(require){
 		return style
 	}
 
-	this.subpixel_off = 1.0115
-	this.subpixel_distance = 3.
-	this.polygonoffset = 0.
-	this.pixel_contrast = 1.4
-	this.pixel_gamma_adjust = vec3(1.2)
-	this.outline = 0.0
-	this.boldness = 0.0
-
-	this.font_pixelstyle_t = define.struct({
-		pos: vec2,
-		fontsize: float,
-		fgcolor:vec4,
-		outlinecolor: vec4,
-		boldness: float,
-		outline: float,
-		field: float
-	}, "font_pixelstyle_t")
+	this.renderconfig = {
+		subpixel_off: 1.0115,
+		subpixel_distance: 3.,
+		pixel_contrast: 1.4,
+		pixel_gamma_adjust: vec3(1.2)
+	}
 
 	this.compute_position = function(){
 		// we want to compute a measure of scale relative to the actual pixels
-		var matrix = view.totalmatrix  * state.viewmatrix
+		var matrix = view.totalmatrix  * system.viewmatrix
 
 		var s = font_style_t(
-			vec2(canvasprops.x, canvasprops.y),
-			canvasprops.fontsize,
-			canvasprops.fgcolor,
-			canvasprops.outlinecolor,
-			canvasprops.boldness,
-			canvasprops.outline,
-			(abs(canvasprops.unicode - 10.)<0.001 || abs(canvasprops.unicode - 32.)<0.001)?false:true
+			vec2(props.x, props.y),
+			props.fontsize,
+			props.color,
+			props.outlinecolor,
+			props.boldness,
+			props.outline,
+			(abs(props.unicode - 10.)<0.001 || abs(props.unicode - 32.)<0.001)?false:props.visible>0.5?true:false
 		)
 
 		s = style(s)
 		
 		var pos = mix(
 			vec2(
-				s.pos.x + s.fontsize * canvasprops.minx,
-				s.pos.y - s.fontsize * canvasprops.miny + s.fontsize * canvasprops.baseline
+				s.pos.x + s.fontsize * props.minx,
+				s.pos.y - s.fontsize * props.miny + s.fontsize * props.baseline
 			),
 			vec2(
-				s.pos.x + s.fontsize * canvasprops.maxx,
-				s.pos.y - s.fontsize * canvasprops.maxy+ s.fontsize * canvasprops.baseline
+				s.pos.x + s.fontsize * props.maxx,
+				s.pos.y - s.fontsize * props.maxy+ s.fontsize * props.baseline
 			),
-			mesh.xy
+			geometry.pos.xy
 		)
 
 		// plug it into varyings
-		stylefgcolor = s.fgcolor
+		stylecolor = s.color
 		styleoutlinecolor = s.outlinecolor
 		stylepack = vec2(s.boldness, s.outline)
 
@@ -129,7 +127,7 @@ define.class('$shaders/pickshader', function(require){
 
 	// draw using SDF texture
 	this.sdf_draw = function(){
-		var pos = mesh.xy
+		var pos = geometry.pos
 
 		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*0.05
 
@@ -137,7 +135,7 @@ define.class('$shaders/pickshader', function(require){
 		var boldness = stylepack.x
 
 		dist -= boldness / 300.
-		dist = dist / m * pixel_contrast
+		dist = dist / m * renderconfig.pixel_contrast
 
 		if(stylepack.y>0.){
 			dist = abs(dist) - (stylepack.y)
@@ -148,20 +146,18 @@ define.class('$shaders/pickshader', function(require){
 			discard
 		}
 
-		//return 'red'
-		return vec4(stylefgcolor.xyz, antialias(-dist))
-		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
+		return vec4(stylecolor.xyz, antialias(-dist))
 	}
 
 	this.sdf_draw_subpixel_aa = function(){
-		var pos = mesh.tex
+		var pos = geometry.pos
 
 		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2
 		//var m = pixelscale*.5//0.005
 		// screenspace length
-		mesh.scaling = 500. * m
+		//mesh.scaling = 500. * m
 
-		var sub_delta = vec2((m / subpixel_distance)*0.1,0)
+		var sub_delta = vec2((m / renderconfig.subpixel_distance)*0.1,0)
 
 		var v1 = sdf_decode(sdf_lookup(pos - sub_delta*2.))
 		var v2 = sdf_decode(sdf_lookup(pos - sub_delta))
@@ -176,7 +172,7 @@ define.class('$shaders/pickshader', function(require){
 		) * 0.001
 
 		dist -= stylepack.x / 300.
-		dist = dist / m * pixel_contrast
+		dist = dist / m * renderconfig.pixel_contrast
 
 		if(stylepack.z>0.){
 			dist = abs(dist) - (stylepack.y)
@@ -189,7 +185,7 @@ define.class('$shaders/pickshader', function(require){
 
 		var alpha = antialias(-dist)
 
-		alpha = pow(alpha, pixel_gamma_adjust)
+		alpha = pow(alpha, renderconfig.pixel_gamma_adjust)
 		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)
 		//if(max_alpha >0.5) max_alpha = 1.
 		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
@@ -214,106 +210,60 @@ define.class('$shaders/pickshader', function(require){
 	}
 
 	this.canvasverbs = {
-		drawWrap:function(str, x, y){
-			if(x !== undefined) this.px = x
-			if(y !== undefined) this.py = y
-			// ok so how does this work.
-			if(typeof str !== 'string') str = str+''
+		draw:function(overload){
 
-			// well first we get the buffer
-			this.GETBUFFER(str.length)
-			this.ARGSTO(this)
+			var t = this.turtle
 
-			var glyphs = (this.font || this.classNAME.font).glyphs
+			this.GETPROPS()
+
+			var text = t._text
+			var len = text.length
+
+			this.ALLOCPROPS(len)
+
+			var glyphs = this.classNAME.font.glyphs
+			var linespacing = t._linespacing
+			var baseline = t._baseline
+			var fontsize = t._fontsize
+			var brk = t._break
 			var off = 0
-			var strlen = str.length
-			var linespacing = this.linespacing || this.classNAME.linespacing 
-			var baseline = this.baseline || this.classNAME.baseline
+			t._h = fontsize * linespacing
 
-			while(off < strlen){
-				var wordwidth = 0
-				for(var i = off; i < strlen; i++){
-					var unicode = str.charCodeAt(i)
-					if(unicode === 32) break
-					wordwidth += glyphs[unicode].advance * this.fontsize
-				}
-				this.w = wordwidth 
-				this.h = this.fontsize * linespacing
-				if(wordwidth){
-					// do alignment on a word width
-					// if this.px > this.width lets move to the next line
-					if(this.x > this.width){
-						this.y += this.fontsize * linespacing
-						this.x = 0 + this.marginleft
+			while(off < len){
+
+				var breakwidth = 0
+				var breaksize = 0
+				for(var i = off; i < len; i++, breaksize++){
+					var unicode = text.charCodeAt(i)
+					if(brk){
+						if(brk === 'word' && unicode === 32) break
+						if(brk === 'char' && i === off+1) break
 					}
+					breakwidth += glyphs[unicode].advance * fontsize
+				}
+
+				if(breakwidth){
+					t._w = breakwidth 	
+					this.walkTurtle()
 
 					// lets output a word
-					for(var i = off; i < strlen; i++){
-						var unicode = str.charCodeAt(i)
-						if(unicode === 32) break
+					for(var i = 0; i < breaksize; i++){
+						//console.log(breaksize, breakwidth)
+						var unicode = text.charCodeAt(i+off)
+						t._unicode = unicode
 						var info = glyphs[unicode]
 						this._ADDTOBUFFER()
-						this.x += info.advance * this.fontsize
+						t._x += info.advance * fontsize
 					}
-					off = i
+					off += breaksize
 				}
 				else{
+					t._w =  glyphs[32].advance * fontsize
 					off++
-					this.x += glyphs[32].advance * this.fontsize
+					this.walkTurtle()
 				}
-				// lets skip spaces
-
-				// and then lets loop for more words
-
 			}
-			this.px = this.x
-			this.py = this.y
-		},
-		draw:function(str, x, y, margin){
-			// ok so how does this work.
-			if(typeof str !== 'string') str = str+''
-
-			var glyphs = (this.font || this.classNAME.font).glyphs
-			var fontsize = this.fontsize || this.classNAME.fontsize
-			var off = 0, width = 0,  strlen = str.length
-			var linespacing = this.linespacing || this.classNAME.linespacing 
-			var baseline = this.baseline || this.classNAME.baseline
-			
-			var width = 0
-			for(var i = 0; i < strlen; i++){
-				var unicode = str.charCodeAt(i)
-				var glyph = glyphs[unicode]
-				if(glyph) width += glyph.advance * fontsize
-			}
-
-			this.w = width 
-			this.h = fontsize * linespacing
-
-			if(x === undefined && this.classNAME.x !== undefined) x = this.classNAME.x
-			if(y === undefined && this.classNAME.y !== undefined) y = this.classNAME.y
-			if(x === float) x = undefined
-			if(y === float) y = undefined
-			//if(x !== undefined) this.px = x
-			//if(y !== undefined) this.py = y
-
-			// well first we get the buffer
-			this.GETBUFFER(str.length)
-			this.ARGSTO(this)
-
-			// do alignment on our full thing
-			if(isNaN(x) || isNaN(y)) this.runAlign(buffer, strlen, margin!==undefined?margin:this.classNAME.margin)
-
-			// lets output a word
-			for(var i = 0; i < strlen; i++){
-				var unicode = str.charCodeAt(i)
-				var info = glyphs[unicode]
-				if(!info) continue
-				//console.log(buffer.length, this.y)
-				//this.y = 0
-				this._ADDTOBUFFER()
-
-				this.x += info.advance * fontsize
-			}
+			this.SETPROPSLEN()
 		},
 		_ADDTOBUFFER:function(){
 			var texx = ((info.atlas_x<<6) | info.nominal_w)
@@ -321,7 +271,7 @@ define.class('$shaders/pickshader', function(require){
 			//this.w = 
 			//this.h = this.fontsize * this.linespacing
 			// write the item
-			this.CANVASTOBUFFER({
+			this.PUTPROPS({
 				minx:info.min_x,
 				maxx:info.max_x,
 				miny:info.min_y,
@@ -330,12 +280,8 @@ define.class('$shaders/pickshader', function(require){
 				texminx:info.tmin_x,
 				texminy:info.tmin_y,
 				texmaxx:info.tmax_x,
-				texmaxy:info.tmax_y,
-				fontsize:fontsize,
-				baseline:baseline
+				texmaxy:info.tmax_y
 			})
-		},
-
-
+		}
 	}
 })
