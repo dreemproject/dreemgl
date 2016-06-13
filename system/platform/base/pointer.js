@@ -144,11 +144,9 @@ define.class('$base/node', function(){
 		}
 	}
 
-	// TODO(aki): initialize per instance
 	this.attributes = {
 		// List of pointers that are captured.
 		first:Config({type: PointerList, init:[]}),
-
 		// List of pointers that are captured.
 		first:Config({type: PointerList, init:[]}),
 		// List of pointers at the moment of capture.
