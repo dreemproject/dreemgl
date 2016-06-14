@@ -29,11 +29,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			var c = this.canvas
 			var dt = performance.now()
 
-			for(var i = 0; i < 2000;i++){
+			for(var i = 0; i < 4000;i++){
 				//if(!(i % 100))c.newline()
 				//var size = abs(sin(i*0.1+time))*10
 				//c.drawButton({padding:size,text:'T'+i,Label:{fontsize:3+size}})
-				c.drawButton({text:'T'+i,w:50+50*sin(0.02*i)})
+				c.drawButton({text:'T'+i})//,Label:{delay:i/2000},Background:{delay:i/2000}})//,w:50+50*sin(0.02*i)})
 				//c.drawRect({color:[random(),random(),random(),1],w:random()*100})
 				//c.drawText({text:""+i+random(),})
 				//c.drawRect({color:'red'})

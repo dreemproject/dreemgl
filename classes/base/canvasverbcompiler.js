@@ -248,7 +248,7 @@ define.class(function(require, exports){
 						//console.log(durationoff)
 						code += '	var _time = this.view._time\n'
 						code += '	_array[_off+'+startanimoff+'] = _time\n'
-						code += '	_time += _turtle._duration\n'
+						code += '	_time += _turtle._duration + _turtle._delay\n'
 						code += '	if(_time > _shader._maxanimtime) _shader._maxanimtime = _time\n'
 						code += '}\n'
 						return code

@@ -48,7 +48,7 @@ define.class('$base/stamp', function(){
 	}
 
 	this.onpointerstart = function(){
-		this.statemap = {h:100}
+		this.statemap = {w:50,h:50}
 		//this.w = 100
 		this.canvas.view.redraw()
 		//this.setState(this.states.down)

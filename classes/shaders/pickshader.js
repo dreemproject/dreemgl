@@ -28,7 +28,8 @@ define.class('$base/shader', function(require){
 	this.static = {
 		visible:1.0,
 		ease:vec4(0),
-		duration:0.
+		duration:0.,
+		delay:0.
 	}
 
 	this.putargs = {
@@ -51,8 +52,8 @@ define.class('$base/shader', function(require){
 
 	this.animate = function(){
 		if(static.duration <0.001) return 1.
-		//return 1.
-		return (system.time - putargs.startanimtime) / static.duration
+		var anim = clamp((system.time - putargs.startanimtime - static.delay) / static.duration,0.,1.)
+		return sin(anim*PI-.5*PI)*.5+.5
 	}
 
 	// baseic rect
