@@ -12,6 +12,7 @@ define.class('$base/stamp', function(){
 
 	this.align = float.CENTER
 	this.padding = 1
+	//this.w = float.width('25%')
 	this.margin = 1
 	this.props = {
 		text:'BUTTON',
