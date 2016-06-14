@@ -15,16 +15,17 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}
 
-	this.newState = function(context, varyings, uniforms){
+	this.newState = function(context, varyings, allattributes){
 		return {
 			depth: '', 
 			basename: '',
 			stack: 0, 
 			context: context, 
 			attributes: {}, 
+			allattributes: allattributes || {},
 			reference_is_attr: {},
 			varyings: varyings || {},
-			uniforms: uniforms || {},
+			uniforms: {},
 			structs: [],
 			scope: {},
 			scopeio: {},
@@ -41,6 +42,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 	// returns a gl type
 	this.getType = function(infer, state){
 		// OK so, mesh doesnt get typed here but in glshader
+		if(!infer) debugger
 		if(infer.fn_t === 'attribute') infer = infer.array.struct
 		return gltypes.getType(infer)
 	}
@@ -52,6 +54,8 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 		if(basename) outname = basename + "_DOT_" + name
 		else outname = name
 
+
+		if(name.indexOf('MACRO_') === 0) return name
 		// uniform
 		if(name === 'super'){
 			node.infer = {fn_t:'object', object:Object.getPrototypeOf(context)}
@@ -79,6 +83,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 					console.error('Geometry attribute specified but not found'+name)
 				}
 				if(obj.struct.id){
+					state.allattributes[outname] = 
 					state.attributes[outname] = obj.struct
 				}
 				node.infer = {
@@ -87,11 +92,12 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 				}
 				return outname
 			}
-			if(infer.name === 'props'){ // its a property attribute
+			if(infer.name === 'stamp' || infer.name === 'props' || infer.name === 'static' || infer.name === 'putargs'){ // its a property attribute
 				// infer the type based on the arg
 				if(typeof obj === 'number') node.infer = float32
 				else if(typeof obj === 'boolean') node.infer = float32
 				else if(typeof obj === 'object' && obj.struct) node.infer = obj.struct
+				state.allattributes[outname] = 
 				state.attributes[outname] = node.infer
 				return outname
 			}

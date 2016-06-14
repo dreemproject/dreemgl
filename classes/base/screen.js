@@ -125,6 +125,11 @@ define.class('$base/view', function(require) {
 			// lets draw it
 			shader.system = this
 			shader.draw(this.device, this.overlay)
+			// maxtime on props
+			// flag somehow to keep running 
+			if(shader._maxanimtime > this.maxanimtime){
+				this.maxanimtime = shader._maxanimtime
+			}
 			//console.log(shader._canvas.clean)
 			this.cmdid += 2
 		},
@@ -241,7 +246,6 @@ define.class('$base/view', function(require) {
 			}
 
 			this.device.bindFramebuffer(tgt)
-
 			this.commandRunner.execute(pass.cmds, overlay, ismain && pickmatrices)
 		}
 		// gc the framebuffer set somehow?
@@ -418,25 +422,31 @@ define.class('$base/view', function(require) {
 		anim_redraw.length = 0
 
 		this._time = stime
+		this._frameid = frameid
 
 		// this.doAnimation(stime, anim_redraw)
+		if(this.draw_dirty){
 
-		// lets lay it out
-		this.doLayout()
+			// lets lay it out
+			this.doLayout()
 
-		// clean out the drawpasses
-		this.draw_passes.length = 0
+			// clean out the drawpasses
+			this.draw_passes.length = 0
 
-		// lets draw the screen
-		this.canvas.frameid = frameid
+			// lets draw the screen
+			this.canvas.frameid = frameid
 
-		this.drawView(stime, frameid)
+			this.drawView()
+		}
+
 
 		var overlay = {
 			_pixelentry:0
 		}
 
 		this.device.bindFramebuffer(null)
+
+		var shaderanimating = false
 
 		// lets run over the drawpasses
 		var draw_passes = this.draw_passes
@@ -455,8 +465,18 @@ define.class('$base/view', function(require) {
 			}
 
 			this.device.bindFramebuffer(tgt)
+			this.commandRunner.time = stime
+			this.commandRunner.maxanimtime = 0
 			this.commandRunner.execute(pass.cmds, overlay)
+
+			if(this.commandRunner.maxanimtime  > stime){
+				shaderanimating = true
+			}
 		}
+		if(shaderanimating && !anim_redraw.length){
+			return true
+		}
+
 		// gc the framebuffer set somehow?
 		this.draw_passes.length = 0
 
@@ -511,7 +531,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.start` event.
 		// Emits `pointerstart` event from `pointer.view` and computes the cursor.
-		this.pointer.start = function(e){
+		this.pointer.onstart = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointerstart',e)
 				this.pointer.cursor = e.view.getCursor()
@@ -521,7 +541,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.move` event.
 		// Emits `pointermove` event from `pointer.view`.
-		this.pointer.move = function(e){
+		this.pointer.onmove = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointermove',e)
 			} else if (e.pointers) {
@@ -530,7 +550,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.end` event.
 		// Emits `pointerend` event `pointer.view` and computes the cursor.
-		this.pointer.end = function(e){
+		this.pointer.onend = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointerend',e)
 				this.pointer.cursor = e.view.getCursor()
@@ -539,7 +559,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.tap` event.
 		// Emits `pointertap` event from `pointer.view`.
-		this.pointer.tap = function(e){
+		this.pointer.ontap = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointertap',e)
 			}
@@ -547,7 +567,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.hover` event.
 		// Emits `pointerhover` event `pointer.view` and computes the cursor.
-		this.pointer.hover = function(e){
+		this.pointer.onhover = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointerhover',e)
 				this.pointer.cursor = e.view.getCursor()
@@ -556,7 +576,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.over` event.
 		// Emits `pointerover` event from `pointer.view`.
-		this.pointer.over = function(e){
+		this.pointer.onover = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointerover',e)
 			}
@@ -564,7 +584,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.out` event.
 		// Emits `pointerout` event from `pointer.view`.
-		this.pointer.out = function(e){
+		this.pointer.onout = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointerout',e)
 			}
@@ -572,7 +592,7 @@ define.class('$base/view', function(require) {
 
 		// Event handler for `pointer.wheel` event.
 		// Emits `pointerwheel` event from `pointer.view`.
-		this.pointer.wheel = function(e){
+		this.pointer.onwheel = function(e){
 			if (e.pointer) {
 				this.emitPointer('pointerwheel',e)
 			}

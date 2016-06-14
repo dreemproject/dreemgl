@@ -16,14 +16,27 @@ define.class('$base/shader', function(require){
 	this.props = {
 		x:NaN,
 		y:NaN,
-		z:0,
 		w:NaN,
 		h:NaN,
+		z:0,
 		margin:[0,0,0,0],
 		padding:[0,0,0,0],
 		align: float.LEFTTOP,
-		wrap: float.WRAP,
+		wrap: float.WRAP
+	}
+
+	this.static = {
 		visible:1.0,
+		ease:vec4(0),
+		duration:0.
+	}
+
+	this.putargs = {
+		startanimtime:0
+	}
+
+	this.stamp = {
+		pickdraw:0.
 	}
 
 	this.view = {
@@ -36,10 +49,11 @@ define.class('$base/shader', function(require){
 		viewmatrix:mat4(),
 	}
 
-	var mystruct = define.struct({
-		a:vec2,
-		b:vec2
-	})
+	this.animate = function(){
+		if(static.duration <0.001) return 1.
+		//return 1.
+		return (system.time - putargs.startanimtime) / static.duration
+	}
 
 	// baseic rect
 	this.geometry = {
@@ -63,7 +77,7 @@ define.class('$base/shader', function(require){
 	// the pick entry point
 	this.pick = function(){
 		var col = this.pixel()
-		var total = view.pickview + this.pickdraw
+		var total = view.pickview + stamp.pickdraw
 		return vec4(floor(total/65536.)/255., mod(floor(total/256.),256.)/255., mod(total,256.)/255., col.a>pickalpha?1.:0.)
 	}
 
@@ -79,4 +93,5 @@ define.class('$base/shader', function(require){
 		flush: function(){
 		}
 	}
+	//this.dump = 1
 })

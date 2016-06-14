@@ -11,10 +11,19 @@ define.class('$shaders/pickshader', function(require){
 		outlinecolor: vec4(NaN),
 		boldness: 0.,
 		outline: 0.,
-		x: NaN,	
+		x: NaN,
 		y: NaN,
 		fontsize:12,
-		linespacing:1.3,
+		baseline:1,
+		italic:NaN,
+		linespacing:1.3
+	}
+
+	this.putargs = {
+		clipx:NaN,
+		clipy:NaN,
+		clipw:NaN,
+		cliph:NaN,
 		unicode:NaN,
 		minx:NaN,
 		miny:NaN,
@@ -23,12 +32,7 @@ define.class('$shaders/pickshader', function(require){
 		texminx:NaN,
 		texminy:NaN,
 		texmaxx:NaN,
-		texmaxy:NaN,
-		baseline:1
-//		clipx:NaN,
-//		clipy:NaN,
-//		clipw:NaN,
-//		cliph:NaN
+		texmaxy:NaN
 	}
 
 	this.pixel = function(){
@@ -39,8 +43,8 @@ define.class('$shaders/pickshader', function(require){
 	this.vertex = function(){
 		// pass through the texture pos
 		texturepos = mix(
-			vec2(props.texminx, props.texminy),
-			vec2(props.texmaxx, props.texmaxy),
+			vec2(putargs.texminx, putargs.texminy),
+			vec2(putargs.texmaxx, putargs.texmaxy),
 			geometry.pos.xy
 		)
 		return compute_position()		
@@ -94,19 +98,19 @@ define.class('$shaders/pickshader', function(require){
 			props.outlinecolor,
 			props.boldness,
 			props.outline,
-			(abs(props.unicode - 10.)<0.001 || abs(props.unicode - 32.)<0.001)?false:props.visible>0.5?true:false
+			(abs(putargs.unicode - 10.)<0.001 || abs(putargs.unicode - 32.)<0.001)?false:static.visible>0.5?true:false
 		)
 
 		s = style(s)
 		
 		var pos = mix(
 			vec2(
-				s.pos.x + s.fontsize * props.minx,
-				s.pos.y - s.fontsize * props.miny + s.fontsize * props.baseline
+				s.pos.x + s.fontsize * putargs.minx,
+				s.pos.y - s.fontsize * putargs.miny + s.fontsize * props.baseline
 			),
 			vec2(
-				s.pos.x + s.fontsize * props.maxx,
-				s.pos.y - s.fontsize * props.maxy+ s.fontsize * props.baseline
+				s.pos.x + s.fontsize * putargs.maxx,
+				s.pos.y - s.fontsize * putargs.maxy+ s.fontsize * props.baseline
 			),
 			geometry.pos.xy
 		)
@@ -243,7 +247,8 @@ define.class('$shaders/pickshader', function(require){
 				}
 
 				if(breakwidth){
-					t._w = breakwidth 	
+					t._w = breakwidth
+					t._x = NaN
 					this.walkTurtle()
 
 					// lets output a word
@@ -258,8 +263,9 @@ define.class('$shaders/pickshader', function(require){
 					off += breaksize
 				}
 				else{
-					t._w =  glyphs[32].advance * fontsize
+					t._w = glyphs[32].advance * fontsize
 					off++
+					t._x = NaN
 					this.walkTurtle()
 				}
 			}

@@ -7,13 +7,6 @@
 define.class(function(require, exports){
 
 	var Animation = require('$base/animation')
-
-	function templateDRAWSHADER(){
-		// first we have all the  objects
-		var o1 = overload, o2 = SCOPE.propmap.NAME, o3 = SCOPE.extstatemap.NAME, o4 = SCOPE.statemap.NAME, o5 = this.classNAME
-		OVERLOADPROPS
-
-	}
 	
 	var layoutprops = {
 		x:1,
@@ -59,6 +52,10 @@ define.class(function(require, exports){
 				var args = define.getFunctionArgs(fn)
 				var fnstr = fn.toString()
 
+				fnstr = fnstr.replace(/^function\s*\(/, function(){
+					return 'function '+verb+name+'('
+				})
+
 				fnstr = fnstr.replace(/(\t*)this\.([\_]+[\_A-Z0-9]+)\s*\(\s*\)/,function(m,ind,name){
 					var str = verbs[name].toString()
 					return str.slice(12,-1)
@@ -73,7 +70,7 @@ define.class(function(require, exports){
 
 					canvas['propstype' + clsname] = struct
 					
-					var props = cls._props
+					var props = cls._staticandprops
 
 					//var allpropkeys = Object.keys(struct.def)
 					//for(var key in layoutprops){
@@ -84,7 +81,7 @@ define.class(function(require, exports){
 		
 						if(!args.length) console.error('Please give draw macro atleast one argument:'+clsname+' '+fnstr)
 
-						var code = 'var _scope = this.scope, _o1 = '+args[0]+', _o2 = _scope.propmap && _scope.propmap.'+clsname+', _o3 = _scope.extstatemap && _scope.extstatemap.'+clsname+', _o4 = _scope.statemap && _scope.statemap.'+clsname+',_o5 = this.class'+clsname+'\n'
+						var code = '\nvar _scope = this.scope, _o1 = '+args[0]+', _o2 = _scope.propmap && _scope.propmap.'+clsname+', _o3 = _scope.extstatemap && _scope.extstatemap.'+clsname+', _o4 = _scope.statemap && _scope.statemap.'+clsname+',_o5 = this.class'+clsname+'\n'
 
 						var vars = ''
 						code += 'var '
@@ -106,7 +103,7 @@ define.class(function(require, exports){
 						for(var key in props){//i = 0; i < allpropkeys.length; i++){
 							if(key in layoutproparray){
 								code += 'if(typeof _'+key + ' === "number"){\n'
-								code += '	var _ts = _turtle._static'+key+'\n'
+								code += '	var _ts = _turtle._cache_'+key+' || (_turtle._cache_'+key+'=[])\n'
 								code += '   _ts[0] = _ts[1] = _ts[2] = _ts[3] = _' + key + '\n'
 								code += '	_turtle._'+key+' = _ts\n'
 								code += '}\n'
@@ -116,13 +113,12 @@ define.class(function(require, exports){
 								code += '_turtle._'+key+' = _'+key+'\n'
 							}
 						}
-
 						return code
 					})
 
 					fnstr = fnstr.replace(/this\.ALLOCPROPS\s*\(\s*([^\)]*)\s*\)/,function(m,needed){
 						if(!needed) needed = '1'
-						var code = ''
+						var code = '\n'
 
 						code += 'var _props = this.propsbuffer'+clsname+'\n'
 						code += 'var _shader = this.shader'+clsname+'\n'
@@ -142,6 +138,7 @@ define.class(function(require, exports){
 						code += '	_props.length = 0\n'
 						code += '	_props.frameid = this.frameid\n'
 						code += '	this.shader'+clsname+' = _shader = Object.create(this.class'+clsname+')\n'
+						code += '	_shader._maxanimtime = 0\n'
 						code += '	this.shadernames.push("'+clsname+'")\n'
 						// TODO, add overloadeaable geometry
 						code += '	_shader._propsbuffer = _props\n'
@@ -173,15 +170,42 @@ define.class(function(require, exports){
 							}
 						}
 
-						var code = 'var _turtle = this.turtle\n'
+						var code = '\n'
+						code += 'var _turtle = this.turtle\n'
 						code += 'var _props = this.propsbuffer'+clsname+'\n'
+						code += 'var _shader = this.shader'+clsname+'\n'
 						code += 'var _array = _props.array\n'
+						code += 'var _changed = -1\n'
 						code += 'var _off = (_turtle._propoff + _turtle._propcount++) * '+slots+'\n'
 						var def = struct.def
 						var off = 0
 						for(var key in def) if(typeof def[key] === 'function'){
+
+							if(key.indexOf('OLD_') === 0) continue
+
 							var itemslots = def[key].slots
-							var src = argmap[key]?argmap[key]:'_turtle._'+key
+
+							var src = '_turtle._'+key
+
+							if(key.indexOf("static_DOT_") === 0){
+								src = '_turtle._'+key.slice(11)
+							}
+	
+							else if(key.indexOf("putargs_DOT_") === 0){
+								src = argmap[key.slice(12)]
+								if(!src){
+									src = '0.'
+									//continue
+									//console.log("Found putargs property which is not sent in PUTPROPS"+key)
+								}
+							}
+
+							else if(key.indexOf("stamp_DOT_") === 0){
+								src = 'this.scope.'+key.slice(10)								
+							}
+
+							var oldkey = 'OLD_' + key
+
 							if(itemslots > 1){
 								if(itemslots === 4){
 									code += 'var _'+key+' = typeof ' + src + ' === "string"?this.parseColor('+src+',true):'+src+'\n'
@@ -189,15 +213,44 @@ define.class(function(require, exports){
 								else{
 									code += 'var _'+key+' = ' + src + '\n'
 								}
+								if(oldkey in def){
+									var oldoff = struct.keyInfo(oldkey).offset / struct.primary.bytes
+									for(var i = 0, o = off; i < itemslots; i++, o++,oldoff++){
+										code += 'if(_'+key+'['+i+'] !== _array[_off+'+o+']){\n'
+										code += '	_changed = '+o+'\n'
+										code += '}\n'
+										code += '_array[_off+'+oldoff+'] = _array[_off+'+o+']\n'
+									}	
+								}
 								for(var i = 0; i < itemslots; i++, off++){
 									code += '_array[_off+'+off+'] = _'+key+'['+i+']\n'
 								}
 							}
 							else{
+
+								if(oldkey in def){
+									var oldoff = struct.keyInfo(oldkey).offset / struct.primary.bytes
+									code += 'if('+src+' !== _array[_off+'+off+']){\n'
+									code += '	_changed = '+off+'\n'
+									code += '}\n'
+									code += '_array[_off+'+oldoff+'] = _array[_off+'+off+']\n'
+								}
+
 								code += '_array[_off+'+off+'] = '+src+'\n'
 								off++
 							}
 						}
+
+						code += 'if(_changed >= 0){\n'
+						//var durationoff = struct.keyInfo('static_DOT_duration').offset / struct.primary.bytes
+						var startanimoff = struct.keyInfo('putargs_DOT_startanimtime').offset / struct.primary.bytes
+						
+						//console.log(durationoff)
+						code += '	var _time = this.view._time\n'
+						code += '	_array[_off+'+startanimoff+'] = _time\n'
+						code += '	_time += _turtle._duration\n'
+						code += '	if(_time > _shader._maxanimtime) _shader._maxanimtime = _time\n'
+						code += '}\n'
 						return code
 						// read layoutprops from canvas (in props)
 						// read others from _local
@@ -207,18 +260,19 @@ define.class(function(require, exports){
 					fnstr = fnstr.replace(/this\.SETPROPSLEN\s*\(\s*\)/,function(m){
 						return '_props.length = _turtle._propoff + _turtle._propcount\n'
 					})
-
-
 				}
 				else{
 					// we are on a stamp. now what.
 					fnstr = fnstr.replace(/this\.STAMPPROPS\s*\(\s*([^\)]*)\s*\)/, function(m,needed){
+
+						if(!args.length) console.error('Please give draw macro atleast one argument:'+clsname+' '+fnstr)
+
 						// fetch samp object
 						var code = ''
 						code += 'var _draw_canvas = this.view.draw_canvas\n'
-						code += 'var _canvas = _draw_canvas["'+clsname+'"]\n'
+						code += 'var _canvas = _draw_canvas["' + clsname + '"]\n'
 						code += 'if(!_canvas){\n'
-						code += '	_draw_canvas["'+clsname+'"] = _canvas = Object.create(this.class'+clsname+'.Canvas)\n'
+						code += '	_draw_canvas["' + clsname + '"] = _canvas = Object.create(this.class'+clsname+'.Canvas)\n'
 						code += '	_canvas.initCanvas(this.view)\n'
 						code += '}\n'
 						code += 'if(_canvas.frameid !== this.frameid){\n'
@@ -228,7 +282,11 @@ define.class(function(require, exports){
 
 						code += 'var _pickdraw = _canvas.pickdraw = ++this.view.pickdraw\n'
 						code += 'var _draw_objects = this.view.draw_objects\n'
-						code += 'var _stamp = _draw_objects[_pickdraw] || (_draw_objects[_pickdraw] = Object.create(this.class'+clsname+'))\n'
+						code += 'var _stamp = _draw_objects[_pickdraw]\n'
+						code += 'if(!_stamp){\n'
+						code += '	_stamp = _draw_objects[_pickdraw] = Object.create(this.class'+clsname+')\n'
+						code += '	_stamp._state = _stamp.statemap = _stamp.states && _stamp.states.default'
+						code += '}\n'
 						code += '_stamp.pickdraw = _pickdraw\n'
 						code += '_stamp.canvas = _canvas\n'
 						code += '_canvas.scope = _stamp\n'
@@ -237,7 +295,7 @@ define.class(function(require, exports){
 						code += '_stamp.extstatemap = this.scope.statemap && this.scope.statemap.' + clsname + '\n'
 						code += '_stamp.propmap = overload\n'
 
-						code += 'var _o1 = overload, _o2 = this.scope.statemap && this.scope.statemap.'+clsname+', _o3 = _stamp.statemap, _o4 = this.class'+clsname+'\n'
+						code += 'var _o1 = '+args[0]+', _o2 = this.scope.statemap && this.scope.statemap.'+clsname+', _o3 = _stamp.statemap, _o4 = this.class'+clsname+'\n'
 
 						var keys = ''
 						for(var key in cls._props) keys += (keys?',':'')+'_'+key
@@ -255,7 +313,18 @@ define.class(function(require, exports){
 
 						// store layoutprops on canvas
 						for(var key in cls._props){
-							code += '_stamp.'+key+' = _'+key+'\n'
+							if(key in layoutproparray){
+								code += 'if(typeof _'+key + ' === "number"){\n'
+								code += '	var _ts = _stamp._static'+key+'\n'
+								code += '   _ts[0] = _ts[1] = _ts[2] = _ts[3] = _' + key + '\n'
+								code += '	_stamp.'+key+' = _ts\n'
+								code += '}\n'
+								code += 'else _stamp.'+key+'= _'+key+'\n'
+							}
+							else{
+
+								code += '_stamp.'+key+' = _'+key+'\n'
+							}
 						}
 
 						return code

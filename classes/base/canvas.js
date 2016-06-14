@@ -40,7 +40,7 @@ define.class(function(require, exports){
 		}
 	}
 
-	this.clearCmds = function(){
+	this.clearCmds = function(frameid){
 		this.cmds.length = 0
 		this.turtleStack.len = 0
 		this.rangeList.length = 0
@@ -55,6 +55,7 @@ define.class(function(require, exports){
 		//this.y = undefined
 		//this.w = this.width
 		//this.h = this.height
+		this.frameid = frameid
 		var t = this.turtle = this.turtleStack[0]
 		t.walkx = 0
 		t.walky = 0
@@ -71,7 +72,8 @@ define.class(function(require, exports){
 
 	this.addCanvas = function(ctx, index){
 		ctx.turtleStack = this.turtleStack
-		ctx.rangeStack = this.rangeStack
+		ctx.rangeList = this.rangeList
+		ctx.turtle = this.turtle
 
 		ctx.width = this.width
 		ctx.height = this.height
@@ -304,18 +306,18 @@ define.class(function(require, exports){
 		}
 	}
 
-	var staticCacheMax = 256000
-	var staticCache = {}
-	var staticCol = vec4()
+	var colorCacheMax = 256000
+	var colorCache = {}
+	var colorCol = vec4()
 	this.parseColor = function(col, stc){
 		if(stc){
-			var out = staticCache[col]
+			var out = colorCache[col]
 			if(out) return out 
-			if(!staticCacheMax){
-				return vec4.parse(col, true, staticCol)
+			if(!colorCacheMax){
+				return vec4.parse(col, true, colorCol)
 			}
-			staticCacheMax--
-			return staticCache[col] = vec4.parse(col, undefined, true)
+			colorCacheMax--
+			return colorCache[col] = vec4.parse(col, undefined, true)
 		}
 		return vec4.parse(col, undefined, true)
 	}

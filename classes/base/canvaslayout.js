@@ -51,14 +51,14 @@ define.class(function(require, exports){
 		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', t.height - (t.maxy - t.starty))
 	}
 
-	float.LRTBWRAP = {
+	function float_LRTBWRAP(){}
+	float_LRTBWRAP.prototype = {
 		begin:function(t, canvas){
 			//var ot = t.outer
 			t.startx = t.walkx = t.initx + t.padding[3] + t.margin[3]
 			t.starty = t.walky = t.inity + t.padding[0] + t.margin[0]
 		},
 		walk:function(t, canvas, oldturtle){
-
 			if(!isNaN(t.width) && t.walkx + t._w + t._margin[3] + t._margin[1] > t.startx + t.width){
 				var dx = t.startx - t.walkx 
 				var dy = t.maxh
@@ -87,10 +87,18 @@ define.class(function(require, exports){
 
 			var ty = t.walky + h
 			if(ty > t.maxy) t.maxy = ty 
+		},
+		newline:function(){
+			t.walkx = t.startx
+			t.walky += t.maxh
+			t.maxh = 0
 		}
 	}
+	float.LRTBWRAP = new float_LRTBWRAP()
 	
-	float.LRTBNOWRAP = {
+	function float_LRTBNOWRAP(){}
+
+	float_LRTBNOWRAP.prototype = {
 		begin:function(t, canvas){
 			var ot = t.outer
 			t.startx = t.walkx = t.initx + t.padding[3] + t.margin[3]
@@ -112,8 +120,15 @@ define.class(function(require, exports){
 
 			var ty = t.walky + h
 			if(ty > t.maxy) t.maxy = ty
+		},
+		newline:function(t, canvas){
+			t.walkx = t.startx
+			t.walky += t.maxh
+			t.maxh = 0
 		}
 	}
+
+	float.LRTBNOWRAP = new float_LRTBNOWRAP()
 
 	float.left = function float_left(left){
 		return function(t, canvas){
@@ -175,7 +190,7 @@ define.class(function(require, exports){
 	this.beginTurtle = function(){
 		// allocate alignment object
 		var ot = this.turtleStack[this.turtleStack.len] = this.turtle
-		var t = this.turtle = this.turtleStack[++this.turtleStack.len] || {_staticmargin:[0,0,0,0],_staticpadding:[0,0,0,0]}
+		var t = this.turtle = this.turtleStack[++this.turtleStack.len] || {}
 		t.outer = ot
 
 		// store our local values from the outer turtle
@@ -184,44 +199,48 @@ define.class(function(require, exports){
 		t._margin = t.margin = ot._margin
 		t._padding = t.padding = ot._padding
 
-		if(typeof ot._x === "function"){
-			t.initx = ot._x(t, this)
+		var _x = ot._x
+		if(typeof _x === "function"){
+			t.initx = _x(t, this)
 		}
-		else t.initx = ot._x
+		else t.initx = _x
 
-		if(typeof ot._y === "function"){
-			t.inity = ot._y(t, this)
+		var _y = ot._y
+		if(typeof _y === "function"){
+			t.inity = _y(t, this)
 		}		
-		else t.inity = ot._y
+		else t.inity = _y
 
 		if(isNaN(t.initx)) t.initx = ot.walkx
 		if(isNaN(t.inity)) t.inity = ot.walky
 
-		if(ot._w === undefined || ot._w === float){
+		var _w = ot._w
+		if(_w === undefined){
 			t.width = NaN
 		}
-		else if(typeof ot._w === 'function'){
-			t.width = ot._w(ot, this) - t.padding[1] - t.padding[3] 
+		else if(typeof _w === 'function'){
+			t.width = _w(ot, this) - t.padding[1] - t.padding[3] 
 		}
 		else{
-			t.width = ot._w - t.padding[1] - t.padding[3] 
+			t.width = _w - t.padding[1] - t.padding[3] 
 		}
 
-		if(ot._h === undefined || ot._h === float){
+		var _h = ot._h
+		if(_h === undefined){
 			t.height = NaN
 		}
-		else if(typeof ot._h === 'function'){
-			t.height = ot._h(ot, this) - t.padding[0] - t.padding[2] 
+		else if(typeof _h === 'function'){
+			t.height = _h(ot, this) - t.padding[0] - t.padding[2] 
 		}
 		else{
-			t.height = ot._h - t.padding[0] - t.padding[2]
+			t.height = _h - t.padding[0] - t.padding[2]
 		}
 
 		// bounding rect (including abs pos)
-		t.boundminx = Infinity
-		t.boundminy = Infinity
-		t.boundmaxx = -Infinity
-		t.boundmaxy = -Infinity
+		//t.boundminx = Infinity
+		//t.boundminy = Infinity
+		//t.boundmaxx = -Infinity
+		//t.boundmaxy = -Infinity
 
 		// alignment rect (excluding abs pos)
 		t.minx = Infinity
@@ -239,17 +258,21 @@ define.class(function(require, exports){
 		// local state x /y / w/ h/ margin/padding
 		var t = this.turtle
 
-		if(typeof t._w === "function"){
-			t._w = t._w(t, this)
+		var _w = t._w
+		if(typeof _w === "function"){
+			t._w = _w(t, this)
 		}
-		if(typeof t._h === "function"){
-			t._h = t._h(t, this)
+		var _h = t._h
+		if(typeof _h === "function"){
+			t._h = _h(t, this)
 		}
-		if(typeof t._x === "function"){
-			t._x = t._x(t, this)
+		var _x = t._y
+		if(typeof _x === "function"){
+			t._x = _x(t, this)
 		}
-		if(typeof t._y === "function"){
-			t._y = t._y(t, this)
+		var _y = t._y
+		if(typeof _y === "function"){
+			t._y = _y(t, this)
 		}
 
 		// its not absolutely positioned
@@ -315,5 +338,10 @@ define.class(function(require, exports){
 		for(var i = start; i < ranges.length; i += 4){
 			track[i+3] = -1
 		}
+	}
+
+	this.newline = function(){
+		var t = this.turtle
+		t.walk.newline(t, this)
 	}
 })

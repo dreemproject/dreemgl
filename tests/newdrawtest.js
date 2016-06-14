@@ -9,49 +9,35 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	var myview = define.class(view, function(){
 
 		define.class(this, 'Button', '$stamps/buttonstamp', function(){
-			//this.x = 10
-			//this.x = float.right(10)
-			this.align = float.LEFT
-		})
-
-
-		this.states = {
-			on:{
-				x:10,
-				Button:{
-					text:'ON!',
-					Background:{
-						color:'red'
-					}
-				}
-			},
-			off:{
-				x:0,
-				color:'red',
-				Button:{
-					//text:'OFF!'
-				}
+			this.align = float.TOPLEFT
+			this.Label = {
+				fontsize:5
 			}
-		}
+		})
 
 		this.Rect = {
 			w:5,h:5,
 		}
+		
+		//this.walk = float.LRTBNOWRAP
 
 		define.class(this, 'Text', '$shaders/fontshader', function(){
-			this.fontsize = 5
+			this.fontsize = 15
 		})
 
-
-		this.draw = function(time){
+		this.draw = function(){
 			var c = this.canvas
 			var dt = performance.now()
 
-			for(var i = 0; i < 1;i++){
+			for(var i = 0; i < 2000;i++){
+				//if(!(i % 100))c.newline()
+				//var size = abs(sin(i*0.1+time))*10
+				//c.drawButton({padding:size,text:'T'+i,Label:{fontsize:3+size}})
+				c.drawButton({text:'T'+i,w:50+50*sin(0.02*i)})
 				//c.drawRect({color:[random(),random(),random(),1],w:random()*100})
 				//c.drawText({text:""+i+random(),})
 				//c.drawRect({color:'red'})
-				c.drawText({break:'word', text:"HELLO THING"})
+				//c.drawText({break:'', text:"HELLO THING"})
 			}
 			//console.log(performance.now()-dt)
 
@@ -132,7 +118,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			clearcolor: '#1f1f1f'
 		}, [
 			myview({
-				align:float.CENTER,
 				name: 'myview',
 				w:float.width('100%'), 
 				h:float.height('100%')

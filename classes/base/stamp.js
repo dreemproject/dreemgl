@@ -5,8 +5,7 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 "use strict"
 define.class('$base/node', function(require){
-	this.__isstamp__ = true
-
+	
 	this.Shader = require('$system/platform/$platform/shader$platform')
 
 	var view = require('$base/view')
@@ -15,6 +14,15 @@ define.class('$base/node', function(require){
 
 	this.Canvas = Object.create(Canvas.prototype)
 	this.atInnerClassAssign = view.prototype.atInnerClassAssign
+
+	Object.defineProperty(this, 'state', {
+		get:function(){
+			return this._state
+		},
+		set:function(value){
+			
+		}
+	})
 
 	Object.defineProperty(this, 'canvasverbs',{
 		set:function(verbs){
@@ -52,15 +60,18 @@ define.class('$base/node', function(require){
 		}
 	})
 
+	this._staticmargin = [0,0,0,0]
+	this._staticpadding = [0,0,0,0]
+
 	this.props = {
-		x:0,
-		y:0,
-		w:0,
-		h:0,
+		x:NaN,
+		y:NaN,
+		w:NaN,
+		h:NaN,
 		margin:[0,0,0,0],
 		padding:[0,0,0,0],
-		aligncontent: float.LEFTTOP,
-		alignwrap: float.WRAP
+		align:float.LEFTTOP,
+		walk:float.LRTBWRAP
 	}
 
 	// the draw api
@@ -97,5 +108,4 @@ define.class('$base/node', function(require){
 	this.redraw = function(){
 		this.canvas.view.redraw()
 	}
-
 })

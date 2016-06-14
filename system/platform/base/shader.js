@@ -48,7 +48,7 @@ define.class(function(require, exports){
 		return ret + '\n'
 	}
 
-	this.compileAttributes = function(vtxattr, pixattr, context, shader){
+	this.compileAttributes = function(allattr, vtxattr, pixattr, context, shader){
 		var ret = ''
 		var attr = {}
 
@@ -57,23 +57,29 @@ define.class(function(require, exports){
 
 		var props = {}
 
-		if(vtxattr) for(var key in vtxattr){
+		for(var key in allattr){
 			var split = key.split('_DOT_')
-			var obj = split[0] === 'geometry'?'geometry_DOT_'+split[1]:'props'
-			if(obj === 'props') props[split[1]] = vtxattr[key]
-			var gltype = gltypes.getType(vtxattr[key])
+			var obj = split[0]
+			if(obj === 'geometry') obj = key
+			else if(obj === 'props') props[split[1]] = allattr[key]
+			else if(obj === 'stamp') props[key] = allattr[key], obj = 'props'
+			else if(obj === 'static') props[key] = allattr[key], obj = 'props'
+			else if(obj === 'putargs') props[key] = allattr[key], obj = 'props'
+
+			var gltype = gltypes.getType(allattr[key])
 			objs[obj] = 1
 			attr[key] = gltype
 		}
 
-		if(pixattr) for(var key in pixattr) if(!(key in vtxattr)){
-			var split = key.split('_DOT_')
-			var obj = split[0] === 'geometry'?'geometry_DOT_'+split[1]:'props'
-			if(obj === 'props') props[split[1]] = pixattr[key]
-			var gltype = gltypes.getType(pixattr[key])
-			objs[obj] = 1
-			attr[key] = gltype
+		// duplicate all non static props for animation
+		var keys = Object.keys(props)
+		for(var i = 0; i < keys.length; i++){
+			var key = keys[i]
+			if(key.indexOf("putargs_DOT_") !== 0 && key.indexOf("static_DOT_") !== 0 && props[key].slots <= 4){
+				props['OLD_'+key] = props[key]
+			}
 		}
+
 		context._propstruct = define.struct(props)
 
 		// lets define sets of attributes per object packed
@@ -149,9 +155,24 @@ define.class(function(require, exports){
 			struct = context._geometry[split[1]].struct
 		}
 		else {
-			obj = 'props'
-			prop = split[1]
+			if(split[0] === 'stamp'){
+				obj = 'props'
+				prop = key
+			}
+			else if(split[0] === 'static'){
+				obj = 'props'
+				prop = key
+			}
+			else if(split[0] === 'putargs'){
+				obj = 'props'
+				prop = key
+			}
+			else {
+				obj = 'props'
+				prop = split[1]
+			}
 			struct = context._propstruct
+			//console.log(struct.def)
 		}
 
 		var gltype = gltypes.getType(attrtype)
@@ -161,61 +182,83 @@ define.class(function(require, exports){
 
 		// lets see what we want
 		if(gltype === 'float'){
-			return '\t' + key + ' = ' + getAttrComponent(struct.slots, obj, offset) + ';\n'
+			return getAttrComponent(struct.slots, obj, offset) 
 		}
 		else if(gltype === 'vec2'){
-			return '\t' + key + ' = vec2('
+			return 'vec2('
 				+ getAttrComponent(struct.slots, obj, offset) + ','
 				+ getAttrComponent(struct.slots, obj, offset+1)
-				+ ');\n' 
+				+ ')' 
 		}
 		else if(gltype === 'vec3'){
-			return '\t' + key + ' = vec3('
+			return 'vec3('
 				+ getAttrComponent(struct.slots, obj, offset) + ','
 				+ getAttrComponent(struct.slots, obj, offset+1)+ ','
 				+ getAttrComponent(struct.slots, obj, offset+2)
-				+ ');\n' 
+				+ ')' 
 		}
 		else if(gltype === 'vec4'){
-			return '\t' + key + ' = vec4('
+			return 'vec4('
 				+ getAttrComponent(struct.slots, obj, offset) + ','
 				+ getAttrComponent(struct.slots, obj, offset+1)+ ','
 				+ getAttrComponent(struct.slots, obj, offset+2)+ ','
 				+ getAttrComponent(struct.slots, obj, offset+3)
-				+ ');\n' 
+				+ ')' 
 		}
 		else if(gltype === 'mat2'){
-			var ret = '\t' + key + ' = mat2('
+			var ret = 'mat2('
 			for(var i = 0; i < 4;i ++) ret += (i?',':'')+ getAttrComponent(struct.slots, obj, offset+i)
-			return ret + ');\n'
+			return ret + ')'
 		}
 		else if(gltype === 'mat3'){
-			var ret = '\t' + key + ' = mat3('
+			var ret = 'mat3('
 			for(var i = 0; i < 9;i ++) ret += (i?',':'')+ getAttrComponent(struct.slots, obj, offset+i)
-			return ret + ');\n'
+			return ret + ')'
 		}
 
 		else if(gltype === 'mat4'){
-			var ret = '\t' + key + ' = mat4('
+			var ret = 'mat4('
 			for(var i = 0; i < 16;i ++) ret += (i?',':'')+ getAttrComponent(struct.slots, obj, offset+i)
-			return ret + ');\n'
+			return ret + ')'
 		}
 		else{
 			throw new Error("Cannot use type "+gltype+" as attribute. Use float,vec2,vec3,vec4,mat2,mat3,mat4")
 		}
 	}
-	
-	this.compileAttribRename = function(vtxattr, pixattr, context){
+
+	this.compileAttribRename = function(allattr, vtxattr, pixattr, context){
 		// lets unpack all the attributes into locally named things
-		var ret = ''
-		if(vtxattr) for(var key in vtxattr){
-			ret += decodeAttribItem(key, vtxattr[key], context)
+
+		var head = '\n' 
+
+		for(var key in allattr){
+			if(key.indexOf('props_DOT_') !== 0 || allattr[key].slots > 4){
+				head += '\t'+key+' = '+ decodeAttribItem(key, allattr[key], context)+';\n'
+			}
 		}
-		if(pixattr) for(var key in pixattr) if(!(key in vtxattr)){
-			ret += decodeAttribItem(key, pixattr[key], context)
+
+		var tail = '\n'
+		tail +='if(ANIMTIME < 1.){\n'
+
+		for(var key in allattr){
+			if(key.indexOf('props_DOT_') === 0 && allattr[key].slots <= 4){
+				tail += '\t'+key+' = mix('+ decodeAttribItem('props_DOT_OLD_'+key.slice(10), allattr[key], context)+','
+				tail += decodeAttribItem(key, allattr[key], context) + ',ANIMTIME);\n'
+			}
 		}
-		return ret
+
+		tail += '}\nelse {\n'
+
+		for(var key in allattr){
+			if(key.indexOf('props_DOT_') === 0){
+				tail += '\t'+key+' = '+ decodeAttribItem(key, allattr[key], context)+';\n'
+			}
+		}
+
+		tail += '}\n'
+		return {head:head, tail:tail}
 	}
+
 
 	this.compileVaryings = function(varyings, name){
 		var ret = ''
@@ -552,14 +595,15 @@ define.class(function(require, exports){
 		
 		var vtx_ast = onejsparser.parse(this.vertex).steps[0]
 
-		if(vtx_ast.type == 'Function') vtx_ast = onejsparser.parse('vertex()').steps[0]
+		if(vtx_ast.type == 'Function') vtx_ast = onejsparser.parse('vertexentry()').steps[0]
 		// ok lets run the vertex codegen.
 		var vtx_state = glslgen.newState(this)
 
 		var vtx_code = glslgen.expand(vtx_ast, undefined, vtx_state)
 
+		var allattr = vtx_state.allattributes
 		// pixel
-		var pix_state = glslgen.newState(this, vtx_state.varyings)
+		var pix_state = glslgen.newState(this, vtx_state.varyings, allattr)
 
 		var pix_ast = onejsparser.parse('pixelentrycode()').steps[0]
 		var pix_code = glslgen.expand(pix_ast, undefined, pix_state)
@@ -579,16 +623,25 @@ define.class(function(require, exports){
 		// lets generate the vertex shader
 		vtx += this.compileHeader()
 		vtx += this.compileStructs(vtx_state.structs)
-		vtx += this.compileAttributes(vtx_state.attributes, pix_state.attributes, this, this)
+		vtx += this.compileAttributes(allattr, vtx_state.attributes, pix_state.attributes, this, this)
 		vtx += this.compileVaryings(vtx_state.varyings, 'Varyings')
 		vtx += this.compileUniforms(vtx_state.uniforms)
 		vtx += this.compileTextures(vtx_state.textures)
 		vtx += this.compileFunctions(vtx_state.call)
 		vtx += '//------------------- Vertex shader main -------------------\nvoid main(){\n'
 		//vtx += this.compileUniformRename(vtx_state.uniforms)
-		vtx += this.compileAttribRename(vtx_state.attributes, pix_state.attributes, this)
 		vtx += '\tgl_Position = ' + this.toVec4(vtx_code, vtx_ast) + ';\n'
 		vtx += '}\n'
+
+		var attribrename = this.compileAttribRename(allattr, vtx_state.attributes, pix_state.attributes, this)
+
+		vtx = vtx.replace(/MACRO\_ATTRIBRENAMEHEAD/g, function(m){
+			return attribrename.head
+		})
+		vtx = vtx.replace(/MACRO\_ATTRIBRENAMETAIL/g, function(m){
+			return attribrename.tail
+		})
+
 
 		var pix_base = '', pix_color = ''//, pix_pick = '', pix_debug = ''
 
@@ -684,6 +737,17 @@ define.class(function(require, exports){
 		return vec4(0.)
 	}
 
+	this.animate = function(){
+		return 1.
+	}
+
+	this.vertexentry = function(){
+		MACRO_ATTRIBRENAMEHEAD
+		var ANIMTIME = animate()
+		MACRO_ATTRIBRENAMETAIL
+		return vertex()
+	}
+
 	Object.defineProperty(this, 'canvasverbs',{
 		get:function(){
 			return this._canvasverbs
@@ -713,13 +777,42 @@ define.class(function(require, exports){
 		},
 		set:function(prop){
 			if(!this.hasOwnProperty('_props')) this._props = Object.create(this._props || {})
+			if(!this.hasOwnProperty('_staticandprops')) this._staticandprops = Object.create(this._staticandprops || {})
 			for(var key in prop){
-				this._props[key] = prop[key]
+				this._staticandprops[key] = 
+				this._props[key] = 
 				this[key] = prop[key] // store default value
 			}
 		}
 	})
 
+	Object.defineProperty(this, 'static', {
+		get:function(){
+			return this._static
+		},
+		set:function(stc){
+			if(!this.hasOwnProperty('_static')) this._static = Object.create(this._static || {})
+			if(!this.hasOwnProperty('_staticandprops')) this._staticandprops = Object.create(this._staticandprops || {})
+			for(var key in stc){
+				this._staticandprops[key] = 
+				this._static[key] = 
+				this[key] = stc[key] // store default value
+			}
+		}
+	})
+
+	Object.defineProperty(this, 'putargs', {
+		get:function(){
+			return this._putargs
+		},
+		set:function(putarg){
+			if(!this.hasOwnProperty('_putargs')) this._putargs = Object.create(this._putargs || {})
+			for(var key in putarg){
+				this._putargs[key] = putarg[key]
+				this[key] = putarg[key] // store default value
+			}
+		}
+	})
 
 	this.monitorCompiledProperty = function(name){
 		if(this.__lookupSetter__(name)) return

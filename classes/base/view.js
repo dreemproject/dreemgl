@@ -227,12 +227,12 @@ define.class('$base/node', function(require){
 	}
 
 	// the user draw function
-	this.draw = function(time, frameid){
-		this.drawBackground(time, frameid)
-		this.drawChildren(time, frameid)
+	this.draw = function(){
+		this.drawBackground()
+		this.drawChildren()
 	}
 
-	this.drawChildren = function(time, frameid){
+	this.drawChildren = function(){
 		var c = this.canvas
 		var redraw
 		// TODO add boundingbox clipping
@@ -240,21 +240,21 @@ define.class('$base/node', function(require){
 			var child = this.children[i]
 			// include it in our drawlist
 			c.addCanvas(child.canvas, i)
-			child.drawView(time, frameid)
+			child.drawView()
 		}
 		return redraw
 	}
 
-	this.drawView = function(time, frameid){
+	this.drawView = function(){
 		var c = this.canvas
-		//c.width = this._layout.w
-		//c.height = this._layout.h
 
 		this._time = this.screen._time
+		this._frameid = this.screen._frameid
+
 		if(!this._viewport && !this.draw_dirty) return
 
 		// clear commandset
-		c.clearCmds()
+		c.clearCmds(this._frameid)
 		this.pickdraw = 0
 
 		// update matrices
@@ -266,11 +266,11 @@ define.class('$base/node', function(require){
 		//TODO pull these from a view?
 		c.width = t._w = this._layout.w
 		c.height = t._h = this._layout.h
-		t._align = float.LEFTTOP
-		t._walk = float.LRTBWRAP
+
+		t._align = this._align
+		t._walk = this._walk//float.LRTBNOWRAP//this._walk
 		t._margin = [0,0,0,0]
 		t._padding = [0,0,0,0]
-
 		// here we need to know the size if its defined by the
 		c.beginTurtle()
 
@@ -296,7 +296,7 @@ define.class('$base/node', function(require){
 		}
 		if(this.draw_dirty){
 			this.atAttributeGetFlag = 1
-			redraw = this.draw(time, frameid)
+			redraw = this.draw()
 			this.atAttributeGetFlag = 0
 			this.draw_dirty = false
 		}

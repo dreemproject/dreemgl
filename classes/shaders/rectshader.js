@@ -7,7 +7,7 @@ define.class('$shaders/pickshader', function(require){
 
 	//this.dump = 1
 	this.vertex = function(){
-		if(props.visible < 0.5) return vec4(0.)
+		if(static.visible < 0.5) return vec4(0.)
 		var pos = vec3(props.x + geometry.pos.x * props.w, props.y + geometry.pos.y * props.h, props.z)
 		var res = vec4(pos, 1) * props.matrix * view.totalmatrix * system.viewmatrix
 		return res 

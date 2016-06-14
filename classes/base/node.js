@@ -108,8 +108,8 @@ define.class(function(require){
 				var fn = this[key]
 				if(typeof fn === 'function'){
 					fn.call(this, event)
+					return
 				}
-				return
 			}
 
 			var proto = this

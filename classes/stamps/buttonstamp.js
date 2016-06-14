@@ -2,18 +2,24 @@
 define.class('$base/stamp', function(){
 
 	define.class(this, 'Background', '$shaders/rectshader', function(){
-		this.aligncontent = float.CENTER
+		this.color = 'red'
+		this.duration = 1.
 	})
 
+	define.class(this, 'Label', '$shaders/fontshader', function(){
+		this.duration = 1.
+	})
+
+	this.align = float.CENTER
+	this.padding = 1
+	this.margin = 1
 	this.props = {
-		text:'DEFAULT',
+		text:'BUTTON',
 		fontsize:15
 	}
 
 	this.states = {
 		default:{
-			duration:0.1,
-			motion:float.linear,
 			Background:{
 				color: 'gray'
 			}
@@ -22,7 +28,8 @@ define.class('$base/stamp', function(){
 			duration:0.1,
 			motion:float.linear,
 			Background:{
-				color: 'orange'
+				color: 'orange',
+				padding: 20
 			}
 		},
 		down:{
@@ -33,24 +40,33 @@ define.class('$base/stamp', function(){
 	}
 
 	this.onpointerhover = function(event){
-		this.setState(this.states.hover)
+		this.state = this.states.hover
 	}
 
 	this.onpointerout = function(event){
-		this.setState(this.states.default)
+		//this.setState(this.states.default)
 	}
 
 	this.onpointerstart = function(){
-		this.setState(this.states.down)
+		this.statemap = {h:100}
+		//this.w = 100
+		this.canvas.view.redraw()
+		//this.setState(this.states.down)
 	}
 
 	this.onpointerend = function(event){
-		this.setState(event.isover?this.states.hover:this.states.default)
+		//this.setState(event.isover?this.states.hover:this.states.default)
 	}
 
-	this.draw = function(state){
+	this.draw = function(){
 		var c = this.canvas
-		c.drawBackground(this)
+		c.beginBackground(this)
+		if(this.text){
+			c.drawLabel({
+				text:this.text
+			})
+		}
+		c.endBackground()
 		/*
 		c.beginBackground(this)
 
