@@ -31,12 +31,19 @@ define.class('$base/composition', function(require, $base$, screen, view, $views
 	this.rviews = function(n) {
 		// Create dynamic squares (location and color)
 		var dynviews = []
+		var pos = rpos()
 		for (var i = 0; i < n; i++) {
+			pos = rpos()
 			var v = button({
-				pos: rpos(),
+				x: pos[0],
+				y: pos[1],
+				w: 200,
+				h: 200,
 				title: 'asdf',
 				icon: 'apple',
-				bgcolor: rcolor(),
+				Background: {
+					color: 'red'
+				},
 				position: 'absolute'
 			})
 			dynviews.push(v)
@@ -58,11 +65,18 @@ define.class('$base/composition', function(require, $base$, screen, view, $views
 		return screen(
 			{name: 'default'},
 			view({
-				flex: 1,
-				bgcolor: '#484230',
+				w: 100,
+				h: 100,
+				bgcolor: 'red',
+				Rect:{
+					Background: {
+						color: '#ff0055'
+					}
+				},
 				pointertap: this.updatePositions
-			},
-			this.rviews(50))
+			}
+			// this.rviews(50)
+			)
 		)
 	}
 })

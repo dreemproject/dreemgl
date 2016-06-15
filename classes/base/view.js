@@ -218,7 +218,8 @@ define.class('$base/node', function(require){
 			//	c.drawRoundedrect(0, 0, c.width, c.height)
 			//}
 			//else{
-			c.drawRect({color:this.bgcolor, x:0, y:0, w:c.width, h:c.height})
+			// c.drawRect({color:this.bgcolor, x:0, y:0, w:c.width, h:c.height})
+			c.drawRect({x:0, y:0, w:c.width, h:c.height})
 			//}
 		}
 		if(this._viewport === '2d'){

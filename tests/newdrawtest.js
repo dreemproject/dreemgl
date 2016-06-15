@@ -18,7 +18,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		this.Rect = {
 			w:5,h:5,
 		}
-		
+
 		//this.walk = float.LRTBNOWRAP
 
 		define.class(this, 'Text', '$shaders/fontshader', function(){
@@ -34,6 +34,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//var size = abs(sin(i*0.1+time))*10
 				//c.drawButton({padding:size,text:'T'+i,Label:{fontsize:3+size}})
 				c.drawButton({
+					align: float.CENTER,
 					text:'T'+i,
 					Label:{delay:i/2000, fontsize:10+5*sin(i)},
 					Background:{color:[random(),random(),random(),1],delay:i/2000}
@@ -78,18 +79,18 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					//}
 
 					c.drawRect({
-						color:'yellow', 
+						color:'yellow',
 						x:float.left(0),
 						y:float.top(3),
-						w:float.width('50%'), 
+						w:float.width('50%'),
 						h:float.height('100%-5')
 						//h:float.height('50%')
 					})
 					c.drawRect({
-						color:'red', 
-						x:float.right(0), 
-						y:float.top(3), 
-						w:float.width('50%'), 
+						color:'red',
+						x:float.right(0),
+						y:float.top(3),
+						w:float.width('50%'),
 						h:float.width('100%-5')
 					})
 
@@ -124,7 +125,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 		}, [
 			myview({
 				name: 'myview',
-				w:float.width('100%'), 
+				w:float.width('100%'),
 				h:float.height('100%')
 			}
 				,view({name:'view1',bgcolor:'red',margin:[0,10,0,10],w:float.width('50%'),h:100})
