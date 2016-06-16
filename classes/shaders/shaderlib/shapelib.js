@@ -10,12 +10,22 @@
 define(function (require, exports) {
 	
 	exports.roundedrectdistance = function(sized, width, height, topleftcorner, toprightcorner, bottomleftcorner, bottomrightcorner){
-		var c1 = vec2(topleftcorner-0.5 , topleftcorner -0.5);
-		var c2 = vec2(bottomleftcorner -0.5, height - bottomleftcorner -0.5);
-		var c3 = vec2(width - bottomrightcorner -.50 , height - bottomrightcorner -.5);
-		var c4 = vec2(width - toprightcorner - .50, toprightcorner -0.5 );
+		var c1 = vec2(topleftcorner , topleftcorner );
+		var c2 = vec2(bottomleftcorner, height - bottomleftcorner);
+		var c3 = vec2(width - bottomrightcorner, height - bottomrightcorner);
+		var c4 = vec2(width - toprightcorner, toprightcorner);
 
 		var dist = 0.0
+		var dt = vec4(
+			max(topleftcorner, bottomleftcorner),
+			max(topleftcorner, toprightcorner),
+			max(toprightcorner, bottomrightcorner),
+			max(bottomrightcorner, bottomleftcorner)
+		)
+			
+		if(sized.x > dt.x && sized.y > dt.y && sized.x < width - dt.z && sized.y < height - dt.w){
+			return 1.
+		}
 
 		if (sized.x <= c1.x && sized.y < c1.y) {
 			dist = distcircle(sized - c1, topleftcorner);
@@ -29,7 +39,7 @@ define(function (require, exports) {
 					if (sized.x >= c4.x && sized.y <= c4.y) {
 						dist = distcircle(sized - c4, toprightcorner);
 					} else {
-							dist = max(max(-sized.y, sized.y-height), max(-sized.x, sized.x-width))
+						dist = max(max(-sized.y, sized.y-height), max(-sized.x, sized.x-width))
 					}
 				}
 			}

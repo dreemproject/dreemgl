@@ -63,20 +63,19 @@ define.class('$base/composition', function(require, $base$, screen, view, $views
 
 	this.render = function(){
 		return screen(
-			{name: 'default'},
+			{name: 'default', clearcolor: 'red'},
 			view({
-				w: 100,
-				h: 100,
-				bgcolor: 'red',
-				Rect:{
-					Background: {
-						color: '#ff0055'
-					}
+				Background:{
+					visible:true,
+					color:vec4('blue')
 				},
+				x: 100,
+				y: 100,
+				w: 200,
+				h: 100,
 				pointertap: this.updatePositions
-			}
-			// this.rviews(50)
-			)
+			})
+
 		)
 	}
 })

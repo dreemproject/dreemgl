@@ -3,12 +3,12 @@ define.class('$base/shader', function(require){
 
 	var Canvas = require('$base/canvas').prototype
 
-	this.noise = require('./shaderlib/noiselib')
-	this.pal = require('./shaderlib/palettelib')
-	this.shape = require('./shaderlib/shapelib')
-	this.math = require('./shaderlib/mathlib')
-	this.demo = require('./shaderlib/demolib')
-	this.material = require('./shaderlib/materiallib')
+	this.noiselib = require('./shaderlib/noiselib')
+	this.pallib = require('./shaderlib/palettelib')
+	this.shapelib = require('./shaderlib/shapelib')
+	this.mathlib = require('./shaderlib/mathlib')
+	this.demolib = require('./shaderlib/demolib')
+	this.materiallib = require('./shaderlib/materiallib')
 	this.colorlib = require('./shaderlib/colorlib')
 
 	this.Texture = require('$base/texture')

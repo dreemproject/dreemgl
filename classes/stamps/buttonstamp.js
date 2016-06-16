@@ -11,7 +11,7 @@ define.class('$base/stamp', function(){
 	})
 
 	this.align = float.CENTER
-	this.padding = 1
+	this.padding = 5
 	//this.w = float.width('25%')
 	this.margin = 1
 	this.props = {
@@ -49,7 +49,7 @@ define.class('$base/stamp', function(){
 	}
 
 	this.onpointerstart = function(){
-		this.statemap = {w:50,h:50}
+		this.statemap = {w:50,h:50, Background:{cornerradius:vec4(0,20,20,0)}}
 		//this.w = 100
 		this.canvas.view.redraw()
 		//this.setState(this.states.down)

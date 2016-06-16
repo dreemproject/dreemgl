@@ -9,7 +9,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	var myview = define.class(view, function(){
 
 		define.class(this, 'Button', '$stamps/buttonstamp', function(){
-			this.align = float.TOPLEFT
 			this.Label = {
 				fontsize:5
 			}
@@ -121,7 +120,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	this.render = function(){ return [
 		screen({
 			name: 'default',
-			clearcolor: '#1f1f1f'
+			clearcolor: 'white'
 		}, [
 			myview({
 				name: 'myview',

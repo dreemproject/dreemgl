@@ -47,19 +47,6 @@ define.class('$base/node', function(require){
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:'style',type:vec4, value: vec4('transparent'), meta:'color'}),
 
-		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: Config({group:'style',type:Object, meta:'texture'}),
-		bgimagemode: Config({group:'style', type:Enum('stretch', 'aspect-fit', 'aspect-fill', 'custom', 'resize'), value:'resize'}),
-		bgimageaspect: Config({group:'style', value:vec2(1,1)}),
-		bgimageoffset: Config({group:'style', value:vec2(0,0)}),
-
-		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:'style', type:vec4, value: vec4(NaN), meta:'color'}),
-
-		// the opacity of the image
-		opacity: Config({group:'style', value: 1.0, type:float}),
-		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
-
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
 		scroll: Config({type:vec2, value:vec2(0, 0), persist: true}),
 
@@ -201,27 +188,9 @@ define.class('$base/node', function(require){
 		if(this._viewport === '2d'){
 			c.setViewMatrix('noscroll')
 		}
-		if (this.dropshadowopacity > 0){
-			c.drawDropshadow()
-		}
-		if(this.bgimage){
-			if(this.borderradius[0]>0){
-				c.drawImage()
-			}
-			else{
-				c.drawRoundedimage()
-			}
-		}
-		else if(!isNaN(this.bgcolor[0])){
-			c.bgcolor = this.bgcolor
-			//if(this.borderradius[0]>0){
-			//	c.drawRoundedrect(0, 0, c.width, c.height)
-			//}
-			//else{
-			// c.drawRect({color:this.bgcolor, x:0, y:0, w:c.width, h:c.height})
-			c.drawRect({x:0, y:0, w:c.width, h:c.height})
-			//}
-		}
+
+		c.drawBackground({x:0, y:0, w:c.width, h:c.height})
+
 		if(this._viewport === '2d'){
 			c.setViewMatrix('view')
 		}
@@ -459,8 +428,10 @@ define.class('$base/node', function(require){
 		this.relayout()
 	}
 
+
 	// the draw api
-	define.class(this, 'Rect', '$shaders/rectshader')
-	define.class(this, 'Image', '$shaders/imageshader')
+	define.class(this, 'Background', '$shaders/rectshader', function(){
+		this.visible = false
+	})
 
 })
