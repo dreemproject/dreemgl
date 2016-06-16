@@ -20,7 +20,8 @@ define.class('$base/node', function(require){
 			return this._state
 		},
 		set:function(value){
-			
+			this._state = value
+			if(this.canvas && this.canvas.view) this.canvas.view.redraw()
 		}
 	})
 

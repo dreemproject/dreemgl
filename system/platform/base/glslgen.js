@@ -92,7 +92,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 				}
 				return outname
 			}
-			if(infer.name === 'stamp' || infer.name === 'props' || infer.name === 'static' || infer.name === 'putargs'){ // its a property attribute
+			if(infer.name === 'stamp' || infer.name === 'props'){ // its a property attribute
 				// infer the type based on the arg
 				if(typeof obj === 'number') node.infer = float32
 				else if(typeof obj === 'boolean') node.infer = float32

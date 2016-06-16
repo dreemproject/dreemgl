@@ -38,6 +38,8 @@ define.class(function(require, exports){
 	// verbNAME <- any user verbname
 
 
+
+
 	this.compileCanvasVerbs = function(root, canvas, name, cls){
 
 		var verbs = cls._canvasverbs
@@ -70,37 +72,98 @@ define.class(function(require, exports){
 
 					canvas['propstype' + clsname] = struct
 					
-					var props = cls._staticandprops
+					var props = cls._props
 
+					var structoffset = {}
+					// compute struct offsets
+					var offset = 0
+					var structbytes = struct.primary.bytes
+					for(var ikey in struct.def){
+						var itype = struct.def[ikey]
+						structoffset[ikey] = offset / structbytes
+						offset += itype.bytes
+					}
 					//var allpropkeys = Object.keys(struct.def)
 					//for(var key in layoutprops){
 					//	if(allpropkeys.indexOf(key) == -1) allpropkeys.push(key)
 					//}
 
+					function propOverload(props, tmpvar, first, tab){
+						var code = ''
+						for(var key in props){
+							if(key in cls._putprops) continue
+							if(!first) code += tab+'if(_'+key+' === undefined) '
+							else code += tab
+							code += '_'+key+' = '+tmpvar+'.'+key+'\n'
+						}
+						return code
+					}
+
 					fnstr = fnstr.replace(/this\.GETPROPS\s*\(\s*\)/,function(m){
 		
 						if(!args.length) console.error('Please give draw macro atleast one argument:'+clsname+' '+fnstr)
 
-						var code = '\nvar _scope = this.scope, _o1 = '+args[0]+', _o2 = _scope.propmap && _scope.propmap.'+clsname+', _o3 = _scope.extstatemap && _scope.extstatemap.'+clsname+', _o4 = _scope.statemap && _scope.statemap.'+clsname+',_o5 = this.class'+clsname+'\n'
+						var code = '\nvar _scope = this.scope, _scopepropmap = _scope._propmap, _scopeextstate = _scope._extstate, _scopestate = _scope._state\n'
+
+						//, _o1 = '+args[0]+', _o2 = _scope.propmap && _scope.propmap.'+clsname+', _o3 = _scope.extstatemap && _scope.extstatemap.'+clsname+', _o4 = _scope.statemap && _scope.statemap.'+clsname+',_o5 = this.class'+clsname+'\n'
+						// delay, duration and ease
 
 						var vars = ''
 						code += 'var '
 						for(var key in props){
+							if(key in cls._putprops) continue
 							vars += (vars?',':'') + '_'+key
 						}
 						code += vars + '\n'
-						for(var ol = 1; ol <= 5; ol++){
-							code += 'if(_o'+ol+'){\n'
-							for(var key in props){
-								if(ol !== 1) code += '	if(_'+key+' === undefined) '
-								else code += '	'
-								code += '_'+key+' = _o'+ol+'.'+key+'\n'
-							}
-							code += '}\n'
-						}
+
+						code += 'if('+args[0]+'){\n'
+						code += propOverload(props, args[0], true,'	')
+						code += '}\n'
+
+						code += 'if(_scopepropmap){\n'
+						code += '	var _o2 = _scopepropmap.'+clsname+'\n'
+						code += '	if(_o2){\n'
+						code += propOverload(props, '_o2', false,'		')
+						code += '	}\n'
+						code += '}\n'
+
+						code += 'if(_scopeextstate){\n'
+						code += '	var _o3 = _scopeextstate.'+clsname+'\n'
+						code += '	if(_o3){\n'
+						code += propOverload(props, '_o3', false,'		')
+						code += '	}\n'
+						code += '}\n'
+
+						code += 'if(_scopestate){\n'
+						code += '	var _o4 = _scopestate.'+clsname+'\n'
+						code += '	if(_o4){\n'
+						code += propOverload(props, '_o4', false,'		')
+						code += '	}\n'
+						code += '}\n'
+
+						code += 'if(_scopepropmap){\n'
+						code += '	if(_duration === undefined) _duration = _scopepropmap.duration\n'
+						code += '	if(_delay === undefined) _delay = _scopepropmap.delay\n'
+						code += '	if(_ease === undefined) _ease = _scopepropmap.ease\n'
+						code += '}\n'
+						code += 'if(_scopeextstate){\n'
+						code += '	if(_duration === undefined) _duration = _scopeextstate.duration\n'
+						code += '	if(_delay === undefined) _delay = _scopeextstate.delay\n'
+						code += '	if(_ease === undefined) _ease = _scopeextstate.ease\n'
+						code += '}\n'
+						code += 'if(_scopestate){\n'
+						code += '	if(_duration === undefined) _duration = _scopestate.duration\n'
+						code += '	if(_delay === undefined) _delay = _scopestate.delay\n'
+						code += '	if(_ease === undefined) _ease = _scopestate.ease\n'
+						code += '}'
+
+						code += 'var _o5 = this.class'+clsname+'\n'
+						code += propOverload(props, '_o5', false,'')
+
 						// store layoutprops on canvas
 						code += 'var _turtle = this.turtle\n'
 						for(var key in props){//i = 0; i < allpropkeys.length; i++){
+							if(key in cls._putprops) continue
 							if(key in layoutproparray){
 								code += 'if(typeof _'+key + ' === "number"){\n'
 								code += '	var _ts = _turtle._cache_'+key+' || (_turtle._cache_'+key+'=[])\n'
@@ -113,6 +176,7 @@ define.class(function(require, exports){
 								code += '_turtle._'+key+' = _'+key+'\n'
 							}
 						}
+
 						return code
 					})
 
@@ -177,7 +241,29 @@ define.class(function(require, exports){
 						code += 'var _array = _props.array\n'
 						code += 'var _changed = -1\n'
 						code += 'var _off = (_turtle._propoff + _turtle._propcount++) * '+slots+'\n'
+
+						// inject animation check and calculation
+
 						var def = struct.def
+
+						code += 'var _oduration =  _array[_off+'+structoffset['duration']+']\n'
+						code += 'var _ostarttime =  _array[_off+'+structoffset['animstarttime']+']\n'
+
+						code += 'if(this.view._time < _ostarttime + _oduration){\n'
+						code += '	var _fac = Math.max(0,Math.min(1.,(this.view._time - _ostarttime)/ _oduration)) \n'
+						code += '	var _1fac = 1 - _fac\n'
+						for(var key in def) if(typeof def[key] === 'function'){
+							var oldkey = 'OLD_' + key
+							if(!(oldkey in def)) continue
+							var off = structoffset[key]
+							var oldoff = structoffset[oldkey]
+							var itemslots = def[key].slots
+							for(var i = 0; i < itemslots; i++, off++,oldoff++){
+								code += '	_array[_off + '+off+'] = _fac * _array[_off+'+off+'] + _1fac * _array[_off+'+oldoff+']\n'
+							}
+						}
+						code += '}'
+
 						var off = 0
 						for(var key in def) if(typeof def[key] === 'function'){
 
@@ -185,22 +271,26 @@ define.class(function(require, exports){
 
 							var itemslots = def[key].slots
 
-							var src = '_turtle._'+key
+							var src = '_turtle._' + key
 
-							if(key.indexOf("static_DOT_") === 0){
-								src = '_turtle._'+key.slice(11)
+							if(key in argmap){
+								src = argmap[key]
 							}
+
+							//if(key.indexOf("static_DOT_") === 0){
+							//	src = '_turtle._'+key.slice(11)
+							//}
 	
-							else if(key.indexOf("putargs_DOT_") === 0){
-								src = argmap[key.slice(12)]
-								if(!src){
-									src = '0.'
+							//else if(key.indexOf("putargs_DOT_") === 0){
+							//	src = argmap[key.slice(12)]
+							//	if(!src){
+							//		src = '0.'
 									//continue
 									//console.log("Found putargs property which is not sent in PUTPROPS"+key)
-								}
-							}
+							//	}
+							//}
 
-							else if(key.indexOf("stamp_DOT_") === 0){
+							if(key.indexOf("stamp_DOT_") === 0){
 								src = 'this.scope.'+key.slice(10)								
 							}
 
@@ -214,7 +304,7 @@ define.class(function(require, exports){
 									code += 'var _'+key+' = ' + src + '\n'
 								}
 								if(oldkey in def){
-									var oldoff = struct.keyInfo(oldkey).offset / struct.primary.bytes
+									var oldoff = structoffset[oldkey]
 									for(var i = 0, o = off; i < itemslots; i++, o++,oldoff++){
 										code += 'if(_'+key+'['+i+'] !== _array[_off+'+o+']){\n'
 										code += '	_changed = '+o+'\n'
@@ -229,11 +319,10 @@ define.class(function(require, exports){
 							else{
 
 								if(oldkey in def){
-									var oldoff = struct.keyInfo(oldkey).offset / struct.primary.bytes
 									code += 'if('+src+' !== _array[_off+'+off+']){\n'
 									code += '	_changed = '+off+'\n'
 									code += '}\n'
-									code += '_array[_off+'+oldoff+'] = _array[_off+'+off+']\n'
+									code += '_array[_off+'+structoffset[oldkey]+'] = _array[_off+'+off+']\n'
 								}
 
 								code += '_array[_off+'+off+'] = '+src+'\n'
@@ -243,14 +332,14 @@ define.class(function(require, exports){
 
 						code += 'if(_changed >= 0){\n'
 						//var durationoff = struct.keyInfo('static_DOT_duration').offset / struct.primary.bytes
-						var startanimoff = struct.keyInfo('putargs_DOT_startanimtime').offset / struct.primary.bytes
-						
+
 						//console.log(durationoff)
 						code += '	var _time = this.view._time\n'
-						code += '	_array[_off+'+startanimoff+'] = _time\n'
+						code += '	_array[_off+'+ structoffset['animstarttime']+'] = _time + _turtle._delay\n'
 						code += '	_time += _turtle._duration + _turtle._delay\n'
 						code += '	if(_time > _shader._maxanimtime) _shader._maxanimtime = _time\n'
 						code += '}\n'
+						console.log(code)
 						return code
 						// read layoutprops from canvas (in props)
 						// read others from _local
@@ -292,10 +381,10 @@ define.class(function(require, exports){
 						code += '_canvas.scope = _stamp\n'
 						code += '_canvas.align = this.align\n'
 
-						code += '_stamp.extstatemap = this.scope.statemap && this.scope.statemap.' + clsname + '\n'
-						code += '_stamp.propmap = overload\n'
+						code += '_stamp._extstate = this.scope._state && this.scope._state.' + clsname + '\n'
+						code += '_stamp._propmap = overload\n'
 
-						code += 'var _o1 = '+args[0]+', _o2 = this.scope.statemap && this.scope.statemap.'+clsname+', _o3 = _stamp.statemap, _o4 = this.class'+clsname+'\n'
+						code += 'var _o1 = '+args[0]+', _o2 = this.scope._state && this.scope._state.'+clsname+', _o3 = _stamp._state, _o4 = this.class'+clsname+'\n'
 
 						var keys = ''
 						for(var key in cls._props) keys += (keys?',':'')+'_'+key

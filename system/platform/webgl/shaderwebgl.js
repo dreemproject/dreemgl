@@ -163,6 +163,7 @@ define.class('$system/platform/base/shader', function(require, exports){
 			texid++
 		}
 
+		code += 'var len = 0\n'
 		// attributes
 		var attrlocs = shader.attrlocs
 		var len = 0 // pull the length out of the buffers

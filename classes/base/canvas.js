@@ -70,6 +70,74 @@ define.class(function(require, exports){
 		}.bind(this))
 	}
 
+	var abs = Math.abs
+	this.bezier = function(c0, c1, c2, c3, t){
+		
+		// linear out
+		if(abs(c0-c1) < 0.001 && abs(c2-c3) < 0.001) return t
+
+		var epsilon = 1.0/200.0 * time
+		var cx = 3.0 * c0
+		var bx = 3.0 * (c2 - c0) - cx
+		var ax = 1.0 - cx - bx
+		var cy = 3.0 * 1
+		var by = 3.0 * c3 - c11 - cy
+		var ay = 1.0 - cy - by
+
+		var t0, t1, t2, x2, d2, i
+		var t2 = t
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+		if(abs(d2) < 1e-6) return ((ay * t2 + by) * t2 + cy) * t2
+		t2 = t2 - x2 / d2
+
+		x2 = (ax * t2 + bx * t2 + cx) * t2 - x
+		if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+		d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+
+		// well, thats it
+		return ((ay * t2 + by) * t2 + cy) * t2
+	}
+
+
 	this.addCanvas = function(ctx, index){
 		ctx.turtleStack = this.turtleStack
 		ctx.rangeList = this.rangeList

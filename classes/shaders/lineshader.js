@@ -1,10 +1,17 @@
 define.class('$shaders/pickshader', function(require){
 	
 	this.props = {
+		prevposx: 0,
+		prevposy: 0,
+		startposx: 0,
+		startposy: 0,
+		endposx:0,
+		endposy:0,
+		nextposx: 0,
+		nextposy: 0,
 		color: vec4('white'),
-		cornerradius: vec4(5),//vec4(10,5,30,40),
-		borderwidth: vec4(0),
-		bordercolor: vec4('#1f1f1f'),
+		outlinewidth: vec4(0),
+		outlinecolor: vec4('#1f1f1f'),
 		shadowradius: 0.25,
 		shadowoffset: vec2(2,2),
 		shadowalpha: 0.35
@@ -17,6 +24,7 @@ define.class('$shaders/pickshader', function(require){
 		pos:vec3.array()
 	}
 
+	// the line shadow
 	this.geometry.pos.pushQuad(
 		-1, -1, 1,  
 		1, -1, 1,
@@ -24,6 +32,7 @@ define.class('$shaders/pickshader', function(require){
 		1, 1, 1
 	)
 
+	// the line segment itself
 	this.geometry.pos.pushQuad(
 		-1, -1, 0,  
 		1, -1, 0,
@@ -33,7 +42,7 @@ define.class('$shaders/pickshader', function(require){
 
 	//this.dump = 1
 	this.vertex = function(){
-		if(props.visible < 0.5) return vec4(0.)
+		if(static.visible < 0.5) return vec4(0.)
 	
 		var pos = geometry.pos
 		var border = vec2(0.,0.)

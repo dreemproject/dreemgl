@@ -16,10 +16,7 @@ define.class('$shaders/pickshader', function(require){
 		fontsize:12,
 		baseline:1,
 		italic:NaN,
-		linespacing:1.3
-	}
-
-	this.putargs = {
+		linespacing:1.3,
 		clipx:NaN,
 		clipy:NaN,
 		clipw:NaN,
@@ -32,7 +29,39 @@ define.class('$shaders/pickshader', function(require){
 		texminx:NaN,
 		texminy:NaN,
 		texmaxx:NaN,
-		texmaxy:NaN
+		texmaxy:NaN		
+	}
+
+	this.putprops = {
+		clipx:true,
+		clipy:true,
+		clipw:true,
+		cliph:true,
+		unicode:true,
+		minx:true,
+		miny:true,
+		maxx:true, 
+		maxy:true,
+		texminx:true,
+		texminy:true,
+		texmaxx:true,
+		texmaxy:true		
+	}
+
+	this.staticprops = {
+		clipx:true,
+		clipy:true,
+		clipw:true,
+		cliph:true,
+		unicode:true,
+		minx:true,
+		miny:true,
+		maxx:true, 
+		maxy:true,
+		texminx:true,
+		texminy:true,
+		texmaxx:true,
+		texmaxy:true		
 	}
 
 	this.pixel = function(){
@@ -43,8 +72,8 @@ define.class('$shaders/pickshader', function(require){
 	this.vertex = function(){
 		// pass through the texture pos
 		texturepos = mix(
-			vec2(putargs.texminx, putargs.texminy),
-			vec2(putargs.texmaxx, putargs.texmaxy),
+			vec2(props.texminx, props.texminy),
+			vec2(props.texmaxx, props.texmaxy),
 			geometry.pos.xy
 		)
 		return compute_position()		
@@ -98,19 +127,19 @@ define.class('$shaders/pickshader', function(require){
 			props.outlinecolor,
 			props.boldness,
 			props.outline,
-			(abs(putargs.unicode - 10.)<0.001 || abs(putargs.unicode - 32.)<0.001)?false:static.visible>0.5?true:false
+			(abs(props.unicode - 10.)<0.001 || abs(props.unicode - 32.)<0.001)?false:props.visible>0.5?true:false
 		)
 
 		s = style(s)
 		
 		var pos = mix(
 			vec2(
-				s.pos.x + s.fontsize * putargs.minx,
-				s.pos.y - s.fontsize * putargs.miny + s.fontsize * props.baseline
+				s.pos.x + s.fontsize * props.minx,
+				s.pos.y - s.fontsize * props.miny + s.fontsize * props.baseline
 			),
 			vec2(
-				s.pos.x + s.fontsize * putargs.maxx,
-				s.pos.y - s.fontsize * putargs.maxy+ s.fontsize * props.baseline
+				s.pos.x + s.fontsize * props.maxx,
+				s.pos.y - s.fontsize * props.maxy+ s.fontsize * props.baseline
 			),
 			geometry.pos.xy
 		)

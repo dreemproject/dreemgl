@@ -63,8 +63,6 @@ define.class(function(require, exports){
 			if(obj === 'geometry') obj = key
 			else if(obj === 'props') props[split[1]] = allattr[key]
 			else if(obj === 'stamp') props[key] = allattr[key], obj = 'props'
-			else if(obj === 'static') props[key] = allattr[key], obj = 'props'
-			else if(obj === 'putargs') props[key] = allattr[key], obj = 'props'
 
 			var gltype = gltypes.getType(allattr[key])
 			objs[obj] = 1
@@ -75,7 +73,7 @@ define.class(function(require, exports){
 		var keys = Object.keys(props)
 		for(var i = 0; i < keys.length; i++){
 			var key = keys[i]
-			if(key.indexOf("putargs_DOT_") !== 0 && key.indexOf("static_DOT_") !== 0 && props[key].slots <= 4){
+			if(!(key in context._staticprops)){
 				props['OLD_'+key] = props[key]
 			}
 		}
@@ -127,6 +125,7 @@ define.class(function(require, exports){
 				ret += 'varying ' + gltype + ' ' + key  + ';\n'
 			}
 		}
+
 		if(ret) ret = '//------------------- Attributes -------------------\n'+ret+'\n'
 		return ret
 	}
@@ -156,14 +155,6 @@ define.class(function(require, exports){
 		}
 		else {
 			if(split[0] === 'stamp'){
-				obj = 'props'
-				prop = key
-			}
-			else if(split[0] === 'static'){
-				obj = 'props'
-				prop = key
-			}
-			else if(split[0] === 'putargs'){
 				obj = 'props'
 				prop = key
 			}
@@ -232,7 +223,11 @@ define.class(function(require, exports){
 		var head = '\n' 
 
 		for(var key in allattr){
-			if(key.indexOf('props_DOT_') !== 0 || allattr[key].slots > 4){
+			// if the thing is static
+			var propkey = undefined
+			if(key.indexOf('props_DOT_') === 0) propkey = key.slice(10)
+
+			if((!propkey || propkey in context._staticprops) || allattr[key].slots > 4){
 				head += '\t'+key+' = '+ decodeAttribItem(key, allattr[key], context)+';\n'
 			}
 		}
@@ -241,7 +236,11 @@ define.class(function(require, exports){
 		tail +='if(ANIMTIME < 1.){\n'
 
 		for(var key in allattr){
-			if(key.indexOf('props_DOT_') === 0 && allattr[key].slots <= 4){
+			var propkey = key
+			if(key.indexOf('props_DOT_') === 0) propkey = key.slice(10)
+			else continue
+
+			if(!(propkey in context._staticprops) && allattr[key].slots <= 4){
 				tail += '\t'+key+' = mix('+ decodeAttribItem('props_DOT_OLD_'+key.slice(10), allattr[key], context)+','
 				tail += decodeAttribItem(key, allattr[key], context) + ',ANIMTIME);\n'
 			}
@@ -250,7 +249,11 @@ define.class(function(require, exports){
 		tail += '}\nelse {\n'
 
 		for(var key in allattr){
-			if(key.indexOf('props_DOT_') === 0){
+			var propkey = key
+			if(key.indexOf('props_DOT_') === 0) propkey = key.slice(10)
+			else continue
+
+			if(!(propkey in context._staticprops)){
 				tail += '\t'+key+' = '+ decodeAttribItem(key, allattr[key], context)+';\n'
 			}
 		}
@@ -372,6 +375,7 @@ define.class(function(require, exports){
 					slots:left>4?4:left,
 					offset:offset
 				}
+	
 				if(loc.loc === -1) attrlocs[attrname] = undefined
 				if(left>=4){
 					offset += 16
@@ -775,41 +779,35 @@ define.class(function(require, exports){
 		get:function(){
 			return this._props
 		},
-		set:function(prop){
+		set:function(obj){
 			if(!this.hasOwnProperty('_props')) this._props = Object.create(this._props || {})
-			if(!this.hasOwnProperty('_staticandprops')) this._staticandprops = Object.create(this._staticandprops || {})
-			for(var key in prop){
-				this._staticandprops[key] = 
+			for(var key in obj){
 				this._props[key] = 
-				this[key] = prop[key] // store default value
+				this[key] = obj[key] // store default value
 			}
 		}
 	})
 
-	Object.defineProperty(this, 'static', {
+	Object.defineProperty(this, 'staticprops', {
 		get:function(){
-			return this._static
+			return this._staticprops
 		},
-		set:function(stc){
-			if(!this.hasOwnProperty('_static')) this._static = Object.create(this._static || {})
-			if(!this.hasOwnProperty('_staticandprops')) this._staticandprops = Object.create(this._staticandprops || {})
-			for(var key in stc){
-				this._staticandprops[key] = 
-				this._static[key] = 
-				this[key] = stc[key] // store default value
+		set:function(obj){
+			if(!this.hasOwnProperty('_static')) this._staticprops = Object.create(this._staticprops || {})
+			for(var key in obj){
+				this._staticprops[key] = obj[key] // store default value
 			}
 		}
 	})
 
-	Object.defineProperty(this, 'putargs', {
+	Object.defineProperty(this, 'putprops', {
 		get:function(){
-			return this._putargs
+			return this._putprops
 		},
-		set:function(putarg){
-			if(!this.hasOwnProperty('_putargs')) this._putargs = Object.create(this._putargs || {})
-			for(var key in putarg){
-				this._putargs[key] = putarg[key]
-				this[key] = putarg[key] // store default value
+		set:function(obj){
+			if(!this.hasOwnProperty('_putprops')) this._putprops = Object.create(this._putprops || {})
+			for(var key in obj){
+				this._putprops[key] = obj[key] // store default value
 			}
 		}
 	})

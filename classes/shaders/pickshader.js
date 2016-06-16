@@ -22,18 +22,24 @@ define.class('$base/shader', function(require){
 		margin:[0,0,0,0],
 		padding:[0,0,0,0],
 		align: float.LEFTTOP,
-		wrap: float.WRAP
-	}
-
-	this.static = {
+		wrap: float.WRAP,
 		visible:1.0,
 		ease:vec4(0),
 		duration:0.,
-		delay:0.
+		delay:0.,
+		animstarttime:0
 	}
 
-	this.putargs = {
-		startanimtime:0
+	this.staticprops = {
+		visible:true,
+		ease:true,
+		duration:true,
+		delay:true,
+		animstarttime:true
+	}
+
+	this.putprops = {
+		animstarttime:true
 	}
 
 	this.stamp = {
@@ -51,9 +57,9 @@ define.class('$base/shader', function(require){
 	}
 
 	this.animate = function(){
-		if(static.duration <0.001) return 1.
-		var anim = clamp((system.time - putargs.startanimtime - static.delay) / static.duration,0.,1.)
-		return sin(anim*PI-.5*PI)*.5+.5
+		if(props.duration <0.001) return 1.
+		var anim = clamp((system.time - props.animstarttime) / props.duration,0.,1.)
+		return anim// sin(anim*PI-.5*PI)*.5+.5
 	}
 
 	// baseic rect

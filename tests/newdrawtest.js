@@ -14,12 +14,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 		})
 
-		this.Rect = {
-			w:5,h:5,
-		}
-
-		//this.walk = float.LRTBNOWRAP
-
 		define.class(this, 'Text', '$shaders/fontshader', function(){
 			this.fontsize = 15
 		})
@@ -34,9 +28,12 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//c.drawButton({padding:size,text:'T'+i,Label:{fontsize:3+size}})
 				c.drawButton({
 					align: float.CENTER,
-					text:'T'+i,
+					text:'TEST'+i,
 					Label:{delay:i/2000, fontsize:10+5*sin(i)},
-					Background:{color:[random(),random(),random(),1],delay:i/2000}
+					Background:{
+						color:[random(),random(),random(),1],
+						delay:i/2000
+					}
 				})
 				//,w:50+50*sin(0.02*i)})
 				//c.drawRect({color:[random(),random(),random(),1],w:random()*100})
@@ -44,7 +41,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//c.drawRect({color:'red'})
 				//c.drawText({break:'', text:"HELLO THING"})
 			}
-			//console.log(performance.now()-dt)
+			console.log(performance.now()-dt)
 
 			//return true
 			/*
@@ -115,7 +112,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//c.drawRect({bgcolor:'blue'})
 		}
 	})
-
 
 	this.render = function(){ return [
 		screen({

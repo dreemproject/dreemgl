@@ -3,11 +3,9 @@ define.class('$base/stamp', function(){
 
 	define.class(this, 'Background', '$shaders/rectshader', function(){
 		this.color = 'red'
-		this.duration = 1.
 	})
 
 	define.class(this, 'Label', '$shaders/fontshader', function(){
-		this.duration = 1.
 	})
 
 	this.align = float.CENTER
@@ -21,16 +19,21 @@ define.class('$base/stamp', function(){
 
 	this.states = {
 		default:{
+			duration:1,
 			Background:{
 				color: 'gray'
+			},
+			Label:{
 			}
 		},
-		hover:{
-			duration:0.1,
-			motion:float.linear,
+		mousedown:{
+			duration:1,
+			w:150,
+			h:150,
 			Background:{
+				cornerradius:vec4(50),
+				borderwidth:vec4(10),
 				color: 'orange',
-				padding: 20
 			}
 		},
 		down:{
@@ -41,7 +44,7 @@ define.class('$base/stamp', function(){
 	}
 
 	this.onpointerhover = function(event){
-		this.state = this.states.hover
+		//this.state = this.states.hover
 	}
 
 	this.onpointerout = function(event){
@@ -49,10 +52,9 @@ define.class('$base/stamp', function(){
 	}
 
 	this.onpointerstart = function(){
-		this.statemap = {w:50,h:50, Background:{cornerradius:vec4(0,20,20,0)}}
-		//this.w = 100
-		this.canvas.view.redraw()
-		//this.setState(this.states.down)
+		this.state = this.states.mousedown 
+		//this.state = {duration:2,w:50,h:50, Background:{cornerradius:vec4(0,20,20,0)}}
+		//this.canvas.view.redraw()
 	}
 
 	this.onpointerend = function(event){
