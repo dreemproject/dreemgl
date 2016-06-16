@@ -1,5 +1,5 @@
 define.class('$shaders/pickshader', function(require){
-	
+
 	this.props = {
 		color: vec4('white'),
 		cornerradius: vec4(5),//vec4(10,5,30,40),
@@ -12,20 +12,20 @@ define.class('$shaders/pickshader', function(require){
 
 	this.shadowcolor = vec4(0,0,0,0.35)
 
-	// baseic rect
+	// basic rect
 	this.geometry = {
 		pos:vec3.array()
 	}
 
 	this.geometry.pos.pushQuad(
-		-1, -1, 1,  
+		-1, -1, 1,
 		1, -1, 1,
 		-1, 1, 1,
 		1, 1, 1
 	)
 
 	this.geometry.pos.pushQuad(
-		-1, -1, 0,  
+		-1, -1, 0,
 		1, -1, 0,
 		-1, 1, 0,
 		1, 1, 0
@@ -34,7 +34,6 @@ define.class('$shaders/pickshader', function(require){
 	//this.dump = 1
 	this.vertex = function(){
 		if(props.visible < 0.5) return vec4(0.)
-	
 		var pos = geometry.pos
 		var border = vec2(0.,0.)
 		if(pos.x < -.5){
@@ -50,10 +49,10 @@ define.class('$shaders/pickshader', function(require){
 
 		var out3 = vec3(
 			posfac.x * props.w,// + border.x * pos.x,
-			posfac.y * props.h,// + border.y * pos.y, 
+			posfac.y * props.h,// + border.y * pos.y,
 			props.z
 		)
-		
+
 		if(pos.z > .5){
 			if(props.shadowradius < 0.001){
 				return vec4(0.)
@@ -76,13 +75,13 @@ define.class('$shaders/pickshader', function(require){
 			props.h - max(max(max(props.cornerradius.w, props.cornerradius.z), props.borderwidth.z),1.)
 		)
 
-		equalborder = 
+		equalborder =
 			abs(props.borderwidth.x - props.borderwidth.y) +
 			abs(props.borderwidth.z - props.borderwidth.w) +
 			abs(props.borderwidth.y - props.borderwidth.z) < 0.01?1.0:0.
 
 		var res = vec4(vec3(out3.x + props.x, out3.y + props.y, out3.z), 1) * view.totalmatrix * system.viewmatrix
-		return res 
+		return res
 	}
 
 	this.bordermix = function(dist, wd){
@@ -97,13 +96,17 @@ define.class('$shaders/pickshader', function(require){
 
 	this.pixel = function(){
 		if(isshadow > 0.5){
-			// return props.shadowcolor
 			var dist = roundedshadowdistance(coordpos + vec2(props.shadowradius) - props.shadowoffset.xy) * 2.
-			dist =  (dist + props.shadowradius) / props.shadowradius
-			return mix(vec4(this.shadowcolor.xyz, props.shadowalpha), vec4(this.shadowcolor.xyz,0.),clamp(dist,0.,1.))
+			dist = (dist + props.shadowradius * 2.) / props.shadowradius / 2.
+			dist = clamp(dist, 0., 1.)
+			return mix(
+				vec4(this.shadowcolor.xyz, props.shadowalpha),
+				vec4(this.shadowcolor.xyz, 0.),
+				dist
+			)
 		}
 		else{
-			var dist = roundedrectdistance(coordpos) * 2.
+			var dist = roundedrectdistance(coordpos) * 2.0
 			if(dist < -10000.){
 				return props.color
 			}
@@ -116,20 +119,21 @@ define.class('$shaders/pickshader', function(require){
 				}
 				else{ // do the lines
 					if(props.borderwidth.x > 0.01 && coordpos.y < roundcornermax.y){
-						return bordermix(-coordpos.y, props.borderwidth.x) 
+						return bordermix(-coordpos.y, props.borderwidth.x)
 					}
 					if(props.borderwidth.z > 0.01 && coordpos.y > roundcornermax.w){
-						return bordermix(coordpos.y-props.h, props.borderwidth.z) 
+						return bordermix(coordpos.y-props.h, props.borderwidth.z)
 					}
 					if(props.borderwidth.w > 0.01 && coordpos.x < roundcornermax.x){
-						return bordermix(-coordpos.x, props.borderwidth.w) 
+						return bordermix(-coordpos.x, props.borderwidth.w)
 					}
 					if(props.borderwidth.y > 0.01 && coordpos.x > roundcornermax.z){
-						return bordermix(coordpos.x-props.w, props.borderwidth.y) 
+						return bordermix(coordpos.x-props.w, props.borderwidth.y)
 					}
 				}
 			}
-			return mix(props.color, vec4(props.color.xyz,0), dist)
+			dist = clamp(dist, 0., 1.)
+			return mix(props.color, vec4(props.color.xyz, 0), dist);
 		}
 	}
 
@@ -149,17 +153,17 @@ define.class('$shaders/pickshader', function(require){
 		var dist = 0.0
 
 		var dt = roundcornermax
-		
+
 		if(sized.x > dt.x && sized.y > dt.y && sized.x < dt.z && sized.y < dt.w){
 			return -100000.	
 		}
 
 		if (sized.x <= c1.x && sized.y < c1.y) {
 			return distcircle(sized - c1, topleftcorner)
-		} 
+		}
 		if (sized.x >= c3.x && sized.y >= c3.y) {
 			return  distcircle(sized - c3, bottomrightcorner)
-		} 
+		}
 		if (sized.x <= c2.x && sized.y >= c2.y) {
 			return distcircle(sized - c2, bottomleftcorner)
 		}
@@ -175,6 +179,7 @@ define.class('$shaders/pickshader', function(require){
 	this.roundedshadowdistance = function(sized){
 		var width = props.w + props.shadowradius * 2
 		var height = props.h + props.shadowradius * 2
+
 		var topleftcorner = props.cornerradius.x + props.shadowradius
 		var toprightcorner = props.cornerradius.y + props.shadowradius
 		var bottomleftcorner = props.cornerradius.z + props.shadowradius
@@ -191,10 +196,10 @@ define.class('$shaders/pickshader', function(require){
 
 		if (sized.x <= c1.x && sized.y < c1.y) {
 			return  distcircle(sized - c1, topleftcorner)
-		} 
+		}
 		if (sized.x >= c3.x && sized.y >= c3.y) {
 			return  distcircle(sized - c3, bottomrightcorner)
-		} 
+		}
 		if (sized.x <= c2.x && sized.y >= c2.y) {
 			return distcircle(sized - c2, bottomleftcorner)
 		}
@@ -208,8 +213,7 @@ define.class('$shaders/pickshader', function(require){
 	}
 
 	this.distcircle = function (texpos, radius) {
-		var c = texpos
-		var distance = length(c) - radius;
+		var distance = length(texpos) - radius;
 		return distance;
 	}
 
@@ -234,15 +238,15 @@ define.class('$shaders/pickshader', function(require){
 
 
 		/*
-			//overload, scope.propmap.Rect, scope.extstatemap.Rect, scope.statemap.Rect, clsobj 
+			//overload, scope.propmap.Rect, scope.extstatemap.Rect, scope.statemap.Rect, clsobj
 			// canvasprops <- pops out of the shadercompiler, w types
-			// layoutprops <- defined 
+			// layoutprops <- defined
 
 			/*
 			// shader class with values
 			this.x = overload && overload.x !=== undefined? overload.x: state.x === undefined? this.classRect.x: state.x
 			this.y = ..
-			this.w = ..	
+			this.w = ..
 			this.h = ..
 			this.margin = state.margin === undefined? ..
 			this.padding.
@@ -258,7 +262,7 @@ define.class('$shaders/pickshader', function(require){
 			this.ARGSTO(this)
 			this.runAlign(buffer,1, margin)
 			this.CANVASTOBUFFER()
-		
+
 		begin:function(x, y, w, h, margin, padding, alignfn, wrapfn){
 			//console.log(this.align.x)
 			this.RECTARGS()
