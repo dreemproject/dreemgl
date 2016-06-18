@@ -339,7 +339,7 @@ define.class(function(require, exports){
 						code += '	_time += _turtle._duration + _turtle._delay\n'
 						code += '	if(_time > _shader._maxanimtime) _shader._maxanimtime = _time\n'
 						code += '}\n'
-						console.log(code)
+
 						return code
 						// read layoutprops from canvas (in props)
 						// read others from _local

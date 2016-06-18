@@ -6,30 +6,21 @@
 
 define.class('$base/composition', function(require, $base$, screen, view){
 
+	var myview = define.class('$base/view', function(){
+		define.class(this,'Line', '$shaders/line', function(){
+			
+		})
+	})
+
 	this.render = function(){ return [
 		screen({name: 'default'}, [
 			view({
-				w:float.width('100%'),
-				h:float.height('100%'),
+				w:float('100%'),
+				h:float('100%'),
 				draw:function(){
-					this.drawBackground()
-					return true
-				},
-				Background:{
-					visible:true,
-					pixel:function(){
-						var x = geometry.pos.x*.5+.5
-						var y = geometry.pos.y*.5+.5
+					var c = this.canvas
+					for(var i = 0; i < 10; i++){
 
-						var t1 = abs(
-							sin(8.*x+system.time)
-						)
-
-						var t2 = abs(
-							sin(8.*y+system.time)
-						)
-
-						return vec4(t1,t2,t1,1.)
 					}
 				}
 			})

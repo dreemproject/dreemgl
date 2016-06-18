@@ -9,8 +9,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 	var myview = define.class(view, function(){
 
 		define.class(this, 'Button', '$stamps/buttonstamp', function(){
+			this.align = float.CENTER
 			this.Label = {
-				fontsize:5
+				fontsize:15
 			}
 		})
 
@@ -23,16 +24,12 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			var dt = performance.now()
 
 			for(var i = 0; i < 4000;i++){
-				//if(!(i % 100))c.newline()
-				//var size = abs(sin(i*0.1+time))*10
-				//c.drawButton({padding:size,text:'T'+i,Label:{fontsize:3+size}})
 				c.drawButton({
-					align: float.CENTER,
-					text:'TEST'+i,
-					Label:{delay:i/2000, fontsize:10+5*sin(i)},
+					text:'HI'+i,
+					delay:i/2000,
+					//Label:{fontsize:10+5*sin(i)},
 					Background:{
-						color:[random(),random(),random(),1],
-						delay:i/2000
+						color:[random(),random(),random(),1]
 					}
 				})
 				//,w:50+50*sin(0.02*i)})
@@ -41,7 +38,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				//c.drawRect({color:'red'})
 				//c.drawText({break:'', text:"HELLO THING"})
 			}
-			console.log(performance.now()-dt)
+			//console.log(performance.now()-dt)
 
 			//return true
 			/*

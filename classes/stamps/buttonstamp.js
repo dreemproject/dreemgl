@@ -8,8 +8,8 @@ define.class('$base/stamp', function(){
 	define.class(this, 'Label', '$shaders/fontshader', function(){
 	})
 
-	this.align = float.CENTER
 	this.padding = 5
+
 	//this.w = float.width('25%')
 	this.margin = 1
 	this.props = {
@@ -22,8 +22,6 @@ define.class('$base/stamp', function(){
 			duration:1,
 			Background:{
 				color: 'gray'
-			},
-			Label:{
 			}
 		},
 		mousedown:{
@@ -31,8 +29,8 @@ define.class('$base/stamp', function(){
 			w:150,
 			h:150,
 			Background:{
-				cornerradius:vec4(50),
-				borderwidth:vec4(10),
+				cornerradius: vec4(20,0,0,0),
+				borderwidth: vec4(10),
 				color: 'orange',
 			}
 		},
