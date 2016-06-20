@@ -30,11 +30,14 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				c.drawButton({
 					text:'HI'+i,
 					delay:i/2000,
-					//Label:{fontsize:10+5*sin(i)},
+					Label:{
+						fontsize:10+5*sin(i)
+					},
 					Background:{
 						color:[random(),random(),random(),1]
 					}
 				})
+
 				//,w:50+50*sin(0.02*i)})
 				//c.drawRect({color:[random(),random(),random(),1],w:random()*100})
 				//c.drawText({text:""+i+random(),})

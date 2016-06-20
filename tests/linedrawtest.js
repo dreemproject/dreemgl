@@ -7,8 +7,8 @@
 define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class('$base/view', function(){
-		define.class(this,'Line', '$shaders/line', function(){
-			
+		define.class(this,'Line', '$shaders/lineshader', function(){
+
 		})
 	})
 
@@ -19,9 +19,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				h:float('100%'),
 				draw:function(){
 					var c = this.canvas
-					for(var i = 0; i < 10; i++){
+					//for(var i = 0; i < 10; i++){
 
-					}
+					//}
 				}
 			})
 		])

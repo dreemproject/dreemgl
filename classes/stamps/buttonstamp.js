@@ -30,6 +30,9 @@ define.class('$base/stamp', function(){
 			w:150,
 			h:150,
 			margin: vec4(10, 30, 5, 20),
+			Label:{
+				fontsize:30
+			},
 			Background:{
 				cornerradius: vec4(20, 0, 0, 0),
 				borderwidth: vec4(10, 30, 5, 20),

@@ -5,19 +5,21 @@ define.class('$shaders/pickshader', function(require){
 		prevposy: 0,
 		startposx: 0,
 		startposy: 0,
-		endposx:0,
-		endposy:0,
+
+		endposx: 0,
+		endposy: 0,
 		nextposx: 0,
 		nextposy: 0,
+
 		color: vec4('white'),
 		outlinewidth: vec4(0),
 		outlinecolor: vec4('#1f1f1f'),
 		shadowradius: 0.25,
-		shadowoffset: vec2(2,2),
+		shadowoffset: vec2(2, 2),
 		shadowalpha: 0.35
 	}
 
-	this.shadowcolor = vec4(0,0,0,0.35)
+	this.shadowcolor = vec4(0, 0, 0, 0.35)
 
 	// baseic rect
 	this.geometry = {
@@ -42,10 +44,10 @@ define.class('$shaders/pickshader', function(require){
 
 	//this.dump = 1
 	this.vertex = function(){
-		if(static.visible < 0.5) return vec4(0.)
+		if(props.visible < 0.5) return vec4(0.)
 	
 		var pos = geometry.pos
-		var border = vec2(0.,0.)
+		var border = vec2(0., 0.)
 		if(pos.x < -.5){
 			if(pos.y < -.5) border = props.borderwidth.wx
 			else border = props.borderwidth.wz

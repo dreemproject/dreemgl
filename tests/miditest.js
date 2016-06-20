@@ -49,7 +49,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			this.arpdata.length = 0
 			this.arp1(this.l, this.m, this.n, this.o, this.p)
 			// ok lets compute the time
-			var beats = ((Date.now() - this.start) / 1000 ) * (this.bpm / 60) + this.shift
+			var beats = ((Date.now() - this.start) / 1000) * (this.bpm / 60) + this.shift
 			// ok now, lets index the arp for what we need
 			var time = 0
 			for(var i =0, j = 0, arp = this.arpdata; i < arp.length && j < 1000;){
@@ -184,7 +184,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 						var i = map[j]
 						p['c'+i]
 						p['e'+i]
-						//p[this.slide]
 						p['g'+i]
 						p['d'+i]
 						p['a'+i]

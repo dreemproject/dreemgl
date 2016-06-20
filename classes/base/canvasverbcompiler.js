@@ -349,6 +349,7 @@ define.class(function(require, exports){
 					fnstr = fnstr.replace(/this\.SETPROPSLEN\s*\(\s*\)/,function(m){
 						return '_props.length = _turtle._propoff + _turtle._propcount\n'
 					})
+
 				}
 				else{
 					// we are on a stamp. now what.
