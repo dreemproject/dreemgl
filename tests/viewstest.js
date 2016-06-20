@@ -63,16 +63,23 @@ define.class('$base/composition', function(require, $base$, screen, view, $views
 
 	this.render = function(){
 		return screen(
-			{name: 'default', clearcolor: 'red'},
+			{name: 'default', clearcolor: [0.7,0.7,0.7,1]},
 			view({
 				Background:{
 					visible:true,
-					color:vec4('blue')
+					color:vec4('tomato'),
+					cornerradius: [30,0,0,0],
+					bordercolor: [0.5, 0.5, 0, 1],
+					borderwidth: [10, 10, 10, 10],
+					shadowradius: 20,
+					shadowoffset: [5, 150],
+					shadowcolor: [0, 0, 0, 1],
+					shadowalpha: 1.0
 				},
 				x: 100,
 				y: 100,
-				w: 200,
-				h: 100,
+				w: 150,
+				h: 150,
 				pointertap: this.updatePositions
 			})
 

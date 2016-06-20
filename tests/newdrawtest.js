@@ -24,6 +24,9 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			var dt = performance.now()
 
 			for(var i = 0; i < 4000;i++){
+				//if(!(i % 100))c.newline()
+				//var size = abs(sin(i*0.1+time))*10
+				//c.drawButton({padding:size,text:'T'+i,Label:{fontsize:3+size}})
 				c.drawButton({
 					text:'HI'+i,
 					delay:i/2000,
@@ -40,7 +43,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			}
 			//console.log(performance.now()-dt)
 
-			//return true
+			// return true
 			/*
 			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
 			for(var i = 0; i < 1; i++){

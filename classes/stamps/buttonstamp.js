@@ -3,14 +3,15 @@ define.class('$base/stamp', function(){
 
 	define.class(this, 'Background', '$shaders/rectshader', function(){
 		this.color = 'red'
+		this.duration = 10.
 	})
 
 	define.class(this, 'Label', '$shaders/fontshader', function(){
+		this.duration = 10.
 	})
 
 	this.padding = 5
 
-	//this.w = float.width('25%')
 	this.margin = 1
 	this.props = {
 		text:'BUTTON',
@@ -28,9 +29,10 @@ define.class('$base/stamp', function(){
 			duration:1,
 			w:150,
 			h:150,
+			margin: vec4(10),
 			Background:{
 				cornerradius: vec4(20,0,0,0),
-				borderwidth: vec4(10),
+				borderwidth: vec4(10, 0, 0, 0),
 				color: 'orange',
 			}
 		},
@@ -50,7 +52,7 @@ define.class('$base/stamp', function(){
 	}
 
 	this.onpointerstart = function(){
-		this.state = this.states.mousedown 
+		this.state = this.states.mousedown
 		//this.state = {duration:2,w:50,h:50, Background:{cornerradius:vec4(0,20,20,0)}}
 		//this.canvas.view.redraw()
 	}
@@ -68,22 +70,6 @@ define.class('$base/stamp', function(){
 			})
 		}
 		c.endBackground()
-		/*
-		c.beginBackground(this)
-
-		if(this.text){
-			c.drawLabel({text:'WHO'+this.text})
-			if(state.icon) c.align.x += 5
-		}
-
-		// lets check what kind of icon we have, if its an image we need to draw an image
-		if(typeof state.icon === 'string'){
-			c.drawIcon()
-		}
-		else if(state.icon){
-			c.drawImage()
-		}
-		c.endBackground()*/
 	}
 
 	this.canvasverbs = {
