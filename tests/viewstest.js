@@ -68,16 +68,16 @@ define.class('$base/composition', function(require, $base$, screen, view, $views
 				Background:{
 					visible:true,
 					color:vec4('tomato'),
-					cornerradius: vec4(20,5,5,5),
+					cornerradius: vec4(20, 0, 0, 0),
 					bordercolor: [0.5, 0.5, 0, 1],
 					borderwidth: vec4(10, 30, 5, 20),
-					shadowradius: 20,
-					shadowoffset: [5, 150],
+					shadowradius: 130,
+					shadowoffset: [0, 170],
 					shadowcolor: [0, 0, 0, 1],
 					shadowalpha: 1.0
 				},
-				x: 100,
-				y: 100,
+				x: 100.5,
+				y: 100.5,
 				w: 150,
 				h: 150,
 				pointertap: this.updatePositions
