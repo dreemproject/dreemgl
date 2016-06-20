@@ -29,10 +29,10 @@ define.class('$base/stamp', function(){
 			duration:1,
 			w:150,
 			h:150,
-			margin: vec4(10),
+			margin: vec4(10, 30, 5, 20),
 			Background:{
-				cornerradius: vec4(20,0,0,0),
-				borderwidth: vec4(10, 0, 0, 0),
+				cornerradius: vec4(20, 5, 5, 5),
+				borderwidth: vec4(10, 30, 5, 20),
 				color: 'orange',
 			}
 		},

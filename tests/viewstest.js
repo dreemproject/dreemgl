@@ -68,9 +68,9 @@ define.class('$base/composition', function(require, $base$, screen, view, $views
 				Background:{
 					visible:true,
 					color:vec4('tomato'),
-					cornerradius: [30,0,0,0],
+					cornerradius: vec4(20,5,5,5),
 					bordercolor: [0.5, 0.5, 0, 1],
-					borderwidth: [10, 10, 10, 10],
+					borderwidth: vec4(10, 30, 5, 20),
 					shadowradius: 20,
 					shadowoffset: [5, 150],
 					shadowcolor: [0, 0, 0, 1],
