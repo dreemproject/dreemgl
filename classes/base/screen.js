@@ -126,7 +126,7 @@ define.class('$base/view', function(require) {
 			shader.system = this
 			shader.draw(this.device, this.overlay)
 			// maxtime on props
-			// flag somehow to keep running 
+			// flag somehow to keep running
 			if(shader._maxanimtime > this.maxanimtime){
 				this.maxanimtime = shader._maxanimtime
 			}
@@ -267,9 +267,13 @@ define.class('$base/view', function(require) {
 		var viewid = totalid&( ((1<<24)-1) - mask)
 		var drawid = totalid&mask
 
-		//console.log(viewid>>16, drawid)
+
+		var view = this.pick_map[viewid]
+		var draw = view ? view.draw_objects[drawid] : undefined
+
 		var match = {
-			view:this.pick_map[viewid],
+			view:view,
+			draw:draw,
 			pickdraw:drawid
 		}
 
@@ -311,12 +315,12 @@ define.class('$base/view', function(require) {
 	}
 	canvasLayoutSubclass.call(canvasLayout)
 
-	
+
 	this.doLayout = function(){
-		
+
 		var c = canvasLayout
 		var t = c.turtle
-		
+
 		c.rangeList.length = 0
 
 		var node = this
@@ -326,10 +330,10 @@ define.class('$base/view', function(require) {
 		node._h = this.device.height
 
 		while(node){
-			
+
 			var t = c.turtle
 			t._align = node._align
-			t._walk = node._walk			
+			t._walk = node._walk
 			t._margin = node._margin
 			t._padding = node._padding
 			t._x = node._x
@@ -349,7 +353,7 @@ define.class('$base/view', function(require) {
 
 			// begin a turtle
 			c.beginTurtle()
-			
+
 			var t = c.turtle
 			t._view_object = node
 
@@ -361,7 +365,7 @@ define.class('$base/view', function(require) {
 				var t = c.turtle
 				c.endTurtle()
 				c.walkTurtle(t)
-	
+
 				// after end we have
 				var t = c.turtle
 				view._layout = {
@@ -535,6 +539,7 @@ define.class('$base/view', function(require) {
 			if (e.pointer) {
 				this.emitPointer('pointerstart',e)
 				this.pointer.cursor = e.view.getCursor()
+				if (e.draw) this.pointer.cursor = e.draw.getCursor()
 				this.setFocus(e.view)
 			}
 		}.bind(this)
@@ -554,6 +559,7 @@ define.class('$base/view', function(require) {
 			if (e.pointer) {
 				this.emitPointer('pointerend',e)
 				this.pointer.cursor = e.view.getCursor()
+				if (e.draw) this.pointer.cursor = e.draw.getCursor()
 			}
 		}.bind(this)
 
@@ -571,6 +577,7 @@ define.class('$base/view', function(require) {
 			if (e.pointer) {
 				this.emitPointer('pointerhover',e)
 				this.pointer.cursor = e.view.getCursor()
+				if (e.draw) this.pointer.cursor = e.draw.getCursor()
 			}
 		}.bind(this)
 

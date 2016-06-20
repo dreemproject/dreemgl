@@ -2,66 +2,63 @@
 define.class('$base/stamp', function(){
 
 	define.class(this, 'Background', '$shaders/rectshader', function(){
-		this.color = 'red'
-		this.duration = 10.
+		this.color = '#dfdfdf'
+		this.margin = vec4(3)
+		this.cornerradius = vec4(5)
+		this.borderwidth = vec4(2)
+		this.bordercolor = '#a0a0a0'
+		this.duration = 0.1
 	})
 
 	define.class(this, 'Label', '$shaders/fontshader', function(){
-		this.duration = 10.
+		this.color = '#333'
+		this.fontsize = 14
+		this.duration = 0.1
 	})
 
-	this.padding = 5
+	this.cursor = 'pointer'
 
-	this.margin = 1
 	this.props = {
-		text:'BUTTON',
-		fontsize:15
+		text: 'BUTTON',
+		padding: 10
 	}
 
 	this.states = {
-		default:{
-			duration:1,
-			Background:{
-				color: 'gray'
-			}
-		},
-		mousedown:{
-			duration:1,
-			w:150,
-			h:150,
-			margin: vec4(10, 30, 5, 20),
-			Label:{
-				fontsize:30
+		hover: {
+			Background: {
+				color: '#d5d5d5',
+				shadowradius: 6,
+				shadowoffset: [5, 5],
+				shadowalpha: 0.3
 			},
-			Background:{
-				cornerradius: vec4(20, 0, 0, 0),
-				borderwidth: vec4(10, 30, 5, 20),
-				color: 'orange',
+			Label: {
+				color: '#222'
 			}
 		},
 		down:{
 			Background:{
-				color: 'red'
+				color: '#e5e5e5',
+				shadowradius: 2,
+				shadowoffset: [1,1]
 			}
 		}
 	}
 
 	this.onpointerhover = function(event){
-		//this.state = this.states.hover
+		this.state = this.states.hover
 	}
 
 	this.onpointerout = function(event){
-		//this.setState(this.states.default)
+		this.state = this.states.default
 	}
 
 	this.onpointerstart = function(){
-		this.state = this.states.mousedown
-		//this.state = {duration:2,w:50,h:50, Background:{cornerradius:vec4(0,20,20,0)}}
-		//this.canvas.view.redraw()
+		this._previousstate = this.state
+		this.state = this.states.down
 	}
 
 	this.onpointerend = function(event){
-		//this.setState(event.isover?this.states.hover:this.states.default)
+		this.state = event.isover ? this._previousstate : this.states.default
 	}
 
 	this.draw = function(){
@@ -69,7 +66,7 @@ define.class('$base/stamp', function(){
 		c.beginBackground(this)
 		if(this.text){
 			c.drawLabel({
-				text:this.text
+				text: this.text
 			})
 		}
 		c.endBackground()

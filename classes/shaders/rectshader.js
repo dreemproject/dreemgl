@@ -4,7 +4,7 @@ define.class('$shaders/pickshader', function(require){
 		color: vec4('white'),
 		cornerradius: vec4(2),
 		borderwidth: vec4(0),
-		bordercolor: vec4('#1f1f1f'),
+		bordercolor: vec4(0),
 		shadowradius: 2.0,
 		shadowoffset: vec2(3.0, 3.0),
 		shadowalpha: 0.5
@@ -97,6 +97,13 @@ define.class('$shaders/pickshader', function(require){
 		return vec4(outpos, 1.0) * view.totalmatrix * system.viewmatrix
 	}
 
+	this.EDGE = '1.0'
+	this.HALF_EDGE = '0.5'
+	this.TL = 'vec2(-1,-1)'
+	this.TR = 'vec2(1,-1)'
+	this.BR = 'vec2(1,1)'
+	this.BL = 'vec2(-1,1)'
+
 	this.pixel = function(){
 		// center face early out
 		var dt = roundcornermax
@@ -109,13 +116,6 @@ define.class('$shaders/pickshader', function(require){
 				return vec4(this.shadowcolor.rgb, this.shadowcolor.a * props.shadowalpha)
 			}
 		}
-
-		var EDGE_FACTOR = 0.5
-		var HALF_EDGE_FACTOR = EDGE_FACTOR / 2.0
-		var TL = vec2(-1,-1)
-		var TR = vec2(1,-1)
-		var BR = vec2(1,1)
-		var BL = vec2(-1,1)
 
 		var dist_border = 0.0
 		var dist_fill = 0.0
@@ -131,33 +131,33 @@ define.class('$shaders/pickshader', function(require){
 		if (face_id == 0.0) {
 			if (border_weights.x >= 0.5 && border_weights.w >= 0.5) {
 				var d = bw.w - bw.x
-				var offset = vec2(min(-d, 0.0), min(d, 0.0)) - TL * HALF_EDGE_FACTOR
-				dist_border = distcirclecorner(c1 - offset, cor.x + min(bw.x, bw.w) + EDGE_FACTOR, TL)
-				dist_fill = distcirclecorner(c1, cor.x + EDGE_FACTOR, TL)
+				var offset = vec2(min(-d, 0.0), min(d, 0.0)) - TL * HALF_EDGE
+				dist_border = distcirclecorner(c1 - offset, cor.x + min(bw.x, bw.w) + EDGE, TL)
+				dist_fill = distcirclecorner(c1, cor.x + EDGE, TL)
 			}
 			else if (border_weights.x >= 0.5 && border_weights.y >= 0.5) {
 				var d = bw.y - bw.x
-				var offset = vec2(max(d, 0.0), min(d, 0.0)) - TR * HALF_EDGE_FACTOR
-				dist_border = distcirclecorner(c2 - offset, cor.y + min(bw.y, bw.x) + EDGE_FACTOR, TR)
-				dist_fill = distcirclecorner(c2, cor.y + EDGE_FACTOR, TR)
+				var offset = vec2(max(d, 0.0), min(d, 0.0)) - TR * HALF_EDGE
+				dist_border = distcirclecorner(c2 - offset, cor.y + min(bw.y, bw.x) + EDGE, TR)
+				dist_fill = distcirclecorner(c2, cor.y + EDGE, TR)
 			}
 			else if (border_weights.z >= 0.5 && border_weights.w >= 0.5) {
 				var d = bw.w - bw.z
-				var offset = vec2(min(-d, 0.0), max(-d, 0.0)) - BL * HALF_EDGE_FACTOR
-				dist_border = distcirclecorner(c3 - offset, cor.w + min(bw.z, bw.w) + EDGE_FACTOR, BL)
-				dist_fill = distcirclecorner(c3, cor.w + EDGE_FACTOR, BL)
+				var offset = vec2(min(-d, 0.0), max(-d, 0.0)) - BL * HALF_EDGE
+				dist_border = distcirclecorner(c3 - offset, cor.w + min(bw.z, bw.w) + EDGE, BL)
+				dist_fill = distcirclecorner(c3, cor.w + EDGE, BL)
 			}
 			else if (border_weights.y >= 0.5 && border_weights.z >= 0.5) {
 				var d = bw.z - bw.y
-				var offset = vec2(max(-d, 0.0), max(d, 0.0)) - BR * HALF_EDGE_FACTOR
-				dist_border = distcirclecorner(c4 - offset, cor.z + min(bw.y, bw.z) + EDGE_FACTOR, BR)
-				dist_fill = distcirclecorner(c4, cor.z + EDGE_FACTOR, BR)
+				var offset = vec2(max(-d, 0.0), max(d, 0.0)) - BR * HALF_EDGE
+				dist_border = distcirclecorner(c4 - offset, cor.z + min(bw.y, bw.z) + EDGE, BR)
+				dist_fill = distcirclecorner(c4, cor.z + EDGE, BR)
 			}
 
-			dist_border = (dist_border + EDGE_FACTOR) * 2.0 / EDGE_FACTOR
+			dist_border = (dist_border + EDGE) * 2.0 / EDGE
 			out_col = clampmix(props.bordercolor, vec4(props.bordercolor.rgb, 0.0), dist_border)
 
-			dist_fill = (dist_fill + EDGE_FACTOR) * 1.0 / EDGE_FACTOR
+			dist_fill = (dist_fill + EDGE) * 1.0 / EDGE
 			out_col = clampmix(props.color, out_col, dist_fill)
 			return out_col
 		}

@@ -242,6 +242,7 @@ define.class('$base/node', function(){
 					var match = this.device.screen.drawPick(pointerlist[i].position)
 					pointer.pick = match.view
 					pointer.pickdraw = match.pickdraw
+					pointer.draw = match.draw
 				}
 				if (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
@@ -308,7 +309,7 @@ define.class('$base/node', function(){
 		var pointer = new Pointer(pointerlist[0], 0, view, match.pickdraw)
 		this._hover.setPointer(pointer)
 		// TODO(aki): entering child view triggers out event. Consider adding pointer-events: 'none'
-		if (!previous || previous.view !== pointer.view) {
+		if (!previous || previous.view !== pointer.view || previous.pickdraw != pointer.pickdraw) {
 			if (pointer.view) {
 				this._over.setPointer(pointer)
 			}
@@ -320,7 +321,6 @@ define.class('$base/node', function(){
 		this.emitPointerList(this._over, 'over')
 		this.emitPointerList(this._out, 'out')
 	}
-
 
 	// TODO(aki): implement over/out on touch start/end
 	// Internal: emits `over` event.

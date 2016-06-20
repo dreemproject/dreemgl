@@ -61,14 +61,7 @@ define.class('$base/node', function(require){
 		viewport: Config({group:'layout', type:Enum('','2d','3d'), value:''}),
 
 		// layout property
-		layout: Config({ type:Object, value:{}, meta:'hidden'}),
-		// node cursor
-		cursor: Config({type: Enum('', 'arrow', 'none', 'wait', 'text', 'pointer', 'zoom-in', 'zoom-out',
-			'grab', 'grabbing', 'ns-resize', 'ew-resize', 'nwse-resize', 'nesw-resize', 'w-resize',
-			'e-resize', 'n-resize', 's-resize', 'nw-resize', 'ne-resize', 'sw-resize', 'se-resize', 'help',
-			'crosshair', 'move', 'col-resize', 'row-resize', 'vertical-text', 'context-menu', 'no-drop',
-			'not-allowed', 'alias', 'cell', 'copy'
-		), value: ''})
+		layout: Config({ type:Object, value:{}, meta:'hidden'})
 	}
 
 	// trigger redraw

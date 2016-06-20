@@ -58,7 +58,7 @@ define.class(function(require){
 		this.constructor_children = []
 		this.initFromConstructorArgs(arguments)
 
-		// create attributes 
+		// create attributes
 		var attr = this._attributes
 		for(var key in this._attribute_init){
 			var config = attr[key]
@@ -399,7 +399,14 @@ define.class(function(require){
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
 		init: Config({type: Event}),
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
-		destroy: Config({type: Event})
+		destroy: Config({type: Event}),
+		// node cursor
+		cursor: Config({type: Enum('', 'arrow', 'none', 'wait', 'text', 'pointer', 'zoom-in', 'zoom-out',
+			'grab', 'grabbing', 'ns-resize', 'ew-resize', 'nwse-resize', 'nesw-resize', 'w-resize',
+			'e-resize', 'n-resize', 's-resize', 'nw-resize', 'ne-resize', 'sw-resize', 'se-resize', 'help',
+			'crosshair', 'move', 'col-resize', 'row-resize', 'vertical-text', 'context-menu', 'no-drop',
+			'not-allowed', 'alias', 'cell', 'copy'
+		), value: ''})
 	}
 
 	this.getCursor = function(){
