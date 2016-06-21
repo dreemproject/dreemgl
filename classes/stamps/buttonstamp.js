@@ -5,9 +5,10 @@ define.class('$base/stamp', function(){
 		this.color = '#dfdfdf'
 		this.margin = vec4(3)
 		this.cornerradius = vec4(5)
-		this.borderwidth = vec4(2)
+		this.borderwidth = vec4(1)
 		this.bordercolor = '#a0a0a0'
 		this.duration = 0.1
+		this.shadowalpha = 0
 	})
 
 	define.class(this, 'Label', '$shaders/fontshader', function(){

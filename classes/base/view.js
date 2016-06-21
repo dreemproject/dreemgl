@@ -189,10 +189,17 @@ define.class('$base/node', function(require){
 		}
 	}
 
+	this.drawScrollbars = function(){
+		var c = this.canvas
+		c.drawScrollbar({x:c.width - 14, y:0, w:14, h:c.height})
+		c.drawScrollbar({x:0, y:c.height - 14, w:c.width, h:14})
+	}
+
 	// the user draw function
 	this.draw = function(){
 		this.drawBackground()
 		this.drawChildren()
+		this.drawScrollbars()
 	}
 
 	this.drawChildren = function(){
@@ -265,7 +272,7 @@ define.class('$base/node', function(require){
 		}
 		if(this._viewport){
 			c.popTarget()
-			//c.blendDraw(tgt)
+			// c.blendDraw(tgt)
 		}
 
 		c.endTurtle()
@@ -424,7 +431,12 @@ define.class('$base/node', function(require){
 
 	// the draw api
 	define.class(this, 'Background', '$shaders/rectshader', function(){
-		this.visible = false
+
+	})
+
+	// the draw api
+	define.class(this, 'Scrollbar', '$stamps/scrollbarstamp', function(){
+
 	})
 
 })

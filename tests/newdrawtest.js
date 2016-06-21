@@ -26,7 +26,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			for(var i = 0; i < 100;i++){
 				c.drawButton({
 					text:'Button '+i,
-					margin: 4
+					margin: 4,
 					Label:{
 						fontsize:10+5*sin(i)
 					},
@@ -106,7 +106,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//console.log(performance.now()-dt)
 			//return true
 				//c.drawRect({bgcolor:'blue'})
->>>>>>> Stashed changes
 		}
 	})
 
