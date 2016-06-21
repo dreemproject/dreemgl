@@ -14,11 +14,19 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	this.render = function(){ return [
 		screen({name: 'default'}, [
-			view({
+			myview({
 				w:float('100%'),
 				h:float('100%'),
 				draw:function(){
 					var c = this.canvas
+					c.beginLine({
+					})
+					for(var i = 0; i < 32; i++){
+						c.drawLine({
+							x:i*50,y:200+100*sin(i)
+						})
+					}
+					c.endLine()
 					//for(var i = 0; i < 10; i++){
 
 					//}

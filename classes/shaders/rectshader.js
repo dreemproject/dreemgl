@@ -17,7 +17,6 @@ define.class('$shaders/pickshader', function(require){
 		pos: vec3.array()
 	}
 
-
 	this.geometry.pos.pushQuad(
 		1.0,-1.0, 1.0,
 		1.0, 1.0, 1.0,

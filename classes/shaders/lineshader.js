@@ -1,22 +1,34 @@
 define.class('$shaders/pickshader', function(require){
 	
 	this.props = {
-		prevposx: 0,
-		prevposy: 0,
-		startposx: 0,
-		startposy: 0,
+		p1x: 0,
+		p1y: 0,
+		p2x: 0,
+		p2y: 0,
 
-		endposx: 0,
-		endposy: 0,
-		nextposx: 0,
-		nextposy: 0,
+		p3x: 0,
+		p3y: 0,
+		p4x: 0,
+		p4y: 0,
 
 		color: vec4('white'),
-		outlinewidth: vec4(0),
+		linewidth:50,
+		outlinewidth: 0,
 		outlinecolor: vec4('#1f1f1f'),
 		shadowradius: 0.25,
 		shadowoffset: vec2(2, 2),
 		shadowalpha: 0.35
+	}
+
+	this.putprops={
+		p1x: 1,
+		p1y: 1,
+		p2x: 1,
+		p2y: 1,
+		p3x: 1,
+		p3y: 1,
+		p4x: 1,
+		p4y: 1
 	}
 
 	this.shadowcolor = vec4(0, 0, 0, 0.35)
@@ -36,211 +48,178 @@ define.class('$shaders/pickshader', function(require){
 
 	// the line segment itself
 	this.geometry.pos.pushQuad(
-		-1, -1, 0,  
+		-1, -1, 0, 
 		1, -1, 0,
 		-1, 1, 0,
 		1, 1, 0
 	)
+
+	this.geometry.pos.push(
+		0,0,  -1,
+		0.5,1, -1,
+		1,0, -1
+	)
+
+	this.intersect = function(n1, dir1, n3, dir2){
+		var n2 = n1 + dir1
+		var n4 = n3 + dir2
+		var part0 = n1.x * n2.y - n1.y * n2.x
+		var part1 = n3.x * n4.y - n3.y * n4.x
+		var det = (n1.x - n2.x) * (n3.y - n4.y) - (n1.y - n2.y) * (n3.x - n4.x)
+		return vec2(
+			(part0 * (n3.x - n4.x) - (n1.x - n2.x) * part1) / det,
+			(part0 * (n3.y - n4.y) - (n1.y - n2.y) * part1) / det
+		)
+	}
 
 	//this.dump = 1
 	this.vertex = function(){
 		if(props.visible < 0.5) return vec4(0.)
 	
 		var pos = geometry.pos
-		var border = vec2(0., 0.)
-		if(pos.x < -.5){
-			if(pos.y < -.5) border = props.borderwidth.wx
-			else border = props.borderwidth.wz
-		}
-		else{
-			if(pos.y <= -.5) border = props.borderwidth.yx
-			else border = props.borderwidth.yz
-		}
-
-		var posfac = pos*.5+.5
-
-		var out3 = vec3(
-			posfac.x * props.w,// + border.x * pos.x,
-			posfac.y * props.h,// + border.y * pos.y, 
-			props.z
-		)
 		
-		if(pos.z > .5){
-			if(props.shadowradius < 0.001){
-				return vec4(0.)
+		// miter cap
+		if(pos.z <-0.5){
+			return vec4(0.)
+		}
+
+		// shadow
+		if(pos.z > 0.5){
+			return vec4(0.)
+		}
+
+		var p1 = vec2(props.p1x, props.p1y)
+		var p2 = vec2(props.p2x, props.p2y)
+		var p3 = vec2(props.p3x, props.p3y)
+		var p4 = vec2(props.p4x, props.p4y)
+
+		// alright lets draw a rectangle from startpos to endpos
+		var dir0 = p2 - p1
+		var dir1 = p3 - p2
+		var dir2 = p4 - p3
+
+		var ndir0 = vec2(dir0.y, -dir0.x)
+		var ndir1 = vec2(dir1.y, -dir1.x)
+		var ndir2 = vec2(dir2.y, -dir2.x)
+
+		// lets get the width normals
+		var norm0 = (normalize(ndir0) * props.linewidth)
+		var norm1 = (normalize(ndir1) * props.linewidth)
+		var norm2 = (normalize(ndir2) * props.linewidth)
+
+		// get the mixing value for left/right side of our segment
+		var m = pos.x*.5+.5
+
+		// make intersection without ifs
+		var outpos = vec2(0.)
+		//var outpos = intersect(
+		//	mix(p1, p3, m) + mix(norm1, norm2, m) * pos.y,
+		//	mix(dir0, dir1, m),
+		//	mix(p2, p4, m) + mix(norm2, norm3, m) * pos.y,
+		//	mix(dir1, dir2, m)
+		//)
+
+		// lets do an if which corner we are
+		if(pos.x < 0.){
+			if(pos.y < 0.){
+				outpos = intersect(
+					vec2(p1.x + norm0.x, p1.y + norm0.y) , 
+					dir0, 
+					vec2(p2.x + norm1.x, p2.y + norm1.y), 
+					dir1
+				)
 			}
-			out3.x += pos.x * props.shadowradius + props.shadowoffset.x
-			out3.y += pos.y * props.shadowradius + props.shadowoffset.y
-			isshadow = 1.
+			else{
+				// bottom left
+				outpos = intersect(
+					vec2(p1.x - norm0.x, p1.y - norm0.y), 
+					dir0, 
+					vec2(p2.x - norm1.x, p2.y - norm1.y), 
+					dir1
+				)
+			}
 		}
 		else{
-			isshadow = 0.
+			if(pos.y < 0.){
+				// top right
+				outpos = intersect(
+					vec2(p3.x + norm1.x, p3.y + norm1.y), 
+					dir1, 
+					vec2(p4.x + norm2.x, p4.y + norm2.y), 
+					dir2
+				)
+			}
+			else{
+ 				// bottom right
+				outpos = intersect(
+					vec2(p3.x - norm1.x, p3.y - norm1.y), 
+					dir1,
+					vec2(p4.x - norm2.x, p4.y - norm2.y), 
+					dir2
+				)
+			}
 		}
 
-		coordpos = out3.xy
-
-		// store rounded corner maximae
-		roundcornermax = vec4(
-			max(max(max(props.cornerradius.x, props.cornerradius.z), props.borderwidth.w),1.),
-			max(max(max(props.cornerradius.x, props.cornerradius.y), props.borderwidth.x),1.),
-			props.w - max(max(max(props.cornerradius.y, props.cornerradius.w), props.borderwidth.y),1.),
-			props.h - max(max(max(props.cornerradius.w, props.cornerradius.z), props.borderwidth.z),1.)
-		)
-
-		equalborder = 
-			abs(props.borderwidth.x - props.borderwidth.y) +
-			abs(props.borderwidth.z - props.borderwidth.w) +
-			abs(props.borderwidth.y - props.borderwidth.z) < 0.01?1.0:0.
-
-		var res = vec4(vec3(out3.x + props.x, out3.y + props.y, out3.z), 1) * view.totalmatrix * system.viewmatrix
+		var res = vec4(outpos.x, outpos.y, 0., 1) * view.totalmatrix * system.viewmatrix
 		return res 
 	}
 
-	this.bordermix = function(dist, wd){
-		// do the field
-		if(dist < - 0.5*wd){
-			return mix(props.bordercolor, props.color, clamp(abs(dist+.5*wd)-.5*wd,0.,1.))
-		}
-		else{
-			return mix(props.bordercolor, vec4(props.bordercolor.xyz,0.), clamp(dist,0.,1.))
-		}
-	}
-
 	this.pixel = function(){
-		if(isshadow > 0.5){
-			// return props.shadowcolor
-			var dist = roundedshadowdistance(coordpos + vec2(props.shadowradius) - props.shadowoffset.xy) * 2.
-			dist =  (dist + props.shadowradius) / props.shadowradius
-			return mix(vec4(this.shadowcolor.xyz, props.shadowalpha), vec4(this.shadowcolor.xyz,0.),clamp(dist,0.,1.))
-		}
-		else{
-			var dist = roundedrectdistance(coordpos) * 2.
-			if(dist < -10000.){
-				return props.color
-			}
-			else{
-				if(equalborder>0.5){
-					var wd = props.borderwidth.x
-					if(wd > 0.){
-						return bordermix(dist, wd)
-					}
-				}
-				else{ // do the lines
-					if(props.borderwidth.x > 0.01 && coordpos.y < roundcornermax.y){
-						return bordermix(-coordpos.y, props.borderwidth.x) 
-					}
-					if(props.borderwidth.z > 0.01 && coordpos.y > roundcornermax.w){
-						return bordermix(coordpos.y-props.h, props.borderwidth.z) 
-					}
-					if(props.borderwidth.w > 0.01 && coordpos.x < roundcornermax.x){
-						return bordermix(-coordpos.x, props.borderwidth.w) 
-					}
-					if(props.borderwidth.y > 0.01 && coordpos.x > roundcornermax.z){
-						return bordermix(coordpos.x-props.w, props.borderwidth.y) 
-					}
-				}
-			}
-			return mix(props.color, vec4(props.color.xyz,0), dist)
-		}
+		return vec4(1,0,1,0.5)
 	}
-
-	this.roundedrectdistance = function(sized){
-		var width = props.w
-		var height = props.h
-		var topleftcorner = props.cornerradius.x
-		var toprightcorner = props.cornerradius.y
-		var bottomleftcorner = props.cornerradius.z
-		var bottomrightcorner = props.cornerradius.w
-
-		var c1 = vec2(topleftcorner , topleftcorner)
-		var c2 = vec2(bottomleftcorner, height - bottomleftcorner)
-		var c3 = vec2(width - bottomrightcorner, height - bottomrightcorner)
-		var c4 = vec2(width - toprightcorner, toprightcorner)
-
-		var dist = 0.0
-
-		var dt = roundcornermax
-		
-		if(sized.x > dt.x && sized.y > dt.y && sized.x < dt.z && sized.y < dt.w){
-			return -100000.	
-		}
-
-		if (sized.x <= c1.x && sized.y < c1.y) {
-			return distcircle(sized - c1, topleftcorner)
-		} 
-		if (sized.x >= c3.x && sized.y >= c3.y) {
-			return  distcircle(sized - c3, bottomrightcorner)
-		} 
-		if (sized.x <= c2.x && sized.y >= c2.y) {
-			return distcircle(sized - c2, bottomleftcorner)
-		}
-		if (sized.x >= c4.x && sized.y <= c4.y) {
-			return distcircle(sized - c4, toprightcorner)
-		}
-
-		var hwh = vec2(.5*width, .5*height)
-		var d = abs(sized - hwh) - hwh
-		return min(max(d.x,d.y),0.) + length(max(d,0.))
-	}
-
-	this.roundedshadowdistance = function(sized){
-		var width = props.w + props.shadowradius * 2
-		var height = props.h + props.shadowradius * 2
-		var topleftcorner = props.cornerradius.x + props.shadowradius
-		var toprightcorner = props.cornerradius.y + props.shadowradius
-		var bottomleftcorner = props.cornerradius.z + props.shadowradius
-		var bottomrightcorner = props.cornerradius.w + props.shadowradius
-
-		var c1 = vec2(topleftcorner, topleftcorner)
-		var c2 = vec2(bottomleftcorner, height - bottomleftcorner)
-		var c3 = vec2(width - bottomrightcorner, height - bottomrightcorner)
-		var c4 = vec2(width - toprightcorner, toprightcorner)
-
-		var dist = 0.0
-
-		var dt = roundcornermax
-
-		if (sized.x <= c1.x && sized.y < c1.y) {
-			return  distcircle(sized - c1, topleftcorner)
-		} 
-		if (sized.x >= c3.x && sized.y >= c3.y) {
-			return  distcircle(sized - c3, bottomrightcorner)
-		} 
-		if (sized.x <= c2.x && sized.y >= c2.y) {
-			return distcircle(sized - c2, bottomleftcorner)
-		}
-		if (sized.x >= c4.x && sized.y <= c4.y) {
-			return distcircle(sized - c4, toprightcorner)
-		}
-
-		var hwh = vec2(.5*width, .5*height)
-		var d = abs(sized - hwh) - hwh
-		return min(max(d.x,d.y),0.) + length(max(d,0.))
-	}
-
-	this.distcircle = function (texpos, radius) {
-		var c = texpos
-		var distance = length(c) - radius;
-		return distance;
-	}
-
+	
 	this.canvasverbs = {
 		draw:function(overload){
 			this.GETPROPS()
 			this.ALLOCPROPS()
-			this.walkTurtle()
-			this.PUTPROPS()
+			// ok so, now we draw a line from _
+			var t = this.turtle
+
+			// lets shift our props
+			t._pts++
+			t._p1x = t._p2x 
+			t._p1y = t._p2y
+			t._p2x = t._p3x 
+			t._p2y = t._p3y
+			t._p3x = t._p4x
+			t._p3y = t._p4y
+			t._p4x = overload.x
+			t._p4y = overload.y
+
+			//console.log(t._p2x, t._p2y)
+			if(t._pts > 4){
+				// output them
+				this.PUTPROPS({
+					p1x: t._p1x,
+					p1y: t._p1y,
+					p2x: t._p2x,
+					p2y: t._p2y,
+					p3x: t._p3x,
+					p3y: t._p3y,
+					p4x: t._p4x,
+					p4y: t._p4y,
+				})
+			}
 		},
 		begin:function(overload){
 			this.GETPROPS()
-			this.ALLOCPROPS()
+			//this.ALLOCPROPS()
 			this.beginTurtle()
+			var t = this.turtle
+
+			t._pts = 0
+			if(overload && overload.x!==undefined){
+				t._pts++
+				t._x = overload.x
+				t._y = overload.y
+			}
 		},
 		end:function(){
 			var t = this.turtle
 			this.endTurtle()
 			this.walkTurtle(t)
-			this.PUTPROPS()
+			// flush all the quads
+			//this.PUTPROPS()
 		}
 
 
