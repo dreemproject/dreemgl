@@ -27,8 +27,86 @@ define.class('$base/composition', function(require, $base$, screen, view){
 				c.drawButton({
 					text:'Button '+i,
 					margin: 4
+					Label:{
+						fontsize:10+5*sin(i)
+					},
+					Background:{
+						color:[random(),random(),random(),1]
+					}
 				})
 			}
+			//	return true
+
+			//console.log(performance.now()-dt)
+
+			// return true
+			/*
+			//var obj = {Background:{color:[1,0,0,1]}, w:2, h:2}
+			for(var i = 0; i < 1; i++){
+				//obj.x = 10+sin(i+time)*100
+				//obj.y = 10+sin(i*0.13+time)*300
+				//c.drawRect({color:[random(),0,random(),1]})
+				c.beginRect({
+					walk:float.LRTBWRAP,
+					align:float.CENTER,
+					color:'orange',
+					padding:30,
+					margin:30,
+					w:400,// + 50*sin(time),
+				})
+
+				for(var j = 0; j < 5; j++){
+					c.beginRect({
+						margin:1,
+						walk:float.LRTBWRAP,
+						align:float.LEFTTOP,
+						color:'blue',
+						padding:0,
+						w:100,
+						h:100
+					})
+
+					//for(var k = 0; k < 3; k++){
+					//	c.drawRect({color:'purple',w:3,h:3})
+					//}
+
+					c.drawRect({
+						color:'yellow',
+						x:float.left(0),
+						y:float.top(3),
+						w:float.width('50%'),
+						h:float.height('100%-5')
+						//h:float.height('50%')
+					})
+					c.drawRect({
+						color:'red',
+						x:float.right(0),
+						y:float.top(3),
+						w:float.width('50%'),
+						h:float.width('100%-5')
+					})
+
+					//c.drawRect({color:'yellow', x:float.right(0), y:float.top(-10), w:3, h:3})
+
+					c.endRect()
+				}
+				//}
+				c.endRect()
+
+			}*/
+			//this.drawChildren()
+			//c.beginAlign(float.CENTER, float.NOWRAP)
+			//c.drawRect({w:100,h:100})
+			//c.drawRect({w:100,h:100})
+			//c.endAlign()
+
+			//c.beginRect()
+
+			///c.endRect()
+			//console.log(performance.now()-dt)
+			//return true
+				//c.drawRect({bgcolor:'blue'})
+>>>>>>> Stashed changes
 		}
 	})
 
