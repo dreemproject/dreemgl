@@ -96,8 +96,6 @@ define.class('$shaders/pickshader', function(require){
 		return vec4(outpos, 1.0) * view.totalmatrix * system.viewmatrix
 	}
 
-	this.EDGE = '1.0'
-	this.HALF_EDGE = '0.5'
 	this.TL = 'vec2(-1,-1)'
 	this.TR = 'vec2(1,-1)'
 	this.BR = 'vec2(1,1)'
@@ -116,16 +114,19 @@ define.class('$shaders/pickshader', function(require){
 			}
 		}
 
+		var EDGE = min(length(vec2(length(dFdx(rectcoords)), length(dFdy(rectcoords)))) * SQRT_1_2, 1.0)
+		var HALF_EDGE = EDGE / 2.0
+
 		var dist_border = 0.0
 		var dist_fill = 0.0
 		var bw = props.borderwidth
 		var cor = props.cornerradius
 		var out_col = vec4(props.color.rgb, 0.0)
 
-		var c1 = rectcoords - vec2(cor.x , cor.x)
-		var c2 = rectcoords - vec2(props.w - cor.y, cor.y)
-		var c3 = rectcoords - vec2(cor.w, props.h - cor.w)
-		var c4 = rectcoords - vec2(props.w - cor.z, props.h - cor.z)
+		var c1 = rectcoords - vec2(HALF_EDGE) - vec2(cor.x , cor.x)
+		var c2 = rectcoords - vec2(HALF_EDGE) - vec2(props.w - cor.y, cor.y)
+		var c3 = rectcoords - vec2(HALF_EDGE) - vec2(cor.w, props.h - cor.w)
+		var c4 = rectcoords - vec2(HALF_EDGE) - vec2(props.w - cor.z, props.h - cor.z)
 
 		if (face_id == 0.0) {
 			if (border_weights.x >= 0.5 && border_weights.w >= 0.5) {

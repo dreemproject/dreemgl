@@ -147,8 +147,6 @@ define.class('$base/node', function(){
 	this.attributes = {
 		// List of pointers that are captured.
 		first:Config({type: PointerList, init:[]}),
-		// List of pointers that are captured.
-		first:Config({type: PointerList, init:[]}),
 		// List of pointers at the moment of capture.
 		start:Config({type: PointerList, init:[]}),
 		// List of captured pointers while moving.
@@ -185,7 +183,6 @@ define.class('$base/node', function(){
 		// scan for handoff hooks on in flight pointers
 		for (var i = 0; i < this._start.length; i++) {
 			var start = this._start[i]
-
 			if (start.atHandOver){
 				var id = start.atHandOver(pointerlist)
 				if (id >= 0){
@@ -235,6 +232,7 @@ define.class('$base/node', function(){
 			var pointer = new Pointer(pointerlist[i], previous.id, first.view)
 			pointer.addDelta(first)
 			pointer.addMovement(previous || first)
+
 
 			// emit event hooks
 			if (start){

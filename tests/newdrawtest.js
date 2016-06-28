@@ -25,10 +25,8 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 			for(var i = 0; i < 1000;i++){
 				c.drawButton({
-					text:'Btn' + i,//s(''+random()).slice(0,5),
-					margin: 10,
-					//padding:10,
-					//w:float.width('20%'),					
+					text:'Button '+i,
+					margin: 4,
 					Label:{
 						//waviness:sin(i)*5,
 					//	fontsize:15+5*sin(i)

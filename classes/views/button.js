@@ -17,6 +17,6 @@ define.class('$base/view', function(require){
 
 	this.draw = function(){
 		var c = this.canvas
-		c.drawButton(this.title, this.icon, undefined, undefined, undefined, undefined, this.bgcolor)
+		c.drawButton(this)
 	}
 })

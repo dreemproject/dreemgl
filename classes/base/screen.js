@@ -23,6 +23,10 @@ define.class('$base/view', function(require) {
 	this.pickbits = 8
 	this.guid = ''
 
+	this.Background = {
+		visible: false
+	}
+
 	this.oninit = function () {
 		this.modal_stack = []
 		this.draw_passes = []
