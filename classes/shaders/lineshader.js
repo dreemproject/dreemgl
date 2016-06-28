@@ -12,6 +12,9 @@ define.class('$shaders/pickshader', function(require){
 		p4x: 0,
 		p4y: 0,
 
+		sx:NaN,
+		sy:NaN,
+
 		color: vec4('white'),
 		linewidth:50,
 		outlinewidth: 0,
@@ -133,8 +136,8 @@ define.class('$shaders/pickshader', function(require){
 	this.pixel = function(){
 		// we want a distance field in pixels?
 		var lw = props.linewidth
-		var grad = abs((abs(gradient)-1.)) * lw
-		return mix(vec4(props.color.xyz,0.),vec4(props.color.xyz,1.),grad)
+		var grad = clamp(abs((abs(gradient)-1.)) * lw,0.,1.)
+		return mix(vec4(props.color.xyz,0.),vec4(props.color.xyz,props.color.w),grad)
 	}
 	
 	this.canvasverbs = {
@@ -145,45 +148,68 @@ define.class('$shaders/pickshader', function(require){
 			// ok so, now we draw a line from _
 			var t = this.turtle
 
-			// alright
-			t._pts++
-			t._p1x = t._p2x 
-			t._p1y = t._p2y
-			t._p2x = t._p3x 
-			t._p2y = t._p3y
-			t._p3x = t._p4x
-			t._p3y = t._p4y
-			t._p4x = overload.x
-			t._p4y = overload.y
+			// if we have sx / sy defined
+			if(isNaN(t._sx) || isNaN(t._sy)){
+				// alright
+				if(t._frameidNAME !== this.frameid){
+					t._frameidNAME = this.frameid
+					t._ptsNAME = 1
+					t._p1xNAME = t._p2xNAME = t._p3xNAME = t._p4xNAME = t._x
+					t._p1yNAME = t._p2yNAME = t._p3yNAME = t._p4yNAME = t._y
+					return
+				}
 
-			if(t._pts > 4){
-				// output them
-				this.PUTPROPS({
-					p1x: t._p1x,
-					p1y: t._p1y,
-					p2x: t._p2x,
-					p2y: t._p2y,
-					p3x: t._p3x,
-					p3y: t._p3y,
-					p4x: t._p4x,
-					p4y: t._p4y,
-				})
-			}
-		},
-		begin:function(overload){
-			this.GETPROPS()
+				// atleast have previous coordinate
+				t._ptsNAME++
+				t._p1xNAME = t._p2xNAME
+				t._p1yNAME = t._p2yNAME
+				t._p2xNAME = t._p3xNAME
+				t._p2yNAME = t._p3yNAME
+				t._p3xNAME = t._x
+				t._p3yNAME = t._y
+				t._p4xNAME = t._p3xNAME + (t._p3xNAME - t._p2xNAME)
+				t._p4yNAME = t._p3yNAME + (t._p3yNAME - t._p2yNAME)
 
-			t._pts = 0
-			if(overload && overload.x!==undefined){
-				t._pts++
-				t._x = overload.x
-				t._y = overload.y
+				if(t._ptsNAME === 2){// 2 points, align first 
+					t._p1xNAME = t._p2xNAME - (t._p3xNAME - t._p2xNAME)
+					t._p1yNAME = t._p2yNAME - (t._p3yNAME - t._p2yNAME)
+				}
+				else{
+					// write back to previous output the new p1x
+					this.PUTPREVIOUS({
+						p4x: t._p3xNAME,
+						p4y: t._p3yNAME
+					})
+				}
 			}
-		},
-		end:function(){
-			// 
-			// flush all the quads
-			//this.PUTPROPS()
+			else{
+				t._ptsNAME = 4
+				t._p2xNAME = t.sx
+				t._p2yNAME = t.sy
+				t._p3xNAME = t._x
+				t._p3yNAME = t._y
+				t._p1xNAME = t._p2xNAME - (t._p3xNAME - t._p2xNAME)
+				t._p1yNAME = t._p2yNAME - (t._p3yNAME - t._p2yNAME)
+				t._p4xNAME = t._p3xNAME + (t._p3xNAME - t._p2xNAME)
+				t._p4yNAME = t._p3yNAME + (t._p3yNAME - t._p2yNAME)
+				if(isNaN(t._x) || isNaN(t._y)){
+					t._p3xNAME = t.sx
+					t._p3yNAME = t.sy
+					t._ptsNAME = 1
+					return
+				}
+			}
+			this.PUTPROPS({
+				p1x: t._p1xNAME,
+				p1y: t._p1yNAME,
+				p2x: t._p2xNAME,
+				p2y: t._p2yNAME,
+				p3x: t._p3xNAME,
+				p3y: t._p3yNAME,
+				p4x: t._p4xNAME,
+				p4y: t._p4yNAME,
+			})
+
 		}
 
 

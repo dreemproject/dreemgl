@@ -20,11 +20,11 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					var c = this.canvas
 					var dt = performance.now()
 
-					for(var i = 0; i < 10; i++){
+					for(var i = 0; i < 100; i++){
 						c.drawLine({
-							//color:[sin(i*0.1),sin(i*0.1),sin(i*0.1),1],
-							x: i * 100,
-							y: 100 + 60 * sin(i)//i*0.8,y:200+100*sin(0.03*i)*sin(i*0.02+this._time)
+							linewidth:4,
+							x: i *5,
+							y: 100 + 60 * sin(sin(this._time*0.1)*i+this._time)//i*0.8,y:200+100*sin(0.03*i)*sin(i*0.02+this._time)
 						})
 					}
 					return true

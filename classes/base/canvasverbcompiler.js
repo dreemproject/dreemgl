@@ -37,9 +37,6 @@ define.class(function(require, exports){
 	// endNAME <- nested drawing end
 	// verbNAME <- any user verbname
 
-
-
-
 	this.compileCanvasVerbs = function(root, canvas, name, cls){
 
 		var verbs = cls._canvasverbs
@@ -97,6 +94,18 @@ define.class(function(require, exports){
 							code += '_'+key+' = '+tmpvar+'.'+key+'\n'
 						}
 						return code
+					}
+
+					function parseObject(str){
+						var obj = {}
+						if(!str) return obj // quickly parse map {key:value}
+						// fetch string baseclasses for nested classes and add them
+						var objrx = new RegExp(/([$_\w]+)\:([^},\n]+)/g)
+						var result
+						while((result = objrx.exec(str)) !== null) {
+							obj[result[1]] = result[2]
+						}
+						return obj
 					}
 
 					fnstr = fnstr.replace(/this\.GETPROPS\s*\(\s*\)/,function(m){
@@ -222,17 +231,40 @@ define.class(function(require, exports){
 						return code
 					})
 
-					fnstr = fnstr.replace(/this\.PUTPROPS\s*\(\s*([^\)]*)\s*\)/,function(m, argmapstr){
+
+					fnstr = fnstr.replace(/this\.PUTPREVIOUS\s*\(\s*([^\)]*)\s*\)/,function(m, argmapstr){
 						
-						var argmap = {}
-						if(argmapstr){ // quickly parse map {key:value}
-							// fetch string baseclasses for nested classes and add them
-							var argmaprx = new RegExp(/([$_\w]+)\:([^},\n]+)/g)
-							var result
-							while((result = argmaprx.exec(argmapstr)) !== null) {
-								argmap[result[1]] = result[2]
+						var argmap = parseObject(argmapstr)
+						var def = struct.def
+						console.log(argmap)
+						var code = '\n'
+						code += 'var _off = (_turtle._propoff + _turtle._propcount - 1) * '+slots+'\n'
+						code += 'var _array = _props.array\n'
+						for(var key in argmap){
+							// get type
+							var type = def[key]
+							var off = structoffset[key]
+							var itemslots = type.slots
+							var src = argmap[key]
+
+							if(itemslots > 1){
+								code += 'var _'+key+' = ' + src + '\n'
+								for(var i = 0; i < itemslots; i++, off++){
+									code += '_array[_off+'+off+'] = _'+key+'['+i+']\n'
+								}
+							}
+							else{
+								code += '_array[_off+'+off+'] = '+src+'\n'
 							}
 						}
+						return code
+
+					})
+
+
+					fnstr = fnstr.replace(/this\.PUTPROPS\s*\(\s*([^\)]*)\s*\)/,function(m, argmapstr){
+						
+						var argmap = parseObject(argmapstr)
 
 						var code = '\n'
 						code += 'var _turtle = this.turtle\n'
@@ -350,6 +382,7 @@ define.class(function(require, exports){
 						return '_props.length = _turtle._propoff + _turtle._propcount\n'
 					})
 
+
 				}
 				else{
 					// we are on a stamp. now what.
@@ -424,7 +457,11 @@ define.class(function(require, exports){
 						return '_stamp.draw()'
 					})
 				}
-
+				var newstr = fnstr.replace(/DUMP/g, '')
+				if(newstr !== fnstr){
+					fnstr = newstr
+					console.log(fnstr)
+				}
 				fnstr = fnstr.replace(/NAME/g, clsname)
 
 				canvas[verb + clsname] = Function('return '+fnstr)()
