@@ -8,6 +8,7 @@ define.class('$base/stamp', function(){
 		this.borderwidth = vec4(1)
 		this.bordercolor = '#a0a0a0'
 		this.duration = 0.1
+		this.ease = [0.5,0,0.5,1]
 		this.shadowalpha = 0
 	})
 
@@ -15,6 +16,7 @@ define.class('$base/stamp', function(){
 		this.color = '#333'
 		this.fontsize = 14
 		this.duration = 0.1
+		this.ease = [0.5,0,0.5,1]
 	})
 
 	this.cursor = 'pointer'

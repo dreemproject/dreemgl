@@ -41,7 +41,7 @@ define.class(function(require, exports){
 	}
 
 	float.RIGHT =
-	float.RIGHTCENTER =  float.CENTERRIGHT = function float_CENTERRIGHT(t, canvas){
+	float.RIGHTCENTER = float.CENTERRIGHT = function float_CENTERRIGHT(t, canvas){
 		if(!isNaN(t.width)) canvas.displaceProp(t.rangeStart, 'x', t.width - (t.maxx - t.startx))
 		if(!isNaN(t.height)) canvas.displaceProp(t.rangeStart, 'y', (t.height - (t.maxy - t.starty)) / 2)
 	}
@@ -129,6 +129,7 @@ define.class(function(require, exports){
 	}
 
 	float.LRTBNOWRAP = new float_LRTBNOWRAP()
+
 
 	float.left = function float_left(left){
 		return function(t, canvas){

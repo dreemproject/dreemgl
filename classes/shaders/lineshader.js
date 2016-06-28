@@ -24,7 +24,7 @@ define.class('$shaders/pickshader', function(require){
 		shadowalpha: 0.35
 	}
 
-	this.putprops={
+	this.putprops = {
 		p1x: 1,
 		p1y: 1,
 		p2x: 1,

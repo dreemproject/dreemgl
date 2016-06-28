@@ -21,13 +21,16 @@ define.class('$base/composition', function(require, $base$, screen, view){
 					var dt = performance.now()
 
 					for(var i = 0; i < 100; i++){
+						var t = i / 100
+						var p = this.Line.prototype.animBezier(0.5,0,0.5,1.,t)
+
 						c.drawLine({
-							linewidth:4,
-							x: i *5,
-							y: 100 + 60 * sin(sin(this._time*0.1)*i+this._time)//i*0.8,y:200+100*sin(0.03*i)*sin(i*0.02+this._time)
+							linewidth:1,
+							x: i,
+							y: p*100
 						})
 					}
-					return true
+					//return true
 					//for(var i = 0; i < 10; i++){
 					//}
 				}

@@ -236,7 +236,6 @@ define.class(function(require, exports){
 						
 						var argmap = parseObject(argmapstr)
 						var def = struct.def
-						console.log(argmap)
 						var code = '\n'
 						code += 'var _off = (_turtle._propoff + _turtle._propcount - 1) * '+slots+'\n'
 						code += 'var _array = _props.array\n'
@@ -282,7 +281,9 @@ define.class(function(require, exports){
 						code += 'var _ostarttime =  _array[_off+'+structoffset['animstarttime']+']\n'
 
 						code += 'if(this.view._time < _ostarttime + _oduration){\n'
-						code += '	var _fac = Math.max(0,Math.min(1.,(this.view._time - _ostarttime)/ _oduration)) \n'
+						code += '	var _tfac = Math.max(0,Math.min(1.,(this.view._time - _ostarttime)/ _oduration)) \n'
+						var animbezoff = structoffset['ease']
+						code += '   var _fac = this.animBezier(_array[_off+'+(animbezoff+0)+'],_array[_off+'+(animbezoff+1)+'],_array[_off+'+(animbezoff+2)+'],_array[_off+'+(animbezoff+3)+'], _tfac)\n'
 						code += '	var _1fac = 1 - _fac\n'
 						for(var key in def) if(typeof def[key] === 'function'){
 							var oldkey = 'OLD_' + key

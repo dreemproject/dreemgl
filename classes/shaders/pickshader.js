@@ -24,7 +24,7 @@ define.class('$base/shader', function(require){
 		align: float.LEFTTOP,
 		wrap: float.WRAP,
 		visible:1.0,
-		ease:vec4(0),
+		ease:vec4(0,0,1.,1.),
 		duration:0.,
 		delay:0.,
 		animstarttime:0
@@ -56,10 +56,56 @@ define.class('$base/shader', function(require){
 		viewmatrix:mat4(),
 	}
 
+
+	var abs = Math.abs
+	this.animBezier = function(c0, c1, c2, c3, t){
+		// linear out
+		if(abs(c0-c1) < 0.001 && abs(c2-c3) < 0.001) return t
+
+		var epsilon = 1.0/200.0 * t
+		var cx = 3.0 * c0
+		var bx = 3.0 * (c2 - c0) - cx
+		var ax = 1.0 - cx - bx
+		var cy = 3.0 * c1
+		var by = 3.0 * (c3 - c1) - cy
+		var ay = 1.0 - cy - by
+
+		var t2 = t
+	
+		for(var i = 0; i < 6; i++){
+			var x2 = ((ax * t2 + bx) * t2 + cx) * t2 - t
+			if(abs(x2) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+			var d2 = (3.0 * ax * t2 + 2.0 * bx) * t2 + cx
+			if(abs(d2) < 1e-6) break// return ((ay * t2 + by) * t2 + cy) * t2
+			t2 = t2 - x2 / d2
+		}
+
+		//return 0.1
+		var t0 = 0.
+		var t1 = 1.0
+		t2 = t
+
+		if(t2< 0.) return 0.
+		if(t2 > 1.) return ((ay + by) + cy) 
+		
+		var l = 0
+		for(var i = 0; i < 8; i++){
+			var x2 = ((ax * t2 + bx) * t2 + cx) * t2
+			if(abs(x2 - t) < epsilon) return ((ay * t2 + by) * t2 + cy) * t2
+			if(t > x2) t0 = t2
+			else t1 = t2
+			t2 = (t1 - t0) *.5 + t0
+		}
+
+		return ((ay * t2 + by) * t2 + cy) * t2
+	}
+
+
 	this.animate = function(){
 		if(props.duration <0.001) return 1.
-		var anim = clamp((system.time - props.animstarttime) / props.duration,0.,1.)
-		return anim// sin(anim*PI-.5*PI)*.5+.5
+		var intime = clamp((system.time - props.animstarttime) / props.duration,0.,1.)
+		return this.animBezier(props.ease.x, props.ease.y, props.ease.z, props.ease.w, intime)
+		//return anim// sin(anim*PI-.5*PI)*.5+.5
 	}
 
 	// baseic rect
