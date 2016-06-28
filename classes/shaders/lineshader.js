@@ -3,11 +3,12 @@ define.class('$shaders/pickshader', function(require){
 	this.props = {
 		p1x: 0,
 		p1y: 0,
+
 		p2x: 0,
 		p2y: 0,
-
 		p3x: 0,
 		p3y: 0,
+
 		p4x: 0,
 		p4y: 0,
 
@@ -48,24 +49,27 @@ define.class('$shaders/pickshader', function(require){
 
 	// the line segment itself
 	this.geometry.pos.pushQuad(
-		-1, -1, 0, 
+		-1, -1, 0,
 		1, -1, 0,
 		-1, 1, 0,
 		1, 1, 0
 	)
 
 	this.geometry.pos.push(
-		0,0,  -1,
-		0.5,1, -1,
-		1,0, -1
+		0, 0, -1,
+		0.5, 1, -1,
+		1, 0, -1
 	)
 
-	this.intersect = function(n1, dir1, n3, dir2){
+	this.intersect = function(n1, dir1, n3, dir2, bail){
 		var n2 = n1 + dir1
 		var n4 = n3 + dir2
 		var part0 = n1.x * n2.y - n1.y * n2.x
 		var part1 = n3.x * n4.y - n3.y * n4.x
 		var det = (n1.x - n2.x) * (n3.y - n4.y) - (n1.y - n2.y) * (n3.x - n4.x)
+		if( abs(det)< 3.){
+			return bail
+		}
 		return vec2(
 			(part0 * (n3.x - n4.x) - (n1.x - n2.x) * part1) / det,
 			(part0 * (n3.y - n4.y) - (n1.y - n2.y) * part1) / det
@@ -103,79 +107,45 @@ define.class('$shaders/pickshader', function(require){
 		var ndir2 = vec2(dir2.y, -dir2.x)
 
 		// lets get the width normals
-		var norm0 = (normalize(ndir0) * props.linewidth)
-		var norm1 = (normalize(ndir1) * props.linewidth)
-		var norm2 = (normalize(ndir2) * props.linewidth)
+		var norm0 = normalize(ndir0) * props.linewidth *.5
+		var norm1 = normalize(ndir1) * props.linewidth *.5//(normalize(ndir1) * props.linewidth)
+		var norm2 = normalize(ndir2) * props.linewidth *.5//(normalize(ndir2) * props.linewidth)
 
 		// get the mixing value for left/right side of our segment
-		var m = pos.x*.5+.5
+		var m = pos.x * .5 + .5
 
 		// make intersection without ifs
-		var outpos = vec2(0.)
-		//var outpos = intersect(
-		//	mix(p1, p3, m) + mix(norm1, norm2, m) * pos.y,
-		//	mix(dir0, dir1, m),
-		//	mix(p2, p4, m) + mix(norm2, norm3, m) * pos.y,
-		//	mix(dir1, dir2, m)
-		//)
+		//var outpos = vec2(0.)
+		var outpos = intersect(
+			mix(p1, p3, m) + mix(norm0, norm1, m) * pos.y,
+			mix(dir0, dir1, m),
+			mix(p2, p4, m) + mix(norm1, norm2, m) * pos.y,
+			mix(dir1, dir2, m),
+			mix(p2, p3, m) + norm1*pos.y
+		)
 
-		// lets do an if which corner we are
-		if(pos.x < 0.){
-			if(pos.y < 0.){
-				outpos = intersect(
-					vec2(p1.x + norm0.x, p1.y + norm0.y) , 
-					dir0, 
-					vec2(p2.x + norm1.x, p2.y + norm1.y), 
-					dir1
-				)
-			}
-			else{
-				// bottom left
-				outpos = intersect(
-					vec2(p1.x - norm0.x, p1.y - norm0.y), 
-					dir0, 
-					vec2(p2.x - norm1.x, p2.y - norm1.y), 
-					dir1
-				)
-			}
-		}
-		else{
-			if(pos.y < 0.){
-				// top right
-				outpos = intersect(
-					vec2(p3.x + norm1.x, p3.y + norm1.y), 
-					dir1, 
-					vec2(p4.x + norm2.x, p4.y + norm2.y), 
-					dir2
-				)
-			}
-			else{
- 				// bottom right
-				outpos = intersect(
-					vec2(p3.x - norm1.x, p3.y - norm1.y), 
-					dir1,
-					vec2(p4.x - norm2.x, p4.y - norm2.y), 
-					dir2
-				)
-			}
-		}
+		gradient = pos.y
 
 		var res = vec4(outpos.x, outpos.y, 0., 1) * view.totalmatrix * system.viewmatrix
 		return res 
 	}
 
 	this.pixel = function(){
-		return vec4(1,0,1,0.5)
+		// we want a distance field in pixels?
+		var lw = props.linewidth
+		var grad = abs((abs(gradient)-1.)) * lw
+		return mix(vec4(props.color.xyz,0.),vec4(props.color.xyz,1.),grad)
 	}
 	
 	this.canvasverbs = {
 		draw:function(overload){
 			this.GETPROPS()
 			this.ALLOCPROPS()
+
 			// ok so, now we draw a line from _
 			var t = this.turtle
 
-			// lets shift our props
+			// alright
 			t._pts++
 			t._p1x = t._p2x 
 			t._p1y = t._p2y
@@ -186,7 +156,6 @@ define.class('$shaders/pickshader', function(require){
 			t._p4x = overload.x
 			t._p4y = overload.y
 
-			//console.log(t._p2x, t._p2y)
 			if(t._pts > 4){
 				// output them
 				this.PUTPROPS({
@@ -203,9 +172,6 @@ define.class('$shaders/pickshader', function(require){
 		},
 		begin:function(overload){
 			this.GETPROPS()
-			//this.ALLOCPROPS()
-			this.beginTurtle()
-			var t = this.turtle
 
 			t._pts = 0
 			if(overload && overload.x!==undefined){
@@ -215,9 +181,7 @@ define.class('$shaders/pickshader', function(require){
 			}
 		},
 		end:function(){
-			var t = this.turtle
-			this.endTurtle()
-			this.walkTurtle(t)
+			// 
 			// flush all the quads
 			//this.PUTPROPS()
 		}

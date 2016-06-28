@@ -23,19 +23,22 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			var c = this.canvas
 			var dt = performance.now()
 
-			for(var i = 0; i < 100;i++){
+			for(var i = 0; i < 1000;i++){
 				c.drawButton({
-					text:'Button '+i,
-					margin: 4
+					text:'Btn' + i,//s(''+random()).slice(0,5),
+					margin: 10,
+					//padding:10,
+					//w:float.width('20%'),					
 					Label:{
-						fontsize:10+5*sin(i)
+						//waviness:sin(i)*5,
+					//	fontsize:15+5*sin(i)
 					},
 					Background:{
-						color:[random(),random(),random(),1]
+						//color:[random(),random(),random(),1]
 					}
 				})
 			}
-			//	return true
+			//return true
 
 			//console.log(performance.now()-dt)
 
@@ -106,7 +109,6 @@ define.class('$base/composition', function(require, $base$, screen, view){
 			//console.log(performance.now()-dt)
 			//return true
 				//c.drawRect({bgcolor:'blue'})
->>>>>>> Stashed changes
 		}
 	})
 

@@ -15,7 +15,6 @@ define.class('$base/node', function(require){
 
 	this.Shader = require('$base/shader')
 	this.Texture = require('$base/texture')
-
 	this.Canvas = Object.create(Canvas.prototype)
 
 	this.attributes = {
@@ -29,6 +28,7 @@ define.class('$base/node', function(require){
 		w: Config({group:'style', type:Object, value:NaN}),
 		h: Config({group:'style', type:Object, value:NaN}),
 		d: Config({group:'style', type:Object, value:NaN}),
+
 		// Scale of an item, only useful for items belof a 3D viewport
 		scale: Config({type: vec3, value: vec3(1), meta:'xyz'}),
 
@@ -39,13 +39,14 @@ define.class('$base/node', function(require){
 		margin: Config({type: vec4, value: vec4(0,0,0,0), meta: 'trbl'}),
 		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
 		padding: Config({type: vec4, value: vec4(0,0,0,0), meta: 'trbl'}),
+
 		// align
 		align: Config({type:Function, value:float.LEFTTOP}),
 		// walk
 		walk: Config({type:Function, value:float.LRTBWRAP}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
-		clearcolor: Config({group:'style',type:vec4, value: vec4('transparent'), meta:'color'}),
+		clearcolor: Config({group:'style', type:vec4, value: vec4('transparent'), meta:'color'}),
 
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
 		scroll: Config({type:vec2, value:vec2(0, 0), persist: true}),
@@ -232,6 +233,7 @@ define.class('$base/node', function(require){
 
 		t._align = this._align
 		t._walk = this._walk//float.LRTBNOWRAP//this._walk
+
 		t._margin = [0,0,0,0]
 		t._padding = [0,0,0,0]
 		// here we need to know the size if its defined by the

@@ -29,7 +29,8 @@ define.class('$shaders/pickshader', function(require){
 		texminx:NaN,
 		texminy:NaN,
 		texmaxx:NaN,
-		texmaxy:NaN		
+		texmaxy:NaN,
+		waviness:10	
 	}
 
 	this.putprops = {

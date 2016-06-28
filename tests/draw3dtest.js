@@ -8,14 +8,15 @@ define.class('$base/composition', function(require, $base$, screen, view){
 
 	var myview = define.class('$base/view', function(){
 		define.class(this,'Line', '$shaders/lineshader', function(){
+
 		})
 	})
 
 	this.render = function(){ return [
 		screen({name: 'default'}, [
 			myview({
-				w: float('100%'),
-				h: float('100%'),
+				w:float('100%'),
+				h:float('100%'),
 				draw:function(){
 					var c = this.canvas
 					var dt = performance.now()
@@ -28,6 +29,7 @@ define.class('$base/composition', function(require, $base$, screen, view){
 						})
 					}
 					return true
+
 					//for(var i = 0; i < 10; i++){
 					//}
 				}
