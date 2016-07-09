@@ -4,12 +4,13 @@ module.exports = function (context, req, res) {
 
 	request("https://rawgit.com/dreemproject/dreemgl/webtask/system/base/define.js", function (error, response, body) {
 		if (!error && response.statusCode == 200) {
-			var define = new Function("pkg", body)("webtask");
+			var $webtask = "webtask";
+			var define = eval(body);
 
 			console.log(define)
 
 			res.writeHead(200, { 'Content-Type': 'text/html '});
-			res.end(body);
+			res.end(define);
 
 		}
 	})
