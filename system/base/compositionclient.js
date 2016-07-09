@@ -36,12 +36,12 @@ define.class('./compositionbase', function(require, baseclass){
 			this.rendered = true
 			this.cached_attributes = previous.cached_attributes
 		}
-		else{
+		else if (define.$disableserver !== true) {
 			this.createBus()
 			// create the rpc object
 			this.rpc = new RpcHub(this)
+			this.bindBusEvents()
 		}
-		this.bindBusEvents()
 
 		this.renderComposition()
 
@@ -65,7 +65,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.screenname = this.screen.name// || this.screen.constructor.name
 		}
 
-		if(previous || parent || define.$disableserver === true || true) this.doRender(previous, parent)
+		if(previous || parent || define.$disableserver === true) this.doRender(previous, parent)
 	}
 
 	this.doRender = function(previous, parent){
