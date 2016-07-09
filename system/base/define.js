@@ -1301,9 +1301,7 @@
 		console.log("IT GOT THIS FAR: ", process.mainModule)
 		module.exports = global.define = define
 
-		if (process.mainModule) {
-			define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
-		}
+		define.$root = '/'
 
 		var http = require("http")
 		var url = require("url")
