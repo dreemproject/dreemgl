@@ -1310,19 +1310,8 @@
 
 		var root = define.expandVariables(define.$root)
 
-		define.makeCacheDir = function(name){
-			var cache_dir = path.join(root+'/cache')
-			if(!fs.existsSync(cache_dir)) fs.mkdirSync(cache_dir)
-
-			var cache_node =  path.join(root+'/cache/'+name)
-			if(!fs.existsSync(cache_node)) fs.mkdirSync(cache_node)
-			return cache_node
-		}
-
-		var cache_path_root = define.makeCacheDir('node')
-
 		define.mapToCacheDir = function(name){
-			return cache_path_root + url.parse(define.expandVariables(name)).path
+			return url.parse(define.expandVariables(name)).path
 		}
 
 		define.getModule = function(name){
@@ -1339,55 +1328,7 @@
 			return new define.Promise(function(resolve, reject){
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
-
-				// lets make some dirs
-				var path = define.filePath(myurl.path)
-				var dirs = path.split('/')
-				var total = cache_path_root + '/'
-				for(var i = 0; i < dirs.length; i++){
-					total += dirs[i]
-					if(!fs.existsSync(total)) fs.mkdirSync(total)
-					total += '/'
-				}
-
-				var cache_path = cache_path_root + myurl.path
-
-				// then we read our files ETag
-				var headers = {'client-type':'nodejs'}
-				fs.stat(cache_path, function(err, stat){
-					if(!err){ // build etag
-						headers['if-none-match'] = stat.mtime.getTime() + '_' + stat.size
-					}
-					http.get({
-							host: myurl.hostname,
-							port: myurl.port,
-							path: myurl.path,
-							headers:headers
-						},
-						function(res){
-							//console.log(res)
-							if(res.statusCode === 200){
-
-							}
-							else if(res.statusCode === 304){ // cached
-								return resolve({path:cache_path, type:res.headers['content-type']})
-							}
-							else reject({path:myurl.path,code:res.statusCode})
-							if(res.headers['content-type'] === 'text/json' && define.fileExt(cache_path) === '') cache_path += '.json'
-							// lets write it to disk
-							var str = fs.createWriteStream(cache_path)
-							res.pipe(str)
-
-							str.on('finish', function(){
-								// lets set the exact timestamp on our file
-								if(res.headers.mtime){
-									var time = res.headers.mtime / 1000
-									fs.utimes(cache_path, time, time)
-								}
-								resolve({path:cache_path, type:res.headers['content-type']})
-							})
-						})
-				})
+				resolve({path:httpurl, type:"javascript"})
 			})
 		}
 
