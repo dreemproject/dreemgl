@@ -1298,7 +1298,7 @@
 	// webtask.io
 
 	function define_webtask(){
-		console.log("IT GOT THIS FAR")
+		console.log("IT GOT THIS FAR", process.mainModule)
 		module.exports = global.define = define
 
 		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
