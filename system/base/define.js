@@ -1033,7 +1033,7 @@
 
 				if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
 					fac_url = url
-					abs_url = define.$root + '/proxy?' + encodeURIComponent(url)
+					abs_url = url //define.$root + '/proxy?' + encodeURIComponent(url)
 				}
 				else{
 					abs_url = define.expandVariables(url)

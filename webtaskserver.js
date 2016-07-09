@@ -5,7 +5,7 @@ module.exports = function (context, req, res) {
 	var boot = "$examples/sliders.js";
 	var title = boot.replace(/^\$|\.js$/g, '').replace(/\//, " - ");
 	var pathset = '{"system":1,"resources":1,"3d":1,"behaviors":1,"server":1,"ui":1,"flow":1,"testing":1,"widgets":1,"sensors":1,"iot":1,"examples":1,"apps":1,"docs":1,"test":1}';
-	var paths = '$root:"https://rawgit.com/dreemproject/dreemgl/master", $system:"$root/system", $resources:"$root/resources", $3d:"$root/3d", $behaviors:"$root/behaviors", $server:"$root/server", $ui:"$root/ui", $flow:"$root/flow", $testing:"$root/testing", $widgets:"$root/widgets", $sensors:"$root/sensors", $iot:"$root/iot", $examples:"$root/examples", $apps:"$root/apps", $docs:"$root/docs", $test:"$root/test"';
+	var paths = '$root:"https://rawgit.com/dreemproject/dreemgl/webtask", $system:"$root/system", $resources:"$root/resources", $3d:"$root/3d", $behaviors:"$root/behaviors", $server:"$root/server", $ui:"$root/ui", $flow:"$root/flow", $testing:"$root/testing", $widgets:"$root/widgets", $sensors:"$root/sensors", $iot:"$root/iot", $examples:"$root/examples", $apps:"$root/apps", $docs:"$root/docs", $test:"$root/test"';
 	var preloadattrs = {};
 	var additionalHeader = "";
 
@@ -44,7 +44,7 @@ module.exports = function (context, req, res) {
 	'      }\n'+
 	'    }\n'+
 	'  </script>\n'+
-	'  <script type="text/javascript" src="https://rawgit.com/dreemproject/dreemgl/master/system/base/define.js"></script>\n'+
+	'  <script type="text/javascript" src="https://rawgit.com/dreemproject/dreemgl/webtask/system/base/define.js"></script>\n'+
 	additionalHeader +
 	' </head>\n'+
 	' <body class="unselectable">\n'+
