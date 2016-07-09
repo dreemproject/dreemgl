@@ -1033,7 +1033,7 @@
 
 				if (define.$webtask === true) {
 					fac_url = url
-					
+
 					var codeurl = url.replace(/\$root/, "$code")
 					abs_url = define.$root + '/?proxyget=' + encodeURIComponent(define.expandVariables(codeurl))
 					if(!ext) ext = 'js', abs_url += '.'  + ext
@@ -1322,10 +1322,10 @@
 
 		define.makeCacheDir = function(name){
 			var cache_dir = path.join(root+'/cache')
-			if(!fs.existsSync(cache_dir) && $readonly !== true) fs.mkdirSync(cache_dir)
+			if(!fs.existsSync(cache_dir)) fs.mkdirSync(cache_dir)
 
 			var cache_node =  path.join(root+'/cache/'+name)
-			if(!fs.existsSync(cache_node) && $readonly !== true) fs.mkdirSync(cache_node)
+			if(!fs.existsSync(cache_node)) fs.mkdirSync(cache_node)
 			return cache_node
 		}
 
@@ -2934,4 +2934,4 @@
 
 // use the switchable promise
 
-if(define.atEnd) define.atEnd()
+if(define && define.atEnd) define.atEnd()
