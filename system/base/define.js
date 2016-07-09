@@ -1301,14 +1301,10 @@
 		console.log("IT GOT THIS FAR: ", process.mainModule)
 		module.exports = global.define = define
 
-		define.$root = '/'
-
 		var http = require("http")
 		var url = require("url")
 		var fs = require("fs")
 		var path = require("path")
-
-		var root = define.expandVariables(define.$root)
 
 		define.mapToCacheDir = function(name){
 			return url.parse(define.expandVariables(name)).path
