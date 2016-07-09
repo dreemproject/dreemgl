@@ -1298,12 +1298,11 @@
 	// webtask.io
 
 	function define_webtask(){
-		console.log("IT GOT THIS FAR: ", process.mainModule)
+		console.log("IT GOT THIS FAR: ")
 		module.exports = global.define = define
 
 		var http = require("http")
 		var url = require("url")
-		var fs = require("fs")
 		var path = require("path")
 
 		define.mapToCacheDir = function(name){
@@ -1382,32 +1381,6 @@
 					// lets make sure we dont already have the module in our system
 					define.httpGetCached(modurl).then(function(result){
 
-						// the root
-						if(result.type === 'text/json' && define.fileExt(parsedmodurl.path) === ''){
-							var data = JSON.parse(fs.readFileSync(result.path).toString())
-							// alright we get a boot file
-							// set our root properly
-							var mathmodule = define.getModule('$system/base/math.js')
-
-							// lets re-assign math
-							define.paths = data.paths
-							for(var key in data.paths){
-								define['$'+key] = '$root/'+key
-							}
-
-							define.paths.root =
-								define.$root = 'http://'+parsedmodurl.hostname+':'+parsedmodurl.port+'/'
-							var math2 = define.mapToCacheDir('$system/base/math.js')
-							define.module[math2] = mathmodule
-
-
-							// alright now, lets load up the root
-							loadModuleAsync(define.expandVariables(data.boot), modurl).then(function(result){
-								// ok so,
-								resolve(result)
-							})
-							return
-						}
 						if(result.type.indexOf('javascript') !== -1){
 							// lets load up the module, without initializing it
 							define.process_factory = true
@@ -1415,6 +1388,7 @@
 							// open the fucker
 							try{
 								//!TODO, make a neater way to fetch the module dependencies (dont require it twice)
+								console.log("open up", result.path)
 								require(result.path)
 								// and lets remove it again immediately
 								delete Module._cache[result.path.indexOf("\\") !== -1?result.path.replace(/\//g, '\\'):result.path]
@@ -1655,9 +1629,7 @@
 	function define_nodejs(){ // nodeJS implementation
 		module.exports = global.define = define
 
-		if (process.mainModule) {
-			define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
-		}
+		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
 
 		var http = require("http")
 		var url = require("url")
