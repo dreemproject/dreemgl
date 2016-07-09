@@ -1325,6 +1325,7 @@
 
 		// fetch it async!
 		define.httpGetCached = function(httpurl){
+			console.log("getting", httpurl)
 			return new define.Promise(function(resolve, reject){
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
