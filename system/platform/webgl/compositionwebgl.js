@@ -8,7 +8,6 @@
 define.class('$system/base/compositionclient', function(require, baseclass){
 
 	var Device = require('$system/platform/$platform/device$platform')
-	var WebRTC = require('$system/rpc/webrtc')
 	var BusClient = require('$system/rpc/busclient')
 
 	this.atConstructor = function(previous, parent, precached, canvas){

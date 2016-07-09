@@ -5,7 +5,7 @@ module.exports = function (context, req, res) {
 	var boot = "$examples/buttons.js";
 	var title = boot.replace(/^\$|\.js$/g, '').replace(/\//, " - ");
 	var pathset = '{"system":1,"resources":1,"3d":1,"behaviors":1,"server":1,"ui":1,"flow":1,"testing":1,"widgets":1,"sensors":1,"iot":1,"examples":1,"apps":1,"docs":1,"test":1}';
-	var paths = '$root:"https://webtask.it.auth0.com/api/run/wt-freemason-gmail_com-0/webtaskserver", $code:"https://rawgit.com/dreemproject/dreemgl/webtask", $system:"$code/system", $resources:"$code/resources", $3d:"$code/classes/3d", $behaviors:"$code/classes/behaviors", $server:"$code/classes/server", $ui:"$code/classes/ui", $flow:"$code/classes/flow", $testing:"$code/classes/testing", $widgets:"$code/classes/widgets", $sensors:"$code/classes/sensors", $iot:"$code/classes/iot", $examples:"$code/examples", $apps:"$code/apps", $docs:"$code/docs", $test:"$code/test"';
+	var paths = '$disableserver:true, $root:"https://webtask.it.auth0.com/api/run/wt-freemason-gmail_com-0/webtaskserver", $code:"https://rawgit.com/dreemproject/dreemgl/webtask", $system:"$code/system", $resources:"$code/resources", $3d:"$code/classes/3d", $behaviors:"$code/classes/behaviors", $server:"$code/classes/server", $ui:"$code/classes/ui", $flow:"$code/classes/flow", $testing:"$code/classes/testing", $widgets:"$code/classes/widgets", $sensors:"$code/classes/sensors", $iot:"$code/classes/iot", $examples:"$code/examples", $apps:"$code/apps", $docs:"$code/docs", $test:"$code/test"';
 	var preloadattrs = {};
 	var additionalHeader = "";
 
