@@ -1298,7 +1298,7 @@
 	// webtask.io
 
 	function define_webtask(){
-		console.log("IT GOT THIS FAR: ")
+		console.log("IT GOT THIS FAR: ", require.main)
 		module.exports = global.define = define
 
 		var http = require("http")
@@ -1322,6 +1322,7 @@
 		define.httpGetCached = function(httpurl){
 			console.log("getting", httpurl)
 			return new define.Promise(function(resolve, reject){
+				console.log("getting:", httpurl)
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
 				resolve({path:httpurl, type:"javascript"})
