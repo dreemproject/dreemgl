@@ -65,7 +65,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.screenname = this.screen.name// || this.screen.constructor.name
 		}
 
-		if(previous || parent || define.$disableserver === true) this.doRender(previous, parent)
+		if(previous || parent || define.$disableserver === true || true) this.doRender(previous, parent)
 	}
 
 	this.doRender = function(previous, parent){
