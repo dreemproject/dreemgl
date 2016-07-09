@@ -11,8 +11,6 @@ define.class('./compositionbase', function(require, baseclass){
 	var RpcHub = require('$system/rpc/rpchub')
 	var screen = require('$ui/screen')
 	var Render = require('./render')
-	var ASTScanner = require('$system/parse/astscanner')
-	var OneJSParser = require('$system/parse/onejsparser')
 
 	this.screenForClient = function() {
 		return typeof location !== 'undefined' && location.search && location.search.slice(1)
@@ -43,9 +41,7 @@ define.class('./compositionbase', function(require, baseclass){
 			// create the rpc object
 			this.rpc = new RpcHub(this)
 		}
-//		this.bindBusEvents()
-
-		if(!this.rendered) this.doRender()
+		this.bindBusEvents()
 
 		this.renderComposition()
 
