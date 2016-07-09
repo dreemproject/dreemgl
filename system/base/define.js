@@ -1354,9 +1354,9 @@
 
 			if(factory instanceof Array) throw new Error("injects-style not supported")
 
-			var module = modules[modules.length - 1] || require.main
+			var module = modules[modules.length - 1] || require.main || { filename:"unknown" }
 
-			console.log("modeul is?", module, "!!", require.main, modules.length)
+			console.log("modeul is?", module, "!!", require.main, modules.length, factory)
 			//console.log(original_paths)
 			// store module and factory just like in the other envs
 			define.module[module.filename] = module
