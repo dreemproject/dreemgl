@@ -1031,15 +1031,15 @@
 				var ext = inext === undefined ? define.fileExt(url): inext;
 				var abs_url, fac_url
 
-				if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
-					fac_url = url
-					abs_url = url //define.$root + '/proxy?' + encodeURIComponent(url)
-				}
-				else{
+				// if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
+				// 	fac_url = url
+				// 	abs_url = url //define.$root + '/proxy?' + encodeURIComponent(url)
+				// }
+				// else{
 					abs_url = define.expandVariables(url)
 					if(!ext) ext = 'js', abs_url += '.'  + ext
 					fac_url = abs_url
-				}
+//				}
 
 				if(define.reload_id) abs_url += '?' + define.getReloadID()
 
