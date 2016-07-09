@@ -1298,10 +1298,12 @@
 	// webtask.io
 
 	function define_webtask(){
-		console.log("IT GOT THIS FAR", process.mainModule)
+		console.log("IT GOT THIS FAR: ", process.mainModule)
 		module.exports = global.define = define
 
-		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
+		if (process.mainModule) {
+			define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
+		}
 
 		var http = require("http")
 		var url = require("url")
