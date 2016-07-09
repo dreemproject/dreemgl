@@ -43,7 +43,9 @@ define.class('./compositionbase', function(require, baseclass){
 			// create the rpc object
 			this.rpc = new RpcHub(this)
 		}
-		this.bindBusEvents()
+//		this.bindBusEvents()
+
+		if(!this.rendered) this.doRender()
 
 		this.renderComposition()
 

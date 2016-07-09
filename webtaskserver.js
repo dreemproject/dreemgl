@@ -2,10 +2,10 @@ var request = require('request')
 
 module.exports = function (context, req, res) {
 
-	var boot = "$examples/sliders.js";
+	var boot = "$examples/buttons.js";
 	var title = boot.replace(/^\$|\.js$/g, '').replace(/\//, " - ");
 	var pathset = '{"system":1,"resources":1,"3d":1,"behaviors":1,"server":1,"ui":1,"flow":1,"testing":1,"widgets":1,"sensors":1,"iot":1,"examples":1,"apps":1,"docs":1,"test":1}';
-	var paths = '$root:"https://rawgit.com/dreemproject/dreemgl/webtask", $system:"$root/system", $resources:"$root/resources", $3d:"$root/3d", $behaviors:"$root/behaviors", $server:"$root/server", $ui:"$root/ui", $flow:"$root/flow", $testing:"$root/testing", $widgets:"$root/widgets", $sensors:"$root/sensors", $iot:"$root/iot", $examples:"$root/examples", $apps:"$root/apps", $docs:"$root/docs", $test:"$root/test"';
+	var paths = '$root:"https://rawgit.com/dreemproject/dreemgl/webtask", $system:"$root/system", $resources:"$root/resources", $3d:"$root/classes/3d", $behaviors:"$root/classes/behaviors", $server:"$root/classes/server", $ui:"$root/classes/ui", $flow:"$root/classes/flow", $testing:"$root/classes/testing", $widgets:"$root/classes/widgets", $sensors:"$root/classes/sensors", $iot:"$root/classes/iot", $examples:"$root/examples", $apps:"$root/apps", $docs:"$root/docs", $test:"$root/test"';
 	var preloadattrs = {};
 	var additionalHeader = "";
 
