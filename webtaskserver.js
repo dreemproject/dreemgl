@@ -7,10 +7,15 @@ module.exports = function (context, req, res) {
 			var $webtask = "webtask";
 			eval(body);
 
-			console.log(define)
+			request("https://rawgit.com/dreemproject/dreemgl/webtask/server.js", function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+					eval(body);
 
-			res.writeHead(200, { 'Content-Type': 'text/html '});
-			res.end(define);
+					res.writeHead(200, { 'Content-Type': 'text/html '});
+					res.end("Worked?");
+
+				}
+			})
 
 		}
 	})
