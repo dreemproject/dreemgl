@@ -4,8 +4,7 @@ module.exports = function (context, req, res) {
 
 	request("https://rawgit.com/dreemproject/dreemgl/webtask/system/base/define.js", function (error, response, body) {
 		if (!error && response.statusCode == 200) {
-			$readonly = true;
-			var define = eval(body);
+			var define = new Function("pkg", body)("webtask");
 
 			console.log(define)
 

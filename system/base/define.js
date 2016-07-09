@@ -65,7 +65,11 @@
 		    value: define,
 		    writable: false
 		})
-		define.$environment = 'nodejs'
+		if (pkg) {
+			define.$environment = pkg
+		} else {
+			define.$environment = 'nodejs'
+		}
 	}
 	else define.$environment = 'v8'
 
@@ -2927,6 +2931,7 @@
 	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
 	if(define.packaged) define_packaged()
+	else if(define.$environment === 'webtask') console.log("IT GOT THIS FAR")
 	else if(define.$environment === 'nodejs') define_nodejs()
 	else if(define.$environment === 'browser') define_browser()
 	else if(define.$environment === 'worker') define_worker()
