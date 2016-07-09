@@ -1031,15 +1031,21 @@
 				var ext = inext === undefined ? define.fileExt(url): inext;
 				var abs_url, fac_url
 
-				// if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
-				// 	fac_url = url
-				// 	abs_url = url //define.$root + '/proxy?' + encodeURIComponent(url)
-				// }
-				// else{
+				if (define.$webtask === true) {
+					fac_url = url
+					
+					var codeurl = url.replace(/\$root/, "$code")
+					abs_url = define.$root + '/?proxyget=' + encodeURIComponent(define.expandVariables(codeurl))
+					if(!ext) ext = 'js', abs_url += '.'  + ext
+				} else if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
+					fac_url = url
+					abs_url = define.$root + '/proxy?' + encodeURIComponent(url)
+				}
+				else{
 					abs_url = define.expandVariables(url)
 					if(!ext) ext = 'js', abs_url += '.'  + ext
 					fac_url = abs_url
-//				}
+				}
 
 				if(define.reload_id) abs_url += '?' + define.getReloadID()
 
@@ -1316,10 +1322,10 @@
 
 		define.makeCacheDir = function(name){
 			var cache_dir = path.join(root+'/cache')
-			if(!fs.existsSync(cache_dir)) fs.mkdirSync(cache_dir)
+			if(!fs.existsSync(cache_dir) && $readonly !== true) fs.mkdirSync(cache_dir)
 
 			var cache_node =  path.join(root+'/cache/'+name)
-			if(!fs.existsSync(cache_node)) fs.mkdirSync(cache_node)
+			if(!fs.existsSync(cache_node) && $readonly !== true) fs.mkdirSync(cache_node)
 			return cache_node
 		}
 
