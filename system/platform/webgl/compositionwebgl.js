@@ -28,7 +28,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	}
 
 	this.createBus = function(){
-		this.bus = new BusClient((location.href.indexOf('https') === 0?'wss://':'ws://')+location.host+location.pathname)
+		this.bus = new BusClient((location.href.indexOf('https') === 0?'ws://':'ws://')+location.host+location.pathname)
 	}
 
 	this.doRender = function(previous, parent){

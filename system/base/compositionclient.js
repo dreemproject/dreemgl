@@ -36,12 +36,12 @@ define.class('./compositionbase', function(require, baseclass){
 			this.rendered = true
 			this.cached_attributes = previous.cached_attributes
 		}
-		else if (define.$disableserver !== true) {
+		else{
 			this.createBus()
 			// create the rpc object
 			this.rpc = new RpcHub(this)
-			this.bindBusEvents()
 		}
+		this.bindBusEvents()
 
 		this.renderComposition()
 
