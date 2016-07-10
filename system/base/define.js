@@ -1283,7 +1283,7 @@
 	function define_light(){
 		module.exports = global.define = define
 
-		define.$root = "https://rawgit.com/dreemproject/dreemgl/thinserver"
+		define.$root = "https://rawgit.com/dreemproject/dreemgl/webtask"
 
 		var http = require("http")
 		var url = require("url")
