@@ -1299,7 +1299,7 @@
 	// webtask.io
 
 	function define_webtask(){
-		console.log("IT GOT THIS FAR: ", require.main)
+		console.log("IT GOT THIS FAR: ", __filename)
 		module.exports = global.define = define
 
 		var http = require("http")
