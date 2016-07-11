@@ -47,7 +47,7 @@ module.exports = function (context, req, res) {
 	define.$platform = 'nodejs'
 	var RootServer = require('$system/server/rootserver')
 
-	console.log("rs", RootServer)
+	console.log("rs", RootServer, define.paths)
 
 	new RootServer({}).request(req, res)
 

@@ -262,6 +262,9 @@ define.class(function(require){
 			return
 		}
 
+		if (requrl.indexOf("/api/run/wt-freemason-gmail_com-0/webtask") === 0) {
+			requrl = "/examples/sliders.js"
+		}
 		var reqquery = requrl.split('?')
 
 		console.log("HERE NOW:::", reqquery)
