@@ -86,6 +86,9 @@ define.class(function(require){
 
 		this.watcher = new FileWatcher()
 		this.watcher.atChange = function(ifile){
+			if (!ifile){
+				return;
+			}
 			// ok lets get the original path
 			var file = ifile.replace(/\\/g,"/")
 			for(var key in define.paths){
