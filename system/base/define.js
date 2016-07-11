@@ -555,8 +555,8 @@
 				fnname = (body.classname || body.name)
 			}
 			else if(module){
-				console.log("filename for module???", module)
 				 fnname = define.fileBase(module.filename).replace(/\.|\-|\s/g,'_')//.replace(/\.js/g,'').replace(/\./g,'_').replace(/\//g,'_')
+				console.log("filename for module???", module.filename, fname)
 			}
 			else{
 				// lets make an fnname based on our callstack
