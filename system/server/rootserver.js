@@ -290,120 +290,128 @@ define.class(function(require){
 		var file = decodeURIComponent(this.mapPath(reqquery[0]))
 
 		console.log("getting fole", file)
+		
+		file = "http://rawgit.com/dreemproject/dreemgl/webtask" + file
 
-		var urlext = define.fileExt(reqquery[0])
-		// write .dre to .dre.js files
-		if (urlext === 'dre') {
-			var dreurl = reqquery[0];
-			var filepath = define.expandVariables('$root' + dreurl)
-			var dre = fs.readFileSync(filepath);
-			var js = XMLConverter(dre)
-			// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version
-			fs.writeFileSync(filepath + '.js', js);
-			this.watcher.watch(file)
-		}
+		var src = requirehttp(file)
+		
+		res.writeHead(200, { 'Content-Type': 'text/html '})
+		res.end(src)
 
-		if(file === false){ // file is a search
-			// what are we looking for
-			// a directory named x or file or anything
-			// we will just 302 to it
-			for(var key in define.paths){
-				var mypath = define.paths[key]
-				var fwdfile = this.searchPath(mypath, reqquery[0].slice(1))
-				if(fwdfile){
-					var urlpath = '/'+ key + '/' +define.fileBase(fwdfile.slice(mypath.length))
-					res.writeHead(307, {location:urlpath})
-					res.end()
-					return
-				}
-			}
-			res.writeHead(404)
-			res.end("File not found: "+reqquery[0])
-			return
-		}
 
-		var fileext = define.fileExt(file)
+		// var urlext = define.fileExt(reqquery[0])
+		// // write .dre to .dre.js files
+		// if (urlext === 'dre') {
+		// 	var dreurl = reqquery[0];
+		// 	var filepath = define.expandVariables('$root' + dreurl)
+		// 	var dre = fs.readFileSync(filepath);
+		// 	var js = XMLConverter(dre)
+		// 	// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version
+		// 	fs.writeFileSync(filepath + '.js', js);
+		// 	this.watcher.watch(file)
+		// }
 
-		if(!fileext || fileext === 'dre'){
-			var composition = this.getComposition('$'+decodeURIComponent(reqquery[0].slice(1)))
-			if(composition) return composition.request(req, res)
-		}
+		// if(file === false){ // file is a search
+		// 	// what are we looking for
+		// 	// a directory named x or file or anything
+		// 	// we will just 302 to it
+		// 	for(var key in define.paths){
+		// 		var mypath = define.paths[key]
+		// 		var fwdfile = this.searchPath(mypath, reqquery[0].slice(1))
+		// 		if(fwdfile){
+		// 			var urlpath = '/'+ key + '/' +define.fileBase(fwdfile.slice(mypath.length))
+		// 			res.writeHead(307, {location:urlpath})
+		// 			res.end()
+		// 			return
+		// 		}
+		// 	}
+		// 	res.writeHead(404)
+		// 	res.end("File not found: "+reqquery[0])
+		// 	return
+		// }
 
-		fs.stat(file, function(err, stat){
-			if(err || !stat.isFile()){
-				// see if we can find the index.js, otherwise skip it
-				file = file.slice(0, file.lastIndexOf('.')) + '/index.js'
-				fs.stat(file, function(err, stat){
-					if(err || !stat.isFile()){
-						res.writeHead(404)
-						res.end()
-						console.color('~br~Error~y~ ' + file + '~~ File not found, returning 404\n')
-						return
-					}
-					processFile(stat)
-				})
-			}
-			else processFile(stat)
-		})
+		// var fileext = define.fileExt(file)
+        //
+		// if(!fileext || fileext === 'dre'){
+		// 	var composition = this.getComposition('$'+decodeURIComponent(reqquery[0].slice(1)))
+		// 	if(composition) return composition.request(req, res)
+		// }
 
-		var processFile = function(stat){
-			var header = {
-				"Connection":"Close",
-				"Cache-control":"max-age=0",
-				"Content-Type": mimeFromFile(file),
-				"etag": stat.mtime.getTime() + '_' + stat.size,
-				"mtime": stat.mtime.getTime()
-			}
-			// this.watcher.watch(file)
-			if( req.headers['if-none-match'] == header.etag){
-				res.writeHead(304,header)
-				res.end()
-				return
-			}
-			// lets add a gzip cache
-			var type = header["Content-Type"]
-			if(type !== 'image/jpeg' && type !== 'image/png'){
-				// see if we accept gzip
-				if(req.headers['accept-encoding'] && req.headers['accept-encoding'].toLowerCase().indexOf('gzip') !== -1){
-					//header["Content-Type"]+="; utf8"
-					header["Content-encoding"] = "gzip"
-					header["Transfer-Encoding"] = "gzip"
-					// var gzip_file = path.join(this.cache_gzip, requrl.replace(/\//g,'_')+header.etag)
-					// fs.stat(gzip_file, function(err, stat){
-					// 	if(err){ // make it
-					// 		fs.readFile(file, function(err, data){
-					// 			zlib.gzip(data, function(err, compr){
-					// 				//header["Content-length"] = compr.length
-					// 				//console.log(compr.length)
-					// 				res.writeHead(200, header)
-					// 				res.write(compr)
-					// 				res.end()
-					// 				fs.writeFile(gzip_file, compr, function(err){
-                    //
-					// 				})
-					// 			})
-					// 		})
-					// 	}
-					// 	else{
-					// 		var stream = fs.createReadStream(gzip_file)
-					// 		res.writeHead(200, header)
-					// 		stream.pipe(res)
-					// 	}
-					// })
-				}
-				else{
-					var stream = fs.createReadStream(file)
-					res.writeHead(200, header)
-					stream.pipe(res)
-				}
-			}
-			else{
-				var stream = fs.createReadStream(file)
-				res.writeHead(200, header)
-				stream.pipe(res)
-			}
-			// ok so we get a filechange right?
+		// fs.stat(file, function(err, stat){
+		// 	if(err || !stat.isFile()){
+		// 		// see if we can find the index.js, otherwise skip it
+		// 		file = file.slice(0, file.lastIndexOf('.')) + '/index.js'
+		// 		fs.stat(file, function(err, stat){
+		// 			if(err || !stat.isFile()){
+		// 				res.writeHead(404)
+		// 				res.end()
+		// 				console.color('~br~Error~y~ ' + file + '~~ File not found, returning 404\n')
+		// 				return
+		// 			}
+		// 			processFile(stat)
+		// 		})
+		// 	}
+		// 	else processFile(stat)
+		// })
 
-		}.bind(this)
+		// var processFile = function(stat){
+		// 	var header = {
+		// 		"Connection":"Close",
+		// 		"Cache-control":"max-age=0",
+		// 		"Content-Type": mimeFromFile(file),
+		// 		"etag": stat.mtime.getTime() + '_' + stat.size,
+		// 		"mtime": stat.mtime.getTime()
+		// 	}
+		// 	// this.watcher.watch(file)
+		// 	if( req.headers['if-none-match'] == header.etag){
+		// 		res.writeHead(304,header)
+		// 		res.end()
+		// 		return
+		// 	}
+		// 	// lets add a gzip cache
+		// 	var type = header["Content-Type"]
+		// 	if(type !== 'image/jpeg' && type !== 'image/png'){
+		// 		// see if we accept gzip
+		// 		if(req.headers['accept-encoding'] && req.headers['accept-encoding'].toLowerCase().indexOf('gzip') !== -1){
+		// 			//header["Content-Type"]+="; utf8"
+		// 			header["Content-encoding"] = "gzip"
+		// 			header["Transfer-Encoding"] = "gzip"
+		// 			// var gzip_file = path.join(this.cache_gzip, requrl.replace(/\//g,'_')+header.etag)
+		// 			// fs.stat(gzip_file, function(err, stat){
+		// 			// 	if(err){ // make it
+		// 			// 		fs.readFile(file, function(err, data){
+		// 			// 			zlib.gzip(data, function(err, compr){
+		// 			// 				//header["Content-length"] = compr.length
+		// 			// 				//console.log(compr.length)
+		// 			// 				res.writeHead(200, header)
+		// 			// 				res.write(compr)
+		// 			// 				res.end()
+		// 			// 				fs.writeFile(gzip_file, compr, function(err){
+         //            //
+		// 			// 				})
+		// 			// 			})
+		// 			// 		})
+		// 			// 	}
+		// 			// 	else{
+		// 			// 		var stream = fs.createReadStream(gzip_file)
+		// 			// 		res.writeHead(200, header)
+		// 			// 		stream.pipe(res)
+		// 			// 	}
+		// 			// })
+		// 		}
+		// 		else{
+		// 			var stream = fs.createReadStream(file)
+		// 			res.writeHead(200, header)
+		// 			stream.pipe(res)
+		// 		}
+		// 	}
+		// 	else{
+		// 		var stream = fs.createReadStream(file)
+		// 		res.writeHead(200, header)
+		// 		stream.pipe(res)
+		// 	}
+		// 	// ok so we get a filechange right?
+        //
+		// }.bind(this)
 	}
 })

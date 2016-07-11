@@ -51,8 +51,8 @@ module.exports = function (context, req, res) {
 
 	new RootServer({}).request(req, res)
 
-	res.writeHead(200, { 'Content-Type': 'text/html '});
-	res.end("Worked? " + Object.keys(define));
+	// res.writeHead(200, { 'Content-Type': 'text/html '});
+	// res.end("Worked? " + Object.keys(define));
 
 	// var boot = "$examples/sliders.js";
 	// var title = boot.replace(/^\$|\.js$/g, '').replace(/\//, " - ");
