@@ -157,7 +157,8 @@ define.class(function(require){
 	this.mapPath = function(input){
 		var reqparts = input.split(/\//)
 		// lets do the filename lookup
-		var mypath = define.paths[reqparts[1]]
+		console.log("D>PA", define.paths, reqparts[1])
+		var mypath = define.paths ? define.paths[reqparts[1]] : false
 		if(!mypath) return false
 
 		// combine it
