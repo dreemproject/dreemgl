@@ -3167,7 +3167,7 @@
 	}
 
 	function defineComponent(proto, name, index){
-		Object.defineProperty(proto, name, {writable:true, get:function(){ return this[index] },set:function(v){
+		Object.defineProperty(proto, name, {get:function(){ return this[index] },set:function(v){
 			this[index] = v
 			if(this.atChange) this.atChange(index)
 		}})
