@@ -2,7 +2,7 @@ var request = require('request')
 
 module.exports = function (context, req, res) {
 
-	var requirehttp = function(url) {
+	requirehttp = function(url) {
 		var http = require("http");
 		var done = false;
 		var data = "";
@@ -21,7 +21,7 @@ module.exports = function (context, req, res) {
 
 	var Module = module.constructor;
 	var m = new Module();
-	m._compile(definesrc, "define.js");
+	m._compile(definesrc, "webtaskdefine.js");
 	var define = m.exports
 
 	res.writeHead(200, { 'Content-Type': 'text/html '});

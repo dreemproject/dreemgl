@@ -65,6 +65,7 @@
 		    value: define,
 		    writable: false
 		})
+		console.log("XXX>", __filename)
 		if (typeof(requirehttp) !== "undefined") {
 			define.$environment = "webtask"
 		} else {
