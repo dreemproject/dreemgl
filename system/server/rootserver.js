@@ -14,12 +14,12 @@ define.class(function(require){
 	var url = require('url')
 	var zlib = require('zlib')
 
-	var FileWatcher;// = require('./filewatcher')
-	var ExternalApps = require('./externalapps')
-	var NodeWebSocket = require('./nodewebsocket')
-	var mimeFromFile = require('./mimefromfile')
-	var CompositionServer = require('./compositionserver')
-	var XMLConverter = require('./xmlconverter')
+	var FileWatcher = require('/system/server/filewatcher')
+	var ExternalApps = require('/system/server/externalapps')
+	var NodeWebSocket = require('/system/server/nodewebsocket')
+	var mimeFromFile = require('/system/server/mimefromfile')
+	var CompositionServer = require('/system/server/compositionserver')
+	var XMLConverter = require('/system/server/xmlconverter')
 
 	var BusServer = require('$system/rpc/busserver')
 
