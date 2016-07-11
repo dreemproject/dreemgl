@@ -25,6 +25,24 @@ module.exports = function (context, req, res) {
 	m._compile(definesrc, "webtask.js");
 	var define = m.exports
 
+	define.paths = {
+		'system':'$root/system',
+		'resources':'$root/resources',
+		'3d':'$root/classes/3d',
+		'behaviors':'$root/classes/behaviors',
+		'server':'$root/classes/server',
+		'ui':'$root/classes/ui',
+		'flow':'$root/classes/flow',
+		'testing':'$root/classes/testing',
+		'widgets':'$root/classes/widgets',
+		'sensors':'$root/classes/sensors',
+		'iot':'$root/classes/iot',
+		'examples':'$root/examples',
+		'apps':'$root/apps',
+		'docs':'$root/docs',
+		'test':'$root/test'
+	}
+
 	require = define
 	define.$platform = 'nodejs'
 	var RootServer = require('$system/server/rootserver')
