@@ -21,11 +21,11 @@ module.exports = function (context, req, res) {
 
 	var Module = module.constructor;
 	var m = new Module();
-	m._compile(definesrc, "webtaskdefine.js");
-	var definey = m.exports
+	m._compile(definesrc, "webtask.js");
+	var define = m.exports
 
 	res.writeHead(200, { 'Content-Type': 'text/html '});
-	res.end("Worked? " + definey);
+	res.end("Worked? " + Object.keys(define));
 
 	// var boot = "$examples/sliders.js";
 	// var title = boot.replace(/^\$|\.js$/g, '').replace(/\//, " - ");
