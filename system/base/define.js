@@ -1494,7 +1494,7 @@
 
 						var src = requirehttp(full_name)
 
-						console.log(full_name, "=", src)
+//						console.log(full_name, "=", src)
 
 //						var m = eval(src)
 
@@ -1502,7 +1502,7 @@
 						var m = new Module();
 						m.filename = full_name;
 						m._compile(src, full_name);
-						ret = m
+						ret = m.exports
 
 					} else {
 						console.log("just require fullname>>", full_name)
