@@ -157,7 +157,7 @@ define.class(function(require){
 	this.mapPath = function(input){
 		var reqparts = input.split(/\//)
 		// lets do the filename lookup
-		console.log("D>PA", define.paths, reqparts[1])
+		console.log("D>PA", define.paths, reqparts)
 		var mypath = define.paths ? define.paths[reqparts[1]] : false
 		if(!mypath) return false
 
@@ -263,6 +263,8 @@ define.class(function(require){
 		}
 
 		var reqquery = requrl.split('?')
+
+		console.log("HERE NOW:::", reqquery)
 
 		// ok if we are a /single fetch
 		var file = decodeURIComponent(this.mapPath(reqquery[0]))
