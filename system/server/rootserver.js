@@ -14,7 +14,7 @@ define.class(function(require){
 	var url = require('url')
 	var zlib = require('zlib')
 
-	var FileWatcher = require('./filewatcher')
+	var FileWatcher;// = require('./filewatcher')
 	var ExternalApps = require('./externalapps')
 	var NodeWebSocket = require('./nodewebsocket')
 	var mimeFromFile = require('./mimefromfile')
@@ -84,31 +84,31 @@ define.class(function(require){
 			ExternalApps.browser(this.address + (browser===true?'':browser), this.args['-devtools'])
 		}
 
-		this.watcher = new FileWatcher()
-		this.watcher.atChange = function(ifile){
-			if (!ifile){
-				return;
-			}
-			// ok lets get the original path
-			var file = ifile.replace(/\\/g,"/")
-			for(var key in define.paths){
-				var match = define.expandVariables(define['$'+key])
-				if(file.indexOf(match) === 0){
-					var sliced = file.slice(match.length)
-					if (sliced[0] !== '/') {
-						sliced = '/' + sliced
-					}
-					file = '/'+key+sliced
-					break
-				}
-			}
-			//file = file.slice(define.expandVariables(define.$root).length).replace(/\\/g, "/")
-			// ok lets rip off our
-			this.broadcast({
-				type:'filechange',
-				file: file
-			})
-		}.bind(this)
+		// this.watcher = new FileWatcher()
+		// this.watcher.atChange = function(ifile){
+		// 	if (!ifile){
+		// 		return;
+		// 	}
+		// 	// ok lets get the original path
+		// 	var file = ifile.replace(/\\/g,"/")
+		// 	for(var key in define.paths){
+		// 		var match = define.expandVariables(define['$'+key])
+		// 		if(file.indexOf(match) === 0){
+		// 			var sliced = file.slice(match.length)
+		// 			if (sliced[0] !== '/') {
+		// 				sliced = '/' + sliced
+		// 			}
+		// 			file = '/'+key+sliced
+		// 			break
+		// 		}
+		// 	}
+		// 	//file = file.slice(define.expandVariables(define.$root).length).replace(/\\/g, "/")
+		// 	// ok lets rip off our
+		// 	this.broadcast({
+		// 		type:'filechange',
+		// 		file: file
+		// 	})
+		// }.bind(this)
 
 		this.busserver = new BusServer()
 
