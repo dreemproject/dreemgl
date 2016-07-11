@@ -11,8 +11,6 @@ define.class('./compositionbase', function(require, baseclass){
 	var RpcHub = require('$system/rpc/rpchub')
 	var screen = require('$ui/screen')
 	var Render = require('./render')
-	var ASTScanner = require('$system/parse/astscanner')
-	var OneJSParser = require('$system/parse/onejsparser')
 
 	this.screenForClient = function() {
 		return typeof location !== 'undefined' && location.search && location.search.slice(1)
@@ -67,7 +65,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.screenname = this.screen.name// || this.screen.constructor.name
 		}
 
-		if(previous || parent) this.doRender(previous, parent)
+		if(previous || parent || define.$webtask === true) this.doRender(previous, parent)
 	}
 
 	this.doRender = function(previous, parent){

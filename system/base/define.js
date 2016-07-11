@@ -65,7 +65,11 @@
 		    value: define,
 		    writable: false
 		})
-		define.$environment = 'nodejs'
+		if ($webtask) {
+			define.$environment = $webtask
+		} else {
+			define.$environment = 'nodejs'
+		}
 	}
 	else define.$environment = 'v8'
 
@@ -1031,7 +1035,13 @@
 				var ext = inext === undefined ? define.fileExt(url): inext;
 				var abs_url, fac_url
 
-				if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
+				if (define.$webtask === true) {
+					fac_url = url
+
+					var codeurl = url.replace(/\$root/, "$code")
+					abs_url = define.$root + '/?proxyget=' + encodeURIComponent(define.expandVariables(codeurl))
+					if(!ext) ext = 'js', abs_url += '.'  + ext
+				} else if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
 					fac_url = url
 					abs_url = define.$root + '/proxy?' + encodeURIComponent(url)
 				}
@@ -1285,22 +1295,337 @@
 		define.autoreloadConnect()
 	}
 
+	// webtask.io
+
+	function define_webtask(){
+		console.log("IT GOT THIS FAR: ", require.main)
+		module.exports = global.define = define
+
+		var http = require("http")
+		var url = require("url")
+		var path = require("path")
+
+		define.mapToCacheDir = function(name){
+			return url.parse(define.expandVariables(name)).path
+		}
+
+		define.getModule = function(name){
+			var expanded = define.expandVariables(name)
+			if(expanded.indexOf('://')!==-1){
+				expanded = define.mapToCacheDir(expanded)
+			}
+			var module = define.module[expanded]
+			return module
+		}
+
+		// fetch it async!
+		define.httpGetCached = function(httpurl){
+			console.log("getting", httpurl)
+			return new define.Promise(function(resolve, reject){
+				console.log("getting:", httpurl)
+				var myurl = url.parse(httpurl)
+				// ok turn this url into a cachepath
+				resolve({path:httpurl, type:"javascript"})
+			})
+		}
+
+		// hook compile to keep track of module objects
+		var Module = require("module")
+		var modules = []
+		var original_paths = []
+		var _compile = Module.prototype._compile
+		Module.prototype._compile = function(content, filename){
+			modules.push(this)
+			try {
+				var ret = _compile.call(this, content, filename)
+			}
+				//catch(e){ throw e}
+				//catch(e){
+				//	console.log(e.linenumber)
+				//	}
+			finally {
+				modules.pop()
+			}
+			return ret
+		}
+
+		define.download_queue = {}
+
+		define.define = function(factory) {
+
+			if(factory instanceof Array) throw new Error("injects-style not supported")
+
+			var module = modules[modules.length - 1] || require.main || { filename:"unknown" }
+
+			console.log("modeul is?", module, "!!", require.main, modules.length, factory)
+			//console.log(original_paths)
+			// store module and factory just like in the other envs
+			define.module[module.filename] = module
+			define.factory[module.filename] = factory
+
+			function loadModuleAsync(modurl, includefrom){
+				modurl = modurl.replace(/\\/g , '/' );
+				var parsedmodurl = url.parse(modurl)
+				var base_path = define.filePath(modurl)
+
+				// block reentry
+				if(define.download_queue[modurl]){
+					return new define.Promise(function(resolve, reject){
+
+						resolve( cache_path_root + url.parse(modurl).path )
+					})
+					//return define.download_queue[modurl]//
+				}
+
+				// we need to fetch the url, then look at its dependencies, fetch those
+				return define.download_queue[modurl] = new define.Promise(function(resolve, reject){
+					// lets make sure we dont already have the module in our system
+					define.httpGetCached(modurl).then(function(result){
+
+						if(result.type.indexOf('javascript') !== -1){
+							// lets load up the module, without initializing it
+							define.process_factory = true
+
+							// open the fucker
+							try{
+								//!TODO, make a neater way to fetch the module dependencies (dont require it twice)
+								console.log("open up", result.path)
+								require(result.path)
+								// and lets remove it again immediately
+								delete Module._cache[result.path.indexOf("\\") !== -1?result.path.replace(/\//g, '\\'):result.path]
+							}
+							catch(e){
+								console.log(e.stack)
+							}
+							var factory = define.process_factory
+							define.process_factory = false
+							// alright we have a define.process_factory call we can now use.
+							if(factory === true){
+								return resolve(result.path)
+							}
+
+							Promise.all(define.findRequiresInFactory(factory).map(function(path){
+
+								// ignore nodejs style module requires
+								var dep_path
+								if(path.indexOf('://') !== -1){
+									dep_path = path
+								}
+								else if(path.indexOf('$') === -1 && path.charAt(0) !== '.'){
+									return null
+								}
+								else dep_path = define.joinPath(base_path, define.expandVariables(path))
+
+								var ext = define.fileExt(dep_path)
+								if(!ext) dep_path += '.js'
+
+								return loadModuleAsync(dep_path, modurl)
+
+							})).then(function(){
+								// lets finish up our factory
+								resolve(result.path)
+							}).catch(function(error){
+								console.log("CAUGHT ERROR ", error)
+							})
+
+							return
+							// lets initialize the module
+						}
+						return resolve(result.path)
+
+					}).catch(function(err){
+						console.log("Error in "+modurl+" from "+includefrom,err,err.stack)
+					})
+				})
+			}
 
 
+			function noderequirewrapper(iname) {
+				var name = iname
+				if(arguments.length != 1) throw new Error("Unsupported require style")
+				try{
+					name = define.expandVariables(name)
+				}
+				catch(e){
+					console.log("Cannot find "+e+" in module "+module.filename)
+					throw e
+				}
 
+				if(name.indexOf('://') !== -1){
+					name = define.mapToCacheDir(name)
+				}
 
+				var full_name = name;
+				try{
+					full_name = Module._resolveFilename(name, module)
+				}
+				catch(e){
+					// Don't generate an error becaues the image might be
+					// remote, or a relative path was specified.
+				}
+				if (full_name instanceof Array) full_name = full_name[0]
 
+				if(define.atRequire && ((full_name.charAt(0) == '/') || (full_name.indexOf('\\') >= 0)) ){
+					define.atRequire(full_name)
+				}
 
+				// we cant require non js files
+				var ext = define.fileExt(full_name)
+				if(ext !== '' && ext !== 'js'){
+					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
+						// Construct a Texture.Image object given its path
+						if(define.loadImage) return define.loadImage(full_name)
+						return undefined
+					}
+					else{
+						// read it as an arraybuffer
+						var buffer = fs.readFileSync(full_name)
+						var ab = new ArrayBuffer(buffer.length)
+						var view = new Uint8Array(ab)
+						for (var i = 0; i < buffer.length; ++i) {
+							view[i] = buffer[i]
+						}
+						return define.processFileType(ext, ab)
+						//console.log(full_name)
+					}
+					return undefined
+				}
 
+				var old_stack = define.local_require_stack
+				define.local_require_stack = []
+
+				try{
+					var ret = require(full_name)
+				}
+					//catch(e){
+
+					//	console.log(e.stack)
+				finally{
+					define.local_require_stack = old_stack
+				}
+				return ret
+			}
+
+			noderequirewrapper.clearCache = function(name){
+				Module._cache = {}
+			}
+
+			noderequirewrapper.module = module
+
+			noderequirewrapper.loaded = function(path, ext){
+				var dep_path = define.joinPath(cache_path_root, define.expandVariables(path))
+				if(define.factory[dep_path]){
+					return true
+				}
+			}
+
+			noderequirewrapper.async = function(modname){
+				// For dali (and probably nodejs) relative paths must be made
+				// absolute to where the example is located. Retrieval
+				// method is different if running from a remote server
+				var remote = (define.$example.indexOf('://') !== -1);
+
+				if (define.$platform == 'dali') {
+					// Remote, relative
+					if (remote && modname.indexOf('./') == 0) {
+						modname = define.$example + modname.substring(2)
+						return define.httpGetCached(modname);
+					}
+
+					// Remote, absolute
+					if (remote && modname.indexOf('/') == 0) {
+						var p = define.$example.indexOf('/', 8);
+						modname = define.$example.substring(0, p) + modname;
+						return define.httpGetCached(modname);
+					}
+
+					// Local, relative
+					if (modname.indexOf('./') == 0) {
+						modname = '$root/' + define.$example + modname.substring(2)
+						modname = define.expandVariables(modname);
+
+						return new define.Promise(function(resolve, reject) {
+							return resolve(define.loadImage(modname));
+						});
+					}
+
+					// Local, absolute
+					if (modname.indexOf('/') == 0) {
+						modname = '$root' + modname
+						modname = define.expandVariables(modname);
+
+						return new define.Promise(function(resolve, reject) {
+							return resolve(define.loadImage(modname));
+						});
+					}
+
+					if (remote && modname.indexOf('://') === -1)
+						modname = define.$example + '/' + modname
+
+					modname = define.expandVariables(modname)
+				}
+
+				if (define.$platform == 'dali' && modname.indexOf('./') == 0)
+					modname = '$root' + '/' + define.$example + '/' + modname;
+
+				if(typeof modname !== 'string') throw new Error("module name in require.async not a string")
+				modname = define.expandVariables(modname)
+
+				// Query if module is in local file system (DALI)
+				var fs = require("fs")
+				try {
+					stats = fs.lstatSync(modname)
+					var data = fs.readFileSync(modname)
+					return new define.Promise(function(resolve, reject){
+						resolve(data)
+					})
+				}
+				catch(e) {
+				}
+
+				return new define.Promise(function(resolve, reject){
+					loadModuleAsync(modname, "root").then(function(path){
+						resolve(noderequirewrapper(path))
+					}).catch(function(e){
+						console.log("ERROR", e.stack)
+					})
+				})
+			}
+
+			module.factory = factory
+
+			if (typeof factory !== "function") return module.exports = factory
+
+			// we are being used for require.async
+			if(define.process_factory){
+				define.process_factory = factory
+				return
+			}
+
+			define.local_require_stack.push(noderequirewrapper)
+			try{
+				var ret = factory.call(module.exports, noderequirewrapper, module.exports, module)
+			}
+			finally{
+				define.local_require_stack.pop()
+			}
+
+			if(ret !== undefined) module.exports = ret
+
+			if(define.atModule) define.atModule(module)
+		}
+
+		global.define.require = require
+		global.define.module = {}
+		global.define.factory = {}
+		// fetch a new require for the main module and return that
+		define.define(function(require){
+			module.exports = require
+		})
+
+	}
 
 	// NodeJS
-
-
-
-
-
-
-
 
 	function define_nodejs(){ // nodeJS implementation
 		module.exports = global.define = define
@@ -2921,6 +3246,7 @@
 	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
 	if(define.packaged) define_packaged()
+	else if(define.$environment === 'webtask') define_webtask()
 	else if(define.$environment === 'nodejs') define_nodejs()
 	else if(define.$environment === 'browser') define_browser()
 	else if(define.$environment === 'worker') define_worker()
@@ -2928,4 +3254,4 @@
 
 // use the switchable promise
 
-if(define.atEnd) define.atEnd()
+if(define && define.atEnd) define.atEnd()

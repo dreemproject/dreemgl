@@ -5,7 +5,11 @@
    See the License for the specific language governing permissions and limitations under the License.*/
 
 // Dreem/Dali server
-require = require('./system/base/define') // support define.js modules
+if (typeof($webtask) === "undefined") {
+	require = require('./system/base/define') // support define.js modules
+} else {
+	require = define
+}
 
 // load up math core and make it global
 require('$system/base/math')
