@@ -35,54 +35,54 @@ define.class(function(require){
 
 //		this.cache_gzip = define.makeCacheDir('gzip')
 
-		this.server = http.createServer(this.request.bind(this))
-		this.server.listen(port, iface)
-		this.server.on('upgrade', this.upgrade.bind(this))
-		this.addresses = []
-		if(iface == '0.0.0.0'){
-			var ifaces = os.networkInterfaces()
-			var txt = ''
-			Object.keys(ifaces).forEach(function(ifname){
-				var alias = 0;
-				ifaces[ifname].forEach(function(iface){
-					if ('IPv4' !== iface.family) return
-					var addr = 'http://' + iface.address + ':' + port + '/'
-					if(!this.address) this.address = addr
-					this.addresses.push('http://' + iface.address + ':' + port)
-					if(iface.address == '127.0.0.1'){
-						this.addresses.push('http://localhost:'+port)
-					}
-					txt += ' ~~on ~c~'+addr
-				}.bind(this))
-			}.bind(this))
-			console.color('Server running' + txt + '~~ Ready to go!\n')
-		}
-		else {
-			this.address = 'http://' + iface + ':' + port + '/'
-			this.addresses.push('http://' + iface + ':' + port)
-			if(iface == '127.0.0.1'){
-				this.addresses.push('http://localhost:'+port)
-			}
-
-			console.color('Server running on ~c~' + this.address + "~~\n")
-		}
-		if(iface === '127.0.0.1'){
-			Object.defineProperty(define, "$localbound", {
-			    value: true,
-			    writable: false
-			});
-		}
-		else{
-			Object.defineProperty(define, "$localbound", {
-			    value: false,
-			    writable: false
-			});
-		}
-		// use the browser spawner
-		var browser = this.args['-browser']
-		if(browser && (!this.args['-delay'] || this.args['-count'] ==0 )){
-			ExternalApps.browser(this.address + (browser===true?'':browser), this.args['-devtools'])
-		}
+		// this.server = http.createServer(this.request.bind(this))
+		// this.server.listen(port, iface)
+		// this.server.on('upgrade', this.upgrade.bind(this))
+		// this.addresses = []
+		// if(iface == '0.0.0.0'){
+		// 	var ifaces = os.networkInterfaces()
+		// 	var txt = ''
+		// 	Object.keys(ifaces).forEach(function(ifname){
+		// 		var alias = 0;
+		// 		ifaces[ifname].forEach(function(iface){
+		// 			if ('IPv4' !== iface.family) return
+		// 			var addr = 'http://' + iface.address + ':' + port + '/'
+		// 			if(!this.address) this.address = addr
+		// 			this.addresses.push('http://' + iface.address + ':' + port)
+		// 			if(iface.address == '127.0.0.1'){
+		// 				this.addresses.push('http://localhost:'+port)
+		// 			}
+		// 			txt += ' ~~on ~c~'+addr
+		// 		}.bind(this))
+		// 	}.bind(this))
+		// 	console.color('Server running' + txt + '~~ Ready to go!\n')
+		// }
+		// else {
+		// 	this.address = 'http://' + iface + ':' + port + '/'
+		// 	this.addresses.push('http://' + iface + ':' + port)
+		// 	if(iface == '127.0.0.1'){
+		// 		this.addresses.push('http://localhost:'+port)
+		// 	}
+        //
+		// 	console.color('Server running on ~c~' + this.address + "~~\n")
+		// }
+		// if(iface === '127.0.0.1'){
+		// 	Object.defineProperty(define, "$localbound", {
+		// 	    value: true,
+		// 	    writable: false
+		// 	});
+		// }
+		// else{
+		// 	Object.defineProperty(define, "$localbound", {
+		// 	    value: false,
+		// 	    writable: false
+		// 	});
+		// }
+		// // use the browser spawner
+		// var browser = this.args['-browser']
+		// if(browser && (!this.args['-delay'] || this.args['-count'] ==0 )){
+		// 	ExternalApps.browser(this.address + (browser===true?'':browser), this.args['-devtools'])
+		// }
 
 		// this.watcher = new FileWatcher()
 		// this.watcher.atChange = function(ifile){
@@ -117,7 +117,7 @@ define.class(function(require){
 			if(this.args['-delay']) this.broadcast({type:'delay'})
 		}.bind(this))
 
-		if(this.args['-web']) this.getComposition(this.args['-web'])
+//		if(this.args['-web']) this.getComposition(this.args['-web'])
 	}
 
 	this.COMP_DIR = 'compositions'
