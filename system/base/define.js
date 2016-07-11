@@ -1498,6 +1498,7 @@
 
 					var Module = module.constructor;
 					var m = new Module();
+					m.filename = full_name;
 					m._compile(src, full_name);
 					var ret = m.exports
 				}
