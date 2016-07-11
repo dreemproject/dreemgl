@@ -28,6 +28,9 @@ module.exports = function (context, req, res) {
 	require = define
 	define.$platform = 'nodejs'
 	var RootServer = require('$system/server/rootserver')
+
+	console.log("rs", RootServer)
+
 	new RootServer({}).request(req, res)
 
 	res.writeHead(200, { 'Content-Type': 'text/html '});

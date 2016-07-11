@@ -1496,12 +1496,12 @@
 
 						console.log(full_name, "=", src)
 
-						var m = eval(src)
+//						var m = eval(src)
 
-						// var Module = module.constructor;
-						// var m = new Module();
-						// m.filename = full_name;
-						// m._compile(src, full_name);
+						var Module = module.constructor;
+						var m = new Module();
+						m.filename = full_name;
+						m._compile(src, full_name);
 						ret = m
 
 					} else {
