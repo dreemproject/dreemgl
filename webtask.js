@@ -24,6 +24,11 @@ module.exports = function (context, req, res) {
 	m._compile(definesrc, "webtask.js");
 	var define = m.exports
 
+	require = define
+	define.$platform = 'nodejs'
+	var RootServer = require('$system/server/rootserver')
+	new RootServer(args).request(req, res)
+
 	res.writeHead(200, { 'Content-Type': 'text/html '});
 	res.end("Worked? " + Object.keys(define));
 
