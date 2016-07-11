@@ -2,8 +2,9 @@ var request = require('request')
 
 module.exports = function (context, req, res) {
 
+	var http = require("http");
+	var deasync = require('deasync');
 	requirehttp = function(url) {
-		var http = require("http");
 		var done = false;
 		var data = "";
 
@@ -13,7 +14,7 @@ module.exports = function (context, req, res) {
 			res.on("end", function() { done = true; })
 		})
 
-		require('deasync').loopWhile(function(){return !done;});
+		deasync.loopWhile(function(){return !done;});
 		return data;
 	}
 
