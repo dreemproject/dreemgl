@@ -10,7 +10,7 @@ define.class(function(require){
 
 	var fs = require('fs')
 
-	var FileWatcher = require('./filewatcher')
+//	var FileWatcher = require('./filewatcher')
 
 	var BusServer = require('$system/rpc/busserver')
 
@@ -25,15 +25,15 @@ define.class(function(require){
 
 		this.busserver = new BusServer()
 
-		this.slow_watcher = new FileWatcher()
+//		this.slow_watcher = new FileWatcher()
 
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.slow_watcher.atChange = function(){
-			// lets reload this app
-			this.reload()
-		}.bind(this)
+		// this.slow_watcher.atChange = function(){
+		// 	// lets reload this app
+		// 	this.reload()
+		// }.bind(this)
 
 		this.components = {}
 
@@ -50,7 +50,7 @@ define.class(function(require){
 
 		// lets compile and run the dreem composition
 		define.atRequire = function(filename){
-			this.slow_watcher.watch(filename)
+//			this.slow_watcher.watch(filename)
 		}.bind(this)
 		//
 		this.reload()
