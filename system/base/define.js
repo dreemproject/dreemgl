@@ -65,7 +65,7 @@
 		    value: define,
 		    writable: false
 		})
-		if (typeof(httprequire) !== "undefined") {
+		if (typeof(requirehttp) !== "undefined") {
 			define.$environment = "webtask"
 		} else {
 			define.$environment = 'nodejs'
