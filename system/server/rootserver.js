@@ -33,7 +33,7 @@ define.class(function(require){
 		var port = this.args['-port'] || process.env.PORT || 2000
 		var iface = this.args['-iface'] || process.env.IP || '127.0.0.1'
 
-		this.cache_gzip = define.makeCacheDir('gzip')
+//		this.cache_gzip = define.makeCacheDir('gzip')
 
 		this.server = http.createServer(this.request.bind(this))
 		this.server.listen(port, iface)
@@ -266,6 +266,8 @@ define.class(function(require){
 		// ok if we are a /single fetch
 		var file = decodeURIComponent(this.mapPath(reqquery[0]))
 
+		console.log("getting fole", file)
+
 		var urlext = define.fileExt(reqquery[0])
 		// write .dre to .dre.js files
 		if (urlext === 'dre') {
@@ -329,7 +331,7 @@ define.class(function(require){
 				"etag": stat.mtime.getTime() + '_' + stat.size,
 				"mtime": stat.mtime.getTime()
 			}
-			this.watcher.watch(file)
+			// this.watcher.watch(file)
 			if( req.headers['if-none-match'] == header.etag){
 				res.writeHead(304,header)
 				res.end()
@@ -343,28 +345,28 @@ define.class(function(require){
 					//header["Content-Type"]+="; utf8"
 					header["Content-encoding"] = "gzip"
 					header["Transfer-Encoding"] = "gzip"
-					var gzip_file = path.join(this.cache_gzip, requrl.replace(/\//g,'_')+header.etag)
-					fs.stat(gzip_file, function(err, stat){
-						if(err){ // make it
-							fs.readFile(file, function(err, data){
-								zlib.gzip(data, function(err, compr){
-									//header["Content-length"] = compr.length
-									//console.log(compr.length)
-									res.writeHead(200, header)
-									res.write(compr)
-									res.end()
-									fs.writeFile(gzip_file, compr, function(err){
-
-									})
-								})
-							})
-						}
-						else{
-							var stream = fs.createReadStream(gzip_file)
-							res.writeHead(200, header)
-							stream.pipe(res)
-						}
-					})
+					// var gzip_file = path.join(this.cache_gzip, requrl.replace(/\//g,'_')+header.etag)
+					// fs.stat(gzip_file, function(err, stat){
+					// 	if(err){ // make it
+					// 		fs.readFile(file, function(err, data){
+					// 			zlib.gzip(data, function(err, compr){
+					// 				//header["Content-length"] = compr.length
+					// 				//console.log(compr.length)
+					// 				res.writeHead(200, header)
+					// 				res.write(compr)
+					// 				res.end()
+					// 				fs.writeFile(gzip_file, compr, function(err){
+                    //
+					// 				})
+					// 			})
+					// 		})
+					// 	}
+					// 	else{
+					// 		var stream = fs.createReadStream(gzip_file)
+					// 		res.writeHead(200, header)
+					// 		stream.pipe(res)
+					// 	}
+					// })
 				}
 				else{
 					var stream = fs.createReadStream(file)
