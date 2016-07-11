@@ -264,6 +264,23 @@ define.class(function(require){
 
 		if (requrl.indexOf("/api/run/wt-freemason-gmail_com-0/webtask") === 0) {
 			requrl = "/examples/sliders.js"
+			define.paths = {
+				'system':'$root/system',
+				'resources':'$root/resources',
+				'3d':'$root/classes/3d',
+				'behaviors':'$root/classes/behaviors',
+				'server':'$root/classes/server',
+				'ui':'$root/classes/ui',
+				'flow':'$root/classes/flow',
+				'testing':'$root/classes/testing',
+				'widgets':'$root/classes/widgets',
+				'sensors':'$root/classes/sensors',
+				'iot':'$root/classes/iot',
+				'examples':'$root/examples',
+				'apps':'$root/apps',
+				'docs':'$root/docs',
+				'test':'$root/test'
+			}
 		}
 		var reqquery = requrl.split('?')
 
