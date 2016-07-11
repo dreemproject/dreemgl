@@ -1473,41 +1473,43 @@
 					define.atRequire(full_name)
 				}
 
-				full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
-				console.log("fullname>>", full_name)
-
-
-				var src = requirehttp(full_name)
-
-				console.log(full_name, "=", src)
-
-				// we cant require non js files
-				var ext = define.fileExt(full_name)
-				if(ext !== '' && ext !== 'js'){
-					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
-						// Construct a Texture.Image object given its path
-						if(define.loadImage) return define.loadImage(full_name)
-						return undefined
-					}
-					else{
-						// read it as an arraybuffer
-						var buffer = fs.readFileSync(full_name)
-						var ab = new ArrayBuffer(buffer.length)
-						var view = new Uint8Array(ab)
-						for (var i = 0; i < buffer.length; ++i) {
-							view[i] = buffer[i]
-						}
-						return define.processFileType(ext, ab)
-						//console.log(full_name)
-					}
-					return undefined
-				}
+				// // we cant require non js files
+				// var ext = define.fileExt(full_name)
+				// if(ext !== '' && ext !== 'js'){
+				// 	if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
+				// 		// Construct a Texture.Image object given its path
+				// 		if(define.loadImage) return define.loadImage(full_name)
+				// 		return undefined
+				// 	}
+				// 	else{
+				// 		// read it as an arraybuffer
+				// 		var buffer = fs.readFileSync(full_name)
+				// 		var ab = new ArrayBuffer(buffer.length)
+				// 		var view = new Uint8Array(ab)
+				// 		for (var i = 0; i < buffer.length; ++i) {
+				// 			view[i] = buffer[i]
+				// 		}
+				// 		return define.processFileType(ext, ab)
+				// 		//console.log(full_name)
+				// 	}
+				// 	return undefined
+				// }
 
 				var old_stack = define.local_require_stack
 				define.local_require_stack = []
 
 				try{
-					var ret = require(full_name)
+					full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
+					console.log("fullname>>", full_name)
+
+					var src = requirehttp(full_name)
+
+					console.log(full_name, "=", src)
+
+					var Module = module.constructor;
+					var m = new Module();
+					m._compile(src, full_name);
+					var ret = m.exports
 				}
 					//catch(e){
 
