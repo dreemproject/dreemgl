@@ -64,7 +64,8 @@
 		console.log("XXX>", __filename)
 		Object.defineProperty(global, "define", {
 		    value: define,
-		    writable: true
+		    writable: false,
+			configurable:true
 		})
 		if (__filename === "webtask.js") {
 			define.$environment = "webtask"
@@ -512,7 +513,7 @@
 				args[i].nested_module = Constructor.module
 			}
 		})
-		Object.defineProperty(Constructor, 'body', {value:body})
+		Object.defineProperty(Constructor, 'body', {configurable:true, value:body})
 		body.class_args = args
 		return body.apply(Constructor.prototype, args)
 	}
@@ -528,7 +529,7 @@
 			if(!(obj instanceof MyConstructor)){
 				var constructor = define.atConstructor? define.atConstructor(MyConstructor, arguments[0]): MyConstructor
 				obj = Object.create(constructor.prototype)
-				Object.defineProperty(obj, 'constructor', {value:constructor})
+				Object.defineProperty(obj, 'constructor', {configurable:true, value:constructor})
 			}
 
 			var outer = MyConstructor.outer
@@ -578,19 +579,19 @@
 
 		if(baseclass){
 			Constructor.prototype = Object.create(baseclass.prototype)
-			Object.defineProperty(Constructor.prototype, 'constructor', {value:Constructor})
+			Object.defineProperty(Constructor.prototype, 'constructor', {configurable:true, value:Constructor})
 		}
 
-		Object.defineProperty(Constructor, 'extend', {value:function(body, outer_this, in_name){
+		Object.defineProperty(Constructor, 'extend', {configurable:true, value:function(body, outer_this, in_name){
 			//if(this.prototype.constructor === define.StubbedClass) return define.StubbedClass
 			return define.makeClass(this, body, require, undefined, this.nested_module, outer_this, in_name)
 		}})
 
-		Object.defineProperty(Constructor, 'overlay', {value:function(body){
+		Object.defineProperty(Constructor, 'overlay', {configurable:true, value:function(body){
 			return define.applyBody(body, this, baseclass)
 		}})
 
-		Object.defineProperty(Constructor, 'mixin', {value:function(body){
+		Object.defineProperty(Constructor, 'mixin', {configurable:true, value:function(body){
 			var obj = body
 			if(typeof body === 'function') obj = body.prototype
 			var out = this.prototype
@@ -599,7 +600,7 @@
 			}
 		}})
 
-		Object.defineProperty(Constructor, 'body', {value:body})
+		Object.defineProperty(Constructor, 'body', {configurable:true, value:body})
 
 		if(outer_this) Constructor.outer = outer_this
 
@@ -611,12 +612,12 @@
 				if(body && body.mixin) module.exports = Constructor.prototype
 				else module.exports = Constructor
 
-				Object.defineProperty(Constructor, 'module', {value:module})
+				Object.defineProperty(Constructor, 'module', {configurable:true, value:module})
 
 				define.applyBody(body, Constructor, baseclass, require)
 			}
 			else if(nested_module){
-				Object.defineProperty(Constructor, 'module', {value:nested_module})
+				Object.defineProperty(Constructor, 'module', {configurable:true, value:nested_module})
 				define.applyBody(body, Constructor, baseclass)
 			}
 			else {
@@ -661,6 +662,7 @@
 			var outer_this = arguments[0]
 			var classname = arguments[1]
 			Object.defineProperty(outer_this, classname, {
+				configurable:true,
 				get:function(){
 					var cls = this['_' + classname]
 					if(cls) cls.outer = this
@@ -3091,7 +3093,7 @@
 			var obj = this
 			if(!(obj instanceof Mark)){
 				obj = Object.create(Mark.prototype)
-				Object.defineProperty(obj, 'constructor', {value:Mark})
+				Object.defineProperty(obj, 'constructor', {configurable:true, value:Mark})
 			}
 			obj.value = value
 			obj.mark = arguments.length>1? mark: true
@@ -3167,28 +3169,28 @@
 	}
 
 	function defineComponent(proto, name, index){
-		Object.defineProperty(proto, name, {get:function(){ return this[index] },set:function(v){
+		Object.defineProperty(proto, name, {configurable:true, get:function(){ return this[index] },set:function(v){
 			this[index] = v
 			if(this.atChange) this.atChange(index)
 		}})
 	}
 
 	function defineSwiz2(proto, name, i0, i1, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1]) },set:function(v){
+		Object.defineProperty(proto, name, {configurable:true, get:function(){ return vec(this[i0], this[i1]) },set:function(v){
 			this[i0] = v[0], this[i1] = v[1]
 			if(this.atChange) this.atChange(-1)
 		}})
 	}
 
 	function defineSwiz3(proto, name, i0, i1, i2, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2]) },set:function(v){
+		Object.defineProperty(proto, name, {configurable:true, get:function(){ return vec(this[i0], this[i1], this[i2]) },set:function(v){
 			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2]
 			if(this.atChange) this.atChange(-1)
 		}})
 	}
 
 	function defineSwiz4(proto, name, i0, i1, i2, i3, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2], this[i3]) },set:function(v){
+		Object.defineProperty(proto, name, {configurable:true, get:function(){ return vec(this[i0], this[i1], this[i2], this[i3]) },set:function(v){
 			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2], this[i3] = v[3]
 			if(this.atChange) this.atChange(-1)
 		}})
