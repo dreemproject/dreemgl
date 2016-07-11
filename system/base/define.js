@@ -1500,7 +1500,7 @@
 
 				try{
 					full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
-					console.log("fullname>>", full_name)
+					console.log("fullname?>>", full_name)
 
 					var src = requirehttp(full_name)
 
