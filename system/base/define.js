@@ -118,9 +118,6 @@
 
 
 	define.fileName = function(file){
-		if (!file) {
-			return file;
-		}
 		file = file.replace(/\\/g,'/')
 		var file = file.slice(define.filePath(file).length)
 		if(file.charAt(0) == '/') return file.slice(1)
@@ -558,6 +555,7 @@
 				fnname = (body.classname || body.name)
 			}
 			else if(module){
+				console.log("filename for module???", module)
 				 fnname = define.fileBase(module.filename).replace(/\.|\-|\s/g,'_')//.replace(/\.js/g,'').replace(/\./g,'_').replace(/\//g,'_')
 			}
 			else{
