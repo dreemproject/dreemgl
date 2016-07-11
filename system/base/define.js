@@ -1473,6 +1473,8 @@
 					define.atRequire(full_name)
 				}
 
+				console.log("fullname>>", full_name)
+
 				// we cant require non js files
 				var ext = define.fileExt(full_name)
 				if(ext !== '' && ext !== 'js'){
