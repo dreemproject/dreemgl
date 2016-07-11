@@ -61,11 +61,11 @@
 	if(typeof window !== 'undefined') window.define = define, define.$environment = 'browser'
 	else if(typeof self !== 'undefined') self.define = define, define.$environment = 'worker'
 	else if (typeof global !== 'undefined'){
+		console.log("XXX>", __filename)
 		Object.defineProperty(global, "define", {
 		    value: define,
 		    writable: false
 		})
-		console.log("XXX>", __filename)
 		if (typeof(requirehttp) !== "undefined") {
 			define.$environment = "webtask"
 		} else {
