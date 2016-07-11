@@ -14,7 +14,7 @@ define.class(function(require){
 	var url = require('url')
 	var zlib = require('zlib')
 
-	var FileWatcher = require('/system/server/filewatcher')
+//	var FileWatcher = require('/system/server/filewatcher')
 	var ExternalApps = require('/system/server/externalapps')
 	var NodeWebSocket = require('/system/server/nodewebsocket')
 	var mimeFromFile = require('/system/server/mimefromfile')
