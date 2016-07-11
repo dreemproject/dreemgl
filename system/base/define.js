@@ -1473,27 +1473,16 @@
 					define.atRequire(full_name)
 				}
 
-				// // we cant require non js files
-				// var ext = define.fileExt(full_name)
-				// if(ext !== '' && ext !== 'js'){
-				// 	if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
-				// 		// Construct a Texture.Image object given its path
-				// 		if(define.loadImage) return define.loadImage(full_name)
-				// 		return undefined
-				// 	}
-				// 	else{
-				// 		// read it as an arraybuffer
-				// 		var buffer = fs.readFileSync(full_name)
-				// 		var ab = new ArrayBuffer(buffer.length)
-				// 		var view = new Uint8Array(ab)
-				// 		for (var i = 0; i < buffer.length; ++i) {
-				// 			view[i] = buffer[i]
-				// 		}
-				// 		return define.processFileType(ext, ab)
-				// 		//console.log(full_name)
-				// 	}
-				// 	return undefined
-				// }
+				// we cant require non js files
+				var ext = define.fileExt(full_name)
+				if(ext !== '' && ext !== 'js'){
+					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){
+						// Construct a Texture.Image object given its path
+						if(define.loadImage) return define.loadImage(full_name)
+						return undefined
+					}
+					return undefined
+				}
 
 				var old_stack = define.local_require_stack
 				define.local_require_stack = []
