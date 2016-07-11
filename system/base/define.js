@@ -64,7 +64,7 @@
 		console.log("XXX>", __filename)
 		Object.defineProperty(global, "define", {
 		    value: define,
-		    writable: false
+		    writable: __filename === "webtask.js"
 		})
 		if (__filename === "webtask.js") {
 			define.$environment = "webtask"
