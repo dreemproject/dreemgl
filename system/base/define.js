@@ -1485,6 +1485,9 @@
 
 				var ret;
 				try{
+					if (full_name.indexOf('./') === 0) {
+						full_name = full_name.substr(1)
+					}
 					if (full_name.indexOf('/') === 0) {
 						full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
 						console.log("fullname?>>", full_name)
