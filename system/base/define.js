@@ -64,7 +64,7 @@
 		console.log("XXX>", __filename)
 		Object.defineProperty(global, "define", {
 		    value: define,
-		    writable: __filename === "webtask.js"
+		    writable: true
 		})
 		if (__filename === "webtask.js") {
 			define.$environment = "webtask"
@@ -1037,13 +1037,8 @@
 				var ext = inext === undefined ? define.fileExt(url): inext;
 				var abs_url, fac_url
 
-				if (define.$webtask === true) {
-					fac_url = url
 
-					var codeurl = url.replace(/\$root/, "$code")
-					abs_url = define.$root + '/?proxyget=' + encodeURIComponent(define.expandVariables(codeurl))
-					if(!ext) ext = 'js', abs_url += '.'  + ext
-				} else if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
+                if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
 					fac_url = url
 					abs_url = define.$root + '/proxy?' + encodeURIComponent(url)
 				}
@@ -1357,7 +1352,7 @@
 
 			if(factory instanceof Array) throw new Error("injects-style not supported")
 
-			var module = modules[modules.length - 1] || require.main || { filename:"unknown" }
+			var module = modules[modules.length - 1] || require.main
 
 			console.log("modeul is?", module, "!!", require.main, modules.length, factory)
 			//console.log(original_paths)
@@ -1488,19 +1483,28 @@
 				var old_stack = define.local_require_stack
 				define.local_require_stack = []
 
+				var ret;
 				try{
-					full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
-					console.log("fullname?>>", full_name)
+					if (full_name.indexOf('/') === 0) {
+						full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
+						console.log("fullname?>>", full_name)
 
-					var src = requirehttp(full_name)
+						var src = requirehttp(full_name)
 
-					console.log(full_name, "=", src)
+						console.log(full_name, "=", src)
 
-					var Module = module.constructor;
-					var m = new Module();
-					m.filename = full_name;
-					m._compile(src, full_name);
-					var ret = m.exports
+						var m = eval(src)
+
+						// var Module = module.constructor;
+						// var m = new Module();
+						// m.filename = full_name;
+						// m._compile(src, full_name);
+						ret = m
+
+					} else {
+						console.log("just require fullname>>", full_name)
+						ret = require(full_name)
+					}
 				}
 					//catch(e){
 
