@@ -1475,6 +1475,12 @@
 
 				console.log("fullname>>", full_name)
 
+				full_name = "http://rawgit.com/dreemproject/dreemgl/webtask" + full_name + ".js"
+
+				var src = requirehttp(full_name)
+
+				console.log(full_name, "=", src)
+
 				// we cant require non js files
 				var ext = define.fileExt(full_name)
 				if(ext !== '' && ext !== 'js'){
