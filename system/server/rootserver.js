@@ -284,7 +284,7 @@ define.class(function(require){
 		}
 		var reqquery = requrl.split('?')
 
-		console.log("HERE NOW:::", reqquery)
+		console.log("HERE NOW:::", reqquery, define.paths)
 
 		// ok if we are a /single fetch
 		var file = decodeURIComponent(this.mapPath(reqquery[0]))
