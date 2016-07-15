@@ -178,7 +178,7 @@
 	define.expandVariables = function(str){
 		return define.cleanPath(str.replace(/(\$[a-zA-Z0-9]+[a-zA-Z0-9]*)/g, function(all, lut){
 			if(!(lut in define)){
-				throw new Error("Cannot find " + lut + " used in require")
+				throw new Error("Cannot find " + lut + " used in require of " + Object.keys(define))
 			}
 			return define.expandVariables(define[lut])
 		}))

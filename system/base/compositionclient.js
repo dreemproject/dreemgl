@@ -68,6 +68,15 @@ define.class('./compositionbase', function(require, baseclass){
 		}
 
 		if(previous || parent) this.doRender(previous, parent)
+
+		if (typeof(define.$rendertimeout) !== "undefined") {
+			setTimeout(function() {
+				if (!this.rendered) {
+					this.doRender()
+				}
+			}.bind(this), define.$rendertimeout)
+		}
+		
 	}
 
 	this.doRender = function(previous, parent){
