@@ -62,17 +62,22 @@ app.use('/widgets', express.static('classes/widgets'));
 app.use('/iot', express.static('classes/iot'));
 app.use('/sensors', express.static('classes/sensors'));
 
+this.compservers = {}
+
 app.get('/', function (req, res) {
 	console.log("got request")
 
-	var compname = "$examples/sliders"
+	var compname = "$test/firebus"
 
-	var compositionserver = new StaticServer(compname, {
-		bus:{name:"dummybus", broadcast:function() { console.log("broadcasing:", arguments) }}
-	})
+	var compositionserver = this.compservers[compname]
+	if (!compositionserver) {
+		this.compservers[compname] = compositionserver = new StaticServer(compname, {
+			busclass:'$system/rpc/firebusserver'
+		})
+	}
 
 	compositionserver.request(req, res)
-});
+}.bind(this));
 
 app.listen(3000, function () {
 	console.log('Example app listening on port 3000!');

@@ -1282,7 +1282,11 @@
 				}
 			}
 		}
-		define.autoreloadConnect()
+
+		if (define.$autoreloadConnect !== false) {
+			define.autoreloadConnect()
+		}
+
 	}
 
 

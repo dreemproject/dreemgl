@@ -9,6 +9,7 @@
 define.class(function(require){
 
 	var fs = require('fs')
+	var path = require('path')
 
 	this.atConstructor = function(
 		compname, //String: name of the composition
@@ -20,14 +21,13 @@ define.class(function(require){
 
 		this.compname = compname
 
+		this.rootdir = path.normalize(__dirname + "/../..")
+		console.log("rd", this.rootdir)
+
 		//xxx root server is now gone, deal with options
 
-		this.busserver = options.bus
-
-		if (!this.busserver) {
-			var BusServer = require('$system/rpc/busserver')
-			this.busserver = new BusServer()
-		}
+		var BusServer = require(options.busclass || '$system/rpc/busserver')
+		this.busserver = new BusServer()
 
 		// lets give it a session
 		this.session = Math.random() * 1000000
@@ -66,7 +66,7 @@ define.class(function(require){
 	}
 
 	this.loadComposition = function(){
-		console.log("Reloading composition "+this.filename)
+		console.log("Reloading composition "+this.filename, this.session)
 		require.clearCache()
 		var Composition = require(define.expandVariables(this.filename)) //xxx load from external source, not just file system?
 		this.composition = new Composition(this.busserver, this.session, this.composition)
@@ -143,9 +143,12 @@ define.class(function(require){
 			'    }\n'+
 			'    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
 			'  </style>'+
+			'<script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>' +
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
-			'	   $rendertimeout:100,\n'+
+			'	   $autoreloadConnect:false,\n'+
+			'	   $busclass:"$system/rpc/firebusclient",\n'+
+//			'	   $rendertimeout:100,\n'+
 			'	   $platform:"webgl",\n'+
 			'      paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
@@ -172,101 +175,6 @@ define.class(function(require){
 	}
 
 	this.request = function(req, res){
-		var base = req.url.split('?')[0]
-		//var app = base.split('/')[2] || 'browser'
-		// ok lets serve our Composition device
-
-		if(req.method == 'POST'){
-			// lets do an RPC call
-
-			if(!define.$unsafeorigin && this.rootserver.addresses.indexOf(req.headers.origin) === -1){ //xxx
-				console.log("WRONG ORIGIN POST API RECEIVED" + req.headers.origin)
-				res.end()
-				return false
-			}
-
-			var boundary;
-			if (req.headers && req.headers['content-type']) {
-				var type = req.headers['content-type'];
-				if (type) {
-					var m = /^multipart\/form-data; boundary=(.*)$/.exec(type)
-
-					if (m) {
-						boundary = m[1];
-					}
-				}
-			}
-
-			var buffer;
-			req.on('data', function(data){
-				if (boundary) {
-					if (!buffer) {
-						buffer = new Buffer(data)
-					} else {
-						buffer = Buffer.concat([buffer, data])
-					}
-				}
-			})
-			req.on('end', function(){
-
-				if (boundary && buffer && buffer.indexOf) {
-
-					var cursor = buffer.indexOf(boundary) + boundary.length;
-
-					cursor = buffer.indexOf("filename=", cursor) + "filename=".length;
-					var q = buffer[cursor];
-					var filename = buffer.slice(cursor + 1, buffer.indexOf(q, cursor + 1)).toString();
-					cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
-
-					var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary));
-
-					var compfile = this.composition.constructor.module.filename;
-					var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
-
-					filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
-
-					if (!define.$writefile){
-						console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
-						res.writeHead(501);
-					} else {
-						try{
-							var fullname = define.expandVariables(filename);
-							fs.writeFile(fullname, filedata);
-							console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
-							res.writeHead(200);
-						}
-						catch(e){
-							res.writeHead(503);
-						}
-					}
-
-					res.end();
-					return
-				} else if (buffer) {
-					try{
-						var json = JSON.parse(buffer.toString())
-						this.composition.postAPI(json, {send:function(msg){
-							res.writeHead(200, {"Content-Type":"text/json"})
-							res.write(JSON.stringify(msg))
-							res.end()
-						}})
-					}
-					catch(e){
-						res.writeHead(500, {"Content-Type": "text/html"})
-						res.write('FAIL')
-						res.end()
-						return
-					}
-				} else {
-					res.writeHead(500, {"Content-Type": "text/html"})
-					res.write('FAIL')
-					res.end()
-					return
-				}
-			}.bind(this))
-			return
-		} // move up
-
 		var header = {
 			"Cache-control": "max-age=0",
 			"Content-Type": "text/html"
@@ -281,7 +189,7 @@ define.class(function(require){
 			return
 		}
 
-		if (! this.filename) {
+		if (!this.filename) {
 			res.writeHead(404, header)
 			res.write('<body>Sorry, we could not find an application at that URL. <a href="/docs/api/index.html">Try reading the documentation?</a></body>')
 			res.end()
