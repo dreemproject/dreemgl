@@ -64,16 +64,13 @@ app.use('/sensors', express.static('classes/sensors'));
 
 this.compservers = {}
 
-app.get('/', function (req, res) {
-	console.log("got request")
+app.get('/*', function (req, res) {
+	var compname = "$" + req.path.substr(1)
 
-	var compname = "$test/firebus"
 
 	var compositionserver = this.compservers[compname]
 	if (!compositionserver) {
-		this.compservers[compname] = compositionserver = new StaticServer(compname, {
-			busclass:'$system/rpc/firebusserver'
-		})
+		this.compservers[compname] = compositionserver = new StaticServer(compname)
 	}
 
 	compositionserver.request(req, res)

@@ -9,6 +9,8 @@ define.class(function(require, exports){
 
 	this.atConstructor = function(url){
 		this.url = url || ''
+
+		this.channel = url.replace(/^\w+:\/\/[^/]*/, "").replace(/[\.\/$]/g, "_")
 	}
 
 	this.connect = function() {
@@ -22,29 +24,27 @@ define.class(function(require, exports){
 
 		var db = this.db = firebase.database();
 
-		this.clients = db.ref("clients");
+		this.clients = db.ref("clients/" + this.channel);
+		this.out = this.db.ref("serverQ/" + this.channel);
 
 		this.reconnect()
 	}
 
-	this.disconnect = function(){
+	this.disconnect = function() {
+		if (this.messages) {
+			this.messages.off()
+		}
 
 		if (this.clientid) {
-			console.log("disconnect fbcleint", this.clientid)
-			this.db.ref().child("clientQ" + this.clientid).remove()
 			this.clientid = undefined
 		}
 	}
 
 	this.sendJSON = this.send = function(msg){
-		console.log("sssend fbcleint", msg)
-
 		var packet = {
-			client: this.clientid,
+			clientid: this.clientid,
 			payload: JSON.stringify(msg)
 		}
-
-		console.log("sending packet", packet)
 
 		this.out.push(packet)
 	}
@@ -56,21 +56,16 @@ define.class(function(require, exports){
 
 		var clientid = this.clientid = this.clients.push({url:this.url}).key
 
-		console.log("clientID", clientid)
-
-		this.out = this.db.ref().child("serverQ");
-
 		this.messages = this.db.ref("clientQ" + clientid)
 		this.readyState = 1
 
 		this.messages.on("child_added", function(snap) {
 			var msg = snap.val()
 			snap.ref.remove()
-			console.log("client got incoming message", msg.key, msg)
 			this.atMessage(msg, this)
 		}.bind(this))
 
-		console.log("fbcleitn reconnect")
+		//this.clients.child(this.clientid).update({ready:true})
 
 	}
 

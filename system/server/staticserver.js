@@ -22,15 +22,14 @@ define.class(function(require){
 		this.compname = compname
 
 		this.rootdir = path.normalize(__dirname + "/../..")
-		console.log("rd", this.rootdir)
 
 		//xxx root server is now gone, deal with options
 
-		var BusServer = require(options.busclass || '$system/rpc/busserver')
-		this.busserver = new BusServer()
-
 		// lets give it a session
-		this.session = Math.random() * 1000000
+		this.session = (Math.random() * 1000000).toString()
+
+		var BusServer = require(options.busclass || '$system/rpc/firebusserver')
+		this.busserver = new BusServer(compname.replace(/[\.\/$]/g, "_"))
 
 		this.components = {}
 
@@ -66,7 +65,7 @@ define.class(function(require){
 	}
 
 	this.loadComposition = function(){
-		console.log("Reloading composition "+this.filename, this.session)
+		console.log("Reloading composition " + this.filename)
 		require.clearCache()
 		var Composition = require(define.expandVariables(this.filename)) //xxx load from external source, not just file system?
 		this.composition = new Composition(this.busserver, this.session, this.composition)

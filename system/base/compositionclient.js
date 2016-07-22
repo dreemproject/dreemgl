@@ -76,7 +76,7 @@ define.class('./compositionbase', function(require, baseclass){
 				}
 			}.bind(this), define.$rendertimeout)
 		}
-		
+
 	}
 
 	this.doRender = function(previous, parent){
@@ -116,8 +116,10 @@ define.class('./compositionbase', function(require, baseclass){
 		this.bus.atMessage = function(msg, socket){
 			if(msg.type == 'sessionCheck'){
 				if(this.session != msg.session){
-					if(this.session) location.href = location.href
-					else {
+					if(this.session) {
+						console.log("session broke?", this.session, msg.session)
+						location.href = location.href
+					} else {
 						this.session = msg.session
 						this.bus.send({type:'connectScreen', name:this.screenname})
 					}

@@ -15,33 +15,29 @@ define.class(function(require, exports){
 		serviceAccount: __dirname + "/firebase.json"
 	});
 
-	this.atConstructor = function(){
+	this.atConstructor = function(channel){
 		this.clients = {}
 
 		this.db = firebase.database();
 
-		this.db.ref().once("value", function(s){
-			console.log("loks like", s.val())
-		})
-
-		var q = this.q = this.db.ref("serverQ");
+		var q = this.q = this.db.ref("serverQ/" + channel);
 		q.on('child_added', function(msg) {
 			var message = msg.val()
 			msg.ref.remove()
-			console.log("incoming message:", message)
-			var clientid = message.client;
+			var clientid = message.clientid;
 			var data = JSON.parse(message.payload)
 			var client = this.clients[clientid];
+			if (!client) {
+				console.log("no client for", clientid)
+			}
 			this.atMessage(data, client)
 		}.bind(this))
 
-		var connections = this.connections = this.db.ref("clients");
+		var connections = this.connections = this.db.ref("clients/" + channel);
 		connections.on('child_added', function(snapshot) {
 			var clientid = snapshot.key
 			var connection = snapshot.val()
-//			snapshot.ref.remove()
-
-			console.log("got connection", clientid, connection)
+			snapshot.ref.remove()
 
 			var clientQ = this.db.ref("clientQ" + clientid)
 			clientQ.sendJSON = clientQ.push
@@ -49,40 +45,23 @@ define.class(function(require, exports){
 
 			this.clients[clientid] = clientQ;
 			this.atConnect(clientQ)
-
-			// var messages = this.messages = this.db.ref().child("serverQ");
-			// messages.on('child_added', function(ss) {
-			// 	var message = ss.val()
-			// 	var cid = ss.ref.parent.key;
-			// 	console.log('cid', cid)
-			// 	var clientQ = this.db.ref("clientQ/" + cid)
-			// 	clientQ.sendJSON = clientQ.push
-			// 	ss.ref.remove()
-            //
-			// 	console.log("got qmessage FROM>", "FOR>", cid, message)
-            //
-			// 	this.atMessage(message, clientQ)
-			// }.bind(this));
-            //
-			// var clientQ = this.db.ref().child("clientQ/" + clientid)
-
 		}.bind(this));
 
 	}
 
 	// called when a new message arrives
 	this.atMessage = function(message, socket){
-		console.log("at message fbserver", message, socket)
+		console.log("atMessage firebuserver not implemented", message, socket)
 	}
 
 	// called when a client disconnects
 	this.atClose = function(socket){
-		console.log("at close fbserver", socket)
+		console.log("atClose firebuserver not implemented", socket)
 	}
 
 	// Called when a new socket appears on the bus
 	this.atConnect = function(message, socket){
-		console.log("at connect fbserver", message, socket)
+		console.log("atConnect firebuserver not implemented", message, socket)
 	}
 
 	this.broadcast = function(message, ignore){
@@ -90,7 +69,6 @@ define.class(function(require, exports){
 			var socket = this.clients[i]
 			if (socket.sendJSON) {
 				if (!ignore || socket.key !== ignore.key) {
-					console.log("broadcast fbserver", socket.key, message)
 					socket.sendJSON(message)
 				}
 			}
@@ -98,9 +76,9 @@ define.class(function(require, exports){
 	}
 
 	this.closeAll = function(){
-		console.log("close all fbserver XXXXX")
 		for(var i = 0; i < this.clients.length; i++){
-			var socket = this.clients[i];
+			var client = this.clients[i];
+			console.log("closeAll firebuserver not implemented", client)
 		}
 		this.clients = []
 	}
