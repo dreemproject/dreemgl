@@ -40,7 +40,9 @@ define.class(function(require, exports){
 			snapshot.ref.remove()
 
 			var clientQ = this.db.ref("clientQ" + clientid)
-			clientQ.sendJSON = clientQ.push
+			clientQ.sendJSON = function(payload) {
+				this.push({payload:JSON.stringify(payload)})
+			}.bind(clientQ)
 			clientQ.readyState = 1
 
 			this.clients[clientid] = clientQ;
@@ -69,6 +71,7 @@ define.class(function(require, exports){
 			var socket = this.clients[i]
 			if (socket.sendJSON) {
 				if (!ignore || socket.key !== ignore.key) {
+					console.log("LEts send", message)
 					socket.sendJSON(message)
 				}
 			}
@@ -83,34 +86,3 @@ define.class(function(require, exports){
 		this.clients = []
 	}
 })
-
-
-//
-// // Initialize the app with a service account, granting admin privileges
-// firebase.initializeApp({
-// 	databaseURL: "https://dreembase.firebaseio.com/",
-// 	serviceAccount: __dirname + "/firebase.json"
-// });
-//
-// var db = firebase.database();
-// var ref = db.ref("messages");
-//
-// ref.on('value', function(snapshot) {
-// 	console.log("is, ", snapshot.val());
-// })
-//
-// //ref.set({foo:"bar"});
-// ref.once("value", function(snapshot) {
-// 	console.log(">>>", snapshot.val());
-// });
-//
-// var screenData = {
-// 	name: "default"
-// };
-//
-// setInterval(function () {
-// 	ref.push({data:"connect"})
-// 	ref.push({data:"connect"})
-// 	ref.push({data:"connect"})
-// 	ref.push({data:"connect"})
-// }, 2000)

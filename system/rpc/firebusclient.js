@@ -62,7 +62,8 @@ define.class(function(require, exports){
 		this.messages.on("child_added", function(snap) {
 			var msg = snap.val()
 			snap.ref.remove()
-			this.atMessage(msg, this)
+			var payload = JSON.parse(msg.payload)
+			this.atMessage(payload, this)
 		}.bind(this))
 
 		//this.clients.child(this.clientid).update({ready:true})
