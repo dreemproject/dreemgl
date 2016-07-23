@@ -6,6 +6,11 @@
 
 require = require('./system/base/define')
 
+define.$platform = 'nodejs'
+
+Object.defineProperty(define, "$writefile", {value: false, writable: false});
+Object.defineProperty(define, "$unsafeorigin", {value: false, writable: false});
+
 define.paths = {
 	'system':'$root/system',
 	'resources':'$root/resources',
@@ -24,57 +29,33 @@ define.paths = {
 	'test':'$root/test'
 }
 
-require('$system/base/math')
-
-Object.defineProperty(define, "$writefile", {
-	value: false,
-	writable: false
-});
-
-Object.defineProperty(define, "$unsafeorigin", {
-	value: false,
-	writable: false
-});
-
-define.$platform = 'nodejs'
 for (var key in define.paths) {
 	define['$' + key] = define.paths[key]
 }
+
+require('$system/base/math')
 
 var StaticServer = require('$system/server/staticserver')
 
 var express = require('express');
 var app = express();
 
-app.use('/system', express.static('system'));
-app.use('/examples', express.static('examples'));
-app.use('/apps', express.static('apps'));
-app.use('/docs', express.static('docs'));
-app.use('/resources', express.static('resources'));
-app.use('/test', express.static('test'));
-app.use('/ui', express.static('classes/ui'));
-app.use('/3d', express.static('classes/3d'));
-app.use('/server', express.static('classes/server'));
-app.use('/behaviors', express.static('classes/behaviors'));
-app.use('/flow', express.static('classes/flow'));
-app.use('/testing', express.static('classes/testing'));
-app.use('/widgets', express.static('classes/widgets'));
-app.use('/iot', express.static('classes/iot'));
-app.use('/sensors', express.static('classes/sensors'));
+for (var key in define.paths) {
+	app.use('/' + key, express.static(define.expandVariables(define.paths[key])));
+}
 
-this.compservers = {}
+StaticServer.compservers = {}
 
 app.get('/*', function (req, res) {
 	var compname = "$" + req.path.substr(1)
 
-
-	var compositionserver = this.compservers[compname]
+	var compositionserver = StaticServer.compservers[compname]
 	if (!compositionserver) {
-		this.compservers[compname] = compositionserver = new StaticServer(compname)
+		StaticServer.compservers[compname] = compositionserver = new StaticServer(compname)
 	}
 
 	compositionserver.request(req, res)
-}.bind(this));
+});
 
 app.listen(3000, function () {
 	console.log('Example app listening on port 3000!');
