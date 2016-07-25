@@ -65,9 +65,6 @@ define.class(function(require, exports){
 			var payload = JSON.parse(msg.payload)
 			this.atMessage(payload, this)
 		}.bind(this))
-
-		//this.clients.child(this.clientid).update({ready:true})
-
 	}
 
 	// Called when a message is received

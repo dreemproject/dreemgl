@@ -4,59 +4,13 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and limitations under the License.*/
 
-require = require('./system/base/define')
-
-define.$platform = 'nodejs'
-
-Object.defineProperty(define, "$writefile", {value: false, writable: false});
-Object.defineProperty(define, "$unsafeorigin", {value: false, writable: false});
-
-define.paths = {
-	'system':'$root/system',
-	'resources':'$root/resources',
-	'3d':'$root/classes/3d',
-	'behaviors':'$root/classes/behaviors',
-	'server':'$root/classes/server',
-	'ui':'$root/classes/ui',
-	'flow':'$root/classes/flow',
-	'testing':'$root/classes/testing',
-	'widgets':'$root/classes/widgets',
-	'sensors':'$root/classes/sensors',
-	'iot':'$root/classes/iot',
-	'examples':'$root/examples',
-	'apps':'$root/apps',
-	'docs':'$root/docs',
-	'test':'$root/test'
-}
-
-for (var key in define.paths) {
-	define['$' + key] = define.paths[key]
-}
-
-require('$system/base/math')
-
-var StaticServer = require('$system/server/staticserver')
-
 var express = require('express');
 var app = express();
 
-for (var key in define.paths) {
-	app.use('/' + key, express.static(define.expandVariables(define.paths[key])));
-}
+var ExpressAdapter = require('./system/adapters/expressadapter')
 
-StaticServer.compservers = {}
+ExpressAdapter.initStatic(express, app)
 
-app.get('/*', function (req, res) {
-	var compname = "$" + req.path.substr(1)
+app.get('/*', ExpressAdapter.requestHandler);
 
-	var compositionserver = StaticServer.compservers[compname]
-	if (!compositionserver) {
-		StaticServer.compservers[compname] = compositionserver = new StaticServer(compname)
-	}
-
-	compositionserver.request(req, res)
-});
-
-app.listen(3000, function () {
-	console.log('Example app listening on port 3000!');
-});
+app.listen(3000);

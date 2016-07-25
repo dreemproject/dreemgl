@@ -27,9 +27,6 @@ define.class(function(require, exports){
 			var clientid = message.clientid;
 			var data = JSON.parse(message.payload)
 			var client = this.clients[clientid];
-			if (!client) {
-				console.log("no client for", clientid)
-			}
 			this.atMessage(data, client)
 		}.bind(this))
 
@@ -71,7 +68,6 @@ define.class(function(require, exports){
 			var socket = this.clients[i]
 			if (socket.sendJSON) {
 				if (!ignore || socket.key !== ignore.key) {
-					console.log("LEts send", message)
 					socket.sendJSON(message)
 				}
 			}
