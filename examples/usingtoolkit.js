@@ -18,7 +18,7 @@ define.class("$server/composition",function(require,$ui$,icon,button,checkbox,la
             toolmove:false,
             toolrect:false
           },
-          view({height:411,width:441,pickalpha:-1,bgcolor:'white',position:"absolute",x:179,y:156.99998474121094})
+          view({height:436,width:207,pickalpha:-1,bgcolor:'white',position:"absolute",x:106,y:102})
         ),
         toolkit({
           name:"toolkit",

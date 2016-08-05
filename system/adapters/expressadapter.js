@@ -16,6 +16,18 @@ for(var lastkey = '', arg, i = 0; i<argv.length; i++){
 // Launch the platform setup
 require = require(__dirname + '/../base/define')
 
+if (args['-writefile']) {
+	Object.defineProperty(define, "$writefile", { value: true, writable: false });
+} else{
+	Object.defineProperty(define, "$writefile", { value: false, writable: false });
+}
+
+if (args['-unsafeorigin']) {
+	Object.defineProperty(define, "$unsafeorigin", { value: true, writable: false });
+} else{
+	Object.defineProperty(define, "$unsafeorigin", { value: false, writable: false });
+}
+
 define.$platform = 'nodejs'
 
 define.paths = {

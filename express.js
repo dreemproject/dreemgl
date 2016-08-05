@@ -11,6 +11,7 @@ var ExpressAdapter = require('./system/adapters/expressadapter')
 
 // These options will be used when building composition servers, primarily used to configure the firebase bus
 define.$compositionOptions = {
+	whitelist: ['http://0.0.0.0:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
 	busclass: '$system/rpc/firebusserver',
 	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
 	defines: {
@@ -34,6 +35,7 @@ ExpressAdapter.initStatic(express, app)
 
 // Configure all requests to be handled by the ExpressAdapter.requestHandler
 app.get('/*', ExpressAdapter.requestHandler);
+app.post('/*', ExpressAdapter.requestHandler);
 
 app.listen(3000, function() {
 	console.log("Started express server on port 3000")

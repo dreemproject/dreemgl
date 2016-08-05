@@ -131,7 +131,7 @@ define.class(function(require){
 	this.getComposition = function(file){
 		// lets find the composition either in define.COMPOSITIONS
 		var options = {}
-		options.addresses = this.addresses
+		options.whitelist = this.addresses
 		if(!this.compositions[file]) this.compositions[file] = new CompositionServer(this.args, file, options)
 		return this.compositions[file]
 	}

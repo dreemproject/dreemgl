@@ -208,11 +208,11 @@ define.class(function(require){
 	}
 
 	this.request = function(req, res){
-		if(req.method == 'POST' && (define.$unsafeorigin || (this.options && this.options.addresses))){
+		if(req.method == 'POST' && (define.$unsafeorigin || (this.options && this.options.whitelist))){
 			// lets do an RPC call
 
-			if(!define.$unsafeorigin && this.options.addresses.indexOf(req.headers.origin) === -1){
-				console.log("WRONG ORIGIN POST API RECEIVED.  " + req.headers.origin + "not in:", this.options.addresses)
+			if(!define.$unsafeorigin && this.options.whitelist.indexOf(req.headers.origin) === -1){
+				console.log("WRONG ORIGIN POST API RECEIVED.  " + req.headers.origin + " not in:", this.options.whitelist)
 				res.end()
 				return false
 			}
