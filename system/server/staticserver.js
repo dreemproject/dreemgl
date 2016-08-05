@@ -21,10 +21,6 @@ define.class(function(require){
 
 		this.compname = compname
 
-		this.rootdir = path.normalize(__dirname + "/../..")
-
-		//xxx root server is now gone, deal with options
-
 		// lets give it a session
 		this.session = (Math.random() * 1000000).toString()
 
@@ -147,7 +143,6 @@ define.class(function(require){
 			'    window.define = {\n'+
 			'	   $autoreloadConnect:false,\n'+
 			'	   $busclass:"$system/rpc/firebusclient",\n'+
-//			'	   $rendertimeout:100,\n'+
 			'	   $platform:"webgl",\n'+
 			'      paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
@@ -178,7 +173,6 @@ define.class(function(require){
 			"Cache-control": "max-age=0",
 			"Content-Type": "text/html"
 		}
-		//var screen = this.screens[app]
 
 		// nodejs root
 		if(req.headers['client-type'] === 'nodejs'){

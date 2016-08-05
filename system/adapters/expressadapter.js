@@ -26,8 +26,6 @@ for (var key in define.paths) {
 
 require('$system/base/math')
 
-//----
-
 exports.initStatic = function(express, app) {
 	for (var use in define.paths) {
 		app.use('/' + use, express.static(define.expandVariables(define.paths[use])));
