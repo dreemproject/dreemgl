@@ -1,3 +1,19 @@
+// Proccess args
+var args = {}
+var argv = process.argv
+for(var lastkey = '', arg, i = 0; i<argv.length; i++){
+	arg = argv[i]
+	if(arg.charAt(0) == '-') lastkey = arg, args[lastkey] = true
+	else {
+		if(lastkey in args && args[lastkey] !== true){
+			if(!Array.isArray(args[lastkey])) args[lastkey] = [args[lastkey]]
+			args[lastkey].push(arg)
+		}
+		else args[lastkey] = arg
+	}
+}
+
+// Launch the platform setup
 require = require(__dirname + '/../base/define')
 
 define.$platform = 'nodejs'
@@ -20,32 +36,13 @@ define.paths = {
 	'test':'$root/test'
 }
 
-// Initialize the app with a service account, granting admin privileges
-define.$firebusConfig = {
-	databaseURL: "https://dreembase.firebaseio.com/",
-	serviceAccount: __dirname + "/firebase.json"
-}
-
-var args = {}
-var options = {
-	busclass: '$system/rpc/firebusserver',
-	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
-	defines: {
-		autoreloadConnect:false,
-		busclass:"$system/rpc/firebusclient",
-		firebaseApiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
-		firebaseAuthDomain: "dreembase.firebaseapp.com",
-		firebaseDatabaseURL: "https://dreembase.firebaseio.com",
-		firebaseStorageBucket: "dreembase.appspot.com"
-	}
-}
-
 for (var key in define.paths) {
 	define['$' + key] = define.paths[key]
 }
 
 require('$system/base/math')
 
+// Serves all the static files in that DreemGL will likely ask for (from define.paths)
 exports.initStatic = function(express, app) {
 	for (var use in define.paths) {
 		app.use('/' + use, express.static(define.expandVariables(define.paths[use])));
@@ -53,15 +50,15 @@ exports.initStatic = function(express, app) {
 }
 
 var CompositionServer = exports.server = require('$system/server/compositionserver')
-
 CompositionServer.compservers = {}
 
+// Request handler Express will use to serve DreemGL
 exports.requestHandler = function (req, res) {
 	var compname = "$" + req.path.substr(1)
 
 	var compositionserver = CompositionServer.compservers[compname]
 	if (!compositionserver) {
-		CompositionServer.compservers[compname] = compositionserver = new CompositionServer(args, compname, options)
+		CompositionServer.compservers[compname] = compositionserver = new CompositionServer(args, compname, define.$compositionOptions)
 	}
 
 	compositionserver.request(req, res)

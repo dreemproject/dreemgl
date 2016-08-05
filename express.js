@@ -9,8 +9,30 @@ var app = express();
 
 var ExpressAdapter = require('./system/adapters/expressadapter')
 
+// These options will be used when building composition servers, primarily used to configure the firebase bus
+define.$compositionOptions = {
+	busclass: '$system/rpc/firebusserver',
+	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
+	defines: {
+		autoreloadConnect:false,
+		busclass:"$system/rpc/firebusclient",
+		firebaseApiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
+		firebaseAuthDomain: "dreembase.firebaseapp.com",
+		firebaseDatabaseURL: "https://dreembase.firebaseio.com",
+		firebaseStorageBucket: "dreembase.appspot.com"
+	}
+}
+
+// Needed by the firebase server-side bus
+define.$firebusConfig = {
+	databaseURL: "https://dreembase.firebaseio.com/",
+	serviceAccount: __dirname + "/firebase.json"
+}
+
+// Configure serving the static JS
 ExpressAdapter.initStatic(express, app)
 
+// Configure all requests to be handled by the ExpressAdapter.requestHandler
 app.get('/*', ExpressAdapter.requestHandler);
 
 app.listen(3000, function() {
