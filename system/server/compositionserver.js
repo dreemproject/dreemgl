@@ -150,9 +150,9 @@ define.class(function(require){
 				}
 			}
 
-			if (this.options.defines) {
-				for (var defkey in this.options.defines) {
-					var defval = this.options.defines[defkey]
+			if (this.options.clientdefines) {
+				for (var defkey in this.options.clientdefines) {
+					var defval = this.options.clientdefines[defkey]
 					if (typeof (defval) === 'string') {
 						defval = '"' + defval +'"'
 					}

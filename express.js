@@ -14,7 +14,7 @@ define.$compositionOptions = {
 	whitelist: ['http://0.0.0.0:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
 	busclass: '$system/rpc/firebusserver',
 	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
-	defines: {
+	clientdefines: {
 		autoreloadConnect:false,
 		busclass:"$system/rpc/firebusclient",
 		firebaseApiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
