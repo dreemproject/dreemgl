@@ -32,16 +32,26 @@ exports.initStatic = function(express, app) {
 	}
 }
 
-var Server = exports.server = require('$system/server/staticserver')
+var CompositionServer = exports.server = require('$system/server/compositionserver')
 
-Server.compservers = {}
+CompositionServer.compservers = {}
+
+var args = {}
+var options = {
+	busclass: '$system/rpc/firebusserver',
+	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
+	defines: {
+		autoreloadConnect:false,
+		busclass:'"$system/rpc/firebusclient"'
+	}
+}
 
 exports.requestHandler = function (req, res) {
 	var compname = "$" + req.path.substr(1)
 
-	var compositionserver = Server.compservers[compname]
+	var compositionserver = CompositionServer.compservers[compname]
 	if (!compositionserver) {
-		Server.compservers[compname] = compositionserver = new Server(compname)
+		CompositionServer.compservers[compname] = compositionserver = new CompositionServer(args, compname, options)
 	}
 
 	compositionserver.request(req, res)

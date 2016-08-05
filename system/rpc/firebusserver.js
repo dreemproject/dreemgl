@@ -16,6 +16,8 @@ define.class(function(require, exports){
 	});
 
 	this.atConstructor = function(channel){
+		channel = channel.replace(/[\.\/$]/g, "_")
+
 		this.clients = {}
 
 		this.db = firebase.database();

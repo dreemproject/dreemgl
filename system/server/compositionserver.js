@@ -146,7 +146,7 @@ define.class(function(require){
 			if (this.options.scripts) {
 				for (var s = 0; s < this.options.scripts.length;s++) {
 					var scriptURL = this.options.scripts[s]
-					additionalScripts += "<script>" + scriptURL + "</script>\n"
+					additionalScripts += '<script src="' + scriptURL + '"></script>\n'
 				}
 			}
 
@@ -173,7 +173,7 @@ define.class(function(require){
   			'		-user-select: none;\n'+
   			'    }\n'+
 			'    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
-			'  </style>'+
+			'  </style>\n'+
 			additionalScripts +
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+

@@ -13,4 +13,6 @@ ExpressAdapter.initStatic(express, app)
 
 app.get('/*', ExpressAdapter.requestHandler);
 
-app.listen(3000);
+app.listen(3000, function() {
+	console.log("Started express server on port 3000")
+});
