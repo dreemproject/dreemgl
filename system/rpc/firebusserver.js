@@ -9,11 +9,7 @@ define.class(function(require, exports){
 
 	var firebase = require("firebase");
 
-	// Initialize the app with a service account, granting admin privileges
-	firebase.initializeApp({
-		databaseURL: "https://dreembase.firebaseio.com/",
-		serviceAccount: __dirname + "/firebase.json"
-	});
+	firebase.initializeApp(define.$firebusConfig);
 
 	this.atConstructor = function(channel){
 		channel = channel.replace(/[\.\/$]/g, "_")

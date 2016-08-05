@@ -153,6 +153,10 @@ define.class(function(require){
 			if (this.options.defines) {
 				for (var defkey in this.options.defines) {
 					var defval = this.options.defines[defkey]
+					if (typeof (defval) === 'string') {
+						defval = '"' + defval +'"'
+					}
+
 					additionalDefines += '$' + defkey + ':' + defval + ',\n'
 				}
 			}

@@ -15,11 +15,11 @@ define.class(function(require, exports){
 
 	this.connect = function() {
 
-		firebase.initializeApp({ //xxx
-			apiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
-			authDomain: "dreembase.firebaseapp.com",
-			databaseURL: "https://dreembase.firebaseio.com",
-			storageBucket: "dreembase.appspot.com"
+		firebase.initializeApp({
+			apiKey: define.$firebaseApiKey,
+			authDomain: define.$firebaseAuthDomain,
+			databaseURL: define.$firebaseDatabaseURL,
+			storageBucket: define.$firebaseStorageBucket
 		});
 
 		var db = this.db = firebase.database();

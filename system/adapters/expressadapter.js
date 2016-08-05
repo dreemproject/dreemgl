@@ -20,6 +20,26 @@ define.paths = {
 	'test':'$root/test'
 }
 
+// Initialize the app with a service account, granting admin privileges
+define.$firebusConfig = {
+	databaseURL: "https://dreembase.firebaseio.com/",
+	serviceAccount: __dirname + "/firebase.json"
+}
+
+var args = {}
+var options = {
+	busclass: '$system/rpc/firebusserver',
+	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
+	defines: {
+		autoreloadConnect:false,
+		busclass:"$system/rpc/firebusclient",
+		firebaseApiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
+		firebaseAuthDomain: "dreembase.firebaseapp.com",
+		firebaseDatabaseURL: "https://dreembase.firebaseio.com",
+		firebaseStorageBucket: "dreembase.appspot.com"
+	}
+}
+
 for (var key in define.paths) {
 	define['$' + key] = define.paths[key]
 }
@@ -35,16 +55,6 @@ exports.initStatic = function(express, app) {
 var CompositionServer = exports.server = require('$system/server/compositionserver')
 
 CompositionServer.compservers = {}
-
-var args = {}
-var options = {
-	busclass: '$system/rpc/firebusserver',
-	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
-	defines: {
-		autoreloadConnect:false,
-		busclass:'"$system/rpc/firebusclient"'
-	}
-}
 
 exports.requestHandler = function (req, res) {
 	var compname = "$" + req.path.substr(1)
