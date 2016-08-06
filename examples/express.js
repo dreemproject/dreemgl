@@ -33,7 +33,7 @@ define.$compositionOptions = {
 // Needed by the firebase server-side bus
 define.$firebusConfig = {
 	databaseURL: "https://dreembase.firebaseio.com/",
-	serviceAccount: __dirname + "/firebase.json"
+	serviceAccount: "firebase.json"
 }
 
 // Configure serving the static JS

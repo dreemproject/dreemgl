@@ -7,8 +7,12 @@
     "express": "^4.14.0",
     "firebase": "^3.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url" : "https://github.com/dreemproject/dreemgl.git"
+  },
   "keywords": [
-    "DreemGL"
+    "DreemGL", "WebGL", "prototyping", "multiscreen", "DALi"
   ],
   "author": "Dreem Teem <dev.teem@teem.nu> (http://teem.nu)",
   "license": "Apache-2.0"
