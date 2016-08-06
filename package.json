@@ -1,9 +1,15 @@
 {
-  "name": "DreemGLx",
-  "version": "0.0.1",
+  "name": "dreemgl",
+  "main": "dreemgl.js",
+  "version": "0.0.3",
   "devDependencies": {},
   "dependencies": {
     "express": "^4.14.0",
     "firebase": "^3.2.0"
-  }
+  },
+  "keywords": [
+    "DreemGL"
+  ],
+  "author": "Dreem Teem <dev.teem@teem.nu> (http://teem.nu)",
+  "license": "Apache-2.0"
 }

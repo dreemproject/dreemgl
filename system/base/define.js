@@ -1309,7 +1309,8 @@
 	function define_nodejs(){ // nodeJS implementation
 		module.exports = global.define = define
 
-		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
+		//define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
+		define.$root = __dirname.substring(0, __dirname.length - '/system/base'.length)
 
 		var http = require("http")
 		var url = require("url")
