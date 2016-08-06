@@ -1,7 +1,7 @@
 {
   "name": "dreemgl",
   "main": "dreemgl.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "devDependencies": {},
   "dependencies": {
     "express": "^4.14.0",

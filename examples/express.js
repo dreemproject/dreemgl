@@ -8,10 +8,10 @@ var express = require('express');
 var app = express();
 
 // Launch the platform setup
-require = require(__dirname + '/dreemgl')
+require = require(__dirname + '/../dreemgl')
 
 // The ExpressAdapter helps configure DreemGl to work with express
-var ExpressAdapter = require('$system/adapters/expressadapter')
+var ExpressAdapter = require('$system/adapters/expressadapter')()
 
 // These options will be used when building composition servers, primarily used to configure the firebase bus
 define.$compositionOptions = {
@@ -37,7 +37,7 @@ define.$firebusConfig = {
 }
 
 // Configure serving the static JS
-ExpressAdapter.initStatic(express, app)
+ExpressAdapter.mountStatic(express, app)
 
 // Configure all requests to be handled by the ExpressAdapter.requestHandler
 app.get('/*', ExpressAdapter.requestHandler);
