@@ -7,16 +7,19 @@
 var express = require('express');
 var app = express();
 
+// The ExpressAdapter helps configure DreemGl to work with express
 var ExpressAdapter = require('./system/adapters/expressadapter')
 
 // These options will be used when building composition servers, primarily used to configure the firebase bus
 define.$compositionOptions = {
 	whitelist: ['http://0.0.0.0:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
 	busclass: '$system/rpc/firebusserver',
+//	busclass: '$system/rpc/dummybusserver',
 	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
 	clientdefines: {
 		autoreloadConnect:false,
 		busclass:"$system/rpc/firebusclient",
+//		busclass:"$system/rpc/dummybusclient",
 		firebaseApiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
 		firebaseAuthDomain: "dreembase.firebaseapp.com",
 		firebaseDatabaseURL: "https://dreembase.firebaseio.com",

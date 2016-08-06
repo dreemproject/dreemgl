@@ -69,6 +69,10 @@ define.class('./compositionbase', function(require, baseclass){
 
 		if(previous || parent) this.doRender(previous, parent)
 
+		if (define.$busclass === "$system/rpc/dummybusclient" && !define.$rendertimeout) {
+			define.$rendertimeout = 0
+		}
+
 		if (typeof(define.$rendertimeout) !== "undefined") {
 			setTimeout(function() {
 				if (!this.rendered) {

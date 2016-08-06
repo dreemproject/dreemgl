@@ -10,6 +10,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var Device = require('$system/platform/$platform/device$platform')
 	var BusClients = {
 		'$system/rpc/busclient':require('$system/rpc/busclient'),
+		'$system/rpc/dummybusclient':require('$system/rpc/dummybusclient'),
 		'$system/rpc/firebusclient':require('$system/rpc/firebusclient')
 	}
 
