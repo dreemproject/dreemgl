@@ -16,13 +16,11 @@ var ExpressAdapter = require('$system/adapters/expressadapter')()
 // These options will be used when building composition servers, primarily used to configure the firebase bus
 define.$compositionOptions = {
 	whitelist: ['http://0.0.0.0:3000', 'http://127.0.0.1:3000', 'http://localhost:3000'],
-//	busclass: '$system/rpc/firebusserver',
-	busclass: '$system/rpc/dummybusserver',
+	busclass: '$system/rpc/firebusserver',
 	scripts: ['https://www.gstatic.com/firebasejs/3.2.0/firebase.js'],
 	clientdefines: {
 		autoreloadConnect:false,
-//		busclass:"$system/rpc/firebusclient",
-		busclass:"$system/rpc/dummybusclient",
+		busclass:"$system/rpc/firebusclient",
 		firebaseApiKey: "AIzaSyDAsFR7KNvqOxBv3go8qWb1y7YRMwaw22U",
 		firebaseAuthDomain: "dreembase.firebaseapp.com",
 		firebaseDatabaseURL: "https://dreembase.firebaseio.com",
@@ -33,7 +31,7 @@ define.$compositionOptions = {
 // Needed by the firebase server-side bus
 define.$firebusConfig = {
 	databaseURL: "https://dreembase.firebaseio.com/",
-	serviceAccount: "firebase.json"
+	serviceAccount: process.env.HOME + "/firebase.json"
 }
 
 // Configure serving the static JS
