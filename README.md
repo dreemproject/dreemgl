@@ -11,6 +11,8 @@ An overview of the DreemGL's architecture is:
 ![Architecture Image]
 (https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png)
 
+<img src="https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png"/>
+
 ## Getting Started with DreemGL
 The fastest way to get started with DreemGL is to walk through [DreemGL in 10 Minutes](http://docs.dreemproject.org/docs/api/index.html#!/guide/dreem_in_10_part1).
 

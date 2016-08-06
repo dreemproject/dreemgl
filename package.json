@@ -1,7 +1,12 @@
 {
   "name": "dreemgl",
   "main": "dreemgl.js",
-  "version": "0.0.4",
+  "homepage":"https://dreemproject.org/",
+  "version": "0.0.5",
+  "preferGlobal": true,
+  "bin":{
+    "dreemgl":"bin/dreemgl"
+  },
   "devDependencies": {},
   "dependencies": {
     "express": "^4.14.0",
@@ -12,7 +17,7 @@
     "url" : "https://github.com/dreemproject/dreemgl.git"
   },
   "keywords": [
-    "DreemGL", "WebGL", "prototyping", "multiscreen", "DALi"
+    "DreemGL", "WebGL", "prototyping", "multiscreen", "DALi", "IoT"
   ],
   "author": "Dreem Teem <dev.teem@teem.nu> (http://teem.nu)",
   "license": "Apache-2.0"
