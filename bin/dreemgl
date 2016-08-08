@@ -1,2 +1,64 @@
 #! /usr/bin/env node
-console.log("yowza")
+
+var args = {}
+var argv = process.argv
+for (var lastkey = '', arg, i = 2; i<argv.length; i++) {
+	arg = argv[i]
+	if (arg.charAt(0) == '-') {
+		lastkey = arg
+		args[lastkey] = true
+	} else {
+		if (lastkey in args && args[lastkey] !== true) {
+			if (!Array.isArray(args[lastkey])) {
+				args[lastkey] = [args[lastkey]]
+			}
+			args[lastkey].push(arg)
+		} else {
+			args[lastkey] = arg
+			lastkey = ""
+		}
+	}
+}
+
+var express = true;//args["-express"];
+var compname = args[""]
+var port = args["-port"] || 3000
+
+if (express) {
+	var express = require('express');
+	var app = express();
+
+	var require = require(__dirname + '/../dreemgl')
+
+	var ExpressAdapter = require('$system/adapters/expressadapter')()
+
+	define.$compositionOptions = {
+		busclass: '$system/rpc/dummybusserver',
+		clientdefines: {
+			autoreloadConnect:false,
+			busclass:"$system/rpc/dummybusclient"
+		}
+	}
+
+	if (compname) {
+		if (compname.substring(compname.length - 3) == '.js') {
+			compname = compname.substring(0, compname.length - 3)
+		}
+		if (compname.indexOf("./") === 0) {
+			compname = compname.substring("./".length)
+		}
+		console.log("Mounting default composition:", compname)
+		ExpressAdapter.defaultComposition = compname
+		var path = require("path")
+		define.paths['cwd'] = path.resolve('./')
+		define['$cwd'] = define.paths['cwd']
+	}
+
+	ExpressAdapter.mountStatic(express, app)
+	app.get('/*', ExpressAdapter.requestHandler.bind(ExpressAdapter));
+
+	app.listen(port, function() { console.log("Started express server on port " + port) });
+
+} else {
+  console.log("node launcher not implemented")
+}

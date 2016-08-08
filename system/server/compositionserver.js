@@ -81,7 +81,8 @@ define.class(function(require){
 	this.loadComposition = function(){
 		console.log("Reloading composition "+this.filename)
 		require.clearCache()
-		var Composition = require(define.expandVariables(this.filename)) //TODO: xxx needs method to load from remote source, not just file system?
+		var file = define.expandVariables(this.filename)
+		var Composition = require(file) //TODO: xxx needs method to load from remote source, not just file system?
 		this.composition = new Composition(this.busserver, this.session, this.composition)
 	}
 

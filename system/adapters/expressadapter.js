@@ -15,11 +15,17 @@ define.class(function(require){
 		}
 	}
 
-	this.compservers = {}
-
 	// Request handler Express will use to serve DreemGL
 	this.requestHandler = function (req, res) {
 		var compname = "$" + req.path.substr(1)
+
+		if (compname === '$' && this.defaultComposition) {
+			compname = '$cwd/' + this.defaultComposition
+		}
+
+		if (!this.compservers) {
+			this.compservers = {}
+		}
 
 		var compositionserver = this.compservers[compname]
 		if (!compositionserver) {
@@ -27,7 +33,7 @@ define.class(function(require){
 		}
 
 		compositionserver.request(req, res)
-	}.bind(this)
+	}
 
 })
 

@@ -13,6 +13,25 @@ An overview of the DreemGL's architecture is:
 ## Getting Started with DreemGL
 The fastest way to get started with DreemGL is to walk through [DreemGL in 10 Minutes](http://docs.dreemproject.org/docs/api/index.html#!/guide/dreem_in_10_part1).
 
+### Working with DreemGL NPM
+
+Install the DreemGl NPM globally to include the `dreemgl` command line standalone launcher.
+
+`npm install -g dreemgl`
+
+#### Serve DreemGL from directory
+
+Dreem can serve files directly from the disk
+
+`dreemgl -port 3000 ./app.js`
+
+`dreemgl -port 3000 ./appdir`
+
+
+#### Serve DreemGL from expresss app
+
+### Working with DreemGL Repository
+
 Once you have downloaded the source from the [master branch of dreemproject in Github](https://github.com/dreemproject/dreemgl), you can start DreemGL by typing: 
 
 ```node server.js```
