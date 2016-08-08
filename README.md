@@ -6,7 +6,7 @@ As a toolkit for gpu-accelerated multiscreen development, DreemGL includes featu
 
 * IoT Integration for Smart Environments that is elegantly simple
 * Visual layouts and compositions using real data from network services
-* Fast protoyping that allows designers to easily test compositions that connect multiple users in shared experiences on big screens or projections, while allowing each person to use the control tools and preferences they have configured.
+* Fast prototyping that allows designers to easily test compositions that connect multiple users in shared experiences on big screens or projections, while allowing each person to use the control tools and preferences they have configured.
 
 An overview of the DreemGL's architecture:
 <img alt="Architecture Image" src="https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png"/>

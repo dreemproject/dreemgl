@@ -2,7 +2,7 @@
   "name": "dreemgl",
   "main": "dreemgl.js",
   "homepage":"https://dreemproject.org/",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "preferGlobal": true,
   "bin":{
     "dreemgl":"bin/dreemgl"
