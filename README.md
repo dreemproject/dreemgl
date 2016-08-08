@@ -23,13 +23,13 @@ Install the DreemGl NPM globally to include the `dreemgl` command line standalon
 
 #### Serve a single DreemGL composition
 
-The easiest way to get started quickly is to have DreemGL serve an individual composition using the standalong launcher:
+The easiest way to get started quickly is to have DreemGL serve an individual composition using the standalone launcher:
 
 `dreemgl -port 3000 ./mydreemglapp.js`
 
 #### Serve DreemGL from within an expresss app
 
-It's easy to integrate the DreemGL runtime fromw ithin an express app:
+It's easy to integrate the DreemGL runtime from within an express app:
 
 ```
 // Create an express app
