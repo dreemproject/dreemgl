@@ -121,7 +121,6 @@ define.class('./compositionbase', function(require, baseclass){
 			if(msg.type == 'sessionCheck'){
 				if(this.session != msg.session){
 					if(this.session) {
-						console.log("session broke?", this.session, msg.session)
 						location.href = location.href
 					} else {
 						this.session = msg.session
