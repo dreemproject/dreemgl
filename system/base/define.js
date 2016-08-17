@@ -178,7 +178,7 @@
 	define.expandVariables = function(str){
 		return define.cleanPath(str.replace(/(\$[a-zA-Z0-9]+[a-zA-Z0-9]*)/g, function(all, lut){
 			if(!(lut in define)){
-				throw new Error("Cannot find " + lut + " used in require")
+				throw new Error("Cannot find " + lut + " used in require of " + Object.keys(define))
 			}
 			return define.expandVariables(define[lut])
 		}))
@@ -1282,7 +1282,11 @@
 				}
 			}
 		}
-		define.autoreloadConnect()
+
+		if (define.$autoreloadConnect !== false) {
+			define.autoreloadConnect()
+		}
+
 	}
 
 
@@ -1305,7 +1309,8 @@
 	function define_nodejs(){ // nodeJS implementation
 		module.exports = global.define = define
 
-		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
+		//define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
+		define.$root = __dirname.substring(0, __dirname.length - '/system/base'.length)
 
 		var http = require("http")
 		var url = require("url")

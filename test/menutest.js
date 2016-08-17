@@ -15,9 +15,9 @@ define.class('$server/composition', function($ui$, screen, view, menubar, button
 	}
 	this.render = function(){ return [
 		screen({clearcolor:vec4('black'), title:"Small menu bar test frame"},
-			view({flex:1, bg:'false'},
+			view({flex:1, bgcolor:NaN},
 				speakergrid({ }
-				,view({bgcolor:vec4(0,0.1,0.2,0.8) , flexdirection:"column"},view({bg:false},menubar({name:"themenu", menus:
+				,view({bgcolor:vec4(0,0.1,0.2,0.8) , flexdirection:"column"},view({bgcolor:NaN},menubar({name:"themenu", menus:
 					[
 						{name:"File", commands:[
 							{name:"New project", action:function(){console.log("new project with a long name") ;}},
@@ -39,7 +39,7 @@ define.class('$server/composition', function($ui$, screen, view, menubar, button
 						]}],
 						position:"relative",margin:0,flex:1}))
 					),
-					view({bg:false, flex:1, alignitems:"center", justifycontent:"center" },
+					view({bgcolor:NaN, flex:1, alignitems:"center", justifycontent:"center" },
 					button({text:"Open a menu!", alignself:"center", click:function(e){
 						this.screen.contextMenu([{name:"Peekaboo!"},{name:"Submenu", commands:[{name:"I am in a submenu!"}]}], e.value.x, e.value.y)
 					} })))

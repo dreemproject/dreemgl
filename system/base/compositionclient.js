@@ -68,6 +68,19 @@ define.class('./compositionbase', function(require, baseclass){
 		}
 
 		if(previous || parent) this.doRender(previous, parent)
+
+		if (define.$busclass === "$system/rpc/dummybusclient" && !define.$rendertimeout) {
+			define.$rendertimeout = 0
+		}
+
+		if (typeof(define.$rendertimeout) !== "undefined") {
+			setTimeout(function() {
+				if (!this.rendered) {
+					this.doRender()
+				}
+			}.bind(this), define.$rendertimeout)
+		}
+
 	}
 
 	this.doRender = function(previous, parent){
@@ -107,8 +120,9 @@ define.class('./compositionbase', function(require, baseclass){
 		this.bus.atMessage = function(msg, socket){
 			if(msg.type == 'sessionCheck'){
 				if(this.session != msg.session){
-					if(this.session) location.href = location.href
-					else {
+					if(this.session) {
+						location.href = location.href
+					} else {
 						this.session = msg.session
 						this.bus.send({type:'connectScreen', name:this.screenname})
 					}

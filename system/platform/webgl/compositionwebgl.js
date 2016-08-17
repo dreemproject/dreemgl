@@ -8,8 +8,11 @@
 define.class('$system/base/compositionclient', function(require, baseclass){
 
 	var Device = require('$system/platform/$platform/device$platform')
-	var WebRTC = require('$system/rpc/webrtc')
-	var BusClient = require('$system/rpc/busclient')
+	var BusClients = {
+		'$system/rpc/busclient':require('$system/rpc/busclient'),
+		'$system/rpc/dummybusclient':require('$system/rpc/dummybusclient'),
+		'$system/rpc/firebusclient':require('$system/rpc/firebusclient')
+	}
 
 	this.atConstructor = function(previous, parent, precached, canvas){
 		window.composition = this
@@ -29,7 +32,10 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	}
 
 	this.createBus = function(){
-		this.bus = new BusClient((location.href.indexOf('https') === 0?'wss://':'ws://')+location.host+location.pathname)
+		this.bus = new BusClients[define.$busclass || '$system/rpc/busclient']((location.href.indexOf('https') === 0?'wss://':'ws://')+location.host+location.pathname)
+		if (this.bus.connect) {
+			this.bus.connect()
+		}
 	}
 
 	this.doRender = function(previous, parent){

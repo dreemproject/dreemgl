@@ -12,28 +12,30 @@ define.class(function(require){
 
 	var FileWatcher = require('./filewatcher')
 
-	var BusServer = require('$system/rpc/busserver')
-
 	this.atConstructor = function(
 		args, //Object: Process arguments
 		compname, //String: name of the composition
-		rootserver){ //TeemServer: teem server object
+	    options) { //Object: config options
 
-		this.rootserver = rootserver
+		if (!options) {
+			options = {}
+		}
+
+		this.options = options
 	 	this.args = args
 		this.compname = compname
 
-		this.busserver = new BusServer()
+		var BusServer;
+		if (this.options.busclass) {
+			BusServer = require(this.options.busclass)
+		} else {
+			BusServer = require('$system/rpc/busserver')
+		}
 
-		this.slow_watcher = new FileWatcher()
+		this.busserver = new BusServer(compname)
 
 		// lets give it a session
 		this.session = Math.random() * 1000000
-
-		this.slow_watcher.atChange = function(){
-			// lets reload this app
-			this.reload()
-		}.bind(this)
 
 		this.components = {}
 
@@ -41,18 +43,28 @@ define.class(function(require){
 		this.pathset = '{'
 
 		for(var key in define.paths){
-			if(this.paths) this.paths += ',\n\t\t', this.pathset += ','
+			if(this.paths) {
+				this.paths += ',\n\t\t'
+				this.pathset += ','
+			}
 			this.paths += '$'+key+':"$root/'+key+'"'
 			this.pathset += '"'+key+'":1'
 		}
 		this.pathset += '}'
 
+		// If files are not being served remorely, watch them for changes
+		if (this.options.serveremote !== true) {
+			this.slow_watcher = new FileWatcher()
+			this.slow_watcher.atChange = function(){
+				// lets reload this app
+				this.reload()
+			}.bind(this)
+			// lets compile and run the dreem composition
+			define.atRequire = function(filename){
+				this.slow_watcher.watch(filename)
+			}.bind(this)
+		}
 
-		// lets compile and run the dreem composition
-		define.atRequire = function(filename){
-			this.slow_watcher.watch(filename)
-		}.bind(this)
-		//
 		this.reload()
 	}
 
@@ -69,7 +81,8 @@ define.class(function(require){
 	this.loadComposition = function(){
 		console.log("Reloading composition "+this.filename)
 		require.clearCache()
-		var Composition = require(define.expandVariables(this.filename))
+		var file = define.expandVariables(this.filename)
+		var Composition = require(file) //TODO: xxx needs method to load from remote source, not just file system?
 		this.composition = new Composition(this.busserver, this.session, this.composition)
 	}
 
@@ -127,8 +140,30 @@ define.class(function(require){
 			additionalHeader = this.composition.headHTML || "";
 		}
 
+		var additionalScripts = ""
+		var additionalDefines = ""
 
-		return '<html lang="en">\n'+
+		if (this.options) {
+			if (this.options.scripts) {
+				for (var s = 0; s < this.options.scripts.length;s++) {
+					var scriptURL = this.options.scripts[s]
+					additionalScripts += '<script src="' + scriptURL + '"></script>\n'
+				}
+			}
+
+			if (this.options.clientdefines) {
+				for (var defkey in this.options.clientdefines) {
+					var defval = this.options.clientdefines[defkey]
+					if (typeof (defval) === 'string') {
+						defval = '"' + defval +'"'
+					}
+
+					additionalDefines += '$' + defkey + ':' + defval + ',\n'
+				}
+			}
+		}
+
+		return '<html lang="en">\n'+ //TODO: xxx make this a template loadable from options
 			' <head>\n'+
 			'  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n'+
 			'  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">\n'+
@@ -143,9 +178,11 @@ define.class(function(require){
   			'		-user-select: none;\n'+
   			'    }\n'+
 			'    body {background-color:white;margin:0;padding:0;height:100%;overflow:hidden;}\n'+
-			'  </style>'+
+			'  </style>\n'+
+			additionalScripts +
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
+			additionalDefines +
 			'	   $platform:"webgl",\n'+
 			'      paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
@@ -172,15 +209,11 @@ define.class(function(require){
 	}
 
 	this.request = function(req, res){
-		var base = req.url.split('?')[0]
-		var app = base.split('/')[2] || 'browser'
-		// ok lets serve our Composition device
-
-		if(req.method == 'POST'){
+		if(req.method == 'POST' && (define.$unsafeorigin || (this.options && this.options.whitelist))){
 			// lets do an RPC call
 
-			if(!define.$unsafeorigin && this.rootserver.addresses.indexOf(req.headers.origin) === -1){
-				console.log("WRONG ORIGIN POST API RECEIVED" + req.headers.origin)
+			if(!define.$unsafeorigin && this.options.whitelist.indexOf(req.headers.origin) === -1){
+				console.log("WRONG ORIGIN POST API RECEIVED.  " + req.headers.origin + " not in:", this.options.whitelist)
 				res.end()
 				return false
 			}
@@ -207,7 +240,7 @@ define.class(function(require){
 					}
 				}
 			})
-			req.on('end', function(){
+			req.on('end', function() {
 
 				if (boundary && buffer && buffer.indexOf) {
 
@@ -241,7 +274,6 @@ define.class(function(require){
 					}
 
 					res.end();
-					return
 				} else if (buffer) {
 					try{
 						var json = JSON.parse(buffer.toString())
@@ -255,13 +287,11 @@ define.class(function(require){
 						res.writeHead(500, {"Content-Type": "text/html"})
 						res.write('FAIL')
 						res.end()
-						return
 					}
 				} else {
 					res.writeHead(500, {"Content-Type": "text/html"})
 					res.write('FAIL')
 					res.end()
-					return
 				}
 			}.bind(this))
 			return
@@ -271,7 +301,6 @@ define.class(function(require){
 			"Cache-control": "max-age=0",
 			"Content-Type": "text/html"
 		}
-		//var screen = this.screens[app]
 
 		// nodejs root
 		if(req.headers['client-type'] === 'nodejs'){
@@ -281,7 +310,7 @@ define.class(function(require){
 			return
 		}
 
-		if (! this.filename) {
+		if (!this.filename) {
 			res.writeHead(404, header)
 			res.write('<body>Sorry, we could not find an application at that URL. <a href="/docs/api/index.html">Try reading the documentation?</a></body>')
 			res.end()
