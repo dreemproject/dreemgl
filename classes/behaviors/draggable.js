@@ -9,6 +9,9 @@ define.class(function(){
 		this._dragstart = vec2(this.pos[0], this.pos[1])
 	}
 	this.pointermove = function(event){
+		if (!this._dragstart) {
+			this._dragstart = vec2(this.pos[0], this.pos[1])
+		}
 		this.pos = vec2(this._dragstart[0] + event.delta[0], this._dragstart[1] + event.delta[1])
 	}
 })
