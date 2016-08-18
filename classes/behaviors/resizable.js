@@ -23,6 +23,22 @@ define.class(function(){
 
 	this.pointermove = function(ev, v, o){
 
+		if (!this._original) {
+			var start = this.globalToLocal(v);
+
+			var growx = (start.x < this.width / 2);
+			var growy = (start.y < this.height / 2);
+
+			this._original = {
+				gx:growx,
+				gy:growy,
+				x:this.x,
+				y:this.y,
+				w:this.width,
+				h:this.height
+			};
+		}
+
 		var dx = ev.delta.x;
 		var dy = ev.delta.y;
 
