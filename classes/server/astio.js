@@ -209,16 +209,34 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 			this.__scanner = new astscanner(this.ast)
 		}
 		this.__scanner.reset()
+		return this;
 	};
 
-	this.nodeForPath = function(path) {
-		this.__scanner.scan(path);
+	this.scan = function(path) {
+		this.__scanner.scan(path)
+		return this;
+	}
+
+	this.at = function() {
 		return this.__scanner.at;
+	}
+
+	this.atindex = function() {
+		return this.__scanner.atindex;
+	}
+
+	this.atparent = function() {
+		return this.__scanner.atparent;
+	}
+
+	this.nodeForPath = function(path) {
+		this.scan(path);
+		return this.at();
 	};
 
 	this.seekNodeFor = function(v) {
 		var path = this.nodePathFor(v);
-		this.__scanner.scan(path)
+		return this.scan(path)
 	};
 
 	this.removeArgNode = function(node) {
