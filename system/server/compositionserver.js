@@ -225,20 +225,33 @@ define.class(function(require){
 							cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
 
 							var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary, cursor));
-
-							var compfile = this.composition.constructor.module.filename;
-							var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
-
-							filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
 							cursor += filedata.length + ("\r\n--" + boundary).length;
 
-							try{
-								var fullname = define.expandVariables(filename);
-  							    fs.writeFile(fullname, filedata);
-								console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
-							} catch(e){
-								res.writeHead(503);
-								return;
+							var handled = false;
+							if (this.composition.children) {
+								for (var i=0;handled === false && i<this.composition.children.length;i++) {
+									var child = this.composition.children[i];
+									if (child.constructor) {
+										var type = child.constructor.name;
+										if (type === "uploader") {
+											handled = child.upload(filename, filedata);
+										}
+									}
+								}
+							}
+
+							if (!handled) {
+								try{
+									var compfile = this.composition.constructor.module.filename;
+									var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+									filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
+									var fullname = define.expandVariables(filename);
+									fs.writeFile(fullname, filedata);
+									console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
+								} catch(e){
+									res.writeHead(503);
+									return;
+								}
 							}
 						}
 						res.writeHead(200);
