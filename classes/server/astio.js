@@ -217,7 +217,10 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 		return this;
 	}
 
-	this.at = function() {
+	this.at = function(at) {
+		if (at) {
+			this.__scanner.at = at;
+		}
 		return this.__scanner.at;
 	}
 

@@ -206,38 +206,42 @@ define.class(function(require){
 						buffer = Buffer.concat([buffer, data])
 					}
 				}
-			})
+			});
 			req.on('end', function(){
 
 				if (boundary && buffer && buffer.indexOf) {
-
-					var cursor = buffer.indexOf(boundary) + boundary.length;
-
-					cursor = buffer.indexOf("filename=", cursor) + "filename=".length;
-					var q = buffer[cursor];
-					var filename = buffer.slice(cursor + 1, buffer.indexOf(q, cursor + 1)).toString();
-					cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
-
-					var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary));
-
-					var compfile = this.composition.constructor.module.filename;
-					var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
-
-					filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
 
 					if (!define.$writefile){
 						console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
 						res.writeHead(501);
 					} else {
-						try{
-							var fullname = define.expandVariables(filename);
-							fs.writeFile(fullname, filedata);
-							console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
-							res.writeHead(200);
+						var cursor = buffer.indexOf(boundary) + boundary.length;
+
+						while ((cursor = buffer.indexOf("filename=", cursor)) > -1) {
+							cursor +=  "filename=".length;
+
+							var q = buffer[cursor];
+							var filename = buffer.slice(cursor + 1, buffer.indexOf(q, cursor + 1)).toString();
+							cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
+
+							var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary, cursor));
+
+							var compfile = this.composition.constructor.module.filename;
+							var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+
+							filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
+							cursor += filedata.length + ("\r\n--" + boundary).length;
+
+							try{
+								var fullname = define.expandVariables(filename);
+  							    fs.writeFile(fullname, filedata);
+								console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
+							} catch(e){
+								res.writeHead(503);
+								return;
+							}
 						}
-						catch(e){
-							res.writeHead(503);
-						}
+						res.writeHead(200);
 					}
 
 					res.end();
