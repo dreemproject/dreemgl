@@ -10,7 +10,10 @@ define.class('$server/service', function(require){
 	var fs = require('fs');
 
 	this.attributes = {
-		dir:String
+		dir:String,
+		accepts:[],
+		fileupload: Config({type:Event}),
+		uploads:Config({persist:true, value:[]})
 	};
 
 	this.init = function () {
@@ -22,13 +25,32 @@ define.class('$server/service', function(require){
 		}
 	};
 
-	this.upload = function(filename, filedata) {
+	this.upload = function(mimetype, filename, filedata) {
+
+		if (this.accepts && this.accepts.length && this.accepts.indexOf(mimetype) < 0) {
+			console.log("Mime type", mimetype, "not in allowed.  Allowed types:", this.accepts)
+			return false;
+		}
 
 		var fullname = define.expandVariables(this.dir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,''));
 
 		try {
+			//todo check if dir exists and if not make it, etc.  Check for security issues.
 			fs.writeFile(fullname, filedata);
 			console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
+
+			var filedesc = {
+				name:filename,
+				mime:mimetype,
+				dir:this.dir,
+				path:fullname,
+				size:filedata.length
+			};
+
+			this.uploads.push(filedesc);
+			this.emit("fileupload", { value:filedesc });
+			this.uploads = this.uploads;
+
 			return true;
 		} catch (e) {
 			console.log("[UPLOAD ERROR] Could not write", filedata.length, "bytes to", fullname, "due to:", e);

@@ -222,6 +222,11 @@ define.class(function(require){
 
 							var q = buffer[cursor];
 							var filename = buffer.slice(cursor + 1, buffer.indexOf(q, cursor + 1)).toString();
+							cursor = buffer.indexOf("\r\n", cursor) + "\r\n".length;
+
+							var contenttype = buffer.slice(cursor, buffer.indexOf("\r\n", cursor + 1)).toString();
+							var mime = contenttype.substring('Content-Type: '.length);
+
 							cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
 
 							var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary, cursor));
@@ -234,7 +239,7 @@ define.class(function(require){
 									if (child.constructor) {
 										var type = child.constructor.name;
 										if (type === "uploader") {
-											handled = child.upload(filename, filedata);
+											handled = child.upload(mime, filename, filedata);
 										}
 									}
 								}
