@@ -131,6 +131,10 @@ function main(){
 			var mypath =	parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
 			console.log('Mapping '+parts[0]+' to ' + mypath)
 			define.paths[parts[0]] = mypath
+			if (typeof(define.maps) === "undefined") {
+				define.maps = {}
+			}
+			define.maps[mypath.substring(0, mypath.lastIndexOf('/'))] = parts[0]
 		}
 		// put them on the define
 		for(var key in define.paths){

@@ -11,6 +11,7 @@ define.class('$server/service', function(require){
 
 	this.attributes = {
 		dir:String,
+		dirpath:String,
 		accepts:[],
 		fileupload: Config({type:Event}),
 		uploads:Config({persist:true, value:[]})
@@ -19,9 +20,11 @@ define.class('$server/service', function(require){
 	this.init = function () {
 		var compfile = this.composition.constructor.module.filename;
 		if (typeof(this.dir) !== "string") {
-			this.dir = compfile.substring(0, compfile.lastIndexOf('/'));
+			this.dirpath = compfile.substring(0, compfile.lastIndexOf('/'));
 		} else if (this.dir.indexOf('./') == 0) {
-			this.dir = compfile.substring(0, compfile.lastIndexOf('/')) + this.dir.substring(1);
+			this.dirpath = compfile.substring(0, compfile.lastIndexOf('/')) + this.dir.substring(1);
+		} else {
+			this.dirpath = this.dir;
 		}
 	};
 
@@ -32,7 +35,7 @@ define.class('$server/service', function(require){
 			return false;
 		}
 
-		var fullname = define.expandVariables(this.dir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,''));
+		var fullname = define.expandVariables(this.dirpath + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,''));
 
 		try {
 			//todo check if dir exists and if not make it, etc.  Check for security issues.

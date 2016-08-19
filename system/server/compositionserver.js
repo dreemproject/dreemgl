@@ -127,6 +127,17 @@ define.class(function(require){
 			additionalHeader = this.composition.headHTML || "";
 		}
 
+		var base = ""
+		if (define.maps) {
+			var compfile = this.composition.constructor.module.filename;
+			var dirpath = compfile.substring(0, compfile.lastIndexOf('/'));
+			var compmap = define.maps[dirpath];
+			if (compmap) {
+				base = '       $base:"$' + compmap + '",\n'
+			}
+		}
+
+
 
 		return '<html lang="en">\n'+
 			' <head>\n'+
@@ -147,7 +158,8 @@ define.class(function(require){
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
 			'	   $platform:"webgl",\n'+
-			'      paths:'+pathset+',\n'+
+			base +
+			'       paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
 			'      main:["$system/base/math", "' + boot + '"],\n'+
 			'      atMain:function(require, modules){\n'+
