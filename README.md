@@ -8,8 +8,7 @@ As a toolkit for gpu-accelerated multiscreen development, DreemGL includes featu
 * Fast protoyping that allows designers to easily test compositions that connect multiple users in shared experiences on big screens or projections, while allowing each person to use the control tools and preferences they have configured.
 
 An overview of the DreemGL's architecture is:
-![Architecture Image]
-(https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png)
+![Architecture Image](https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png)
 
 ## Getting Started with DreemGL
 The fastest way to get started with DreemGL is to walk through [DreemGL in 10 Minutes](http://docs.dreemproject.org/docs/api/index.html#!/guide/dreem_in_10_part1).
